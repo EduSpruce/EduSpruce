@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.74
+- Política de Privacidade (`privacidade.html`) e Termos de Serviço (`termos.html`) públicos, com ligações no ecrã de entrada, na barra lateral, nas Definições e na Ajuda.
+
 ## 0.73
 - Ecrã de entrada harmonizado: cartão e apresentação centrados lado a lado, com separador e logótipo junto ao nome.
 

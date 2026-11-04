@@ -814,3 +814,6 @@ Auditoria automática repetida a todo o código e a todas as secções:
 
 ## 0.73 — Ecrã de entrada harmonizado
 - `#login` em grelha centrada (440px | 520px, 560px acima de 1700px), cartão e `.lghero` alinhados ao centro com separador vertical; logótipo ao lado do nome (`.lgh-top`); abaixo de 980px só o cartão.
+
+## 0.74 — Política de Privacidade e Termos de Serviço
+- Páginas estáticas públicas `privacidade.html` e `termos.html` na raiz do site (mesmo estilo institucional, claro/escuro, imprimíveis). Ligações: rodapé do formulário de entrada (`.lglegal`), rodapé da barra lateral (`.verlegal`), cartão Privacidade (RGPD) em Definições › Dados (`legalLinks()`), entrada na Ajuda. URLs a usar nos ecrãs de consentimento: `https://eduspruce.app/privacidade.html` e `https://eduspruce.app/termos.html`.
