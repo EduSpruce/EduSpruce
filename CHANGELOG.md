@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.72
+- Aparência por defeito: tema Claro, estilo Institucional, azul, logótipo Monograma, animações completas.
+- Entrar com Google (também no iPhone/iPad); ecrã de entrada sem utilizador/palavra-passe iniciais.
+- Novo ecrã de entrada institucional (azul-marinho, abetos, apresentação das funcionalidades).
+- Guia de configuração pormenorizado (nov. 2026) para Microsoft Entra e Google Auth Platform, na app e em docs/guias.
+
 ## 0.71
 - Sincronização em computadores, iPad e iPhone testada de ponta a ponta: IDs centrais em `eduspruce-config.json`, início de sessão por redirecionamento no iPhone/iPad, renovação automática da ligação, ícone de estado na barra, ligar outro dispositivo por link, ETag no manifesto, novas tentativas, bloqueio entre separadores.
 - Corrigido: ano letivo por escolher num aparelho novo; auditoria sempre por enviar; perda de alteração quando dois aparelhos sincronizavam ao mesmo tempo.

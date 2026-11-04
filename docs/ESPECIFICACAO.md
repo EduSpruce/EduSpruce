@@ -805,3 +805,9 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - Ligar outro dispositivo: `#ligar=<base64url {p,ms?,g?,c}>` (sem dados nem chave).
 - Teste ponta-a-ponta (`synct.py`): OneDrive simulado com rotas Playwright, dois contextos (computador por pop-up, iPhone 13 por redirecionamento), palavra errada, junção, conflito, corrida (ETag), expiração 24 h + renovação silenciosa, ficheiros ilegíveis na nuvem.
 - Logótipo `monograma` predefinido (`#2f6ea5→#1c3f63`, ponto `#e3b448`, «S» em caminho vetorial Inter ExtraBold); ícones PWA regenerados; `theme_color #1f4e79`.
+
+## 0.72 — Aparência institucional por defeito, Entrar com Google, novo ecrã de entrada, guias
+- Predefinições aplicadas em `aplicarPrefs` quando o valor não existe: `tema:'light'`, `estilo:'institucional'` (também `ESTILO_DEF`), `acento:'azul'`, `logoApp:'monograma'`, `animPerfil:'cheio'`. Escolhas já feitas mantêm-se.
+- Ecrã de entrada: sem a nota «admin/admin»; botão **Entrar com Google** (`gLogin`): GIS (pop-up) no computador, fluxo implícito por redirecionamento no iPhone/iPad (`nvglR…`), âmbitos `openid email profile`, userinfo OpenID; sessão `{tipo:'google'}` aceite em `pedirLogin`; domínio autorizado = `auth.google.dominio` ou `auth.ms.dominio`. Botões Microsoft/Google ativam-se quando `eduspruce-config.json` chega.
+- Novo visual: fundo azul-marinho com padrão de abetos (SVG), painel `.lghero` com logótipo, lema e 4 funcionalidades (escondido < 980 px).
+- Guias `nvGuiaMs()`/`nvGuiaG()` (Microsoft Entra admin center e Google Auth Platform, nov. 2026) com URI/origem desta app preenchidos e botões Copiar; `nvGuiaDlg()` no cartão da nuvem e na Ajuda; resolução de erros (AADSTS50011, AADSTS9002326, AADSTS700016, redirect_uri_mismatch, origin_mismatch, access_denied).

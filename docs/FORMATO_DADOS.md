@@ -180,3 +180,7 @@ Ficheiros (documentos do aluno, portefólio, arquivo do DT, biblioteca) são dat
 - `localStorage['edugest.nuvem.auth']`: estado temporário do início de sessão por redirecionamento ({p,v,state,q,silent,view,tab}); apagado no regresso.
 - Ficheiro do site `eduspruce-config.json`: `{ "microsoftClientId": "", "googleClientId": "" }`.
 - `cfg.logoApp` predefinido passa a `monograma`.
+
+## 0.72
+- Sessão pode ter `tipo:'google'` (`u` = e-mail em minúsculas). `cfg.auth.google` opcional: `{clientId, dominio}`.
+- Predefinições de aparência gravadas em `cfg` na primeira utilização (ver Especificação 0.72).
