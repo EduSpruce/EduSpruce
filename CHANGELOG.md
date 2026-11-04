@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.78
+- Google Drive: mensagens claras para o erro 403 (API do Drive por ativar / permissão desmarcada) e novo pedido de consentimento quando falta a permissão.
+
 ## 0.77
 - Ecrã de entrada: versão da app discreta ao lado do nome.
 
