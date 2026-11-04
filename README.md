@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="versão" src="https://img.shields.io/badge/versão-0.75-0b63ce">
+  <img alt="versão" src="https://img.shields.io/badge/versão-0.76-0b63ce">
   <img alt="ficheiro único" src="https://img.shields.io/badge/instalação-ficheiro%20único-1a7f37">
   <img alt="offline" src="https://img.shields.io/badge/funciona-offline-6d3fd1">
   <img alt="RGPD" src="https://img.shields.io/badge/dados-no%20seu%20dispositivo-c2410c">
