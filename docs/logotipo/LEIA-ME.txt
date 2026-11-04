@@ -1,0 +1,16 @@
+EduSpruce — logótipo (novembro de 2026)
+
+svg/  — ficheiros vetoriais (qualquer tamanho, sem perder qualidade). Use estes sempre que possível.
+  EduSpruce-icone.svg                    ícone (Monograma «S.» azul institucional e dourado)
+  EduSpruce-icone-monocromatico.svg      ícone para impressão a uma cor
+  EduSpruce-horizontal-fundo-claro.svg   ícone + nome, para fundos claros
+  EduSpruce-horizontal-fundo-escuro.svg  ícone + nome, para fundos escuros
+
+png/  — imagens prontas (fundo transparente)
+  EduSpruce-icone-1024/512/256/180/64.png   (180 = ícone do iPhone/iPad; 64 = favicon)
+  EduSpruce-horizontal-*-128/256.png
+
+Cores: azul #2f6ea5 → #1c3f63 · azul-marinho #1f4e79 · dourado #e3b448 · texto #1b2430
+Tipo de letra do nome: Inter ExtraBold (convertido em formas — não precisa da letra instalada).
+Deixe à volta do logótipo um espaço livre de pelo menos metade da altura do ícone.
+© 2026 EduSpruce · Joel Cunha

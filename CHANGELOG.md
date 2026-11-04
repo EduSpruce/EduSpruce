@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.75
+- Entrar com Google sempre visível; sem ID de cliente, explica o que falta e liga ao guia.
+- Logótipo para descarregar em `docs/logotipo/` (SVG e PNG, claro/escuro, monocromático).
+
 ## 0.74
 - Política de Privacidade (`privacidade.html`) e Termos de Serviço (`termos.html`) públicos, com ligações no ecrã de entrada, na barra lateral, nas Definições e na Ajuda.
 
