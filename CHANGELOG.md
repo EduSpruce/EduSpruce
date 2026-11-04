@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.71
+- Sincronização em computadores, iPad e iPhone testada de ponta a ponta: IDs centrais em `eduspruce-config.json`, início de sessão por redirecionamento no iPhone/iPad, renovação automática da ligação, ícone de estado na barra, ligar outro dispositivo por link, ETag no manifesto, novas tentativas, bloqueio entre separadores.
+- Corrigido: ano letivo por escolher num aparelho novo; auditoria sempre por enviar; perda de alteração quando dois aparelhos sincronizavam ao mesmo tempo.
+- Logótipo Monograma predefinido com as cores do tema Institucional.
+- Corrigido: sublinhado duplicado nos separadores (Institucional); Primeiros passos legíveis.
+
 ## 0.70
 - A app passa a chamar-se **EduSpruce** (Sumários, Planeamento, Registos, Unidades, Calendário e Ensino).
 - 5 logótipos à escolha em Definições › Aparência: Abeto, Livro, Monograma, Floresta e Ramo; novos ícones da app.

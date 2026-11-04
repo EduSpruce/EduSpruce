@@ -174,3 +174,9 @@ Ficheiros (documentos do aluno, portefólio, arquivo do DT, biblioteca) são dat
 
 ## 0.70
 - `cfg.logoApp`: `'abeto' | 'livro' | 'monograma' | 'floresta' | 'ramo'` (predefinido `abeto`). Nenhuma chave de armazenamento mudou com o novo nome EduSpruce.
+
+## 0.71
+- `localStorage['edugest.nuvem']` ganha: `renovar` (bool), `renTent` (ms), `g` ({t,exp} token Google), `ms.rtq` (hora do início de sessão), `ligarPend`.
+- `localStorage['edugest.nuvem.auth']`: estado temporário do início de sessão por redirecionamento ({p,v,state,q,silent,view,tab}); apagado no regresso.
+- Ficheiro do site `eduspruce-config.json`: `{ "microsoftClientId": "", "googleClientId": "" }`.
+- `cfg.logoApp` predefinido passa a `monograma`.

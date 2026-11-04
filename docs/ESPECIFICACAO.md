@@ -793,3 +793,15 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - **Mantido de propósito** (compatibilidade dos dados): chaves `edugest.*` do localStorage, IndexedDB `eduflow-ev`, ficheiro `eduflow-dados.json` (Google Drive), pasta `EduFlow` do OneDrive, verificação `nvCifrar('eduflow')` da nuvem e etiquetas internas.
 - `EF_LOGOS` (sistema da v0.43) passa a ter 5 opções: `abeto` (predefinido), `livro`, `monograma`, `floresta`, `ramo` — cada uma com `svg`, `fav` (PNG 192) e `ios` (PNG 180). Escolha em Definições › Aparência › Logótipo da app (`S.cfg.logoApp`); valores antigos (`turma`, `pagina`) caem no Abeto.
 - Ícones PWA do repositório e do manifesto embutido regenerados com o Abeto; `theme_color` do manifesto do repositório `#0f766e`.
+
+## 0.71 — Sincronização multi-dispositivo completa + logótipo institucional
+- `eduspruce-config.json` (raiz do site, opcional): `{microsoftClientId, googleClientId}` → `NV_CENTRAL`; `nvMsId()`/`nvGId()` usam o ID do utilizador ou o central. Cartão esconde o campo técnico quando há ID central. `msLogin` (entrada com M365) também usa o central.
+- OAuth: `msLigar({silent,redirect,hint})` — pop-up aberto antes de qualquer `await` (gesto do utilizador) ou redirecionamento (iOS/standalone/pop-up bloqueado); estado `nvmsR…` + verificador PKCE em `localStorage['edugest.nuvem.auth']`; regresso tratado ao carregar (`msTroca`). Google: GIS no computador, fluxo implícito por redirecionamento no iOS (`nvgsR…`, `#access_token`); token Google guardado (`nvL().g`).
+- Renovação: refresh falhado → `nvL().renovar=true` (ícone amarelo). Ao abrir a app, sem interação do utilizador, tenta `prompt=none` por redirecionamento (no máx. 1× por 30 min, `renTent`).
+- `nvFetchRetry`: 4 novas tentativas (rede, 429 com Retry-After, 5xx). OneDrive: manifesto lido por metadados (eTag + downloadUrl) e escrito com `If-Match`; 412 → repete (`__nvCorrida`, até 3×). `navigator.locks` (`eduspruce-sync`) com reentrada.
+- Algoritmo: partes enviadas numa passagem interrompida por corrida voltam ao `base` anterior (continuam por enviar); acertos de hash depois de aplicar dados recebidos obrigam a gravar o manifesto (`res._fix`); auditoria de "Edição" não é registada durante gravações da sincronização (`_semHist`); receber só auditoria não mostra aviso nem redesenha.
+- `nvMontar`: escolhe o último ano letivo quando `anoAtivo` não existe (aparelho novo).
+- Ícone `#nv-badge` em `.barico` (estados ok/pend/sync/renovar/falta/erro/offline). `pagehide` envia pendentes. `navigator.storage.persist()`.
+- Ligar outro dispositivo: `#ligar=<base64url {p,ms?,g?,c}>` (sem dados nem chave).
+- Teste ponta-a-ponta (`synct.py`): OneDrive simulado com rotas Playwright, dois contextos (computador por pop-up, iPhone 13 por redirecionamento), palavra errada, junção, conflito, corrida (ETag), expiração 24 h + renovação silenciosa, ficheiros ilegíveis na nuvem.
+- Logótipo `monograma` predefinido (`#2f6ea5→#1c3f63`, ponto `#e3b448`, «S» em caminho vetorial Inter ExtraBold); ícones PWA regenerados; `theme_color #1f4e79`.
