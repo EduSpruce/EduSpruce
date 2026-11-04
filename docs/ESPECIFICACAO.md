@@ -811,3 +811,6 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - Ecrã de entrada: sem a nota «admin/admin»; botão **Entrar com Google** (`gLogin`): GIS (pop-up) no computador, fluxo implícito por redirecionamento no iPhone/iPad (`nvglR…`), âmbitos `openid email profile`, userinfo OpenID; sessão `{tipo:'google'}` aceite em `pedirLogin`; domínio autorizado = `auth.google.dominio` ou `auth.ms.dominio`. Botões Microsoft/Google ativam-se quando `eduspruce-config.json` chega.
 - Novo visual: fundo azul-marinho com padrão de abetos (SVG), painel `.lghero` com logótipo, lema e 4 funcionalidades (escondido < 980 px).
 - Guias `nvGuiaMs()`/`nvGuiaG()` (Microsoft Entra admin center e Google Auth Platform, nov. 2026) com URI/origem desta app preenchidos e botões Copiar; `nvGuiaDlg()` no cartão da nuvem e na Ajuda; resolução de erros (AADSTS50011, AADSTS9002326, AADSTS700016, redirect_uri_mismatch, origin_mismatch, access_denied).
+
+## 0.73 — Ecrã de entrada harmonizado
+- `#login` em grelha centrada (440px | 520px, 560px acima de 1700px), cartão e `.lghero` alinhados ao centro com separador vertical; logótipo ao lado do nome (`.lgh-top`); abaixo de 980px só o cartão.

@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.73
+- Ecrã de entrada harmonizado: cartão e apresentação centrados lado a lado, com separador e logótipo junto ao nome.
+
 ## 0.72
 - Aparência por defeito: tema Claro, estilo Institucional, azul, logótipo Monograma, animações completas.
 - Entrar com Google (também no iPhone/iPad); ecrã de entrada sem utilizador/palavra-passe iniciais.
