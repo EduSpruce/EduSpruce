@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.77
+- Ecrã de entrada: versão da app discreta ao lado do nome.
+
 ## 0.76
 - Entrar com Google: permissões pedidas pelo nome completo, e-mail confirmado em vários serviços da Google e mensagem clara se a permissão do e-mail ficar desmarcada.
 
