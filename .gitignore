@@ -11,6 +11,7 @@ desktop.ini
 # NUNCA versionar dados reais de alunos (RGPD)
 *.json
 !manifest.webmanifest
+!eduspruce-config.json
 backups/
 copias/
 exportacoes/
