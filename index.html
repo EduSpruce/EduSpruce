@@ -4053,8 +4053,7 @@ body.dev-ipad #view,body.dev-tlm #view{overflow-x:hidden}
 .bloqban{transition:opacity .4s ease,transform .4s ease,max-height .45s ease}.bloqban.fora{opacity:0;transform:translateY(-6px);max-height:0;margin:0!important;padding-top:0!important;padding-bottom:0!important;overflow:hidden}
 .bloqdef{display:block;margin-top:4px;font-size:13px;opacity:.85}
 #bloq-card.realce{box-shadow:0 0 0 3px var(--acc);transition:box-shadow .3s}
-#side .brand .bnm{white-space:nowrap}
-#side .bver{margin-left:5px;font-size:10px;font-weight:500;letter-spacing:.2px;vertical-align:2px;opacity:.45;font-style:normal;cursor:pointer;color:inherit}
+#side .bver{display:block;margin-top:2px;font-size:10px;font-weight:500;letter-spacing:.3px;line-height:1.3;opacity:.45;font-style:normal;cursor:pointer;color:inherit;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -7817,8 +7816,9 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.992';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.992</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li>A versão da app aparece, discreta, junto ao logótipo na barra lateral.</li></ul></details>
+const VERSAO='0.993';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.993</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li>A versão passa para uma linha pequena por baixo do nome da plataforma, para nunca ficar cortada.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.992</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>A versão da app aparece, discreta, junto ao logótipo na barra lateral.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.991</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Bloqueio dos dados de base</b>: o aviso amarelo aparece só durante 5 segundos (ao bloquear e ao abrir uma vista bloqueada) e diz onde desbloquear. Desbloquear passa a fazer-se apenas em <b>Definições › Dados e Segurança</b>: o cadeado da barra e o aviso de alteração bloqueada levam lá.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.990</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>Endereço novo eduspruce.pt: se a app for aberta com http, passa sozinha para https assim que o certificado estiver pronto, e a mensagem de erro diz o que fazer.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.98</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Barra lateral fixa, como numa app</b>: no iPad deixa de deslizar para o lado (os ícones já não ficam cortados) e a página não «salta» ao arrastar nos limites.</li></ul></details>
@@ -14760,7 +14760,7 @@ function bloqIrDef(){toast('Para desbloquear: Definições › Dados e Seguranç
 }catch(e){console.warn(e)}return r}}
 
 /* 0.992 · versão discreta junto ao logótipo na barra lateral */
-function verSide(){const n=$('#side .brand .bnm');if(!n)return;let v=$('#side .bver');if(!v){v=document.createElement('span');v.className='bver';v.title='Versão da app — toque para ver as novidades';n.appendChild(v);v.onclick=e=>{e.stopPropagation();try{UI.defTab='geral';go('ajuda')}catch(_){}}}v.textContent='v'+VERSAO}
+function verSide(){const n=$('#side .brand .bt')||$('#side .brand');if(!n)return;let v=$('#side .bver');if(v&&v.parentElement!==n){v.remove();v=null}if(!v){v=document.createElement('span');v.className='bver';v.title='Versão da app — toque para ver as novidades';n.appendChild(v);v.onclick=e=>{e.stopPropagation();try{UI.defTab='geral';go('ajuda')}catch(_){}}}v.textContent='v'+VERSAO}
 verSide();setInterval(verSide,3000);
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});

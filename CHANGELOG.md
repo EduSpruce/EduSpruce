@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.993
+- Versão numa linha própria por baixo do nome da plataforma (não fica cortada em ecrãs estreitos).
+
 ## 0.992
 - Versão discreta junto ao logótipo na barra lateral (toque abre a Ajuda/novidades).
 
