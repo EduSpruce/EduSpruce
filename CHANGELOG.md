@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.89
+- Perfil do professor preenchido com a conta Google (nome, e-mail, fotografia); nome na barra lateral em vez do e-mail, atualizado ao escrever.
+
 ## 0.88
 - Ligação ao Google Drive bloqueada: a app explica como desligar bloqueadores de publicidade/conteúdos (incluindo no Safari) ou mudar de rede.
 
