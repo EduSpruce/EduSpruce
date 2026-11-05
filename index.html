@@ -4007,6 +4007,42 @@ input.pinfoco{outline:3px solid var(--acc);outline-offset:1px}
   #barx::-webkit-scrollbar{display:none}
   #barx>.btn{flex:0 0 auto}
 }
+
+/* v0.96 · iPad, vertical e horizontal: cabeçalho compacto e listas que cabem */
+body.dev-ipad #bar{row-gap:8px;column-gap:10px;padding:10px 20px;align-items:center}
+body.dev-ipad.ori-p #bar>.ttlw{order:0;flex:1 1 200px;min-width:0}
+body.dev-ipad.ori-p #bar>.barico{order:1;margin-left:auto;flex-wrap:nowrap}
+body.dev-ipad.ori-p #bar>.brk{order:2;display:block!important;flex-basis:100%;height:0;margin:0}
+body.dev-ipad.ori-p #bar>.ctx{order:3}
+body.dev-ipad.ori-l #bar{flex-wrap:nowrap}
+body.dev-ipad.ori-l #bar>.brk,body.dev-ipad.ori-l #ctxAno{display:none!important}
+body.dev-ipad.ori-l #bar>.ctx{flex:0 1 auto;min-width:0}
+body.dev-ipad.ori-l #bar .escsw{max-width:190px}
+body.dev-ipad.ori-l #bar #selTurma{max-width:170px}
+body.dev-ipad.ori-l #bar .barico{gap:6px}
+body.dev-ipad.ori-l #bar .barico .btn.ico{width:38px;height:38px;min-height:38px}
+body.dev-ipad #bar>#barx{order:9}
+body.dev-ipad.ori-p #bar .barico .btn.ico{width:40px;height:40px;min-height:40px}
+body.dev-ipad #bar .ctx select,body.dev-ipad #bar .escsw{min-height:40px;height:40px}
+body.dev-ipad #bar .anol{display:none}
+body.dev-ipad #ttl{font-size:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.dev-ipad.ori-l #side{width:224px}
+/* tabelas: ações só com ícone, numa linha */
+body.dev-ipad .lst td.act{white-space:nowrap;width:1%}
+body.dev-ipad .lst td.act .acts,body.dev-ipad .lst td.act{flex-wrap:nowrap}
+body.dev-ipad .lst td.act .btn.sm:not(.ico){font-size:0;gap:0;padding:0 10px;min-width:40px;justify-content:center}
+body.dev-ipad .lst td.act .btn.sm:not(.ico) .ic{margin:0}
+body.dev-ipad .lst td.act .btn.sm{min-height:38px}
+body.dev-ipad .lst td,body.dev-ipad .lst th{padding-top:8px;padding-bottom:8px}
+/* grelhas de cartões: colunas que se adaptam */
+body.dev-ipad .pnks,body.dev-ipad .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+body.dev-ipad .lst tr.swp td.act,body.dev-ipad .lst.instl td.act{display:flex!important;flex-direction:row!important;flex-wrap:nowrap;gap:6px;align-items:center}
+body.dev-ipad .lst.instl td.act .btn{flex:0 0 auto}
+body.dev-ipad .lst tr.swp td.act{width:auto!important;grid-column:1/-1;justify-content:flex-start;margin-top:4px}
+body.dev-ipad.ori-l .pnks{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+body.dev-ipad .tabs{overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+body.dev-ipad .tabs::-webkit-scrollbar{display:none}
+body.dev-ipad .tabs>button{flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -7768,8 +7804,9 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.95';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.95</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>iPad: menu lateral com os nomes</b> — toque no botão por baixo do logótipo (ou no próprio logótipo), ou deslize o dedo a partir da margem esquerda, para abrir o menu com os nomes das secções e das turmas; fecha ao escolher uma secção, ao tocar fora ou ao deslizar para a esquerda.</li><li><b>iPad: Início mais arrumado</b> — o cartão da escola deixa de esmagar o texto (os botões passam para baixo), instruções numa só linha, margens iguais e a barra de ações de baixo desliza em vez de cortar botões.</li></ul></details>
+const VERSAO='0.96';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.96</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>iPad mais compacto, na vertical e na horizontal</b>: cabeçalho em duas linhas baixas (título e botões em cima, escola, ano e turma por baixo), barra lateral mais estreita na horizontal, separadores que deslizam em vez de cortar, ações das tabelas só com ícones na vertical (já não empilham e não esticam as linhas) e cartões de indicadores que se ajustam à largura.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.95</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>iPad: menu lateral com os nomes</b> — toque no botão por baixo do logótipo (ou no próprio logótipo), ou deslize o dedo a partir da margem esquerda, para abrir o menu com os nomes das secções e das turmas; fecha ao escolher uma secção, ao tocar fora ou ao deslizar para a esquerda.</li><li><b>iPad: Início mais arrumado</b> — o cartão da escola deixa de esmagar o texto (os botões passam para baixo), instruções numa só linha, margens iguais e a barra de ações de baixo desliza em vez de cortar botões.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.94</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Mudar o código de encriptação</b>: em Definições › Sincronização › <b>Mudar o Código</b> escreve o código atual e o novo; a app encripta de novo todos os dados na nuvem e, nos outros aparelhos, pede o código novo. Se a ligação cair a meio, continua sozinha na próxima sincronização.</li><li>Para abrir os dados com um código que já existia, a app aceita qualquer código (as regras contra sequências como 12345678 valem só para códigos novos).</li><li>«Entrar com Google» já não diz que o site não está configurado quando a configuração demora a chegar (iPad/iPhone em redes lentas).</li><li>Ecrã de entrada: o aviso «só contas autorizadas» volta a ler-se numa só coluna.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.93</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Código de encriptação numérico</b>: a palavra-passe que protege os dados na nuvem passa a ser um código só com algarismos (mínimo 8, sem repetições nem sequências), com um teclado numérico no ecrã em todos os aparelhos — computador, iPad e iPhone. Quem já tinha uma palavra-passe com letras continua a usá-la: toque em «A minha palavra-passe antiga tem letras».</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.92</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Nada fica por enviar ao sair</b>: ao fechar a app, mudar de app no iPhone/iPad, recarregar ou terminar a sessão, a app grava e sincroniza logo as últimas alterações (sem esperar os 6 segundos). No computador, se ainda houver alterações a caminho, o navegador pede um momento antes de fechar; ao terminar a sessão aparece «A guardar as últimas alterações na nuvem…».</li><li><b>Ecrã de arranque animado</b> com o logótipo (desenho do «S» e o ponto dourado), quando a app demora a abrir.</li></ul></details>

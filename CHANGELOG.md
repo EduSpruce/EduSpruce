@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.96
+- iPad mais responsivo: na horizontal o cabeçalho cabe numa só linha (título, escola, turma e botões; barra lateral de 224 px); na vertical, duas linhas baixas. Ações das tabelas só com ícones e numa linha, cartões de indicadores ajustados à largura, separadores que deslizam.
+
 ## 0.95
 - iPad: menu lateral expansível com os nomes (botão sob o logótipo, toque no logótipo ou deslizar da margem esquerda); fecha ao escolher, tocar fora, Esc ou deslizar.
 - iPad: cartão da escola sem texto esmagado, instruções numa linha, margens de 20 px, barra de ações deslizável.

@@ -866,3 +866,8 @@ Auditoria automática repetida a todo o código e a todas as secções:
 ## v0.95 · iPad: menu lateral expansível
 - Entre 701 e 1100 px a barra lateral é uma coluna de ícones (74 px). `#railTgl` (sob `.brand`), o toque no logótipo ou deslizar a partir da margem esquerda (< 28 px, > 48 px para a direita) chamam `railAbrir(true)`: `body.rail-aberta` mostra `#side` fixo com 288 px e os nomes, com `#railBg` por trás. Fecha ao escolher uma secção, tocar fora, Esc, deslizar para a esquerda ou sair da largura de iPad.
 - Ajustes de layout no mesmo intervalo: `.esc-hero` em duas linhas, `.dhint` numa linha, `#view` com 20 px, `#barx` com deslocamento horizontal.
+
+## v0.96 · iPad responsivo
+- `body.dev-ipad.ori-l #bar`: uma linha (sem `#ctxAno`, que já aparece no caminho), `.escsw` ≤ 190 px, `#selTurma` ≤ 170 px, botões de 38 px; `#side` com 224 px.
+- `body.dev-ipad.ori-p #bar`: título + botões na 1.ª linha, escola/ano/turma na 2.ª (`.brk`).
+- `.lst td.act` sem texto (só ícones, `font-size:0`, nome acessível mantido), numa linha; em modo cartão (`tr.swp`) ocupa a linha inteira. `.pnks` em 6 colunas na horizontal, `auto-fit` 140 px na vertical; `.tabs` com deslocamento horizontal.
