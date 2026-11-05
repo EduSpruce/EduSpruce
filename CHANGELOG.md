@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.906
+- Ecrã do código de acesso: o teclado físico deixa de apanhar as teclas escritas em campos e janelas («Esqueci-me do código» funcionava só com o teclado do ecrã).
+
 ## 0.905
 - «Esqueci-me do código» no ecrã do código de acesso: confirma a identidade com o código de encriptação da sincronização (ou a palavra-passe da conta local), até 5 tentativas, e define um código novo de 4 algarismos; registado na auditoria.
 
