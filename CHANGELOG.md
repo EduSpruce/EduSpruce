@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.87
+- Safari no Mac: início de sessão Google por redirecionamento (sem janela bloqueada).
+
 ## 0.86
 - Google Drive: corrigido «Failed to fetch» (autorização enviada uma só vez; formato simples quando o navegador ou um filtro bloqueia o pedido).
 
