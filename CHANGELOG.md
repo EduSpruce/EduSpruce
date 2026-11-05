@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.85
+- Sincronização mais fiável: ficheiros grandes por envio retomável, um ficheiro com erro não pára o resto, tentativas rápidas e mensagens exatas; endereço de regresso normalizado no iPhone/iPad.
+
+## 0.84
+- Novo separador Definições › Sincronização, redesenhado.
+
 ## 0.83
 - Entrar com Microsoft 365 aparece como «em breve» até haver ID da Microsoft.
 

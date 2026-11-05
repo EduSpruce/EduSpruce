@@ -826,3 +826,9 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - Google Drive: a lista de ficheiros é refrescada em cada sincronização e quando um ficheiro não é encontrado (ficheiros criados noutros aparelhos).
 - `nvMontar` escolhe também a primeira turma quando `turmaAtiva` não existe.
 - Teste ponta-a-ponta `gsynct.py` (GIS e Drive simulados, computador + iPhone).
+
+## 0.84–0.85 — Separador Sincronização e fiabilidade
+- Definições › **Sincronização** (`defSync`/`bindSync`, painel `nvPainel()` com estado, fornecedor, conta, palavra-passe, automático, aparelhos, conflitos); Dados e Segurança mostra só um atalho. `nvLigado()` considera o ID central da Google.
+- `nvFetchRetry` reescrito: 3 tentativas (0,5/1/2 s), mensagem com serviço, caminho e erro (`window.__nvRedeErro`).
+- Fotografias/anexos: falha num ficheiro não interrompe a sincronização (`res.fotosFalha`). Google Drive: envio retomável para ficheiros > 4 MB.
+- `nvRedirect()` normalizado (sem `index.html`, sempre com «/» final).
