@@ -910,3 +910,7 @@ Auditoria automática repetida a todo o código e a todas as secções:
 ## v0.911 · Planeamento em grande e acertos de alinhamento
 - `cpmAmpliar(v)`: com `UI.cpmFull` o cartão `.cpm-plano` passa para `#cpm-fullbox` (fora de `#view`, que tem transformações) e fica `position:fixed` no ecrã inteiro; `--cs` (tamanho das células, 22–64 px) calcula-se pela largura e altura disponíveis; sai com o botão, Esc, fim do ecrã inteiro ou mudança de secção.
 - `dashRender`: no modo Geral o topo (seletor, pesquisa, ações, filtros) vai antes do cartão da escola, como no modo Simples.
+
+
+## v0.912 · Ecrã ampliado
+- `ecraAmplo({titulo, sub, el, acoes, aoFechar})`: cria `#ampv` (mesmo aspeto de `#perfilap`: `.pah` com «Fechar», `.pat`, ações; `.pab` com o conteúdo movido). Usado por `cpmAmpliar` (`UI.cpmFull`) e pelos Quadros (`UI.mqFull`); fecha com Esc, «Fechar» ou ao mudar de secção; volta a abrir sozinho quando a vista se redesenha.

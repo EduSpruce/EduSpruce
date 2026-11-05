@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.912
+- «Aumentar» no Planeamento Anual e nos Quadros abre um ecrã próprio ao estilo do Perfil de Aprendizagem (`ecraAmplo`).
+
 ## 0.911
 - Planeamento Anual: botão «Aumentar» (ecrã inteiro, células à medida do ecrã; Esc para sair).
 - Início: seletor Simples/Geral sempre por cima do cartão da escola; lupa da pesquisa corrigida.
