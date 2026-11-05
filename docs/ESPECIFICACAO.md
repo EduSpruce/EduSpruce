@@ -876,3 +876,7 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `ES_DOM='eduspruce.pt'`. Em `eduspruce.app` (e www), fora do regresso OAuth, a app faz `fetch('https://eduspruce.pt/eduspruce-config.json')` (CORS do GitHub Pages); se responder, mostra o ecrã de arranque, espera até 36 s que `nvL().mod` fique vazio (sincroniza) e faz `location.replace` para o mesmo caminho em eduspruce.pt. Se o .pt não responder (ainda não está no ar ou a rede bloqueia), fica no .app.
 - O armazenamento local é por endereço: no .pt cada aparelho entra com Google e escreve o código; os dados vêm da nuvem. UID dos eventos .ics mantém `@eduspruce.app` para não duplicar no Calendário.
 - `gLoginId`/`NV_CENTRAL.google` com reserva em `eduspruce.(pt|app)`.
+
+## v1.00 · Bloqueio dos dados de base
+- `_bloqBanAte` = agora + 5 s ao mudar de vista (`go`) e ao bloquear (`bloqAlternar(true)`); `bloqUI` só mostra `.bloqban` dentro desse prazo e depois esconde-o com transição.
+- `bloqIrDef()`: abre Definições › Dados e Segurança e realça `#bloq-card`. Com o bloqueio ligado, `#bloqBar`/`#bloqNav` e o aviso «Dados Bloqueados» chamam `bloqIrDef`, já não desbloqueiam.

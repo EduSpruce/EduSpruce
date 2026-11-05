@@ -4050,6 +4050,9 @@ html,body{overscroll-behavior:none}
 #view{overscroll-behavior-x:none}
 body.dev-ipad #view,body.dev-tlm #view{overflow-x:hidden}
 @media (min-width:701px) and (max-width:1100px){body:not(.rail-aberta) #side .verlegal{display:none!important}}
+.bloqban{transition:opacity .4s ease,transform .4s ease,max-height .45s ease}.bloqban.fora{opacity:0;transform:translateY(-6px);max-height:0;margin:0!important;padding-top:0!important;padding-bottom:0!important;overflow:hidden}
+.bloqdef{display:block;margin-top:4px;font-size:13px;opacity:.85}
+#bloq-card.realce{box-shadow:0 0 0 3px var(--acc);transition:box-shadow .3s}
 </style>
 </head>
 <body>
@@ -7812,8 +7815,9 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.99';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.99</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li>Endereço novo eduspruce.pt: se a app for aberta com http, passa sozinha para https assim que o certificado estiver pronto, e a mensagem de erro diz o que fazer.</li></ul></details>
+const VERSAO='1.00';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 1.00</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Bloqueio dos dados de base</b>: o aviso amarelo aparece só durante 5 segundos (ao bloquear e ao abrir uma vista bloqueada) e diz onde desbloquear. Desbloquear passa a fazer-se apenas em <b>Definições › Dados e Segurança</b>: o cadeado da barra e o aviso de alteração bloqueada levam lá.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.99</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>Endereço novo eduspruce.pt: se a app for aberta com http, passa sozinha para https assim que o certificado estiver pronto, e a mensagem de erro diz o que fazer.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.98</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Barra lateral fixa, como numa app</b>: no iPad deixa de deslizar para o lado (os ícones já não ficam cortados) e a página não «salta» ao arrastar nos limites.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.97</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Novo endereço: eduspruce.pt.</b> Quando o novo endereço estiver no ar, quem abrir eduspruce.app é levado para lá automaticamente — antes disso a app envia para a nuvem o que estiver por sincronizar. No novo endereço basta entrar com Google e escrever o código de encriptação: os dados vêm da nuvem.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.96</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>iPad mais compacto, na vertical e na horizontal</b>: cabeçalho em duas linhas baixas (título e botões em cima, escola, ano e turma por baixo), barra lateral mais estreita na horizontal, separadores que deslizam em vez de cortar, ações das tabelas só com ícones na vertical (já não empilham e não esticam as linhas) e cartões de indicadores que se ajustam à largura.</li></ul></details>
@@ -10474,7 +10478,7 @@ function bloqViolacoes(){if(!bloqOn()||_bloqLivre)return [];if(!_bloqRef)bloqRef
   if(v.length&&_ultimoJ){/* repõe o último estado guardado e explica */const ctx={};['anoAtivo','turmaAtiva','escolaAtiva','filtroOferta'].forEach(k=>ctx[k]=S[k]);
     try{S=JSON.parse(_ultimoJ);Object.assign(S,ctx)}catch(e){return _svB.apply(this,arguments)}
     clearTimeout(saveT);try{if($('#drawer.on'))closeDrawer()}catch(_){}try{manterPosicao(()=>go(VIEW))}catch(_){go(VIEW)}
-    if(!_bloqAviso){_bloqAviso=true;avisoModal('Dados Bloqueados',[...v.map(([,n])=>n+' está bloqueado.'),'A alteração foi desfeita para proteger a informação de base.','Pode desbloquear (com o seu código, se tiver um), fazer a alteração e voltar a bloquear.'],[{t:'Ok',v:0},{t:ic('cadeadoAb',15)+' Desbloquear',v:1,c:'pri'}]).then(r=>{_bloqAviso=false;if(r===1)bloqAlternar(false)})}
+    if(!_bloqAviso){_bloqAviso=true;avisoModal('Dados Bloqueados',[...v.map(([,n])=>n+' está bloqueado.'),'A alteração foi desfeita para proteger a informação de base.','Para alterar, desbloqueie em Definições › Dados e Segurança (com o seu código, se tiver um) e volte a bloquear no fim.'],[{t:'Ok',v:0},{t:ic('gear',15)+' Abrir Definições',v:1,c:'pri'}]).then(r=>{_bloqAviso=false;if(r===1)bloqIrDef()})}
     return}
   const r=_svB.apply(this,arguments);if(bloqOn())_bloqRef=bloqSigs(S);return r}}
 async function bloqAlternar(ligar){const b=bloqM();
@@ -14737,6 +14741,20 @@ const ES_DOM='eduspruce.pt';
   for(let i=0;i<30;i++){let L={};try{L=nvL()}catch(_){}const pend=Object.keys(L.mod||{}).length;if(!L.prov||!_nvK||!pend)break;if(!_nvBusy){try{await nvSincronizar(false)}catch(_){}}await new Promise(r=>setTimeout(r,1200))}
   try{esSplash('A abrir '+ES_DOM+'… Entre com Google e escreva o seu código: os dados vêm da nuvem.')}catch(_){}
   setTimeout(()=>location.replace(destino),1600)}catch(e){console.warn(e)}})();
+
+/* v1.00 · bloqueio dos dados de base: aviso só 5 s; desbloquear apenas em Definições › Dados e Segurança */
+let _bloqBanAte=0;
+function bloqIrDef(){toast('Para desbloquear: Definições › Dados e Segurança','aviso');UI.defTab='dados';go('definicoes');setTimeout(()=>{const c=$('#bloq-card');if(c){c.scrollIntoView({behavior:'smooth',block:'center'});c.classList.add('realce');setTimeout(()=>c.classList.remove('realce'),1800)}},350)}
+{const _gBB=go;go=function(v){if(v!==go._bbUlt){_bloqBanAte=Date.now()+5000;go._bbUlt=v}return _gBB.apply(this,arguments)};if(go._f)go._f=go._f}
+{const _ba=bloqAlternar;bloqAlternar=async function(ligar){if(ligar)_bloqBanAte=Date.now()+5000;return _ba.apply(this,arguments)}}
+{const _bu3=bloqUI;bloqUI=function(){const r=_bu3.apply(this,arguments);try{
+  const bb=$('#view .bloqban:not(.sug)');if(bb){const falta=_bloqBanAte-Date.now();if(falta<=0){bb.remove()}else{
+      const b=bb.querySelector('[data-bloqoff]');if(b){b.innerHTML=ic('gear',14)+' Definições';b.onclick=bloqIrDef}
+      const t=bb.querySelector('span:not(.sp1)');if(t&&!t.querySelector('.bloqdef'))t.insertAdjacentHTML('beforeend',' <span class="bloqdef">Para desbloquear: <b>Definições › Dados e Segurança</b>.</span>');
+      clearTimeout(bloqUI._t);bloqUI._t=setTimeout(()=>{const x=$('#view .bloqban:not(.sug)');if(x){x.classList.add('fora');setTimeout(()=>x.remove(),450)}},falta)}}
+  if(bloqOn())['#bloqBar','#bloqNav'].forEach(q=>{const e=$(q);if(e){e.onclick=bloqIrDef;e.title='Dados de base bloqueados — desbloqueie em Definições › Dados e Segurança';e.setAttribute('aria-label',e.title)}});
+  else['#bloqBar','#bloqNav'].forEach(q=>{const e=$(q);if(e)e.onclick=()=>bloqAlternar(true)});
+}catch(e){console.warn(e)}return r}}
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-org2]');if(b)mudarOrg(A(),b.dataset.org2);const mz=e.target.closest&&e.target.closest('[data-mzok]');if(mz){const [tid,iid]=mz.dataset.mzok.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=Date.now();saveNow();toast('Matriz de '+i.nome+' marcada como enviada','ok');go(VIEW)}}});

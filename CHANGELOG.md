@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.99
+- http → https automático em eduspruce.pt/.app quando o certificado existe; mensagem de erro clara.
+
+## 1.00
+- Bloqueio dos dados de base: aviso visível só 5 s (ao bloquear e ao entrar numa vista bloqueada), com indicação de onde desbloquear; desbloqueio apenas em Definições › Dados e Segurança (cadeado da barra e aviso de alteração levam lá).
+
 ## 0.98
 - Barra lateral fixa: sem deslocamento horizontal no iPad (`#side{overflow-x:hidden}`, ligações legais escondidas na coluna de ícones) e sem «salto» da página nos limites (`overscroll-behavior`).
 
