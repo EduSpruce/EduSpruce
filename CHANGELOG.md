@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.86
+- Google Drive: corrigido «Failed to fetch» (autorização enviada uma só vez; formato simples quando o navegador ou um filtro bloqueia o pedido).
+
 ## 0.85
 - Sincronização mais fiável: ficheiros grandes por envio retomável, um ficheiro com erro não pára o resto, tentativas rápidas e mensagens exatas; endereço de regresso normalizado no iPhone/iPad.
 
