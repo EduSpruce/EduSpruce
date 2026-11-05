@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.88
+- Ligação ao Google Drive bloqueada: a app explica como desligar bloqueadores de publicidade/conteúdos (incluindo no Safari) ou mudar de rede.
+
 ## 0.87
 - Safari no Mac: início de sessão Google por redirecionamento (sem janela bloqueada).
 
