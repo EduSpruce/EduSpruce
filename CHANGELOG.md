@@ -2,10 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
-## 0.99
+## 0.990
 - http → https automático em eduspruce.pt/.app quando o certificado existe; mensagem de erro clara.
 
-## 1.00
+## 0.991
 - Bloqueio dos dados de base: aviso visível só 5 s (ao bloquear e ao entrar numa vista bloqueada), com indicação de onde desbloquear; desbloqueio apenas em Definições › Dados e Segurança (cadeado da barra e aviso de alteração levam lá).
 
 ## 0.98
