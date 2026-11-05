@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.98
+- Barra lateral fixa: sem deslocamento horizontal no iPad (`#side{overflow-x:hidden}`, ligações legais escondidas na coluna de ícones) e sem «salto» da página nos limites (`overscroll-behavior`).
+
 ## 0.97
 - Endereço principal passa a eduspruce.pt (textos, páginas legais, guias e manual). No eduspruce.app a app verifica se eduspruce.pt já está no ar; se estiver, sincroniza o que estiver pendente e muda de endereço sozinha.
 
