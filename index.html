@@ -3968,6 +3968,45 @@ input.pinfoco{outline:3px solid var(--acc);outline-offset:1px}
 .nvmc{border:0;border-radius:20px;padding:0;max-width:420px;width:calc(100% - 24px);background:var(--panel);color:var(--ink)}.nvmc::backdrop{background:rgba(10,20,35,.45)}
 .nvmcf{display:flex;flex-direction:column;gap:6px;padding:20px}.nvmcf h2{margin:0 0 4px;display:flex;gap:8px;align-items:center;font-size:18px;text-transform:none;color:var(--ink)}.nvmcf label{font-size:12.5px;color:var(--mut);margin-top:6px}.nvmcf input{min-height:44px}
 .lgobr>span{flex:1;min-width:0}
+
+/* v0.95 · iPad (vertical e horizontal estreito) */
+.railtgl{display:none}
+@media (min-width:701px) and (max-width:1100px){
+  .railtgl{display:flex;align-items:center;justify-content:center;gap:10px;width:52px;height:40px;margin:0 0 10px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:inherit;flex:none}
+  .railtgl:active{transform:scale(.95)}
+  body.rail-aberta{padding-left:74px}
+  body.rail-aberta #side{position:fixed;left:0;top:0;bottom:0;width:288px;z-index:9001;align-items:stretch;padding:16px 14px 20px;box-shadow:16px 0 48px rgba(5,15,30,.35);overflow-y:auto;animation:railIn .22s cubic-bezier(.2,.8,.2,1)}
+  @keyframes railIn{from{transform:translateX(-200px);opacity:.4}to{transform:none;opacity:1}}
+  body.rail-aberta #side .lbl,body.rail-aberta #side .tnode .lbl,body.rail-aberta #side .chev{display:inline-flex!important}
+  body.rail-aberta #side .grp,body.rail-aberta #side .ver{display:block!important}
+  body.rail-aberta #side .brand{font-size:inherit;margin:0 0 10px;justify-content:flex-start}
+  body.rail-aberta #side .brand small{display:block!important}
+  body.rail-aberta #side .brand::before{content:none}
+  body.rail-aberta #side button.nav,body.rail-aberta #side button.nav.tnode{width:auto;justify-content:flex-start;padding:0 12px;gap:12px}
+  body.rail-aberta #side .tkids{padding-left:14px;align-items:stretch}
+  body.rail-aberta .railtgl{width:auto;justify-content:flex-start;padding:0 12px}
+  body.rail-aberta .railtgl .lbl{font-size:13.5px}
+  #railBg{position:fixed;inset:0;z-index:9000;background:rgba(10,20,35,.32);animation:railBg .2s ease-out}
+  @keyframes railBg{from{opacity:0}}
+  /* margens e cartões */
+  #bar{padding:12px 20px}
+  #view{padding:20px 20px 112px}
+  .esc-hero{flex-wrap:wrap;row-gap:14px;column-gap:16px;align-items:center}
+  .esc-hero .esc-t{flex:1 1 260px;min-width:0}
+  .esc-hero .sp1{flex-basis:100%;height:0}
+  .esc-hero.vz .sp1{display:none}
+  .esc-hero>.btn,.esc-hero>button{flex:0 0 auto;order:3}
+  .esc-hero .sp1{order:2}
+  .esc-hero.vz>.btn{order:0}
+  body.rail-aberta #side .brand .bt,body.rail-aberta #side .brand .bnm{display:flex!important;flex-direction:column;font-size:17px}
+  body.rail-aberta #side .brand .bnm{display:block!important}
+  .dtop{flex-wrap:wrap;row-gap:8px}
+  .dhint{display:block!important;flex:1 1 100%;line-height:1.45;font-size:12.5px}
+  .dhint .ic{vertical-align:-2px}
+  #barx{overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+  #barx::-webkit-scrollbar{display:none}
+  #barx>.btn{flex:0 0 auto}
+}
 </style>
 </head>
 <body>
@@ -7729,8 +7768,9 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.94';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.94</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Mudar o código de encriptação</b>: em Definições › Sincronização › <b>Mudar o Código</b> escreve o código atual e o novo; a app encripta de novo todos os dados na nuvem e, nos outros aparelhos, pede o código novo. Se a ligação cair a meio, continua sozinha na próxima sincronização.</li><li>Para abrir os dados com um código que já existia, a app aceita qualquer código (as regras contra sequências como 12345678 valem só para códigos novos).</li><li>«Entrar com Google» já não diz que o site não está configurado quando a configuração demora a chegar (iPad/iPhone em redes lentas).</li><li>Ecrã de entrada: o aviso «só contas autorizadas» volta a ler-se numa só coluna.</li></ul></details>
+const VERSAO='0.95';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.95</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>iPad: menu lateral com os nomes</b> — toque no botão por baixo do logótipo (ou no próprio logótipo), ou deslize o dedo a partir da margem esquerda, para abrir o menu com os nomes das secções e das turmas; fecha ao escolher uma secção, ao tocar fora ou ao deslizar para a esquerda.</li><li><b>iPad: Início mais arrumado</b> — o cartão da escola deixa de esmagar o texto (os botões passam para baixo), instruções numa só linha, margens iguais e a barra de ações de baixo desliza em vez de cortar botões.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.94</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Mudar o código de encriptação</b>: em Definições › Sincronização › <b>Mudar o Código</b> escreve o código atual e o novo; a app encripta de novo todos os dados na nuvem e, nos outros aparelhos, pede o código novo. Se a ligação cair a meio, continua sozinha na próxima sincronização.</li><li>Para abrir os dados com um código que já existia, a app aceita qualquer código (as regras contra sequências como 12345678 valem só para códigos novos).</li><li>«Entrar com Google» já não diz que o site não está configurado quando a configuração demora a chegar (iPad/iPhone em redes lentas).</li><li>Ecrã de entrada: o aviso «só contas autorizadas» volta a ler-se numa só coluna.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.93</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Código de encriptação numérico</b>: a palavra-passe que protege os dados na nuvem passa a ser um código só com algarismos (mínimo 8, sem repetições nem sequências), com um teclado numérico no ecrã em todos os aparelhos — computador, iPad e iPhone. Quem já tinha uma palavra-passe com letras continua a usá-la: toque em «A minha palavra-passe antiga tem letras».</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.92</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Nada fica por enviar ao sair</b>: ao fechar a app, mudar de app no iPhone/iPad, recarregar ou terminar a sessão, a app grava e sincroniza logo as últimas alterações (sem esperar os 6 segundos). No computador, se ainda houver alterações a caminho, o navegador pede um momento antes de fechar; ao terminar a sessão aparece «A guardar as últimas alterações na nuvem…».</li><li><b>Ecrã de arranque animado</b> com o logótipo (desenho do «S» e o ponto dourado), quando a app demora a abrir.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.91</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Só entram as contas autorizadas</b>: o administrador escolhe quem pode entrar com Google e com que perfil (Definições › Conta e Acesso › Quem Pode Entrar com Google) e publica a lista no site; contas retiradas perdem o acesso.</li><li><b>Dados só na nuvem</b>: neste site entra-se com Google, a sincronização encriptada é obrigatória e, ao terminar a sessão, a cópia do aparelho é limpa depois de enviar tudo.</li><li><b>Notificações</b> (iPhone/iPad com a app no ecrã principal, e computador): aula a começar, sumário por escrever, resumo do dia, avaliações de amanhã, reuniões e avisos urgentes, número no ícone, horário de silêncio — em Definições › Notificações. Com a app fechada: lembretes no Calendário (.ics).</li><li><b>iPhone</b>: novo Início «Hoje» (aula a decorrer ou a seguir com Sumário e Presenças, alertas, atalhos, o dia, os próximos 7 dias e as turmas) e Painel da Turma compacto (indicadores, atalhos, Atenção · Alunos · Agenda). A vista completa continua a um toque.</li><li>A app passa a abrir sem internet a partir do ecrã principal.</li></ul></details>
@@ -14622,6 +14662,23 @@ function nvMudarDlg(){const d=document.createElement('dialog');d.className='nvmc
       d.close();d.remove();toast('Código mudado — '+n+' ficheiro(s) encriptados de novo','ok');if(VIEW==='definicoes')vDefinicoes()}
     catch(e){er.textContent=e.message;pg.textContent='';bt.disabled=false;d.querySelector('#mc-x').disabled=false}}}
 {const _bs2=bindSync;bindSync=function(){const r=_bs2.apply(this,arguments);try{const pm=$('#nv2-pwm');if(pm&&!$('#nv2-mc')){pm.insertAdjacentHTML('beforebegin',`<button class="btn" id="nv2-mc">${ic('shield',14)} Mudar o Código</button>`);$('#nv2-mc').onclick=nvMudarDlg}}catch(e){console.warn(e)}return r}}
+
+/* v0.95 · iPad: menu lateral que abre com os nomes (botão, toque no logótipo ou deslizar da margem) */
+const railModo=()=>{try{return matchMedia('(min-width:701px) and (max-width:1100px)').matches}catch(_){return false}};
+const RAIL_IC_ABRIR='<svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/><path d="M13 10l2 2-2 2"/></svg>';
+const RAIL_IC_FECHAR='<svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/><path d="M16 10l-2 2 2 2"/></svg>';
+function railAbrir(on){if(on&&!railModo())on=false;document.body.classList.toggle('rail-aberta',!!on);const b=$('#railTgl');if(b){b.setAttribute('aria-expanded',on?'true':'false');b.setAttribute('aria-label',on?'Recolher o menu':'Mostrar o menu com os nomes');b.innerHTML=on?RAIL_IC_FECHAR+'<span class="lbl">Recolher</span>':RAIL_IC_ABRIR}
+  let bg=$('#railBg');if(on&&!bg){bg=document.createElement('div');bg.id='railBg';bg.onclick=()=>railAbrir(false);document.body.appendChild(bg)}else if(!on&&bg)bg.remove();try{if(on)$('#side').scrollTop=0}catch(_){}}
+function railPrep(){const sd=$('#side');if(!sd||$('#railTgl'))return;const br=sd.querySelector('.brand');const b=document.createElement('button');b.type='button';b.id='railTgl';b.className='railtgl';b.innerHTML=RAIL_IC_ABRIR;b.setAttribute('aria-label','Mostrar o menu com os nomes');b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','side');
+  if(br)br.insertAdjacentElement('afterend',b);else sd.prepend(b);b.onclick=e=>{e.stopPropagation();railAbrir(!document.body.classList.contains('rail-aberta'))};
+  if(br){br.style.cursor='pointer';br.addEventListener('click',()=>{if(railModo())railAbrir(!document.body.classList.contains('rail-aberta'))})}
+  sd.addEventListener('click',e=>{if(!document.body.classList.contains('rail-aberta'))return;const n=e.target.closest('[data-v],[data-go],.tsec');if(n&&!e.target.closest('.chev'))setTimeout(()=>railAbrir(false),60)})}
+railPrep();setInterval(railPrep,1500);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('rail-aberta'))railAbrir(false)});
+addEventListener('resize',()=>{if(!railModo()&&document.body.classList.contains('rail-aberta'))railAbrir(false)});
+{let x0=null,y0r=null,dentro=false;document.addEventListener('touchstart',e=>{if(!railModo()||e.touches.length!==1)return;const t=e.touches[0];const ab=document.body.classList.contains('rail-aberta');dentro=ab&&!!e.target.closest('#side');if(t.clientX<28||dentro||(!ab&&e.target.closest('#side'))){x0=t.clientX;y0r=t.clientY}else x0=null},{passive:true});
+  document.addEventListener('touchmove',e=>{if(x0==null)return;const t=e.touches[0];const dx=t.clientX-x0,dy=Math.abs(t.clientY-y0r);if(dy>40){x0=null;return}const ab=document.body.classList.contains('rail-aberta');if(!ab&&dx>48){railAbrir(true);x0=null}else if(ab&&dx<-60){railAbrir(false);x0=null}},{passive:true});
+  document.addEventListener('touchend',()=>{x0=null},{passive:true})}
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-org2]');if(b)mudarOrg(A(),b.dataset.org2);const mz=e.target.closest&&e.target.closest('[data-mzok]');if(mz){const [tid,iid]=mz.dataset.mzok.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=Date.now();saveNow();toast('Matriz de '+i.nome+' marcada como enviada','ok');go(VIEW)}}});

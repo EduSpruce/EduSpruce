@@ -862,3 +862,7 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - Noutro aparelho, «não corresponde» → apaga a chave local e abre o assistente para o código novo.
 - `nvPinErro(a,id,novo)`: regras contra repetições/sequências só para códigos novos.
 - `gLoginId` com reserva `ES_G_ID` em eduspruce.app; `gLogin` espera por `nvCentralCarregar()` se o ID ainda não chegou.
+
+## v0.95 · iPad: menu lateral expansível
+- Entre 701 e 1100 px a barra lateral é uma coluna de ícones (74 px). `#railTgl` (sob `.brand`), o toque no logótipo ou deslizar a partir da margem esquerda (< 28 px, > 48 px para a direita) chamam `railAbrir(true)`: `body.rail-aberta` mostra `#side` fixo com 288 px e os nomes, com `#railBg` por trás. Fecha ao escolher uma secção, tocar fora, Esc, deslizar para a esquerda ou sair da largura de iPad.
+- Ajustes de layout no mesmo intervalo: `.esc-hero` em duas linhas, `.dhint` numa linha, `#view` com 20 px, `#barx` com deslocamento horizontal.

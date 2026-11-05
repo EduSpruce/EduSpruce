@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.95
+- iPad: menu lateral expansível com os nomes (botão sob o logótipo, toque no logótipo ou deslizar da margem esquerda); fecha ao escolher, tocar fora, Esc ou deslizar.
+- iPad: cartão da escola sem texto esmagado, instruções numa linha, margens de 20 px, barra de ações deslizável.
+
 ## 0.94
 - Mudar o código de encriptação (Definições › Sincronização › Mudar o Código): volta a encriptar todos os ficheiros na nuvem, retoma se for interrompido; os outros aparelhos pedem o código novo.
 - Códigos existentes aceites sem as regras de força (só para códigos novos).
