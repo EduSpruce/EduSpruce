@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.905
+- «Esqueci-me do código» no ecrã do código de acesso: confirma a identidade com o código de encriptação da sincronização (ou a palavra-passe da conta local), até 5 tentativas, e define um código novo de 4 algarismos; registado na auditoria.
+
 ## 0.904
 - Módulo opcional Coord. PROFIJ (cargo «Coordenador(a) do PROFIJ»): painel, turmas e formandos (médias por componente, FPCT, PAF, regra ≥ 10), entidades e colocações da FPCT, PAF/PEA com júri e classificações, Conselho dos Cursos, legislação; CSV e .ics.
 - Ao entrar, barra de sincronização 0–100 % e a app só abre depois de sincronizar (com opções sem internet, ligação expirada ou erro).
