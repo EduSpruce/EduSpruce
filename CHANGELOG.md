@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.992
+- Versão discreta junto ao logótipo na barra lateral (toque abre a Ajuda/novidades).
+
 ## 0.990
 - http → https automático em eduspruce.pt/.app quando o certificado existe; mensagem de erro clara.
 
