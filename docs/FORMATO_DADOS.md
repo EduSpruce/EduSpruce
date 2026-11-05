@@ -199,3 +199,5 @@ Ficheiros (documentos do aluno, portefólio, arquivo do DT, biblioteca) são dat
 - `S.jornal.quadros` (0.910): quadros do Jornal (ver ESPECIFICACAO v0.910). `FOTOS['mq:<id>']`: imagens dos quadros.
 - `eduspruce-config.json` › `reposicoes`: [{h, q}] ordens de reposição; localStorage `esrep` (por aparelho): ordens já cumpridas. Ficheiro na nuvem `ef-reposto-<q>.json`: marca de reposição feita.
 - `S.cprofij.anos[ano].mat[turma].disc[].det`: código da UFCD; disciplinas tecnológicas com as mesmas siglas dão-se em sequência.
+
+- `S.cprofij.anos[ano].mat[turma].plano` {em, R} e `.pontos` [{id, data, dadas, obs}] (0.913).

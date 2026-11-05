@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.913
+- Coord. PROFIJ: Planeamento Inicial (calculado e fixável) e Pontos de Situação datados com aulas dadas reais, desvio e previsão até ao fim.
+
 ## 0.912
 - «Aumentar» no Planeamento Anual e nos Quadros abre um ecrã próprio ao estilo do Perfil de Aprendizagem (`ecraAmplo`).
 

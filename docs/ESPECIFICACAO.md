@@ -914,3 +914,9 @@ Auditoria automática repetida a todo o código e a todas as secções:
 
 ## v0.912 · Ecrã ampliado
 - `ecraAmplo({titulo, sub, el, acoes, aoFechar})`: cria `#ampv` (mesmo aspeto de `#perfilap`: `.pah` com «Fechar», `.pat`, ações; `.pab` com o conteúdo movido). Usado por `cpmAmpliar` (`UI.cpmFull`) e pelos Quadros (`UI.mqFull`); fecha com Esc, «Fechar» ou ao mudar de secção; volta a abrir sozinho quando a vista se redesenha.
+
+
+## v0.913 · Planeamento inicial e pontos de situação
+- `cpmCalc(a, turma, opt)`: `opt.ref` = primeiro dia «futuro» (tudo antes conta como previsto/dado); `opt.dadas` = valores de um ponto. Sem `opt`, usa o último ponto até hoje (`P0`) e soma as aulas do horário desde esse dia (`fonte:'estimativa'`). Cada linha tem `prev` (previstas até à data), `tot` (aulas do horário no ano), `fonte` (horario|ponto|estimativa|manual).
+- `cpmPlanoIni` (ref = início das aulas): planeamento inicial; `M.plano = {em, R:[{id, nome, aulas, tot, fim, saldo}]}` quando fixado.
+- `M.pontos = [{id, data, dadas:{discId:n}, obs}]`; `cpmPontoDlg` (dadas em branco = previstas), `cpmPontoVer` (relatório em `ecraAmplo`, impressão só do relatório com `body.amp-print`).
