@@ -905,3 +905,8 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - Verificação ao vivo: `setInterval` 4 s → `nvSincronizar(false)` (caminho rápido: versão do manifesto) quando a app está visível, com sessão, chave e sem barra/privacidade.
 - Reposição: `eduspruce-config.json` › `reposicoes:[{h, q}]` (h = SHA-256 de «eduspruce:»+e-mail, q = data da ordem). `repVerificar()` corre antes da barra de sincronização: confirma com o utilizador, apaga todos os ficheiros `ef-*` do appDataFolder (se ainda não houver `ef-reposto-<q>.json`), cria essa marca, limpa o aparelho e guarda `esrep` {h:q}.
 - Cabeçalho: botão `#privBtn` antes da Ajuda; `ResizeObserver` nos ícones volta a arrumar o cabeçalho; antes de passar os botões para a 2.ª linha tenta esconder as etiquetas (`hcomp`); na 2.ª linha ficam alinhados à direita.
+
+
+## v0.911 · Planeamento em grande e acertos de alinhamento
+- `cpmAmpliar(v)`: com `UI.cpmFull` o cartão `.cpm-plano` passa para `#cpm-fullbox` (fora de `#view`, que tem transformações) e fica `position:fixed` no ecrã inteiro; `--cs` (tamanho das células, 22–64 px) calcula-se pela largura e altura disponíveis; sai com o botão, Esc, fim do ecrã inteiro ou mudança de secção.
+- `dashRender`: no modo Geral o topo (seletor, pesquisa, ações, filtros) vai antes do cartão da escola, como no modo Simples.

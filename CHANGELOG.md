@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.911
+- Planeamento Anual: botão «Aumentar» (ecrã inteiro, células à medida do ecrã; Esc para sair).
+- Início: seletor Simples/Geral sempre por cima do cartão da escola; lupa da pesquisa corrigida.
+- Barra lateral: rodapé alinhado; texto conforme a sincronização.
+
 ## 0.910
 - Jornal Escolar › Quadros (quadro visual: notas, listas, ligações, imagens, colunas, títulos, cores, setas, quadros dentro de quadros; desfazer/refazer, zoom, dois dedos).
 - Atualização ao vivo entre aparelhos: verificação da nuvem a cada 4 s com a app à vista (1 pedido pequeno).
