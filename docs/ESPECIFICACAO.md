@@ -871,3 +871,8 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `body.dev-ipad.ori-l #bar`: uma linha (sem `#ctxAno`, que já aparece no caminho), `.escsw` ≤ 190 px, `#selTurma` ≤ 170 px, botões de 38 px; `#side` com 224 px.
 - `body.dev-ipad.ori-p #bar`: título + botões na 1.ª linha, escola/ano/turma na 2.ª (`.brk`).
 - `.lst td.act` sem texto (só ícones, `font-size:0`, nome acessível mantido), numa linha; em modo cartão (`tr.swp`) ocupa a linha inteira. `.pnks` em 6 colunas na horizontal, `auto-fit` 140 px na vertical; `.tabs` com deslocamento horizontal.
+
+## v0.97 · Mudança de endereço para eduspruce.pt
+- `ES_DOM='eduspruce.pt'`. Em `eduspruce.app` (e www), fora do regresso OAuth, a app faz `fetch('https://eduspruce.pt/eduspruce-config.json')` (CORS do GitHub Pages); se responder, mostra o ecrã de arranque, espera até 36 s que `nvL().mod` fique vazio (sincroniza) e faz `location.replace` para o mesmo caminho em eduspruce.pt. Se o .pt não responder (ainda não está no ar ou a rede bloqueia), fica no .app.
+- O armazenamento local é por endereço: no .pt cada aparelho entra com Google e escreve o código; os dados vêm da nuvem. UID dos eventos .ics mantém `@eduspruce.app` para não duplicar no Calendário.
+- `gLoginId`/`NV_CENTRAL.google` com reserva em `eduspruce.(pt|app)`.

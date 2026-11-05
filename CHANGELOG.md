@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.97
+- Endereço principal passa a eduspruce.pt (textos, páginas legais, guias e manual). No eduspruce.app a app verifica se eduspruce.pt já está no ar; se estiver, sincroniza o que estiver pendente e muda de endereço sozinha.
+
 ## 0.96
 - iPad mais responsivo: na horizontal o cabeçalho cabe numa só linha (título, escola, turma e botões; barra lateral de 224 px); na vertical, duas linhas baixas. Ações das tabelas só com ícones e numa linha, cartões de indicadores ajustados à largura, separadores que deslizam.
 

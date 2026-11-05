@@ -25,7 +25,7 @@ Os endereços a usar abaixo são os da sua app. Exemplos:
 | Onde está a app | URI de redirecionamento | Origem |
 |---|---|---|
 | GitHub Pages | `https://<utilizador>.github.io/eduspruce/` | `https://<utilizador>.github.io` |
-| Domínio próprio | `https://eduspruce.app/` | `https://eduspruce.app` |
+| Domínio próprio | `https://eduspruce.pt/` | `https://eduspruce.pt` |
 
 Dentro da app, em **Definições › Dados e Segurança › Sincronização na Nuvem › Guia de configuração**, estes
 endereços aparecem já preenchidos, com botão para copiar.
@@ -83,8 +83,8 @@ a **verificação de editor** (precisa de um ID do Microsoft AI Cloud Partner Pr
    `drive.appdata` é a pasta escondida da app no Drive: a app não vê os outros ficheiros do professor.
 5. **Clientes › + Criar cliente:**
    - **Tipo de aplicação:** Aplicação Web; nome `EduSpruce web`;
-   - **Origens JavaScript autorizadas:** a origem da app (ex.: `https://eduspruce.app`);
-   - **URIs de redirecionamento autorizados:** o endereço da app com barra final (ex.: `https://eduspruce.app/`) — necessário no iPhone/iPad;
+   - **Origens JavaScript autorizadas:** a origem da app (ex.: `https://eduspruce.pt`);
+   - **URIs de redirecionamento autorizados:** o endereço da app com barra final (ex.: `https://eduspruce.pt/`) — necessário no iPhone/iPad;
    - **Criar** › copie o **ID de cliente** (`….apps.googleusercontent.com`). O segredo do cliente não é usado.
 6. **Público-alvo › Publicar app.** Em «Teste» só entram os utilizadores de teste (até 100). Publicada («Em produção»), qualquer conta pode entrar; com estes âmbitos não sensíveis, normalmente não é precisa a verificação completa da Google (pode ser pedida a confirmação da marca).
 7. **No GitHub**: `eduspruce-config.json` › cole em `googleClientId` › **Commit changes**.

@@ -9,10 +9,10 @@
 | O quê | Onde |
 |---|---|
 | Repositório (código da app, público) | **github.com/EduSpruce/EduSpruce** (ramo `main`) |
-| Site | GitHub Pages do repositório; domínio próprio **eduspruce.app** (ficheiro `CNAME`) |
+| Site | GitHub Pages do repositório; domínio próprio **eduspruce.pt** (ficheiro `CNAME`) |
 | Configuração central (IDs Microsoft/Google) | `eduspruce-config.json` na raiz do repositório |
-| Política de Privacidade | `https://eduspruce.app/privacidade.html` |
-| Termos de Serviço | `https://eduspruce.app/termos.html` |
+| Política de Privacidade | `https://eduspruce.pt/privacidade.html` |
+| Termos de Serviço | `https://eduspruce.pt/termos.html` |
 | Guia técnico completo | `docs/guias/CONFIGURAR_SINCRONIZACAO.md` (e, na app, Definições › Dados e Segurança › Sincronização › Guia de configuração) |
 | Logótipo (SVG/PNG) | `docs/logotipo/` no repositório |
 | Projeto Google Cloud | n.º **275856895734** |
@@ -37,7 +37,7 @@
 
 ---
 
-## 3. Domínio próprio eduspruce.app
+## 3. Domínio próprio eduspruce.pt
 
 1. Comprar o domínio num registador (Cloudflare, Porkbun, Namecheap, Hostinger…).
 2. **Verificar o domínio no GitHub** (conta › Settings › Pages › *Add a domain*) com o registo TXT `_github-pages-challenge-<utilizador>`.
@@ -53,9 +53,9 @@
 | CNAME | www | `<utilizador>.github.io` (sem https nem caminho) |
 
 4. Na Cloudflare: nuvem **cinzenta (DNS only)**.
-5. Repositório › Settings › Pages › *Custom domain* `eduspruce.app` › Save (cria o `CNAME`).
-6. Verificar propagação em **dnschecker.org** (tipo A) ou `dig eduspruce.app +short`; depois **Check again** e marcar **Enforce HTTPS**. `.app` só abre com HTTPS.
-7. Erro «Both eduspruce.app and its alternate name are improperly configured / NotServedByPagesError» = DNS ainda não aponta para o GitHub (registos em falta, antigos ou a propagar).
+5. Repositório › Settings › Pages › *Custom domain* `eduspruce.pt` › Save (cria o `CNAME`).
+6. Verificar propagação em **dnschecker.org** (tipo A) ou `dig eduspruce.pt +short`; depois **Check again** e marcar **Enforce HTTPS**. `.app` só abre com HTTPS.
+7. Erro «Both eduspruce.pt and its alternate name are improperly configured / NotServedByPagesError» = DNS ainda não aponta para o GitHub (registos em falta, antigos ou a propagar).
 
 ---
 
@@ -66,16 +66,16 @@ Feito na **console.cloud.google.com**, projeto 275856895734:
 2. **Google Auth Platform** (antigo «Ecrã de consentimento OAuth»): nome EduSpruce, público **Externo**, e-mail de contacto.
 3. **Acesso a dados (âmbitos):** `openid`, `.../auth/userinfo.email`, `.../auth/userinfo.profile`, `.../auth/drive.appdata`.
 4. **Clientes › Aplicação Web:**
-   - Origens JavaScript autorizadas: `https://eduspruce.app` (e o endereço github.io, se usado).
-   - URIs de redirecionamento: `https://eduspruce.app/` (com barra final; necessário no iPhone/iPad).
+   - Origens JavaScript autorizadas: `https://eduspruce.pt` (e o endereço github.io, se usado).
+   - URIs de redirecionamento: `https://eduspruce.pt/` (com barra final; necessário no iPhone/iPad).
 5. ID de cliente colado em `eduspruce-config.json` › `googleClientId`.
 6. **Público-alvo:** em «Teste» só entram utilizadores de teste (até 100) → **Publicar app** para todos.
 
 ### Remover o «Unverified» (por fazer)
 Só é precisa a **verificação da marca** (âmbitos não sensíveis), 2–3 dias úteis:
-1. Domínio `eduspruce.app` a funcionar.
-2. **Google Search Console** (search.google.com/search-console): adicionar `eduspruce.app` como propriedade de *Domínio* e criar o registo TXT pedido.
-3. **Google Auth Platform › Branding:** logótipo 120×120 (`EduSpruce-logotipo-Google-120.png` em `docs/logotipo/png/`), página inicial `https://eduspruce.app/`, privacidade `https://eduspruce.app/privacidade.html`, termos `https://eduspruce.app/termos.html`, domínio autorizado `eduspruce.app`.
+1. Domínio `eduspruce.pt` a funcionar.
+2. **Google Search Console** (search.google.com/search-console): adicionar `eduspruce.pt` como propriedade de *Domínio* e criar o registo TXT pedido.
+3. **Google Auth Platform › Branding:** logótipo 120×120 (`EduSpruce-logotipo-Google-120.png` em `docs/logotipo/png/`), página inicial `https://eduspruce.pt/`, privacidade `https://eduspruce.pt/privacidade.html`, termos `https://eduspruce.pt/termos.html`, domínio autorizado `eduspruce.pt`.
 4. **Centro de verificação › Pedir verificação**.
 
 ### Onde ficam os dados no Google Drive
@@ -97,7 +97,7 @@ Numa **pasta oculta da app** (`appDataFolder`), que não aparece em «O meu disc
 
 1. **entra.microsoft.com › Entra ID › Registos de aplicações › + Novo registo.**
 2. Nome EduSpruce · Tipos de conta: *qualquer diretório organizacional (multi-inquilino) e contas Microsoft pessoais*.
-3. URI de redirecionamento: plataforma **Aplicação de página única (SPA)** › `https://eduspruce.app/` (e o github.io, se usado).
+3. URI de redirecionamento: plataforma **Aplicação de página única (SPA)** › `https://eduspruce.pt/` (e o github.io, se usado).
 4. **Permissões de API › Microsoft Graph › Delegadas:** `Files.ReadWrite.AppFolder`, `User.Read`, `offline_access`.
 5. Copiar o **ID da aplicação (cliente)** para `eduspruce-config.json` › `microsoftClientId` (o Claude pode fazer o commit).
 6. Contas da escola: se aparecer «Precisa da aprovação do administrador», o administrador do Microsoft 365 do agrupamento faz **Entra ID › Aplicações empresariais › EduSpruce › Permissões › Conceder consentimento de administrador**.
