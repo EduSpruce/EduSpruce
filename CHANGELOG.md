@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.92
+- Sincroniza antes de sair: ao esconder/fechar a app, recarregar ou terminar a sessão grava e envia logo as alterações pendentes; aviso do navegador se ainda houver envios; ecrã «A guardar as últimas alterações na nuvem…» ao terminar a sessão.
+- Ecrã de arranque com o logótipo animado.
+
 ## 0.91
 - Acesso controlado pelo administrador: só entram com Google as contas autorizadas (lista em `eduspruce-config.json`, com SHA-256 dos e-mails) e com o perfil definido; sessões revalidadas ao abrir.
 - Nuvem obrigatória (`modoNuvem: "obrigatorio"`): só Google (conta local apenas para emergência do administrador), sincronização sempre ligada, limpeza do aparelho ao terminar a sessão.

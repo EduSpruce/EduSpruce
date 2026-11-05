@@ -846,3 +846,8 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - Nuvem obrigatória: classe `body.nv-obrig`; login local só para `papel==='admin'`; assistente sem «Agora Não»; `#nv2-auto` bloqueado; `terminarSessao` → `sairNuvem()` (sincroniza, confirma pendentes, apaga localStorage/IndexedDB).
 - Notificações: `sw.js` (notificationclick → postMessage {es:'ir',v,t} ou `?ir=&t=`; cache da app rede-primeiro). `ntMostrar` usa `registration.showNotification`; `ntTick` a cada 30 s (chaves enviadas em `es.nt.env`); `S.cfg.notif` (aulas/ante, sumario, resumo/resumoH, testes/testesH, urgentes, badge, silDe/silAte, fds); `navigator.setAppBadge`; `ntICS(45)`. Separador Definições › Notificações (`UI.defTab='notif'`).
 - iPhone (≤640 px): `vInicioMovel()` (`S.cfg.inicioMovel!=='completo'`) e `vPainelMovel()` (`S.cfg.painelMovel!=='completo'`, `UI.pnmTab` at|al|ag).
+
+## v0.92 · Sincronizar antes de sair · ecrã de arranque
+- `nvPendenteAgora()` (faz `saveNow()` e vê `nvL().mod`), `nvSyncSaida()` (até 4 tentativas, espera `_nvBusy`); chamados em `visibilitychange→hidden`, `pagehide`, `beforeunload` (com aviso do navegador, exceto `__efApagar`/`__nvSemAviso`, p. ex. durante «Entrar com Google»).
+- `terminarSessao` espera pela sincronização (máx. 20 s) com o ecrã de arranque e a mensagem «A guardar…»; se ficar algo por enviar pergunta antes de sair.
+- `#splash` logo a seguir a `<body>` (CSS próprio `#splash-css`, aparece só após 250 ms, respeita «Reduzir movimento»); `esSplash(txt|false)`; retirado quando aparece o ecrã de entrada ou a primeira vista; mensagens aos 4 s e 15 s.
