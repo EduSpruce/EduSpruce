@@ -3299,6 +3299,7 @@ body.dev-pc #bar.hgrid>#ctxAno{grid-area:a!important}
 body.dev-pc #bar.hgrid>.ctx:not(#ctxEsc):not(#ctxAno){grid-area:u!important}
 body.dev-pc #bar.hgrid>.barico{grid-area:i!important;justify-self:end}
 body.dev-pc #bar.hgrid>#barx{grid-column:1/-1!important;grid-row:2!important;width:auto!important;min-width:0;justify-content:center!important;flex-wrap:wrap!important}
+body.dev-pc #bar.hgrid:not(.hx1)>#barx{justify-content:flex-end!important}
 body.dev-pc #bar.hgrid.hx1>#barx{flex-wrap:nowrap!important}
 body.dev-pc #bar.hgrid>#barx:empty{display:none!important}
 body.dev-pc #bar.hgrid>:is(#menuBtn,.brk,#barEsc){display:none!important}
@@ -4121,6 +4122,115 @@ body.priv-on dialog{visibility:hidden!important}
 @keyframes prvPulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.28)}70%{box-shadow:0 0 0 18px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
 @media (prefers-reduced-motion:reduce){#privlock,#privlock .prvl{animation:none}}
 @media print{#privlock{display:none}}
+
+/* 0.910 · Jornal › Quadros */
+.mq{display:flex;flex-direction:column;height:calc(100vh - 250px);min-height:520px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}
+.mq-top{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);min-height:46px}
+.mq-bc{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px}.mq-bcb{border:0;background:none;color:var(--acc);padding:2px 4px;border-radius:6px}.mq-bcb:hover{background:var(--acc2)}
+.mq-dica{font-size:12px}@media (max-width:900px){.mq-dica{display:none}}
+.mq-body{flex:1;display:flex;min-height:0}
+.mq-bar{width:74px;flex:none;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px;padding:8px 6px;overflow-y:auto;background:var(--bg)}
+.mq-tool{display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;border-radius:10px;padding:8px 2px;font-size:11px;color:var(--ink);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.mq-tool:hover{background:var(--panel);box-shadow:0 1px 4px rgba(0,0,0,.08)}.mq-tool svg{color:var(--acc)}
+.mq-ghost{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);background:var(--panel);border:1px solid var(--acc);color:var(--ink);padding:8px 12px;border-radius:10px;box-shadow:0 10px 30px -8px rgba(0,0,0,.3);display:flex;gap:6px;align-items:center;font-size:13px}
+.mq-cv{flex:1;position:relative;overflow:hidden;touch-action:none;cursor:default;outline:none;background-color:var(--bg);background-image:radial-gradient(circle,color-mix(in srgb,var(--ink) 16%,transparent) 1px,transparent 1.2px);background-size:22px 22px}
+.mq-cv.pan{cursor:grabbing}.mq-cv.drop{box-shadow:inset 0 0 0 3px var(--acc)}
+.mq-w{position:absolute;left:0;top:0;transform-origin:0 0;width:1px;height:1px}
+.mq-svg{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;color:var(--mut)}
+.mq-seta .ln{fill:none;stroke:currentColor;stroke-width:2}.mq-seta .hit{fill:none;stroke:transparent;stroke-width:14;pointer-events:stroke;cursor:pointer}.mq-seta.sel{color:var(--acc)}.mq-seta.sel .ln{stroke-width:3}
+.mq-it{position:absolute;background:var(--panel);border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.12),0 0 0 1px color-mix(in srgb,var(--ink) 9%,transparent);font-size:13.5px;line-height:1.45;user-select:none;-webkit-user-select:none;touch-action:none;cursor:default}
+.mq-it.tem-cor{box-shadow:inset 0 4px 0 var(--mqc),0 1px 2px rgba(0,0,0,.12),0 0 0 1px color-mix(in srgb,var(--ink) 9%,transparent)}
+.mq-it.sel{box-shadow:0 0 0 2px var(--acc),0 6px 18px -8px rgba(0,0,0,.35)}.mq-it.tem-cor.sel{box-shadow:inset 0 4px 0 var(--mqc),0 0 0 2px var(--acc),0 6px 18px -8px rgba(0,0,0,.35)}
+.mq-it.arr{z-index:50;box-shadow:0 0 0 2px var(--acc),0 18px 40px -12px rgba(0,0,0,.45);transform:rotate(-1deg) scale(1.02);cursor:grabbing;transition:transform .12s}
+.mq-it.lig{box-shadow:0 0 0 3px #f59e0b}.mq.ligar .mq-it{cursor:crosshair}
+.mq-rz{position:absolute;right:-5px;top:20%;bottom:20%;width:10px;cursor:ew-resize;border-radius:6px}.mq-it.sel .mq-rz::after{content:"";position:absolute;right:3px;top:calc(50% - 10px);width:4px;height:20px;border-radius:3px;background:var(--acc)}
+.mq-txt{padding:12px 14px;min-height:22px;outline:none;word-wrap:break-word;overflow-wrap:anywhere}.mq-txt h3{font-size:16px;margin:0 0 4px}.mq-txt ul,.mq-txt ol{margin:4px 0;padding-left:20px}.mq-txt p{margin:0 0 4px}.mq-txt a{color:var(--acc)}
+.mq-it.ed{cursor:text;user-select:text;-webkit-user-select:text}.mq-it.ed .mq-txt{user-select:text;-webkit-user-select:text}
+.mq-ph{color:var(--mut)}
+.mq-titulo{background:none;box-shadow:none}.mq-titulo .mq-txt{font-size:24px;font-weight:700;padding:4px 6px;line-height:1.2}.mq-titulo.sel{box-shadow:0 0 0 2px var(--acc)}.mq-titulo.tem-cor .mq-txt{color:var(--mqc)}.mq-titulo.tem-cor{box-shadow:none}
+.mq-th,.mq-ch{display:flex;align-items:center;gap:6px;padding:10px 12px 4px}.mq-th small,.mq-ch small{color:var(--mut);font-size:11.5px}
+.mq-nm{flex:1;min-width:0;border:0;background:none;font-weight:700;font-size:14px;padding:2px;border-radius:4px;color:var(--ink)}.mq-nm:focus{outline:2px solid var(--acc2);background:var(--bg)}
+.mq-pb{display:block;height:3px;margin:2px 12px 6px;background:var(--line);border-radius:3px;overflow:hidden}.mq-pb>i{display:block;height:100%;background:var(--ok);transition:width .4s}
+.mq-tl{display:flex;flex-direction:column;padding:0 8px}.mq-tl label{display:flex;align-items:center;gap:8px;padding:3px 4px;border-radius:5px}.mq-tl label:hover{background:var(--bg)}
+.mq-tl input[type=text]{flex:1;min-width:0;border:0;background:none;padding:3px 0;font-size:13.5px;color:var(--ink)}.mq-tl input[type=text]:focus{outline:none}.mq-tl label.f input[type=text]{text-decoration:line-through;color:var(--mut)}
+.mq-tl input[type=checkbox]{width:17px;height:17px;accent-color:var(--ok);flex:none}
+.mq-add{border:0;background:none;color:var(--mut);font-size:12.5px;padding:6px 12px 10px;display:flex;gap:4px;align-items:center}.mq-add:hover{color:var(--acc)}
+.mq-lk{display:flex;gap:10px;align-items:center;padding:12px 12px 6px}.mq-lki{width:38px;height:38px;border-radius:9px;background:var(--acc2);color:var(--acc);display:grid;place-items:center;font-weight:700;font-size:17px;flex:none}
+.mq-lk b{display:block;line-height:1.25;overflow-wrap:anywhere}.mq-lk small{color:var(--mut)}.mq-lkd{margin:0;padding:0 12px 6px;color:var(--mut);font-size:12.5px}.mq-lka{display:flex;gap:6px;padding:4px 10px 10px}
+.mq-imagem img{display:block;width:100%;height:auto;border-radius:6px 6px 0 0;pointer-events:none}.mq-semimg{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px 10px;color:var(--mut);text-align:center}
+.mq-leg{display:block;width:100%;border:0;background:none;padding:7px 10px 9px;font-size:12.5px;color:var(--mut)}.mq-leg:focus{outline:none;color:var(--ink)}
+.mq-cor{padding:8px;display:flex;flex-direction:column;gap:6px;align-items:center}.mq-sw{display:block;width:100%;height:72px;border-radius:6px;cursor:pointer;position:relative}.mq-sw input{position:absolute;inset:0;opacity:0;cursor:pointer}.mq-cor small{font-family:ui-monospace,Menlo,monospace;color:var(--mut)}
+.mq-quadro{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px 12px;text-align:center;cursor:pointer;background:none;box-shadow:none}.mq-quadro.sel{box-shadow:0 0 0 2px var(--acc);border-radius:12px}
+.mq-qi{width:76px;height:76px;border-radius:16px;display:grid;place-items:center;color:#fff;box-shadow:0 6px 16px -6px rgba(0,0,0,.35);transition:transform .2s}.mq-quadro:hover .mq-qi{transform:translateY(-2px) scale(1.04)}
+.mq-quadro .mq-nm{text-align:center;font-size:13.5px}.mq-quadro small{color:var(--mut);font-size:11.5px}
+.mq-coluna{background:color-mix(in srgb,var(--ink) 5%,var(--panel))}.mq-cb{display:flex;flex-direction:column;gap:8px;padding:6px 8px 10px;min-height:60px;border-radius:0 0 6px 6px;transition:background .15s}
+.mq-cb.alvo{background:var(--acc2)}.mq-cb>.mq-it{position:relative;left:auto;top:auto;width:auto!important}.mq-cvaz{border:1.5px dashed var(--line);border-radius:6px;padding:14px;text-align:center;color:var(--mut);font-size:12.5px}
+.mq-vaz{position:absolute;left:60px;top:60px;width:340px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;color:var(--mut)}.mq-vaz svg{color:var(--acc)}.mq-vaz b{color:var(--ink);font-size:16px}
+.mq-box{position:absolute;border:1.5px solid var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent);border-radius:3px;pointer-events:none}
+.mq-zoom{position:absolute;left:12px;bottom:12px;display:flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px -4px rgba(0,0,0,.2)}
+.mq-zoom button{border:0;background:none;min-width:36px;height:34px;font-size:15px}.mq-zoom button:hover{background:var(--bg)}.mq-zoom #mq-zr{font-size:12px;min-width:52px}
+.mq-ctx[hidden],.mq-fmt[hidden]{display:none!important}
+.mq-it input:not([type=checkbox]):not([type=color]){border:0!important;box-shadow:none!important;background:transparent!important;height:auto!important;min-height:0!important;border-radius:4px!important;padding:2px 3px!important;font:inherit}
+.mq-it .mq-nm{font-weight:700!important}.mq-it input:not([type=checkbox]):focus{background:var(--bg)!important;outline:2px solid var(--acc2)!important}
+.mq-tl input[type=checkbox]{margin:0}
+.mq-ctx{position:absolute;left:50%;top:10px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:5px 8px;box-shadow:0 6px 20px -8px rgba(0,0,0,.3);z-index:60}
+.mq-cs{display:flex;gap:4px}.mq-cs button{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:var(--panel);font-size:11px;line-height:1;padding:0;color:var(--mut)}.mq-cs button.on{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--acc)}
+.mq-fmt{position:absolute;display:flex;gap:2px;background:#1d1d1f;color:#fff;border-radius:10px;padding:4px;z-index:70;box-shadow:0 8px 24px -8px rgba(0,0,0,.5)}
+.mq-fmt button{border:0;background:none;color:#fff;min-width:30px;height:30px;border-radius:7px;font-weight:700}.mq-fmt button:hover{background:rgba(255,255,255,.15)}
+.mq-fmt [data-fmt=italic]{font-style:italic}.mq-fmt [data-fmt=underline]{text-decoration:underline}.mq-fmt [data-fmt=strikeThrough]{text-decoration:line-through}
+@media (max-width:640px){.mq{height:calc(100vh - 210px)}.mq-bar{width:58px}.mq-tool span{font-size:10px}}
+@media print{.mq-bar,.mq-zoom,.mq-ctx,.mq-top button{display:none}.mq{height:auto;min-height:700px}}
+html.anim-cheio:not(.a11y-rm) .mq-w.mq-in{animation:mqIn .45s cubic-bezier(.2,.8,.2,1)}@keyframes mqIn{from{opacity:0;filter:blur(4px)}to{opacity:1;filter:none}}
+html.anim-cheio:not(.a11y-rm) .mq-it{transition:box-shadow .2s}
+
+/* 0.910 · mais animações no perfil «Cheio» */
+@media (prefers-reduced-motion:no-preference){
+html.anim-cheio:not(.a11y-rm) .an-ripp{overflow:hidden}
+html.anim-cheio:not(.a11y-rm) .an-rip{position:absolute;border-radius:50%;background:currentColor;opacity:.18;transform:scale(0);animation:anRip .6s ease-out forwards;pointer-events:none}
+@keyframes anRip{to{transform:scale(1);opacity:0}}
+html.anim-cheio:not(.a11y-rm) .an-card{animation:anCard .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--ci,0)*45ms)}
+@keyframes anCard{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+html.anim-cheio:not(.a11y-rm) .an-rev{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
+html.anim-cheio:not(.a11y-rm) .an-rev.an-vis{opacity:1;transform:none}
+html.anim-cheio:not(.a11y-rm) input[type=checkbox].an-chk{animation:anChk .45s cubic-bezier(.3,1.8,.5,1)}@keyframes anChk{40%{transform:scale(1.35)}}
+.an-mini i{width:5px!important;height:5px!important;border-radius:50%!important}
+html.anim-cheio:not(.a11y-rm) .an-tilt{transition:transform .12s ease-out;will-change:transform}
+html.anim-cheio:not(.a11y-rm) :is(.kpi,.pnk){transition:transform .35s cubic-bezier(.3,1.5,.5,1),box-shadow .25s}
+html.anim-cheio:not(.a11y-rm) .an-bump{animation:anBump .5s cubic-bezier(.3,1.8,.5,1)}@keyframes anBump{30%{transform:scale(1.45)}}
+html.anim-cheio:not(.a11y-rm) #ttl.an-ttl{animation:anTtl .5s cubic-bezier(.2,.8,.2,1)}@keyframes anTtl{from{opacity:0;transform:translateX(-10px);letter-spacing:.04em}to{opacity:1;transform:none}}
+html.anim-cheio:not(.a11y-rm) #side .nav:hover [data-ico] svg,html.anim-cheio:not(.a11y-rm) #side .nav:hover>svg{animation:anWig .5s ease}@keyframes anWig{25%{transform:rotate(-10deg)}60%{transform:rotate(7deg)}}
+html.anim-cheio:not(.a11y-rm) #view.vin h2{background:linear-gradient(currentColor,currentColor) 0 100%/0 2px no-repeat;animation:anUl .9s cubic-bezier(.2,.8,.2,1) .2s;padding-bottom:2px}
+@keyframes anUl{0%{background-size:0 2px}60%{background-size:42px 2px}100%{background-size:0 2px}}
+html.anim-cheio:not(.a11y-rm) .tag.ok{animation:anTag .4s cubic-bezier(.3,1.6,.5,1) both}
+html.anim-cheio:not(.a11y-rm) #nvgate .nvgb i{background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);background-size:220% 100%;animation:anShine 1.4s linear infinite}
+@keyframes anShine{from{background-position:120% 0}to{background-position:-120% 0}}
+html.anim-cheio:not(.a11y-rm) .cpm-cal tbody tr{animation:anRow .4s cubic-bezier(.2,.8,.2,1) both}
+html.anim-cheio:not(.a11y-rm) .cpm-cal tbody tr:nth-child(2){animation-delay:.03s}html.anim-cheio:not(.a11y-rm) .cpm-cal tbody tr:nth-child(3){animation-delay:.06s}html.anim-cheio:not(.a11y-rm) .cpm-cal tbody tr:nth-child(4){animation-delay:.09s}html.anim-cheio:not(.a11y-rm) .cpm-cal tbody tr:nth-child(5){animation-delay:.12s}html.anim-cheio:not(.a11y-rm) .cpm-cal tbody tr:nth-child(6){animation-delay:.15s}html.anim-cheio:not(.a11y-rm) .cpm-cal tbody tr:nth-child(n+7){animation-delay:.18s}
+html.anim-cheio:not(.a11y-rm) .cpm-cal td.fimd{animation:anPulse 1.8s ease-in-out infinite}@keyframes anPulse{50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 30%,transparent)}}
+html.anim-cheio:not(.a11y-rm) .cpm-bar>i,html.anim-cheio:not(.a11y-rm) .mq-pb>i{transform-origin:left;animation:anGrow .9s cubic-bezier(.2,.8,.2,1) .15s both}
+html.anim-cheio:not(.a11y-rm) #drawer.on #dw-b>*{animation:anCard .45s cubic-bezier(.2,.8,.2,1) both}
+html.anim-cheio:not(.a11y-rm) .chip.on{animation:anTab .35s cubic-bezier(.3,1.5,.5,1)}
+html.anim-cheio:not(.a11y-rm) .mq-it.sel{animation:anSel .3s cubic-bezier(.3,1.6,.5,1)}@keyframes anSel{from{transform:scale(.97)}}
+}
+
+/* 0.910 · cartões que abrem para baixo: seta a indicar que abrem */
+details.card>summary,details>summary.row{list-style:none}
+details.card>summary::-webkit-details-marker,details>summary.row::-webkit-details-marker{display:none}
+details.card>summary::after,details>summary.row::after{content:"";flex:none;width:30px;height:30px;margin-left:10px;border-radius:50%;border:1px solid var(--line);background:var(--panel) no-repeat center/16px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6e73' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");transition:transform .25s cubic-bezier(.3,1.4,.5,1),background-color .15s}
+details.card[open]>summary::after,details[open]>summary.row::after{transform:rotate(180deg)}
+details.card>summary:hover::after,details>summary.row:hover::after{background-color:var(--acc2);border-color:var(--acc)}
+details.card:not([open])>summary,details:not([open])>summary.row{cursor:pointer}
+details.card:not([open])>summary h2::after,details:not([open])>summary.row h2::after{content:"· toque para abrir";margin-left:8px;font-size:12px;font-weight:400;color:var(--mut);text-transform:none;letter-spacing:0}
+
+/* 0.910 · lista de alunos responsiva */
+#view .card.wide:has(>div>table.alst){container-type:inline-size}
+table.alst thead th:last-child,table.alst td.act{position:sticky;right:0;z-index:1}
+table.alst thead th:last-child{background:rgb(221,228,236)}
+table.alst td.act{background:var(--panel);box-shadow:-10px 0 10px -10px rgba(0,0,0,.25)}
+table.alst .tdnome{min-width:130px}
+@container (max-width:1000px){table.alst [data-k="processo"],table.alst th:nth-child(4),table.alst td:nth-child(4){display:none}table.alst .c-ft{display:none}table.alst th,table.alst td{padding:7px 4px}}
+@container (max-width:820px){table.alst th:nth-child(9),table.alst td:nth-child(9),table.alst th:nth-child(10),table.alst td:nth-child(10){display:none}}
+@container (max-width:680px){table.alst th:nth-child(7),table.alst td:nth-child(7){display:none}}
 </style>
 </head>
 <body>
@@ -7883,8 +7993,8 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.909';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.909</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Coord. PROFIJ › Matriz e Ponto de Situação</b>: matriz curricular por componente (horas → aulas de 45 min, dadas, diferença, tempos por semana, previsão do dia em que cada disciplina termina e professor), resumo por professor, FPCT com verificação das horas, CSV e impressão assinada «O Coordenador do PROFIJ».</li><li><b>Planeamento Anual</b>: calendário mês a mês com os tempos de cada dia (geral, por disciplina ou por professor), feriados, interrupções, FPCT e o dia da última aula.</li><li><b>Horário da Turma em PDF</b>: importa a grelha e a legenda (sigla → professor) e cria as disciplinas da matriz sozinho.</li><li><b>Modo de privacidade</b>: sem atividade durante 10 minutos (configurável em Definições › Dados e Segurança › Código de Acesso), o ecrã fica bloqueado e sem nada visível; com código de acesso, é preciso o código para voltar. Não bloqueia em ecrã inteiro (projeção).</li><li><b>Entrada mais rápida</b>: os endereços dos ficheiros na nuvem ficam guardados, por isso ao abrir basta um pedido pequeno; as fotografias e anexos chegam em segundo plano depois de a app abrir; até 12 partes ao mesmo tempo e sem esperas na barra.</li></ul></details><details class="nvver"><summary><b>Versão 0.908</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Sincronização mais rápida</b>: envia 0,5 s depois de cada alteração (antes 2 s), transfere até 4 partes e fotografias ao mesmo tempo e, quando nada mudou, confirma com um só pedido pequeno — por isso pode verificar a cada 10 s (antes 30 s).</li><li><b>Avisos só depois dos 100 %</b>: avisos urgentes, aniversários, novidades e outras janelas esperam que a barra de sincronização termine.</li></ul></details>
+const VERSAO='0.910';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.910</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Jornal Escolar › Quadros</b>: quadro visual livre — notas com formatação, listas de tarefas, ligações, imagens (arrastar, colar ou escolher), colunas, títulos, cores, setas entre elementos e quadros dentro de quadros; arrastar da barra, mover, redimensionar, selecionar vários, aproximar/afastar (também com dois dedos), desfazer e refazer.</li><li><b>Sessões sempre atualizadas</b>: com a app aberta, cada aparelho verifica a nuvem a cada 4 s e mostra logo o que se mudou noutro (por exemplo, testes orais gravados no telemóvel aparecem no computador em poucos segundos).</li><li><b>Sem conflitos</b>: quando o mesmo conjunto de dados muda em dois aparelhos, a app junta as duas alterações (registo a registo; no mesmo campo fica a mais recente) em vez de guardar uma cópia à parte.</li><li><b>Botão do modo de privacidade</b> no canto superior direito (ou Ctrl+Shift+L).</li><li><b>Ordem de reposição</b>: o administrador pode mandar apagar definitivamente todos os dados de uma conta (nuvem e aparelhos), por exemplo para repor a demonstração — Definições › Conta e Acesso, botão ↻ ao lado da conta, e publicar a configuração.</li><li><b>Coord. PROFIJ</b>: importa o horário da turma também em Excel; UFCD em sequência (botão ☰ numa linha tecnológica) com o início e o fim previstos de cada UFCD; o Planeamento Anual indica que está ligado ao Calendário Escolar importado; TIC passa para a componente Sociocultural.</li><li><b>Mais animações</b> no perfil «Cheio»: ondas ao tocar, cartões em cascata e a aparecer ao deslizar, visto a saltar e mini-confetes, indicadores que inclinam, números de avisos a saltar, título da secção a deslizar.</li><li>Cartões que abrem para baixo mostram uma seta e «toque para abrir»; a lista de alunos cabe no ecrã (ações sempre visíveis, colunas secundárias escondem-se em ecrãs estreitos); os botões da secção ficam na mesma linha quando cabem e, senão, alinhados à direita.</li></ul></details><details class="nvver"><summary><b>Versão 0.909</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Coord. PROFIJ › Matriz e Ponto de Situação</b>: matriz curricular por componente (horas → aulas de 45 min, dadas, diferença, tempos por semana, previsão do dia em que cada disciplina termina e professor), resumo por professor, FPCT com verificação das horas, CSV e impressão assinada «O Coordenador do PROFIJ».</li><li><b>Planeamento Anual</b>: calendário mês a mês com os tempos de cada dia (geral, por disciplina ou por professor), feriados, interrupções, FPCT e o dia da última aula.</li><li><b>Horário da Turma em PDF</b>: importa a grelha e a legenda (sigla → professor) e cria as disciplinas da matriz sozinho.</li><li><b>Modo de privacidade</b>: sem atividade durante 10 minutos (configurável em Definições › Dados e Segurança › Código de Acesso), o ecrã fica bloqueado e sem nada visível; com código de acesso, é preciso o código para voltar. Não bloqueia em ecrã inteiro (projeção).</li><li><b>Entrada mais rápida</b>: os endereços dos ficheiros na nuvem ficam guardados, por isso ao abrir basta um pedido pequeno; as fotografias e anexos chegam em segundo plano depois de a app abrir; até 12 partes ao mesmo tempo e sem esperas na barra.</li></ul></details><details class="nvver"><summary><b>Versão 0.908</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Sincronização mais rápida</b>: envia 0,5 s depois de cada alteração (antes 2 s), transfere até 4 partes e fotografias ao mesmo tempo e, quando nada mudou, confirma com um só pedido pequeno — por isso pode verificar a cada 10 s (antes 30 s).</li><li><b>Avisos só depois dos 100 %</b>: avisos urgentes, aniversários, novidades e outras janelas esperam que a barra de sincronização termine.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.907</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>«Esqueci-me do código» em todas as janelas que pedem o código de acesso: desbloquear os dados de base, mudar o código e desativar o código.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.906</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>«Esqueci-me do código»: os algarismos escritos no teclado do computador vão para os campos da janela (antes iam para o ecrã do código, por trás).</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.905</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Esqueci-me do código</b> no ecrã do código de acesso: confirma a sua identidade com o código de encriptação da sincronização (ou com a palavra-passe da conta local) e escolhe logo um código novo de 4 algarismos.</li></ul></details>
@@ -9978,6 +10088,14 @@ const nvConflitos=()=>{try{return JSON.parse(localStorage.getItem(NV_CONF)||'[]'
 const nvGuardaConflito=(parte,dados,de)=>{const L=nvConflitos();L.unshift({parte,q:Date.now(),de,dados});try{localStorage.setItem(NV_CONF,JSON.stringify(L.slice(0,12)))}catch(_){try{localStorage.setItem(NV_CONF,JSON.stringify(L.slice(0,3)))}catch(_){}}};
 const nvRotulo=k=>{if(k==='geral')return 'Definições e dados gerais';if(k==='audit')return 'Auditoria';if(k.startsWith('ano-')){const a=S.anos.find(x=>x.id===k.slice(4));return 'Ano letivo '+(a?a.nome:'')}if(k.startsWith('turma-')){let t=null;S.anos.forEach(a=>a.turmas.forEach(x=>{if(x.id===k.slice(6))t=x}));return t?'Turma '+t.nome+' · '+t.disciplina:'Turma'}return k};
 /* --- sincronizar --- */
+/* junta dois estados JSON: listas de registos com id juntam-se por id, objetos campo a campo; em caso de valor diferente fica o de «b» (o mais recente) */
+function nvJuntar(a,b){if(b===undefined)return a;if(a===undefined)return b;
+  if(Array.isArray(a)&&Array.isArray(b)){const idd=x=>x&&typeof x==='object'&&x.id!=null?'i:'+x.id:null;
+    if(a.length&&b.length&&a.every(idd)&&b.every(idd)){const M=new Map(a.map(x=>[idd(x),x]));const vis=new Set();const out=b.map(x=>{const k_=idd(x);vis.add(k_);return M.has(k_)?nvJuntar(M.get(k_),x):x});a.forEach(x=>{if(!vis.has(idd(x)))out.push(x)});return out}
+    if(a.every(x=>x===null||typeof x!=='object')&&b.every(x=>x===null||typeof x!=='object')){const o=b.slice();a.forEach(x=>{if(!o.includes(x))o.push(x)});return o}
+    return b}
+  if(a&&b&&typeof a==='object'&&typeof b==='object'&&!Array.isArray(a)&&!Array.isArray(b)){const o={...a};Object.keys(b).forEach(k_=>{o[k_]=nvJuntar(a[k_],b[k_])});return o}
+  return b}
 async function nvPool(L,n,fn){let i=0;const w=async()=>{while(i<L.length){const x=L[i++];await fn(x)}};await Promise.all(Array.from({length:Math.min(n,L.length)},w))}
 async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)return null;const k=await nvChave();if(!k){if(interativo)toast('Defina a palavra-passe de encriptação da nuvem.','erro');return null}
   _nvBusy=true;nvEstadoTxt('a sincronizar…');const res={env:0,rec:0,conf:0,fotosEnv:0,fotosRec:0};
@@ -9992,7 +10110,11 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
       if(n==='audit'&&lm&&rm&&l!==undefined&&r!==undefined){/* auditoria: junta os registos dos dois lados */const txt=await prov.ler(NV_PREF+'audit.bin');const R=txt?JSON.parse(await nvDecifrar(txt,k)):[];const vis=new Set();const M=[...(P.audit||[]),...R].filter(e=>{const id=e.q+'|'+e.area+'|'+e.acao+'|'+e.det;if(vis.has(id))return false;vis.add(id);return true}).sort((x,y)=>y.q-x.q).slice(0,5000);
         P.audit=M;const h=nvHash(JSON.stringify(M));await prov.escrever(NV_PREF+'audit.bin',await nvCifrar(JSON.stringify(M),k));man.partes.audit={h,ts:agora,dev:disp};base.audit=h;mudouLocal=true;res.env++;(res._up=res._up||[]).push('audit');return}
       if(primeira&&r!==undefined){/* primeiro contacto deste dispositivo: fica com o que está na nuvem; guarda cópia só de turmas/anos que existam aqui */if(l!==undefined&&/^(turma|ano)-/.test(n))nvGuardaConflito(n,P[n],'este dispositivo (antes de ligar)');usar='remoto'}
-      else if(lm&&!rm)usar='local';else if(rm&&!lm)usar='remoto';else{const lt=primeira?0:(mod[n]||S._ts||0),rt=man.partes[n]?man.partes[n].ts:0;(res.cp=res.cp||[]).push(n);usar=(r===undefined&&l!==undefined)?'local':(l===undefined&&r!==undefined)?'remoto':(rt>lt?'remoto':'local');res.conf++;
+      else if(lm&&!rm)usar='local';else if(rm&&!lm)usar='remoto';else{const lt=primeira?0:(mod[n]||S._ts||0),rt=man.partes[n]?man.partes[n].ts:0;
+        /* 0.910: alterações nos dois aparelhos → junta-as (registo a registo; no mesmo campo fica a mais recente) e não cria conflito */
+        if(l!==undefined&&r!==undefined){let R_=null;try{const tx=await prov.ler(NV_PREF+n+'.bin');if(tx!=null)R_=JSON.parse(await nvDecifrar(tx,k))}catch(_){}
+          if(R_!=null&&P[n]!=null&&typeof R_==='object'&&typeof P[n]==='object'){const M_=rt>lt?nvJuntar(P[n],R_):nvJuntar(R_,P[n]);P[n]=M_;const h=nvHash(JSON.stringify(M_));await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(M_),k));man.partes[n]={h,ts:agora,dev:disp};base[n]=h;mudouLocal=true;res.env++;res.rec++;res.junt=(res.junt||0)+1;(res._up=res._up||[]).push(n);return}}
+        (res.cp=res.cp||[]).push(n);usar=(r===undefined&&l!==undefined)?'local':(l===undefined&&r!==undefined)?'remoto':(rt>lt?'remoto':'local');res.conf++;
         if(usar==='remoto'&&P[n]!==undefined)nvGuardaConflito(n,P[n],'este dispositivo');else if(usar==='local'&&r!==undefined){try{nvGuardaConflito(n,JSON.parse(await nvDecifrar(await prov.ler(NV_PREF+n+'.bin'),k)),(man.partes[n]||{}).dev||'outro dispositivo')}catch(_){}}}
       if(usar==='local'){if(l===undefined){await prov.apagar(NV_PREF+n+'.bin');delete man.partes[n];delete base[n]}else{await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(P[n]),k));man.partes[n]={h:l,ts:mod[n]||agora,dev:disp};base[n]=l}res.env++;(res._up=res._up||[]).push(n)}
       else{if(r===undefined){delete P[n];delete base[n]}else{const txt=await prov.ler(NV_PREF+n+'.bin');if(txt==null)return;P[n]=JSON.parse(await nvDecifrar(txt,k));base[n]=r}mudouLocal=true;res.rec++;if(n==='audit')res._aud=(res._aud||0)+1}});
@@ -10004,7 +10126,7 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
       man.rev=(man.rev||0)+1;man.q=agora;man.dev=disp;await prov.escrever(NV_PREF+'manifest.json',JSON.stringify(man))}
     nvSet({base,mod:{},ultimo:agora,erro:''});const t=res.rec||res.env||res.fotosRec||res.fotosEnv?`sincronizado · ${res.env} enviadas · ${res.rec} recebidas${res.conf?' · '+res.conf+' conflito(s)':''}`:'sincronizado — tudo igual';nvEstadoTxt(t);
     if(mudouLocal&&res.rec-(res._aud||0)>0){aplicarPrefs();go(VIEW);toast('Recebidas alterações de outro dispositivo ('+(res.rec-(res._aud||0))+')','ok')}else if(interativo)toast('Sincronizado'+(res.env?' — '+res.env+' parte(s) enviada(s)':''),'ok');
-    if(res.conf)toast(res.conf+' conflito(s): ficou a versão mais recente; a outra está em Definições › Sincronização','aviso');if(res.fotosFalha&&interativo)toast(res.fotosFalha.length+' fotografia(s)/documento(s) muito grande(s) ou com erro — os restantes dados foram sincronizados; volta a tentar sozinha.','aviso');
+    if(res.conf)toast(res.conf+' conflito(s): ficou a versão mais recente; a outra está em Definições › Sincronização','aviso');if(res.junt)try{audit('Sincronização','Alterações de dois aparelhos juntadas',res.junt+' parte(s)')}catch(_){}if(res.fotosFalha&&interativo)toast(res.fotosFalha.length+' fotografia(s)/documento(s) muito grande(s) ou com erro — os restantes dados foram sincronizados; volta a tentar sozinha.','aviso');
     window.__nvUlt=res;return res}
   catch(e){nvSet({erro:e.message});nvEstadoTxt('erro: '+e.message);if(interativo)toast(e.message,'erro');console.warn(e);return null}finally{_nvBusy=false}}
 /* registo da hora de alteração de cada parte (para decidir conflitos pela versão mais recente) */
@@ -13197,6 +13319,7 @@ function cabecalho(){const b=$('#bar');if(!b)return;const pc=document.body.class
   let o=exc();if(o>1){const de=Math.min(o,Math.max(0,ecol-150));ecol-=de;o-=de;if(o>0)tcol=Math.max(110,tcol-o);aplica()}
   cabecalho.aperto=(b.classList.contains('hcomp')?1:0)+(tcol<Math.max(nat,hc)-1?1:0)+(escV&&ecol<escN-1?1:0);
   if(x&&x.children.length){b.classList.add('hx1');const xok=()=>x.scrollWidth<=x.clientWidth+1&&new Set([...x.children].filter(e=>e.offsetWidth).map(e=>e.offsetTop)).size<=1&&b.scrollWidth<=b.clientWidth+1;
+    /* 0.910: antes de passar os botões para a 2.ª linha, esconde as etiquetas «Ano Letivo»/«Turma» */if(!xok()&&!b.classList.contains('hcomp')){b.classList.add('hcomp');if(!xok())b.classList.remove('hcomp')}
     if(!xok()){x.classList.add('cmp');if(!xok()){x.classList.remove('cmp');b.classList.remove('hx1');barCompacto()}}if(!b.classList.contains('hx1'))cabecalho.aperto+=.5}}
 {const _bL=barLayout;barLayout=function(){if(document.body.classList.contains('dev-pc')){try{cabecalho()}catch(_){}return}return _bL.apply(this,arguments)}}
 
@@ -13905,11 +14028,11 @@ function vJornal(){if(!jnOn()){$('#view').innerHTML=`<div class="card empty">${i
   barBtns([{id:'b-jnimp',t:ic('upload',15)+' Importar PAA…',f:jnPickPAA},{id:'b-jnics',t:ic('calendar',15)+' Exportar .ics',f:jnICS},{id:'b-jncfg',t:ic('gear',15)+' Opções',f:jnCfgDlg}]);
   const AV=jnAvisos();const prox=y.ativ.filter(a=>!a.foraPAA&&a.dec!=='ignorar'&&jnPrecEf(a)==='dia'&&jnDatasEf(a).some(d=>d.fim>=hj&&d.ini<=jnAdd(hj,14))).length;
   const curso=y.pecas.filter(p=>!jnFeita(p)).length;const ne=y.edicoes.filter(e=>e.estado!=='publicada'&&e.fecho&&e.fecho>=hj).sort((a,b)=>a.fecho.localeCompare(b.fecho))[0];
-  const tabs=[['painel','bell','Painel'],['paa','list','Atividades do PAA'],['cal','calendar','Calendário'],['pecas','pen','Peças'],['edicoes','news','Edições'],['equipa','users','Redação']];
+  const tabs=[['painel','bell','Painel'],['paa','list','Atividades do PAA'],['cal','calendar','Calendário'],['pecas','pen','Peças'],['edicoes','news','Edições'],['quadros','grid','Quadros'],['equipa','users','Redação']];
   $('#view').innerHTML=`<div class="kpis"><div class="kpi"><div class="l">${ic('bell',14)} Avisos</div><div class="v">${AV.length}</div><div class="mut">${AV.filter(x=>x.u).length} urgente(s)</div></div><div class="kpi"><div class="l">${ic('calendar',14)} Próximos 14 Dias</div><div class="v">${prox}</div><div class="mut">atividades com data</div></div><div class="kpi"><div class="l">${ic('pen',14)} Peças em Curso</div><div class="v">${curso}</div><div class="mut">${y.pecas.filter(p=>p.estado==='publicada').length} publicadas</div></div><div class="kpi"><div class="l">${ic('news',14)} Próximo Fecho</div><div class="v jn-kv">${ne?esc(contagem(ne.fecho)):'—'}</div><div class="mut">${ne?'n.º '+esc(ne.num||'?')+' · '+esc(fmtIsoL(ne.fecho)):'sem edição planeada'}</div></div></div>
    <div class="tabs noprint jn-tabs">${tabs.map(([k,i,l])=>`<button data-jt="${k}" class="${tab===k?'on':''}">${ic(i,15)} ${l}</button>`).join('')}</div><div id="jn-c"></div>`;
   $$('[data-jt]').forEach(b=>b.onclick=()=>{UI.jnTab=b.dataset.jt;vJornal()});
-  ({painel:jnPainel,paa:jnPAA,cal:jnCal,pecas:jnPecas,edicoes:jnEdicoes,equipa:jnEquipa})[tab](AV);jnBadge()}
+  ({painel:jnPainel,paa:jnPAA,cal:jnCal,pecas:jnPecas,edicoes:jnEdicoes,quadros:mqVista,equipa:jnEquipa})[tab](AV);jnBadge()}
 function jnSemPAA(){return `<div class="card empty">${ic('upload',30)}<br><b>Importe o Plano Anual de Atividades ${esc(jnAnoNome())}</b><br><span class="mut">Escolha o ficheiro Word (.docx) do PAA da escola. A app lê as tabelas de cada departamento, clube e equipa, reconhece as datas («12 a 16 de outubro», «Março/Abril», «2.º período»…) e passa a avisá-lo do que aí vem.</span><br><br><div class="row" style="justify-content:center"><button class="btn pri" data-jnimp>${ic('upload',15)} Importar PAA (.docx)</button><button class="btn" data-jnnova>${ic('plus',15)} Juntar Atividade à Mão</button></div></div>`}
 function jnBindComuns(){$$('[data-jnimp]').forEach(b=>b.onclick=jnPickPAA);$$('[data-jnnova]').forEach(b=>b.onclick=()=>jnAtivDlg(null));
   $$('[data-ja]').forEach(b=>b.onclick=e=>{if(e.target.closest('[data-jd]'))return;const a=JN().y.ativ.find(x=>x.id===b.dataset.ja);if(a)jnAtivDlg(a)});
@@ -15094,8 +15217,9 @@ try{const s0=sessaoAtual();if(s0&&s0.tipo==='google'&&nvL().prov==='google')wind
     calendário dia a dia por disciplina e por professor, FPCT e horário da turma importado do PDF) */
 const CPM_SIG={'mat':'Matemática Aplicada','ma':'Matemática Aplicada','port':'Língua Portuguesa','lp':'Língua Portuguesa','ing':'Língua Estrangeira - Inglês','le ing':'Língua Estrangeira - Inglês','fran':'Língua Estrangeira - Francês','fr':'Língua Estrangeira - Francês','ef':'Educação Física','cid m at':'Cidadania e Mundo Atual','cma':'Cidadania e Mundo Atual','cid':'Cidadania e Mundo Atual','tic':'Tecnologias de Informação e Comunicação','ae':'Atividades Económicas','hsst':'Higiene, Saúde e Segurança no Trabalho','psi':'Psicologia','psisoc':'Psicossociologia'};
 const CPM_H0={'Cidadania e Mundo Atual':70,'Tecnologias de Informação e Comunicação':50,'Educação Física':75,'Língua Portuguesa':90,'Língua Estrangeira - Inglês':70,'Matemática Aplicada':100,'Atividades Económicas':50};
+const cpmH0=n=>{const k=normT(n).replace(/\b(da|de|do)\b/g,'').replace(/\s+/g,' ');const e=Object.entries(CPM_H0).find(([x])=>normT(x).replace(/\b(da|de|do)\b/g,'').replace(/\s+/g,' ')===k);return e?e[1]:''};
 const CPM_COMP=[['sociocultural','Componente de Formação Sociocultural'],['cientifica','Componente de Formação Científica'],['tecnologica','Componente de Formação Tecnológica'],['pratica','Componente de Formação Prática em Contexto de Trabalho']];
-const cpmCompDe=n=>{const s=normT(n);return /^ufcd|tecnolog(?!ias de inf)|\b\d{4}\b/.test(s)?'tecnologica':/matemat|atividades econ|fisica e quim|biolog|psicolog|economia/.test(s)?'cientifica':/fct|formacao pratica|contexto de trabalho/.test(s)?'pratica':'sociocultural'};
+const cpmCompDe=n=>{const s=normT(n);return /^ufcd|unidades de formacao|tecnolog(?!ias d[ae] inf)|\b\d{4}\b/.test(s)?'tecnologica':/matemat|atividades econ|fisica e quim|biolog|psicolog|economia/.test(s)?'cientifica':/fct|formacao pratica|contexto de trabalho/.test(s)?'pratica':'sociocultural'};
 const cpmAulas=h=>{h=+h||0;return h>0?Math.ceil(h/0.75-1e-9):0};
 const cpmNomeSig=s=>CPM_SIG[normT(s).replace(/\./g,'').trim()]||String(s||'').replace(/\.$/,'').trim();
 function cpmM(nome){const {y}=CP();y.mat=y.mat||{};const M=y.mat[nome]=y.mat[nome]||{curso:'',area:'',nivel:'II',cod:'',ref:'',anoCurso:'1.º',ini:'',fim:'',nasInt:false,disc:[],fct:{horas:'',ini:'',fim:'',hDia:7}};M.disc=M.disc||[];M.fct=M.fct||{horas:'',ini:'',fim:'',hDia:7};return M}
@@ -15121,28 +15245,35 @@ function cpmCalc(a,nome){const M=cpmM(nome),L=cpmLimites(a,M),c=CAL();const hj=i
     if(aulas&&dadas>=aulas)fimPrev='feito';
     const falta=Math.max(0,aulas-dadas),saldo=dadas+fut-aulas,semT=sem.reduce((s,v)=>s+v,0);
     const est=!aulas?'sem':dadas>=aulas?'ok':saldo<0?'bad':saldo<semT?'w':'curso';
-    return {d,H,sem,semT,aulas,dadas,auto,fut,falta,saldo,fimPrev,porDia,est}});
+    return {d,H,sem,semT,aulas,dadas,auto,fut,falta,saldo,fimPrev,porDia,porDiaT:porDia,est}});cpmSeq(R,hj);
   /* FPCT: horas possíveis no período (dias úteis sem feriados) */
   const f=M.fct||{};let fctH=0;if(f.ini&&f.fim){for(let d=dataDeIso(f.ini);isoData(d)<=f.fim;d.setDate(d.getDate()+1)){const iso=isoData(d),w=d.getDay();if(w===0||w===6)continue;if(c&&/^feriado/.test(c.dias[iso]||''))continue;fctH+=+f.hDia||7}}
   return {M,L,dias,R,fctH,c}}
+/* UFCD que partilham os mesmos tempos do horário (ex.: «UFCD») dão-se umas a seguir às outras, pela ordem da matriz */
+function cpmSeq(R,hj){const G={};R.forEach(r=>{if(r.d.comp!=='tecnologica'||!r.d.sig||!r.d.sig.length)return;const k=r.d.sig.map(normSig).sort().join('|');(G[k]=G[k]||[]).push(r)});
+  Object.values(G).filter(g=>g.length>1).forEach(g=>{const A_=Math.max(0,g[0].auto+g.reduce((s,r)=>s+(+r.d.aj||0),0));const dias=Object.keys(g[0].porDiaT).filter(i=>i>=hj).sort();let antes=0;
+    g.forEach(r=>{const man=r.d.dadas!=null&&r.d.dadas!=='';const dd=man?+r.d.dadas:Math.max(0,Math.min(r.aulas,A_-antes));r.dadas=dd;r.falta=Math.max(0,r.aulas-dd);
+      const a0=antes,a1=antes+r.aulas;let ac=A_,ini=A_>a0?'feito':'',fim=A_>=a1?'feito':'';const pd={};
+      for(const iso of dias){if(fim&&fim!=='feito'&&iso>fim)break;const n=g[0].porDiaT[iso];const ant=ac;ac+=n;if(!ini&&ac>a0)ini=iso;if(!fim&&ac>=a1)fim=iso;if(ini&&ac>a0&&ant<a1&&!(fim==='feito'))pd[iso]=Math.min(ac,a1)-Math.max(ant,a0)}
+      r.porDia=pd;r.fimPrev=r.aulas?fim:'';r.iniPrev=ini;r.saldo=(A_+g[0].fut)-a1;r.seq=g.length;r.est=!r.aulas?'sem':dd>=r.aulas?'ok':r.saldo<0?'bad':r.saldo<r.semT?'w':'curso';antes=a1})})}
 const cpmFD=iso=>iso==='feito'?'concluída':iso?fmtIsoL(iso):'—';
 const CPM_E={ok:['Concluída','ok'],curso:['Dentro do previsto',''],w:['Margem curta','w'],bad:['Não chega ao fim do ano','bad'],sem:['Sem horas','']};
-function cpmMatrizHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return `<section class="card empty">${ic('grid',28)}<br><b>Ainda não há turmas PROFIJ</b><br><span class="mut">Crie a matriz de uma turma (por exemplo, a partir do horário da turma em PDF).</span><br><br><button class="btn pri" id="cpm-nova">${ic('plus',14)} Nova Matriz</button> <button class="btn" id="cpm-pdf">${ic('upload',14)} Importar Horário da Turma (PDF)</button></section>`;
+function cpmMatrizHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return `<section class="card empty">${ic('grid',28)}<br><b>Ainda não há turmas PROFIJ</b><br><span class="mut">Crie a matriz de uma turma (por exemplo, a partir do horário da turma em PDF).</span><br><br><button class="btn pri" id="cpm-nova">${ic('plus',14)} Nova Matriz</button> <button class="btn" id="cpm-pdf">${ic('upload',14)} Importar Horário da Turma (PDF ou Excel)</button></section>`;
   const nome=UI.cpmT&&N.includes(UI.cpmT)?UI.cpmT:N[0];UI.cpmT=nome;const K=cpmCalc(a,nome),M=K.M;const h=horarioDe(a,nome);
   const tot=K.R.reduce((s,r)=>({a:s.a+r.aulas,d:s.d+Math.min(r.dadas,r.aulas||r.dadas),f:s.f+r.falta,b:s.b+(r.est==='bad'?1:0)}),{a:0,d:0,f:0,b:0});const pc=tot.a?Math.round(tot.d/tot.a*100):0;
   const sel=`<div class="row cpm-sel noprint" style="gap:8px;flex-wrap:wrap">${N.map(n=>`<button type="button" class="chip ${n===nome?'on':''}" data-cpmt="${esc(n)}">${esc(n)}</button>`).join('')}<button type="button" class="chip" id="cpm-nova">${ic('plus',13)} Nova</button></div>`;
   const cab=`<section class="card cpm-cab"><div><div><div class="cpm-tit">${esc(M.curso||'Curso PROFIJ — '+nome)}</div>
     <div class="mut cpm-meta">${[M.area&&'Área de Educação e Formação: '+esc(M.area),M.nivel&&'Nível de Qualificação do QNQ: '+esc(M.nivel),M.cod&&'Cód. interno: '+esc(M.cod),M.anoCurso&&'Ano: '+esc(M.anoCurso),M.ref&&'Referencial: '+esc(M.ref)].filter(Boolean).join(' · ')||'Toque em «Dados do Curso» para preencher o cabeçalho.'}</div>
     <div class="cpm-ps"><b>Ponto de Situação — ${isoHoje().split('-').reverse().join('.')}</b> <span class="mut">· ${esc(nome)} · ${fmtIsoL(K.L.ini)} a ${fmtIsoL(K.L.fim)}${M.nasInt?' · com sessões nas interrupções':''}</span></div></div>
-    <div class="row noprint" style="gap:6px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" id="cpm-curso">${ic('pencil',14)} Dados do Curso</button><button class="btn sm" id="cpm-pdf">${ic('upload',14)} Horário da Turma (PDF)</button>${h?`<button class="btn sm" id="cpm-ger">${ic('flow',14)} Gerar do Horário</button>`:''}<button class="btn sm" id="cpm-add">${ic('plus',14)} Disciplina / UFCD</button><button class="btn sm" id="cpm-csv">${ic('download',14)} CSV</button><button class="btn sm pri" id="cpm-imp">${ic('printer',14)} Imprimir</button></div></div>
+    <div class="row noprint" style="gap:6px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" id="cpm-curso">${ic('pencil',14)} Dados do Curso</button><button class="btn sm" id="cpm-pdf">${ic('upload',14)} Horário da Turma (PDF ou Excel)</button>${h?`<button class="btn sm" id="cpm-ger">${ic('flow',14)} Gerar do Horário</button>`:''}<button class="btn sm" id="cpm-add">${ic('plus',14)} Disciplina / UFCD</button><button class="btn sm" id="cpm-csv">${ic('download',14)} CSV</button><button class="btn sm pri" id="cpm-imp">${ic('printer',14)} Imprimir</button></div></div>
     ${!K.c?`<div class="alert w noprint" style="margin-top:10px">${ic('alert',15)} Sem calendário escolar: só os fins de semana são descontados. Importe o calendário (Calendário › Importar) para descontar feriados e interrupções letivas.</div>`:''}
     ${!h?`<div class="alert noprint" style="margin-top:10px">${ic('calendar',15)} Importe o horário da turma (PDF «Horário da Turma») para a app contar sozinha as aulas dadas e prever quando termina cada disciplina.</div>`:''}
     <div class="cpm-kp"><div><small>Aulas previstas</small><b>${tot.a}</b></div><div><small>Dadas</small><b>${tot.d}</b><i class="cpm-bar"><i style="width:${pc}%"></i></i></div><div><small>Em falta</small><b>${tot.f}</b></div><div class="${tot.b?'bad':''}"><small>Não chegam ao fim</small><b>${tot.b}</b></div></div></section>`;
   const linha=r=>{const e=CPM_E[r.est];const p=r.aulas?Math.min(100,Math.round(r.dadas/r.aulas*100)):0;
     return `<tr class="cpm-r ${e[1]}"><td><b>${esc(r.d.nome)}</b>${r.d.det?`<div class="hint">${esc(r.d.det)}</div>`:''}${r.d.sig&&r.d.sig.length?`<div class="hint noprint">horário: ${esc(r.d.sig.join(', '))}</div>`:''}</td><td class="n">${r.d.horas||'—'}</td><td class="n">${r.aulas||'—'}</td>
       <td class="n"><b>${r.dadas}</b>${r.d.dadas!=null&&r.d.dadas!==''?' <span class="tag" title="escrito à mão">manual</span>':r.d.aj?` <span class="mut" title="ajuste">(${r.d.aj>0?'+':''}${r.d.aj})</span>`:''}<i class="cpm-bar"><i style="width:${p}%"></i></i></td>
-      <td class="n ${r.falta?'':'mut'}">${r.falta}</td><td class="n">${r.semT||'—'}</td><td>${r.fimPrev?cpmFD(r.fimPrev):r.aulas?`<span class="neg">faltam ${-r.saldo} no fim</span>`:'—'}${r.fimPrev&&r.fimPrev!=='feito'&&r.saldo>0?`<div class="hint">sobram ${r.saldo} tempo(s)</div>`:''}</td>
-      <td>${esc(r.d.prof||'—')}</td><td><span class="tag ${e[1]}">${e[0]}</span></td><td class="act noprint"><button class="btn sm ghost" data-cpmd="${r.d.id}" title="Editar">${ic('pencil',14)}</button></td></tr>`};
+      <td class="n ${r.falta?'':'mut'}">${r.falta}</td><td class="n">${r.semT||'—'}</td><td>${r.fimPrev?cpmFD(r.fimPrev):r.aulas?`<span class="neg">faltam ${-r.saldo} no fim</span>`:'—'}${r.seq&&r.iniPrev&&r.iniPrev!=='feito'?`<div class="hint">começa ${fmtIsoL(r.iniPrev)} (em sequência)</div>`:''}${r.fimPrev&&r.fimPrev!=='feito'&&r.saldo>0&&!r.seq?`<div class="hint">sobram ${r.saldo} tempo(s)</div>`:''}</td>
+      <td>${esc(r.d.prof||'—')}</td><td><span class="tag ${e[1]}">${e[0]}</span></td><td class="act noprint">${r.d.comp==='tecnologica'?`<button class="btn sm ghost" data-cpmu="${r.d.id}" title="Dividir em UFCD (dadas em sequência)">${ic('list',14)}</button>`:''}<button class="btn sm ghost" data-cpmd="${r.d.id}" title="Editar">${ic('pencil',14)}</button></td></tr>`};
   const comp=CPM_COMP.filter(([k])=>k!=='pratica').map(([k,l])=>{const L=K.R.filter(r=>r.d.comp===k);if(!L.length)return '';const f=L.reduce((s,r)=>s+r.falta,0),au=L.reduce((s,r)=>s+r.aulas,0),dd=L.reduce((s,r)=>s+r.dadas,0),hh=L.reduce((s,r)=>s+(+r.d.horas||0),0);
     return `<tr class="cpm-comp"><th colspan="10">${l}</th></tr>${L.map(linha).join('')}<tr class="cpm-tot"><td>Total da componente${f?' em falta':''}</td><td class="n">${hh}</td><td class="n">${au}</td><td class="n">${dd}</td><td class="n"><b>${f}</b></td><td colspan="5"></td></tr>`}).join('');
   const tab=K.R.length?`<section class="card"><h2 style="margin:0 0 8px">${ic('grid',18)} Matriz Curricular</h2><div class="cpm-tw"><table class="lst cpm-t"><thead><tr><th>Disciplina / UFCD</th><th class="n">Horas</th><th class="n">Aulas</th><th class="n">Dadas</th><th class="n">Diferença</th><th class="n">Tempos / semana</th><th>Previsão de conclusão</th><th>Professor(a)</th><th>Situação</th><th class="noprint"></th></tr></thead><tbody>${comp}</tbody></table></div>
@@ -15190,9 +15321,9 @@ function cpmFctDlg(nome){const M=cpmM(nome),f=M.fct;openDrawer('FPCT · '+nome,`
 /* cria as disciplinas a partir da legenda do horário da turma */
 function cpmGerar(a,nome,silencioso){const h=horarioDe(a,nome);if(!h)return 0;const M=cpmM(nome);let n=0;
   const sigs=[...new Set(h.aulas.map(x=>x.ab))];const leg=h.legenda||[];
-  sigs.forEach(s=>{if(M.disc.some(d=>(d.sig||[]).map(normSig).includes(normSig(s))))return;const l=leg.find(x=>normSig(x.ab)===normSig(s))||{};const nm=l.nome&&normSig(l.nome)!==normSig(s)?l.nome:cpmNomeSig(s);
+  sigs.forEach(s=>{if(M.disc.some(d=>(d.sig||[]).map(normSig).includes(normSig(s))))return;const l=leg.find(x=>normSig(x.ab)===normSig(s))||{};const nm=/^unidades de forma/i.test(normT(l.nome||''))?'UFCD (Formação Tecnológica)':l.nome&&normSig(l.nome)!==normSig(s)?l.nome:cpmNomeSig(s);
     const ex=M.disc.find(d=>normT(d.nome)===normT(nm));if(ex){ex.sig=[...(ex.sig||[]),s];return}
-    M.disc.push({id:uid(),nome:nm,comp:cpmCompDe(nm),horas:CPM_H0[nm]||'',prof:(l.profs||[]).join(', '),sig:[s],aj:0,dadas:null,det:''});n++});
+    M.disc.push({id:uid(),nome:nm,comp:cpmCompDe(nm),horas:cpmH0(nm),prof:(l.profs||[]).join(', '),sig:[s],aj:0,dadas:null,det:''});n++});
   const ord={sociocultural:0,cientifica:1,tecnologica:2};M.disc.sort((x,y)=>(ord[x.comp]-ord[y.comp])||x.nome.localeCompare(y.nome,'pt',{numeric:true}));
   save();if(!silencioso)toast(n?n+' disciplina(s) criada(s). Confirme as horas de cada uma.':'A matriz já tem todas as disciplinas do horário.');return n}
 /* horário da turma em PDF (ex.: «Horário da Turma: …», com legenda Atividade / Nome do Professor) */
@@ -15210,8 +15341,8 @@ async function cpmLerHorTurma(file){const r=await lerHorarioProfPdf(file);
     if(!aulas.some(o=>o.dia===x.dia&&o.ini===x.ini))aulas.push({dia:x.dia,ini:x.ini,fim:x.fim,ab:s,sala:x.sala||''})});
   aulas.sort((p,q)=>p.dia-q.dia||p.ini-q.ini);if(!aulas.length)throw new Error('Não encontrei aulas na grelha do horário.');
   return {turma,aulas,legenda:leg,diretor,ficheiro:file.name}}
-function cpmImportarPdf(alvo){const inp=document.createElement('input');inp.type='file';inp.accept='.pdf,application/pdf';inp.multiple=true;
-  inp.onchange=async()=>{const a=A();const ok=[];for(const f of inp.files){ocupado('A ler '+f.name+'…');try{const h=await cpmLerHorTurma(f);ok.push(h)}catch(e){toast(f.name+': '+e.message)}}livre();if(!ok.length)return;
+function cpmImportarPdf(alvo){const inp=document.createElement('input');inp.type='file';inp.accept='.pdf,.xlsx,.xls,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';inp.multiple=true;
+  inp.onchange=async()=>{const a=A();const ok=[];for(const f of inp.files){ocupado('A ler '+f.name+'…');try{if(/\.xlsx?$/i.test(f.name)){const hs=await lerHorarioXlsx(f);if(!hs.length||!hs[0].aulas.length)throw new Error('não encontrei um horário de turma');hs.forEach(h=>{h.ficheiro=f.name;ok.push(h)})}else{const h=await cpmLerHorTurma(f);ok.push(h)}}catch(e){toast(f.name+': '+e.message)}}livre();if(!ok.length)return;
     a.horarios=a.horarios||{};ok.forEach(h=>{let nm=h.turma||alvo||'Turma PROFIJ';if(alvo&&ok.length===1&&normTurma(nm)!==normTurma(alvo)&&confirm('O PDF é da turma «'+nm+'». Associar à matriz «'+alvo+'»?'))nm=alvo;
       const k=Object.keys(a.horarios).find(k=>normTurma(k)===normTurma(nm))||nm;a.horarios[k]={turma:nm,aulas:h.aulas,legenda:h.legenda,diretor:h.diretor,ficheiro:h.ficheiro,importado:new Date().toISOString()};
       const {y}=CP();y.mat=y.mat||{};const ex=Object.keys(y.mat).find(n=>normTurma(n)===normTurma(k));const mn=ex||k;cpmM(mn);const n=cpmGerar(a,mn,true);UI.cpmT=mn;
@@ -15231,13 +15362,23 @@ function cpmBindMatriz(v,a){const nome=UI.cpmT;const g=id=>v.querySelector('#'+i
   const fc=g('cpm-fct');if(fc)fc.onclick=()=>cpmFctDlg(nome);
   const cs=g('cpm-csv');if(cs)cs.onclick=()=>cpmCSV(a,nome);
   const im=g('cpm-imp');if(im)im.onclick=()=>imprimirVista();
-  v.querySelectorAll('[data-cpmd]').forEach(b=>b.onclick=()=>cpmDiscDlg(nome,cpmM(nome).disc.find(d=>d.id===b.dataset.cpmd)))}
+  v.querySelectorAll('[data-cpmd]').forEach(b=>b.onclick=()=>cpmDiscDlg(nome,cpmM(nome).disc.find(d=>d.id===b.dataset.cpmd)));
+  v.querySelectorAll('[data-cpmu]').forEach(b=>b.onclick=()=>cpmUfcdDlg(nome,cpmM(nome).disc.find(d=>d.id===b.dataset.cpmu)))}
+function cpmUfcdDlg(nome,d){const M=cpmM(nome);const irm=M.disc.filter(x=>x.comp==='tecnologica'&&(x.sig||[]).map(normSig).sort().join('|')===(d.sig||[]).map(normSig).sort().join('|'));
+  const txt=irm.map(x=>[x.det||'',x.nome,x.horas||'',x.prof||''].join(' ; ')).join('\n');
+  openDrawer('UFCD em Sequência',`<div class="ed"><p class="hint" style="margin-top:0">Uma linha por UFCD, pela ordem em que são dadas: <b>código ; nome ; horas ; professor(a)</b>. Todas usam os tempos «${esc((d.sig||[]).join(', ')||'—')}» do horário: a app dá-as umas a seguir às outras e prevê quando começa e acaba cada uma.</p>
+    <textarea id="mu-t" rows="14" style="font-family:ui-monospace,Menlo,monospace;font-size:12.5px" placeholder="0349 ; Ambiente, segurança, higiene e saúde no trabalho ; 25 ; …">${esc(txt)}</textarea>
+    <div class="row" style="margin-top:14px"><span class="mut" id="mu-n"></span><span class="sp1"></span><button class="btn" id="mu-0">Cancelar</button><button class="btn pri" id="mu-ok">${ic('check',14)} Guardar</button></div></div>`);
+  const T=$('#mu-t'),cont=()=>{const L=T.value.split('\n').map(l=>l.split(/\s*[;\t]\s*/)).filter(p=>p.join('').trim());const h=L.reduce((s,p)=>s+(+String(p[2]||'').replace(',','.')||0),0);$('#mu-n').textContent=L.length+' UFCD · '+h+' h · '+cpmAulas(h)+' aulas'};T.oninput=cont;cont();
+  $('#mu-0').onclick=closeDrawer;$('#mu-ok').onclick=()=>{const L=T.value.split('\n').map(l=>l.split(/\s*[;\t]\s*/).map(x=>x.trim())).filter(p=>p.join(''));if(!L.length)return toast('Escreva pelo menos uma UFCD.','erro');
+    const pos=M.disc.indexOf(irm[0]);const nov=L.map((p,k)=>{const ex=irm[k];return {id:ex?ex.id:uid(),nome:p[1]?(p[0]?p[0]+' - ':'')+p[1]:(p[0]||'UFCD '+(k+1)),det:p[0]||'',comp:'tecnologica',horas:+String(p[2]||'').replace(',','.')||'',prof:p[3]||d.prof||'',sig:(d.sig||[]).slice(),aj:ex?ex.aj||0:0,dadas:ex?ex.dadas:null}});
+    M.disc=M.disc.filter(x=>!irm.includes(x));M.disc.splice(Math.max(0,pos),0,...nov);save();audit('Coord. PROFIJ','UFCD em sequência · '+nome,nov.length+' UFCD');closeDrawer();vCProfij()}}
 /* Planeamento anual: grelha mês × dia, como a folha «Geral» e as folhas por professor */
 function cpmPlanoHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return cpmMatrizHTML(a,C);const nome=UI.cpmT&&N.includes(UI.cpmT)?UI.cpmT:N[0];UI.cpmT=nome;const K=cpmCalc(a,nome);
   const profs=[...new Set(K.R.map(r=>(r.d.prof||'').trim()).filter(Boolean))].sort((x,y)=>x.localeCompare(y,'pt'));const fil=UI.cpmF||'geral';
   const Rs=fil==='geral'?K.R:fil.startsWith('p:')?K.R.filter(r=>(r.d.prof||'').trim()===fil.slice(2)):K.R.filter(r=>r.d.id===fil);
   const um=Rs.length===1?Rs[0]:null;const hj=isoHoje();
-  const porDia={};Rs.forEach(r=>Object.entries(r.porDia).forEach(([iso,n])=>porDia[iso]=(porDia[iso]||0)+n));
+  const porDia={};if(um)Object.entries(um.seq?{...Object.fromEntries(Object.entries(um.porDiaT).filter(([i])=>i<hj)),...um.porDia}:um.porDia).forEach(([iso,n])=>porDia[iso]=n);else{const vis=new Set();Rs.forEach(r=>{const k=(r.d.sig||[]).map(normSig).sort().join('|')||r.d.id;if(vis.has(k))return;vis.add(k);Object.entries(r.porDiaT).forEach(([iso,n])=>porDia[iso]=(porDia[iso]||0)+n)})}
   /* no modo de uma disciplina, depois de atingir as aulas os dias deixam de contar (como o «j» do Excel) */
   let acum=um?um.dadas:0;const meses=[];K.dias.forEach(z=>{const m=z.iso.slice(0,7);let M_=meses.find(x=>x.m===m);if(!M_){M_={m,d:{},tot:0};meses.push(M_)}M_.d[+z.iso.slice(8)]=z});
   const sel=`<div class="row cpm-sel noprint" style="gap:8px;flex-wrap:wrap">${N.map(n=>`<button type="button" class="chip ${n===nome?'on':''}" data-cpmt="${esc(n)}">${esc(n)}</button>`).join('')}</div>`;
@@ -15248,11 +15389,11 @@ function cpmPlanoHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return cpmMatrizHT
       else if(z.t==='fct')txt='F';else if(z.t==='fer')txt='•';
       return `<td class="${cls}${z.iso===hj?' hj':''}" title="${fmtIsoL(z.iso)}">${txt}</td>`}).join('');tGeral+=tot;M_.tot=tot;
     return `<tr><th>${MESES[mm].slice(0,3)} ’${String(yy).slice(2)}</th>${cel}<td class="n"><b>${tot||''}</b></td><td class="n mut">${tGeral||''}</td></tr>`}).join('');
-  const resumo=um?`<p style="margin:8px 0 0"><b>${esc(um.d.nome)}</b> · ${um.aulas} aulas · ${um.dadas} dadas · ${um.semT} tempos por semana · ${um.fimPrev?'conclusão prevista: <b>'+cpmFD(um.fimPrev)+'</b>':'<span class="neg">faltam '+(-um.saldo)+' tempos no fim do ano</span>'}</p>`:`<p class="mut" style="margin:8px 0 0">${Rs.length} disciplina(s) · tempos por dia segundo o horário da turma. Escolha uma disciplina para ver o dia em que termina.</p>`;
-  return sel+`<section class="card"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('calendar',18)} Planeamento Anual · ${esc(nome)}</h2><span class="sp1"></span>${opt}<button class="btn sm noprint" id="cpm-imp">${ic('printer',14)} Imprimir</button></div>${resumo}
+  const cal=K.c?`<p class="cpm-calk">${ic('calendar',14)} Ligado ao <button type="button" class="lnk" id="cpm-cal">Calendário Escolar</button> importado — feriados, interrupções e fim das aulas vêm de lá${K.c.periodos&&K.c.periodos.length?' · '+K.c.periodos.length+' períodos':''} · ${K.dias.filter(z=>z.t==='let').length} dias de aulas</p>`:`<div class="alert w" style="margin-top:8px">${ic('alert',15)} Sem calendário escolar importado: só se descontam os fins de semana. <button type="button" class="btn sm" id="cpm-cal">Importar o Calendário</button></div>`;const resumo=um?`<p style="margin:8px 0 0"><b>${esc(um.d.nome)}</b> · ${um.aulas} aulas · ${um.dadas} dadas · ${um.semT} tempos por semana · ${um.fimPrev?'conclusão prevista: <b>'+cpmFD(um.fimPrev)+'</b>':'<span class="neg">faltam '+(-um.saldo)+' tempos no fim do ano</span>'}</p>`:`<p class="mut" style="margin:8px 0 0">${Rs.length} disciplina(s) · tempos por dia segundo o horário da turma. Escolha uma disciplina para ver o dia em que termina.</p>`;
+  return sel+`<section class="card"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('calendar',18)} Planeamento Anual · ${esc(nome)}</h2><span class="sp1"></span>${opt}<button class="btn sm noprint" id="cpm-imp">${ic('printer',14)} Imprimir</button></div>${cal}${resumo}
     <div class="cpm-cw"><table class="cpm-cal"><thead><tr><th></th>${Array.from({length:31},(_,i)=>`<th>${i+1}</th>`).join('')}<th>Mês</th><th>Acum.</th></tr></thead><tbody>${rows}</tbody></table></div>
     <div class="cpm-leg"><span><i class="let"></i>dia de aulas (n.º de tempos)</span>${um?'<span><i class="let fimd"></i>última aula</span><span><i class="j"></i>já concluída</span>':''}<span><i class="fds"></i>fim de semana</span><span><i class="fer"></i>feriado</span><span><i class="int"></i>interrupção letiva</span><span><i class="fct"></i>FPCT</span><span><i class="hjl"></i>hoje</span></div></section>`}
-function cpmBindPlano(v,a){v.querySelectorAll('[data-cpmt]').forEach(b=>b.onclick=()=>{UI.cpmT=b.dataset.cpmt;UI.cpmF='geral';vCProfij()});const f=v.querySelector('#cpm-f');if(f)f.onchange=()=>{UI.cpmF=f.value;vCProfij()};const im=v.querySelector('#cpm-imp');if(im)im.onclick=()=>imprimirVista();cpmBindMatriz(v,a)}
+function cpmBindPlano(v,a){v.querySelectorAll('[data-cpmt]').forEach(b=>b.onclick=()=>{UI.cpmT=b.dataset.cpmt;UI.cpmF='geral';vCProfij()});const f=v.querySelector('#cpm-f');if(f)f.onchange=()=>{UI.cpmF=f.value;vCProfij()};const im=v.querySelector('#cpm-imp');if(im)im.onclick=()=>imprimirVista();const cl=v.querySelector('#cpm-cal');if(cl)cl.onclick=()=>go('calendario');cpmBindMatriz(v,a)}
 /* atenção do painel: disciplinas que não chegam ao fim do ano */
 {const _at=cpAtencao;cpAtencao=function(){const L=_at.apply(this,arguments);try{const a=A(),{y}=CP();Object.keys(y.mat||{}).forEach(n=>{cpmCalc(a,n).R.filter(r=>r.est==='bad').forEach(r=>L.push({c:'bad',ic:'clock',t:r.d.nome+' · '+n,s:'Faltam '+(-r.saldo)+' tempo(s) no fim do ano — planear reposições',tab:'matriz'}))})}catch(e){console.warn(e)}return L}}
 
@@ -15263,11 +15404,11 @@ let _privUlt=Date.now(),_privOn=false;
 function privCfgHTML(){const v=privMin();return `<div class="row" style="margin-top:14px;gap:10px;flex-wrap:wrap;align-items:center"><b style="font-weight:600">${ic('shield',15)} Modo de privacidade</b><select id="priv-min" aria-label="Modo de privacidade por inatividade">${PRIV_OPC.map(m=>`<option value="${m}" ${m===v?'selected':''}>${m?'depois de '+m+' min sem atividade':'desligado'}</option>`).join('')}</select></div>
   <p class="hint">O ecrã fica bloqueado e sem nada visível (nomes, notas, fotografias, janelas abertas). ${S.cfg.pinHash?'Para voltar, pede o código de acesso.':'Defina um código de acesso para que seja preciso o código para voltar.'} Não bloqueia em ecrã inteiro (projeção).</p>`}
 document.addEventListener('change',e=>{if(e.target&&e.target.id==='priv-min'){S.cfg.privMin=+e.target.value;save();toast(S.cfg.privMin?'Modo de privacidade depois de '+S.cfg.privMin+' min':'Modo de privacidade desligado','ok')}});
-function privPodeBloquear(){if(_privOn||!privMin()||typeof SESSAO==='undefined'||!SESSAO)return false;const b=document.body;if(b.classList.contains('login-on')||document.getElementById('nvgate')||document.getElementById('pinlock')||document.getElementById('splash'))return false;if(document.fullscreenElement||document.webkitFullscreenElement)return false;return true}
-function privBloquear(){if(!privPodeBloquear())return;_privOn=true;document.body.classList.add('priv-on');
+function privPodeBloquear(f){if(_privOn||(!f&&!privMin())||typeof SESSAO==='undefined'||!SESSAO)return false;const b=document.body;if(b.classList.contains('login-on')||document.getElementById('nvgate')||document.getElementById('pinlock')||document.getElementById('splash'))return false;if(!f&&(document.fullscreenElement||document.webkitFullscreenElement))return false;return true}
+function privBloquear(f){if(!privPodeBloquear(f))return;try{if(f&&document.fullscreenElement)document.exitFullscreen()}catch(_){}_privOn=true;document.body.classList.add('priv-on');
   const o=document.createElement('div');o.id='privlock';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','prv-t');
-  o.innerHTML=`<div class="prvb"><span class="prvl">${ic('shield',30)}</span><b id="prv-t">Modo de Privacidade</b><span class="prvs">Bloqueado por inatividade — nada fica visível.</span><button type="button" class="btn pri" id="prv-ok">${S.cfg.pinHash?'Desbloquear com o Código':'Continuar'}</button></div>`;
-  document.body.appendChild(o);const b=o.querySelector('#prv-ok');b.onclick=privDesbloquear;setTimeout(()=>{try{b.focus()}catch(_){}},50);audit('Privacidade','Ecrã bloqueado por inatividade','')}
+  o.innerHTML=`<div class="prvb"><span class="prvl">${ic('shield',30)}</span><b id="prv-t">Modo de Privacidade</b><span class="prvs">${f?'Ecrã escondido — nada fica visível.':'Bloqueado por inatividade — nada fica visível.'}</span><button type="button" class="btn pri" id="prv-ok">${S.cfg.pinHash?'Desbloquear com o Código':'Continuar'}</button></div>`;
+  document.body.appendChild(o);const b=o.querySelector('#prv-ok');b.onclick=privDesbloquear;setTimeout(()=>{try{b.focus()}catch(_){}},50);audit('Privacidade',f?'Modo de privacidade ativado':'Ecrã bloqueado por inatividade','')}
 let _privA=false;
 async function privDesbloquear(){if(_privA)return;_privA=true;try{if(S.cfg.pinHash){const o=document.getElementById('privlock');if(o)o.classList.add('pin');await pedirPin()}}finally{_privA=false}
   const o=document.getElementById('privlock');if(o){o.classList.add('fora');setTimeout(()=>o.remove(),180)}document.body.classList.remove('priv-on');_privOn=false;_privUlt=Date.now()}
@@ -15279,6 +15420,246 @@ async function privDesbloquear(){if(_privA)return;_privA=true;try{if(S.cfg.pinHa
   /* ao voltar à app (separador, iPad acordado) verifica logo, antes de se ver o conteúdo */
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){window.__privH=Date.now()}else ver()});
   addEventListener('pageshow',ver);addEventListener('focus',ver)}
+
+/* botão no canto superior direito: entrar já no modo de privacidade (atalho: Ctrl+Shift+L) */
+{const pb=()=>{const a=document.getElementById('ajBtn');if(!a||document.getElementById('privBtn'))return;a.insertAdjacentHTML('beforebegin',`<button class="btn ico" id="privBtn" title="Modo de privacidade — esconder tudo (Ctrl+Shift+L)" aria-label="Entrar no modo de privacidade">${ic('shield',20)}</button>`);document.getElementById('privBtn').onclick=()=>privBloquear(true);try{barLayout()}catch(_){}};pb();setTimeout(pb,800);
+  /* o cabeçalho volta a arrumar-se quando os ícones da direita mudam de largura (evita botões por cima do título) */
+  {let _rt=0,_w=0;const ro=new ResizeObserver(()=>{const ic_=document.querySelector('#bar>.barico');const w=ic_?Math.round(ic_.getBoundingClientRect().width):0;if(w===_w)return;_w=w;cancelAnimationFrame(_rt);_rt=requestAnimationFrame(()=>{try{barLayout()}catch(_){}})});setTimeout(()=>{const ic_=document.querySelector('#bar>.barico');if(ic_)ro.observe(ic_)},300)}
+  addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='L'||e.key==='l')){e.preventDefault();privBloquear(true)}},true)}
+
+/* 0.910 · ordem de reposição: o administrador manda apagar definitivamente os dados de um utilizador
+   (nuvem + aparelhos) — por exemplo, para repor os dados de demonstração. Cumpre-se uma vez por ordem. */
+const REP_KEY='esrep';
+{const _an=acNorm;acNorm=function(j){const r=_an.apply(this,arguments);r.repor=(Array.isArray(j&&j.reposicoes)?j.reposicoes:[]).filter(x=>x&&x.h&&x.q).map(x=>({h:String(x.h).toLowerCase(),q:+x.q}));return r}}
+try{if(AC_CENTRAL&&!AC_CENTRAL.repor)AC_CENTRAL.repor=[]}catch(_){}
+const repFeitas=()=>{try{return JSON.parse(localStorage.getItem(REP_KEY)||'{}')||{}}catch(_){return {}}};
+let _repA=false;
+/* devolve true se a app vai recarregar (reposição feita) */
+async function repVerificar(){if(_repA)return false;try{const s=sessaoAtual();if(!s||s.tipo!=='google')return false;const C=await acCentral();if(!C||!C.repor||!C.repor.length)return false;
+  const h=await acHash(s.u);const o=C.repor.filter(x=>x.h===h).sort((a,b)=>b.q-a.q)[0];if(!o)return false;const F=repFeitas();if((F[h]||0)>=o.q)return false;
+  _repA=true;const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');
+  const r=await avisoModal('Reposição dos seus dados',['O administrador da EduSpruce pediu a reposição dos dados desta conta ('+s.u+') em '+new Date(o.q).toLocaleDateString('pt-PT')+'.','Todos os dados desta conta — na nuvem (Google Drive) e neste aparelho — vão ser apagados definitivamente. A app volta a começar do zero.','Se precisar de alguma coisa, exporte primeiro uma cópia em Definições › Dados e Segurança.'],[{t:'Exportar Cópia Primeiro',v:'copia'},{t:'Repor Agora',c:'dng',v:'sim'}]);
+  if(r==='copia'){_repA=false;try{UI.defTab='dados';go('definicoes')}catch(_){}toast('Depois de exportar, termine a sessão e volte a entrar para concluir a reposição.','aviso');return true}
+  if(r!=='sim'){_repA=false;return false}
+  ocupado('A apagar os dados…');
+  /* 1) nuvem: só uma vez por ordem — outros aparelhos encontram a marca e limpam apenas o que têm */
+  try{if(nvL().prov==='google'){const G=PROV.google;const m=await G._mapa(true);const marca=NV_PREF+'reposto-'+o.q+'.json';
+      if(!m[marca]){const L=Object.keys(m).filter(n=>n!==marca);await nvPool(L,8,async n=>{try{await G.apagar(n)}catch(e){console.warn(e)}});await G.escrever(marca,JSON.stringify({q:o.q,em:Date.now()}))}}}
+  catch(e){livre();_repA=false;await avisoModal('Não foi possível apagar a nuvem',['A ligação ao Google Drive falhou ('+(e.message||e)+').','A reposição fica pendente e volta a ser pedida na próxima entrada.'],[{t:'Continuar',c:'pri',v:1}]);return false}
+  /* 2) aparelho */
+  audit('Contas','Dados repostos por ordem do administrador',s.u);window.__efApagar=true;try{save=function(){};saveNow=function(){}}catch(_){}
+  const _set=Storage.prototype.setItem,_rm=Storage.prototype.removeItem;
+  try{Object.keys(localStorage).filter(k=>(/^(edugest|eduflow|es\.|ef\.|nv)/i.test(k)||k==='eskeep')&&k!==ES_PC_KEY&&k!==REP_KEY).forEach(k=>_rm.call(localStorage,k))}catch(_){}
+  try{sessionStorage.clear()}catch(_){}
+  try{const D=indexedDB.databases?await indexedDB.databases():[];await Promise.all([...D.map(d=>d.name),'edugest','eduflow-ev'].filter((x,k,a)=>x&&a.indexOf(x)===k).map(n=>new Promise(ok=>{const q=indexedDB.deleteDatabase(n);q.onsuccess=q.onerror=q.onblocked=()=>ok()})))}catch(_){}
+  F[h]=o.q;try{_set.call(localStorage,REP_KEY,JSON.stringify(F))}catch(_){}
+  try{Storage.prototype.setItem=function(){}}catch(_){}
+  location.reload();return true}catch(e){console.warn(e);_repA=false;return false}}
+{const _sg=nvSyncGate;nvSyncGate=async function(){if(await repVerificar())return;return _sg.apply(this,arguments)}}
+setTimeout(()=>{try{const s=sessaoAtual();if(s&&s.tipo==='google'&&!(nvL().prov))repVerificar()}catch(_){}},1500);
+/* Definições › Conta e Acesso: botão «Repor dados» por conta e exportação das ordens */
+{const _ac=acCartao;acCartao=async function(){let h=await _ac.apply(this,arguments);try{const loc=acLocal();const C=AC_CENTRAL;const hs={};for(const x of loc.gContas)hs[x.email]=await acHash(x.email);
+  loc.gContas.forEach((x,i)=>{const pub=C&&C.repor&&x.repor&&C.repor.some(r=>r.h===hs[x.email]&&r.q===x.repor);const tag=x.repor?` <span class="tag ${pub?'w':'bad'}" title="Ordem de reposição">${ic('refresh',11)} reposição ${pub?'publicada':'por publicar'} · ${new Date(x.repor).toLocaleDateString('pt-PT')}</span>`:'';
+    h=h.replace(`<button class="btn sm ico dng" data-acx="${i}"`,`<button class="btn sm ico" data-acrep="${i}" title="${x.repor?'Cancelar a ordem de reposição':'Repor (apagar todos os dados desta conta)'}" aria-label="Repor os dados de ${esc(x.email)}">${ic(x.repor?'x':'refresh',14)}</button><button class="btn sm ico dng" data-acx="${i}"`);
+    if(tag)h=h.replace(`<b>${esc(x.email)}</b><small>`,`<b>${esc(x.email)}</b><small>${tag} `)})}catch(e){console.warn(e)}return h}}
+{const _ab=acBind;acBind=function(){const r=_ab.apply(this,arguments);const loc=acLocal();
+  $$('[data-acrep]').forEach(b=>b.onclick=async()=>{const x=loc.gContas[+b.dataset.acrep];if(!x)return;
+    if(x.repor){delete x.repor;save();audit('Contas','Ordem de reposição cancelada',x.email);toast('Ordem cancelada — descarregue e publique a configuração.');}
+    else{const v=await avisoModal('Repor os dados de '+x.email+'?',['Na próxima vez que esta conta entrar na EduSpruce, todos os seus dados — no Google Drive e nos aparelhos — são apagados definitivamente e a app começa do zero (útil para repor os dados de demonstração).','A ordem só vale depois de descarregar e publicar a configuração no site. Cumpre-se uma vez; para repetir, dê nova ordem.'],[{t:'Cancelar',v:null},{t:'Dar Ordem de Reposição',c:'dng',v:'sim'}]);if(v!=='sim')return;
+      x.repor=Date.now();save();audit('Contas','Ordem de reposição dada',x.email);toast('Ordem registada — agora descarregue e publique a configuração.','aviso')}
+    const c=$('#ac-card');if(c)acCartao().then(h=>{c.outerHTML=h;acBind()})});return r}}
+/* a configuração descarregada leva as ordens de reposição */
+{const _dl=download;download=function(nome,txt,tipo){if(nome==='eduspruce-config.json'){try{const j=JSON.parse(txt);const loc=acLocal();Promise.all(loc.gContas.filter(x=>x.repor).map(async x=>({h:await acHash(x.email),q:x.repor}))).then(R=>{if(R.length)j.reposicoes=R;else delete j.reposicoes;_dl.call(this,nome,JSON.stringify(j,null,2)+'\n',tipo)});return}catch(e){console.warn(e)}}return _dl.apply(this,arguments)}}
+
+/* 0.910 · Jornal Escolar › Quadros — quadro visual livre (notas, listas, links, imagens, colunas, títulos, cores, setas e quadros dentro de quadros) */
+try{Object.assign(ICONS,{undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',arrow:'<path d="M5 19 19 5"/><path d="M9 5h10v10"/>',type:'<path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>'})}catch(_){}
+const MQ_CORES=['','#f87171','#fb923c','#facc15','#4ade80','#2dd4bf','#60a5fa','#a78bfa','#f472b6','#94a3b8'];
+const MQ_T={nota:['pen','Nota'],tarefa:['check','Lista'],link:['link','Link'],imagem:['image','Imagem'],coluna:['layers','Coluna'],quadro:['grid','Quadro'],titulo:['type','Título'],cor:['sparkle','Cor'],seta:['arrow','Seta']};
+function MQ(){JN();const j=S.jornal=S.jornal||{};if(!Array.isArray(j.quadros)||!j.quadros.length)j.quadros=[{id:'raiz',nome:'Quadros do Jornal',pai:null,itens:[],setas:[],cor:'#60a5fa'}];j.quadros.forEach(q=>{q.itens=q.itens||[];q.setas=q.setas||[]});return j.quadros}
+const mqQ=id=>MQ().find(q=>q.id===id)||MQ()[0];
+const mqUI=()=>{UI.mq=UI.mq||{q:'raiz',sel:[],vis:{}};return UI.mq};
+const mqVis=qid=>{const u=mqUI();return u.vis[qid]=u.vis[qid]||{x:40,y:30,z:1}};
+function mqLimpa(html){const t=document.createElement('template');t.innerHTML=String(html||'');const OK={B:1,STRONG:1,I:1,EM:1,U:1,S:1,STRIKE:1,BR:1,DIV:1,P:1,UL:1,OL:1,LI:1,H3:1,A:1,SPAN:1,BLOCKQUOTE:1,CODE:1};
+  const anda=n=>{[...n.childNodes].forEach(c=>{if(c.nodeType===1){if(!OK[c.tagName]){const f=document.createDocumentFragment();while(c.firstChild)f.appendChild(c.firstChild);c.replaceWith(f);anda(n);return}
+    [...c.attributes].forEach(a=>{if(!(c.tagName==='A'&&a.name==='href'&&/^(https?:|mailto:)/i.test(a.value)))c.removeAttribute(a.name)});if(c.tagName==='A'){c.setAttribute('target','_blank');c.setAttribute('rel','noopener')}anda(c)}else if(c.nodeType!==3)c.remove()})};anda(t.content);return t.innerHTML}
+let _mqHist=[],_mqRef=[];
+function mqAntes(){const q=mqQ(mqUI().q);_mqHist.push({qid:q.id,j:JSON.stringify({itens:q.itens,setas:q.setas})});if(_mqHist.length>60)_mqHist.shift();_mqRef=[]}
+function mqDesfazer(refazer){const A_=refazer?_mqRef:_mqHist,B_=refazer?_mqHist:_mqRef;const h=A_.pop();if(!h)return toast(refazer?'Nada para refazer':'Nada para desfazer');const q=mqQ(h.qid);B_.push({qid:q.id,j:JSON.stringify({itens:q.itens,setas:q.setas})});const o=JSON.parse(h.j);q.itens=o.itens;q.setas=o.setas;mqUI().q=q.id;save();mqRender()}
+const mqItem=(q,id)=>q.itens.find(i=>i.id===id);
+function mqNovo(t,x,y,extra){if(_mqEd&&window._mqFim)window._mqFim();const q=mqQ(mqUI().q);mqAntes();const it={id:uid(),t,x:Math.round(x),y:Math.round(y),w:{nota:220,tarefa:240,link:240,imagem:260,coluna:270,quadro:150,titulo:320,cor:120}[t]||220,cor:'',pai:null,...(extra||{})};
+  if(t==='nota'&&it.txt==null)it.txt='';if(t==='tarefa'){it.tit=it.tit||'Lista';it.l=it.l||[{t:'',f:false}]}if(t==='titulo'&&it.txt==null)it.txt='Título';if(t==='cor')it.hex=it.hex||'#60a5fa';if(t==='coluna')it.tit=it.tit||'Coluna';
+  if(t==='quadro'&&!it.ref){const nq={id:uid(),nome:it.nome||'Novo quadro',pai:q.id,itens:[],setas:[],cor:MQ_CORES[1+Math.floor(Math.random()*8)]};MQ().push(nq);it.ref=nq.id}
+  q.itens.push(it);mqUI().sel=[it.id];save();mqRender();if(['nota','titulo'].includes(t))setTimeout(()=>mqEditar(it.id),30);if(t==='tarefa')setTimeout(()=>{const i=document.querySelector(`[data-mq="${it.id}"] .mq-tl input[type=text]`);if(i)i.focus()},30);if(t==='coluna'||t==='quadro')setTimeout(()=>{const i=document.querySelector(`[data-mq="${it.id}"] .mq-nm`);if(i){i.focus();i.select&&i.select()}},30);return it}
+/* ---------- vista ---------- */
+function mqVista(){const c=$('#jn-c');if(!c)return;MQ();const u=mqUI();if(!MQ().some(q=>q.id===u.q))u.q='raiz';
+  c.innerHTML=`<div class="mq" id="mq"><div class="mq-top"><nav class="mq-bc" id="mq-bc"></nav><span class="sp1"></span><span class="mq-dica mut">Arraste da barra para o quadro · duplo toque para abrir ou editar</span><button class="btn sm ghost" id="mq-und" title="Desfazer (Ctrl+Z)">${ic('undo',15)}</button><button class="btn sm ghost" id="mq-red" title="Refazer (Ctrl+Shift+Z)" style="transform:scaleX(-1)">${ic('undo',15)}</button></div>
+    <div class="mq-body"><aside class="mq-bar" role="toolbar" aria-label="Acrescentar ao quadro">${['nota','link','tarefa','seta','quadro','coluna','titulo','cor','imagem'].map(t=>`<button type="button" class="mq-tool" data-mqt="${t}" title="${MQ_T[t][1]}">${ic(MQ_T[t][0],20)}<span>${MQ_T[t][1]}</span></button>`).join('')}<input type="file" id="mq-f" accept="image/*" multiple hidden></aside>
+    <div class="mq-cv" id="mq-cv" tabindex="0" aria-label="Quadro"><div class="mq-w" id="mq-w"><svg class="mq-svg" id="mq-svg"><defs><marker id="mq-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8e8e93"/></marker></defs></svg><div id="mq-its"></div></div>
+      <div class="mq-zoom"><button type="button" id="mq-zm" aria-label="Afastar">−</button><button type="button" id="mq-zr" title="Repor 100 %">100%</button><button type="button" id="mq-zp" aria-label="Aproximar">+</button><button type="button" id="mq-zf" title="Ajustar ao ecrã">${ic('target',14)}</button></div>
+      <div class="mq-ctx" id="mq-ctx" hidden></div><div class="mq-fmt" id="mq-fmt" hidden>${[['bold','B','Negrito'],['italic','I','Itálico'],['underline','U','Sublinhado'],['strikeThrough','S','Riscado'],['insertUnorderedList','•','Lista'],['h3','H','Título'],['link','🔗','Ligação']].map(([c_,l,t])=>`<button type="button" data-fmt="${c_}" title="${t}">${l}</button>`).join('')}</div></div></div></div>`;
+  mqBind();mqRender()}
+function mqBC(){const u=mqUI();const L=[];let q=mqQ(u.q);while(q){L.unshift(q);q=q.pai?MQ().find(z=>z.id===q.pai):null}
+  $('#mq-bc').innerHTML=L.map((q,i)=>i<L.length-1?`<button type="button" class="mq-bcb" data-mqq="${q.id}">${esc(q.nome)}</button><span class="mut">›</span>`:`<b>${esc(q.nome)}</b>`).join('');
+  $$('#mq-bc [data-mqq]').forEach(b=>b.onclick=()=>mqAbrir(b.dataset.mqq))}
+function mqAbrir(id){const u=mqUI();u.q=id;u.sel=[];_mqLig=null;mqRender();const w=$('#mq-w');if(w&&animPerfil&&animPerfil()==='cheio'){w.classList.remove('mq-in');void w.offsetWidth;w.classList.add('mq-in')}}
+function mqHTML(it,q){const sel=mqUI().sel.includes(it.id)?' sel':'';const cor=it.cor?` style="--mqc:${it.cor}"`:'';const cl=`mq-it mq-${it.t}${sel}${it.cor?' tem-cor':''}`;
+  const pos=it.pai?'':` style="left:${it.x}px;top:${it.y}px;width:${it.w}px${it.cor?';--mqc:'+it.cor:''}"`;const st=it.pai?(it.cor?` style="--mqc:${it.cor}"`:''):pos;
+  const rz=it.pai||['quadro','cor'].includes(it.t)?'':'<span class="mq-rz" data-rz aria-hidden="true"></span>';
+  if(it.t==='nota')return `<div class="${cl}" data-mq="${it.id}"${st}><div class="mq-txt" data-ed>${mqLimpa(it.txt)||'<span class="mq-ph">Escreva…</span>'}</div>${rz}</div>`;
+  if(it.t==='titulo')return `<div class="${cl}" data-mq="${it.id}"${st}><div class="mq-txt" data-ed>${mqLimpa(it.txt)||'<span class="mq-ph">Título</span>'}</div>${rz}</div>`;
+  if(it.t==='tarefa'){const n=it.l.filter(x=>x.f).length;return `<div class="${cl}" data-mq="${it.id}"${st}><div class="mq-th"><input class="mq-nm" data-tit value="${esc(it.tit||'')}" placeholder="Lista" aria-label="Nome da lista"><small>${n}/${it.l.length}</small></div><i class="mq-pb"><i style="width:${it.l.length?Math.round(n/it.l.length*100):0}%"></i></i><div class="mq-tl">${it.l.map((x,k)=>`<label class="${x.f?'f':''}"><input type="checkbox" data-tk="${k}" ${x.f?'checked':''}><input type="text" data-tt="${k}" value="${esc(x.t)}" placeholder="Tarefa…"></label>`).join('')}</div><button type="button" class="mq-add" data-tadd>${ic('plus',13)} Tarefa</button>${rz}</div>`}
+  if(it.t==='link'){let d='';try{d=new URL(it.url).hostname.replace(/^www\./,'')}catch(_){}return `<div class="${cl}" data-mq="${it.id}"${st}><div class="mq-lk"><span class="mq-lki">${esc((d||'?').charAt(0).toUpperCase())}</span><div><b>${esc(it.tit||d||it.url||'Ligação')}</b><small>${esc(d)}</small></div></div>${it.desc?`<p class="mq-lkd">${esc(it.desc)}</p>`:''}<div class="mq-lka"><a href="${esc(/^https?:/i.test(it.url||'')?it.url:'#')}" target="_blank" rel="noopener" class="btn sm">${ic('link',13)} Abrir</a><button type="button" class="btn sm ghost" data-lked>${ic('pencil',13)}</button></div>${rz}</div>`}
+  if(it.t==='imagem'){const src=FOTOS[it.fid];return `<div class="${cl}" data-mq="${it.id}"${st}>${src?`<img src="${src}" alt="${esc(it.leg||'Imagem')}" draggable="false">`:`<div class="mq-semimg">${ic('image',22)}<small>imagem ainda não disponível neste aparelho</small></div>`}<input class="mq-leg" data-leg value="${esc(it.leg||'')}" placeholder="Legenda…" aria-label="Legenda">${rz}</div>`}
+  if(it.t==='cor')return `<div class="${cl}" data-mq="${it.id}"${st}><label class="mq-sw" style="background:${esc(it.hex)}"><input type="color" data-hex value="${esc(it.hex)}" aria-label="Cor"></label><small>${esc(it.hex.toUpperCase())}</small></div>`;
+  if(it.t==='quadro'){const s=mqQ(it.ref);const n=s&&s.id===it.ref?s.itens.length:0;return `<div class="${cl}" data-mq="${it.id}"${st}><span class="mq-qi" style="background:${esc((s&&s.cor)||'#60a5fa')}">${ic('grid',26)}</span><input class="mq-nm" data-qnm value="${esc((s&&s.id===it.ref&&s.nome)||'Quadro')}" aria-label="Nome do quadro"><small>${n} ${n===1?'elemento':'elementos'}</small></div>`}
+  if(it.t==='coluna'){const F=q.itens.filter(x=>x.pai===it.id).sort((a,b)=>(a.o||0)-(b.o||0));return `<div class="${cl}" data-mq="${it.id}"${st}><div class="mq-ch"><input class="mq-nm" data-tit value="${esc(it.tit||'')}" placeholder="Coluna" aria-label="Nome da coluna"><small>${F.length}</small></div><div class="mq-cb" data-colb="${it.id}">${F.map(x=>mqHTML(x,q)).join('')||'<div class="mq-cvaz">Arraste para aqui</div>'}</div>${rz}</div>`}
+  return ''}
+function mqRender(){const w=$('#mq-its');if(!w)return;const u=mqUI(),q=mqQ(u.q);u.sel=u.sel.filter(id=>mqItem(q,id));mqBC();
+  w.innerHTML=q.itens.filter(i=>!i.pai).map(i=>mqHTML(i,q)).join('')+(q.itens.length?'':`<div class="mq-vaz">${ic('grid',34)}<b>Quadro vazio</b><span>Arraste uma nota, uma lista, uma imagem ou um quadro da barra à esquerda — ou cole texto, ligações e imagens aqui.</span></div>`);
+  mqZoomAp();mqItensBind();requestAnimationFrame(mqSetas);mqCtx()}
+function mqZoomAp(){const v=mqVis(mqUI().q),w=$('#mq-w');if(!w)return;w.style.transform=`translate(${v.x}px,${v.y}px) scale(${v.z})`;const r=$('#mq-zr');if(r)r.textContent=Math.round(v.z*100)+'%';const cv=$('#mq-cv');if(cv){cv.style.backgroundSize=`${22*v.z}px ${22*v.z}px`;cv.style.backgroundPosition=`${v.x}px ${v.y}px`}}
+function mqPt(cx,cy){const r=$('#mq-cv').getBoundingClientRect(),v=mqVis(mqUI().q);return {x:(cx-r.left-v.x)/v.z,y:(cy-r.top-v.y)/v.z}}
+function mqCentro(){const r=$('#mq-cv').getBoundingClientRect();const p=mqPt(r.left+r.width/2,r.top+r.height/2);return {x:p.x-100+Math.random()*40,y:p.y-60+Math.random()*40}}
+function mqRectW(el){const r=el.getBoundingClientRect(),cv=$('#mq-cv').getBoundingClientRect(),v=mqVis(mqUI().q);return {x:(r.left-cv.left-v.x)/v.z,y:(r.top-cv.top-v.y)/v.z,w:r.width/v.z,h:r.height/v.z}}
+function mqSetas(){const svg=$('#mq-svg');if(!svg)return;const q=mqQ(mqUI().q);const u=mqUI();svg.querySelectorAll('g').forEach(g=>g.remove());
+  const borda=(R,px,py)=>{const cx=R.x+R.w/2,cy=R.y+R.h/2,dx=px-cx,dy=py-cy;if(!dx&&!dy)return {x:cx,y:cy};const s=Math.min(Math.abs((R.w/2+6)/(dx||1e-9)),Math.abs((R.h/2+6)/(dy||1e-9)));return {x:cx+dx*s,y:cy+dy*s}};
+  q.setas=q.setas.filter(s=>mqItem(q,s.de)&&mqItem(q,s.para));
+  q.setas.forEach(s=>{const a=$(`[data-mq="${s.de}"]`),b=$(`[data-mq="${s.para}"]`);if(!a||!b)return;const A_=mqRectW(a),B_=mqRectW(b);const p1=borda(A_,B_.x+B_.w/2,B_.y+B_.h/2),p2=borda(B_,A_.x+A_.w/2,A_.y+A_.h/2);
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2,dx=p2.x-p1.x,dy=p2.y-p1.y,cx=mx-dy*0.12,cy=my+dx*0.12;const d=`M${p1.x} ${p1.y} Q${cx} ${cy} ${p2.x} ${p2.y}`;
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','mq-seta'+(u.sel.includes(s.id)?' sel':''));g.dataset.seta=s.id;
+    g.innerHTML=`<path class="hit" d="${d}"/><path class="ln" d="${d}" marker-end="url(#mq-ah)"/>`;svg.appendChild(g);g.onpointerdown=e=>{e.stopPropagation();u.sel=[s.id];mqRender()}})}
+function mqCtx(){const box=$('#mq-ctx');if(!box)return;const u=mqUI(),q=mqQ(u.q);if(!u.sel.length||_mqEd){box.hidden=true;return}
+  const seta=q.setas.find(s=>u.sel.includes(s.id));const its=u.sel.map(id=>mqItem(q,id)).filter(Boolean);
+  box.innerHTML=(its.length&&!its.some(i=>i.t==='cor')?`<span class="mq-cs">${MQ_CORES.map(c=>`<button type="button" data-cc="${c}" class="${its.every(i=>(i.cor||'')===c)?'on':''}" style="${c?'background:'+c:''}" title="${c?'Cor':'Sem cor'}">${c?'':'×'}</button>`).join('')}</span>`:'')+
+    (its.length===1&&its[0].t==='quadro'?`<button type="button" class="btn sm" data-ca="abrir">${ic('grid',13)} Abrir</button>`:'')+(its.length===1&&!its[0].pai?`<button type="button" class="btn sm ghost" data-ca="frente" title="Trazer para a frente">${ic('layers',14)}</button>`:'')+
+    (its.length?`<button type="button" class="btn sm ghost" data-ca="dup" title="Duplicar (Ctrl+D)">${ic('copy',14)}</button>`:'')+`<button type="button" class="btn sm ghost dng" data-ca="del" title="Apagar">${ic('trash',14)}</button>`;
+  box.hidden=false;box.querySelectorAll('[data-cc]').forEach(b=>b.onclick=()=>{mqAntes();its.forEach(i=>i.cor=b.dataset.cc);save();mqRender()});
+  box.querySelectorAll('[data-ca]').forEach(b=>b.onclick=()=>{const a=b.dataset.ca;if(a==='abrir')return mqAbrir(its[0].ref);if(a==='del')return mqApagar();if(a==='dup')return mqDuplicar();if(a==='frente'){mqAntes();q.itens=q.itens.filter(i=>i!==its[0]).concat(its[0]);save();mqRender()}});
+  if(seta&&!its.length){}}
+function mqApagar(){const u=mqUI(),q=mqQ(u.q);if(!u.sel.length)return;const its=u.sel.map(id=>mqItem(q,id)).filter(Boolean);
+  const sub=its.filter(i=>i.t==='quadro');if(sub.length){const n=sub.reduce((s,i)=>{const z=MQ().find(x=>x.id===i.ref);return s+(z?z.itens.length:0)},0);if(n&&!confirm('Apagar '+(sub.length>1?'estes quadros':'este quadro')+' e '+n+' elemento(s) lá dentro?'))return}
+  mqAntes();const ids=new Set(u.sel);its.filter(i=>i.t==='coluna').forEach(c=>q.itens.filter(x=>x.pai===c.id).forEach(x=>ids.add(x.id)));
+  const apagaQ=id=>{const z=MQ().find(x=>x.id===id);if(!z)return;z.itens.filter(i=>i.t==='quadro').forEach(i=>apagaQ(i.ref));S.jornal.quadros=MQ().filter(x=>x.id!==id)};sub.forEach(i=>apagaQ(i.ref));
+  q.itens=q.itens.filter(i=>!ids.has(i.id));q.setas=q.setas.filter(s=>!ids.has(s.id)&&!ids.has(s.de)&&!ids.has(s.para));u.sel=[];save();mqRender()}
+function mqDuplicar(){const u=mqUI(),q=mqQ(u.q);const its=u.sel.map(id=>mqItem(q,id)).filter(i=>i&&i.t!=='quadro'&&i.t!=='coluna');if(!its.length)return;mqAntes();
+  const nv=its.map(i=>{const c=JSON.parse(JSON.stringify(i));c.id=uid();if(c.pai){const el=$(`[data-mq="${i.id}"]`);const R=el?mqRectW(el):{x:i.x,y:i.y};c.pai=null;c.x=R.x;c.y=R.y}c.x+=24;c.y+=24;return c});q.itens.push(...nv);u.sel=nv.map(i=>i.id);save();mqRender()}
+/* ---------- edição de texto ---------- */
+let _mqEd=null;window._mqFim=null;
+function mqEditar(id){const el=$(`[data-mq="${id}"] [data-ed]`);if(!el)return;const q=mqQ(mqUI().q),it=mqItem(q,id);if(!it)return;_mqEd=id;const ph=el.querySelector('.mq-ph');if(ph)el.innerHTML='';
+  el.contentEditable='true';el.closest('.mq-it').classList.add('ed');el.focus();try{const r=document.createRange();r.selectNodeContents(el);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r)}catch(_){}
+  const f=$('#mq-fmt');if(f&&it.t==='nota'){f.hidden=false;mqFmtPos(el)}$('#mq-ctx').hidden=true;
+  const fim=window._mqFim=()=>{if(_mqEd!==id)return;window._mqFim=null;el.removeEventListener('blur',blur);el.contentEditable='false';el.closest('.mq-it')&&el.closest('.mq-it').classList.remove('ed');const v=mqLimpa(el.innerHTML).replace(/^(<br>|\s)+$/,'');if(v!==(it.txt||'')){mqAntes();it.txt=v;save()}_mqEd=null;if(f)f.hidden=true;mqRender()};
+  const blur=e=>{setTimeout(()=>{if(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#mq-fmt'))return;if(_mqEd===id)fim()},120)};el.addEventListener('blur',blur);
+  el.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();el.blur()}e.stopPropagation()};el.oninput=()=>{mqFmtPos(el);requestAnimationFrame(mqSetas)}}
+function mqFmtPos(el){const f=$('#mq-fmt'),cv=$('#mq-cv');if(!f||f.hidden)return;const r=el.closest('.mq-it').getBoundingClientRect(),c=cv.getBoundingClientRect();f.style.left=Math.max(6,Math.min(c.width-260,r.left-c.left))+'px';f.style.top=Math.max(6,r.top-c.top-44)+'px'}
+/* ---------- imagens ---------- */
+function mqReduz(file){return new Promise((ok,ko)=>{const r=new FileReader();r.onerror=()=>ko(r.error);r.onload=()=>{const im=new Image();im.onload=()=>{const M=1600,s=Math.min(1,M/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+  ok({u:/png|gif|webp/.test(file.type)&&s===1&&file.size<400000?r.result:c.toDataURL('image/jpeg',.82),w:c.width,h:c.height})};im.onerror=()=>ko(new Error('Imagem inválida'));im.src=r.result};r.readAsDataURL(file)})}
+async function mqImagens(files,x,y){let k=0;for(const f of files){if(!/^image\//.test(f.type))continue;try{const r=await mqReduz(f);const id='mq:'+uid();FOTOS[id]=r.u;idbPor(id,r.u);mqNovo('imagem',x+k*30,y+k*30,{fid:id,leg:'',w:Math.min(320,Math.max(160,r.w/3))});k++}catch(e){toast(e.message,'erro')}}}
+function mqLinkDlg(it){const nov=!it;openDrawer(nov?'Nova Ligação':'Editar Ligação',`<div class="ed"><label>Endereço</label><input id="ml-u" type="url" inputmode="url" value="${esc(it&&it.url||'')}" placeholder="https://…" autocapitalize="none"><label>Título</label><input id="ml-t" value="${esc(it&&it.tit||'')}" placeholder="(o nome do site, se ficar vazio)"><label>Descrição</label><textarea id="ml-d" rows="3">${esc(it&&it.desc||'')}</textarea><div class="row" style="margin-top:14px"><span class="sp1"></span><button class="btn" id="ml-0">Cancelar</button><button class="btn pri" id="ml-ok">${ic('check',14)} Guardar</button></div></div>`);
+  setTimeout(()=>$('#ml-u').focus(),60);$('#ml-0').onclick=closeDrawer;$('#ml-ok').onclick=()=>{let u=$('#ml-u').value.trim();if(u&&!/^[a-z]+:/i.test(u))u='https://'+u;if(!/^https?:\/\/[^\s.]+\.[^\s]+/i.test(u))return toast('Escreva um endereço válido','erro');
+    const d={url:u,tit:$('#ml-t').value.trim(),desc:$('#ml-d').value.trim()};closeDrawer();if(nov){const p=mqLinkPos||mqCentro();mqNovo('link',p.x,p.y,d)}else{mqAntes();Object.assign(it,d);save();mqRender()}}}
+let mqLinkPos=null;
+function mqCriar(t,p){p=p||mqCentro();if(t==='imagem'){mqLinkPos=p;$('#mq-f').click();return}if(t==='link'){mqLinkPos=p;mqLinkDlg(null);return}if(t==='seta'){_mqLig={de:null};toast('Toque no primeiro elemento e depois no segundo');$('#mq').classList.add('ligar');return}mqNovo(t,p.x,p.y)}
+let _mqLig=null;
+/* ---------- interação ---------- */
+function mqBind(){const cv=$('#mq-cv'),u=mqUI();
+  $('#mq-und').onclick=()=>mqDesfazer(false);$('#mq-red').onclick=()=>mqDesfazer(true);
+  const zoom=(f,cx,cy)=>{const v=mqVis(u.q),r=cv.getBoundingClientRect();cx=cx==null?r.width/2:cx-r.left;cy=cy==null?r.height/2:cy-r.top;const nz=Math.max(.25,Math.min(2.5,v.z*f));v.x=cx-(cx-v.x)*nz/v.z;v.y=cy-(cy-v.y)*nz/v.z;v.z=nz;mqZoomAp();mqFmtPos($('.mq-it.ed [data-ed]')||document.body)};
+  $('#mq-zp').onclick=()=>zoom(1.2);$('#mq-zm').onclick=()=>zoom(1/1.2);$('#mq-zr').onclick=()=>{const v=mqVis(u.q);v.z=1;mqZoomAp()};
+  $('#mq-zf').onclick=()=>{const q=mqQ(u.q);const L=q.itens.filter(i=>!i.pai);if(!L.length)return;const els=L.map(i=>$(`[data-mq="${i.id}"]`)).filter(Boolean).map(mqRectW);const x0=Math.min(...els.map(r=>r.x)),y0=Math.min(...els.map(r=>r.y)),x1=Math.max(...els.map(r=>r.x+r.w)),y1=Math.max(...els.map(r=>r.y+r.h));const r=cv.getBoundingClientRect();const z=Math.max(.25,Math.min(1.5,Math.min((r.width-60)/(x1-x0),(r.height-60)/(y1-y0))));const v=mqVis(u.q);v.z=z;v.x=(r.width-(x1-x0)*z)/2-x0*z;v.y=(r.height-(y1-y0)*z)/2-y0*z;mqZoomAp()};
+  cv.addEventListener('wheel',e=>{e.preventDefault();if(e.ctrlKey||e.metaKey)zoom(Math.exp(-e.deltaY*0.01),e.clientX,e.clientY);else{const v=mqVis(u.q);v.x-=e.deltaX;v.y-=e.deltaY;mqZoomAp()}},{passive:false});
+  /* barra: tocar cria no centro; arrastar cria onde largar */
+  $$('.mq-tool').forEach(b=>{b.onpointerdown=e=>{e.preventDefault();const t=b.dataset.mqt;let g=null;const x0=e.clientX,y0=e.clientY;
+    const mv=ev=>{if(!g&&Math.hypot(ev.clientX-x0,ev.clientY-y0)>6){g=document.createElement('div');g.className='mq-ghost';g.innerHTML=ic(MQ_T[t][0],18)+' '+MQ_T[t][1];document.body.appendChild(g)}if(g){g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'}};
+    const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);if(g){g.remove();const r=cv.getBoundingClientRect();if(ev.clientX>r.left&&ev.clientX<r.right&&ev.clientY>r.top&&ev.clientY<r.bottom){const p=mqPt(ev.clientX,ev.clientY);mqCriar(t,{x:p.x-40,y:p.y-20})}}else mqCriar(t)};
+    addEventListener('pointermove',mv);addEventListener('pointerup',up)}});
+  $('#mq-f').onchange=e=>{const p=mqLinkPos||mqCentro();mqImagens([...e.target.files],p.x,p.y);e.target.value=''};
+  /* fundo: arrastar desloca; seleção por retângulo com Shift; dois dedos aproximam */
+  const P=new Map();let pan=null,pinch=null,box=null;
+  cv.onpointerdown=e=>{if(e.target.closest('.mq-it,.mq-zoom,.mq-ctx,.mq-fmt,.mq-seta'))return;if(_mqEd){document.activeElement&&document.activeElement.blur();}
+    P.set(e.pointerId,{x:e.clientX,y:e.clientY});try{cv.setPointerCapture(e.pointerId);cv.focus({preventScroll:true})}catch(_){}
+    if(P.size===2){const [a,b]=[...P.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),cx:(a.x+b.x)/2,cy:(a.y+b.y)/2};pan=null;return}
+    if(_mqLig){_mqLig=null;$('#mq').classList.remove('ligar')}
+    if(e.shiftKey){const p=mqPt(e.clientX,e.clientY);box={x0:p.x,y0:p.y,el:document.createElement('div')};box.el.className='mq-box';$('#mq-w').appendChild(box.el);return}
+    const v=mqVis(u.q);pan={x:e.clientX,y:e.clientY,vx:v.x,vy:v.y,mov:false};cv.classList.add('pan')};
+  cv.onpointermove=e=>{if(!P.has(e.pointerId))return;P.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pinch&&P.size===2){const [a,b]=[...P.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoom(d/pinch.d,pinch.cx,pinch.cy);pinch.d=d;return}
+    if(box){const p=mqPt(e.clientX,e.clientY);const x=Math.min(p.x,box.x0),y=Math.min(p.y,box.y0),w=Math.abs(p.x-box.x0),h=Math.abs(p.y-box.y0);Object.assign(box.el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});box.r={x,y,w,h};return}
+    if(pan){const v=mqVis(u.q);v.x=pan.vx+e.clientX-pan.x;v.y=pan.vy+e.clientY-pan.y;if(Math.abs(e.clientX-pan.x)+Math.abs(e.clientY-pan.y)>4)pan.mov=true;mqZoomAp()}};
+  cv.onpointerup=cv.onpointercancel=e=>{P.delete(e.pointerId);if(P.size<2)pinch=null;cv.classList.remove('pan');
+    if(box){const R=box.r;box.el.remove();box=null;if(R){const q=mqQ(u.q);u.sel=q.itens.filter(i=>!i.pai).filter(i=>{const el=$(`[data-mq="${i.id}"]`);if(!el)return false;const r=mqRectW(el);return r.x<R.x+R.w&&r.x+r.w>R.x&&r.y<R.y+R.h&&r.y+r.h>R.y}).map(i=>i.id);mqRender()}return}
+    if(pan&&!pan.mov&&u.sel.length){u.sel=[];mqRender()}pan=null};
+  cv.ondblclick=e=>{if(e.target.closest('.mq-it,.mq-zoom,.mq-ctx'))return;const p=mqPt(e.clientX,e.clientY);mqNovo('nota',p.x-20,p.y-20)};
+  /* largar ficheiros e colar */
+  cv.ondragover=e=>{e.preventDefault();cv.classList.add('drop')};cv.ondragleave=()=>cv.classList.remove('drop');
+  cv.ondrop=e=>{e.preventDefault();cv.classList.remove('drop');const p=mqPt(e.clientX,e.clientY);const F=[...(e.dataTransfer.files||[])];if(F.length)return mqImagens(F,p.x,p.y);const t=e.dataTransfer.getData('text/uri-list')||e.dataTransfer.getData('text/plain');if(t)mqColarTexto(t,p)};
+  cv.onpaste=e=>{if(_mqEd||e.target.closest('input,textarea'))return;const F=[...(e.clipboardData.files||[])];const p=mqCentro();if(F.length){e.preventDefault();return mqImagens(F,p.x,p.y)}const t=e.clipboardData.getData('text/plain');if(t){e.preventDefault();mqColarTexto(t,p)}};
+  cv.onkeydown=e=>{if(_mqEd||e.target.closest('input,textarea,[contenteditable=true]'))return;const k=e.key;const m=e.ctrlKey||e.metaKey;
+    if((k==='Delete'||k==='Backspace')&&u.sel.length){e.preventDefault();mqApagar()}else if(m&&k.toLowerCase()==='z'){e.preventDefault();mqDesfazer(e.shiftKey)}else if(m&&k.toLowerCase()==='d'){e.preventDefault();mqDuplicar()}else if(m&&k.toLowerCase()==='a'){e.preventDefault();u.sel=mqQ(u.q).itens.filter(i=>!i.pai).map(i=>i.id);mqRender()}else if(k==='Escape'){u.sel=[];_mqLig=null;$('#mq').classList.remove('ligar');mqRender()}
+    else if(k.startsWith('Arrow')&&u.sel.length){e.preventDefault();const d=e.shiftKey?20:4;const q=mqQ(u.q);u.sel.forEach(id=>{const i=mqItem(q,id);if(i&&!i.pai){if(k==='ArrowLeft')i.x-=d;if(k==='ArrowRight')i.x+=d;if(k==='ArrowUp')i.y-=d;if(k==='ArrowDown')i.y+=d}});save();mqRender()}};
+  $$('#mq-fmt [data-fmt]').forEach(b=>{b.onpointerdown=e=>e.preventDefault();b.onclick=()=>{const c_=b.dataset.fmt;if(c_==='h3')document.execCommand('formatBlock',false,'h3');else if(c_==='link'){const l=prompt('Endereço da ligação:','https://');if(l&&/^https?:\/\//.test(l))document.execCommand('createLink',false,l)}else document.execCommand(c_)}})}
+function mqColarTexto(t,p){t=t.trim();if(/^https?:\/\/\S+$/i.test(t)){let d='';try{d=new URL(t).hostname.replace(/^www\./,'')}catch(_){}mqNovo('link',p.x,p.y,{url:t,tit:d,desc:''})}else{const txt=esc(t).replace(/\n/g,'<br>');const it=mqNovo('nota',p.x,p.y,{txt});setTimeout(()=>{if(_mqEd===it.id){const el=$(`[data-mq="${it.id}"] [data-ed]`);el&&el.blur()}},40)}}
+function mqItensBind(){const u=mqUI(),q=mqQ(u.q),cv=$('#mq-cv');
+  $$('#mq-its .mq-it').forEach(el=>{const id=el.dataset.mq,it=mqItem(q,id);if(!it)return;
+    el.onpointerdown=e=>{if(e.button>0||e.target.closest('input,textarea,a,button,[contenteditable=true],label.mq-sw'))return;e.stopPropagation();try{cv.focus({preventScroll:true})}catch(_){}
+      if(_mqLig){if(!_mqLig.de){_mqLig.de=id;el.classList.add('lig');return}if(_mqLig.de!==id){mqAntes();q.setas.push({id:uid(),de:_mqLig.de,para:id});save()}_mqLig=null;$('#mq').classList.remove('ligar');mqRender();return}
+      if(e.shiftKey||e.metaKey||e.ctrlKey){u.sel=u.sel.includes(id)?u.sel.filter(x=>x!==id):[...u.sel,id];mqRender();return}
+      if(!u.sel.includes(id)){u.sel=[id];$$('#mq-its .mq-it.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');mqCtx()}
+      const rz=e.target.closest('[data-rz]');const v=mqVis(u.q);const x0=e.clientX,y0=e.clientY;let mov=false,ghost=null,colAlvo=null;
+      const grupo=rz?[it]:u.sel.map(x=>mqItem(q,x)).filter(i=>i&&!(i.pai&&i.id!==it.id));const ori=grupo.map(i=>({i,x:i.x,y:i.y,w:i.w}));
+      try{el.setPointerCapture(e.pointerId)}catch(_){}
+      const mv=ev=>{const dx=(ev.clientX-x0)/v.z,dy=(ev.clientY-y0)/v.z;if(!mov&&Math.hypot(dx,dy)<4/v.z)return;
+        if(!mov){mov=true;mqAntes();if(!rz&&it.pai){/* tirar da coluna */const R=mqRectW(el);it.pai=null;it.x=R.x;it.y=R.y;ori[0].x=R.x;ori[0].y=R.y;mqRender();ghost=$(`[data-mq="${id}"]`)}else ghost=el;ghost.classList.add('arr')}
+        if(rz){it.w=Math.max(120,Math.round(ori[0].w+dx));ghost.style.width=it.w+'px';requestAnimationFrame(mqSetas);return}
+        ori.forEach(o=>{if(o.i.pai)return;o.i.x=Math.round(o.x+dx);o.i.y=Math.round(o.y+dy);const g=o.i.id===id?ghost:$(`[data-mq="${o.i.id}"]`);if(g){g.style.left=o.i.x+'px';g.style.top=o.i.y+'px'}});
+        /* coluna por baixo? */
+        if(grupo.length===1&&!['coluna'].includes(it.t)){ghost.style.pointerEvents='none';const t=document.elementFromPoint(ev.clientX,ev.clientY);ghost.style.pointerEvents='';const cb=t&&t.closest&&t.closest('[data-colb]');$$('.mq-cb.alvo').forEach(x=>x!==cb&&x.classList.remove('alvo'));colAlvo=cb&&cb.dataset.colb!==id?cb:null;if(colAlvo)colAlvo.classList.add('alvo')}
+        requestAnimationFrame(mqSetas)};
+      const up=ev=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);if(ghost&&ghost!==el){ghost.removeEventListener('pointermove',mv)}
+        if(!mov)return;if(colAlvo){colAlvo.classList.remove('alvo');const cid=colAlvo.dataset.colb;const F=q.itens.filter(x=>x.pai===cid).sort((a,b)=>(a.o||0)-(b.o||0));let k=F.length;
+          [...colAlvo.querySelectorAll(':scope > .mq-it')].forEach((c,n)=>{const r=c.getBoundingClientRect();if(k===F.length&&ev.clientY<r.top+r.height/2)k=n});F.splice(k,0,it);it.pai=cid;F.forEach((x,n)=>x.o=n)}
+        save();mqRender()};
+      el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)};
+    el.ondblclick=e=>{e.stopPropagation();if(it.t==='quadro')return mqAbrir(it.ref);if(it.t==='nota'||it.t==='titulo')return mqEditar(id);if(it.t==='link')return mqLinkDlg(it)};
+    const ed=el.querySelector(':scope > [data-ed]');if(ed)ed.onclick=e=>{if(u.sel.length===1&&u.sel[0]===id&&!e.target.closest('a'))mqEditar(id)};
+    el.querySelectorAll(':scope [data-tit]').forEach(i=>{if(i.closest('.mq-it')!==el)return;i.onchange=()=>{mqAntes();it.tit=i.value.trim();save()}});
+    const qn=el.querySelector('[data-qnm]');if(qn)qn.onchange=()=>{const s=MQ().find(z=>z.id===it.ref);if(s){s.nome=qn.value.trim()||'Quadro';save();mqBC()}};
+    const lg=el.querySelector('[data-leg]');if(lg&&lg.closest('.mq-it')===el)lg.onchange=()=>{it.leg=lg.value;save()};
+    const hx=el.querySelector('[data-hex]');if(hx)hx.oninput=()=>{it.hex=hx.value;el.querySelector('.mq-sw').style.background=hx.value;el.querySelector('small').textContent=hx.value.toUpperCase()},hx&&(hx.onchange=()=>save());
+    const le=el.querySelector('[data-lked]');if(le&&le.closest('.mq-it')===el)le.onclick=()=>mqLinkDlg(it);
+    if(it.t==='tarefa'){el.querySelectorAll('[data-tk]').forEach(c=>c.onchange=()=>{mqAntes();it.l[+c.dataset.tk].f=c.checked;save();if(c.checked&&it.l.every(x=>x.f)){try{const r=c.getBoundingClientRect();animConfetes(r.left,r.top)}catch(_){}}mqRender()});
+      el.querySelectorAll('[data-tt]').forEach(t=>{const k=+t.dataset.tt;t.onchange=()=>{it.l[k].t=t.value;save()};t.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();it.l[k].t=t.value;mqAntes();it.l.splice(k+1,0,{t:'',f:false});save();mqRender();setTimeout(()=>{const n=$(`[data-mq="${id}"] [data-tt="${k+1}"]`);n&&n.focus()},20)}else if(e.key==='Backspace'&&!t.value&&it.l.length>1){e.preventDefault();mqAntes();it.l.splice(k,1);save();mqRender();setTimeout(()=>{const n=$(`[data-mq="${id}"] [data-tt="${Math.max(0,k-1)}"]`);n&&n.focus()},20)}}});
+      const ad=el.querySelector('[data-tadd]');if(ad)ad.onclick=()=>{mqAntes();it.l.push({t:'',f:false});save();mqRender();setTimeout(()=>{const n=$(`[data-mq="${id}"] [data-tt="${it.l.length-1}"]`);n&&n.focus()},20)}}});
+  $$('#mq-its input').forEach(i=>i.addEventListener('keydown',e=>e.stopPropagation()))}
+
+/* 0.910 · «Cheio de animações»: mais efeitos (ondas ao tocar, cartões em cascata, revelação ao deslizar, visto a saltar, mini-confetes, contador da barra, inclinação suave) */
+{const cheio=()=>{try{return animPerfil()==='cheio'&&animOK()&&!document.documentElement.classList.contains('a11y-rm')}catch(_){return false}};
+  /* onda a partir do ponto tocado */
+  addEventListener('pointerdown',e=>{if(!cheio())return;const b=e.target.closest&&e.target.closest('.btn,.nav,.chip,.tabs button,.pnk,.kpi,.mq-tool,.anopt');if(!b||b.disabled)return;const r=b.getBoundingClientRect();const d=Math.max(r.width,r.height)*2.2;
+    const s=document.createElement('span');s.className='an-rip';s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;if(getComputedStyle(b).position==='static')b.style.position='relative';b.classList.add('an-ripp');b.appendChild(s);setTimeout(()=>s.remove(),650)},{passive:true,capture:true});
+  /* visto a saltar e mini-confetes ao marcar caixas */
+  addEventListener('change',e=>{if(!cheio())return;const c=e.target;if(!(c instanceof HTMLInputElement)||c.type!=='checkbox'||!c.checked)return;c.classList.remove('an-chk');void c.offsetWidth;c.classList.add('an-chk');
+    if(c.closest('#view,.mq')){const r=c.getBoundingClientRect();const box=document.createElement('div');box.className='an-conf an-mini';box.style.left=(r.left+r.width/2)+'px';box.style.top=(r.top+r.height/2)+'px';const C=['#10b981','#3b82f6','#f59e0b','#ec4899'];
+      for(let k=0;k<8;k++){const i=document.createElement('i');const a=k/8*Math.PI*2;i.style.cssText=`--dx:${Math.cos(a)*26}px;--dy:${Math.sin(a)*26}px;--r:${k*45}deg;background:${C[k%4]}`;box.appendChild(i)}document.body.appendChild(box);setTimeout(()=>box.remove(),800)}},true);
+  /* cartões em cascata + revelação ao deslizar */
+  let io=null;const rev=root=>{if(!cheio()||!('IntersectionObserver' in window))return;io=io||new IntersectionObserver(L=>L.forEach(x=>{if(x.isIntersecting){x.target.classList.add('an-vis');io.unobserve(x.target)}}),{rootMargin:'0px 0px -6% 0px'});
+    const C=[...(root||document).querySelectorAll('#view .card, #view .cpm-pc, #view .pnk, #view .jn-pc')].slice(0,60);C.forEach((c,k)=>{const r=c.getBoundingClientRect();if(r.top<innerHeight){c.style.setProperty('--ci',Math.min(k,10));c.classList.add('an-card')}else{c.classList.add('an-rev');io.observe(c)}})};
+  {const _g=go;go=function(){const r=_g.apply(this,arguments);try{requestAnimationFrame(()=>rev())}catch(_){}return r}}
+  /* inclinação suave dos indicadores com o rato */
+  addEventListener('pointermove',e=>{if(!cheio()||e.pointerType!=='mouse')return;const k=e.target.closest&&e.target.closest('#view .kpi,#view .pnk');if(!k)return;const r=k.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;k.style.transform=`perspective(600px) rotateX(${(-y*5).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg) translateY(-2px)`;k.classList.add('an-tilt')},{passive:true});
+  addEventListener('pointerout',e=>{const k=e.target.closest&&e.target.closest('.an-tilt');if(k&&!k.contains(e.relatedTarget)){k.style.transform='';k.classList.remove('an-tilt')}},{passive:true});
+  /* o número de avisos da barra lateral salta quando muda */
+  const mo=new MutationObserver(M=>{if(!cheio())return;M.forEach(m=>{const el=m.target.nodeType===1?m.target:m.target.parentElement;const b=el&&el.closest&&el.closest('.nbadge,#cpBadge,#jnBadge,.badge');if(b){b.classList.remove('an-bump');void b.offsetWidth;b.classList.add('an-bump')}})});
+  setTimeout(()=>{const sd=document.getElementById('side');if(sd)mo.observe(sd,{subtree:true,childList:true,characterData:true})},1500);
+  /* título da secção desliza ao mudar */
+  {const _g2=go;go=function(){const r=_g2.apply(this,arguments);try{if(cheio()){const t=document.getElementById('ttl');if(t){t.classList.remove('an-ttl');void t.offsetWidth;t.classList.add('an-ttl')}}}catch(_){}return r}}}
+
+/* 0.910 · sessões abertas noutros aparelhos atualizam-se sozinhas: com a app à vista, verifica a nuvem a cada 4 s
+   (1 pedido pequeno; só descarrega quando outro aparelho mudou alguma coisa — ex.: testes orais gravados no telemóvel) */
+{let _lv=0;const vivo=()=>{try{const L=nvL();if(document.visibilityState!=='visible'||!navigator.onLine||!L.prov||L.auto===false||L.renovar||_nvBusy||!(L.k||_nvK)||!SESSAO||document.getElementById('nvgate')||document.body.classList.contains('priv-on'))return;
+    if(Date.now()-_lv<3500)return;_lv=Date.now();nvSincronizar(false).catch(()=>{})}catch(_){}};
+  setInterval(vivo,4000);addEventListener('focus',()=>setTimeout(vivo,300));addEventListener('online',()=>setTimeout(vivo,800))}
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-org2]');if(b)mudarOrg(A(),b.dataset.org2);const mz=e.target.closest&&e.target.closest('[data-mzok]');if(mz){const [tid,iid]=mz.dataset.mzok.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=Date.now();saveNow();toast('Matriz de '+i.nome+' marcada como enviada','ok');go(VIEW)}}});

@@ -195,3 +195,7 @@ Ficheiros (documentos do aluno, portefólio, arquivo do DT, biblioteca) são dat
 
 - `S.cprofij.anos[anoId].mat[turma]`: {curso, area, nivel, cod, ref, anoCurso, ini, fim, nasInt, fct:{ini, fim, horas, hDia}, disc:[{id, nome, comp: sociocultural|cientifica|tecnologica, horas, det, prof, sig:[siglas], aj, dadas|null}]} (0.909).
 - `S.cfg.privMin`: minutos sem atividade até ao modo de privacidade (0 = desligado). localStorage `es.gids`: ids dos ficheiros do Drive da conta atual (por aparelho, sem dados de alunos).
+
+- `S.jornal.quadros` (0.910): quadros do Jornal (ver ESPECIFICACAO v0.910). `FOTOS['mq:<id>']`: imagens dos quadros.
+- `eduspruce-config.json` › `reposicoes`: [{h, q}] ordens de reposição; localStorage `esrep` (por aparelho): ordens já cumpridas. Ficheiro na nuvem `ef-reposto-<q>.json`: marca de reposição feita.
+- `S.cprofij.anos[ano].mat[turma].disc[].det`: código da UFCD; disciplinas tecnológicas com as mesmas siglas dão-se em sequência.

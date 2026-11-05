@@ -2,6 +2,15 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.910
+- Jornal Escolar › Quadros (quadro visual: notas, listas, ligações, imagens, colunas, títulos, cores, setas, quadros dentro de quadros; desfazer/refazer, zoom, dois dedos).
+- Atualização ao vivo entre aparelhos: verificação da nuvem a cada 4 s com a app à vista (1 pedido pequeno).
+- Conflitos resolvidos automaticamente: `nvJuntar` junta os dois lados (listas por id, objetos campo a campo, valor mais recente nos campos iguais).
+- Botão do modo de privacidade no cabeçalho (Ctrl+Shift+L).
+- Ordem de reposição pelo administrador (`reposicoes` no `eduspruce-config.json`), cumprida uma vez por conta, com marca na nuvem.
+- Coord. PROFIJ: horário da turma em Excel, UFCD em sequência, ligação ao calendário, TIC na Sociocultural.
+- Mais animações no perfil «Cheio»; cabeçalho e lista de alunos mais responsivos; seta nos cartões que abrem.
+
 ## 0.909
 - Coord. PROFIJ › **Matriz e Ponto de Situação**: matriz curricular por componente (horas → aulas de 45 min, dadas pelo horário e calendário, ajuste/valor manual, diferença, tempos por semana, previsão de conclusão), resumo por professor, FPCT (período, horas possíveis vs. exigidas), CSV e impressão com «O Coordenador do PROFIJ».
 - Coord. PROFIJ › **Planeamento Anual**: grelha mês × dia (geral, por disciplina ou por professor) com feriados, interrupções, FPCT, última aula e dias já concluídos.
