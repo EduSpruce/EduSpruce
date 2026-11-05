@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.83
+- Entrar com Microsoft 365 aparece como «em breve» até haver ID da Microsoft.
+
 ## 0.82
 - Entrar com Google já liga o Google Drive; assistente de 3 passos na primeira vez; noutro aparelho só pede a palavra-passe.
 - Sincroniza 6 s depois de cada alteração, a cada minuto e ao voltar à app; renovação silenciosa da ligação Google no computador.
