@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.79
+- Google Drive: corrigido «Method doesn't allow unregistered callers» (ligações antigas sem a permissão do Drive deixam de ser reutilizadas).
+
 ## 0.78
 - Google Drive: mensagens claras para o erro 403 (API do Drive por ativar / permissão desmarcada) e novo pedido de consentimento quando falta a permissão.
 
