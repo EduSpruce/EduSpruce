@@ -184,3 +184,6 @@ Ficheiros (documentos do aluno, portefólio, arquivo do DT, biblioteca) são dat
 ## 0.72
 - Sessão pode ter `tipo:'google'` (`u` = e-mail em minúsculas). `cfg.auth.google` opcional: `{clientId, dominio}`.
 - Predefinições de aparência gravadas em `cfg` na primeira utilização (ver Especificação 0.72).
+
+## v0.90
+- Sem alterações ao formato dos dados.

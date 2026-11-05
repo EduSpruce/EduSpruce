@@ -20,3 +20,4 @@ exportacoes/
 *.csv
 *.pdf
 !docs/**/*.pdf
+!manual/*.pdf

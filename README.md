@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="versão" src="https://img.shields.io/badge/versão-0.89-0b63ce">
+  <img alt="versão" src="https://img.shields.io/badge/versão-0.90-0b63ce">
   <img alt="ficheiro único" src="https://img.shields.io/badge/instalação-ficheiro%20único-1a7f37">
   <img alt="offline" src="https://img.shields.io/badge/funciona-offline-6d3fd1">
   <img alt="RGPD" src="https://img.shields.io/badge/dados-no%20seu%20dispositivo-c2410c">
@@ -18,6 +18,9 @@
 > 🇬🇧 **EduSpruce** is a single-file HTML/JavaScript school management app for Portuguese teachers (grading, lesson logs, timetables, meetings, class management). It runs offline in any modern browser, keeps all data on the teacher's own device, and can sync encrypted data through the teacher's own OneDrive or Google Drive. The interface is in European Portuguese.
 
 ---
+
+
+📘 **[Manual de Instruções (PDF)](manual/EduSpruce-Manual.pdf)** — tudo o que a app faz, passo a passo.
 
 ## Índice
 

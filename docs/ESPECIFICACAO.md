@@ -832,3 +832,9 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `nvFetchRetry` reescrito: 3 tentativas (0,5/1/2 s), mensagem com serviço, caminho e erro (`window.__nvRedeErro`).
 - Fotografias/anexos: falha num ficheiro não interrompe a sincronização (`res.fotosFalha`). Google Drive: envio retomável para ficheiros > 4 MB.
 - `nvRedirect()` normalizado (sem `index.html`, sempre com «/» final).
+
+## v0.90 · Manual em PDF e Ajuda atualizada
+- `manual/EduSpruce-Manual.pdf` (A4, 46 páginas): capa, índice, 19 capítulos + anexo para quem aloja; capturas com dados da demonstração. Gerado a partir de HTML (Inter, estilo institucional) com Playwright `page.pdf`.
+- `MANUAL_URL`: relativo (`manual/EduSpruce-Manual.pdf`) no site; em file:// aponta para https://eduspruce.app/manual/….
+- `ajudaAtualizar()` (idempotente, chamada no início de `vAjuda`): revê `comecar`, `sessao`, `dados`, `nuvem`, `nuvem2`, `nuvemcfg`, `aparencia`; remove `gsync` (substituído por `nuvem`); junta `manual`, `gentrar`, `convemail`, `instalar`, `seguranca`, `problemas`; ordem: manual, comecar, gentrar, instalar, resto.
+- Cartão `.ajman` no cabeçalho da Ajuda com o botão Descarregar.
