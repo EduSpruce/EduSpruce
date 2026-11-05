@@ -817,3 +817,12 @@ Auditoria automática repetida a todo o código e a todas as secções:
 
 ## 0.74 — Política de Privacidade e Termos de Serviço
 - Páginas estáticas públicas `privacidade.html` e `termos.html` na raiz do site (mesmo estilo institucional, claro/escuro, imprimíveis). Ligações: rodapé do formulário de entrada (`.lglegal`), rodapé da barra lateral (`.verlegal`), cartão Privacidade (RGPD) em Definições › Dados (`legalLinks()`), entrada na Ajuda. URLs a usar nos ecrãs de consentimento: `https://eduspruce.app/privacidade.html` e `https://eduspruce.app/termos.html`.
+
+## 0.82 — Sincronização sem esforço com Google
+- `gLogin` pede também `drive.appdata`; o testemunho fica guardado para a sincronização (`gLigarDrive`, `nvGGuardar(t,exp,sc)`), `prov` passa a `google` se não havia outro.
+- Assistente `nvAssist()` (dialog `.nvas`) ao entrar com Google sem chave: passo 1 conta/Drive, passo 2 criar ou escrever a palavra-passe (deteta `ef-manifest.json` na nuvem), passo 3 sincronizar; formulário com `autocomplete` username/new-password/current-password e `PasswordCredential` para o gestor de palavras-passe preencher noutros aparelhos. Tem prioridade sobre os «Primeiros passos». O ícone da nuvem sem chave abre o assistente.
+- Ritmo: 6 s após cada alteração, a cada 60 s com a app visível, ao ganhar foco (>20 s desde a última).
+- Google no computador: renovação silenciosa do testemunho (`prompt:""`) no primeiro toque quando faltam <5 min.
+- Google Drive: a lista de ficheiros é refrescada em cada sincronização e quando um ficheiro não é encontrado (ficheiros criados noutros aparelhos).
+- `nvMontar` escolhe também a primeira turma quando `turmaAtiva` não existe.
+- Teste ponta-a-ponta `gsynct.py` (GIS e Drive simulados, computador + iPhone).
