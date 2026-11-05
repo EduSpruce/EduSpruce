@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.81
+- Google Drive: repetição com o testemunho no endereço quando a autorização se perde pelo caminho; ligação direta para ativar a Drive API quando a ligação está correta mas a Google recusa.
+
 ## 0.80
 - Google Drive: diagnóstico (ID de cliente e permissões da ligação) quando a Google recusa o acesso.
 
