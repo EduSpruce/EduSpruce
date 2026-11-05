@@ -4082,6 +4082,7 @@ body.dev-ipad #view,body.dev-tlm #view{overflow-x:hidden}
 .cpmem{margin:6px 0 0;padding-left:18px;line-height:1.7}.cpleg{list-style:none;margin:8px 0 0;padding:0}.cpleg li{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}.cpleg li:first-child{border-top:0}.cpleg li>div{flex:1;display:flex;flex-direction:column;gap:2px}.cpleg small{color:var(--mut)}
 #nvgate .splg .s0{fill:rgba(255,255,255,.18)}#nvgate .splg .s1{fill:none;stroke:#fff;stroke-width:1.6}#nvgate .splg .s2{fill:#fff}#nvgate .splg .dot{fill:#e3b448;transform-origin:46.2px 43px}#nvgate .splg .ring{fill:none;stroke:#e3b448;stroke-width:1.2;opacity:0;transform-origin:46.2px 43px}
 .plesq{background:none;border:0;color:var(--acc);font-size:13px;font-weight:600;text-decoration:underline;margin:10px auto 0;display:block;cursor:pointer;padding:6px 10px;min-height:36px}
+body.nv-gating :is(#avpop,#parabens,#tour,#toast,#reunBan,.reunban,#nffab){display:none!important}
 </style>
 </head>
 <body>
@@ -7844,8 +7845,10 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.906';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.906</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li>«Esqueci-me do código»: os algarismos escritos no teclado do computador vão para os campos da janela (antes iam para o ecrã do código, por trás).</li></ul></details>
+const VERSAO='0.908';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.908</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Sincronização mais rápida</b>: envia 0,5 s depois de cada alteração (antes 2 s), transfere até 4 partes e fotografias ao mesmo tempo e, quando nada mudou, confirma com um só pedido pequeno — por isso pode verificar a cada 10 s (antes 30 s).</li><li><b>Avisos só depois dos 100 %</b>: avisos urgentes, aniversários, novidades e outras janelas esperam que a barra de sincronização termine.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.907</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>«Esqueci-me do código» em todas as janelas que pedem o código de acesso: desbloquear os dados de base, mudar o código e desativar o código.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.906</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>«Esqueci-me do código»: os algarismos escritos no teclado do computador vão para os campos da janela (antes iam para o ecrã do código, por trás).</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.905</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Esqueci-me do código</b> no ecrã do código de acesso: confirma a sua identidade com o código de encriptação da sincronização (ou com a palavra-passe da conta local) e escolhe logo um código novo de 4 algarismos.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.904</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Novo módulo opcional Coord. PROFIJ</b> (para o cargo «Coordenador(a) do PROFIJ»): painel do programa, turmas e formandos com as médias por componente, FPCT e PAF (regra ≥ 10 da Portaria n.º 86/2018), entidades de acolhimento e colocações da FPCT, marcação de PAF e PEA com júri e classificações, Conselho dos Cursos e legislação. Exporta CSV e .ics.</li><li><b>Sincronização ao entrar</b>: aparece uma barra animada de 0 a 100 % e a app só abre quando os dados estão sincronizados. Sem internet ou com a ligação expirada, diz o que fazer (renovar, tentar de novo ou continuar com os dados do aparelho).</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.903</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Sincronização sem interrupções</b>: deixa de mostrar mensagens — só o ícone da nuvem a rodar. Quando chegam alterações de outro aparelho, a página atualiza-se sem saltar e espera que acabe de escrever.</li><li><b>Mais rápida</b>: 2 segundos depois de cada alteração e a cada 30 segundos com a app aberta (antes 6 s e 1 min).</li><li><b>O código escreve-se uma vez em cada aparelho</b>: fica lembrado para a sua conta Google, mesmo depois de terminar a sessão. Só volta a ser pedido se o mudar noutro aparelho. O assistente fecha sozinho no fim.</li></ul></details>
@@ -9866,7 +9869,7 @@ function pinDialog(o){o=o||{};const N=o.n||4;return new Promise(res=>{let v='';l
   const abana=m=>{er.textContent=m||'';dots.classList.remove('abana');void dots.offsetWidth;dots.classList.add('abana');if(navigator.vibrate)try{navigator.vibrate(120)}catch(_){}};
   const tecla=async k=>{if(ocup)return;if(k==='x')return fim(null);if(k==='b'){v=v.slice(0,-1);pinta();return}if(v.length>=N)return;v+=k;er.textContent='';pinta();
     if(v.length===N){ocup=true;await new Promise(r=>setTimeout(r,140));const ok=o.verifica?await o.verifica(v):true;if(ok){dots.classList.add('ok');setTimeout(()=>fim(v),160)}else{abana(o.erro||'Código incorreto.');setTimeout(()=>{v='';pinta()},380)}ocup=false}};
-  const kb=e=>{if(!d.isConnected)return;if(/^\d$/.test(e.key)){e.preventDefault();tecla(e.key)}else if(e.key==='Backspace'){e.preventDefault();tecla('b')}else if(e.key==='Escape'){e.preventDefault();fim(null)}};document.addEventListener('keydown',kb,true);
+  const kb=e=>{if(!d.isConnected)return;if(e.target&&e.target.closest&&e.target.closest('dialog')!==d&&(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.target.closest('dialog')))return;if(/^\d$/.test(e.key)){e.preventDefault();tecla(e.key)}else if(e.key==='Backspace'){e.preventDefault();tecla('b')}else if(e.key==='Escape'){e.preventDefault();fim(null)}};document.addEventListener('keydown',kb,true);
   d.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{tecla(b.dataset.pk);b.classList.remove('prem');void b.offsetWidth;b.classList.add('prem')});d.addEventListener('cancel',e=>{e.preventDefault();fim(null)});
   try{d.showModal()}catch(_){d.setAttribute('open','')}const f=d.querySelector('[data-pk="1"]');if(f)f.focus()})}
 if(!ICONS.arrowL)ICONS.arrowL='<path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/><path d="M17 9l-6 6M11 9l6 6"/>';
@@ -9937,6 +9940,7 @@ const nvConflitos=()=>{try{return JSON.parse(localStorage.getItem(NV_CONF)||'[]'
 const nvGuardaConflito=(parte,dados,de)=>{const L=nvConflitos();L.unshift({parte,q:Date.now(),de,dados});try{localStorage.setItem(NV_CONF,JSON.stringify(L.slice(0,12)))}catch(_){try{localStorage.setItem(NV_CONF,JSON.stringify(L.slice(0,3)))}catch(_){}}};
 const nvRotulo=k=>{if(k==='geral')return 'Definições e dados gerais';if(k==='audit')return 'Auditoria';if(k.startsWith('ano-')){const a=S.anos.find(x=>x.id===k.slice(4));return 'Ano letivo '+(a?a.nome:'')}if(k.startsWith('turma-')){let t=null;S.anos.forEach(a=>a.turmas.forEach(x=>{if(x.id===k.slice(6))t=x}));return t?'Turma '+t.nome+' · '+t.disciplina:'Turma'}return k};
 /* --- sincronizar --- */
+async function nvPool(L,n,fn){let i=0;const w=async()=>{while(i<L.length){const x=L[i++];await fn(x)}};await Promise.all(Array.from({length:Math.min(n,L.length)},w))}
 async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)return null;const k=await nvChave();if(!k){if(interativo)toast('Defina a palavra-passe de encriptação da nuvem.','erro');return null}
   _nvBusy=true;nvEstadoTxt('a sincronizar…');const res={env:0,rec:0,conf:0,fotosEnv:0,fotosRec:0};
   try{const L=nvL();const base={...(L.base||{})};const primeira=!L.base;
@@ -9945,18 +9949,18 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     if(!man)man={v:1,salt:L.salt,chk:await nvCifrar('eduflow',k),partes:{},fotos:{},rev:0};man.partes=man.partes||{};man.fotos=man.fotos||{};
     const P=nvPartes();const loc={};Object.keys(P).forEach(n=>loc[n]=nvHash(JSON.stringify(P[n])));const mod=L.mod||{};
     const todos=new Set([...Object.keys(loc),...Object.keys(man.partes),...Object.keys(base)]);let mudouLocal=false;let _pi=0;const _pt=Math.max(1,todos.size);const agora=Date.now(),disp=nvDisp();
-    for(const n of todos){try{window.__nvProg&&window.__nvProg(0.8*(++_pi)/_pt)}catch(_){}const l=loc[n],r=man.partes[n]?man.partes[n].h:undefined,b=base[n];if(l===r){base[n]=l;continue}
+    await nvPool([...todos],4,async n=>{try{window.__nvProg&&window.__nvProg(0.8*(++_pi)/_pt)}catch(_){}const l=loc[n],r=man.partes[n]?man.partes[n].h:undefined,b=base[n];if(l===r){base[n]=l;return}
       const lm=l!==b,rm=r!==b;let usar=null;
       if(n==='audit'&&lm&&rm&&l!==undefined&&r!==undefined){/* auditoria: junta os registos dos dois lados */const txt=await prov.ler(NV_PREF+'audit.bin');const R=txt?JSON.parse(await nvDecifrar(txt,k)):[];const vis=new Set();const M=[...(P.audit||[]),...R].filter(e=>{const id=e.q+'|'+e.area+'|'+e.acao+'|'+e.det;if(vis.has(id))return false;vis.add(id);return true}).sort((x,y)=>y.q-x.q).slice(0,5000);
-        P.audit=M;const h=nvHash(JSON.stringify(M));await prov.escrever(NV_PREF+'audit.bin',await nvCifrar(JSON.stringify(M),k));man.partes.audit={h,ts:agora,dev:disp};base.audit=h;mudouLocal=true;res.env++;(res._up=res._up||[]).push('audit');continue}
+        P.audit=M;const h=nvHash(JSON.stringify(M));await prov.escrever(NV_PREF+'audit.bin',await nvCifrar(JSON.stringify(M),k));man.partes.audit={h,ts:agora,dev:disp};base.audit=h;mudouLocal=true;res.env++;(res._up=res._up||[]).push('audit');return}
       if(primeira&&r!==undefined){/* primeiro contacto deste dispositivo: fica com o que está na nuvem; guarda cópia só de turmas/anos que existam aqui */if(l!==undefined&&/^(turma|ano)-/.test(n))nvGuardaConflito(n,P[n],'este dispositivo (antes de ligar)');usar='remoto'}
       else if(lm&&!rm)usar='local';else if(rm&&!lm)usar='remoto';else{const lt=primeira?0:(mod[n]||S._ts||0),rt=man.partes[n]?man.partes[n].ts:0;(res.cp=res.cp||[]).push(n);usar=(r===undefined&&l!==undefined)?'local':(l===undefined&&r!==undefined)?'remoto':(rt>lt?'remoto':'local');res.conf++;
         if(usar==='remoto'&&P[n]!==undefined)nvGuardaConflito(n,P[n],'este dispositivo');else if(usar==='local'&&r!==undefined){try{nvGuardaConflito(n,JSON.parse(await nvDecifrar(await prov.ler(NV_PREF+n+'.bin'),k)),(man.partes[n]||{}).dev||'outro dispositivo')}catch(_){}}}
       if(usar==='local'){if(l===undefined){await prov.apagar(NV_PREF+n+'.bin');delete man.partes[n];delete base[n]}else{await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(P[n]),k));man.partes[n]={h:l,ts:mod[n]||agora,dev:disp};base[n]=l}res.env++;(res._up=res._up||[]).push(n)}
-      else{if(r===undefined){delete P[n];delete base[n]}else{const txt=await prov.ler(NV_PREF+n+'.bin');if(txt==null)continue;P[n]=JSON.parse(await nvDecifrar(txt,k));base[n]=r}mudouLocal=true;res.rec++;if(n==='audit')res._aud=(res._aud||0)+1}}
+      else{if(r===undefined){delete P[n];delete base[n]}else{const txt=await prov.ler(NV_PREF+n+'.bin');if(txt==null)return;P[n]=JSON.parse(await nvDecifrar(txt,k));base[n]=r}mudouLocal=true;res.rec++;if(n==='audit')res._aud=(res._aud||0)+1}});
     /* fotografias e anexos: imutáveis — envia as que faltam, recebe as que não existem aqui */
-    for(const id of Object.keys(FOTOS)){if(!man.fotos[id]){try{await prov.escrever(nvNomeF(id),await nvCifrar(FOTOS[id],k));man.fotos[id]=1;res.fotosEnv++}catch(e){(res.fotosFalha=res.fotosFalha||[]).push(id);console.warn('[EduSpruce] ficheiro não enviado',id,e)}}}
-    {const _F=Object.keys(man.fotos);let _fi=0;var _fprog=()=>{try{window.__nvProg&&window.__nvProg(0.8+0.2*(++_fi)/Math.max(1,_F.length))}catch(_){}}}for(const id of Object.keys(man.fotos)){_fprog();if(!FOTOS[id]){let txt=null;try{txt=await prov.ler(nvNomeF(id))}catch(e){console.warn('[EduSpruce] ficheiro não recebido',id,e);continue}if(txt!=null){const v=await nvDecifrar(txt,k);FOTOS[id]=v;idbPor(id,v);res.fotosRec++}}}
+    await nvPool(Object.keys(FOTOS),4,async id=>{if(!man.fotos[id]){try{await prov.escrever(nvNomeF(id),await nvCifrar(FOTOS[id],k));man.fotos[id]=1;res.fotosEnv++}catch(e){(res.fotosFalha=res.fotosFalha||[]).push(id);console.warn('[EduSpruce] ficheiro não enviado',id,e)}}});
+    {const _F=Object.keys(man.fotos);let _fi=0;var _fprog=()=>{try{window.__nvProg&&window.__nvProg(0.8+0.2*(++_fi)/Math.max(1,_F.length))}catch(_){}}}await nvPool(Object.keys(man.fotos),4,async id=>{_fprog();if(!FOTOS[id]){let txt=null;try{txt=await prov.ler(nvNomeF(id))}catch(e){console.warn('[EduSpruce] ficheiro não recebido',id,e);return}if(txt!=null){const v=await nvDecifrar(txt,k);FOTOS[id]=v;idbPor(id,v);res.fotosRec++}}});
     if(mudouLocal){const st=nvMontar(P);const ok=validarCopia(st);if(ok.length)throw new Error('Dados recebidos incompletos: '+ok[0]);S=migrate(st);_semHist=true;saveNow();_semHist=false;const P2=nvPartes();Object.keys(P2).forEach(n=>{const h2=nvHash(JSON.stringify(P2[n]));if(man.partes[n]&&base[n]===man.partes[n].h&&h2!==base[n]){man.partes[n].h=h2;base[n]=h2;res._fix=1}})}
     if(res.env||res.conf||res.fotosEnv||res._fix||!manTxt){/* evita escrever por cima de outro dispositivo que sincronizou entretanto */const atual=await prov.ler(NV_PREF+'manifest.json');if(atual&&manTxt&&atual!==manTxt){_nvBusy=false;const b0=L.base||{};(res._up||[]).forEach(n=>{if(b0[n]===undefined)delete base[n];else base[n]=b0[n]});nvSet({base,mod:L.mod||{}});return await nvSincronizar(interativo)}
       man.rev=(man.rev||0)+1;man.q=agora;man.dev=disp;await prov.escrever(NV_PREF+'manifest.json',JSON.stringify(man))}
@@ -9966,7 +9970,7 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     window.__nvUlt=res;return res}
   catch(e){nvSet({erro:e.message});nvEstadoTxt('erro: '+e.message);if(interativo)toast(e.message,'erro');console.warn(e);return null}finally{_nvBusy=false}}
 /* registo da hora de alteração de cada parte (para decidir conflitos pela versão mais recente) */
-{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const P=nvPartes();const mod=L.mod||{};let m=false;Object.keys(P).forEach(n=>{const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]&&!mod[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),2000)}}}catch(_){}return r}}
+{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const P=nvPartes();const mod=L.mod||{};let m=false;Object.keys(P).forEach(n=>{const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]&&!mod[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),500)}}}catch(_){}return r}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&nvL().prov&&_nvK&&nvL().auto!==false){clearTimeout(_nvT);nvSincronizar(false)}else if(document.visibilityState==='visible'&&nvL().prov&&_nvK&&nvL().auto!==false)setTimeout(()=>nvSincronizar(false),1500)});
 addEventListener('online',()=>{if(nvL().prov&&_nvK)nvSincronizar(false)});
 setInterval(()=>{if(nvL().prov&&_nvK&&nvL().auto!==false&&!document.hidden)nvSincronizar(false)},5*60*1000);
@@ -10466,8 +10470,8 @@ async function nvAssist(forcar){const L=nvL();const s=SESSAO||{};if(!forcar){if(
 /* o ícone da nuvem, sem palavra-passe definida, abre o assistente */
 {const _nb=nvBadge;nvBadge=function(){_nb.apply(this,arguments);const b=$('#nv-badge');if(b&&!b.dataset.as){b.dataset.as=1;b.addEventListener('click',e=>{const L=nvL();if(L.prov==='google'&&!L.k){e.stopImmediatePropagation();e.preventDefault();nvAssist(true)}},true)}}}
 /* --- ritmo da sincronização: 6 s depois de alterar, a cada 60 s com a app aberta, ao voltar à app --- */
-{const _svR=saveNow;saveNow=function(){const r=_svR.apply(this,arguments);try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),2000)}}catch(_){}return r}}
-setInterval(()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&!document.hidden&&navigator.onLine&&!L.renovar)nvSincronizar(false)}catch(_){}},30*1000);
+{const _svR=saveNow;saveNow=function(){const r=_svR.apply(this,arguments);try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),500)}}catch(_){}return r}}
+setInterval(()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&!document.hidden&&navigator.onLine&&!L.renovar)nvSincronizar(false)}catch(_){}},10*1000);
 addEventListener('focus',()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&!L.renovar&&(!L.ultimo||Date.now()-L.ultimo>20000))nvSincronizar(false)}catch(_){}});
 /* --- Google: renovar a ligação (1 h) aproveitando um toque qualquer no computador, sem perguntar nada --- */
 let _gRenT=0;
@@ -14731,7 +14735,7 @@ async function nvMudarCodigo(antigo,novo,prog){const prov=nvProv();const L=nvL()
   finally{_nvBusy=false}}
 /* noutro aparelho: o código mudou → pede o novo em vez de dar erro */
 {const _nsR=nvSincronizar;nvSincronizar=async function(){const L=nvL();if(L.rekey&&L.rekey.k&&!_nvBusy){try{await nvMudarCodigo('','',()=>{});toast('Acabou de mudar o código de encriptação na nuvem','ok')}catch(e){console.warn(e)}}
-  const r=await _nsR.apply(this,arguments);try{const e=nvL().erro||'';if(!r&&/não corresponde/.test(e)&&SESSAO){_nvK=null;nvSet({k:null,erro:null});toast('O código de encriptação foi mudado noutro aparelho. Escreva o código novo.','aviso');try{sessionStorage.removeItem('es.assist')}catch(_){}setTimeout(()=>nvAssist(true),400)}}catch(_){}return r}}
+  const r=await _nsR.apply(this,arguments);try{const e=nvL().erro||'';if(!r&&/não corresponde/.test(e)&&SESSAO){_nvK=null;try{localStorage.removeItem('eskeep')}catch(_){}nvSet({k:null,erro:null});toast('O código de encriptação foi mudado noutro aparelho. Escreva o código novo.','aviso');try{sessionStorage.removeItem('es.assist')}catch(_){}setTimeout(()=>nvAssist(true),400)}}catch(_){}return r}}
 function nvMudarDlg(){const d=document.createElement('dialog');d.className='nvmc';d.setAttribute('aria-labelledby','mc-t');
   d.innerHTML=`<form class="nvmcf" onsubmit="return false" autocomplete="on"><input type="text" name="username" autocomplete="username" value="${esc(gsCfg().email||(SESSAO||{}).u||'')}" hidden readonly><h2 id="mc-t">${ic('shield',18)} Mudar o Código de Encriptação</h2>
    <p class="hint">Os dados na nuvem são encriptados de novo com o código novo. Nos outros aparelhos a app vai pedir o código novo. Faça-o com a internet ligada e, se possível, com a app fechada nos outros aparelhos.</p>
@@ -14957,10 +14961,10 @@ function nvGateUI(){let o=document.getElementById('nvgate');if(o)return o;o=docu
 async function nvSyncGate(){if(_gateOn)return;let L;try{L=nvL()}catch(_){return}if(!L.prov||!(L.k||_nvK)||!SESSAO){const g=document.getElementById('nvgate');if(g)g.remove();return}_gateOn=true;
   const o=nvGateUI();o.classList.remove('fora');const bar=o.querySelector('.nvgb'),fill=bar.querySelector('i'),pct=o.querySelector('#nvg-p'),msg=o.querySelector('#nvg-m'),acts=o.querySelector('#nvg-a');
   let alvo=0,atual=0,raf=0;const anima=()=>{atual+=(alvo-atual)*0.18;if(alvo-atual<0.3)atual=alvo;fill.style.width=atual+'%';pct.textContent=Math.round(atual)+'%';bar.setAttribute('aria-valuenow',Math.round(atual));if(atual<alvo)raf=requestAnimationFrame(anima);else raf=0};
-  const set=(v,t)=>{alvo=Math.max(alvo,Math.min(100,v));if(t)msg.textContent=t;if(!raf)raf=requestAnimationFrame(anima)};
+  let fim=false;const set=(v,t)=>{if(fim&&v<100)return;alvo=Math.max(alvo,Math.min(100,v));if(t)msg.textContent=t;if(v>=100)fim=true;if(!raf)raf=requestAnimationFrame(anima)};
   /* enquanto espera pela rede, avança devagar para mostrar que está vivo */
   const lento=setInterval(()=>{if(alvo<88)set(alvo+0.6)},400);
-  const fechar=()=>{clearInterval(lento);window.__nvProg=null;o.classList.add('fora');setTimeout(()=>{o.remove();_gateOn=false},450)};
+  const fechar=()=>{clearInterval(lento);window.__nvProg=null;o.classList.add('fora');setTimeout(()=>{o.remove();_gateOn=false;document.body.classList.remove('nv-gating');try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}setTimeout(()=>{try{mostrarAvisos(false)}catch(_){}},400)},450)};
   const botoes=B=>{acts.hidden=!B.length;acts.innerHTML=B.map((b,i)=>`<button type="button" class="btn ${b.c||''}" data-g="${i}">${b.t}</button>`).join('');acts.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>B[+x.dataset.g].f())};
   const correr=async()=>{botoes([]);o.classList.remove('erro');set(6,'A ligar à sua conta Google…');
     if(!navigator.onLine){set(100,'Sem internet — os dados deste aparelho estão prontos; sincroniza quando a ligação voltar.');o.classList.add('erro');botoes([{t:'Continuar',c:'pri',f:fechar}]);return}
@@ -14983,7 +14987,7 @@ try{const s0=sessaoAtual();const L0=JSON.parse(localStorage.getItem(NV_KEY)||'{}
 {const _pp=pedirPin;pedirPin=function(){const pr=_pp.apply(this,arguments);setTimeout(()=>{const o=document.querySelector('#login.pinmode .pinc');if(!o||o.querySelector('.plesq'))return;
   const n=o.querySelector('.lgnota');const b=document.createElement('button');b.type='button';b.className='plesq';b.textContent='Esqueci-me do código';(n||o).insertAdjacentElement(n?'beforebegin':'beforeend',b);b.onclick=pinRecuperar},0);return pr}}
 let _pinTent=0;
-async function pinRecuperar(){const L=(()=>{try{return nvL()}catch(_){return {}}})();const s=SESSAO||{};const conta=((S.cfg.auth||{}).contas||[]).find(c=>c.u===s.u);
+async function pinRecuperar(alvo){if(!(alvo instanceof Element))alvo=null;const L=(()=>{try{return nvL()}catch(_){return {}}})();const s=SESSAO||{};const conta=((S.cfg.auth||{}).contas||[]).find(c=>c.u===s.u);
   const modo=L.k&&L.salt?'nuvem':conta?'conta':null;
   if(!modo){alert('Não há outra forma de confirmar a sua identidade neste aparelho.\n\nToque em «Sair», entre de novo com a sua conta e defina um código novo em Definições › Dados e Segurança.');return}
   const d=document.createElement('dialog');d.className='nvmc';d.innerHTML=`<form class="nvmcf" onsubmit="return false" autocomplete="on"><input type="text" name="username" autocomplete="username" value="${esc(gsCfg&&gsCfg().email||s.u||'')}" hidden readonly><h2>${ic('cadeadoAb',18)} Esqueci-me do Código</h2>
@@ -15003,7 +15007,23 @@ async function pinRecuperar(){const L=(()=>{try{return nvL()}catch(_){return {}}
     S.cfg.pinHash=await sha('eg:'+a);try{saveNow()}catch(_){}try{audit('Segurança','Código de acesso mudado (recuperação)',s.u||'')}catch(_){}
     d.close();d.remove();toast('Código de acesso mudado','ok');
     /* entra logo com o código novo */
-    const pad=document.querySelector('#login.pinmode');if(pad){for(const x of a){const k=pad.querySelector(`[data-pk="${x}"]`);if(k)k.click();await new Promise(r=>setTimeout(r,60))}}}}
+    const pad=alvo&&alvo.isConnected?alvo:document.querySelector('#login.pinmode');if(pad){for(const x of a){const k=pad.querySelector(`[data-pk="${x}"]`);if(k)k.click();await new Promise(r=>setTimeout(r,60))}}}}
+
+/* 0.907 · «Esqueci-me do código» também nas janelas que pedem o código (desbloquear dados, mudar ou desativar o código…) */
+{const _pd=pinDialog;pinDialog=function(o){const pr=_pd.apply(this,arguments);try{if(S.cfg.pinHash&&o&&o.verifica&&!/repita/i.test(o.t||'')){const ds=document.querySelectorAll('dialog.pindlg');const d=ds[ds.length-1];if(d&&!d.querySelector('.plesq')){const b=document.createElement('button');b.type='button';b.className='plesq';b.textContent='Esqueci-me do código';d.appendChild(b);b.onclick=()=>pinRecuperar(d)}}}catch(e){console.warn(e)}return pr}}
+
+/* 0.908 · sincronização rápida: sem alterações locais e com o manifesto igual na nuvem, só um pedido pequeno */
+{const _nsF=nvSincronizar;nvSincronizar=async function(interativo){try{const L=nvL();const prov=nvProv();
+    if(!interativo&&prov===PROV.google&&L.base&&L.manVer&&!Object.keys(L.mod||{}).length&&!L.rekey&&!_nvBusy&&_nvK){const m=prov._ids&&prov._ids[NV_PREF+'manifest.json'];
+      if(m){const r=await gsFetch('https://www.googleapis.com/drive/v3/files/'+m.id+'?fields=version');const j=await r.json().catch(()=>({}));if(j.version&&String(j.version)===String(L.manVer)){nvSet({ultimo:Date.now(),erro:''});try{nvBadge()}catch(_){}return {rapida:true,env:0,rec:0}}}}}catch(_){}
+  const r=await _nsF.apply(this,arguments);
+  try{if(r&&nvProv()===PROV.google){const m=PROV.google._ids&&PROV.google._ids[NV_PREF+'manifest.json'];if(m){const x=await gsFetch('https://www.googleapis.com/drive/v3/files/'+m.id+'?fields=version');const j=await x.json().catch(()=>({}));if(j.version)nvSet({manVer:String(j.version)})}}}catch(_){}
+  return r}}
+/* avisos, parabéns, guia e janelas só depois de a sincronização chegar aos 100 % */
+{const _sm=HTMLDialogElement.prototype.showModal;const fila=[];HTMLDialogElement.prototype.showModal=function(){if(document.getElementById('nvgate')&&!this.matches('.nvas,.nvmc,.pindlg')){fila.push(this);this.dataset.espera=1;return}return _sm.apply(this,arguments)};
+  window.__nvGateFila=()=>{while(fila.length){const d=fila.shift();if(d.isConnected&&!d.open){delete d.dataset.espera;try{_sm.call(d)}catch(_){}}}}}
+setInterval(()=>{const g=document.getElementById('nvgate');document.body.classList.toggle('nv-gating',!!g);if(!g&&window.__nvGateFila&&document.querySelector('dialog[data-espera]'))window.__nvGateFila()},150);
+{const _ma2=mostrarAvisos;mostrarAvisos=function(){if(document.getElementById('nvgate')){clearTimeout(mostrarAvisos._t);mostrarAvisos._t=setTimeout(()=>mostrarAvisos.apply(this,arguments),800);return}return _ma2.apply(this,arguments)}}
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-org2]');if(b)mudarOrg(A(),b.dataset.org2);const mz=e.target.closest&&e.target.closest('[data-mzok]');if(mz){const [tid,iid]=mz.dataset.mzok.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=Date.now();saveNow();toast('Matriz de '+i.nome+' marcada como enviada','ok');go(VIEW)}}});

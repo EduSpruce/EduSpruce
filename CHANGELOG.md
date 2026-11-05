@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.908
+- Sincronização mais rápida: 0,5 s após cada alteração, até 4 transferências em paralelo (partes e ficheiros), verificação rápida da versão do manifesto (Google Drive) e intervalo de 10 s.
+- Avisos, aniversários, novidades e janelas só aparecem depois de a barra de sincronização chegar aos 100 %.
+- Corrigido: depois de mudar o código noutro aparelho, a chave lembrada antiga deixa de ser reposta.
+
+## 0.907
+- «Esqueci-me do código» também nas janelas que pedem o código de acesso (desbloquear dados de base, mudar e desativar o código).
+
 ## 0.906
 - Ecrã do código de acesso: o teclado físico deixa de apanhar as teclas escritas em campos e janelas («Esqueci-me do código» funcionava só com o teclado do ecrã).
 
