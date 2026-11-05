@@ -880,3 +880,8 @@ Auditoria automática repetida a todo o código e a todas as secções:
 ## v0.991 · Bloqueio dos dados de base
 - `_bloqBanAte` = agora + 5 s ao mudar de vista (`go`) e ao bloquear (`bloqAlternar(true)`); `bloqUI` só mostra `.bloqban` dentro desse prazo e depois esconde-o com transição.
 - `bloqIrDef()`: abre Definições › Dados e Segurança e realça `#bloq-card`. Com o bloqueio ligado, `#bloqBar`/`#bloqNav` e o aviso «Dados Bloqueados» chamam `bloqIrDef`, já não desbloqueiam.
+
+## v0.994 · Sincronização discreta e código uma só vez
+- Debounce 2 s após `saveNow`, intervalo 30 s (visível, online). Em sincronizações automáticas (`_nvSil`), `toast` cala mensagens de sincronização (erros continuam) e `go(VIEW)` com dados recebidos é adiado enquanto houver um campo focado ou um diálogo aberto (`_nvGoPend`, aplicado no `focusout`), sempre com `manterPosicao`.
+- `eskeep` = {e: e-mail Google, k, salt}: guardado a cada 10 s e antes de `sairNuvem`; `nvKeepRepor()` repõe a chave se a sessão Google for do mesmo e-mail (o assistente já não aparece). Apagado se a nuvem disser que o código não corresponde (mudado noutro aparelho).
+- O assistente carrega sozinho em «Começar» 2,5 s depois do fim.

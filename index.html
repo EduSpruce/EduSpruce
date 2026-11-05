@@ -7816,8 +7816,9 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.993';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.993</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li>A versão passa para uma linha pequena por baixo do nome da plataforma, para nunca ficar cortada.</li></ul></details>
+const VERSAO='0.994';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.994</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Sincronização sem interrupções</b>: deixa de mostrar mensagens — só o ícone da nuvem a rodar. Quando chegam alterações de outro aparelho, a página atualiza-se sem saltar e espera que acabe de escrever.</li><li><b>Mais rápida</b>: 2 segundos depois de cada alteração e a cada 30 segundos com a app aberta (antes 6 s e 1 min).</li><li><b>O código escreve-se uma vez em cada aparelho</b>: fica lembrado para a sua conta Google, mesmo depois de terminar a sessão. Só volta a ser pedido se o mudar noutro aparelho. O assistente fecha sozinho no fim.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.993</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>A versão passa para uma linha pequena por baixo do nome da plataforma, para nunca ficar cortada.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.992</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>A versão da app aparece, discreta, junto ao logótipo na barra lateral.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.991</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Bloqueio dos dados de base</b>: o aviso amarelo aparece só durante 5 segundos (ao bloquear e ao abrir uma vista bloqueada) e diz onde desbloquear. Desbloquear passa a fazer-se apenas em <b>Definições › Dados e Segurança</b>: o cadeado da barra e o aviso de alteração bloqueada levam lá.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.990</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>Endereço novo eduspruce.pt: se a app for aberta com http, passa sozinha para https assim que o certificado estiver pronto, e a mensagem de erro diz o que fazer.</li></ul></details>
@@ -9934,7 +9935,7 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     window.__nvUlt=res;return res}
   catch(e){nvSet({erro:e.message});nvEstadoTxt('erro: '+e.message);if(interativo)toast(e.message,'erro');console.warn(e);return null}finally{_nvBusy=false}}
 /* registo da hora de alteração de cada parte (para decidir conflitos pela versão mais recente) */
-{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const P=nvPartes();const mod=L.mod||{};let m=false;Object.keys(P).forEach(n=>{const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]&&!mod[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),20000)}}}catch(_){}return r}}
+{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const P=nvPartes();const mod=L.mod||{};let m=false;Object.keys(P).forEach(n=>{const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]&&!mod[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),2000)}}}catch(_){}return r}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&nvL().prov&&_nvK&&nvL().auto!==false){clearTimeout(_nvT);nvSincronizar(false)}else if(document.visibilityState==='visible'&&nvL().prov&&_nvK&&nvL().auto!==false)setTimeout(()=>nvSincronizar(false),1500)});
 addEventListener('online',()=>{if(nvL().prov&&_nvK)nvSincronizar(false)});
 setInterval(()=>{if(nvL().prov&&_nvK&&nvL().auto!==false&&!document.hidden)nvSincronizar(false)},5*60*1000);
@@ -10434,8 +10435,8 @@ async function nvAssist(forcar){const L=nvL();const s=SESSAO||{};if(!forcar){if(
 /* o ícone da nuvem, sem palavra-passe definida, abre o assistente */
 {const _nb=nvBadge;nvBadge=function(){_nb.apply(this,arguments);const b=$('#nv-badge');if(b&&!b.dataset.as){b.dataset.as=1;b.addEventListener('click',e=>{const L=nvL();if(L.prov==='google'&&!L.k){e.stopImmediatePropagation();e.preventDefault();nvAssist(true)}},true)}}}
 /* --- ritmo da sincronização: 6 s depois de alterar, a cada 60 s com a app aberta, ao voltar à app --- */
-{const _svR=saveNow;saveNow=function(){const r=_svR.apply(this,arguments);try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),6000)}}catch(_){}return r}}
-setInterval(()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&!document.hidden&&navigator.onLine&&!L.renovar)nvSincronizar(false)}catch(_){}},60*1000);
+{const _svR=saveNow;saveNow=function(){const r=_svR.apply(this,arguments);try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),2000)}}catch(_){}return r}}
+setInterval(()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&!document.hidden&&navigator.onLine&&!L.renovar)nvSincronizar(false)}catch(_){}},30*1000);
 addEventListener('focus',()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&!L.renovar&&(!L.ultimo||Date.now()-L.ultimo>20000))nvSincronizar(false)}catch(_){}});
 /* --- Google: renovar a ligação (1 h) aproveitando um toque qualquer no computador, sem perguntar nada --- */
 let _gRenT=0;
@@ -14762,6 +14763,26 @@ function bloqIrDef(){toast('Para desbloquear: Definições › Dados e Seguranç
 /* 0.992 · versão discreta junto ao logótipo na barra lateral */
 function verSide(){const n=$('#side .brand .bt')||$('#side .brand');if(!n)return;let v=$('#side .bver');if(v&&v.parentElement!==n){v.remove();v=null}if(!v){v=document.createElement('span');v.className='bver';v.title='Versão da app — toque para ver as novidades';n.appendChild(v);v.onclick=e=>{e.stopPropagation();try{UI.defTab='geral';go('ajuda')}catch(_){}}}v.textContent='v'+VERSAO}
 verSide();setInterval(verSide,3000);
+
+/* 0.994 · sincronização discreta: só o ícone a rodar; o código escreve-se uma vez por aparelho */
+let _nvSil=0,_nvGoPend=null;
+{const _nsS=nvSincronizar;nvSincronizar=async function(interativo){if(interativo)return _nsS.apply(this,arguments);_nvSil++;try{return await _nsS.apply(this,arguments)}finally{_nvSil--;if(!_nvSil){try{nvBadge()}catch(_){}}}}}
+{const _tS=toast;toast=function(m,tipo){if(_nvSil&&tipo!=='erro'&&/sincroniz|recebid|conflit|parte\(s\)|nuvem|fotografia|enviad/i.test(String(m)))return;return _tS.apply(this,arguments)}}
+/* dados que chegam de outro aparelho: não redesenha a página por baixo do dedo */
+{const _gS=go;go=function(v){if(_nvSil&&v===VIEW){const ae=document.activeElement;if(ae&&ae.closest&&ae.closest('#view,dialog')&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)||document.querySelector('dialog[open]:not(.nvas)')){_nvGoPend=v;return}try{return manterPosicao(()=>_gS.call(this,v))}catch(_){return _gS.call(this,v)}}return _gS.apply(this,arguments)};if(go._f)go._f=go._f}
+document.addEventListener('focusout',()=>setTimeout(()=>{if(_nvGoPend&&!document.querySelector('dialog[open]')){const ae=document.activeElement;if(!(ae&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))){const v=_nvGoPend;_nvGoPend=null;try{manterPosicao(()=>go(v))}catch(_){go(v)}}}},300));
+/* código de encriptação lembrado neste aparelho para a mesma conta Google (mesmo depois de terminar a sessão) */
+const NV_KEEP='eskeep';
+function nvKeepGuardar(){try{const L=nvL();const em=String((gsCfg().email||(SESSAO&&SESSAO.u)||'')).toLowerCase();if(L.k&&L.salt&&em&&L.prov==='google')localStorage.setItem(NV_KEEP,JSON.stringify({e:em,k:L.k,salt:L.salt,t:Date.now()}))}catch(_){}}
+function nvKeepRepor(){try{const L=nvL();if(L.k)return false;const K=JSON.parse(localStorage.getItem(NV_KEEP)||'null');if(!K)return false;const em=String((gsCfg().email||(SESSAO&&SESSAO.u)||'')).toLowerCase();if(!em||K.e!==em)return false;nvSet({k:K.k,salt:K.salt,prov:'google',base:null,mod:{}});_nvK=null;return true}catch(_){return false}}
+setInterval(nvKeepGuardar,10000);setTimeout(nvKeepGuardar,3000);
+{const _sn=sairNuvem;sairNuvem=async function(){nvKeepGuardar();return _sn.apply(this,arguments)}}
+{const _as=nvAssist;nvAssist=function(forcar){if(nvKeepRepor()){setTimeout(()=>nvSincronizar(false),300);return}return _as.apply(this,arguments)}}
+setTimeout(()=>{if(SESSAO&&SESSAO.tipo==='google'&&nvKeepRepor())nvSincronizar(false)},1200);
+/* o código mudou noutro aparelho: a chave lembrada deixa de servir */
+{const _nsK=nvSincronizar;nvSincronizar=async function(){const r=await _nsK.apply(this,arguments);try{if(!nvL().k){const K=JSON.parse(localStorage.getItem(NV_KEEP)||'null');if(K&&/não corresponde/.test(nvL().erro||''))localStorage.removeItem(NV_KEEP)}}catch(_){}return r}}
+/* assistente: no fim fecha sozinho */
+setInterval(()=>{const b=document.querySelector('dialog.nvas #nvas-fim');if(b&&!b.dataset.auto){b.dataset.auto=1;setTimeout(()=>{if(document.body.contains(b))b.click()},2500)}},500);
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-org2]');if(b)mudarOrg(A(),b.dataset.org2);const mz=e.target.closest&&e.target.closest('[data-mzok]');if(mz){const [tid,iid]=mz.dataset.mzok.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=Date.now();saveNow();toast('Matriz de '+i.nome+' marcada como enviada','ok');go(VIEW)}}});

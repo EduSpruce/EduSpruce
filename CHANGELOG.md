@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.994
+- Sincronização discreta (sem mensagens, só o ícone), sem redesenhar a página enquanto se escreve; 2 s após cada alteração e a cada 30 s.
+- Código de encriptação lembrado por aparelho e conta Google (`localStorage.eskeep`), também depois de terminar a sessão; pedido de novo só se mudar noutro aparelho. Assistente fecha sozinho no fim.
+
 ## 0.993
 - Versão numa linha própria por baixo do nome da plataforma (não fica cortada em ecrãs estreitos).
 
