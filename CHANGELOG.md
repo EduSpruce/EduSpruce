@@ -2,20 +2,24 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
-## 0.994
+## 0.904
+- Módulo opcional Coord. PROFIJ (cargo «Coordenador(a) do PROFIJ»): painel, turmas e formandos (médias por componente, FPCT, PAF, regra ≥ 10), entidades e colocações da FPCT, PAF/PEA com júri e classificações, Conselho dos Cursos, legislação; CSV e .ics.
+- Ao entrar, barra de sincronização 0–100 % e a app só abre depois de sincronizar (com opções sem internet, ligação expirada ou erro).
+
+## 0.903
 - Sincronização discreta (sem mensagens, só o ícone), sem redesenhar a página enquanto se escreve; 2 s após cada alteração e a cada 30 s.
 - Código de encriptação lembrado por aparelho e conta Google (`localStorage.eskeep`), também depois de terminar a sessão; pedido de novo só se mudar noutro aparelho. Assistente fecha sozinho no fim.
 
-## 0.993
+## 0.902
 - Versão numa linha própria por baixo do nome da plataforma (não fica cortada em ecrãs estreitos).
 
-## 0.992
+## 0.901
 - Versão discreta junto ao logótipo na barra lateral (toque abre a Ajuda/novidades).
 
-## 0.990
+## 0.99
 - http → https automático em eduspruce.pt/.app quando o certificado existe; mensagem de erro clara.
 
-## 0.991
+## 0.900
 - Bloqueio dos dados de base: aviso visível só 5 s (ao bloquear e ao entrar numa vista bloqueada), com indicação de onde desbloquear; desbloqueio apenas em Definições › Dados e Segurança (cadeado da barra e aviso de alteração levam lá).
 
 ## 0.98

@@ -877,11 +877,16 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - O armazenamento local é por endereço: no .pt cada aparelho entra com Google e escreve o código; os dados vêm da nuvem. UID dos eventos .ics mantém `@eduspruce.app` para não duplicar no Calendário.
 - `gLoginId`/`NV_CENTRAL.google` com reserva em `eduspruce.(pt|app)`.
 
-## v0.991 · Bloqueio dos dados de base
+## v0.900 · Bloqueio dos dados de base
 - `_bloqBanAte` = agora + 5 s ao mudar de vista (`go`) e ao bloquear (`bloqAlternar(true)`); `bloqUI` só mostra `.bloqban` dentro desse prazo e depois esconde-o com transição.
 - `bloqIrDef()`: abre Definições › Dados e Segurança e realça `#bloq-card`. Com o bloqueio ligado, `#bloqBar`/`#bloqNav` e o aviso «Dados Bloqueados» chamam `bloqIrDef`, já não desbloqueiam.
 
-## v0.994 · Sincronização discreta e código uma só vez
+## v0.903 · Sincronização discreta e código uma só vez
 - Debounce 2 s após `saveNow`, intervalo 30 s (visível, online). Em sincronizações automáticas (`_nvSil`), `toast` cala mensagens de sincronização (erros continuam) e `go(VIEW)` com dados recebidos é adiado enquanto houver um campo focado ou um diálogo aberto (`_nvGoPend`, aplicado no `focusout`), sempre com `manterPosicao`.
 - `eskeep` = {e: e-mail Google, k, salt}: guardado a cada 10 s e antes de `sairNuvem`; `nvKeepRepor()` repõe a chave se a sessão Google for do mesmo e-mail (o assistente já não aparece). Apagado se a nuvem disser que o código não corresponde (mudado noutro aparelho).
 - O assistente carrega sozinho em «Começar» 2,5 s depois do fim.
+
+## v0.904 · Coord. PROFIJ e sincronização ao entrar
+- Numeração: depois de 0.99 segue 0.900, 0.901, … até 0.999 (sem 1.0).
+- `cpOn()` (cargo com «PROFIJ», `S.cfg.modulos.cprofij`, ou demonstração com turmas PROFIJ); vista `cprofij` (separadores painel · turmas · fpct · provas · cc · leg). Dados em `S.cprofij`: `leg[]` e `anos[anoId] = {ent[], fpct{"turma|formando"}, provas[], dts{}, man{"turma|formando":{componente:nota}}}`. Formando = `proc` ou `num|nome` normalizado; componentes via `compDe(disciplina)`; nota da disciplina = média dos UFCD (`notaMod`) ou `ponderada(pctsFinal)` / último período. Situação: «Em risco» se algum valor < 10; «Tudo ≥ 10» se componentes, FPCT e PAF existem e ≥ 10.
+- `nvSyncGate()`: `#nvgate` cobre a app desde o arranque com sessão Google e chave; progresso real via `window.__nvProg` dentro de `nvSincronizar` (partes 0–80 %, ficheiros 80–100 %), mais avanço lento enquanto espera pela rede. Sem internet → «Continuar»; ligação expirada → «Renovar e Sincronizar» (gesto do utilizador); erro → «Tentar de Novo» ou «Continuar com os Dados Deste Aparelho».
