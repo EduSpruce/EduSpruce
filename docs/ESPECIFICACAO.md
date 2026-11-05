@@ -851,3 +851,8 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `nvPendenteAgora()` (faz `saveNow()` e vê `nvL().mod`), `nvSyncSaida()` (até 4 tentativas, espera `_nvBusy`); chamados em `visibilitychange→hidden`, `pagehide`, `beforeunload` (com aviso do navegador, exceto `__efApagar`/`__nvSemAviso`, p. ex. durante «Entrar com Google»).
 - `terminarSessao` espera pela sincronização (máx. 20 s) com o ecrã de arranque e a mensagem «A guardar…»; se ficar algo por enviar pergunta antes de sair.
 - `#splash` logo a seguir a `<body>` (CSS próprio `#splash-css`, aparece só após 250 ms, respeita «Reduzir movimento»); `esSplash(txt|false)`; retirado quando aparece o ecrã de entrada ou a primeira vista; mensagens aos 4 s e 15 s.
+
+## v0.93 · Código de encriptação numérico
+- `nvPinErro(a,id)`: só algarismos, `NV_PIN_MIN=8`, recusa repetições e sequências; com `data-letras="1"` aceita palavras-passe antigas (≥ 8 caracteres).
+- `nvPinPrep()` nos campos `nvas-p1/p2`, `nv2-p1/p2`, `np-1/2`, `nv-pw1/2`: `inputmode` `none` em ecrãs tácteis (só o teclado da app) e `numeric` no computador, `pattern=[0-9]*`, remove não-algarismos; `.pinpad` 3×4 (apagar, 0, seguinte/confirmar) e «A minha palavra-passe antiga tem letras» quando é para desbloquear.
+- A derivação da chave não muda (PBKDF2-SHA256, 210 000 iterações): códigos e palavras-passe existentes continuam válidos.

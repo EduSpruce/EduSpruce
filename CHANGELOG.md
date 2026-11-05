@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.93
+- Código de encriptação da sincronização só com algarismos (mín. 8, sem repetições/sequências) e teclado numérico no ecrã em todos os aparelhos; palavras-passe antigas com letras continuam aceites ao desbloquear.
+
 ## 0.92
 - Sincroniza antes de sair: ao esconder/fechar a app, recarregar ou terminar a sessão grava e envia logo as alterações pendentes; aviso do navegador se ainda houver envios; ecrã «A guardar as últimas alterações na nuvem…» ao terminar a sessão.
 - Ecrã de arranque com o logótipo animado.
