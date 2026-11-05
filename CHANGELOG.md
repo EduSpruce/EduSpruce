@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.91
+- Acesso controlado pelo administrador: só entram com Google as contas autorizadas (lista em `eduspruce-config.json`, com SHA-256 dos e-mails) e com o perfil definido; sessões revalidadas ao abrir.
+- Nuvem obrigatória (`modoNuvem: "obrigatorio"`): só Google (conta local apenas para emergência do administrador), sincronização sempre ligada, limpeza do aparelho ao terminar a sessão.
+- Notificações via service worker (`sw.js`) no iPhone/iPad (ecrã principal) e computador; resumo do dia, aulas, sumários, avaliações, reuniões, avisos, número no ícone, silêncio; lembretes para o Calendário (.ics).
+- iPhone: Início «Hoje» e Painel da Turma compactos.
+
 ## 0.90
 - Manual de Instruções completo em PDF (46 páginas, com imagens), disponível em [manual/EduSpruce-Manual.pdf](manual/EduSpruce-Manual.pdf) e para descarregar no topo da Ajuda.
 - Ajuda atualizada: novos tópicos (Entrar com Google e assistente, convocatórias por e-mail, instalar, segurança, problemas de ligação) e textos revistos.

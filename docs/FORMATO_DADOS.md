@@ -187,3 +187,8 @@ Ficheiros (documentos do aluno, portefólio, arquivo do DT, biblioteca) são dat
 
 ## v0.90
 - Sem alterações ao formato dos dados.
+
+## v0.91
+- `S.cfg.auth.gContas`: [{email, nome, papel, desde}] — contas Google autorizadas (lista do administrador).
+- `S.cfg.notif`: preferências de notificações; `S.cfg.ntDispensa`, `S.cfg.inicioMovel`, `S.cfg.painelMovel`.
+- localStorage (por aparelho, não sincronizado): `es.cfgc` (política do site), `es.nt.env` (notificações já mostradas).

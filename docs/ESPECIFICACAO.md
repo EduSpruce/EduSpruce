@@ -838,3 +838,11 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `MANUAL_URL`: relativo (`manual/EduSpruce-Manual.pdf`) no site; em file:// aponta para https://eduspruce.app/manual/….
 - `ajudaAtualizar()` (idempotente, chamada no início de `vAjuda`): revê `comecar`, `sessao`, `dados`, `nuvem`, `nuvem2`, `nuvemcfg`, `aparencia`; remove `gsync` (substituído por `nuvem`); junta `manual`, `gentrar`, `convemail`, `instalar`, `seguranca`, `problemas`; ordem: manual, comecar, gentrar, instalar, resto.
 - Cartão `.ajman` no cabeçalho da Ajuda com o botão Descarregar.
+
+## v0.91 · Acesso, nuvem obrigatória, notificações e iPhone
+- `eduspruce-config.json`: `acessoGoogle` (`aberto`|`dominio`|`lista`), `dominiosGoogle`, `contasGoogle` [{h: sha256("eduspruce:"+email minúsculo), papel}], `modoNuvem` (`opcional`|`obrigatorio`). Lido por `acCentral()` (cache `localStorage['es.cfgc']`).
+- `acVerificar(email)` chamado em `gSessaoDe` (popup e redirecionamento): lista do site > domínio > lista local (`S.cfg.auth.gContas`) > aberto; devolve o papel. Sessões Google guardadas são revalidadas ao abrir.
+- Definições › Conta e Acesso › «Quem Pode Entrar com Google»: lista local (e-mail, nome, perfil), estado «publicado/por publicar», exportação do JSON com hashes.
+- Nuvem obrigatória: classe `body.nv-obrig`; login local só para `papel==='admin'`; assistente sem «Agora Não»; `#nv2-auto` bloqueado; `terminarSessao` → `sairNuvem()` (sincroniza, confirma pendentes, apaga localStorage/IndexedDB).
+- Notificações: `sw.js` (notificationclick → postMessage {es:'ir',v,t} ou `?ir=&t=`; cache da app rede-primeiro). `ntMostrar` usa `registration.showNotification`; `ntTick` a cada 30 s (chaves enviadas em `es.nt.env`); `S.cfg.notif` (aulas/ante, sumario, resumo/resumoH, testes/testesH, urgentes, badge, silDe/silAte, fds); `navigator.setAppBadge`; `ntICS(45)`. Separador Definições › Notificações (`UI.defTab='notif'`).
+- iPhone (≤640 px): `vInicioMovel()` (`S.cfg.inicioMovel!=='completo'`) e `vPainelMovel()` (`S.cfg.painelMovel!=='completo'`, `UI.pnmTab` at|al|ag).
