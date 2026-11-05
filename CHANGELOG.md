@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.94
+- Mudar o código de encriptação (Definições › Sincronização › Mudar o Código): volta a encriptar todos os ficheiros na nuvem, retoma se for interrompido; os outros aparelhos pedem o código novo.
+- Códigos existentes aceites sem as regras de força (só para códigos novos).
+- ID da Google com valor de reserva quando a configuração demora; aviso do ecrã de entrada numa coluna.
+
 ## 0.93
 - Código de encriptação da sincronização só com algarismos (mín. 8, sem repetições/sequências) e teclado numérico no ecrã em todos os aparelhos; palavras-passe antigas com letras continuam aceites ao desbloquear.
 

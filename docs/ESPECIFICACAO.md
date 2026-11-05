@@ -856,3 +856,9 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `nvPinErro(a,id)`: só algarismos, `NV_PIN_MIN=8`, recusa repetições e sequências; com `data-letras="1"` aceita palavras-passe antigas (≥ 8 caracteres).
 - `nvPinPrep()` nos campos `nvas-p1/p2`, `nv2-p1/p2`, `np-1/2`, `nv-pw1/2`: `inputmode` `none` em ecrãs tácteis (só o teclado da app) e `numeric` no computador, `pattern=[0-9]*`, remove não-algarismos; `.pinpad` 3×4 (apagar, 0, seguinte/confirmar) e «A minha palavra-passe antiga tem letras» quando é para desbloquear.
 - A derivação da chave não muda (PBKDF2-SHA256, 210 000 iterações): códigos e palavras-passe existentes continuam válidos.
+
+## v0.94 · Mudar o código de encriptação
+- `nvMudarCodigo(antigo,novo,prog)`: confirma o código atual (deriva com `L.salt` e compara com `L.k`), sincroniza, guarda `nvL().rekey {salt,k,kOld}` e volta a encriptar cada `partes`/`fotos` do manifesto (decifra com a chave antiga; se já abrir com a nova, salta); no fim escreve `manifest.salt`/`chk` novos e `rekeyEm`. Retoma sozinho em `nvSincronizar` enquanto houver `rekey`.
+- Noutro aparelho, «não corresponde» → apaga a chave local e abre o assistente para o código novo.
+- `nvPinErro(a,id,novo)`: regras contra repetições/sequências só para códigos novos.
+- `gLoginId` com reserva `ES_G_ID` em eduspruce.app; `gLogin` espera por `nvCentralCarregar()` se o ID ainda não chegou.

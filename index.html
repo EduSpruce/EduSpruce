@@ -3965,6 +3965,9 @@ body:not(.nv-obrig) .lgobr,body:not(.nv-obrig) .lgemg{display:none}
 .pinpad .pinlet{grid-column:1/-1;min-height:34px;font-size:12.5px;font-weight:500;border:0;background:none;box-shadow:none;color:var(--mut);text-decoration:underline}
 .pinpad.letras{display:none}
 input.pinfoco{outline:3px solid var(--acc);outline-offset:1px}
+.nvmc{border:0;border-radius:20px;padding:0;max-width:420px;width:calc(100% - 24px);background:var(--panel);color:var(--ink)}.nvmc::backdrop{background:rgba(10,20,35,.45)}
+.nvmcf{display:flex;flex-direction:column;gap:6px;padding:20px}.nvmcf h2{margin:0 0 4px;display:flex;gap:8px;align-items:center;font-size:18px;text-transform:none;color:var(--ink)}.nvmcf label{font-size:12.5px;color:var(--mut);margin-top:6px}.nvmcf input{min-height:44px}
+.lgobr>span{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -7726,8 +7729,9 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.93';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.93</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Código de encriptação numérico</b>: a palavra-passe que protege os dados na nuvem passa a ser um código só com algarismos (mínimo 8, sem repetições nem sequências), com um teclado numérico no ecrã em todos os aparelhos — computador, iPad e iPhone. Quem já tinha uma palavra-passe com letras continua a usá-la: toque em «A minha palavra-passe antiga tem letras».</li></ul></details>
+const VERSAO='0.94';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.94</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Mudar o código de encriptação</b>: em Definições › Sincronização › <b>Mudar o Código</b> escreve o código atual e o novo; a app encripta de novo todos os dados na nuvem e, nos outros aparelhos, pede o código novo. Se a ligação cair a meio, continua sozinha na próxima sincronização.</li><li>Para abrir os dados com um código que já existia, a app aceita qualquer código (as regras contra sequências como 12345678 valem só para códigos novos).</li><li>«Entrar com Google» já não diz que o site não está configurado quando a configuração demora a chegar (iPad/iPhone em redes lentas).</li><li>Ecrã de entrada: o aviso «só contas autorizadas» volta a ler-se numa só coluna.</li></ul></details>
+<details class="nvver"><summary><b>Versão 0.93</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Código de encriptação numérico</b>: a palavra-passe que protege os dados na nuvem passa a ser um código só com algarismos (mínimo 8, sem repetições nem sequências), com um teclado numérico no ecrã em todos os aparelhos — computador, iPad e iPhone. Quem já tinha uma palavra-passe com letras continua a usá-la: toque em «A minha palavra-passe antiga tem letras».</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.92</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Nada fica por enviar ao sair</b>: ao fechar a app, mudar de app no iPhone/iPad, recarregar ou terminar a sessão, a app grava e sincroniza logo as últimas alterações (sem esperar os 6 segundos). No computador, se ainda houver alterações a caminho, o navegador pede um momento antes de fechar; ao terminar a sessão aparece «A guardar as últimas alterações na nuvem…».</li><li><b>Ecrã de arranque animado</b> com o logótipo (desenho do «S» e o ponto dourado), quando a app demora a abrir.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.91</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Só entram as contas autorizadas</b>: o administrador escolhe quem pode entrar com Google e com que perfil (Definições › Conta e Acesso › Quem Pode Entrar com Google) e publica a lista no site; contas retiradas perdem o acesso.</li><li><b>Dados só na nuvem</b>: neste site entra-se com Google, a sincronização encriptada é obrigatória e, ao terminar a sessão, a cópia do aparelho é limpa depois de enviar tudo.</li><li><b>Notificações</b> (iPhone/iPad com a app no ecrã principal, e computador): aula a começar, sumário por escrever, resumo do dia, avaliações de amanhã, reuniões e avisos urgentes, número no ícone, horário de silêncio — em Definições › Notificações. Com a app fechada: lembretes no Calendário (.ics).</li><li><b>iPhone</b>: novo Início «Hoje» (aula a decorrer ou a seguir com Sumário e Presenças, alertas, atalhos, o dia, os próximos 7 dias e as turmas) e Painel da Turma compacto (indicadores, atalhos, Atenção · Alunos · Agenda). A vista completa continua a um toque.</li><li>A app passa a abrir sem internet a partir do ecrã principal.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.90</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Manual de Instruções em PDF</b> (46 páginas, com imagens): da primeira entrada à resolução de problemas, com glossário e anexo para quem aloja a app. Descarregue-o no topo da secção <b>Ajuda</b>.</li><li><b>Ajuda atualizada</b>: novos tópicos — Entrar com Google e assistente de sincronização, Convocatórias e atividades por e-mail, Instalar no iPad/iPhone/computador, Segurança (Argon2id, bloqueio, perfis) e Problemas de ligação; textos revistos sobre sessão, dados, sincronização e aparência.</li></ul></details>
@@ -10147,7 +10151,7 @@ function nvPainel(){const L=nvL();const prov=PROV[L.prov];const lig=nvLigado();c
 function bindNvPainel(){const re=()=>{const c=$('#nv-card');if(!c)return;const d=document.createElement('div');d.innerHTML=nvPainel();c.replaceWith(d.firstElementChild);bindNvPainel()};
   $$('[data-nvp2]').forEach(b=>b.onclick=()=>{if(b.disabled)return;nvSet({prov:b.dataset.nvp2,base:null,mod:{},erro:''});PROV.google._ids=null;re()});
   const lg=$('#nv2-lig');if(lg)lg.onclick=async()=>{try{if(nvL().prov==='google'){await gsToken(true)}else{await msLigar()}toast('Conta ligada','ok');if(nvL().k)await nvSincronizar(true);re()}catch(e){toast(e.message,'erro')}};
-  const f=$('#nv2-pwf');if(f){f.onsubmit=async e=>{e.preventDefault();const a=$('#nv2-p1').value,b=$('#nv2-p2').value;{const _e=nvPinErro(a,'nv2-p1');if(_e)return toast(_e,'erro')}if(b&&a!==b)return toast('As palavras-passe não coincidem.','erro');const bt=$('#nv2-pwok');bt.disabled=true;
+  const f=$('#nv2-pwf');if(f){f.onsubmit=async e=>{e.preventDefault();const a=$('#nv2-p1').value,b=$('#nv2-p2').value;{const _e=nvPinErro(a,'nv2-p1',!!b);if(_e)return toast(_e,'erro')}if(b&&a!==b)return toast('As palavras-passe não coincidem.','erro');const bt=$('#nv2-pwok');bt.disabled=true;
     try{const exist=await nvDefinirPalavra(a);if(!exist&&a!==b){_nvK=null;nvSet({k:null});bt.disabled=false;return toast('É uma palavra-passe nova: escreva-a também em «Repetir».','erro')}toast(exist?'Palavra-passe confirmada — a receber os dados…':'A encriptar e enviar os dados…','ok');await nvSincronizar(true)}catch(e2){toast(e2.message,'erro')}bt.disabled=false;re()}}
   const pm=$('#nv2-pwm');if(pm)pm.onclick=()=>{if(!confirm('Esquecer a palavra-passe neste aparelho? Terá de a escrever outra vez para sincronizar.'))return;_nvK=null;nvSet({k:null});re()};
   const ag=$('#nv2-agora');if(ag)ag.onclick=async()=>{ag.disabled=true;ag.classList.add('gira');await nvSincronizar(true);re()};
@@ -10323,7 +10327,7 @@ async function nvAssist(forcar){const L=nvL();const s=SESSAO||{};if(!forcar){if(
     const au=d.querySelector('#nvas-aut');if(au)au.onclick=async()=>{try{await gsToken(true);arrancar()}catch(e){toast(e.message,'erro')}};
     const f=d.querySelector('#nvas-f');if(f){const p1=f.querySelector('#nvas-p1');setTimeout(()=>p1&&p1.focus(),80);
       f.onsubmit=e=>{e.preventDefault();return false};f.querySelector('#nvas-ok').onclick=async ev=>{ev.preventDefault();const a=p1.value,b=(f.querySelector('#nvas-p2')||{}).value;const er=f.querySelector('#nvas-e');er.textContent='';
-        {const _e=nvPinErro(a,'nvas-p1');if(_e)return er.textContent=_e}if(!info.existe&&a!==b)return er.textContent='As palavras-passe não coincidem.';
+        {const _e=nvPinErro(a,'nvas-p1',!info.existe);if(_e)return er.textContent=_e}if(!info.existe&&a!==b)return er.textContent='As palavras-passe não coincidem.';
         const bt=f.querySelector('#nvas-ok');bt.disabled=true;try{await nvDefinirPalavra(a);
           /* deixa o gestor de palavras-passe guardar */try{if(window.PasswordCredential&&navigator.credentials&&navigator.credentials.store)await navigator.credentials.store(new PasswordCredential({id:email||'eduspruce',password:a,name:'EduSpruce — encriptação'}))}catch(_){}
           desenhar('sync',info);const r=await nvSincronizar(true);if(!r){desenhar('pw',info);const e2=d.querySelector('#nvas-e');const m=nvL().erro||'Não foi possível sincronizar.';if(e2){if(/Não foi possível contactar|Failed to fetch|Load failed/i.test(m))e2.innerHTML=nvAjudaBloq();else e2.textContent=m}return}
@@ -10483,7 +10487,7 @@ function nvPedirPalavra(existe,conta){return new Promise(res=>{const d=document.
   <input type="password" id="np-1" placeholder="Palavra-passe de encriptação" autocomplete="${existe?'current-password':'new-password'}">${existe?'':'<input type="password" id="np-2" placeholder="Repetir" autocomplete="new-password" style="margin-top:8px">'}
   <p class="lgerr" id="np-err" role="alert"></p><div class="row amb"><button type="button" class="btn" data-np="0">Mais Tarde</button><button type="button" class="btn pri" data-np="1">${ic('refresh',15)} ${existe?'Abrir e Sincronizar':'Guardar e Sincronizar'}</button></div>`;
   document.body.appendChild(d);const fim=v=>{try{d.close()}catch(_){}d.remove();res(v)};d.addEventListener('cancel',e=>{e.preventDefault();fim(false)});d.querySelector('[data-np="0"]').onclick=()=>fim(false);
-  const ok=async()=>{const a=d.querySelector('#np-1').value,b=existe?a:d.querySelector('#np-2').value;const er=d.querySelector('#np-err');{const _e=nvPinErro(a,'np-1');if(_e){er.textContent=_e;return}}if(a!==b){er.textContent='As palavras-passe não coincidem.';return}
+  const ok=async()=>{const a=d.querySelector('#np-1').value,b=existe?a:d.querySelector('#np-2').value;const er=d.querySelector('#np-err');{const _e=nvPinErro(a,'np-1',!existe);if(_e){er.textContent=_e;return}}if(a!==b){er.textContent='As palavras-passe não coincidem.';return}
     const bt=d.querySelector('[data-np="1"]');bt.disabled=true;er.textContent='';try{await nvDefinirPalavra(a);fim(true)}catch(e){er.textContent=e.message;bt.disabled=false;d.classList.add('abana');setTimeout(()=>d.classList.remove('abana'),400)}};
   d.querySelector('[data-np="1"]').onclick=ok;d.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();ok()}}));try{d.showModal()}catch(_){d.setAttribute('open','')}setTimeout(()=>d.querySelector('#np-1').focus(),50)})}
 async function nvAposLogin(){if(nvAposLogin._a)return;nvAposLogin._a=1;try{const L=nvL();if(L.prov!=='onedrive'||!L.ms)return;if(await nvChave()){nvSincronizar(false);return}
@@ -14282,7 +14286,7 @@ const nuvemObrig=()=>!!(AC_CENTRAL&&AC_CENTRAL.nuvem==='obrigatorio'&&/^https:/.
 function nuvemObrigAplicar(){const on=nuvemObrig();document.body.classList.toggle('nv-obrig',on);if(!on)return;
   try{const L=nvL();if(L.auto===false)nvSet({auto:true})}catch(_){}
   /* ecrã de entrada: só Google; a conta local fica como entrada de emergência do administrador */
-  const lg=$('#login .lgb');if(lg&&!lg.querySelector('.lgemg')){const ou=lg.querySelector('.lgou');if(ou){ou.insertAdjacentHTML('beforebegin',`<p class="lgobr">${ic('shield',14)} Neste site entra-se só com a <b>conta Google autorizada</b> pelo administrador. Os dados ficam encriptados na sua conta e sincronizados em todos os aparelhos.</p><button type="button" class="lgemg">Entrada de emergência do administrador</button>`);lg.querySelector('.lgemg').onclick=()=>lg.classList.toggle('emg')}}}
+  const lg=$('#login .lgb');if(lg&&!lg.querySelector('.lgemg')){const ou=lg.querySelector('.lgou');if(ou){ou.insertAdjacentHTML('beforebegin',`<p class="lgobr">${ic('shield',14)}<span>Neste site entra-se só com a <b>conta Google autorizada</b> pelo administrador. Os dados ficam encriptados na sua conta e sincronizados em todos os aparelhos.</span></p><button type="button" class="lgemg">Entrada de emergência do administrador</button>`);lg.querySelector('.lgemg').onclick=()=>lg.classList.toggle('emg')}}}
 setInterval(()=>{if(nuvemObrig()&&$('#login .lgb')&&!$('#login .lgemg'))nuvemObrigAplicar()},700);
 /* assistente: sem «Agora não» — sem nuvem não há app */
 setInterval(()=>{if(!nuvemObrig()||!SESSAO)return;const d=$('dialog.nvas');if(d){const no=d.querySelector('#nvas-no');if(no&&!no.dataset.obr){no.dataset.obr=1;no.innerHTML=ic('back',14)+' Terminar Sessão';no.onclick=e=>{e.preventDefault();terminarSessao()}}if(!d.dataset.obr){d.dataset.obr=1;d.addEventListener('cancel',e=>e.preventDefault())}return}
@@ -14545,13 +14549,13 @@ addEventListener('beforeunload',e=>{if(window.__efApagar||window.__nvSemAviso)re
   window.__nvSemAviso=true;return _ts2.apply(this,arguments)}}
 
 /* v0.93 · palavra-passe de encriptação numérica, com teclado numérico em todos os aparelhos */
-const NV_PIN_IDS=['nvas-p1','nvas-p2','nv2-p1','nv2-p2','np-1','np-2','nv-pw1','nv-pw2'];
+const NV_PIN_IDS=['nvas-p1','nvas-p2','nv2-p1','nv2-p2','np-1','np-2','nv-pw1','nv-pw2','mc-0','mc-1','mc-2'];
 const NV_PIN_MIN=8;
-function nvPinErro(a,id){const el=document.getElementById(id);const letras=el&&el.dataset.letras==='1';a=String(a||'');
+function nvPinErro(a,id,novo){if(novo===undefined)novo=true;const el=document.getElementById(id);const letras=el&&el.dataset.letras==='1';a=String(a||'');
   if(letras)return a.length<8?'Use pelo menos 8 caracteres.':'';
   if(!/^\d+$/.test(a))return 'O código de encriptação tem só algarismos.';
   if(a.length<NV_PIN_MIN)return 'Use pelo menos '+NV_PIN_MIN+' algarismos.';
-  if(/^(\d)\1+$/.test(a)||'01234567890123456789'.includes(a)||'98765432109876543210'.includes(a))return 'Esse código é fácil de adivinhar — evite repetições e sequências.';return ''}
+  if(novo&&(/^(\d)\1+$/.test(a)||'01234567890123456789'.includes(a)||'98765432109876543210'.includes(a)))return 'Esse código é fácil de adivinhar — evite repetições e sequências.';return ''}
 const nvToque=()=>{try{return matchMedia('(pointer: coarse)').matches||navigator.maxTouchPoints>0}catch(_){return false}};
 function nvPinPrep(){NV_PIN_IDS.forEach(id=>{const el=document.getElementById(id);if(!el||el.dataset.pin)return;el.dataset.pin='1';
     const letras=()=>el.dataset.letras==='1';
@@ -14564,18 +14568,60 @@ function nvPinPrep(){NV_PIN_IDS.forEach(id=>{const el=document.getElementById(id
     const ultimo=[...grp.querySelectorAll('input[type=password]')].filter(x=>NV_PIN_IDS.includes(x.id)).pop();
     if(grp.querySelector('.pinpad')||el!==ultimo)return;
     const pad=document.createElement('div');pad.className='pinpad';pad.setAttribute('role','group');pad.setAttribute('aria-label','Teclado numérico');
-    pad.innerHTML=['1','2','3','4','5','6','7','8','9','apagar','0','ok'].map(k=>`<button type="button" data-pk="${k}" ${k==='apagar'?'aria-label="Apagar"':k==='ok'?'aria-label="Seguinte"':''}>${k==='apagar'?ic('back',18):k==='ok'?ic('check',18):k}</button>`).join('')+(grp.querySelector('#nvas-p2,#np-2,#nv-pw2')?'':`<button type="button" class="pinlet" data-pk="letras">A minha palavra-passe antiga tem letras</button>`);
+    pad.innerHTML=['1','2','3','4','5','6','7','8','9','apagar','0','ok'].map(k=>`<button type="button" data-pk="${k}" ${k==='apagar'?'aria-label="Apagar"':k==='ok'?'aria-label="Seguinte"':''}>${k==='apagar'?ic('back',18):k==='ok'?ic('check',18):k}</button>`).join('')+(grp.querySelector('#nvas-p2,#np-2,#nv-pw2')&&!grp.querySelector('[data-antigo]')?'':`<button type="button" class="pinlet" data-pk="letras">A minha palavra-passe antiga tem letras</button>`);
     ultimo.insertAdjacentElement('afterend',pad);
     pad.addEventListener('pointerdown',e=>{if(e.target.closest('[data-pk]'))e.preventDefault()});
     pad.addEventListener('click',e=>{const b=e.target.closest('[data-pk]');if(!b)return;const k=b.dataset.pk;const campos=[...grp.querySelectorAll('input[type=password]')].filter(x=>NV_PIN_IDS.includes(x.id)&&!x.hidden&&x.offsetParent!==null);
       let alvo=grp._pinAlvo&&campos.includes(grp._pinAlvo)?grp._pinAlvo:campos[0];if(!alvo)return;
-      if(k==='letras'){campos.forEach(c=>{c.dataset.letras='1';c.setAttribute('inputmode','text');c.removeAttribute('pattern')});pad.classList.add('letras');alvo.focus();return}
+      if(k==='letras'){const ant=campos.filter(c=>!c.dataset.novo);ant.forEach(c=>{c.dataset.letras='1';c.setAttribute('inputmode','text');c.removeAttribute('pattern')});if(ant.length===campos.length)pad.classList.add('letras');else b.remove();(ant[0]||alvo).focus();return}
       if(k==='apagar'){alvo.value=alvo.value.slice(0,-1)}
       else if(k==='ok'){const i=campos.indexOf(alvo);if(i<campos.length-1&&!campos[i+1].value){grp._pinAlvo=campos[i+1];campos[i+1].classList.add('pinfoco');setTimeout(()=>campos[i+1].classList.remove('pinfoco'),600);return}
         const bt=grp.querySelector('#nvas-ok,#nv2-pwok,#nv-pwok,[data-np="1"],button[type=submit].pri,.btn.pri');if(bt)bt.click();return}
       else{if(alvo.value.length>=32)return;alvo.value+=k}
       alvo.dispatchEvent(new Event('input',{bubbles:true}));if(!nvToque())alvo.focus();if(navigator.vibrate)try{navigator.vibrate(8)}catch(_){}})})}
 setInterval(nvPinPrep,350);document.addEventListener('focusin',()=>setTimeout(nvPinPrep,0));
+
+/* v0.94 · o ID da Google nunca falta (configuração lenta ou bloqueada) */
+const ES_G_ID='275856895734-48n60vhatvltml3t601o24cbak7ndjq2.apps.googleusercontent.com';
+{const _gid=gLoginId;gLoginId=function(){return _gid.apply(this,arguments)||(/(^|\.)eduspruce\.app$/.test(location.hostname)?ES_G_ID:'')}}
+{const _gl3=gLogin;gLogin=async function(A_){if(!gLoginId(A_)){try{await nvCentralCarregar()}catch(_){}}return _gl3.apply(this,arguments)}}
+setTimeout(()=>{try{if(!NV_CENTRAL.google&&/(^|\.)eduspruce\.app$/.test(location.hostname))NV_CENTRAL.google=ES_G_ID}catch(_){}},4000);
+/* v0.94 · mudar o código de encriptação (volta a encriptar tudo na nuvem) */
+async function nvMudarCodigo(antigo,novo,prog){const prov=nvProv();const L=nvL();prog=prog||(()=>{});if(!prov||!L.k)throw new Error('A sincronização não está ligada neste aparelho.');
+  let kOld=null;if(L.rekey&&L.rekey.kOld){kOld=await crypto.subtle.importKey('raw',unb64(L.rekey.kOld),'AES-GCM',true,['encrypt','decrypt'])}
+  else{const k0=await nvChaveDe(antigo,L.salt);if(b64(await crypto.subtle.exportKey('raw',k0))!==L.k)throw new Error('O código atual está errado.');kOld=k0}
+  let salt,kNew;if(L.rekey&&L.rekey.k){salt=L.rekey.salt;kNew=await crypto.subtle.importKey('raw',unb64(L.rekey.k),'AES-GCM',true,['encrypt','decrypt'])}
+  else{prog('A sincronizar antes de mudar…');await nvSincronizar(true);if(Object.keys(nvL().mod||{}).length)throw new Error('Não foi possível sincronizar antes de mudar o código. Verifique a internet e tente de novo.');
+    salt=b64(crypto.getRandomValues(new Uint8Array(16)));kNew=await nvChaveDe(novo,salt);nvSet({rekey:{salt,k:b64(await crypto.subtle.exportKey('raw',kNew)),kOld:b64(await crypto.subtle.exportKey('raw',kOld)),desde:Date.now()}})}
+  while(_nvBusy)await new Promise(r=>setTimeout(r,300));_nvBusy=true;
+  try{const man=JSON.parse(await prov.ler(NV_PREF+'manifest.json')||'null');if(!man)throw new Error('Não há dados na nuvem.');
+    const re=async nome=>{const txt=await prov.ler(nome);if(txt==null)return;let pt;try{pt=await nvDecifrar(txt,kOld)}catch(_){try{await nvDecifrar(txt,kNew);return}catch(__){throw new Error('Um ficheiro na nuvem não abre com nenhum dos códigos: '+nome)}}await prov.escrever(nome,await nvCifrar(pt,kNew))};
+    const P=Object.keys(man.partes||{}),F=Object.keys(man.fotos||{});const tot=P.length+F.length;let i=0;
+    for(const n of P){prog('A encriptar de novo… '+(++i)+' de '+tot);await re(NV_PREF+n+'.bin')}
+    for(const id of F){prog('A encriptar de novo… '+(++i)+' de '+tot);await re(nvNomeF(id))}
+    man.salt=salt;man.chk=await nvCifrar('eduflow',kNew);man.rev=(man.rev||0)+1;man.rekeyEm=Date.now();await prov.escrever(NV_PREF+'manifest.json',JSON.stringify(man));
+    await nvGuardarChave(kNew);nvSet({salt,rekey:null,erro:null});try{audit('Segurança','Código de encriptação da nuvem mudado',tot+' ficheiros')}catch(_){}return tot}
+  finally{_nvBusy=false}}
+/* noutro aparelho: o código mudou → pede o novo em vez de dar erro */
+{const _nsR=nvSincronizar;nvSincronizar=async function(){const L=nvL();if(L.rekey&&L.rekey.k&&!_nvBusy){try{await nvMudarCodigo('','',()=>{});toast('Acabou de mudar o código de encriptação na nuvem','ok')}catch(e){console.warn(e)}}
+  const r=await _nsR.apply(this,arguments);try{const e=nvL().erro||'';if(!r&&/não corresponde/.test(e)&&SESSAO){_nvK=null;nvSet({k:null,erro:null});toast('O código de encriptação foi mudado noutro aparelho. Escreva o código novo.','aviso');try{sessionStorage.removeItem('es.assist')}catch(_){}setTimeout(()=>nvAssist(true),400)}}catch(_){}return r}}
+function nvMudarDlg(){const d=document.createElement('dialog');d.className='nvmc';d.setAttribute('aria-labelledby','mc-t');
+  d.innerHTML=`<form class="nvmcf" onsubmit="return false" autocomplete="on"><input type="text" name="username" autocomplete="username" value="${esc(gsCfg().email||(SESSAO||{}).u||'')}" hidden readonly><h2 id="mc-t">${ic('shield',18)} Mudar o Código de Encriptação</h2>
+   <p class="hint">Os dados na nuvem são encriptados de novo com o código novo. Nos outros aparelhos a app vai pedir o código novo. Faça-o com a internet ligada e, se possível, com a app fechada nos outros aparelhos.</p>
+   <label for="mc-0">Código atual</label><input type="password" id="mc-0" data-antigo="1" autocomplete="current-password" placeholder="Código atual">
+   <label for="mc-1">Código novo (só algarismos, mín. 8)</label><input type="password" id="mc-1" data-novo="1" name="new-password" autocomplete="new-password" placeholder="Código novo">
+   <input type="password" id="mc-2" data-novo="1" autocomplete="new-password" placeholder="Repetir o código novo" aria-label="Repetir o código novo">
+   <div class="nverr" id="mc-e" role="alert"></div><div class="mut" id="mc-p" aria-live="polite"></div>
+   <div class="row" style="gap:8px;justify-content:flex-end;margin-top:6px"><button type="button" class="btn" id="mc-x">Cancelar</button><button type="button" class="btn pri" id="mc-ok">${ic('shield',15)} Mudar o Código</button></div></form>`;
+  document.body.appendChild(d);d.showModal();setTimeout(nvPinPrep,0);const er=d.querySelector('#mc-e'),pg=d.querySelector('#mc-p');
+  d.querySelector('#mc-x').onclick=()=>{d.close();d.remove()};
+  d.querySelector('#mc-ok').onclick=async()=>{er.textContent='';const a=d.querySelector('#mc-0').value,b=d.querySelector('#mc-1').value,c=d.querySelector('#mc-2').value;
+    if(!a)return er.textContent='Escreva o código atual.';{const e=nvPinErro(b,'mc-1',true);if(e)return er.textContent=e}if(b!==c)return er.textContent='Os códigos novos não coincidem.';if(a===b)return er.textContent='O código novo é igual ao atual.';
+    const bt=d.querySelector('#mc-ok');bt.disabled=true;d.querySelector('#mc-x').disabled=true;
+    try{const n=await nvMudarCodigo(a,b,t=>pg.textContent=t);try{if(window.PasswordCredential&&navigator.credentials){const cr=new PasswordCredential({id:gsCfg().email||(SESSAO||{}).u||'eduspruce',password:b,name:'EduSpruce — código de encriptação'});navigator.credentials.store(cr).catch(()=>{})}}catch(_){}
+      d.close();d.remove();toast('Código mudado — '+n+' ficheiro(s) encriptados de novo','ok');if(VIEW==='definicoes')vDefinicoes()}
+    catch(e){er.textContent=e.message;pg.textContent='';bt.disabled=false;d.querySelector('#mc-x').disabled=false}}}
+{const _bs2=bindSync;bindSync=function(){const r=_bs2.apply(this,arguments);try{const pm=$('#nv2-pwm');if(pm&&!$('#nv2-mc')){pm.insertAdjacentHTML('beforebegin',`<button class="btn" id="nv2-mc">${ic('shield',14)} Mudar o Código</button>`);$('#nv2-mc').onclick=nvMudarDlg}}catch(e){console.warn(e)}return r}}
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-org2]');if(b)mudarOrg(A(),b.dataset.org2);const mz=e.target.closest&&e.target.closest('[data-mzok]');if(mz){const [tid,iid]=mz.dataset.mzok.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=Date.now();saveNow();toast('Matriz de '+i.nome+' marcada como enviada','ok');go(VIEW)}}});
