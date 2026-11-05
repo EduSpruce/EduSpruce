@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.80
+- Google Drive: diagnóstico (ID de cliente e permissões da ligação) quando a Google recusa o acesso.
+
 ## 0.79
 - Google Drive: corrigido «Method doesn't allow unregistered callers» (ligações antigas sem a permissão do Drive deixam de ser reutilizadas).
 
