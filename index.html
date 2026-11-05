@@ -4056,7 +4056,7 @@ body.dev-ipad #view,body.dev-tlm #view{overflow-x:hidden}
 #side .bver{display:block;margin-top:2px;font-size:10px;font-weight:500;letter-spacing:.3px;line-height:1.3;opacity:.45;font-style:normal;cursor:pointer;color:inherit;white-space:nowrap}
 
 /* 0.995 · barra de sincronização ao entrar */
-#nvgate{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 90% at 50% 30%,#1f4a74 0%,#16314f 55%,#0f2238 100%);color:#fff;transition:opacity .4s ease,visibility .4s;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+#nvgate{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 90% at 50% 30%,#1f4a74 0%,#16314f 55%,#0f2238 100%);color:#fff;transition:opacity .2s ease,visibility .2s;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
 #nvgate.fora{opacity:0;visibility:hidden}
 #nvgate .nvgw{width:min(380px,calc(100% - 48px));display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
 #nvgate .splg{width:84px;height:84px;animation:none}
@@ -4083,6 +4083,44 @@ body.dev-ipad #view,body.dev-tlm #view{overflow-x:hidden}
 #nvgate .splg .s0{fill:rgba(255,255,255,.18)}#nvgate .splg .s1{fill:none;stroke:#fff;stroke-width:1.6}#nvgate .splg .s2{fill:#fff}#nvgate .splg .dot{fill:#e3b448;transform-origin:46.2px 43px}#nvgate .splg .ring{fill:none;stroke:#e3b448;stroke-width:1.2;opacity:0;transform-origin:46.2px 43px}
 .plesq{background:none;border:0;color:var(--acc);font-size:13px;font-weight:600;text-decoration:underline;margin:10px auto 0;display:block;cursor:pointer;padding:6px 10px;min-height:36px}
 body.nv-gating :is(#avpop,#parabens,#tour,#toast,#reunBan,.reunban,#nffab){display:none!important}
+
+/* 0.909 · Coord. PROFIJ › Matriz e Planeamento */
+.cpm-sel{margin:0 0 10px}.cpm-sel .chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.cpm-tit{font-weight:700;font-size:17px}.cpm-meta{font-size:12.5px;margin-top:2px}.cpm-ps{margin-top:6px}
+.cpm-kp{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.cpm-kp>div{border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--bg)}.cpm-kp small{display:block;color:var(--mut);font-size:11.5px}.cpm-kp b{font-size:22px}.cpm-kp .bad b{color:var(--bad)}
+.cpm-bar{display:block;height:5px;border-radius:9px;background:var(--line);margin-top:4px;overflow:hidden;min-width:44px}.cpm-bar>i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .6s}
+.cpm-tw{overflow-x:auto;-webkit-overflow-scrolling:touch}.cpm-t td.n,.cpm-t th.n{text-align:right;font-variant-numeric:tabular-nums}
+.cpm-t tr.cpm-comp th{background:var(--acc2);color:var(--ink);font-weight:600;font-size:12.5px;padding:6px 8px}
+.cpm-t tr.cpm-tot td{font-weight:600;border-bottom:2px solid var(--line)}.cpm-t tr.bad td:first-child{box-shadow:inset 3px 0 var(--bad)}.cpm-t tr.w td:first-child{box-shadow:inset 3px 0 var(--warn)}
+.cpm-pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}.cpm-pc{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}.cpm-pc small{color:var(--mut);font-size:12px}.cpm-pc.bad{border-color:var(--bad)}
+.cpm-ass{display:flex;justify-content:space-between;align-items:flex-end;margin:22px 4px 8px;font-size:13px}.cpm-ass>div{text-align:center;min-width:220px}.cpm-lin{border-bottom:1px solid var(--ink);height:34px;margin-bottom:4px}
+.cpm-cw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px}
+table.cpm-cal{border-collapse:separate;border-spacing:2px;font-size:11px;font-variant-numeric:tabular-nums}
+.cpm-cal th{font-weight:500;color:var(--mut);padding:2px 3px;text-align:center}.cpm-cal tbody th{text-align:left;white-space:nowrap;color:var(--ink);padding-right:6px}
+.cpm-cal td{width:22px;min-width:22px;height:22px;text-align:center;border-radius:5px;padding:0}
+.cpm-cal td.let,.cpm-leg i.let{background:color-mix(in srgb,var(--acc) 15%,var(--panel));color:var(--acc);font-weight:600}.cpm-cal td.fds,.cpm-leg i.fds{background:var(--line);opacity:.45}
+.cpm-cal td.fer,.cpm-leg i.fer{background:color-mix(in srgb,var(--bad) 32%,var(--panel));color:var(--bad);font-weight:700}.cpm-cal td.int,.cpm-leg i.int{background:color-mix(in srgb,#e0a100 30%,var(--panel))}
+.cpm-cal td.fct,.cpm-leg i.fct{background:color-mix(in srgb,var(--ok) 25%,transparent);color:var(--ok);font-weight:700}.cpm-cal td.nl{background:transparent}.cpm-cal td.fora,.cpm-cal td.x{background:transparent}
+.cpm-cal td.j,.cpm-leg i.j{background:repeating-linear-gradient(45deg,var(--line) 0 3px,transparent 3px 6px);color:var(--mut)}
+.cpm-cal td.fimd,.cpm-leg i.fimd{background:var(--ok);color:#fff}.cpm-cal td.hj{outline:2px solid var(--acc);outline-offset:-1px}.cpm-leg i.hjl{outline:2px solid var(--acc);outline-offset:-2px}
+.cpm-cal td.n{width:auto;min-width:32px;text-align:right;padding:0 4px;background:transparent}
+.cpm-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12px;color:var(--mut)}.cpm-leg i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-3px;margin-right:5px}
+@media (max-width:640px){.cpm-kp{grid-template-columns:repeat(2,1fr)}}
+@media print{.cpm-kp>div{background:none}.cpm-cal td{height:16px;width:16px;min-width:16px;font-size:9px}}
+
+/* 0.909 · modo de privacidade */
+body.priv-on>*:not(#privlock):not(#pinlock):not(#login.pinmode){visibility:hidden!important}
+body.priv-on #login.pinmode{z-index:2147480000}
+body.priv-on dialog{visibility:hidden!important}
+#privlock{position:fixed;inset:0;z-index:190;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 90% at 50% 30%,#1f4a74 0%,#16314f 55%,#0f2238 100%);color:#fff;animation:prvIn .35s ease;transition:opacity .18s}
+#privlock.fora{opacity:0}#privlock.pin .prvb{visibility:hidden}
+#privlock .prvb{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:24px}
+#privlock .prvl{width:72px;height:72px;border-radius:22px;display:grid;place-items:center;background:rgba(255,255,255,.12);box-shadow:0 0 0 0 rgba(255,255,255,.25);animation:prvPulse 2.4s ease-out infinite}
+#privlock b{font-size:20px}#privlock .prvs{opacity:.8;max-width:300px}#privlock .btn{margin-top:8px;min-height:44px;padding:0 20px}
+@keyframes prvIn{from{opacity:0;backdrop-filter:blur(0)}to{opacity:1}}
+@keyframes prvPulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.28)}70%{box-shadow:0 0 0 18px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+@media (prefers-reduced-motion:reduce){#privlock,#privlock .prvl{animation:none}}
+@media print{#privlock{display:none}}
 </style>
 </head>
 <body>
@@ -7787,7 +7825,7 @@ function defDados(){const c=S.cfg;const dias=c.ultimaCopia?Math.floor((Date.now(
     <div class="row" style="margin-top:10px"><button class="btn sm" id="bk-def">Exportar só as definições</button><span class="sp1"></span><button class="btn sm dng" id="bk-zero">${ic('trash',14)} Apagar todos os dados</button></div>
     <p class="hint">A cópia encriptada usa AES‑256 com a sua palavra‑passe — sem ela não é possível abrir o ficheiro.</p></div>
   <div class="card"><h2>${ic('shield',18)} Código de Acesso</h2><p class="hint" style="margin-top:0">Pede um código de 4 dígitos ao abrir a app neste dispositivo. Protege contra olhares curiosos; não encripta os dados (para isso use a cópia encriptada).</p>
-    <div class="row">${c.pinHash?`<span class="tag">Ativo</span><button class="btn" id="pin-mud">Mudar Código</button><button class="btn dng" id="pin-off">Desativar</button>`:`<button class="btn pri" id="pin-on">${ic('shield',15)} Definir Código</button>`}</div></div>
+    <div class="row">${c.pinHash?`<span class="tag">Ativo</span><button class="btn" id="pin-mud">Mudar Código</button><button class="btn dng" id="pin-off">Desativar</button>`:`<button class="btn pri" id="pin-on">${ic('shield',15)} Definir Código</button>`}</div>${privCfgHTML()}</div>
   <div class="card"><h2>${ic('layers',18)} Espaço Utilizado</h2><div id="espaco" class="mut">A calcular…</div></div>
   <div class="card"><h2>${ic('trash',18)} Caixote do Lixo <span class="mut" style="font-weight:400;font-size:13px">· 30 dias</span></h2>
     ${(S.lixo||[]).length?(S.lixo||[]).map(x=>`<div class="lin"><span class="tag">${x.tipo==='ano'?'Ano letivo':x.tipo==='turma'?'Turma':x.tipo==='reuniao'?'Reunião':'Instrumento'}</span><b>${esc(x.tipo==='turma'?x.obj.nome+' · '+x.obj.disciplina:x.tipo==='reuniao'?(x.obj.titulo||(REUN_T[x.obj.tipo]||REUN_T.outra).n)+' · '+fmtIsoL(x.obj.data):x.obj.nome)}</b><span class="mut">${new Date(x.quando).toLocaleDateString('pt-PT')}</span><span class="sp1"></span><button class="btn sm" data-rl="${x.id}">${ic('refresh',14)} Restaurar</button></div>`).join(''):'<p class="mut" style="margin:0">Vazio. Turmas, instrumentos e anos letivos apagados ficam aqui durante 30 dias.</p>'}</div>
@@ -7845,8 +7883,8 @@ function autoTestes(){const err=[];let ok=0;const chk=(n,v,e)=>{if(Math.abs((v==
     const t2={...t,regra:{2:'periodo',3:'media'}};chk('regra “só o período”',pctsFinal(t2,'a1',2).d1,0.5)}catch(e){err.push('erro: '+e.message)}
   return {ok,f:err.length,err}}
 /* ---------- novidades ---------- */
-const VERSAO='0.908';
-function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.908</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Sincronização mais rápida</b>: envia 0,5 s depois de cada alteração (antes 2 s), transfere até 4 partes e fotografias ao mesmo tempo e, quando nada mudou, confirma com um só pedido pequeno — por isso pode verificar a cada 10 s (antes 30 s).</li><li><b>Avisos só depois dos 100 %</b>: avisos urgentes, aniversários, novidades e outras janelas esperam que a barra de sincronização termine.</li></ul></details>
+const VERSAO='0.909';
+function novidades(){openDrawer('Novidades — EduSpruce '+VERSAO,`<div class="ed ajt nvv"><details class="nvver" open><summary><b>Versão 0.909</b><span class="mut"> · 5 nov 2026</span><span class="tag ok">atual</span></summary><ul><li><b>Coord. PROFIJ › Matriz e Ponto de Situação</b>: matriz curricular por componente (horas → aulas de 45 min, dadas, diferença, tempos por semana, previsão do dia em que cada disciplina termina e professor), resumo por professor, FPCT com verificação das horas, CSV e impressão assinada «O Coordenador do PROFIJ».</li><li><b>Planeamento Anual</b>: calendário mês a mês com os tempos de cada dia (geral, por disciplina ou por professor), feriados, interrupções, FPCT e o dia da última aula.</li><li><b>Horário da Turma em PDF</b>: importa a grelha e a legenda (sigla → professor) e cria as disciplinas da matriz sozinho.</li><li><b>Modo de privacidade</b>: sem atividade durante 10 minutos (configurável em Definições › Dados e Segurança › Código de Acesso), o ecrã fica bloqueado e sem nada visível; com código de acesso, é preciso o código para voltar. Não bloqueia em ecrã inteiro (projeção).</li><li><b>Entrada mais rápida</b>: os endereços dos ficheiros na nuvem ficam guardados, por isso ao abrir basta um pedido pequeno; as fotografias e anexos chegam em segundo plano depois de a app abrir; até 12 partes ao mesmo tempo e sem esperas na barra.</li></ul></details><details class="nvver"><summary><b>Versão 0.908</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Sincronização mais rápida</b>: envia 0,5 s depois de cada alteração (antes 2 s), transfere até 4 partes e fotografias ao mesmo tempo e, quando nada mudou, confirma com um só pedido pequeno — por isso pode verificar a cada 10 s (antes 30 s).</li><li><b>Avisos só depois dos 100 %</b>: avisos urgentes, aniversários, novidades e outras janelas esperam que a barra de sincronização termine.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.907</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>«Esqueci-me do código» em todas as janelas que pedem o código de acesso: desbloquear os dados de base, mudar o código e desativar o código.</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.906</b><span class="mut"> · 5 nov 2026</span></summary><ul><li>«Esqueci-me do código»: os algarismos escritos no teclado do computador vão para os campos da janela (antes iam para o ecrã do código, por trás).</li></ul></details>
 <details class="nvver"><summary><b>Versão 0.905</b><span class="mut"> · 5 nov 2026</span></summary><ul><li><b>Esqueci-me do código</b> no ecrã do código de acesso: confirma a sua identidade com o código de encriptação da sincronização (ou com a palavra-passe da conta local) e escolhe logo um código novo de 4 algarismos.</li></ul></details>
@@ -9949,7 +9987,7 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     if(!man)man={v:1,salt:L.salt,chk:await nvCifrar('eduflow',k),partes:{},fotos:{},rev:0};man.partes=man.partes||{};man.fotos=man.fotos||{};
     const P=nvPartes();const loc={};Object.keys(P).forEach(n=>loc[n]=nvHash(JSON.stringify(P[n])));const mod=L.mod||{};
     const todos=new Set([...Object.keys(loc),...Object.keys(man.partes),...Object.keys(base)]);let mudouLocal=false;let _pi=0;const _pt=Math.max(1,todos.size);const agora=Date.now(),disp=nvDisp();
-    await nvPool([...todos],4,async n=>{try{window.__nvProg&&window.__nvProg(0.8*(++_pi)/_pt)}catch(_){}const l=loc[n],r=man.partes[n]?man.partes[n].h:undefined,b=base[n];if(l===r){base[n]=l;return}
+    await nvPool([...todos],12,async n=>{try{window.__nvProg&&window.__nvProg(0.8*(++_pi)/_pt)}catch(_){}const l=loc[n],r=man.partes[n]?man.partes[n].h:undefined,b=base[n];if(l===r){base[n]=l;return}
       const lm=l!==b,rm=r!==b;let usar=null;
       if(n==='audit'&&lm&&rm&&l!==undefined&&r!==undefined){/* auditoria: junta os registos dos dois lados */const txt=await prov.ler(NV_PREF+'audit.bin');const R=txt?JSON.parse(await nvDecifrar(txt,k)):[];const vis=new Set();const M=[...(P.audit||[]),...R].filter(e=>{const id=e.q+'|'+e.area+'|'+e.acao+'|'+e.det;if(vis.has(id))return false;vis.add(id);return true}).sort((x,y)=>y.q-x.q).slice(0,5000);
         P.audit=M;const h=nvHash(JSON.stringify(M));await prov.escrever(NV_PREF+'audit.bin',await nvCifrar(JSON.stringify(M),k));man.partes.audit={h,ts:agora,dev:disp};base.audit=h;mudouLocal=true;res.env++;(res._up=res._up||[]).push('audit');return}
@@ -9959,8 +9997,8 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
       if(usar==='local'){if(l===undefined){await prov.apagar(NV_PREF+n+'.bin');delete man.partes[n];delete base[n]}else{await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(P[n]),k));man.partes[n]={h:l,ts:mod[n]||agora,dev:disp};base[n]=l}res.env++;(res._up=res._up||[]).push(n)}
       else{if(r===undefined){delete P[n];delete base[n]}else{const txt=await prov.ler(NV_PREF+n+'.bin');if(txt==null)return;P[n]=JSON.parse(await nvDecifrar(txt,k));base[n]=r}mudouLocal=true;res.rec++;if(n==='audit')res._aud=(res._aud||0)+1}});
     /* fotografias e anexos: imutáveis — envia as que faltam, recebe as que não existem aqui */
-    await nvPool(Object.keys(FOTOS),4,async id=>{if(!man.fotos[id]){try{await prov.escrever(nvNomeF(id),await nvCifrar(FOTOS[id],k));man.fotos[id]=1;res.fotosEnv++}catch(e){(res.fotosFalha=res.fotosFalha||[]).push(id);console.warn('[EduSpruce] ficheiro não enviado',id,e)}}});
-    {const _F=Object.keys(man.fotos);let _fi=0;var _fprog=()=>{try{window.__nvProg&&window.__nvProg(0.8+0.2*(++_fi)/Math.max(1,_F.length))}catch(_){}}}await nvPool(Object.keys(man.fotos),4,async id=>{_fprog();if(!FOTOS[id]){let txt=null;try{txt=await prov.ler(nvNomeF(id))}catch(e){console.warn('[EduSpruce] ficheiro não recebido',id,e);return}if(txt!=null){const v=await nvDecifrar(txt,k);FOTOS[id]=v;idbPor(id,v);res.fotosRec++}}});
+    if(!window.__nvSemFotos)await nvPool(Object.keys(FOTOS),10,async id=>{if(!man.fotos[id]){try{await prov.escrever(nvNomeF(id),await nvCifrar(FOTOS[id],k));man.fotos[id]=1;res.fotosEnv++}catch(e){(res.fotosFalha=res.fotosFalha||[]).push(id);console.warn('[EduSpruce] ficheiro não enviado',id,e)}}});
+    {const _F=Object.keys(man.fotos);let _fi=0;var _fprog=()=>{try{window.__nvProg&&window.__nvProg(0.8+0.2*(++_fi)/Math.max(1,_F.length))}catch(_){}}}if(!window.__nvSemFotos)await nvPool(Object.keys(man.fotos),10,async id=>{_fprog();if(!FOTOS[id]){let txt=null;try{txt=await prov.ler(nvNomeF(id))}catch(e){console.warn('[EduSpruce] ficheiro não recebido',id,e);return}if(txt!=null){const v=await nvDecifrar(txt,k);FOTOS[id]=v;idbPor(id,v);res.fotosRec++}}});
     if(mudouLocal){const st=nvMontar(P);const ok=validarCopia(st);if(ok.length)throw new Error('Dados recebidos incompletos: '+ok[0]);S=migrate(st);_semHist=true;saveNow();_semHist=false;const P2=nvPartes();Object.keys(P2).forEach(n=>{const h2=nvHash(JSON.stringify(P2[n]));if(man.partes[n]&&base[n]===man.partes[n].h&&h2!==base[n]){man.partes[n].h=h2;base[n]=h2;res._fix=1}})}
     if(res.env||res.conf||res.fotosEnv||res._fix||!manTxt){/* evita escrever por cima de outro dispositivo que sincronizou entretanto */const atual=await prov.ler(NV_PREF+'manifest.json');if(atual&&manTxt&&atual!==manTxt){_nvBusy=false;const b0=L.base||{};(res._up||[]).forEach(n=>{if(b0[n]===undefined)delete base[n];else base[n]=b0[n]});nvSet({base,mod:L.mod||{}});return await nvSincronizar(interativo)}
       man.rev=(man.rev||0)+1;man.q=agora;man.dev=disp;await prov.escrever(NV_PREF+'manifest.json',JSON.stringify(man))}
@@ -14866,7 +14904,7 @@ function vCProfij(){if(!cpOn()){$('#view').innerHTML=`<div class="card empty">${
   const linhas=[];C.forEach(cl=>cl.formandos.forEach(al=>linhas.push({cl,al,r:cpLinha(cl,al,a)})));
   const risco=linhas.filter(l=>l.r.sit==='risco').length,porCol=linhas.filter(l=>cpFpctEst(y.fpct[l.cl.nome+'|'+l.al.k])==='colocar').length;const hj=isoHoje();const prox=y.provas.filter(p=>p.data&&p.data>=hj&&diasEntre(hj,p.data)<=30).length;
   const kp=(k,i,l,v,s,cls)=>`<button type="button" class="pnk ${cls||''}" data-cpk="${k}"><span class="pnkl">${ic(i,15)} ${l}</span><b>${v}</b><small>${s}</small></button>`;
-  const tabs=[['painel','chart','Painel'],['turmas','users','Turmas e Formandos'],['fpct','building','FPCT'],['provas','clipboard','PAF e PEA'],['cc','meet','Conselho dos Cursos'],['leg','book','Legislação']];
+  const tabs=[['painel','chart','Painel'],['turmas','users','Turmas e Formandos'],['matriz','grid','Matriz e Ponto de Situação'],['plano','calendar','Planeamento Anual'],['fpct','building','FPCT'],['provas','clipboard','PAF e PEA'],['cc','meet','Conselho dos Cursos'],['leg','book','Legislação']];
   let corpo='';
   if(tab==='painel')corpo=`<div class="png2"><section class="card pnat"><div class="row"><h2 style="margin:0">${ic('alert',18)} Precisa da Sua Atenção</h2><span class="tag ${AT.length?'bad':'ok'}">${AT.length||'tudo em dia'}</span></div>
       ${AT.length?`<div class="pnatl">${AT.slice(0,14).map(x=>`<div class="pnai ${x.c}"><span class="pnaic">${ic(x.ic,16)}</span><span class="pnaib"><b>${esc(x.t)}</b><small>${esc(x.s)}</small></span><span class="pnaia"><button type="button" class="btn sm" data-cptab="${x.tab}">Abrir</button></span></div>`).join('')}${AT.length>14?`<p class="mut" style="margin:6px 0 0">… e mais ${AT.length-14}</p>`:''}</div>`:`<p class="mut" style="margin:10px 0 0">${ic('check',14)} Nada pendente no programa.</p>`}</section>
@@ -14893,10 +14931,12 @@ function vCProfij(){if(!cpOn()){$('#view').innerHTML=`<div class="card empty">${
   if(tab==='leg')corpo=`<section class="card"><div class="row"><h2 style="margin:0">${ic('book',18)} Legislação e Documentos de Referência</h2><span class="sp1"></span><button class="btn sm" id="cp-leg">${ic('plus',14)} Acrescentar</button></div>
       <ul class="cpleg">${c.leg.map(l=>`<li><div><b>${l.u?`<a href="${esc(l.u)}" target="_blank" rel="noopener">${esc(l.t)}</a>`:esc(l.t)}</b>${l.n?`<small>${esc(l.n)}</small>`:''}</div><button class="btn sm ico" data-cplx="${l.id}" aria-label="Editar">${ic('pencil',14)}</button></li>`).join('')}</ul>
       <p class="hint">As ligações ficam guardadas na sua conta e servem para partilhar com os diretores de turma nas reuniões.</p></section>`;
+  if(tab==='matriz')corpo=cpmMatrizHTML(a,C);if(tab==='plano')corpo=cpmPlanoHTML(a,C);
   $('#view').innerHTML=`<div class="cp"><div class="pnks">${kp('turmas','layers','Turmas PROFIJ',C.length,nF+' formandos')}${kp('risco','alert','Em Risco',risco,'componente, FPCT ou PAF < 10',risco?'bad':'')}${kp('fpct','building','FPCT por Colocar',porCol,y.ent.length+' entidade(s)',porCol?'w':'')}${kp('provas','clipboard','Provas (30 dias)',prox,y.provas.length+' marcadas')}</div>
     <div class="tabs noprint cptabs">${tabs.map(([k,i,l])=>`<button data-cptab="${k}" class="${tab===k?'on':''}">${ic(i,15)} ${l}</button>`).join('')}</div>${corpo}</div>`;
   const v=$('#view');const re=()=>manterPosicao(vCProfij);
   v.querySelectorAll('[data-cptab]').forEach(b=>b.onclick=()=>{UI.cpTab=b.dataset.cptab;vCProfij()});
+  if(tab==='matriz')cpmBindMatriz(v,a);if(tab==='plano')cpmBindPlano(v,a);
   v.querySelectorAll('[data-cpk]').forEach(b=>b.onclick=()=>{UI.cpTab={turmas:'turmas',risco:'turmas',fpct:'fpct',provas:'provas'}[b.dataset.cpk];vCProfij()});
   v.querySelectorAll('[data-cpdt]').forEach(i=>i.onchange=()=>{y.dts[i.dataset.cpdt]=i.value.trim();save()});
   v.querySelectorAll('[data-cpman]').forEach(b=>b.onclick=()=>{const [cn,k,comp]=b.dataset.cpman.split('|');const K=cn+'|'+k;const atual=(y.man[K]||{})[comp];const r=prompt('Média da componente '+CP_COMP.find(x=>x[0]===comp)[1]+' (0–20), tal como na pauta.\nDeixe vazio para voltar ao cálculo automático.',atual!=null?atual:'');if(r==null)return;const n=r.trim()===''?null:+r.replace(',','.');if(n!=null&&(isNaN(n)||n<0||n>20))return toast('Escreva um valor de 0 a 20','erro');y.man[K]=y.man[K]||{};if(n==null)delete y.man[K][comp];else y.man[K][comp]=n;save();re()});
@@ -14960,17 +15000,17 @@ function nvGateUI(){let o=document.getElementById('nvgate');if(o)return o;o=docu
   document.body.appendChild(o);return o}
 async function nvSyncGate(){if(_gateOn)return;let L;try{L=nvL()}catch(_){return}if(!L.prov||!(L.k||_nvK)||!SESSAO){const g=document.getElementById('nvgate');if(g)g.remove();return}_gateOn=true;
   const o=nvGateUI();o.classList.remove('fora');const bar=o.querySelector('.nvgb'),fill=bar.querySelector('i'),pct=o.querySelector('#nvg-p'),msg=o.querySelector('#nvg-m'),acts=o.querySelector('#nvg-a');
-  let alvo=0,atual=0,raf=0;const anima=()=>{atual+=(alvo-atual)*0.18;if(alvo-atual<0.3)atual=alvo;fill.style.width=atual+'%';pct.textContent=Math.round(atual)+'%';bar.setAttribute('aria-valuenow',Math.round(atual));if(atual<alvo)raf=requestAnimationFrame(anima);else raf=0};
+  let alvo=0,atual=0,raf=0;const anima=()=>{atual+=(alvo-atual)*0.35;if(alvo-atual<0.3)atual=alvo;fill.style.width=atual+'%';pct.textContent=Math.round(atual)+'%';bar.setAttribute('aria-valuenow',Math.round(atual));if(atual<alvo)raf=requestAnimationFrame(anima);else raf=0};
   let fim=false;const set=(v,t)=>{if(fim&&v<100)return;alvo=Math.max(alvo,Math.min(100,v));if(t)msg.textContent=t;if(v>=100)fim=true;if(!raf)raf=requestAnimationFrame(anima)};
   /* enquanto espera pela rede, avança devagar para mostrar que está vivo */
   const lento=setInterval(()=>{if(alvo<88)set(alvo+0.6)},400);
-  const fechar=()=>{clearInterval(lento);window.__nvProg=null;o.classList.add('fora');setTimeout(()=>{o.remove();_gateOn=false;document.body.classList.remove('nv-gating');try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}setTimeout(()=>{try{mostrarAvisos(false)}catch(_){}},400)},450)};
+  const fechar=()=>{clearInterval(lento);window.__nvProg=null;o.classList.add('fora');setTimeout(()=>{o.remove();_gateOn=false;document.body.classList.remove('nv-gating');try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}setTimeout(()=>{try{mostrarAvisos(false)}catch(_){}},400)},200)};
   const botoes=B=>{acts.hidden=!B.length;acts.innerHTML=B.map((b,i)=>`<button type="button" class="btn ${b.c||''}" data-g="${i}">${b.t}</button>`).join('');acts.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>B[+x.dataset.g].f())};
   const correr=async()=>{botoes([]);o.classList.remove('erro');set(6,'A ligar à sua conta Google…');
     if(!navigator.onLine){set(100,'Sem internet — os dados deste aparelho estão prontos; sincroniza quando a ligação voltar.');o.classList.add('erro');botoes([{t:'Continuar',c:'pri',f:fechar}]);return}
     window.__nvProg=f=>set(18+f*72,'A receber e a enviar as alterações…');
-    set(12,'A verificar a nuvem…');let r=null;try{r=await nvSincronizar(false)}catch(_){}
-    if(r){set(96,'A preparar a app…');await new Promise(x=>setTimeout(x,250));set(100,'Pronto');setTimeout(fechar,550);return}
+    set(12,'A verificar a nuvem…');let r=null;if(await nvNadaNovo()){alvo=atual=100;fill.style.width='100%';pct.textContent='100%';msg.textContent='Pronto';setTimeout(fechar,60);setTimeout(()=>{window.__nvFotos=1;nvSincronizar(false).catch(()=>{}).finally(()=>{window.__nvFotos=0})},700);return}window.__nvSemFotos=true;try{r=await nvSincronizar(false)}catch(_){}finally{window.__nvSemFotos=false}if(r&&!r.rapida)nvFotosFundo();
+    if(r){alvo=atual=100;fill.style.width='100%';pct.textContent='100%';msg.textContent='Pronto';setTimeout(fechar,90);return}
     const L2=nvL();
     if(L2.renovar){o.classList.add('erro');msg.textContent='A ligação à Google expirou. Toque para renovar e sincronizar.';botoes([{t:ic('refresh',15)+' Renovar e Sincronizar',c:'pri',f:async()=>{try{await nvRenovar(false)}catch(e){msg.textContent=e.message;return}correr()}},{t:'Continuar sem Sincronizar',f:fechar}]);return}
     if(!L2.k){fechar();return} /* o assistente trata do código */
@@ -15014,16 +15054,231 @@ async function pinRecuperar(alvo){if(!(alvo instanceof Element))alvo=null;const 
 
 /* 0.908 · sincronização rápida: sem alterações locais e com o manifesto igual na nuvem, só um pedido pequeno */
 {const _nsF=nvSincronizar;nvSincronizar=async function(interativo){try{const L=nvL();const prov=nvProv();
-    if(!interativo&&prov===PROV.google&&L.base&&L.manVer&&!Object.keys(L.mod||{}).length&&!L.rekey&&!_nvBusy&&_nvK){const m=prov._ids&&prov._ids[NV_PREF+'manifest.json'];
+    if(!interativo&&!window.__nvFotos&&prov===PROV.google&&L.base&&L.manVer&&!Object.keys(L.mod||{}).length&&!L.rekey&&!_nvBusy&&_nvK){const m=prov._ids&&prov._ids[NV_PREF+'manifest.json'];
       if(m){const r=await gsFetch('https://www.googleapis.com/drive/v3/files/'+m.id+'?fields=version');const j=await r.json().catch(()=>({}));if(j.version&&String(j.version)===String(L.manVer)){nvSet({ultimo:Date.now(),erro:''});try{nvBadge()}catch(_){}return {rapida:true,env:0,rec:0}}}}}catch(_){}
   const r=await _nsF.apply(this,arguments);
-  try{if(r&&nvProv()===PROV.google){const m=PROV.google._ids&&PROV.google._ids[NV_PREF+'manifest.json'];if(m){const x=await gsFetch('https://www.googleapis.com/drive/v3/files/'+m.id+'?fields=version');const j=await x.json().catch(()=>({}));if(j.version)nvSet({manVer:String(j.version)})}}}catch(_){}
+  try{if(r&&nvProv()===PROV.google){const m=PROV.google._ids&&PROV.google._ids[NV_PREF+'manifest.json'];if(m){const _v=gsFetch('https://www.googleapis.com/drive/v3/files/'+m.id+'?fields=version').then(x=>x.json()).then(j=>{if(j&&j.version)nvSet({manVer:String(j.version)})}).catch(()=>{});if(window.__nvSemFotos)await _v}}}catch(_){}
   return r}}
 /* avisos, parabéns, guia e janelas só depois de a sincronização chegar aos 100 % */
 {const _sm=HTMLDialogElement.prototype.showModal;const fila=[];HTMLDialogElement.prototype.showModal=function(){if(document.getElementById('nvgate')&&!this.matches('.nvas,.nvmc,.pindlg')){fila.push(this);this.dataset.espera=1;return}return _sm.apply(this,arguments)};
   window.__nvGateFila=()=>{while(fila.length){const d=fila.shift();if(d.isConnected&&!d.open){delete d.dataset.espera;try{_sm.call(d)}catch(_){}}}}}
 setInterval(()=>{const g=document.getElementById('nvgate');document.body.classList.toggle('nv-gating',!!g);if(!g&&window.__nvGateFila&&document.querySelector('dialog[data-espera]'))window.__nvGateFila()},150);
 {const _ma2=mostrarAvisos;mostrarAvisos=function(){if(document.getElementById('nvgate')){clearTimeout(mostrarAvisos._t);mostrarAvisos._t=setTimeout(()=>mostrarAvisos.apply(this,arguments),800);return}return _ma2.apply(this,arguments)}}
+
+/* 0.909 · sincronização inicial ~10× mais rápida
+   - guarda os ids dos ficheiros da nuvem (por conta Google): ao abrir, basta 1 pedido pequeno para saber se algo mudou
+   - fotografias e anexos passam para segundo plano: a app abre logo que os dados (texto) chegam
+   - até 12 partes ao mesmo tempo; a versão do manifesto é lida sem atrasar a entrada */
+const NV_GIDS='es.gids';
+const nvGEmail=()=>{try{const s=sessaoAtual();return String(gsCfg().email||(s&&(s.email||s.u))||'').toLowerCase()}catch(_){return ''}};
+function nvGidsCache(){try{const c=JSON.parse(localStorage.getItem(NV_GIDS)||'null');if(c&&c.m&&c.u&&c.u===nvGEmail())return c.m}catch(_){}return null}
+{const G=PROV.google;const _m=G._mapa,_l=G.ler,_e=G.escrever;
+  G._mapa=async function(f){if(!this._ids&&!f){const c=nvGidsCache();if(c)this._ids=c}if(this._ids&&!f)return this._ids;const m=await _m.call(this,true);try{localStorage.setItem(NV_GIDS,JSON.stringify({u:nvGEmail(),m}))}catch(_){}return m};
+  const _guarda=()=>{try{if(G._ids)localStorage.setItem(NV_GIDS,JSON.stringify({u:nvGEmail(),m:G._ids}))}catch(_){}};
+  G.ler=async function(n){try{return await _l.call(this,n)}catch(e){if(/erro 404/.test(e.message||'')){await this._mapa(true);return await _l.call(this,n)}throw e}};
+  G.escrever=async function(n,t){try{const r=await _e.call(this,n,t);_guarda();return r}catch(e){if(/erro 404/.test(e.message||'')){await this._mapa(true);const r=await _e.call(this,n,t);_guarda();return r}throw e}}}
+{const _ns=nvSincronizar;nvSincronizar=async function(){try{if(nvL().prov==='google'&&!PROV.google._ids){const c=nvGidsCache();if(c)PROV.google._ids=c}}catch(_){}return _ns.apply(this,arguments)}}
+/* entrada: 1 pedido pequeno diz se outro dispositivo mudou alguma coisa; se não mudou, a app abre logo */
+async function nvNadaNovo(){const P=window.__nvPre;window.__nvPre=null;if(P&&Date.now()-P.t<20000)return await P.p;return await nvNadaNovo0()}
+async function nvNadaNovo0(){try{const L=nvL();if(L.prov!=='google'||!L.base||!L.manVer||L.rekey||!(L.k||_nvK))return false;
+  const G=PROV.google;if(!G._ids){const c=nvGidsCache();if(c)G._ids=c}const m=G._ids&&G._ids[NV_PREF+'manifest.json'];if(!m)return false;
+  const r=await gsFetch('https://www.googleapis.com/drive/v3/files/'+m.id+'?fields=version');const j=await r.json().catch(()=>({}));return !!j.version&&String(j.version)===String(L.manVer)}catch(_){return false}}
+
+/* depois da barra: fotografias e anexos em segundo plano, sem bloquear */
+function nvFotosFundo(){setTimeout(async()=>{if(_nvBusy){nvFotosFundo();return}window.__nvFotos=1;try{await nvSincronizar(false)}catch(_){}finally{window.__nvFotos=0}},400)}
+/* o pedido pequeno parte logo enquanto a app ainda está a abrir */
+try{const s0=sessaoAtual();if(s0&&s0.tipo==='google'&&nvL().prov==='google')window.__nvPre={t:Date.now(),p:nvNadaNovo0()}}catch(_){}
+
+/* 0.909 · Coord. PROFIJ › Matriz Curricular / Ponto de Situação e Planeamento Anual
+   (o equivalente ao Excel do coordenador: horas → aulas de 45 min, dadas, diferença, previsão de conclusão,
+    calendário dia a dia por disciplina e por professor, FPCT e horário da turma importado do PDF) */
+const CPM_SIG={'mat':'Matemática Aplicada','ma':'Matemática Aplicada','port':'Língua Portuguesa','lp':'Língua Portuguesa','ing':'Língua Estrangeira - Inglês','le ing':'Língua Estrangeira - Inglês','fran':'Língua Estrangeira - Francês','fr':'Língua Estrangeira - Francês','ef':'Educação Física','cid m at':'Cidadania e Mundo Atual','cma':'Cidadania e Mundo Atual','cid':'Cidadania e Mundo Atual','tic':'Tecnologias de Informação e Comunicação','ae':'Atividades Económicas','hsst':'Higiene, Saúde e Segurança no Trabalho','psi':'Psicologia','psisoc':'Psicossociologia'};
+const CPM_H0={'Cidadania e Mundo Atual':70,'Tecnologias de Informação e Comunicação':50,'Educação Física':75,'Língua Portuguesa':90,'Língua Estrangeira - Inglês':70,'Matemática Aplicada':100,'Atividades Económicas':50};
+const CPM_COMP=[['sociocultural','Componente de Formação Sociocultural'],['cientifica','Componente de Formação Científica'],['tecnologica','Componente de Formação Tecnológica'],['pratica','Componente de Formação Prática em Contexto de Trabalho']];
+const cpmCompDe=n=>{const s=normT(n);return /^ufcd|tecnolog(?!ias de inf)|\b\d{4}\b/.test(s)?'tecnologica':/matemat|atividades econ|fisica e quim|biolog|psicolog|economia/.test(s)?'cientifica':/fct|formacao pratica|contexto de trabalho/.test(s)?'pratica':'sociocultural'};
+const cpmAulas=h=>{h=+h||0;return h>0?Math.ceil(h/0.75-1e-9):0};
+const cpmNomeSig=s=>CPM_SIG[normT(s).replace(/\./g,'').trim()]||String(s||'').replace(/\.$/,'').trim();
+function cpmM(nome){const {y}=CP();y.mat=y.mat||{};const M=y.mat[nome]=y.mat[nome]||{curso:'',area:'',nivel:'II',cod:'',ref:'',anoCurso:'1.º',ini:'',fim:'',nasInt:false,disc:[],fct:{horas:'',ini:'',fim:'',hDia:7}};M.disc=M.disc||[];M.fct=M.fct||{horas:'',ini:'',fim:'',hDia:7};return M}
+function cpmNomes(a,C){const {y}=CP();const L=C.map(c=>c.nome);Object.keys(y.mat||{}).forEach(n=>{if(!L.includes(n))L.push(n)});return L}
+function cpmLimites(a,M){const c=CAL();const al=String((a&&a.nome)||anoLetivoDeHoje()).match(/(\d{4})/);const y1=al?+al[1]:new Date().getFullYear();
+  const ini=M.ini||(c&&c.inicio)||y1+'-09-15';const fim=M.fim||(c&&termoTurma(null,c))||(y1+1)+'-06-30';return {ini,fim}}
+/* tipo de cada dia para a turma: letivo, fds, feriado, interrupção, FPCT, fora do ano */
+function cpmTipo(iso,M,L,c){const d=dataDeIso(iso),w=d.getDay();if(iso<L.ini||iso>L.fim)return 'fora';
+  const f=M.fct||{};if(f.ini&&f.fim&&iso>=f.ini&&iso<=f.fim)return w===0||w===6?'fds':'fct';
+  if(w===0||w===6)return 'fds';if(!c)return 'let';const tp=c.dias[iso];
+  if(/^feriado/.test(tp||''))return 'fer';if(tp==='interrupcao')return M.nasInt?'let':'int';
+  if(!tp)return M.nasInt?'let':'nl';return LETIVOS.includes(tp)?'let':'nl'}
+/* aulas (tempos de 45 min) de cada disciplina no horário da turma */
+function cpmAulasHor(a,nome,d){const h=horarioDe(a,nome);if(!h||!d.sig||!d.sig.length)return [];const S_=d.sig.map(normSig);return h.aulas.filter(x=>S_.includes(normSig(x.ab)))}
+function cpmCalc(a,nome){const M=cpmM(nome),L=cpmLimites(a,M),c=CAL();const hj=isoHoje(),agora=new Date(),mins=agora.getHours()*60+agora.getMinutes();
+  const dias=[];for(let d=dataDeIso(L.ini);isoData(d)<=L.fim;d.setDate(d.getDate()+1)){const iso=isoData(d);dias.push({iso,w:d.getDay(),t:cpmTipo(iso,M,L,c)})}
+  const R=M.disc.map(d=>{const H=cpmAulasHor(a,nome,d);const sem=[0,0,0,0,0,0,0];H.forEach(x=>sem[x.dia]++);const aulas=cpmAulas(d.horas);
+    let auto=0,fut=0,fimPrev='',acum=0;const porDia={};
+    dias.forEach(z=>{if(z.t!=='let')return;let n=sem[z.w];if(!n)return;
+      if(z.iso<hj)auto+=n;else if(z.iso===hj){const k=H.filter(x=>x.dia===z.w&&x.fim<=mins).length;auto+=k;fut+=n-k}else fut+=n;porDia[z.iso]=n});
+    const dadas=d.dadas!=null&&d.dadas!==''?+d.dadas:Math.max(0,auto+(+d.aj||0));
+    acum=dadas;Object.keys(porDia).sort().forEach(iso=>{if(iso<hj||fimPrev)return;acum+=porDia[iso];if(!fimPrev&&acum>=aulas&&aulas)fimPrev=iso});
+    if(aulas&&dadas>=aulas)fimPrev='feito';
+    const falta=Math.max(0,aulas-dadas),saldo=dadas+fut-aulas,semT=sem.reduce((s,v)=>s+v,0);
+    const est=!aulas?'sem':dadas>=aulas?'ok':saldo<0?'bad':saldo<semT?'w':'curso';
+    return {d,H,sem,semT,aulas,dadas,auto,fut,falta,saldo,fimPrev,porDia,est}});
+  /* FPCT: horas possíveis no período (dias úteis sem feriados) */
+  const f=M.fct||{};let fctH=0;if(f.ini&&f.fim){for(let d=dataDeIso(f.ini);isoData(d)<=f.fim;d.setDate(d.getDate()+1)){const iso=isoData(d),w=d.getDay();if(w===0||w===6)continue;if(c&&/^feriado/.test(c.dias[iso]||''))continue;fctH+=+f.hDia||7}}
+  return {M,L,dias,R,fctH,c}}
+const cpmFD=iso=>iso==='feito'?'concluída':iso?fmtIsoL(iso):'—';
+const CPM_E={ok:['Concluída','ok'],curso:['Dentro do previsto',''],w:['Margem curta','w'],bad:['Não chega ao fim do ano','bad'],sem:['Sem horas','']};
+function cpmMatrizHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return `<section class="card empty">${ic('grid',28)}<br><b>Ainda não há turmas PROFIJ</b><br><span class="mut">Crie a matriz de uma turma (por exemplo, a partir do horário da turma em PDF).</span><br><br><button class="btn pri" id="cpm-nova">${ic('plus',14)} Nova Matriz</button> <button class="btn" id="cpm-pdf">${ic('upload',14)} Importar Horário da Turma (PDF)</button></section>`;
+  const nome=UI.cpmT&&N.includes(UI.cpmT)?UI.cpmT:N[0];UI.cpmT=nome;const K=cpmCalc(a,nome),M=K.M;const h=horarioDe(a,nome);
+  const tot=K.R.reduce((s,r)=>({a:s.a+r.aulas,d:s.d+Math.min(r.dadas,r.aulas||r.dadas),f:s.f+r.falta,b:s.b+(r.est==='bad'?1:0)}),{a:0,d:0,f:0,b:0});const pc=tot.a?Math.round(tot.d/tot.a*100):0;
+  const sel=`<div class="row cpm-sel noprint" style="gap:8px;flex-wrap:wrap">${N.map(n=>`<button type="button" class="chip ${n===nome?'on':''}" data-cpmt="${esc(n)}">${esc(n)}</button>`).join('')}<button type="button" class="chip" id="cpm-nova">${ic('plus',13)} Nova</button></div>`;
+  const cab=`<section class="card cpm-cab"><div><div><div class="cpm-tit">${esc(M.curso||'Curso PROFIJ — '+nome)}</div>
+    <div class="mut cpm-meta">${[M.area&&'Área de Educação e Formação: '+esc(M.area),M.nivel&&'Nível de Qualificação do QNQ: '+esc(M.nivel),M.cod&&'Cód. interno: '+esc(M.cod),M.anoCurso&&'Ano: '+esc(M.anoCurso),M.ref&&'Referencial: '+esc(M.ref)].filter(Boolean).join(' · ')||'Toque em «Dados do Curso» para preencher o cabeçalho.'}</div>
+    <div class="cpm-ps"><b>Ponto de Situação — ${isoHoje().split('-').reverse().join('.')}</b> <span class="mut">· ${esc(nome)} · ${fmtIsoL(K.L.ini)} a ${fmtIsoL(K.L.fim)}${M.nasInt?' · com sessões nas interrupções':''}</span></div></div>
+    <div class="row noprint" style="gap:6px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" id="cpm-curso">${ic('pencil',14)} Dados do Curso</button><button class="btn sm" id="cpm-pdf">${ic('upload',14)} Horário da Turma (PDF)</button>${h?`<button class="btn sm" id="cpm-ger">${ic('flow',14)} Gerar do Horário</button>`:''}<button class="btn sm" id="cpm-add">${ic('plus',14)} Disciplina / UFCD</button><button class="btn sm" id="cpm-csv">${ic('download',14)} CSV</button><button class="btn sm pri" id="cpm-imp">${ic('printer',14)} Imprimir</button></div></div>
+    ${!K.c?`<div class="alert w noprint" style="margin-top:10px">${ic('alert',15)} Sem calendário escolar: só os fins de semana são descontados. Importe o calendário (Calendário › Importar) para descontar feriados e interrupções letivas.</div>`:''}
+    ${!h?`<div class="alert noprint" style="margin-top:10px">${ic('calendar',15)} Importe o horário da turma (PDF «Horário da Turma») para a app contar sozinha as aulas dadas e prever quando termina cada disciplina.</div>`:''}
+    <div class="cpm-kp"><div><small>Aulas previstas</small><b>${tot.a}</b></div><div><small>Dadas</small><b>${tot.d}</b><i class="cpm-bar"><i style="width:${pc}%"></i></i></div><div><small>Em falta</small><b>${tot.f}</b></div><div class="${tot.b?'bad':''}"><small>Não chegam ao fim</small><b>${tot.b}</b></div></div></section>`;
+  const linha=r=>{const e=CPM_E[r.est];const p=r.aulas?Math.min(100,Math.round(r.dadas/r.aulas*100)):0;
+    return `<tr class="cpm-r ${e[1]}"><td><b>${esc(r.d.nome)}</b>${r.d.det?`<div class="hint">${esc(r.d.det)}</div>`:''}${r.d.sig&&r.d.sig.length?`<div class="hint noprint">horário: ${esc(r.d.sig.join(', '))}</div>`:''}</td><td class="n">${r.d.horas||'—'}</td><td class="n">${r.aulas||'—'}</td>
+      <td class="n"><b>${r.dadas}</b>${r.d.dadas!=null&&r.d.dadas!==''?' <span class="tag" title="escrito à mão">manual</span>':r.d.aj?` <span class="mut" title="ajuste">(${r.d.aj>0?'+':''}${r.d.aj})</span>`:''}<i class="cpm-bar"><i style="width:${p}%"></i></i></td>
+      <td class="n ${r.falta?'':'mut'}">${r.falta}</td><td class="n">${r.semT||'—'}</td><td>${r.fimPrev?cpmFD(r.fimPrev):r.aulas?`<span class="neg">faltam ${-r.saldo} no fim</span>`:'—'}${r.fimPrev&&r.fimPrev!=='feito'&&r.saldo>0?`<div class="hint">sobram ${r.saldo} tempo(s)</div>`:''}</td>
+      <td>${esc(r.d.prof||'—')}</td><td><span class="tag ${e[1]}">${e[0]}</span></td><td class="act noprint"><button class="btn sm ghost" data-cpmd="${r.d.id}" title="Editar">${ic('pencil',14)}</button></td></tr>`};
+  const comp=CPM_COMP.filter(([k])=>k!=='pratica').map(([k,l])=>{const L=K.R.filter(r=>r.d.comp===k);if(!L.length)return '';const f=L.reduce((s,r)=>s+r.falta,0),au=L.reduce((s,r)=>s+r.aulas,0),dd=L.reduce((s,r)=>s+r.dadas,0),hh=L.reduce((s,r)=>s+(+r.d.horas||0),0);
+    return `<tr class="cpm-comp"><th colspan="10">${l}</th></tr>${L.map(linha).join('')}<tr class="cpm-tot"><td>Total da componente${f?' em falta':''}</td><td class="n">${hh}</td><td class="n">${au}</td><td class="n">${dd}</td><td class="n"><b>${f}</b></td><td colspan="5"></td></tr>`}).join('');
+  const tab=K.R.length?`<section class="card"><h2 style="margin:0 0 8px">${ic('grid',18)} Matriz Curricular</h2><div class="cpm-tw"><table class="lst cpm-t"><thead><tr><th>Disciplina / UFCD</th><th class="n">Horas</th><th class="n">Aulas</th><th class="n">Dadas</th><th class="n">Diferença</th><th class="n">Tempos / semana</th><th>Previsão de conclusão</th><th>Professor(a)</th><th>Situação</th><th class="noprint"></th></tr></thead><tbody>${comp}</tbody></table></div>
+    <p class="hint">Aulas = horas ÷ 0,75 (tempos de 45 minutos), arredondado para cima. As dadas contam-se pelo horário da turma e pelo calendário escolar até agora; acerte com «Ajuste» (aulas repostas ou não dadas) ou escreva o total à mão.</p></section>`:`<section class="card empty">${ic('grid',26)}<br><b>Matriz vazia</b><br><span class="mut">${h?'Toque em «Gerar do Horário» para criar as disciplinas a partir do horário da turma.':'Importe o horário da turma em PDF ou acrescente as disciplinas e UFCD à mão.'}</span></section>`;
+  /* por professor (as folhas por professor do Excel) */
+  const P={};K.R.forEach(r=>{const k=(r.d.prof||'Sem professor').trim();(P[k]=P[k]||[]).push(r)});
+  const prof=K.R.length?`<section class="card"><h2 style="margin:0 0 8px">${ic('users',18)} Por Professor(a)</h2><div class="cpm-pg">${Object.entries(P).sort((x,y)=>x[0].localeCompare(y[0],'pt')).map(([p,L])=>{const au=L.reduce((s,r)=>s+r.aulas,0),dd=L.reduce((s,r)=>s+Math.min(r.dadas,r.aulas||r.dadas),0),f=L.reduce((s,r)=>s+r.falta,0),b=L.some(r=>r.est==='bad');
+    return `<div class="cpm-pc ${b?'bad':''}"><b>${esc(p)}</b><small>${L.map(r=>esc(r.d.nome)).join(' · ')}</small><div class="row" style="gap:10px"><span>${dd}/${au} dadas</span><span class="${f?'':'mut'}">faltam ${f}</span>${b?`<span class="tag bad">risco</span>`:''}</div><i class="cpm-bar"><i style="width:${au?Math.round(dd/au*100):0}%"></i></i></div>`}).join('')}</div></section>`:'';
+  const f=M.fct||{};const fh=+f.horas||0;
+  const fct=`<section class="card"><div class="row"><h2 style="margin:0">${ic('building',18)} Formação Prática em Contexto de Trabalho</h2><span class="sp1"></span><button class="btn sm noprint" id="cpm-fct">${ic('pencil',14)} Período</button></div>
+    ${f.ini&&f.fim?`<p style="margin:8px 0 0">${fmtIsoL(f.ini)} a ${fmtIsoL(f.fim)} · ${+f.hDia||7} h/dia → <b>${K.fctH} h possíveis</b>${fh?` de ${fh} h exigidas · <span class="${K.fctH>=fh?'pos':'neg'}">${K.fctH>=fh?'chega (sobram '+(K.fctH-fh)+' h)':'faltam '+(fh-K.fctH)+' h — alargue o período'}</span>`:''}</p><p class="hint">Durante a FPCT não há aulas: os dias deste período não contam para as disciplinas. Os feriados são descontados das horas da FPCT.</p>`:`<p class="mut" style="margin:8px 0 0">Indique o período e as horas da FPCT (ex.: 100 h no 1.º ano) para a app descontar esses dias das aulas e verificar se as horas chegam.</p>`}</section>`;
+  const ass=`<div class="cpm-ass"><span>${esc((S.cfg.escola||'')+'')}</span><div><div class="cpm-lin"></div>O Coordenador do PROFIJ<br><small>${esc(S.cfg.professor||'')}</small></div></div>`;
+  return sel+cab+tab+prof+fct+ass}
+function cpmDiscDlg(nome,d){const M=cpmM(nome);const novo=!d;d=d||{id:uid(),nome:'',comp:'sociocultural',horas:'',prof:'',sig:[],aj:0,dadas:null,det:''};const a=A();const h=horarioDe(a,nome);
+  const sigs=h?[...new Set(h.aulas.map(x=>x.ab))].sort():[];
+  openDrawer(novo?'Nova Disciplina / UFCD':'Editar Disciplina',`<div class="ed"><label>Nome</label><input id="dm-n" value="${esc(d.nome)}" placeholder="ex.: Matemática Aplicada · UFCD A">
+    <label>Componente</label><select id="dm-c">${CPM_COMP.filter(([k])=>k!=='pratica').map(([k,l])=>`<option value="${k}" ${d.comp===k?'selected':''}>${l.replace('Componente de Formação ','')}</option>`).join('')}</select>
+    <div class="row" style="gap:10px"><div style="flex:1"><label>Horas (este ano)</label><input id="dm-h" type="number" min="0" step="1" inputmode="numeric" value="${esc(d.horas)}"></div><div style="flex:1"><label>Aulas de 45 min</label><input id="dm-a" disabled value="${cpmAulas(d.horas)||''}"></div></div>
+    <label>UFCD incluídas (opcional)</label><input id="dm-u" value="${esc(d.det||'')}" placeholder="ex.: 0349 · 1122 · 0778">
+    <label>Professor(a)</label><input id="dm-p" value="${esc(d.prof)}">
+    <label>Siglas no horário da turma</label>${sigs.length?`<div class="row" style="gap:6px;flex-wrap:wrap">${sigs.map(s=>`<label class="chk"><input type="checkbox" data-dms="${esc(s)}" ${(d.sig||[]).map(normSig).includes(normSig(s))?'checked':''}> ${esc(s)}</label>`).join('')}</div>`:`<input id="dm-s" value="${esc((d.sig||[]).join(', '))}" placeholder="ex.: MAT"><div class="hint">Importe o horário da turma para escolher da lista.</div>`}
+    <div class="row" style="gap:10px"><div style="flex:1"><label>Ajuste às dadas</label><input id="dm-j" type="number" step="1" inputmode="numeric" value="${+d.aj||0}"><div class="hint">+ repostas · − não dadas (greves, visitas…)</div></div><div style="flex:1"><label>Dadas (escrever à mão)</label><input id="dm-d" type="number" min="0" step="1" inputmode="numeric" value="${d.dadas!=null?esc(d.dadas):''}" placeholder="automático"></div></div>
+    <div class="row" style="margin-top:14px">${novo?'':`<button class="btn bad" id="dm-x">${ic('trash',14)} Apagar</button>`}<span class="sp1"></span><button class="btn" id="dm-c0">Cancelar</button><button class="btn pri" id="dm-ok">${ic('check',14)} Guardar</button></div></div>`);
+  const H=$('#dm-h');H.oninput=()=>{$('#dm-a').value=cpmAulas(H.value)||''};
+  $('#dm-n').onchange=()=>{const v=$('#dm-n').value;if(novo){$('#dm-c').value=cpmCompDe(v);if(!H.value&&CPM_H0[v]){H.value=CPM_H0[v];H.oninput()}}};
+  $('#dm-c0').onclick=closeDrawer;const x=$('#dm-x');if(x)x.onclick=()=>{if(!confirm('Apagar «'+d.nome+'» da matriz?'))return;M.disc=M.disc.filter(z=>z.id!==d.id);save();closeDrawer();vCProfij()};
+  $('#dm-ok').onclick=()=>{const n=$('#dm-n').value.trim();if(!n){toast('Escreva o nome.');return}
+    d.nome=n;d.comp=$('#dm-c').value;d.horas=H.value===''?'':+H.value;d.det=$('#dm-u').value.trim();d.prof=$('#dm-p').value.trim();d.aj=+$('#dm-j').value||0;const dv=$('#dm-d').value;d.dadas=dv===''?null:+dv;
+    d.sig=sigs.length?$$('[data-dms]').filter(i=>i.checked).map(i=>i.dataset.dms):($('#dm-s').value||'').split(/[,;]/).map(s=>s.trim()).filter(Boolean);
+    if(novo)M.disc.push(d);save();audit('Coord. PROFIJ',(novo?'Disciplina acrescentada à matriz':'Matriz alterada')+' · '+nome,d.nome);closeDrawer();vCProfij()}}
+function cpmCursoDlg(nome){const M=cpmM(nome);const a=A(),L=cpmLimites(a,{...M,ini:'',fim:''});
+  const f=(id,l,v,ph,t)=>`<label>${l}</label><input id="${id}" ${t?`type="${t}"`:''} value="${esc(v||'')}" placeholder="${esc(ph||'')}">`;
+  openDrawer('Dados do Curso · '+nome,`<div class="ed">${f('mc-c','Curso',M.curso,'ex.: Curso PROFIJ II - Operador/a de …')}${f('mc-a','Área de Educação e Formação',M.area,'ex.: 341 - Comércio')}
+    <div class="row" style="gap:10px"><div style="flex:1">${f('mc-n','Nível de Qualificação do QNQ',M.nivel,'II')}</div><div style="flex:1">${f('mc-y','Ano do curso',M.anoCurso,'1.º')}</div></div>
+    ${f('mc-k','Cód. interno',M.cod,'')}${f('mc-r','Referencial de Formação',M.ref,'')}
+    <div class="row" style="gap:10px"><div style="flex:1">${f('mc-i','Início das aulas',M.ini,'','date')}<div class="hint">vazio = ${fmtIsoL(L.ini)}</div></div><div style="flex:1">${f('mc-f','Fim das aulas',M.fim,'','date')}<div class="hint">vazio = ${fmtIsoL(L.fim)}</div></div></div>
+    <label class="chk" style="margin-top:10px"><input type="checkbox" id="mc-int" ${M.nasInt?'checked':''}> Há sessões de formação nas interrupções letivas</label>
+    <div class="row" style="margin-top:14px">${UI.cpmT===nome&&!cpClasses(a).some(c=>c.nome===nome)?`<button class="btn bad" id="mc-x">${ic('trash',14)} Apagar Matriz</button>`:''}<span class="sp1"></span><button class="btn" id="mc-0">Cancelar</button><button class="btn pri" id="mc-ok">${ic('check',14)} Guardar</button></div></div>`);
+  $('#mc-0').onclick=closeDrawer;const x=$('#mc-x');if(x)x.onclick=()=>{if(!confirm('Apagar a matriz de '+nome+'?'))return;delete CP().y.mat[nome];UI.cpmT='';save();closeDrawer();vCProfij()};
+  $('#mc-ok').onclick=()=>{Object.assign(M,{curso:$('#mc-c').value.trim(),area:$('#mc-a').value.trim(),nivel:$('#mc-n').value.trim(),anoCurso:$('#mc-y').value.trim(),cod:$('#mc-k').value.trim(),ref:$('#mc-r').value.trim(),ini:$('#mc-i').value,fim:$('#mc-f').value,nasInt:$('#mc-int').checked});save();closeDrawer();vCProfij()}}
+function cpmFctDlg(nome){const M=cpmM(nome),f=M.fct;openDrawer('FPCT · '+nome,`<div class="ed"><div class="row" style="gap:10px"><div style="flex:1"><label>Início</label><input type="date" id="mf-i" value="${esc(f.ini||'')}"></div><div style="flex:1"><label>Fim</label><input type="date" id="mf-f" value="${esc(f.fim||'')}"></div></div>
+    <div class="row" style="gap:10px"><div style="flex:1"><label>Horas exigidas</label><input type="number" min="0" inputmode="numeric" id="mf-h" value="${esc(f.horas||'')}" placeholder="ex.: 100"></div><div style="flex:1"><label>Horas por dia</label><input type="number" min="1" max="10" inputmode="numeric" id="mf-d" value="${esc(f.hDia||7)}"></div></div>
+    <div class="row" style="margin-top:14px"><span class="sp1"></span><button class="btn" id="mf-0">Cancelar</button><button class="btn pri" id="mf-ok">${ic('check',14)} Guardar</button></div></div>`);
+  $('#mf-0').onclick=closeDrawer;$('#mf-ok').onclick=()=>{const i=$('#mf-i').value,fi=$('#mf-f').value;if(i&&fi&&fi<i){toast('O fim é antes do início.');return}Object.assign(f,{ini:i,fim:fi,horas:$('#mf-h').value===''?'':+$('#mf-h').value,hDia:+$('#mf-d').value||7});save();closeDrawer();vCProfij()}}
+/* cria as disciplinas a partir da legenda do horário da turma */
+function cpmGerar(a,nome,silencioso){const h=horarioDe(a,nome);if(!h)return 0;const M=cpmM(nome);let n=0;
+  const sigs=[...new Set(h.aulas.map(x=>x.ab))];const leg=h.legenda||[];
+  sigs.forEach(s=>{if(M.disc.some(d=>(d.sig||[]).map(normSig).includes(normSig(s))))return;const l=leg.find(x=>normSig(x.ab)===normSig(s))||{};const nm=l.nome&&normSig(l.nome)!==normSig(s)?l.nome:cpmNomeSig(s);
+    const ex=M.disc.find(d=>normT(d.nome)===normT(nm));if(ex){ex.sig=[...(ex.sig||[]),s];return}
+    M.disc.push({id:uid(),nome:nm,comp:cpmCompDe(nm),horas:CPM_H0[nm]||'',prof:(l.profs||[]).join(', '),sig:[s],aj:0,dadas:null,det:''});n++});
+  const ord={sociocultural:0,cientifica:1,tecnologica:2};M.disc.sort((x,y)=>(ord[x.comp]-ord[y.comp])||x.nome.localeCompare(y.nome,'pt',{numeric:true}));
+  save();if(!silencioso)toast(n?n+' disciplina(s) criada(s). Confirme as horas de cada uma.':'A matriz já tem todas as disciplinas do horário.');return n}
+/* horário da turma em PDF (ex.: «Horário da Turma: …», com legenda Atividade / Nome do Professor) */
+async function cpmLerHorTurma(file){const r=await lerHorarioProfPdf(file);
+  const lib=await getPdfLib();const doc=await lib.getDocument({data:await file.arrayBuffer()}).promise;const it=[];
+  for(let p=1;p<=doc.numPages;p++){const pg=await doc.getPage(p);const tc=await pg.getTextContent();tc.items.filter(i=>i.str&&i.str.trim()).forEach(i=>it.push({s:i.str.replace(/\s+/g,' ').trim(),x:i.transform[4],y:i.transform[5]-p*2000,w:i.width||0}))}
+  const txt=it.map(i=>i.s).join(' ');const tm=txt.match(/Hor[aá]rio da Turma:?\s*(.+?)(?=\s+Ano letivo|\s+Tempos|$)/i);const turma=tm?tm[1].trim():'';
+  const at=it.find(i=>normT(i.s)==='atividade'),np=it.find(i=>/nome do professor/i.test(i.s));const leg=[];let diretor='';
+  if(at&&np){const rows={};it.filter(i=>i.y<at.y-1).forEach(i=>{const k=Math.round(i.y/3);(rows[k]=rows[k]||[]).push(i)});
+    Object.keys(rows).map(Number).sort((x,y)=>y-x).forEach(k=>{const R=rows[k].sort((p,q)=>p.x-q.x);const sg=R.filter(i=>i.x<np.x-4).map(i=>i.s).join(' ').trim(),pf=R.filter(i=>i.x>=np.x-4).map(i=>i.s).join(' ').trim();if(!sg||!pf)return;
+      if(/^dir\.?\s*(de\s*)?turma|diretor/i.test(sg)){diretor=pf;return}const e=leg.find(l=>normSig(l.ab)===normSig(sg));if(e){if(!e.profs.includes(pf))e.profs.push(pf)}else leg.push({ab:sg,nome:cpmNomeSig(sg),profs:[pf]})})}
+  const LS=leg.map(l=>normSig(l.ab));const aulas=[];
+  [...r.aulas.map(x=>({...x,sig:(x.turma?x.turma+' ':'')+x.sig})),...r.naoLetivos].forEach(x=>{const s=String(x.sig||'').trim();if(!s||/atividade|professor/i.test(s))return;
+    if(LS.length&&!LS.includes(normSig(s))){const m=LS.find(k=>normSig(s).startsWith(k));if(!m)return}
+    if(!aulas.some(o=>o.dia===x.dia&&o.ini===x.ini))aulas.push({dia:x.dia,ini:x.ini,fim:x.fim,ab:s,sala:x.sala||''})});
+  aulas.sort((p,q)=>p.dia-q.dia||p.ini-q.ini);if(!aulas.length)throw new Error('Não encontrei aulas na grelha do horário.');
+  return {turma,aulas,legenda:leg,diretor,ficheiro:file.name}}
+function cpmImportarPdf(alvo){const inp=document.createElement('input');inp.type='file';inp.accept='.pdf,application/pdf';inp.multiple=true;
+  inp.onchange=async()=>{const a=A();const ok=[];for(const f of inp.files){ocupado('A ler '+f.name+'…');try{const h=await cpmLerHorTurma(f);ok.push(h)}catch(e){toast(f.name+': '+e.message)}}livre();if(!ok.length)return;
+    a.horarios=a.horarios||{};ok.forEach(h=>{let nm=h.turma||alvo||'Turma PROFIJ';if(alvo&&ok.length===1&&normTurma(nm)!==normTurma(alvo)&&confirm('O PDF é da turma «'+nm+'». Associar à matriz «'+alvo+'»?'))nm=alvo;
+      const k=Object.keys(a.horarios).find(k=>normTurma(k)===normTurma(nm))||nm;a.horarios[k]={turma:nm,aulas:h.aulas,legenda:h.legenda,diretor:h.diretor,ficheiro:h.ficheiro,importado:new Date().toISOString()};
+      const {y}=CP();y.mat=y.mat||{};const ex=Object.keys(y.mat).find(n=>normTurma(n)===normTurma(k));const mn=ex||k;cpmM(mn);const n=cpmGerar(a,mn,true);UI.cpmT=mn;
+      toast('Horário de '+nm+': '+h.aulas.length+' tempos'+(n?' · '+n+' disciplina(s) criada(s) — confirme as horas':''))});
+    regista('Horário da turma (PDF)',ok.map(h=>h.ficheiro).join(', '),ok.map(h=>h.turma).join(', '));saveNow();UI.cpTab='matriz';vCProfij()};inp.click()}
+function cpmCSV(a,nome){const K=cpmCalc(a,nome);const q=v=>{v=v==null?'':String(v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const R=[['Componente','Disciplina/UFCD','UFCD incluídas','Horas','Aulas (45 min)','Dadas','Diferença','Tempos/semana','Previsão de conclusão','Professor(a)','Situação']];
+  K.R.forEach(r=>R.push([(CPM_COMP.find(c=>c[0]===r.d.comp)||[,''])[1],r.d.nome,r.d.det||'',r.d.horas,r.aulas,r.dadas,r.falta,r.semT,r.fimPrev==='feito'?'concluída':r.fimPrev||('faltam '+(-r.saldo)),r.d.prof,CPM_E[r.est][0]]));
+  download('ponto-situacao-'+normSig(nome)+'-'+isoHoje()+'.csv','﻿'+R.map(l=>l.map(q).join(';')).join('\n'),'text/csv')}
+function cpmBindMatriz(v,a){const nome=UI.cpmT;const g=id=>v.querySelector('#'+id);
+  v.querySelectorAll('[data-cpmt]').forEach(b=>b.onclick=()=>{UI.cpmT=b.dataset.cpmt;vCProfij()});
+  const nv=g('cpm-nova');if(nv)nv.onclick=()=>{const n=(prompt('Nome da turma (como no horário, ex.: Profij 2):')||'').trim();if(!n)return;cpmM(n);UI.cpmT=n;save();vCProfij()};
+  const pdf=g('cpm-pdf');if(pdf)pdf.onclick=()=>cpmImportarPdf(nome);
+  const ge=g('cpm-ger');if(ge)ge.onclick=()=>{cpmGerar(a,nome);vCProfij()};
+  const ad=g('cpm-add');if(ad)ad.onclick=()=>cpmDiscDlg(nome);
+  const cu=g('cpm-curso');if(cu)cu.onclick=()=>cpmCursoDlg(nome);
+  const fc=g('cpm-fct');if(fc)fc.onclick=()=>cpmFctDlg(nome);
+  const cs=g('cpm-csv');if(cs)cs.onclick=()=>cpmCSV(a,nome);
+  const im=g('cpm-imp');if(im)im.onclick=()=>imprimirVista();
+  v.querySelectorAll('[data-cpmd]').forEach(b=>b.onclick=()=>cpmDiscDlg(nome,cpmM(nome).disc.find(d=>d.id===b.dataset.cpmd)))}
+/* Planeamento anual: grelha mês × dia, como a folha «Geral» e as folhas por professor */
+function cpmPlanoHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return cpmMatrizHTML(a,C);const nome=UI.cpmT&&N.includes(UI.cpmT)?UI.cpmT:N[0];UI.cpmT=nome;const K=cpmCalc(a,nome);
+  const profs=[...new Set(K.R.map(r=>(r.d.prof||'').trim()).filter(Boolean))].sort((x,y)=>x.localeCompare(y,'pt'));const fil=UI.cpmF||'geral';
+  const Rs=fil==='geral'?K.R:fil.startsWith('p:')?K.R.filter(r=>(r.d.prof||'').trim()===fil.slice(2)):K.R.filter(r=>r.d.id===fil);
+  const um=Rs.length===1?Rs[0]:null;const hj=isoHoje();
+  const porDia={};Rs.forEach(r=>Object.entries(r.porDia).forEach(([iso,n])=>porDia[iso]=(porDia[iso]||0)+n));
+  /* no modo de uma disciplina, depois de atingir as aulas os dias deixam de contar (como o «j» do Excel) */
+  let acum=um?um.dadas:0;const meses=[];K.dias.forEach(z=>{const m=z.iso.slice(0,7);let M_=meses.find(x=>x.m===m);if(!M_){M_={m,d:{},tot:0};meses.push(M_)}M_.d[+z.iso.slice(8)]=z});
+  const sel=`<div class="row cpm-sel noprint" style="gap:8px;flex-wrap:wrap">${N.map(n=>`<button type="button" class="chip ${n===nome?'on':''}" data-cpmt="${esc(n)}">${esc(n)}</button>`).join('')}</div>`;
+  const opt=`<select id="cpm-f" class="noprint"><option value="geral" ${fil==='geral'?'selected':''}>Geral (todas as disciplinas)</option><optgroup label="Disciplina / UFCD">${K.R.map(r=>`<option value="${r.d.id}" ${fil===r.d.id?'selected':''}>${esc(r.d.nome)}</option>`).join('')}</optgroup>${profs.length?`<optgroup label="Professor(a)">${profs.map(p=>`<option value="p:${esc(p)}" ${fil==='p:'+p?'selected':''}>${esc(p)}</option>`).join('')}</optgroup>`:''}</select>`;
+  let tGeral=0;const rows=meses.map(M_=>{const [yy,mm]=M_.m.split('-').map(Number);const nd=new Date(yy,mm,0).getDate();let tot=0;
+    const cel=Array.from({length:31},(_,i)=>{const d=i+1;if(d>nd)return '<td class="x"></td>';const z=M_.d[d];if(!z)return '<td class="fora"></td>';
+      let n=porDia[z.iso]||0,cls=z.t;let txt='';if(z.t==='let'){if(n){if(um&&z.iso>=hj){if(acum>=um.aulas){cls='j';n=0}else{acum+=n;if(acum>=um.aulas)cls='let fimd'}}tot+=n;txt=n||''}}
+      else if(z.t==='fct')txt='F';else if(z.t==='fer')txt='•';
+      return `<td class="${cls}${z.iso===hj?' hj':''}" title="${fmtIsoL(z.iso)}">${txt}</td>`}).join('');tGeral+=tot;M_.tot=tot;
+    return `<tr><th>${MESES[mm].slice(0,3)} ’${String(yy).slice(2)}</th>${cel}<td class="n"><b>${tot||''}</b></td><td class="n mut">${tGeral||''}</td></tr>`}).join('');
+  const resumo=um?`<p style="margin:8px 0 0"><b>${esc(um.d.nome)}</b> · ${um.aulas} aulas · ${um.dadas} dadas · ${um.semT} tempos por semana · ${um.fimPrev?'conclusão prevista: <b>'+cpmFD(um.fimPrev)+'</b>':'<span class="neg">faltam '+(-um.saldo)+' tempos no fim do ano</span>'}</p>`:`<p class="mut" style="margin:8px 0 0">${Rs.length} disciplina(s) · tempos por dia segundo o horário da turma. Escolha uma disciplina para ver o dia em que termina.</p>`;
+  return sel+`<section class="card"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('calendar',18)} Planeamento Anual · ${esc(nome)}</h2><span class="sp1"></span>${opt}<button class="btn sm noprint" id="cpm-imp">${ic('printer',14)} Imprimir</button></div>${resumo}
+    <div class="cpm-cw"><table class="cpm-cal"><thead><tr><th></th>${Array.from({length:31},(_,i)=>`<th>${i+1}</th>`).join('')}<th>Mês</th><th>Acum.</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="cpm-leg"><span><i class="let"></i>dia de aulas (n.º de tempos)</span>${um?'<span><i class="let fimd"></i>última aula</span><span><i class="j"></i>já concluída</span>':''}<span><i class="fds"></i>fim de semana</span><span><i class="fer"></i>feriado</span><span><i class="int"></i>interrupção letiva</span><span><i class="fct"></i>FPCT</span><span><i class="hjl"></i>hoje</span></div></section>`}
+function cpmBindPlano(v,a){v.querySelectorAll('[data-cpmt]').forEach(b=>b.onclick=()=>{UI.cpmT=b.dataset.cpmt;UI.cpmF='geral';vCProfij()});const f=v.querySelector('#cpm-f');if(f)f.onchange=()=>{UI.cpmF=f.value;vCProfij()};const im=v.querySelector('#cpm-imp');if(im)im.onclick=()=>imprimirVista();cpmBindMatriz(v,a)}
+/* atenção do painel: disciplinas que não chegam ao fim do ano */
+{const _at=cpAtencao;cpAtencao=function(){const L=_at.apply(this,arguments);try{const a=A(),{y}=CP();Object.keys(y.mat||{}).forEach(n=>{cpmCalc(a,n).R.filter(r=>r.est==='bad').forEach(r=>L.push({c:'bad',ic:'clock',t:r.d.nome+' · '+n,s:'Faltam '+(-r.saldo)+' tempo(s) no fim do ano — planear reposições',tab:'matriz'}))})}catch(e){console.warn(e)}return L}}
+
+/* 0.909 · modo de privacidade: sem atividade durante algum tempo, o ecrã fica bloqueado e sem nada visível */
+const PRIV_OPC=[0,2,5,10,15,30,60];
+const privMin=()=>{const v=S.cfg&&S.cfg.privMin;return v==null?10:+v};
+let _privUlt=Date.now(),_privOn=false;
+function privCfgHTML(){const v=privMin();return `<div class="row" style="margin-top:14px;gap:10px;flex-wrap:wrap;align-items:center"><b style="font-weight:600">${ic('shield',15)} Modo de privacidade</b><select id="priv-min" aria-label="Modo de privacidade por inatividade">${PRIV_OPC.map(m=>`<option value="${m}" ${m===v?'selected':''}>${m?'depois de '+m+' min sem atividade':'desligado'}</option>`).join('')}</select></div>
+  <p class="hint">O ecrã fica bloqueado e sem nada visível (nomes, notas, fotografias, janelas abertas). ${S.cfg.pinHash?'Para voltar, pede o código de acesso.':'Defina um código de acesso para que seja preciso o código para voltar.'} Não bloqueia em ecrã inteiro (projeção).</p>`}
+document.addEventListener('change',e=>{if(e.target&&e.target.id==='priv-min'){S.cfg.privMin=+e.target.value;save();toast(S.cfg.privMin?'Modo de privacidade depois de '+S.cfg.privMin+' min':'Modo de privacidade desligado','ok')}});
+function privPodeBloquear(){if(_privOn||!privMin()||typeof SESSAO==='undefined'||!SESSAO)return false;const b=document.body;if(b.classList.contains('login-on')||document.getElementById('nvgate')||document.getElementById('pinlock')||document.getElementById('splash'))return false;if(document.fullscreenElement||document.webkitFullscreenElement)return false;return true}
+function privBloquear(){if(!privPodeBloquear())return;_privOn=true;document.body.classList.add('priv-on');
+  const o=document.createElement('div');o.id='privlock';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','prv-t');
+  o.innerHTML=`<div class="prvb"><span class="prvl">${ic('shield',30)}</span><b id="prv-t">Modo de Privacidade</b><span class="prvs">Bloqueado por inatividade — nada fica visível.</span><button type="button" class="btn pri" id="prv-ok">${S.cfg.pinHash?'Desbloquear com o Código':'Continuar'}</button></div>`;
+  document.body.appendChild(o);const b=o.querySelector('#prv-ok');b.onclick=privDesbloquear;setTimeout(()=>{try{b.focus()}catch(_){}},50);audit('Privacidade','Ecrã bloqueado por inatividade','')}
+let _privA=false;
+async function privDesbloquear(){if(_privA)return;_privA=true;try{if(S.cfg.pinHash){const o=document.getElementById('privlock');if(o)o.classList.add('pin');await pedirPin()}}finally{_privA=false}
+  const o=document.getElementById('privlock');if(o){o.classList.add('fora');setTimeout(()=>o.remove(),180)}document.body.classList.remove('priv-on');_privOn=false;_privUlt=Date.now()}
+{const mexeu=()=>{if(!_privOn)_privUlt=Date.now()};let _mm=0;
+  ['pointerdown','keydown','wheel','touchstart','input','scroll'].forEach(ev=>addEventListener(ev,mexeu,{capture:true,passive:true}));
+  addEventListener('mousemove',()=>{const t=Date.now();if(t-_mm>2000){_mm=t;mexeu()}},{passive:true});
+  const ver=()=>{const m=privMin();if(m&&Date.now()-_privUlt>=m*60000)privBloquear()};
+  setInterval(ver,10000);
+  /* ao voltar à app (separador, iPad acordado) verifica logo, antes de se ver o conteúdo */
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){window.__privH=Date.now()}else ver()});
+  addEventListener('pageshow',ver);addEventListener('focus',ver)}
 
 addEventListener('pageshow',e=>{if(e.persisted)go('inicio')});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-org2]');if(b)mudarOrg(A(),b.dataset.org2);const mz=e.target.closest&&e.target.closest('[data-mzok]');if(mz){const [tid,iid]=mz.dataset.mzok.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=Date.now();saveNow();toast('Matriz de '+i.nome+' marcada como enviada','ok');go(VIEW)}}});

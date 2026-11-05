@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.909
+- Coord. PROFIJ › **Matriz e Ponto de Situação**: matriz curricular por componente (horas → aulas de 45 min, dadas pelo horário e calendário, ajuste/valor manual, diferença, tempos por semana, previsão de conclusão), resumo por professor, FPCT (período, horas possíveis vs. exigidas), CSV e impressão com «O Coordenador do PROFIJ».
+- Coord. PROFIJ › **Planeamento Anual**: grelha mês × dia (geral, por disciplina ou por professor) com feriados, interrupções, FPCT, última aula e dias já concluídos.
+- Importação do **Horário da Turma em PDF** (grelha + legenda sigla → professor + diretor de turma), que cria as disciplinas da matriz.
+- **Entrada mais rápida**: ids dos ficheiros do Drive guardados por conta (`es.gids`), verificação da versão do manifesto lançada logo no arranque; se nada mudou na nuvem, a app abre com 1 pedido e sincroniza o resto em segundo plano; fotografias/anexos depois da barra; 12 partes em paralelo; sem esperas na barra.
+- **Modo de privacidade**: bloqueio por inatividade (10 min por omissão, configurável), ecrã sem nada visível; com código de acesso, pede o código para voltar.
+
 ## 0.908
 - Sincronização mais rápida: 0,5 s após cada alteração, até 4 transferências em paralelo (partes e ficheiros), verificação rápida da versão do manifesto (Google Drive) e intervalo de 10 s.
 - Avisos, aniversários, novidades e janelas só aparecem depois de a barra de sincronização chegar aos 100 %.
