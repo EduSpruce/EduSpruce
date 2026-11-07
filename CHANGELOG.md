@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.915
+- SpruceNote como módulo opcional (S.sn.quadros, migrado de S.jornal.quadros)
+- Início em largura total, colunas vazias recolhidas, grid-auto-flow dense
+- Apagar ano letivo limpa jornal/cprofij/tarefas/avisos desse ano
+- Recomeçar do zero (apagar nuvem + aparelho)
+- Aviso de bloqueador de anúncios
+- Barra lateral, intercalar por turma, conselho por n.º antigo, Esc nos avisos, vários acertos de interface
+
 ## 0.913
 - Coord. PROFIJ: Planeamento Inicial (calculado e fixável) e Pontos de Situação datados com aulas dadas reais, desvio e previsão até ao fim.
 

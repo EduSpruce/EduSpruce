@@ -920,3 +920,11 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `cpmCalc(a, turma, opt)`: `opt.ref` = primeiro dia «futuro» (tudo antes conta como previsto/dado); `opt.dadas` = valores de um ponto. Sem `opt`, usa o último ponto até hoje (`P0`) e soma as aulas do horário desde esse dia (`fonte:'estimativa'`). Cada linha tem `prev` (previstas até à data), `tot` (aulas do horário no ano), `fonte` (horario|ponto|estimativa|manual).
 - `cpmPlanoIni` (ref = início das aulas): planeamento inicial; `M.plano = {em, R:[{id, nome, aulas, tot, fim, saldo}]}` quando fixado.
 - `M.pontos = [{id, data, dadas:{discId:n}, obs}]`; `cpmPontoDlg` (dadas em branco = previstas), `cpmPontoVer` (relatório em `ecraAmplo`, impressão só do relatório com `body.amp-print`).
+
+
+## v0.915
+- SpruceNote: `S.sn.quadros` (migra de `S.jornal.quadros`), `snOn()` = `S.cfg.modSN!==false`, vista `sprucenote` (`vSpruceNote` → `mqVista` em `#sn-c`).
+- `anoLimparTudo(a)` ao apagar o ano: `S.jornal.anos[a.nome]`, `S.cprofij.anos[a.id]`, tarefas/avisos com turma desse ano (cópia no lixo).
+- `nvApagarTudo()`: apaga todos os ficheiros `ef-*` do appDataFolder e o armazenamento local.
+- `bloqDetetar()`: isca de anúncio + pedido ao GIS; janela uma vez por sessão.
+- Início: `.inlay.sem-fav/.sem-side`, `.in-main.ingrid{grid-auto-flow:row dense}`.
