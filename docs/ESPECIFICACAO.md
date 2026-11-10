@@ -992,3 +992,7 @@ apple-touch-icon, favicon e ícones do manifesto (any + maskable) com o logótip
 
 ## v0.931
 nvSyncGate ignorado com prov supabase e dados locais; nvAssist só com gesto do utilizador, senão sbLembrete; semSync; S.cfg.gdFrio; barBtns sem + Ano letivo quando não há ano; .lgemg em fluxo.
+
+
+## v0.932
+Modo só nuvem: shim de localStorage em memória para KEY/NV_CONF/mra.*, IndexedDB desligado, base:null ao abrir, esLimparAparelho, evidências como anexos encriptados, parte loc-mra; esCarregar sem portão; sw.js stale-while-revalidate.

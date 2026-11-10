@@ -2,6 +2,15 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.932
+- Dados só na base de dados (memória + Supabase), migração e limpeza da cópia local
+- Entrada imediata sem ecrã de espera; service worker abre a partir da cópia
+- Sem animações de entrada
+- Contadores a 0 escondidos
+- Código de encriptação: layout
+- Campos de data uniformes
+- Cartão Hoje: padding
+
 ## 0.931
 - Sem ecrã de sincronizar com a base de dados (dados locais + tempo real)
 - Lembrete em vez do assistente ao entrar
