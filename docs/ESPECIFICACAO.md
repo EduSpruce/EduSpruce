@@ -944,3 +944,7 @@ Novos tipos no quadro: comentario (txt, aut, resp[], res), audio (fid), video (u
 
 ## v0.919
 Tema predefinido: sge (migração única _sge919: institucional→sge, logótipo monograma→auto). Verificação rápida da nuvem: GET files/{manifest}?fields=version a cada 1 s (só Google); sincronização completa só quando muda. window.__gsiBloq ativa o início de sessão por redirecionamento. EFEM (efemérides MM-DD) e CITAS no ecrã do código.
+
+
+## v0.920
+MSAI SGE: aluno.msaiSge[ação.categoria.item]={d:{disciplina:dataInício},outra}; reflete-se em aluno.medidas (medSgeAuto). TeacherSchedule: lerTeacherScheduleXlsx/lerTeacherSchedulePdf → mesma estrutura do horário do professor (aulas, naoLetivos, linhas). Perfil: ONDE[competência][patamar] com onde estou e como avançar.

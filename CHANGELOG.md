@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.920
+- Catálogo MSAI do SGE (Data de início · Ação · Disciplina) na ficha e no Quadro MSAI
+- Importação do TeacherSchedule (xlsx e pdf) para O Meu Horário
+- Onde Estou e Como Avançar com patamares, passos e metas
+
 ## 0.919
 - Tema SGE predefinido
 - Sincronização ~1 s e à prova de bloqueadores (início de sessão por redirecionamento automático)
