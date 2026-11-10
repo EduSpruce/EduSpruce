@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.926
+- Ajuda: animações substituídas por gravações só com dados de demonstração (as anteriores mostravam nomes reais)
+
 ## 0.925
 - Base de dados: entrada automática, migração automática do Drive, tempo real
 - Minhas Tarefas: sem moldura dupla nos campos (SGE)

@@ -1,6 +1,6 @@
 {
  "baseline": "EDUSPRUCE_ORIGINAL_BASELINE (v0.923)",
- "baseline_sha256": "710fa7389a4a764c13ca668e90e628d881d766c3fed3e872db21766a6a0157f3",
+ "baseline_sha256": "0bf226fe229a0b251083fd0a66d9c590726bdbc9bb455f54a337022c60c5a17f",
  "ficheiros": [
   {
    "ficheiro": "src/styles/01-estilos.css",
@@ -182,5 +182,7 @@
    "ficheiro": "src/js/app/035-v0-923-ajuda-com-capturas-do-tema-em-uso-m.js",
    "bytes": 3572
   }
- ]
+ ],
+ "baseline_sha256_original": "710fa7389a4a764c13ca668e90e628d881d766c3fed3e872db21766a6a0157f3",
+ "nota_privacidade": "10 nov 2026: as animações da Ajuda foram substituídas por outras gravadas só com a demonstração (as originais mostravam nomes reais). A referência passa a ser esta versão sem dados reais."
 }

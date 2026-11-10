@@ -968,3 +968,7 @@ Sincronização com a Base de Dados EduSpruce (Supabase/PostgreSQL na UE, RLS po
 
 ## v0.925
 Sincronização automática (Supabase): sessão automática com login_hint, migração do Google Drive com base:null, canal de tempo real na tabela eduspruce_sinal (trigger nas partes). Realce da barra lateral só com .hov (pointer real). #view[data-vista].
+
+
+## v0.926
+Animações da Ajuda (gifs-json) regeneradas a partir da demonstração; verificação por OCR sem nomes fora da lista da demonstração.
