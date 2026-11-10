@@ -2,6 +2,15 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.916
+- SpruceNote do Jornal (quadros próprios do jornal)
+- Logótipo animado configurável
+- Zoom e modos de página nos relatórios
+- Ecrã do código por tema, responsivo
+- Caixote do lixo nas fotografias
+- Correções no tema SGE e no gráfico de distribuição
+- Página de apresentação em landing/ (também na raiz de eduspruce.app)
+
 ## 0.915
 - SpruceNote como módulo opcional (S.sn.quadros, migrado de S.jornal.quadros)
 - Início em largura total, colunas vazias recolhidas, grid-auto-flow dense

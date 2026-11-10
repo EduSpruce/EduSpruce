@@ -928,3 +928,7 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - `nvApagarTudo()`: apaga todos os ficheiros `ef-*` do appDataFolder e o armazenamento local.
 - `bloqDetetar()`: isca de anúncio + pedido ao GIS; janela uma vez por sessão.
 - Início: `.inlay.sem-fav/.sem-side`, `.in-main.ingrid{grid-auto-flow:row dense}`.
+
+
+## v0.916
+SpruceNote do Jornal (S.snj, UI.mqCtx); logótipo animado (S.cfg.logoAnim, LGA); zoom nas folhas A4 (UI.zm); PIN com variáveis --pin-* por tema; fotografias com .phdel; nvRedirect trata /app/ como raiz (eduspruce.app); página de apresentação em landing/.
