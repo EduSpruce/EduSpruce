@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.931
+- Sem ecrã de sincronizar com a base de dados (dados locais + tempo real)
+- Lembrete em vez do assistente ao entrar
+- Opção Não Sincronizar
+- Estado da cópia fria partilhado entre aparelhos
+- Sem botão repetido de ano letivo
+- Padding do botão Administrador no ecrã de entrada
+
 ## 0.930
 - Ícone da app (Mac, iPad, iPhone, Chrome) com o logótipo SGE
 

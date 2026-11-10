@@ -988,3 +988,7 @@ sbContasSincronizar pára após 42501/PGRST na sessão.
 
 ## v0.930
 apple-touch-icon, favicon e ícones do manifesto (any + maskable) com o logótipo SGE; theme-color #1b93c6.
+
+
+## v0.931
+nvSyncGate ignorado com prov supabase e dados locais; nvAssist só com gesto do utilizador, senão sbLembrete; semSync; S.cfg.gdFrio; barBtns sem + Ano letivo quando não há ano; .lgemg em fluxo.
