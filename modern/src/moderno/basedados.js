@@ -49,6 +49,17 @@ try{const q=new URLSearchParams(location.search),h=new URLSearchParams(location.
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&SESSAO&&nvL().prov==='supabase')setTimeout(sbPuxar,300)});
   addEventListener('online',()=>{if(SESSAO)setTimeout(sbVerificar,800)})}
 
+
+/* janela de progresso: título, barra, percentagem, «x de y» e tempo que falta */
+function esProgresso(tit,feito,total,sub,t0){let o=$('#ocup');if(!o){o=document.createElement('div');o.id='ocup';o.setAttribute('role','status');document.body.appendChild(o)}
+  const pc=total?Math.round(feito/total*100):0;let falta='';if(t0&&feito>2&&feito<total){const s=Math.round((Date.now()-t0)/feito*(total-feito)/1000);falta=s<60?`falta${s===1?'':'m'} ~${Math.max(1,s)} s`:`faltam ~${Math.round(s/60)} min`}
+  if(!o.querySelector('.esprg')){o.innerHTML=`<div class="ocb esprg"><div class="esph">${ic('cloud',18)}<b class="espt"></b></div><div class="espb" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i></i></div><div class="espn"><b class="espp"></b><span class="espx"></span><span class="sp1"></span><span class="espf"></span></div><p class="esps"></p></div>`}
+  o.classList.add('on');o.querySelector('.espt').textContent=tit;o.querySelector('.espb i').style.width=pc+'%';o.querySelector('.espb').setAttribute('aria-valuenow',pc);
+  o.querySelector('.espp').textContent=pc+'%';o.querySelector('.espx').textContent=`${feito} de ${total} partes`;o.querySelector('.espf').textContent=falta;o.querySelector('.esps').textContent=sub||''}
+(()=>{const st=document.createElement('style');st.textContent=`#ocup .esprg{min-width:min(440px,86vw);text-align:left;align-items:stretch}#ocup .esprg>*{width:100%;align-self:stretch}.esprg .esph{justify-content:flex-start;display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--acc,#1b93c6)}.esph b{color:var(--ink,#222);font-size:17px}
+.esprg .espb{display:block;height:10px;border-radius:99px;background:color-mix(in srgb,var(--mut,#777) 18%,transparent);overflow:hidden}.espb i{display:block;height:100%;width:0;background:var(--acc,#1b93c6);border-radius:inherit;transition:width .25s ease}
+.espn{display:flex;align-items:baseline;gap:8px;margin-top:10px;font-size:14px}.espn b{font-size:18px;font-variant-numeric:tabular-nums}.espx,.espf{color:var(--mut,#666);font-variant-numeric:tabular-nums}.esps{margin:8px 0 0;font-size:13px;color:var(--mut,#666)}
+body.est-sge .espb,body.est-sge .espb i{border-radius:0}`;document.head.appendChild(st)})();
 /* ===== Google Drive como cópia fria (opcional): a base de dados é o sítio dos dados; o Drive guarda, se quiser, uma cópia encriptada ===== */
 const gdFrio=()=>nvL().gdFrio||{};
 async function gdTokenOk(interativo){try{await gsToken(interativo?true:'silencioso');return true}catch(_){return false}}
@@ -57,13 +68,14 @@ async function gdCopiar(interativo){const L=nvL();if(L.prov!=='supabase'||!(L.k|
   if(interativo)ocupado('A preparar a cópia…');try{await nvSincronizar(false)}catch(_){}
   if(!(await gdTokenOk(interativo))){if(interativo){livre();toast('Não foi possível ligar ao Google Drive.','erro')}return}
   const bd=await PROV.supabase.lista();const N=Object.keys(bd);if(!bd[NV_PREF+'manifest.json'])throw new Error('a base de dados ainda não tem dados');
-  const G=PROV.google;const m=await G._mapa(true);let n=0;const H={...(gdFrio().h||{})};
-  await nvPool(N,4,async k=>{const t=await PROV.supabase.ler(k);if(t==null)return;const hh=nvHash(t);if(m[k]&&H[k]===hh)return;await G.escrever(k,t);H[k]=hh;n++;if(interativo)ocupado('A copiar para o Google Drive… '+n)});
+  const G=PROV.google;const m=await G._mapa(true);let n=0,feito=0;const H={...(gdFrio().h||{})};const t0=Date.now();
+  if(interativo)esProgresso('Cópia no Google Drive',0,N.length,'A comparar com a cópia anterior…');
+  await nvPool(N,4,async k=>{try{const t=await PROV.supabase.ler(k);if(t==null)return;const hh=nvHash(t);if(m[k]&&H[k]===hh)return;await G.escrever(k,t);H[k]=hh;n++}finally{feito++;if(interativo)esProgresso('Cópia no Google Drive',feito,N.length,n?`${n} parte${n>1?'s':''} atualizada${n>1?'s':''} · ${feito-n} já estava${feito-n===1?'':'m'} em dia`:'A comparar com a cópia anterior…',t0)}});
   Object.keys(H).forEach(k=>{if(!bd[k])delete H[k]});
   /* espelho exato: tira do Drive o que já não existe na base de dados */
   const sobra=Object.keys(m).filter(k=>k.startsWith(NV_PREF)&&!bd[k]);await nvPool(sobra,4,async k=>{try{await G.apagar(k)}catch(_){}});
   nvSet({gdFrio:{...gdFrio(),ultima:Date.now(),n:N.length,h:H}});G._ids=null;try{audit('Sincronização','Cópia fria no Google Drive',N.length+' partes')}catch(_){}
-  if(interativo)toast('Cópia guardada no Google Drive ('+N.length+' partes, encriptadas).','ok');sbRedesenhar()}
+  if(interativo)toast(n?`Cópia guardada no Google Drive: ${n} parte${n>1?'s':''} atualizada${n>1?'s':''} de ${N.length} (encriptadas).`:`A cópia no Google Drive já estava em dia (${N.length} partes).`,'ok');sbRedesenhar()}
   catch(e){if(interativo)toast('Cópia no Google Drive: '+e.message,'erro');else console.warn('[EduSpruce] cópia fria:',e.message)}
   finally{gdCopiar._ocup=false;if(interativo)livre()}}
 async function gdApagar(){const L=nvL();if(L.prov!=='supabase')return toast('Só disponível com a Base de Dados EduSpruce escolhida.','erro');
