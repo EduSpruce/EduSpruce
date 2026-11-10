@@ -984,3 +984,7 @@ calcMostrar (registo de cada chk), cartaoTestePopups redesenhado, esProgresso pa
 
 ## v0.929
 sbContasSincronizar pára após 42501/PGRST na sessão.
+
+
+## v0.930
+apple-touch-icon, favicon e ícones do manifesto (any + maskable) com o logótipo SGE; theme-color #1b93c6.

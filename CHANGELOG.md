@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.930
+- Ícone da app (Mac, iPad, iPhone, Chrome) com o logótipo SGE
+
 ## 0.929
 - Contas na base de dados: sem tentativas repetidas quando o script SQL falta
 
