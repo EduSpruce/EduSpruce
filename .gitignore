@@ -21,3 +21,4 @@ exportacoes/
 *.pdf
 !docs/**/*.pdf
 !manual/*.pdf
+!supabase-config.json
