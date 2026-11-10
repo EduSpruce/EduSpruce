@@ -15,7 +15,7 @@ async function sbLigar(silencioso){const p=await sbObter();const {data}=await p.
 let _sbCanal=null,_sbOcup=false,_sbAviso=0;
 function sbPuxar(){const L=nvL();if(L.prov!=='supabase'||!(L.k||_nvK)||document.getElementById('nvgate'))return;clearTimeout(sbPuxar._t);sbPuxar._t=setTimeout(()=>{nvSincronizar(false).then(()=>{try{nvBadge()}catch(_){}}).catch(()=>{})},150)}
 function sbRedesenhar(){try{nvBadge()}catch(_){}try{const c=$('#nv-card');if(c&&typeof nvPainel==='function'){const d=document.createElement('div');d.innerHTML=nvPainel();c.replaceWith(d.firstElementChild);bindNvPainel()}}catch(_){}}
-async function sbVerificar(){if(_sbOcup)return;_sbOcup=true;try{const p=await sbObter();const {data}=await p.cliente.auth.getSession();const ses=data&&data.session;const em=sbEmailApp();
+async function sbVerificar(){if(_sbOcup||nvL().semSync)return;_sbOcup=true;try{const p=await sbObter();const {data}=await p.cliente.auth.getSession();const ses=data&&data.session;const em=sbEmailApp();
   if(!ses){if(nvL().sb)nvSet({sb:0});
     /* entra sozinho com a mesma conta Google (uma vez por separador, para nunca ficar em ciclo) */
     let ja='';try{ja=sessionStorage.getItem('es.sbauto')||''}catch(_){}
@@ -33,8 +33,7 @@ async function sbVerificar(){if(_sbOcup)return;_sbOcup=true;try{const p=await sb
   else if(L.prov==='supabase'&&chave)sbPuxar();
   else{/* aparelho novo: a base de dados passa a ser o sítio dos dados; falta só o código de encriptação (uma vez) */
     if(L.prov!=='supabase')nvSet({prov:'supabase',base:null,mod:{},erro:'',renovar:false});
-    let ped='';try{ped=sessionStorage.getItem('es.sbpw')||''}catch(_){}
-    if(!ped){try{sessionStorage.setItem('es.sbpw','1')}catch(_){}setTimeout(()=>{try{UI.defTab='sync';go('definicoes');toast('Escreva o seu código de encriptação para receber os dados (só neste aparelho, uma vez).','ok');setTimeout(()=>{const i=$('#nv2-p1');if(i)i.focus()},400)}catch(_){}},300)}
+    setTimeout(()=>{try{sbLembrete()}catch(_){}},600);
     sbRedesenhar()}}
   catch(e){console.warn('[EduSpruce] base de dados:',e.message)}finally{_sbOcup=false}}
 
@@ -61,7 +60,9 @@ function esProgresso(tit,feito,total,sub,t0){let o=$('#ocup');if(!o){o=document.
 .espn{display:flex;align-items:baseline;gap:8px;margin-top:10px;font-size:14px}.espn b{font-size:18px;font-variant-numeric:tabular-nums}.espx,.espf{color:var(--mut,#666);font-variant-numeric:tabular-nums}.esps{margin:8px 0 0;font-size:13px;color:var(--mut,#666)}
 body.est-sge .espb,body.est-sge .espb i{border-radius:0}`;document.head.appendChild(st)})();
 /* ===== Google Drive como cópia fria (opcional): a base de dados é o sítio dos dados; o Drive guarda, se quiser, uma cópia encriptada ===== */
-const gdFrio=()=>nvL().gdFrio||{};
+/* o estado da cópia (ligada, última cópia, n.º de partes) vai com os dados — vê-se igual em todos os aparelhos; os resumos (hashes) ficam em cada aparelho */
+const gdFrio=()=>{let c={};try{c=(S.cfg&&S.cfg.gdFrio)||{}}catch(_){}const l=nvL().gdFrio||{};return {auto:c.auto!=null?c.auto:!!l.auto,ultima:Math.max(c.ultima||0,l.ultima||0),n:c.n||l.n||0,h:nvL().gdFrioH||l.h||{}}};
+const gdFrioSet=o=>{const x={...gdFrio(),...o};try{S.cfg.gdFrio={auto:!!x.auto,ultima:x.ultima||0,n:x.n||0};save()}catch(_){}nvSet({gdFrioH:x.h||{},gdFrio:null})};
 async function gdTokenOk(interativo){try{await gsToken(interativo?true:'silencioso');return true}catch(_){return false}}
 async function gdCopiar(interativo){const L=nvL();if(L.prov!=='supabase'||!(L.k||_nvK))return interativo&&toast('Só disponível com a Base de Dados EduSpruce e o código de encriptação.','erro');
   if(gdCopiar._ocup)return;gdCopiar._ocup=true;try{
@@ -74,7 +75,7 @@ async function gdCopiar(interativo){const L=nvL();if(L.prov!=='supabase'||!(L.k|
   Object.keys(H).forEach(k=>{if(!bd[k])delete H[k]});
   /* espelho exato: tira do Drive o que já não existe na base de dados */
   const sobra=Object.keys(m).filter(k=>k.startsWith(NV_PREF)&&!bd[k]);await nvPool(sobra,4,async k=>{try{await G.apagar(k)}catch(_){}});
-  nvSet({gdFrio:{...gdFrio(),ultima:Date.now(),n:N.length,h:H}});G._ids=null;try{audit('Sincronização','Cópia fria no Google Drive',N.length+' partes')}catch(_){}
+  gdFrioSet({ultima:Date.now(),n:N.length,h:H});G._ids=null;try{audit('Sincronização','Cópia fria no Google Drive',N.length+' partes')}catch(_){}
   if(interativo)toast(n?`Cópia guardada no Google Drive: ${n} parte${n>1?'s':''} atualizada${n>1?'s':''} de ${N.length} (encriptadas).`:`A cópia no Google Drive já estava em dia (${N.length} partes).`,'ok');sbRedesenhar()}
   catch(e){if(interativo)toast('Cópia no Google Drive: '+e.message,'erro');else console.warn('[EduSpruce] cópia fria:',e.message)}
   finally{gdCopiar._ocup=false;if(interativo)livre()}}
@@ -84,11 +85,11 @@ async function gdApagar(){const L=nvL();if(L.prov!=='supabase')return toast('Só
   const nb=Object.keys(bd).length;if(!bd[NV_PREF+'manifest.json']||nb<2)return toast('A base de dados ainda não tem os seus dados. Nada foi apagado.','erro');
   if(nvL().erro||Object.keys(nvL().mod||{}).length)return toast('Há alterações por enviar para a base de dados. Tente daqui a uns segundos.','erro');
   ocupado('A ligar ao Google Drive…');let m;try{await gsToken(true);m=await PROV.google._mapa(true)}catch(e){livre();return toast('Google Drive: '+e.message,'erro')}livre();
-  const N=Object.keys(m||{}).filter(k=>k.startsWith(NV_PREF));if(!N.length){nvSet({gdFrio:{...gdFrio(),auto:false,ultima:0,n:0}});sbRedesenhar();return toast('O Google Drive já não tem dados da EduSpruce.','ok')}
+  const N=Object.keys(m||{}).filter(k=>k.startsWith(NV_PREF));if(!N.length){gdFrioSet({auto:false,ultima:0,n:0});sbRedesenhar();return toast('O Google Drive já não tem dados da EduSpruce.','ok')}
   const w=(prompt(`Vai apagar ${N.length} ficheiro${N.length>1?'s':''} da EduSpruce do seu Google Drive (pasta privada da app).\n\nOs dados ficam só na Base de Dados EduSpruce (${nb} partes, confirmadas agora). A cópia diária fica desligada. Não é possível desfazer.\n\nPara confirmar, escreva APAGAR`)||'').trim().toUpperCase();
   if(w!=='APAGAR')return toast('Nada foi apagado.');
   ocupado('A apagar do Google Drive…');let ok=0,f=0;try{await nvPool(N,6,async n=>{try{await PROV.google.apagar(n);ok++}catch(_){f++}})}finally{livre()}
-  PROV.google._ids=null;nvSet({gdFrio:{auto:false,ultima:0,n:0,h:{}}});try{localStorage.removeItem(NV_KEEP)}catch(_){}try{audit('Sincronização','Dados apagados do Google Drive',ok+' ficheiros')}catch(_){}
+  PROV.google._ids=null;gdFrioSet({auto:false,ultima:0,n:0,h:{}});try{localStorage.removeItem(NV_KEEP)}catch(_){}try{audit('Sincronização','Dados apagados do Google Drive',ok+' ficheiros')}catch(_){}
   toast(f?`Apagados ${ok}; ${f} não foi possível apagar — tente outra vez.`:`Google Drive limpo: ${ok} ficheiro${ok>1?'s':''} apagado${ok>1?'s':''}. Os dados estão na base de dados.`,f?'erro':'ok');sbRedesenhar()}
 /* cópia diária automática (só se estiver ligada): no máximo uma vez por dia, em silêncio */
 setInterval(()=>{try{const L=nvL(),F=gdFrio();if(SESSAO&&L.prov==='supabase'&&F.auto&&(L.k||_nvK)&&navigator.onLine&&document.visibilityState==='visible'&&Date.now()-(F.ultima||0)>864e5)gdCopiar(false)}catch(_){}},60000);
@@ -97,12 +98,12 @@ setInterval(()=>{try{const L=nvL(),F=gdFrio();if(SESSAO&&L.prov==='supabase'&&F.
     const q=F.ultima?new Date(F.ultima).toLocaleString('pt-PT',{dateStyle:'short',timeStyle:'short'}):'';
     s.innerHTML=`<div class="nvsh"><h3>Cópia no Google Drive (opcional)</h3><p>Os seus dados vivem na base de dados. Se quiser, o Google Drive guarda uma cópia encriptada, só de reserva — nunca é usada para sincronizar.</p></div>
       <div class="nvsb"><label class="chk"><input type="checkbox" id="nv-gdauto" ${F.auto?'checked':''}> Guardar uma cópia por dia, automaticamente</label>
-      <p class="hint" style="margin:6px 0 10px">${q?`Última cópia: <b>${esc(q)}</b> · ${F.n||0} partes`:'Ainda não há cópia no Google Drive.'}</p>
+      <p class="hint" style="margin:6px 0 10px">${q?`Última cópia: <b>${esc(q)}</b> · ${F.n||0} partes`:'Ainda não foi feita nenhuma cópia a partir da base de dados. (O Google Drive pode ter ainda os dados da sincronização antiga — pode apagá-los aqui.)'}</p>
       <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn" id="nv-gdcp">${ic('upload',15)} Guardar Cópia Agora</button><button type="button" class="btn dng" id="nv-gdx">${ic('trash',15)} Apagar os Dados do Google Drive</button></div>
       <p class="hint" style="margin:8px 0 0">Antes de apagar, a app confirma que a base de dados tem tudo e pede para escrever APAGAR.</p></div>`;
     const card=c.querySelector('.card:not(.nvhero)')||c;card.appendChild(s);
     s.querySelector('#nv-gdcp').onclick=()=>gdCopiar(true);s.querySelector('#nv-gdx').onclick=gdApagar;
-    s.querySelector('#nv-gdauto').onchange=e=>{nvSet({gdFrio:{...gdFrio(),auto:e.target.checked}});toast(e.target.checked?'Cópia diária no Google Drive ligada.':'Cópia diária desligada. A cópia que já existe fica no Drive até a apagar.','ok');if(e.target.checked&&!gdFrio().ultima)gdCopiar(true)}}}catch(e){console.warn(e)}return r}}
+    s.querySelector('#nv-gdauto').onchange=e=>{gdFrioSet({auto:e.target.checked});toast(e.target.checked?'Cópia diária no Google Drive ligada.':'Cópia diária desligada. A cópia que já existe fica no Drive até a apagar.','ok');if(e.target.checked&&!gdFrio().ultima)gdCopiar(true)}}}catch(e){console.warn(e)}return r}}
 /* depois de passar para a base de dados, o ecrã «A sincronizar» antigo (do Google Drive) não fica preso */
 function sbFecharPortao(){try{const g=document.getElementById('nvgate');if(g&&nvL().prov==='supabase'){const b=[...g.querySelectorAll('[data-g]')].find(x=>/Continuar/.test(x.textContent));if(b)b.click();else if(g.classList.contains('erro'))g.remove()}}catch(_){}}
 
@@ -122,3 +123,35 @@ async function sbContasSincronizar(forcar){try{if(!SESSAO||SESSAO.papel!=='admin
 setInterval(()=>sbContasSincronizar(false),15000);
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#ac-add,#ac-col,[data-acdel],[data-acpp],#view select');if(b&&VIEW==='definicoes')setTimeout(()=>sbContasSincronizar(true),900)},true);
 document.addEventListener('change',e=>{if(VIEW==='definicoes'&&e.target.closest&&e.target.closest('.card'))setTimeout(()=>sbContasSincronizar(false),900)},true);
+
+/* ===== abrir como uma app normal: com a base de dados e dados neste aparelho, nada de ecrã «A sincronizar» =====
+   mostra logo os dados deste aparelho e atualiza em segundo plano (tempo real); o ecrã de espera só aparece num aparelho novo, sem dados */
+{const _sg=nvSyncGate;nvSyncGate=async function(){try{const L=nvL();const temDados=S&&Array.isArray(S.anos)&&S.anos.length>0;
+  if(L.prov==='supabase'&&temDados&&(L.k||_nvK)){const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}setTimeout(sbPuxar,400);return}}catch(_){}return _sg.apply(this,arguments)}}
+
+/* ===== sem perguntas ao entrar: um lembrete discreto em vez do assistente; e a opção «Não Sincronizar» ===== */
+let _gesto=0;['pointerdown','keydown'].forEach(t=>addEventListener(t,e=>{if(e.isTrusted)_gesto=Date.now()},true));
+{const _as=nvAssist;nvAssist=function(forcar){/* só abre o assistente quando a pessoa o pede (toque/clique); ao entrar, mostra apenas o lembrete */
+  if(Date.now()-_gesto<1500)return _as.apply(this,arguments);try{sbLembrete()}catch(_){}}}
+function sbNaoSincronizar(){nvSet({semSync:true,prov:'',base:null,mod:{},erro:'',renovar:false});try{_nvK=null}catch(_){}
+  $$('dialog.nvas').forEach(d=>{try{d.close()}catch(_){}d.remove()});const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');
+  const l=document.getElementById('sblemb');if(l)l.remove();try{nvBadge()}catch(_){}try{audit('Sincronização','Não sincronizar neste aparelho','')}catch(_){}
+  toast('Sem sincronização neste aparelho: os dados ficam só aqui. Pode ativar em Definições › Sincronização.','ok');sbRedesenhar()}
+function sbAtivarSync(){nvSet({semSync:false,prov:'supabase',base:null,mod:{},erro:''});const l=document.getElementById('sblemb');if(l)l.remove();
+  UI.defTab='sync';go('definicoes');setTimeout(()=>{sbVerificar();const i=$('#nv2-p1');if(i)i.focus()},400)}
+function sbLembrete(){try{const L=nvL();if(!SESSAO||L.semSync||(L.k||_nvK)||document.getElementById('sblemb')||document.body.classList.contains('login-on'))return;
+  let vis='';try{vis=sessionStorage.getItem('es.sblemb')||''}catch(_){}if(vis)return;
+  const d=document.createElement('div');d.id='sblemb';d.setAttribute('role','status');
+  d.innerHTML=`<span class="sbli">${ic('cloud',18)}</span><div class="sblt"><b>Sincronização por ativar</b><span>Para ter os mesmos dados no computador, no iPad e no iPhone, escreva o seu código de encriptação.</span></div><div class="sbla"><button type="button" class="btn pri sm" id="sbl-at">Ativar</button><button type="button" class="btn sm" id="sbl-no">Não Sincronizar</button><button type="button" class="btn sm ico" id="sbl-x" aria-label="Fechar">${ic('x',14)}</button></div>`;
+  document.body.appendChild(d);d.querySelector('#sbl-at').onclick=sbAtivarSync;d.querySelector('#sbl-no').onclick=sbNaoSincronizar;
+  d.querySelector('#sbl-x').onclick=()=>{try{sessionStorage.setItem('es.sblemb','1')}catch(_){}d.remove()}}catch(e){console.warn(e)}}
+/* o assistente (quando a pessoa o abre) e o painel também têm «Não Sincronizar»; com a sincronização desligada, o painel mostra como voltar a ligar */
+setInterval(()=>{const d=$('dialog.nvas');if(d&&!d.querySelector('#nvas-nosync')){const f=d.querySelector('footer');if(f){const b=document.createElement('button');b.type='button';b.className='btn';b.id='nvas-nosync';b.textContent='Não Sincronizar';b.onclick=e=>{e.preventDefault();sbNaoSincronizar()};f.insertBefore(b,f.firstChild)}}},500);
+{const _bP=bindNvPainel;bindNvPainel=function(){const r=_bP.apply(this,arguments);try{const c=$('#nv-card');const L=nvL();if(!c)return r;
+  const o=c.querySelector('.nvobr');if(o)o.remove();
+  if(L.semSync&&!c.querySelector('#nv-semsync')){const s=document.createElement('div');s.id='nv-semsync';s.className='alert';s.innerHTML=`${ic('info',16)} <span><b>Sincronização desligada neste aparelho.</b> Os dados ficam só aqui (não vão para a base de dados nem para os outros aparelhos).</span> <button type="button" class="btn pri sm" id="nv-ssat">Ativar Sincronização</button>`;c.insertBefore(s,c.firstChild);s.querySelector('#nv-ssat').onclick=sbAtivarSync}
+  else if(!L.semSync&&L.prov&&!c.querySelector('#nv-ssno')){const card=c.querySelector('.card:not(.nvhero)')||c;const s=document.createElement('section');s.className='nvs';s.innerHTML=`<div class="nvsh"><h3>Não Sincronizar</h3><p>Usar a app só neste aparelho, mesmo com a conta Google. Os dados deixam de ir para a base de dados.</p></div><div class="nvsb"><button type="button" class="btn" id="nv-ssno">${ic('x',15)} Não Sincronizar neste Aparelho</button></div>`;card.appendChild(s);
+    s.querySelector('#nv-ssno').onclick=()=>{if(confirm('Deixar de sincronizar neste aparelho?\n\nOs dados ficam só aqui. Os outros aparelhos e a base de dados não recebem as alterações feitas aqui.'))sbNaoSincronizar()}}}catch(e){console.warn(e)}return r}}
+(()=>{const st=document.createElement('style');st.textContent=`#sblemb{position:fixed;left:12px;right:12px;margin:0 auto;bottom:max(16px,env(safe-area-inset-bottom));z-index:9000;max-width:680px;box-sizing:border-box;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 14px;background:var(--panel,#fff);color:var(--ink,#222);border:1px solid var(--line,#ddd);border-left:4px solid var(--acc,#1b93c6);border-radius:12px;box-shadow:0 14px 40px -12px rgba(0,0,0,.35);animation:egUp .35s ease both}
+#sblemb .sbli{color:var(--acc,#1b93c6);display:flex}#sblemb .sblt{flex:1 1 260px;min-width:0}#sblemb .sblt b{display:block;font-size:14.5px}#sblemb .sblt span{display:block;font-size:13px;color:var(--mut,#666);line-height:1.35}
+#sblemb .sbla{display:flex;gap:6px;flex-wrap:wrap}body.est-sge #sblemb{border-radius:0}#nv-semsync{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}#nv-semsync span{flex:1 1 260px}`;document.head.appendChild(st)})();
