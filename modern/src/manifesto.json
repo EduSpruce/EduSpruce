@@ -1,0 +1,186 @@
+{
+ "baseline": "EDUSPRUCE_ORIGINAL_BASELINE (v0.923)",
+ "baseline_sha256": "710fa7389a4a764c13ca668e90e628d881d766c3fed3e872db21766a6a0157f3",
+ "ficheiros": [
+  {
+   "ficheiro": "src/styles/01-estilos.css",
+   "bytes": 428407
+  },
+  {
+   "ficheiro": "src/styles/02-estilos.css",
+   "bytes": 89103
+  },
+  {
+   "ficheiro": "src/js/boot/01-arranque.js",
+   "bytes": 101
+  },
+  {
+   "ficheiro": "src/js/boot/02-arranque.js",
+   "bytes": 402
+  },
+  {
+   "ficheiro": "src/js/boot/03-arranque.js",
+   "bytes": 433
+  },
+  {
+   "ficheiro": "src/js/boot/argon2-lib.js",
+   "bytes": 29478
+  },
+  {
+   "ficheiro": "src/data/gifs-json.json",
+   "bytes": 2667425
+  },
+  {
+   "ficheiro": "src/data/pdfgz-lib.b64",
+   "bytes": 118692
+  },
+  {
+   "ficheiro": "src/data/mragz.b64",
+   "bytes": 97392
+  },
+  {
+   "ficheiro": "src/data/pdfgz-wk.b64",
+   "bytes": 388060
+  },
+  {
+   "ficheiro": "src/js/app/001-catalogo-de-disciplinas-ensino-regular.js",
+   "bytes": 63227
+  },
+  {
+   "ficheiro": "src/js/app/002-ano-letivo-e-turmas.js",
+   "bytes": 73451
+  },
+  {
+   "ficheiro": "src/js/app/003-aulas-previstas-calendario-horario-da-turm.js",
+   "bytes": 66472
+  },
+  {
+   "ficheiro": "src/js/app/004-ficha-da-reuniao-preparacao-ordem-de-traba.js",
+   "bytes": 61477
+  },
+  {
+   "ficheiro": "src/js/app/005-arrastar-tempos-nao-letivos-na-grelha-rato.js",
+   "bytes": 65181
+  },
+  {
+   "ficheiro": "src/js/app/006-instrumentos.js",
+   "bytes": 66365
+  },
+  {
+   "ficheiro": "src/js/app/007-5-inicio-de-sessao-local-microsoft-365-pre.js",
+   "bytes": 74745
+  },
+  {
+   "ficheiro": "src/js/app/008-arranque.js",
+   "bytes": 125173
+  },
+  {
+   "ficheiro": "src/js/app/009-visita-guiada.js",
+   "bytes": 73227
+  },
+  {
+   "ficheiro": "src/js/app/010-planta-da-sala-de-aula.js",
+   "bytes": 81087
+  },
+  {
+   "ficheiro": "src/js/app/011-gerador-de-documentos.js",
+   "bytes": 67910
+  },
+  {
+   "ficheiro": "src/js/app/012-v0-35-b-varias-disciplinas-na-mesma-turma-.js",
+   "bytes": 63695
+  },
+  {
+   "ficheiro": "src/js/app/013-filosofia-de-ecras-largos-cartoes-secundar.js",
+   "bytes": 72611
+  },
+  {
+   "ficheiro": "src/js/app/014-biblioteca-pastas-proprias-uma-por-turma-a.js",
+   "bytes": 60988
+  },
+  {
+   "ficheiro": "src/js/app/015-partes.js",
+   "bytes": 66640
+  },
+  {
+   "ficheiro": "src/js/app/016-v0-72-apresentacao-ao-lado-do-ecra-de-entr.js",
+   "bytes": 62241
+  },
+  {
+   "ficheiro": "src/js/app/017-dias-nacionais-e-internacionais.js",
+   "bytes": 63504
+  },
+  {
+   "ficheiro": "src/js/app/018-inicio-versao-simples-versao-geral-painel-.js",
+   "bytes": 85433
+  },
+  {
+   "ficheiro": "src/js/app/019-instrumentos-itens-em-arvore-ate-4-niveis-.js",
+   "bytes": 64567
+  },
+  {
+   "ficheiro": "src/js/app/020-inicio-simples-cartoes-lado-a-lado-redimen.js",
+   "bytes": 66092
+  },
+  {
+   "ficheiro": "src/js/app/021-v0-39-perfis-de-utilizador-e-permissoes.js",
+   "bytes": 554392
+  },
+  {
+   "ficheiro": "src/js/app/022-v0-44-animacoes-subtis.js",
+   "bytes": 60754
+  },
+  {
+   "ficheiro": "src/js/app/023-v0-49-esquema-dos-dados-e-migracoes-contro.js",
+   "bytes": 65188
+  },
+  {
+   "ficheiro": "src/js/app/024-v0-51-bloquear-o-horario.js",
+   "bytes": 64572
+  },
+  {
+   "ficheiro": "src/js/app/025-v0-55-o-meu-horario-tocar-numa-aula-abre-o.js",
+   "bytes": 89598
+  },
+  {
+   "ficheiro": "src/js/app/026-pauta-do-modulo.js",
+   "bytes": 62107
+  },
+  {
+   "ficheiro": "src/js/app/027-avisos.js",
+   "bytes": 68176
+  },
+  {
+   "ficheiro": "src/js/app/028-v0-67-convocatorias-e-atividades-por-e-mai.js",
+   "bytes": 65497
+  },
+  {
+   "ficheiro": "src/js/app/029-5-inicio-no-iphone.js",
+   "bytes": 80421
+  },
+  {
+   "ficheiro": "src/js/app/030-0-995-ao-entrar-barra-de-progresso-0100-e-.js",
+   "bytes": 63865
+  },
+  {
+   "ficheiro": "src/js/app/031-0-909-modo-de-privacidade-sem-atividade-du.js",
+   "bytes": 66415
+  },
+  {
+   "ficheiro": "src/js/app/032-v0-917-avaliacao.js",
+   "bytes": 119055
+  },
+  {
+   "ficheiro": "src/js/app/033-v0-918-sprucenote-e-jornalnote-todos-os-el.js",
+   "bytes": 65480
+  },
+  {
+   "ficheiro": "src/js/app/034-v0-920-horario-do-professor-a-partir-do-te.js",
+   "bytes": 65126
+  },
+  {
+   "ficheiro": "src/js/app/035-v0-923-ajuda-com-capturas-do-tema-em-uso-m.js",
+   "bytes": 3572
+  }
+ ]
+}

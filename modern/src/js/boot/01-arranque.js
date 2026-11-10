@@ -1,0 +1,1 @@
+try{document.documentElement.classList.add("lga-"+(localStorage.getItem("es.lga")||"sge"))}catch(e){}
