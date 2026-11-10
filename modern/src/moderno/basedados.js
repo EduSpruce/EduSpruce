@@ -113,7 +113,7 @@ async function sbContasLista(){const M=new Map();let C=null;try{C=await acCentra
   for(const x of (acLocal().gContas||[])){if(x&&x.email){try{M.set(await acHash(x.email),x.papel||'professor')}catch(_){}}}return M}
 async function sbContasSincronizar(forcar){try{if(!SESSAO||SESSAO.papel!=='admin'||nvL().prov!=='supabase'||!nvL().sb)return;const p=await sbObter();
   const M=await sbContasLista();if(!M||!M.size)return;const assin=[...M].sort().join('|');if(!forcar&&assin===sbContasSincronizar._a)return;
-  const sb=p.cliente;const {data:bd,error}=await sb.from('eduspruce_autorizados').select('h,papel');if(error)return console.warn('[EduSpruce] contas na base de dados:',error.message);
+  if(sbContasSincronizar._parado)return;const sb=p.cliente;const {data:bd,error}=await sb.from('eduspruce_autorizados').select('h,papel');if(error){/* sem o script das contas no Supabase: pára até recarregar, para não encher os registos de erros */if(/42501|PGRST|permission|does not exist/i.test((error.code||'')+' '+error.message))sbContasSincronizar._parado=true;return console.warn('[EduSpruce] contas na base de dados:',error.message)}
   const tem=new Map((bd||[]).map(r=>[r.h,r.papel]));const juntar=[...M].filter(([h,pp])=>tem.get(h)!==pp).map(([h,papel])=>({h,papel}));
   if(juntar.length){const r=await sb.from('eduspruce_autorizados').upsert(juntar,{onConflict:'h'});if(r.error)return console.warn(r.error.message)}
   const tirar=[...tem.keys()].filter(h=>!M.has(h));if(tirar.length){const r=await sb.from('eduspruce_autorizados').delete().in('h',tirar);if(r.error)console.warn(r.error.message)}
