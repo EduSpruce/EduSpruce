@@ -2,6 +2,16 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.917
+- Momento de Avaliação Completo e por domínio (PO ligada na aula seguinte, revisões na anterior)
+- Produção Oral: pares, nomes abreviados, cotação padrão 50
+- Notas possíveis por item (lista na grelha, leitura dos critérios de correção)
+- Vista Ampla nos instrumentos
+- Seletor de datas próprio
+- Logótipos SGE, Clássico (escuro), Claro e Automático
+- JornalNote separado do SpruceNote
+- Política de privacidade atualizada (dados só na nuvem do professor)
+
 ## 0.916
 - SpruceNote do Jornal (quadros próprios do jornal)
 - Logótipo animado configurável

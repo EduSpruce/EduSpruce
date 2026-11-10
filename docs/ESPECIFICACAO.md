@@ -932,3 +932,7 @@ Auditoria automática repetida a todo o código e a todas as secções:
 
 ## v0.916
 SpruceNote do Jornal (S.snj, UI.mqCtx); logótipo animado (S.cfg.logoAnim, LGA); zoom nas folhas A4 (UI.zm); PIN com variáveis --pin-* por tema; fotografias com .phdel; nvRedirect trata /app/ como raiz (eduspruce.app); página de apresentação em landing/.
+
+
+## v0.917
+Momentos: i.momento ('completo'|'dominio'), i.completo, i.poData, i.revData; sumários automáticos (s.auto). Oral: r.par; cfg padrão total 50 com man N4 10/N3 8/N2 6/N1 2 (oralMan50, migração _m50 só sem registos). Itens: it.opc (valores possíveis). UI.instAmp (vista ampla). Seletor de datas: S.cfg.dpNativo=true volta ao do sistema. Logótipos: EF_LOGOS.auto/sge/escuro/claro. JornalNote = S.snj.
