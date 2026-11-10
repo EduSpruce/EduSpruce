@@ -37,6 +37,11 @@ async function sbVerificar(){if(_sbOcup)return;_sbOcup=true;try{const p=await sb
     if(!ped){try{sessionStorage.setItem('es.sbpw','1')}catch(_){}setTimeout(()=>{try{UI.defTab='sync';go('definicoes');toast('Escreva o seu código de encriptação para receber os dados (só neste aparelho, uma vez).','ok');setTimeout(()=>{const i=$('#nv2-p1');if(i)i.focus()},400)}catch(_){}},300)}
     sbRedesenhar()}}
   catch(e){console.warn('[EduSpruce] base de dados:',e.message)}finally{_sbOcup=false}}
+
+/* regresso do Google com erro (ex.: segredo do cliente errado no Supabase): explica e limpa o endereço, sem voltar a tentar sozinho */
+try{const q=new URLSearchParams(location.search),h=new URLSearchParams(location.hash.slice(1));const er=q.get('error_description')||h.get('error_description');
+  if(er&&(q.get('error_code')||h.get('error_code'))){history.replaceState(null,'',location.pathname);try{sessionStorage.setItem('es.sbauto','1')}catch(_){}
+    setTimeout(()=>toast('Não foi possível entrar na base de dados ('+decodeURIComponent(er).replace(/\+/g,' ')+'). Os dados continuam no Google Drive.','erro'),1500)}}catch(_){}
 /* arranque: espera pela sessão da app; depois verifica de novo sempre que fizer falta (palavra-passe definida, volta à app, rede) */
 {let _ok=false;const t=setInterval(()=>{if(_ok)return;if(sbEmailApp()||(SESSAO&&nvL().prov==='supabase')){_ok=true;clearInterval(t);sbVerificar()}},700);
   setInterval(()=>{const L=nvL();if(SESSAO&&L.sb&&L.prov!=='supabase'&&(L.k||_nvK))sbVerificar()},5000);
