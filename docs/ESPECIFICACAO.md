@@ -952,3 +952,7 @@ MSAI SGE: aluno.msaiSge[ação.categoria.item]={d:{disciplina:dataInício},outra
 
 ## v0.921
 Tarefas: S.todo[] com dia (O Meu Dia, ISO do dia), prio 'alta' = importante, prazo, lemb (datetime), lembFeito, rep (d|u|s|m|a), passos[{t,f}], lista (id em S.todoListas[{id,nome,cor}]), nota, turma, ord.
+
+
+## v0.922
+Pautas: CP().y.pautas[turma] (cabeçalho), y.fpct[turma|aluno].det={rel[],ent,cc}, S.cprofij.hist[aluno]={a1,a2,a3:{fsc,fc,ft,fp},cpaf}. Word gerado em OOXML (zipCriar) e PDF (DocPDF) com a mesma composição.

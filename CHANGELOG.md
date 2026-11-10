@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.922
+- Pautas oficiais PROFIJ (FPCT e CFC, final e detalhada) em Word e PDF
+- Cálculo da FPCT, CFA e CFC como nos Excel da escola
+- Importação do histórico/média detalhada (xlsx)
+
 ## 0.921
 - Minhas Tarefas ao estilo do Microsoft To Do (listas, O Meu Dia, Importante, Planeado, passos, lembretes, repetição, notas, listas próprias)
 
