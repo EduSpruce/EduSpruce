@@ -142,16 +142,53 @@ function sbAtivarSync(){nvSet({semSync:false,prov:'supabase',base:null,mod:{},er
 function sbLembrete(){try{const L=nvL();if(!SESSAO||L.semSync||(L.k||_nvK)||document.getElementById('sblemb')||document.body.classList.contains('login-on'))return;
   let vis='';try{vis=sessionStorage.getItem('es.sblemb')||''}catch(_){}if(vis)return;
   const d=document.createElement('div');d.id='sblemb';d.setAttribute('role','status');
-  d.innerHTML=`<span class="sbli">${ic('cloud',18)}</span><div class="sblt"><b>Sincronização por ativar</b><span>Para ter os mesmos dados no computador, no iPad e no iPhone, escreva o seu código de encriptação.</span></div><div class="sbla"><button type="button" class="btn pri sm" id="sbl-at">Ativar</button><button type="button" class="btn sm" id="sbl-no">Não Sincronizar</button><button type="button" class="btn sm ico" id="sbl-x" aria-label="Fechar">${ic('x',14)}</button></div>`;
-  document.body.appendChild(d);d.querySelector('#sbl-at').onclick=sbAtivarSync;d.querySelector('#sbl-no').onclick=sbNaoSincronizar;
+  d.innerHTML=`<span class="sbli">${ic('cloud',18)}</span><div class="sblt"><b>Sincronização por ativar</b><span>Os seus dados vivem na base de dados. Escreva o seu código de encriptação para os abrir neste aparelho — sem ele, o que fizer aqui não fica guardado.</span></div><div class="sbla"><button type="button" class="btn pri sm" id="sbl-at">Ativar</button><button type="button" class="btn sm ico" id="sbl-x" aria-label="Fechar">${ic('x',14)}</button></div>`;
+  document.body.appendChild(d);d.querySelector('#sbl-at').onclick=sbAtivarSync;
   d.querySelector('#sbl-x').onclick=()=>{try{sessionStorage.setItem('es.sblemb','1')}catch(_){}d.remove()}}catch(e){console.warn(e)}}
 /* o assistente (quando a pessoa o abre) e o painel também têm «Não Sincronizar»; com a sincronização desligada, o painel mostra como voltar a ligar */
-setInterval(()=>{const d=$('dialog.nvas');if(d&&!d.querySelector('#nvas-nosync')){const f=d.querySelector('footer');if(f){const b=document.createElement('button');b.type='button';b.className='btn';b.id='nvas-nosync';b.textContent='Não Sincronizar';b.onclick=e=>{e.preventDefault();sbNaoSincronizar()};f.insertBefore(b,f.firstChild)}}},500);
+if(false)setInterval(()=>{const d=$('dialog.nvas');if(d&&!d.querySelector('#nvas-nosync')){const f=d.querySelector('footer');if(f){const b=document.createElement('button');b.type='button';b.className='btn';b.id='nvas-nosync';b.textContent='Não Sincronizar';b.onclick=e=>{e.preventDefault();sbNaoSincronizar()};f.insertBefore(b,f.firstChild)}}},500);
 {const _bP=bindNvPainel;bindNvPainel=function(){const r=_bP.apply(this,arguments);try{const c=$('#nv-card');const L=nvL();if(!c)return r;
   const o=c.querySelector('.nvobr');if(o)o.remove();
   if(L.semSync&&!c.querySelector('#nv-semsync')){const s=document.createElement('div');s.id='nv-semsync';s.className='alert';s.innerHTML=`${ic('info',16)} <span><b>Sincronização desligada neste aparelho.</b> Os dados ficam só aqui (não vão para a base de dados nem para os outros aparelhos).</span> <button type="button" class="btn pri sm" id="nv-ssat">Ativar Sincronização</button>`;c.insertBefore(s,c.firstChild);s.querySelector('#nv-ssat').onclick=sbAtivarSync}
-  else if(!L.semSync&&L.prov&&!c.querySelector('#nv-ssno')){const card=c.querySelector('.card:not(.nvhero)')||c;const s=document.createElement('section');s.className='nvs';s.innerHTML=`<div class="nvsh"><h3>Não Sincronizar</h3><p>Usar a app só neste aparelho, mesmo com a conta Google. Os dados deixam de ir para a base de dados.</p></div><div class="nvsb"><button type="button" class="btn" id="nv-ssno">${ic('x',15)} Não Sincronizar neste Aparelho</button></div>`;card.appendChild(s);
+  else if(false){const card=c.querySelector('.card:not(.nvhero)')||c;const s=document.createElement('section');s.className='nvs';s.innerHTML=`<div class="nvsh"><h3>Não Sincronizar</h3><p>Usar a app só neste aparelho, mesmo com a conta Google. Os dados deixam de ir para a base de dados.</p></div><div class="nvsb"><button type="button" class="btn" id="nv-ssno">${ic('x',15)} Não Sincronizar neste Aparelho</button></div>`;card.appendChild(s);
     s.querySelector('#nv-ssno').onclick=()=>{if(confirm('Deixar de sincronizar neste aparelho?\n\nOs dados ficam só aqui. Os outros aparelhos e a base de dados não recebem as alterações feitas aqui.'))sbNaoSincronizar()}}}catch(e){console.warn(e)}return r}}
 (()=>{const st=document.createElement('style');st.textContent=`#sblemb{position:fixed;left:12px;right:12px;margin:0 auto;bottom:max(16px,env(safe-area-inset-bottom));z-index:9000;max-width:680px;box-sizing:border-box;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 14px;background:var(--panel,#fff);color:var(--ink,#222);border:1px solid var(--line,#ddd);border-left:4px solid var(--acc,#1b93c6);border-radius:12px;box-shadow:0 14px 40px -12px rgba(0,0,0,.35);animation:egUp .35s ease both}
 #sblemb .sbli{color:var(--acc,#1b93c6);display:flex}#sblemb .sblt{flex:1 1 260px;min-width:0}#sblemb .sblt b{display:block;font-size:14.5px}#sblemb .sblt span{display:block;font-size:13px;color:var(--mut,#666);line-height:1.35}
 #sblemb .sbla{display:flex;gap:6px;flex-wrap:wrap}body.est-sge #sblemb{border-radius:0}#nv-semsync{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}#nv-semsync span{flex:1 1 260px}`;document.head.appendChild(st)})();
+
+/* ===== dados só na base de dados (sem cópia neste aparelho) ===== */
+if(nvL().semSync)nvSet({semSync:false,prov:nvL().prov||'supabase'});
+/* ficha MRA (antes só neste aparelho): passa a ir com os dados, numa parte própria */
+window.__esMraMud=()=>{clearTimeout(window.__esMraMud._t);window.__esMraMud._t=setTimeout(()=>{try{save()}catch(_){}},400)};
+{const _p=nvPartes;nvPartes=function(){const P=_p.apply(this,arguments);try{const o={};Object.keys(ES_MEM).filter(k=>k.startsWith('mra.')).sort().forEach(k=>o[k]=ES_MEM[k]);if(Object.keys(o).length)P['loc-mra']=o}catch(_){}return P}}
+{const _m=nvMontar;nvMontar=function(P){try{const o=P&&P['loc-mra'];if(o&&typeof o==='object')Object.keys(o).forEach(k=>{if(k.startsWith('mra.'))ES_MEM[k]=String(o[k])})}catch(_){}return _m.apply(this,arguments)}}
+/* evidências (fotografia, áudio, ficheiro por aluno): deixam o IndexedDB e vão encriptadas com os anexos da sincronização */
+const evMetaDe=(t,instId,aid,criar)=>{if(!t)return [];if(criar){t.evMeta=t.evMeta||{};t.evMeta[instId]=t.evMeta[instId]||{};t.evMeta[instId][aid]=t.evMeta[instId][aid]||[]}return ((t.evMeta||{})[instId]||{})[aid]||[]};
+const evParaURL=b=>new Promise((ok,ko)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>ko(r.error);r.readAsDataURL(b)});
+evLista=async function(t,instId,aid){const M=evMetaDe(t,instId,aid);const out=[];for(const m of M){const d=FOTOS['ev-'+m.id];let blob=null;if(d){try{blob=await (await fetch(d)).blob()}catch(_){}}out.push({...m,k:evKey(t,instId,aid),t:t.id,inst:instId,aluno:aid,blob:blob||new Blob([],{type:m.mime||''}),falta:!d})}return out.sort((a,b)=>a.q-b.q)};
+evGuardar=async function(t,instId,aid,blob,nome,tipo){const id=uid()+Math.random().toString(36).slice(2,5);FOTOS['ev-'+id]=await evParaURL(blob);evMetaDe(t,instId,aid,true).push({id,tipo,nome:nome||'',mime:blob.type,tam:blob.size,q:Date.now()});evSetConta(t,instId,aid,evMetaDe(t,instId,aid).length);return id};
+evApagar=async function(t,instId,aid,id){const M=evMetaDe(t,instId,aid,true);const i=M.findIndex(x=>x.id===id);if(i>=0)M.splice(i,1);delete FOTOS['ev-'+id];evSetConta(t,instId,aid,M.length)};
+async function esMigrarEvidencias(){try{if(!indexedDB.databases)return 0;const L=await indexedDB.databases();if(!L.some(d=>d.name===EV_DB))return 0;
+  const recs=await evTx('readonly',st=>new Promise(ok=>{const q=st.getAll();q.onsuccess=()=>ok(q.result||[]);q.onerror=()=>ok([])}));let n=0;
+  for(const r of recs){let t=null;for(const a of S.anos)for(const x of a.turmas)if(x.id===r.t)t=x;if(!t||!r.blob)continue;const M=evMetaDe(t,r.inst,r.aluno,true);if(M.some(m=>m.id===r.id))continue;
+    FOTOS['ev-'+r.id]=await evParaURL(r.blob);M.push({id:r.id,tipo:r.tipo,nome:r.nome||'',mime:r.mime||r.blob.type,tam:r.tam||r.blob.size,q:r.q||Date.now()});evSetConta(t,r.inst,r.aluno,M.length);n++}
+  if(n){save();try{audit('Sincronização','Evidências passadas para a base de dados',n+'')}catch(_){}}return recs.length}catch(e){console.warn('[EduSpruce] evidências:',e);return -1}}
+/* depois da 1.ª sincronização completa com a base de dados, apaga a cópia antiga que ficou no aparelho (estado, cópias, fotografias, evidências) */
+let _esLimpo=false,_esEvMig=false;
+async function esLimparAparelho(){if(_esLimpo)return;const L=nvL();if(L.prov!=='supabase'||Object.keys(L.mod||{}).length||L.erro)return;
+  if(!_esEvMig){_esEvMig=true;const n=await esMigrarEvidencias();if(n>0){setTimeout(()=>{try{nvSincronizar(false)}catch(_){}},300);return}}
+  _esLimpo=true;nvSet({sbOk:true});
+  try{Object.keys(localStorage).forEach(k=>{if(ES_DADOS(k))window.__esLS.ri.call(localStorage,k)})}catch(_){}
+  try{if(IDB){const tx=IDB.transaction(['estado','fotos'],'readwrite');tx.objectStore('estado').clear();tx.objectStore('fotos').clear()}}catch(_){}
+  try{indexedDB.deleteDatabase(EV_DB)}catch(_){}
+  try{localStorage.removeItem('eskeep')}catch(_){}}
+{const _ns=nvSincronizar;nvSincronizar=async function(){const r=await _ns.apply(this,arguments);try{if(r&&nvL().prov==='supabase')setTimeout(esLimparAparelho,200)}catch(_){}return r}}
+/* sair da página com alterações por enviar: avisa (já não há cópia no aparelho) */
+addEventListener('beforeunload',e=>{try{if(nvL().prov==='supabase'&&Object.keys(nvL().mod||{}).length){e.preventDefault();e.returnValue=''}}catch(_){}});
+/* ao abrir: entra logo na app, como uma app normal — os dados chegam da base de dados numa barra fina no topo, sem ecrã de espera */
+async function esCarregar(){if(esCarregar._on)return;esCarregar._on=true;let b=document.getElementById('esbar');if(!b){b=document.createElement('div');b.id='esbar';b.innerHTML='<i></i>';document.body.appendChild(b)}b.className='on';
+  const fim=()=>{b.className='';esCarregar._on=false;try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}setTimeout(()=>{try{mostrarAvisos(false)}catch(_){}},400)};
+  if(!navigator.onLine){fim();toast('Sem internet: os seus dados estão na base de dados. Ligue-se à internet para os abrir.','erro');addEventListener('online',()=>esCarregar(),{once:true});return}
+  try{window.__nvSemFotos=true;const r=await nvSincronizar(false);window.__nvSemFotos=false;if(r){try{go(VIEW)}catch(_){}if(!r.rapida)try{nvFotosFundo()}catch(_){}}else if(nvL().erro)toast('Não foi possível abrir os dados: '+nvL().erro,'erro')}catch(e){window.__nvSemFotos=false;toast(e.message,'erro')}fim()}
+{const _sg=nvSyncGate;nvSyncGate=async function(){try{const L=nvL();if(L.prov==='supabase'){const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');if(L.k||_nvK)return esCarregar();return}}catch(_){}return _sg.apply(this,arguments)}}
+(()=>{const st=document.createElement('style');st.textContent=`#esbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:99999;pointer-events:none;opacity:0;transition:opacity .25s}#esbar.on{opacity:1}#esbar i{display:block;height:100%;width:40%;background:var(--acc,#1b93c6);animation:esbarra 1.1s ease-in-out infinite}@keyframes esbarra{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}`;document.head.appendChild(st)})();
