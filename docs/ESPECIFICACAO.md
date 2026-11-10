@@ -980,3 +980,7 @@ Cópia fria no Google Drive (gdFrio), apagar com confirmação APAGAR após veri
 
 ## v0.928
 calcMostrar (registo de cada chk), cartaoTestePopups redesenhado, esProgresso para a cópia fria, .privrow.
+
+
+## v0.929
+sbContasSincronizar pára após 42501/PGRST na sessão.
