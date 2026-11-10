@@ -1,0 +1,4 @@
+-- PROPOSTA (NÃO APLICAR sem aprovação): tabelas normalizadas em claro (anos, turmas, alunos, instrumentos, classificações…).
+-- Conflito com a regra atual «dados encriptados na conta do professor, sem servidores com dados de alunos»:
+-- guardar alunos em claro numa base de dados exige base legal, acordo com a escola (RGPD) e outra política de privacidade.
+-- Por isso a migração 0001 usa só partes encriptadas; esta proposta fica documentada em docs/SEGURANCA.md para decisão.
