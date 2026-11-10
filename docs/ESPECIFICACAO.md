@@ -964,3 +964,7 @@ Ajuda: AJ_VISTA (tópico → ecrã); imagens em ajuda/<tema>/<ecrã>.webp ao lad
 
 ## v0.924
 Sincronização com a Base de Dados EduSpruce (Supabase/PostgreSQL na UE, RLS por utilizador e contas autorizadas por hash; conteúdo encriptado AES-256-GCM no aparelho). Cores do horário da turma por disciplina (COR_DISC). Gráfico do relatório individual com distribuição uniforme.
+
+
+## v0.925
+Sincronização automática (Supabase): sessão automática com login_hint, migração do Google Drive com base:null, canal de tempo real na tabela eduspruce_sinal (trigger nas partes). Realce da barra lateral só com .hov (pointer real). #view[data-vista].

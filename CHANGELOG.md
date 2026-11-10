@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.925
+- Base de dados: entrada automática, migração automática do Drive, tempo real
+- Minhas Tarefas: sem moldura dupla nos campos (SGE)
+- Barra lateral: realce de hover controlado pelo rato real
+- Reuniões: separadores centrados
+
 ## 0.924
 - Base de dados EduSpruce (Supabase, UE) como fornecedor de sincronização; versão anterior em /old
 - Horário da turma: cores por disciplina bem separadas; estilo SGE
