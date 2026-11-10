@@ -13,7 +13,9 @@ export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'})
   const uid=async()=>{const {data}=await sb.auth.getSession();if(!data||!data.session)throw new Error('Entre na base de dados com a sua conta Google (Definições › Sincronização).');return data.session.user.id};
   const ok=r=>{if(r.error)throw msg(r.error);return r.data};
   return {n:'Base de dados EduSpruce',cliente:sb,
-    async entrarGoogle(){const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname,queryParams:{prompt:'select_account'}}});if(error)throw msg(error)},
+    async entrarGoogle(email){const qp=email?{login_hint:email}:{prompt:'select_account'};const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname,queryParams:qp}});if(error)throw msg(error)},
+    async autorizado(){try{const r=await sb.rpc('eduspruce_autorizado');return r.data===true}catch(_){return false}},
+    tempoReal(uid,cb){try{const c=sb.channel('es-'+uid).on('postgres_changes',{event:'*',schema:'public',table:'eduspruce_sinal',filter:'user_id=eq.'+uid},()=>cb()).subscribe();return c}catch(e){console.warn('[EduSpruce] tempo real indisponível',e);return null}},
     async sair(){await sb.auth.signOut()},
     async lista(){await uid();const o={};let de=0;for(;;){const d=ok(await sb.from(tabela).select('nome,tamanho').order('nome').range(de,de+999));d.forEach(r=>o[r.nome]=r.tamanho);if(d.length<1000)break;de+=1000}return o},
     async ler(nome){await uid();const d=ok(await sb.from(tabela).select('conteudo').eq('nome',nome).maybeSingle());return d?d.conteudo:null},
