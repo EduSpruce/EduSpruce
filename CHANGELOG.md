@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.927
+- Google Drive como cópia fria opcional (manual/diária) e apagar dados do Drive
+- Contas autorizadas sincronizadas com a base de dados (só o administrador)
+- SpruceNote: barra mostra todos os elementos quando cabem
+- Mensagem clara quando a entrada na base de dados falha
+
 ## 0.926
 - Ajuda: animações substituídas por gravações só com dados de demonstração (as anteriores mostravam nomes reais)
 

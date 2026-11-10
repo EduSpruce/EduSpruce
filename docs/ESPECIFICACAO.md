@@ -972,3 +972,7 @@ Sincronização automática (Supabase): sessão automática com login_hint, migr
 
 ## v0.926
 Animações da Ajuda (gifs-json) regeneradas a partir da demonstração; verificação por OCR sem nomes fora da lista da demonstração.
+
+
+## v0.927
+Cópia fria no Google Drive (gdFrio), apagar com confirmação APAGAR após verificar a base de dados; contas autorizadas (hash SHA-256) em eduspruce_autorizados com políticas de administrador; mqAjustarBarra.
