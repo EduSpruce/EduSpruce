@@ -1,0 +1,5 @@
+{
+  "ativo": false,
+  "url": "https://O-SEU-PROJETO.supabase.co",
+  "anonKey": "COLOQUE AQUI A CHAVE PÚBLICA (anon) — NUNCA a service_role"
+}

@@ -2,3 +2,10 @@ node_modules/
 dist/
 tests/saida/
 supabase-config.json
+
+# exceções explícitas (sem dados de alunos): configuração e recursos da própria app
+!package.json
+!package-lock.json
+!supabase-config.example.json
+!src/manifesto.json
+!src/data/gifs-json.json

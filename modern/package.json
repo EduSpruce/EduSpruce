@@ -1,0 +1,19 @@
+{
+  "name": "eduspruce-modernizacao",
+  "private": true,
+  "version": "0.0.0-experimental",
+  "description": "EduSpruce — modernização experimental com equivalência total à baseline (EDUSPRUCE_ORIGINAL_BASELINE).",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "verificar": "node scripts/build.mjs --verificar",
+    "test:visual": "node tests/visual.mjs",
+    "test:calc": "node tests/calculos.mjs",
+    "inventario": "node tests/inventario.mjs",
+    "test": "node scripts/build.mjs --verificar && node tests/calculos.mjs && node tests/visual.mjs"
+  },
+  "devDependencies": {
+    "pixelmatch": "5.3.0",
+    "pngjs": "7.0.0"
+  }
+}
