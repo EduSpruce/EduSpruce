@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.918
+- SpruceNote/JornalNote: comentário, áudio, vídeo, mapa, documento, esboço, tabela, enviar ficheiros, desenho livre
+- Menu ••• com os elementos extra
+- Lixeira com recuperação (30 dias)
+
 ## 0.917
 - Momento de Avaliação Completo e por domínio (PO ligada na aula seguinte, revisões na anterior)
 - Produção Oral: pares, nomes abreviados, cotação padrão 50

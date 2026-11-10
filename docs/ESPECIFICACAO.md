@@ -936,3 +936,7 @@ SpruceNote do Jornal (S.snj, UI.mqCtx); logótipo animado (S.cfg.logoAnim, LGA);
 
 ## v0.917
 Momentos: i.momento ('completo'|'dominio'), i.completo, i.poData, i.revData; sumários automáticos (s.auto). Oral: r.par; cfg padrão total 50 com man N4 10/N3 8/N2 6/N1 2 (oralMan50, migração _m50 só sem registos). Itens: it.opc (valores possíveis). UI.instAmp (vista ampla). Seletor de datas: S.cfg.dpNativo=true volta ao do sistema. Logótipos: EF_LOGOS.auto/sge/escuro/claro. JornalNote = S.snj.
+
+
+## v0.918
+Novos tipos no quadro: comentario (txt, aut, resp[], res), audio (fid), video (url|fid), mapa (lq, z), documento (tit, html), esboco (fid png), tabela (lin[][]), ficheiro (fid, nome, tam, tipo), traco (d, w, h, cor, esp). Lixeira em S.sn.lixo / S.snj.lixo (30 dias; itens, setas e quadros apagados).
