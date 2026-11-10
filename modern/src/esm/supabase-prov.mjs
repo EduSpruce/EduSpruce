@@ -1,7 +1,7 @@
 // Fornecedor de nuvem «Supabase» com a mesma interface dos fornecedores existentes (PROV.google / PROV.onedrive):
 //   lista() → {nome: tamanho} · ler(nome) → texto|null · escrever(nome, texto) · apagar(nome)
 // O texto chega JÁ ENCRIPTADO pela app (AES-256-GCM no aparelho): a base de dados só guarda dados ilegíveis.
-const SB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
+const SB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/+esm';
 export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'}){
   const {createClient}=await import(SB);const sb=createClient(url,anonKey,{auth:{persistSession:true,autoRefreshToken:true}});
   const uid=async()=>{const {data}=await sb.auth.getUser();if(!data||!data.user)throw new Error('Sessão Supabase em falta — entre primeiro.');return data.user.id};

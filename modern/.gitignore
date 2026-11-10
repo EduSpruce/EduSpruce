@@ -1,7 +1,7 @@
 node_modules/
 dist/
 tests/saida/
-supabase-config.json
+# supabase-config.json só tem a chave publicável (pública); a chave secreta nunca entra no repositório
 
 # exceções explícitas (sem dados de alunos): configuração e recursos da própria app
 !package.json
@@ -9,3 +9,4 @@ supabase-config.json
 !supabase-config.example.json
 !src/manifesto.json
 !src/data/gifs-json.json
+!supabase-config.json
