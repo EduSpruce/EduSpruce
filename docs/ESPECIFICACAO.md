@@ -960,3 +960,7 @@ Pautas: CP().y.pautas[turma] (cabeçalho), y.fpct[turma|aluno].det={rel[],ent,cc
 
 ## v0.923
 Ajuda: AJ_VISTA (tópico → ecrã); imagens em ajuda/<tema>/<ecrã>.webp ao lado da app; sem a pasta, o tópico mostra só o texto.
+
+
+## v0.924
+Sincronização com a Base de Dados EduSpruce (Supabase/PostgreSQL na UE, RLS por utilizador e contas autorizadas por hash; conteúdo encriptado AES-256-GCM no aparelho). Cores do horário da turma por disciplina (COR_DISC). Gráfico do relatório individual com distribuição uniforme.

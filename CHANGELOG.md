@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.924
+- Base de dados EduSpruce (Supabase, UE) como fornecedor de sincronização; versão anterior em /old
+- Horário da turma: cores por disciplina bem separadas; estilo SGE
+- Gráfico do relatório individual distribuído por toda a largura
+
 ## 0.923
 - Ajuda com capturas por tema (175 capturas em ajuda/<tema>/)
 
