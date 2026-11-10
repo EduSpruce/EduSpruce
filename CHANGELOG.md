@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.928
+- Verificar os Cálculos: lista de todos os testes
+- Avisos em Pop-up: cartão redesenhado
+- Cópia no Google Drive: progresso real
+- Código de Acesso: espaço e linha antes do modo de privacidade
+
 ## 0.927
 - Google Drive como cópia fria opcional (manual/diária) e apagar dados do Drive
 - Contas autorizadas sincronizadas com a base de dados (só o administrador)

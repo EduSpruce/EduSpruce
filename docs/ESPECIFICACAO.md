@@ -976,3 +976,7 @@ Animações da Ajuda (gifs-json) regeneradas a partir da demonstração; verific
 
 ## v0.927
 Cópia fria no Google Drive (gdFrio), apagar com confirmação APAGAR após verificar a base de dados; contas autorizadas (hash SHA-256) em eduspruce_autorizados com políticas de administrador; mqAjustarBarra.
+
+
+## v0.928
+calcMostrar (registo de cada chk), cartaoTestePopups redesenhado, esProgresso para a cópia fria, .privrow.
