@@ -948,3 +948,7 @@ Tema predefinido: sge (migração única _sge919: institucional→sge, logótipo
 
 ## v0.920
 MSAI SGE: aluno.msaiSge[ação.categoria.item]={d:{disciplina:dataInício},outra}; reflete-se em aluno.medidas (medSgeAuto). TeacherSchedule: lerTeacherScheduleXlsx/lerTeacherSchedulePdf → mesma estrutura do horário do professor (aulas, naoLetivos, linhas). Perfil: ONDE[competência][patamar] com onde estou e como avançar.
+
+
+## v0.921
+Tarefas: S.todo[] com dia (O Meu Dia, ISO do dia), prio 'alta' = importante, prazo, lemb (datetime), lembFeito, rep (d|u|s|m|a), passos[{t,f}], lista (id em S.todoListas[{id,nome,cor}]), nota, turma, ord.
