@@ -2,6 +2,15 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.919
+- Tema SGE predefinido
+- Sincronização ~1 s e à prova de bloqueadores (início de sessão por redirecionamento automático)
+- Efemérides e citações no ecrã do código
+- Botão «Mais» no cabeçalho
+- Lista de turmas responsiva
+- Ícones únicos na barra lateral
+- Página de apresentação no estilo SGE
+
 ## 0.918
 - SpruceNote/JornalNote: comentário, áudio, vídeo, mapa, documento, esboço, tabela, enviar ficheiros, desenho livre
 - Menu ••• com os elementos extra

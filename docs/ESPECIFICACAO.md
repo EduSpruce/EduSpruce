@@ -940,3 +940,7 @@ Momentos: i.momento ('completo'|'dominio'), i.completo, i.poData, i.revData; sum
 
 ## v0.918
 Novos tipos no quadro: comentario (txt, aut, resp[], res), audio (fid), video (url|fid), mapa (lq, z), documento (tit, html), esboco (fid png), tabela (lin[][]), ficheiro (fid, nome, tam, tipo), traco (d, w, h, cor, esp). Lixeira em S.sn.lixo / S.snj.lixo (30 dias; itens, setas e quadros apagados).
+
+
+## v0.919
+Tema predefinido: sge (migração única _sge919: institucional→sge, logótipo monograma→auto). Verificação rápida da nuvem: GET files/{manifest}?fields=version a cada 1 s (só Google); sincronização completa só quando muda. window.__gsiBloq ativa o início de sessão por redirecionamento. EFEM (efemérides MM-DD) e CITAS no ecrã do código.
