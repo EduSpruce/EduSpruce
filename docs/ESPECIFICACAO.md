@@ -956,3 +956,7 @@ Tarefas: S.todo[] com dia (O Meu Dia, ISO do dia), prio 'alta' = importante, pra
 
 ## v0.922
 Pautas: CP().y.pautas[turma] (cabeçalho), y.fpct[turma|aluno].det={rel[],ent,cc}, S.cprofij.hist[aluno]={a1,a2,a3:{fsc,fc,ft,fp},cpaf}. Word gerado em OOXML (zipCriar) e PDF (DocPDF) com a mesma composição.
+
+
+## v0.923
+Ajuda: AJ_VISTA (tópico → ecrã); imagens em ajuda/<tema>/<ecrã>.webp ao lado da app; sem a pasta, o tópico mostra só o texto.

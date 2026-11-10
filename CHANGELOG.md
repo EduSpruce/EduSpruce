@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.923
+- Ajuda com capturas por tema (175 capturas em ajuda/<tema>/)
+
 ## 0.922
 - Pautas oficiais PROFIJ (FPCT e CFC, final e detalhada) em Word e PDF
 - Cálculo da FPCT, CFA e CFC como nos Excel da escola
