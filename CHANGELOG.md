@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.941
+- Menu só ícones: sessão/tema compactos, tema num só botão
+- Recolher menu: só ícone no fundo
+- #barmais reaproveitado; sem animação de entrada nos botões da barra
+
 ## 0.940
 - Correção: ao abrir, a BD manda (base:null, sem subir restos locais); índice protegido
 - Cópias automáticas ef-f-bk-* antes de apagar/substituir (30 dias)
