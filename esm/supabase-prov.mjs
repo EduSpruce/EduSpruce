@@ -47,7 +47,8 @@ export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'})
       const e=new Error('A verificação da conta falhou na base de dados ('+r.st+': '+r.tx.slice(0,140)+(info?' · '+info:'')+').');e.detalhe=true;throw e},
     async diagAut(){const {data}=await sb.auth.getSession();const t=data&&data.session&&data.session.access_token;if(!t)return 'sem sessão';
       const j=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));const u=await fetch(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:'Bearer '+t}});
-      return 'papel '+j.role+' · e-mail '+(j.email||'(nenhum)')+' · contas '+u.status+' · alg '+(JSON.parse(atob(t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/'))).alg||'?')},
+      const hd=JSON.parse(atob(t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/')));let q='';try{const r=await fetch(url+'/rest/v1/rpc/eduspruce_quem',{method:'POST',headers:{apikey:anonKey,'Content-Type':'application/json',Authorization:'Bearer '+t},body:'{}',cache:'no-store'});q=' · bd '+r.status+' '+(await r.text()).slice(0,220)}catch(e){q=' · bd erro '+e.message}
+      return 'papel '+j.role+' · e-mail '+(j.email||'(nenhum)')+' · uid '+String(j.sub||'').slice(0,8)+' · contas '+u.status+' · alg '+(hd.alg||'?')+' · kid '+String(hd.kid||'-').slice(0,8)+' · iss '+String(j.iss||'').replace(/^https?:\/\//,'').slice(0,40)+q},
     tempoReal(uid,cb){try{const c=sb.channel('es-'+uid).on('postgres_changes',{event:'*',schema:'public',table:'eduspruce_sinal',filter:'user_id=eq.'+uid},()=>cb()).subscribe();return c}catch(e){console.warn('[EduSpruce] tempo real indisponível',e);return null}},
     async sair(){try{await sb.auth.signOut({scope:'local'})}catch(_){}},
     async lista(){await uid();const o={};let de=0;for(;;){const d=ok(await sb.from(tabela).select('nome,tamanho').order('nome').range(de,de+999));d.forEach(r=>o[r.nome]=r.tamanho);if(d.length<1000)break;de+=1000}return o},
