@@ -14,7 +14,9 @@ const msg=e=>{const c=e&&e.code,m=(e&&e.message)||String(e);let x;
 const perfil=u=>{const m=(u&&u.user_metadata)||{};return {id:u.id,email:String(u.email||'').toLowerCase(),nome:m.full_name||m.name||'',foto:m.avatar_url||m.picture||''}};
 export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'}){
   const {createClient}=await import('./supabase-2.117.3.min.js');
-  const sb=createClient(url,anonKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce',storageKey:CHAVE_SESSAO}});
+  /* versão da app em cada pedido: a base de dados só aceita gravações de versões seguras (cópias antigas guardadas noutros aparelhos não escrevem por cima) */
+  let ver='0.940';try{const v=new URL(import.meta.url).searchParams.get('v');if(v&&/^\d+\.\d+/.test(v))ver=v.replace(/[^0-9.]/g,'')}catch(_){}
+  const sb=createClient(url,anonKey,{global:{headers:{'x-es-ver':ver}},auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce',storageKey:CHAVE_SESSAO}});
   const uid=async()=>{const {data,error}=await sb.auth.getSession();if(data&&data.session)return data.session.user.id;if(error&&eRede(error))throw msg(error);const e=new Error('A sessão terminou. Entre de novo com a sua conta Google.');e.semSessao=true;throw e};
   const ok=r=>{if(r.error)throw msg(r.error);return r.data};
   return {n:'Base de dados EduSpruce',cliente:sb,

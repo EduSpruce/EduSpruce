@@ -14,7 +14,22 @@ const sbMemo={m:new Map(),lidos:new Set(),tudo:false,q:0,limpar(){this.m.clear()
   por(o){this.limpar();Object.keys(o||{}).forEach(k=>this.m.set(k,o[k]));this.tudo=true;this.q=Date.now()},
   ler(n){if(Date.now()-this.q>20000){this.limpar();return undefined}if(this.m.has(n)){const t=this.m.get(n);this.m.delete(n);this.lidos.add(n);return t}
     if(this.tudo&&!this.lidos.has(n)&&!/^ef-f-/.test(n)){this.lidos.add(n);return null}return undefined}};
-PROV.supabase={n:'Base de dados EduSpruce',async lista(){return (await sbObter()).lista()},async ler(n){const t=sbMemo.ler(n);if(t!==undefined)return t;return (await sbObter()).ler(n)},async escrever(n,t){sbMemo.lidos.add(n);sbMemo.m.delete(n);return (await sbObter()).escrever(n,t)},async apagar(n){sbMemo.lidos.add(n);sbMemo.m.delete(n);return (await sbObter()).apagar(n)}};
+/* v0.940 · cópias automáticas (na própria base de dados, cifradas como os dados): antes de apagar uma parte (ano, turma, definições) e,
+   no máximo de 3 em 3 horas por parte, antes de a substituir. Ficam 30 dias com o nome ef-f-bk-<data>-<parte> (não entram na abertura da app) */
+const SB_BK_RX=/^ef-(geral|ano-[^/]+|turma-[^/]+)\.bin$/,SB_BK_INT=3*3600e3,SB_BK_DIAS=30;
+const sbBkT=()=>{try{return JSON.parse(localStorage.getItem('es.bkt')||'{}')}catch(_){return {}}};
+async function sbCopiaAntes(p,n,sempre){if(!SB_BK_RX.test(n))return;const T=sbBkT();if(!sempre&&T[n]&&Date.now()-T[n]<SB_BK_INT)return;
+  try{const ant=await p.ler(n);if(ant==null)return;const q=new Date().toISOString().replace(/[-:]/g,'').replace(/\..*$/,'');await p.escrever('ef-f-bk-'+q+'-'+n.slice(3),ant);T[n]=Date.now();try{localStorage.setItem('es.bkt',JSON.stringify(T))}catch(_){}}
+  catch(e){console.warn('[EduSpruce] cópia automática',n,e&&e.message)}}
+async function sbIndiceOk(p){if(window.__esManOk)return true;
+  if(sbMemo.tudo&&Date.now()-sbMemo.q<20000){if(sbMemo.m.has('ef-manifest.json')){window.__esManOk=true;return true}return ![...sbMemo.m.keys()].some(k=>SB_BK_RX.test(k))}
+  const L=await p.lista();if(L['ef-manifest.json']!=null){window.__esManOk=true;return true}return !Object.keys(L).some(k=>SB_BK_RX.test(k))}
+async function sbArrumarCopias(){try{const p=await sbObter();const L=await p.lista();const lim=new Date(Date.now()-SB_BK_DIAS*864e5).toISOString().replace(/[-:]/g,'').slice(0,8);
+  const V=Object.keys(L).filter(k=>k.startsWith('ef-f-bk-')&&k.slice(8,16)<lim);for(const k of V.slice(0,40)){try{await p.apagar(k)}catch(_){}}}catch(_){}}
+PROV.supabase={n:'Base de dados EduSpruce',async lista(){return (await sbObter()).lista()},async ler(n){const t=sbMemo.ler(n);if(t!==undefined)return t;return (await sbObter()).ler(n)},async escrever(n,t){sbMemo.lidos.add(n);sbMemo.m.delete(n);const p=await sbObter();
+    if(n==='ef-manifest.json'&&!window.__esManOk&&!(await sbIndiceOk(p)))throw new Error('Por segurança, o índice dos dados não foi gravado (há dados na conta sem índice).');
+    await sbCopiaAntes(p,n,false);const r=await p.escrever(n,t);if(n==='ef-manifest.json')window.__esManOk=true;return r},
+  async apagar(n){sbMemo.lidos.add(n);sbMemo.m.delete(n);const p=await sbObter();await sbCopiaAntes(p,n,true);return p.apagar(n)}};
 window.__esPronto=false; /* os dados da conta já chegaram da base de dados? */
 
 /* ---------- 1. a conta ---------- */
@@ -139,11 +154,15 @@ async function esAbrir0(){clearTimeout(esFalha._t);esEsqueleto('abrir');let b=$(
   if(D)sbMemo.por(D);
   /* ao abrir sem nada no aparelho, o registo de auditoria só tem o ruído do arranque: não se mistura com o da conta */
   try{if(!window.__esLerLocal&&Array.isArray(S.audit))S.audit=S.audit.filter(e=>!(e&&e.area==='Dados'&&/^Formato atualizado/.test(e.acao||'')))}catch(_){}
-  let r=null;window.__nvSemFotos=true;_esDentro=true;try{r=await nvSincronizar(false)}finally{window.__nvSemFotos=false;_esDentro=false;sbMemo.limpar()}
+  /* v0.940 · SEGURANÇA: ao abrir, o aparelho não tem dados próprios — o que está na base de dados manda sempre.
+     (antes, um aparelho com restos de uma versão antiga podia achar que «não ter» uma parte era tê-la apagado, e apagava-a na base de dados) */
+  try{nvSet({base:null,mod:{}})}catch(_){}
+  if(!(await sbIndiceOk(p))){const e=new Error('O índice dos seus dados não foi encontrado, mas há dados na conta. Por segurança nada foi alterado. Contacte o suporte.');throw e}
+  let r=null;window.__nvSemFotos=true;_esDentro=true;window.__esAbrirBD=true;try{r=await nvSincronizar(false)}finally{window.__nvSemFotos=false;_esDentro=false;window.__esAbrirBD=false;sbMemo.limpar()}
   if(!r){const m=nvL().erro||'';const e=new Error(m||'Não foi possível abrir os dados.');if(/Sem ligação|internet|rede/i.test(m))e.rede=true;throw e}
   window.__esPronto=true;clearTimeout(esFalha._t);try{sessionStorage.removeItem('es.rl')}catch(_){}
   if(!_sbCanal)_sbCanal=p.tempoReal(pf.id,sbPuxar)||1;
-  await esPosCarga(pf);try{nvFotosFundo()}catch(_){}}
+  await esPosCarga(pf);try{nvFotosFundo()}catch(_){}setTimeout(sbArrumarCopias,30000)}
 
 /* o que só faz sentido com os dados à frente: ano/turma, código de acesso, boas-vindas (uma única vez), avisos */
 const esLocGuardar=()=>{try{sessionStorage.setItem('es.loc',JSON.stringify({a:S.anoAtivo||'',t:S.turmaAtiva||'',e:S.escolaAtiva||'',f:S.filtroOferta||''}))}catch(_){}};
@@ -263,7 +282,7 @@ async function gdApagar(){const L=nvL();if(!window.__esPronto||L.prov!=='supabas
   PROV.google._ids=null;gdFrioSet({auto:false,ultima:0,n:0,h:{}});try{localStorage.removeItem(NV_KEEP)}catch(_){}try{audit('Conta','Dados apagados do Google Drive',ok+' ficheiros')}catch(_){}
   toast(f?`Apagados ${ok}; ${f} não foi possível apagar — tente outra vez.`:`Google Drive limpo: ${ok} ficheiro${ok>1?'s':''} apagado${ok>1?'s':''}. Os dados estão na base de dados.`,f?'erro':'ok');sbRedesenhar()}
 /* cópia diária automática (só se estiver ligada): no máximo uma vez por dia, em silêncio */
-setInterval(()=>{try{const L=nvL(),F=gdFrio();if(SESSAO&&window.__esPronto&&L.prov==='supabase'&&F.auto&&(L.k||_nvK)&&navigator.onLine&&document.visibilityState==='visible'&&Date.now()-(F.ultima||0)>864e5)gdCopiar(false)}catch(_){}},60000);
+setInterval(()=>{try{const L=nvL(),F=gdFrio();if(window.__esGdSuspensa!==false)return;if(SESSAO&&window.__esPronto&&L.prov==='supabase'&&F.auto&&(L.k||_nvK)&&navigator.onLine&&document.visibilityState==='visible'&&Date.now()-(F.ultima||0)>864e5)gdCopiar(false)}catch(_){}},60000);
 {const _bP=bindNvPainel;bindNvPainel=function(){const r=_bP.apply(this,arguments);try{const c=$('#nv-card');const L=nvL();
   if(c&&L.prov==='supabase'&&!c.querySelector('#nv-gdf')){const F=gdFrio();const s=document.createElement('section');s.className='nvs';s.id='nv-gdf';
     const q=F.ultima?new Date(F.ultima).toLocaleString('pt-PT',{dateStyle:'short',timeStyle:'short'}):'';
@@ -275,6 +294,33 @@ setInterval(()=>{try{const L=nvL(),F=gdFrio();if(SESSAO&&window.__esPronto&&L.pr
     const foot=c.querySelector('.nvfoot');const card=c.querySelector('.card:not(.nvhero)')||c;if(foot)card.insertBefore(s,foot);else card.appendChild(s);
     s.querySelector('#nv-gdcp').onclick=()=>gdCopiar(true);s.querySelector('#nv-gdx').onclick=gdApagar;
     s.querySelector('#nv-gdauto').onchange=e=>{gdFrioSet({auto:e.target.checked});toast(e.target.checked?'Cópia diária no Google Drive ligada.':'Cópia diária desligada. A cópia que já existe fica no Drive até a apagar.','ok');if(e.target.checked&&!gdFrio().ultima)gdCopiar(true)}}}catch(e){console.warn(e)}return r}}
+
+/* ===== v0.940 · Recuperar uma cópia anterior (Google Drive) — mostra o que tem e só repõe se a pessoa confirmar; o estado atual fica guardado antes ===== */
+function recResumo(st){const anos=(st&&st.anos)||[];return anos.map(a=>({nome:a.nome||'(sem nome)',turmas:(a.turmas||[]).map(t=>({nome:(t.nome||'')+(t.disciplina?' · '+t.disciplina:''),al:(t.alunos||[]).length,kb:Math.round(JSON.stringify(t).length/1024)}))}))}
+function recHtml(R){if(!R.length)return '<p class="mut">Sem anos letivos.</p>';return R.map(a=>`<div class="recano"><b>${esc(a.nome)}</b> <span class="mut">· ${a.turmas.length} turma${a.turmas.length===1?'':'s'} · ${a.turmas.reduce((x,t)=>x+t.al,0)} alunos</span><ul>${a.turmas.map(t=>`<li>${esc(t.nome)} <span class="mut">— ${t.al} alunos · ${t.kb} kB</span></li>`).join('')}</ul></div>`).join('')}
+async function recDrive(){if(!window.__esPronto)return toast('Os dados ainda estão a abrir.','erro');ocupado('A ligar ao Google Drive…');
+  try{await gsToken(true)}catch(e){livre();return toast('Google Drive: '+((e&&e.message)||'não foi possível ligar'),'erro')}
+  let st,man;try{const G=PROV.google;await G._mapa(true);const mt=await G.ler('ef-manifest.json');if(!mt){livre();return toast('O Google Drive não tem nenhuma cópia da EduSpruce.','aviso')}
+    man=JSON.parse(mt);const k=await nvChave();if(man.chk){let ok=false;try{ok=await nvDecifrar(man.chk,k)==='eduflow'}catch(_){}if(!ok)throw new Error('a cópia do Drive foi cifrada com outra chave')}
+    const P={};const N=Object.keys(man.partes||{});let i=0;await nvPool(N,4,async n=>{ocupado('A ler a cópia do Google Drive… '+(++i)+'/'+N.length);const t=await G.ler('ef-'+n+'.bin');if(t!=null)P[n]=JSON.parse(await nvDecifrar(t,k))});
+    st=nvMontar(P)}catch(e){livre();return toast('Cópia do Google Drive: '+((e&&e.message)||e),'erro')}livre();
+  const q=man.q?new Date(man.q).toLocaleString('pt-PT',{dateStyle:'full',timeStyle:'short'}):'(data desconhecida)';
+  const d=document.createElement('dialog');d.className='nvmc recdlg';d.innerHTML=`<form method="dialog" class="nvmcf"><h2>${ic('refresh',18)} Cópia encontrada no Google Drive</h2>
+    <p class="hint">Gravada a <b>${esc(q)}</b>${man.dev?' · pelo aparelho '+esc(man.dev):''}. Compare com o que está agora na base de dados.</p>
+    <div class="recg"><div><h3>Agora na base de dados</h3>${recHtml(recResumo(S))}</div><div><h3>Na cópia do Google Drive</h3>${recHtml(recResumo(st))}</div></div>
+    <p class="hint">Ao repor, os dados atuais ficam guardados na base de dados (cópia automática) — é possível voltar atrás.</p>
+    <div class="row" style="gap:8px;justify-content:flex-end;flex-wrap:wrap"><button value="" class="btn">Cancelar</button><button value="sim" class="btn pri" id="rec-ok">${ic('check',15)} Repor Esta Cópia</button></div></form>`;
+  document.body.appendChild(d);d.showModal();d.addEventListener('close',async()=>{const v=d.returnValue;d.remove();if(v!=='sim')return;
+    const prob=validarCopia(st);if(prob.length)return toast('A cópia tem um problema: '+prob[0],'erro');
+    ocupado('A guardar o estado atual e a repor a cópia…');try{const p=await sbObter();const L=await p.lista();
+      for(const n of Object.keys(L).filter(x=>SB_BK_RX.test(x)))await sbCopiaAntes(p,n,true);
+      S=migrate(st);saveNow();const r=await nvSincronizar(true);if(!r)throw new Error(nvL().erro||'não foi possível gravar');
+      try{audit('Conta','Cópia do Google Drive reposta',q)}catch(_){}livre();go('inicio');toast('Cópia reposta. O estado anterior ficou guardado.','ok')}
+    catch(e){livre();toast('Não foi possível repor: '+((e&&e.message)||e),'erro')}})}
+{const _bR=bindNvPainel;bindNvPainel=function(){const r=_bR.apply(this,arguments);try{const c=$('#nv-card');if(c&&nvL().prov==='supabase'&&!c.querySelector('#nv-rec')){const s=document.createElement('section');s.className='nvs';s.id='nv-rec';
+    s.innerHTML=`<div class="nvsh"><h3>Recuperar uma cópia anterior</h3><p>Se alguma coisa desapareceu, procure uma cópia mais antiga e compare antes de repor. Nada é substituído sem confirmar.</p></div><div class="nvsb"><button type="button" class="btn" id="nv-recgd">${ic('search',15)} Procurar Cópia no Google Drive</button></div>`;
+    const foot=c.querySelector('.nvfoot');const card=c.querySelector('.card:not(.nvhero)')||c;if(foot)card.insertBefore(s,foot);else card.appendChild(s);s.querySelector('#nv-recgd').onclick=recDrive}}catch(e){console.warn(e)}return r}}
+(()=>{const st=document.createElement('style');st.textContent='.recdlg{max-width:min(860px,96vw);width:860px}.recg{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-height:52vh;overflow:auto;margin:10px 0}.recg h3{margin:0 0 6px;font-size:14px}.recano{margin:0 0 10px}.recano ul{margin:4px 0 0;padding-left:18px;font-size:13px}@media(max-width:700px){.recg{grid-template-columns:1fr}}';document.head.appendChild(st)})();
 
 /* ===== a lista «Quem Pode Entrar com Google» (Definições › Conta e Acesso) manda também na base de dados =====
    só o administrador a envia; vai a impressão digital de cada e-mail (como no eduspruce-config.json), nunca o e-mail */

@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.940
+- Correção: ao abrir, a BD manda (base:null, sem subir restos locais); índice protegido
+- Cópias automáticas ef-f-bk-* antes de apagar/substituir (30 dias)
+- sw.js: rede primeiro na navegação (v3)
+- SQL 0005: histórico eduspruce_partes_hist + versão mínima 0.940 (cabeçalho x-es-ver)
+- Recuperar cópia do Google Drive (comparar e repor)
+- Cópia diária automática ao Drive suspensa
+
 ## 0.939
 - Início: novo motor de arrasto (rato/toque/teclado) para qualquer área designada; chaves de posição estáveis
 - Menu lateral só com ícones em PCs pequenos, escolha do utilizador (S.cfg.menuModo)

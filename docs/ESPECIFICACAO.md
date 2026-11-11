@@ -1024,3 +1024,7 @@ pinOk (sha antigo + verificarSenha); avEstatistica; corTurma/pintarTurmas; body.
 
 ## v0.939
 Arrasto de cartões único (wgIniciar/wgAtivar/wgPosicionar/wgFim) com áreas .wgarea; S.cfg.menuModo auto|icones|completo (body.menu-ico, CSS clonado das regras ≤1100px); dpLer() para datas escritas; mpFixo() envolve as vistas de go._f para manter o scroll.
+
+
+## v0.940
+Incidente 11/11/2026: um iPad com uma versão antiga em cache e estado de sincronização antigo (prov google) escreveu por cima dos dados mais recentes. Correções: esAbrir0 força base:null e __esAbrirBD (partes só locais não sobem); sbIndiceOk; sbCopiaAntes; sw.js rede primeiro; SQL 0005 (histórico + versão mínima); recDrive.
