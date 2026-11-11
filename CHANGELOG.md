@@ -2,6 +2,19 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.933
+- Códigos verificados com o mesmo método em todo o lado
+- Janela do código centrada
+- Estatística da turma na Avaliação Final
+- Chamada maior e responsiva
+- Pesquisa e filtros alinhados
+- Produção Oral sem instrumentos marcados
+- Cor por turma
+- Menu da turma fecha fora da turma
+- Campos bloqueados não editáveis
+- Mover cartões com toque longo
+- Fotografia do relatório menor
+
 ## 0.932
 - Dados só na base de dados (memória + Supabase), migração e limpeza da cópia local
 - Entrada imediata sem ecrã de espera; service worker abre a partir da cópia

@@ -996,3 +996,7 @@ nvSyncGate ignorado com prov supabase e dados locais; nvAssist só com gesto do 
 
 ## v0.932
 Modo só nuvem: shim de localStorage em memória para KEY/NV_CONF/mra.*, IndexedDB desligado, base:null ao abrir, esLimparAparelho, evidências como anexos encriptados, parte loc-mra; esCarregar sem portão; sw.js stale-while-revalidate.
+
+
+## v0.933
+pinOk (sha antigo + verificarSenha); avEstatistica; corTurma/pintarTurmas; body.vgeral; #view:has(.bloqban) campos só leitura; toque longo em qualquer parte do cartão.
