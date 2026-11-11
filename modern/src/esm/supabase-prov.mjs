@@ -43,7 +43,10 @@ export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'})
       let info='';try{if(!t)info='sem sessão';else{const j=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
         const u=await fetch(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:'Bearer '+t}});
         info='papel '+j.role+', e-mail no testemunho '+(j.email||'(nenhum)')+', servidor de contas '+u.status+', alg '+(JSON.parse(atob(t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/'))).alg||'?')}}catch(_){}
-      if(r.st===200&&r.tx.trim()==='false')return false;
+      if(r.st===200&&r.tx.trim()==='false'){
+        /* sessão válida no servidor de contas mas a base de dados não a vê: algo no aparelho (bloqueador como o AdGuard) está a mexer nos pedidos */
+        try{if(t){const u=await fetch(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:'Bearer '+t}});if(u.ok){const e=new Error('Um bloqueador de anúncios ou de privacidade neste aparelho (por exemplo o AdGuard) está a alterar os pedidos à base de dados. Acrescente eduspruce.pt e supabase.co às exceções do bloqueador (ou desligue a «filtragem HTTPS» para supabase.co) e entre de novo.');e.detalhe=true;e.bloqueador=true;throw e}}}catch(e){if(e&&e.bloqueador)throw e}
+        return false}
       const e=new Error('A verificação da conta falhou na base de dados ('+r.st+': '+r.tx.slice(0,140)+(info?' · '+info:'')+').');e.detalhe=true;throw e},
     async diagAut(){const {data}=await sb.auth.getSession();const t=data&&data.session&&data.session.access_token;if(!t)return 'sem sessão';
       const j=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));const u=await fetch(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:'Bearer '+t}});

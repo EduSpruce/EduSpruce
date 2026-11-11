@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.954
+- cl
+- Entrada: deteta bloqueadores que alteram os pedidos
+
 ## 0.953
 - cl
 - Entrada: diagnóstico mais completo
