@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.947
+- Regresso do OAuth: cortina por cima do ecrã de entrada até abrir; erros continuam a aparecer no formulário
+
 ## 0.946
 - Cortina de entrada com saída garantida (login, erro, 12 s) e removida ao terminar sessão
 

@@ -64,13 +64,13 @@ let _sbEntrouAgora=false;
 /* v0.942 · cortina: nada da app fica à vista enquanto a sessão se confirma ou antes de pedir o código de acesso */
 function esCortina(on){let o=$('#escofre');if(!on){if(o)o.remove();return}if(o)return;o=document.createElement('div');o.id='escofre';o.setAttribute('aria-busy','true');o.innerHTML='<span class="sr" role="status">A abrir…</span><i aria-hidden="true"></i>';document.body.appendChild(o);
   /* nunca fica presa: sai se aparecer o ecrã de entrada, uma mensagem de erro ou ao fim de 12 s */
-  const t0=Date.now();const t=setInterval(()=>{const c=$('#escofre');if(!c){clearInterval(t);return}if(document.body.classList.contains('login-on')||$('#pinlock')||$('#esabrir.falha')||$('#esabrir .esab-f')||Date.now()-t0>12000){clearInterval(t);c.remove()}},250)}
+  const t0=Date.now();const t=setInterval(()=>{const c=$('#escofre');if(!c){clearInterval(t);return}if((document.body.classList.contains('login-on')&&!c.dataset.volta)||$('#pinlock')||$('#esabrir.falha')||$('#esabrir .esab-f')||Date.now()-t0>12000){clearInterval(t);c.remove()}},250)}
 const sbGuardadaValida=()=>{try{const j=JSON.parse(localStorage.getItem(SB_SES)||'null');return !!(j&&j.expires_at&&j.expires_at*1000>Date.now()+30000)}catch(_){return false}};
 pedirLogin=function(){return new Promise(async ok=>{try{authCfg().catch(()=>{})}catch(_){}
   const entrar=(pf,papel)=>{const ant=sessaoAtual();const m=ant&&ant.tipo==='google'&&String(ant.u||'').toLowerCase()===pf.email?ant:null;
     const s={u:pf.email,nome:pf.nome||(m&&m.nome)||pf.email,papel:papel||(m&&m.papel)||'professor',tipo:'google',foto:pf.foto||(m&&m.foto)||'',desde:(m&&m.desde)||Date.now()};
-    SESSAO=s;guardarSessao(s,true);document.body.classList.remove('login-on');const o=$('#login');if(o){o.classList.add('sai');setTimeout(()=>o.remove(),280)}
-    try{if(localStorage.getItem('es.pin')==='1')esCortina(true)}catch(_){}
+    SESSAO=s;guardarSessao(s,true);document.body.classList.remove('login-on');const o=$('#login');if(o){if($('#escofre'))o.remove();else{o.classList.add('sai');setTimeout(()=>o.remove(),280)}}
+    try{const c0=$('#escofre');if(c0){delete c0.dataset.volta;c0.style.zIndex=''}if(localStorage.getItem('es.pin')==='1')esCortina(true);else esCortina(false)}catch(_){}
     try{sessBox()}catch(_){}setTimeout(esAbrir,0);ok(s)};
   const volta=/[?&]code=/.test(location.search);let g=sbGuardada();
   if(g&&!volta&&sbGuardadaValida())return entrar(g); /* sessão válida neste aparelho: entra logo, como uma app normal */
@@ -83,13 +83,15 @@ pedirLogin=function(){return new Promise(async ok=>{try{authCfg().catch(()=>{})}
   let msg='';try{msg=sessionStorage.getItem('es.lgmsg')||'';sessionStorage.removeItem('es.lgmsg')}catch(_){}
   const o=sbEcraEntrar();const bt=o.querySelector('#lg-gg'),er=o.querySelector('#lg-err');if(msg)er.textContent=msg;
   const ocup=t=>{bt.disabled=!!t;bt.classList.toggle('ocp',!!t);bt.querySelector('.lggt').textContent=t||'Entrar com Google'};
-  const recusar=async(p,m)=>{try{await p.sair()}catch(_){}sbEsquecer();ocup('');er.textContent=m};
+  /* a voltar do Google: não se volta a mostrar o formulário de entrada — só uma espera até a app abrir (ou até haver um erro para mostrar) */
+  if(volta){esCortina(true);const c0=$('#escofre');if(c0){c0.dataset.volta='1';c0.style.zIndex='100000'}}
+  const recusar=async(p,m)=>{esCortina(false);try{await p.sair()}catch(_){}sbEsquecer();ocup('');er.textContent=m};
   const concluir=async()=>{ocup('A entrar…');er.textContent='';
-    try{const p=await sbObter();const pf=await p.sessao();if(!pf){ocup('');if(volta)er.textContent='Não foi possível concluir a entrada. Toque em «Entrar com Google» outra vez.';return}
+    try{const p=await sbObter();const pf=await p.sessao();if(!pf){esCortina(false);ocup('');if(volta)er.textContent='Não foi possível concluir a entrada. Toque em «Entrar com Google» outra vez.';return}
       if(!(await p.autorizado()))return recusar(p,'A conta '+pf.email+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.');
       let papel='';try{papel=(await acVerificar(pf.email)).papel||''}catch(e){if(e&&e.semAcesso)return recusar(p,e.message)}
       _sbEntrouAgora=true;esAbrir._aut={e:pf.email,q:Date.now()};entrar(pf,papel)}
-    catch(e){ocup('');er.textContent=(e&&e.message)||'Não foi possível entrar. Tente de novo.'}};
+    catch(e){esCortina(false);ocup('');er.textContent=(e&&e.message)||'Não foi possível entrar. Tente de novo.'}};
   bt.onclick=async()=>{er.textContent='';if(!navigator.onLine){er.textContent='Sem ligação à internet.';return}ocup('A abrir a Google…');try{const p=await sbObter();await p.entrarGoogle();setTimeout(()=>ocup(''),10000)}catch(e){ocup('');er.textContent=(e&&e.message)||'Não foi possível abrir a Google.'}};
   if(volta||g)concluir()})};
 /* regresso do Google com erro: explica no ecrã de entrada e limpa o endereço */
