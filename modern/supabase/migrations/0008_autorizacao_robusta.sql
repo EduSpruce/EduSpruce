@@ -30,16 +30,7 @@ insert into public.eduspruce_autorizados (h, papel)
 values ('f311a15e184c53a993b13bf8062c72e985ae07fc1ecc4995e8fd28035d1f1d6a', 'admin')
 on conflict (h) do update set papel = 'admin';
 
--- DIAGNÓSTICO: simula um pedido da sua conta e mostra o que a base de dados responde
-do $$
-declare uid uuid; r record;
-begin
-  select id into uid from auth.users where encode(extensions.digest('eduspruce:' || lower(trim(email)), 'sha256'), 'hex') = 'f311a15e184c53a993b13bf8062c72e985ae07fc1ecc4995e8fd28035d1f1d6a' order by last_sign_in_at desc nulls last limit 1;
-  perform set_config('request.jwt.claims', json_build_object('sub', uid, 'role', 'authenticated')::text, true);
-  perform set_config('role', 'authenticated', true);
-  raise notice 'conta encontrada: %', uid is not null;
-end $$;
-
+-- DIAGNÓSTICO (só leitura)
 select 'contas com este e-mail' as verificacao, count(*)::text as resultado from auth.users where encode(extensions.digest('eduspruce:' || lower(trim(email)), 'sha256'), 'hex') = 'f311a15e184c53a993b13bf8062c72e985ae07fc1ecc4995e8fd28035d1f1d6a'
 union all
 select 'autorizado (simulado)', (
