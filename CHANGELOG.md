@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.945
+- sw.js v4: navegação com carimbo no endereço e no-store; ao ativar recarrega as janelas
+- versao.json + esVerNova() (verificação de versão e recarga única)
+
 ## 0.944
 - Importar do Outlook: olHub (colar, ICS link/ficheiro, Microsoft Graph Calendars.Read/Mail.Read com ID de aplicação próprio)
 

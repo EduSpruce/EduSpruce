@@ -397,3 +397,14 @@ body.est-sge .esk{border-radius:0}
 .nvbd.gira .ic{animation:nvgira 1s linear infinite}`;document.head.appendChild(st)})();
 /* arranque: se já há sessão neste aparelho, a página abre logo com o esqueleto e os dados chegam a seguir */
 try{if(sbGuardada()&&!/[?&]code=/.test(location.search)){document.body.classList.remove('login-on');esEsqueleto('abrir')}}catch(_){}
+/* v0.945 · a app confirma sozinha se está na versão mais recente (ao abrir, ao voltar à app e de 10 em 10 minutos); se não estiver, limpa a cópia guardada e recarrega — uma vez por versão */
+async function esVerNova(){try{if(!navigator.onLine||esVerNova._on)return;esVerNova._on=1;const r=await fetch('versao.json?_='+Date.now().toString(36),{cache:'no-store'});if(!r.ok)return;const j=await r.json();const nova=String(j.v||'');const minha=String(VERSAO).replace(/DB$/,'');
+    if(!nova||esVer(nova)<=esVer(minha))return;let ja='';try{ja=sessionStorage.getItem('es.vnova')||''}catch(_){}if(ja===nova)return;try{sessionStorage.setItem('es.vnova',nova)}catch(_){}
+    /* não interromper quem está a escrever ou com uma janela aberta: espera por um momento calmo */
+    const calmo=()=>!document.querySelector('dialog[open],#drawer.on,#pinlock')&&!/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement||{}).tagName||'')&&!(document.activeElement||{}).isContentEditable;
+    const vai=async()=>{try{saveNow()}catch(_){}try{if(typeof nvSincronizar==='function'&&window.__esPronto)await Promise.race([nvSincronizar(false),new Promise(r=>setTimeout(r,4000))])}catch(_){}
+      try{const K=await caches.keys();await Promise.all(K.map(k=>caches.delete(k)))}catch(_){}try{const R=await navigator.serviceWorker.getRegistrations();await Promise.all(R.map(x=>x.update().catch(()=>{})))}catch(_){}
+      try{esLocGuardar()}catch(_){}window.__esSair=true;location.replace(location.pathname+'?_v='+encodeURIComponent(nova))};
+    const tenta=()=>{if(calmo())vai();else setTimeout(tenta,5000)};tenta()}catch(_){}finally{esVerNova._on=0}}
+setTimeout(esVerNova,2500);setInterval(esVerNova,600000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')setTimeout(esVerNova,800)});
+try{if(/[?&]_v=/.test(location.search)&&!/[?&]code=/.test(location.search))history.replaceState(null,'',location.pathname+location.hash)}catch(_){}
