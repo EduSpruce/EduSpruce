@@ -1016,3 +1016,7 @@ pinOk (sha antigo + verificarSenha); avEstatistica; corTurma/pintarTurmas; body.
 
 ## v0.937
 
+
+
+## v0.938
+

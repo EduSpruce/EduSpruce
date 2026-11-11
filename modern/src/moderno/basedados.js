@@ -192,16 +192,10 @@ addEventListener('online',()=>{if(!SESSAO)return;if(window.__esPronto)setTimeout
 addEventListener('es-bd',()=>{if(SESSAO&&!window.__esPronto&&$('#esabrir')&&$('#esabrir').dataset.m!=='abrir')esAbrir()});
 /* sair da página com alterações por guardar: avisa (não há cópia no aparelho) */
 addEventListener('beforeunload',e=>{try{if(!window.__esSair&&window.__esPronto&&nvL().prov==='supabase'&&Object.keys(nvL().mod||{}).length){e.preventDefault();e.returnValue=''}}catch(_){}});
-/* indicador na barra: só aparece quando há algo a dizer (por guardar, sem internet, erro) */
-nvBadge=function(){try{const bar=$('#bar');if(!bar)return;let b=$('#nv-badge');const L=nvL();const pend=Object.keys(L.mod||{}).length>0;
-  if(pend){nvBadge._d=nvBadge._d||Date.now()}else nvBadge._d=0;
-  const est=!window.__esPronto?'':!navigator.onLine?'offline':L.erro&&pend?'erro':pend&&Date.now()-nvBadge._d>4000?'pend':'';
-  if(!est){if(b)b.remove();return}
-  if(!b){b=document.createElement('button');b.type='button';b.id='nv-badge';b.className='btn ico nvbd';const bi=bar.querySelector('.barico');if(bi)bi.insertBefore(b,bi.firstChild);else bar.appendChild(b);
-    b.onclick=async()=>{if(!navigator.onLine)return toast('Sem internet — as alterações são guardadas assim que a ligação voltar.','aviso');b.classList.add('gira');try{await nvSincronizar(true)}finally{b.classList.remove('gira');nvBadge()}}}
-  const tt={offline:'Sem internet — as alterações são guardadas assim que a ligação voltar',erro:'Não foi possível guardar ('+(L.erro||'')+') — toque para tentar de novo',pend:'A guardar…'}[est];
-  if(b.dataset.e!==est||b.title!==tt){b.dataset.e=est;b.title=tt;b.setAttribute('aria-label',tt);b.innerHTML=ic('cloud',19)+'<span class="nvdot"></span>'}}catch(_){}};
-
+/* sem ícone na barra: guardar e receber acontece em segundo plano; só um aviso discreto se a internet cair (e quando volta) */
+nvBadge=function(){try{const b=$('#nv-badge');if(b)b.remove()}catch(_){}};
+addEventListener('offline',()=>{if(window.__esPronto)toast('Sem internet — o que fizer é guardado assim que a ligação voltar.','aviso')});
+addEventListener('online',()=>{if(window.__esPronto&&Object.keys(nvL().mod||{}).length)setTimeout(()=>nvSincronizar(false).then(r=>{if(r)toast('Ligação de volta — tudo guardado.','ok')}),600)});
 /* ---------- 5. Definições › Conta e Dados ---------- */
 nvPainel=function(){const L=nvL();const C=nvConflitos();const pend=Object.keys(L.mod||{}).length;const em=sbEmailApp()||L.conta||'';
   const est=!window.__esPronto?['off','A abrir os dados…','']:!navigator.onLine?['off','Sem internet','As alterações são guardadas assim que a ligação voltar.']:L.erro&&pend?['err','Não foi possível guardar',L.erro]:pend?['pend','A guardar…','']:['ok','Tudo guardado','Última gravação '+nvQuando(L.ultimo)+'.'];
@@ -340,7 +334,7 @@ body.es-abrir #view,body.es-abrir #barx,body.es-abrir #nffab,body.es-abrir #tabb
 @keyframes eskb{0%{background-position:100% 0}100%{background-position:-100% 0}}@media (prefers-reduced-motion:reduce){.esk{animation:none}#esbar i{animation:none;width:100%}}
 body.est-sge .esk{border-radius:0}
 .esmsg{max-width:460px;margin:8vh auto 0;text-align:center;display:grid;gap:10px;justify-items:center;padding:28px 22px;background:var(--panel,#fff);border:1px solid var(--line,#ddd);border-radius:18px}.esmsg .esmi{color:var(--acc,#1b93c6);display:flex}.esmsg h2{margin:0;font-size:20px;color:var(--ink,#222);text-transform:none}.esmsg p{margin:0 0 6px;color:var(--mut,#666);line-height:1.45}body.est-sge .esmsg{border-radius:0}
-#nv-card .nvobr{display:none!important}
+#nv-card .nvobr{display:none!important}#nv-badge{display:none!important}
 #login .lgbd .lggd{width:100%;min-height:52px;font-size:16px}#login .lgbd .lggd.ocp{opacity:.75;cursor:progress}#login .lgbd .lgerr{margin-top:10px}#login .lgbd .lgerr:empty{display:none}
 .lgbdn{font-size:12.5px;line-height:1.45;color:var(--mut);margin:12px 0 4px;display:flex;gap:6px;align-items:flex-start}.lgbdn .ic{flex:none;margin-top:2px;color:var(--acc)}.lgbdn>span{flex:1;min-width:0}
 .sbcod .sbcalt{display:flex;gap:6px;align-items:flex-start;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line,#ddd)}.sbcod .sbcalt .ic{flex:none;margin-top:2px;color:var(--acc)}.sbcod .sbcalt>span{flex:1;min-width:0}
