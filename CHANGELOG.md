@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.934
+- cl
+- Arrastar cartões: alvo encontrado mesmo com cartões dentro de invólucros; calendário sem conflito com a classe .aula; anoBadge com cor da turma; botão Perfil no dossiê
+
 ## 0.933
 - Códigos verificados com o mesmo método em todo o lado
 - Janela do código centrada

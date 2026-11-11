@@ -1000,3 +1000,7 @@ Modo só nuvem: shim de localStorage em memória para KEY/NV_CONF/mra.*, Indexed
 
 ## v0.933
 pinOk (sha antigo + verificarSenha); avEstatistica; corTurma/pintarTurmas; body.vgeral; #view:has(.bloqban) campos só leitura; toque longo em qualquer parte do cartão.
+
+
+## v0.934
+
