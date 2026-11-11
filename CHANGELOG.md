@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.950
+- autorizado(): nova tentativa após renovar a sessão e erro detalhado
+
 ## 0.949
 - Entrada por e-mail e palavra-passe (Supabase signInWithPassword) e definição da palavra-passe de reserva (updateUser)
 
