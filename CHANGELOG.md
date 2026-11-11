@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.935
+- cl
+- Auditoria automática de 29 vistas em 4 formatos; CSS tlm/ipad com especificidade acima do tema; cartões alst; barx flex-start + scroll; cores TIPOS_DIA no calendário de avaliações e cpm-cal
+
 ## 0.934
 - cl
 - Arrastar cartões: alvo encontrado mesmo com cartões dentro de invólucros; calendário sem conflito com a classe .aula; anoBadge com cor da turma; botão Perfil no dossiê
