@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.949
+- Entrada por e-mail e palavra-passe (Supabase signInWithPassword) e definição da palavra-passe de reserva (updateUser)
+
 ## 0.948
 - Gravação recusada (42501) deixa de ser tratada como conta não autorizada; aviso #essemgrav com o detalhe; abertura só de leitura
 - SQL 0007: regras de gravação repostas e histórico que nunca bloqueia

@@ -24,6 +24,14 @@ export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'})
     async sessao(){const {data,error}=await sb.auth.getSession();if(data&&data.session)return perfil(data.session.user);if(error&&eRede(error))throw msg(error);return null},
     aoMudar(cb){try{sb.auth.onAuthStateChange((ev,ses)=>{setTimeout(()=>{try{cb(ev,ses?perfil(ses.user):null)}catch(_){}},0)})}catch(_){}},
     async entrarGoogle(email){const qp=email?{login_hint:email}:{prompt:'select_account'};const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname,queryParams:qp}});if(error)throw msg(error)},
+    /* entrada alternativa: e-mail e palavra-passe da mesma conta (definida pelo próprio em Definições) */
+    async entrarSenha(email,senha){const {error}=await sb.auth.signInWithPassword({email:String(email||'').trim().toLowerCase(),password:String(senha||'')});if(!error)return;const m=error.message||'';
+      if(/invalid login credentials/i.test(m))throw new Error('E-mail ou palavra-passe errados (ou esta conta ainda não tem palavra-passe definida).');
+      if(/email logins are disabled|provider is not enabled|signups not allowed/i.test(m))throw new Error('A entrada por e-mail está desligada na base de dados (Supabase › Authentication › Sign In / Providers › Email).');
+      if(/email not confirmed/i.test(m))throw new Error('O e-mail desta conta ainda não foi confirmado.');if(/rate limit|too many/i.test(m))throw new Error('Demasiadas tentativas. Espere um pouco e tente de novo.');throw msg(error)},
+    async definirSenha(senha){const {error}=await sb.auth.updateUser({password:String(senha||'')});if(!error)return;const m=error.message||'';
+      if(/reauth|recent/i.test(m))throw new Error('Por segurança, termine a sessão, entre de novo com Google e defina logo a palavra-passe.');
+      if(/weak|at least|should be|characters|pwned/i.test(m))throw new Error('Palavra-passe fraca: '+m);if(/same.*password|different from the old/i.test(m))throw new Error('Essa já é a palavra-passe atual.');throw msg(error)},
     async autorizado(){const r=await sb.rpc('eduspruce_autorizado');if(r.error){if(r.error.code==='42501')return false;throw msg(r.error)}return r.data===true},
     tempoReal(uid,cb){try{const c=sb.channel('es-'+uid).on('postgres_changes',{event:'*',schema:'public',table:'eduspruce_sinal',filter:'user_id=eq.'+uid},()=>cb()).subscribe();return c}catch(e){console.warn('[EduSpruce] tempo real indisponível',e);return null}},
     async sair(){try{await sb.auth.signOut({scope:'local'})}catch(_){}},

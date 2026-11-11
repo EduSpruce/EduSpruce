@@ -58,6 +58,9 @@ function sbEcraEntrar(){document.body.classList.add('login-on');let o=$('#login'
     <h1>Iniciar Sessão</h1>
     <button type="button" class="btn mslg lggd" id="lg-gg"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg> <span class="lggt">Entrar com Google</span></button>
     <div class="lgerr" id="lg-err" role="alert"></div>
+    <div class="lgalt" id="lg-alt" hidden><label for="lg-em">E-mail da conta</label><input type="email" id="lg-em" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="nome@exemplo.pt">
+      <label for="lg-pw">Palavra-passe</label><input type="password" id="lg-pw" autocomplete="current-password"><button type="submit" class="btn pri" id="lg-pwok">Entrar</button></div>
+    <button type="button" class="lgoutra" id="lg-outra" aria-expanded="false">Outra forma de entrar</button>
     <p class="lgbdn">${ic('shield',14)}<span>Entra-se com a <b>conta Google autorizada</b> pelo administrador. Os seus dados aparecem logo, em qualquer aparelho — sem códigos e sem nada para configurar.</span></p></form>`;
   document.body.appendChild(o);try{loginHero()}catch(_){}try{loginLegal()}catch(_){}return o}
 let _sbEntrouAgora=false;
@@ -93,6 +96,12 @@ pedirLogin=function(){return new Promise(async ok=>{try{authCfg().catch(()=>{})}
       _sbEntrouAgora=true;esAbrir._aut={e:pf.email,q:Date.now()};entrar(pf,papel)}
     catch(e){esCortina(false);ocup('');er.textContent=(e&&e.message)||'Não foi possível entrar. Tente de novo.'}};
   bt.onclick=async()=>{er.textContent='';if(!navigator.onLine){er.textContent='Sem ligação à internet.';return}ocup('A abrir a Google…');try{const p=await sbObter();await p.entrarGoogle();setTimeout(()=>ocup(''),10000)}catch(e){ocup('');er.textContent=(e&&e.message)||'Não foi possível abrir a Google.'}};
+  /* entrada alternativa: e-mail + palavra-passe da mesma conta */
+  {const alt=o.querySelector('#lg-alt'),ob=o.querySelector('#lg-outra'),em=o.querySelector('#lg-em'),pw=o.querySelector('#lg-pw'),okb=o.querySelector('#lg-pwok');
+    ob.onclick=()=>{alt.hidden=!alt.hidden;ob.setAttribute('aria-expanded',!alt.hidden);ob.textContent=alt.hidden?'Outra forma de entrar':'Esconder';if(!alt.hidden){try{em.value=em.value||localStorage.getItem('es.lge')||''}catch(_){}(em.value?pw:em).focus()}};
+    const vai=async()=>{er.textContent='';const e=em.value.trim(),s=pw.value;if(!/^\S+@\S+\.\S+$/.test(e)){er.textContent='Escreva o e-mail da conta.';em.focus();return}if(!s){er.textContent='Escreva a palavra-passe.';pw.focus();return}if(!navigator.onLine){er.textContent='Sem ligação à internet.';return}
+      okb.disabled=true;okb.textContent='A entrar…';try{const p=await sbObter();await p.entrarSenha(e,s);pw.value='';try{localStorage.setItem('es.lge',e)}catch(_){}await concluir()}catch(x){er.textContent=(x&&x.message)||'Não foi possível entrar.'}finally{okb.disabled=false;okb.textContent='Entrar'}};
+    okb.onclick=vai;o.querySelector('form').onsubmit=ev=>{ev.preventDefault();if(!alt.hidden)vai();return false}}
   if(volta||g)concluir()})};
 /* regresso do Google com erro: explica no ecrã de entrada e limpa o endereço */
 try{const q=new URLSearchParams(location.search),h=new URLSearchParams(location.hash.slice(1));const er=q.get('error_description')||h.get('error_description');
@@ -331,6 +340,20 @@ async function recDrive(){if(!window.__esPronto)return toast('Os dados ainda est
       S=migrate(st);saveNow();const r=await nvSincronizar(true);if(!r)throw new Error(nvL().erro||'não foi possível gravar');
       try{audit('Conta','Cópia do Google Drive reposta',q)}catch(_){}livre();go('inicio');toast('Cópia reposta. O estado anterior ficou guardado.','ok')}
     catch(e){livre();toast('Não foi possível repor: '+((e&&e.message)||e),'erro')}})}
+/* palavra-passe de reserva: segunda forma de entrar na mesma conta, sem depender do Google */
+function sbSenhaDlg(){$$('dialog.nvmc.sbpw').forEach(x=>x.remove());const d=document.createElement('dialog');d.className='nvmc sbpw';
+  d.innerHTML=`<form class="nvmcf" onsubmit="return false"><h2>${ic('cadeado',18)} Palavra-passe de reserva</h2><p class="hint">Serve para entrar na <b>mesma conta</b> (${esc((SESSAO&&SESSAO.u)||'')}) com e-mail e palavra-passe, em «Outra forma de entrar», quando não puder usar o Google. Mínimo de 10 caracteres. Não fica guardada na app.</p>
+    <label for="sbpw-1">Nova palavra-passe</label><input type="password" id="sbpw-1" autocomplete="new-password" minlength="10"><label for="sbpw-2">Repetir</label><input type="password" id="sbpw-2" autocomplete="new-password" minlength="10">
+    <p class="nverr" role="alert" id="sbpw-e"></p><div class="row" style="gap:8px;justify-content:flex-end"><button type="button" class="btn" id="sbpw-c">Cancelar</button><button type="submit" class="btn pri" id="sbpw-ok">Guardar</button></div></form>`;
+  document.body.appendChild(d);d.showModal();const fim=()=>{try{d.close()}catch(_){}d.remove()};d.addEventListener('cancel',e=>{e.preventDefault();fim()});d.querySelector('#sbpw-c').onclick=fim;
+  d.querySelector('form').onsubmit=async ev=>{ev.preventDefault();const a=d.querySelector('#sbpw-1').value,b=d.querySelector('#sbpw-2').value,e=d.querySelector('#sbpw-e'),ok=d.querySelector('#sbpw-ok');
+    if(a.length<10){e.textContent='Use pelo menos 10 caracteres.';return}if(a!==b){e.textContent='As duas palavras-passe não são iguais.';return}
+    ok.disabled=true;ok.textContent='A guardar…';try{await (await sbObter()).definirSenha(a);try{localStorage.setItem('es.lge',(SESSAO&&SESSAO.u)||'')}catch(_){}try{audit('Segurança','Palavra-passe de reserva definida','')}catch(_){}fim();toast('Palavra-passe de reserva guardada. Pode entrar por «Outra forma de entrar».','ok')}
+    catch(x){e.textContent=(x&&x.message)||'Não foi possível guardar.';ok.disabled=false;ok.textContent='Guardar'}}}
+{const _bS=bindNvPainel;bindNvPainel=function(){const r=_bS.apply(this,arguments);try{const c=$('#nv-card');if(c&&nvL().prov==='supabase'&&!c.querySelector('#nv-pw')){const s=document.createElement('section');s.className='nvs';s.id='nv-pw';
+    s.innerHTML=`<div class="nvsh"><h3>Palavra-passe de reserva</h3><p>Uma segunda forma de entrar na sua conta, sem depender do Google: e-mail e palavra-passe, em «Outra forma de entrar» no ecrã de entrada.</p></div><div class="nvsb"><button type="button" class="btn" id="nv-pwb">${ic('cadeado',15)} Definir ou Mudar a Palavra-passe</button></div>`;
+    const foot=c.querySelector('.nvfoot');const card=c.querySelector('.card:not(.nvhero)')||c;if(foot)card.insertBefore(s,foot);else card.appendChild(s);s.querySelector('#nv-pwb').onclick=sbSenhaDlg}}catch(e){console.warn(e)}return r}}
+(()=>{const st=document.createElement('style');st.textContent='#login .lgoutra{display:block;margin:10px auto 0;background:none;border:0;color:var(--acc,#0e6a93);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;min-height:36px}#login .lgalt{display:flex;flex-direction:column;gap:6px;margin-top:14px;text-align:left}#login .lgalt[hidden]{display:none}#login .lgalt label{font-size:13px;font-weight:700}#login .lgalt input{min-height:46px;font-size:16px}#login .lgalt .btn{margin-top:8px;min-height:46px;justify-content:center}dialog.sbpw input{width:100%;min-height:44px;margin:4px 0 8px}';document.head.appendChild(st)})();
 {const _bR=bindNvPainel;bindNvPainel=function(){const r=_bR.apply(this,arguments);try{const c=$('#nv-card');if(c&&nvL().prov==='supabase'&&!c.querySelector('#nv-rec')){const s=document.createElement('section');s.className='nvs';s.id='nv-rec';
     s.innerHTML=`<div class="nvsh"><h3>Recuperar uma cópia anterior</h3><p>Se alguma coisa desapareceu, procure uma cópia mais antiga e compare antes de repor. Nada é substituído sem confirmar.</p></div><div class="nvsb"><button type="button" class="btn" id="nv-recgd">${ic('search',15)} Procurar Cópia no Google Drive</button></div>`;
     const foot=c.querySelector('.nvfoot');const card=c.querySelector('.card:not(.nvhero)')||c;if(foot)card.insertBefore(s,foot);else card.appendChild(s);s.querySelector('#nv-recgd').onclick=recDrive}}catch(e){console.warn(e)}return r}}
