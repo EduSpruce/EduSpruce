@@ -25,7 +25,7 @@ label{display:block;font-weight:650;margin:14px 0 6px}
 input,textarea{width:100%;font:inherit;font-size:17px;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px}
 textarea{min-height:84px;resize:vertical}
 input:focus,textarea:focus,button:focus-visible,.al:focus-within{outline:3px solid color-mix(in srgb,var(--acc) 55%,transparent);outline-offset:2px;border-color:var(--acc)}
-#cod{font-size:26px;letter-spacing:.18em;text-transform:uppercase;text-align:center;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+#cod,.pc{font-size:26px;letter-spacing:.18em;text-transform:uppercase;text-align:center;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 button{font:inherit}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;border-radius:14px;border:0;background:var(--acc);color:#fff;font-weight:700;font-size:17px;cursor:pointer;margin-top:16px}
 .btn.sec{background:transparent;color:var(--acc);border:1.5px solid var(--line)}
@@ -83,7 +83,7 @@ async function rpc(fn,args){const c=await cfg();const r=await fetch(c.url+'/rest
   if(!r.ok){const t=await r.text().catch(()=>'');const e=new Error(t||('HTTP '+r.status));e.status=r.status;throw e}return r.json()}
 const espera=t=>`<span class="spin" aria-hidden="true"></span> ${esc(t)}`;
 const NIV=[['1','Ainda não consigo','#dc2626'],['2','Consigo com ajuda','#d97706'],['3','Consigo sozinho(a)','#2563eb'],['4','Consigo e ajudo os outros','#16a34a']];
-let S={code:'',id:'',k:null,D:null,aluno:null};
+let S={code:'',id:'',k:null,D:null,aluno:null,chave:''};let PRE=null;
 
 /* 1. código */
 function ecraCodigo(msg,valor){app.innerHTML=`<section class="card"><h1>Autoavaliação</h1><p class="mut">Escreve o código que o professor mostrou (8 letras e números).</p>
@@ -95,17 +95,27 @@ function ecraCodigo(msg,valor){app.innerHTML=`<section class="card"><h1>Autoaval
     b.disabled=true;b.innerHTML=espera('A abrir…');await abrir(c);b.disabled=false;b.textContent='Continuar'};
   if(!valor)setTimeout(()=>i.focus(),50)}
 async function abrir(code){try{const {id,k}=await chaves(code);let L;try{L=await rpc('eduspruce_autoav_ler',{p_id:id})}catch(e){if(e.status===404||/does not exist|PGRST202/.test(e.message))return ecraCodigo('A autoavaliação pelo telemóvel ainda não está ativa neste site. Avisa o professor.',code);throw e}
-    if(!Array.isArray(L)||!L.length)return ecraCodigo('Este código não existe ou a autoavaliação já fechou. Confirma o código com o professor.',code.slice(0,4)+'-'+code.slice(4));
+    if(!Array.isArray(L)||!L.length){if(PRE)return ecraFechada();return ecraCodigo('A autoavaliação desta turma não está aberta neste momento (ou o código está errado). Confirma com o professor.',code.slice(0,4)+'-'+code.slice(4))}
     let D;try{D=await decifrar(L[0].dados,k)}catch(_){return ecraCodigo('Não foi possível abrir com este código. Confirma-o com o professor.',code)}
-    S={code,id,k,D,aluno:null,exp:L[0].expira};try{history.replaceState(null,'',location.pathname+'#'+code)}catch(_){}ecraQuem()}
+    S={code,id,k,D,aluno:null,chave:'',exp:L[0].expira};
+    if(PRE&&PRE.code===code){const a=D.al.find(x=>x.id===PRE.aid);if(a){S.aluno=a;S.chave=PRE.chave;return ecraForm()}return ecraQuem('Não encontrámos o teu nome nesta turma. Escolhe o teu número e escreve o código pessoal do teu papel.')}
+    try{history.replaceState(null,'',location.pathname+'#'+code)}catch(_){}ecraQuem()}
   catch(e){console.warn(e);ecraCodigo(navigator.onLine?'Não foi possível ligar. Tenta outra vez dentro de momentos.':'Sem internet. Liga-te e tenta outra vez.',code)}}
 
 /* 2. quem és? */
 function cab(){const D=S.D;return `<div class="tit"><h1>${esc(D.t)} · ${esc(D.d)}</h1><span class="tag">${esc(D.pn)}</span></div>${D.prof?`<p class="mut peq">Professor(a): ${esc(D.prof)}</p>`:''}`}
-function ecraQuem(){const D=S.D;app.innerHTML=`<section class="card">${cab()}<form id="f" novalidate><fieldset style="border:0;padding:0;margin:0"><legend><h2 style="margin-top:8px">Quem és?</h2><span class="mut peq">Escolhe o teu número.</span></legend>
+function ecraQuem(msg){const D=S.D;app.innerHTML=`<section class="card">${cab()}<form id="f" novalidate><fieldset style="border:0;padding:0;margin:0"><legend><h2 style="margin-top:8px">Quem és?</h2><span class="mut peq">Escolhe o teu número.</span></legend>
   <div class="als">${D.al.map(a=>`<label class="al"><input type="radio" name="al" value="${esc(a.id)}"><span><b>${esc(a.n)}</b>${esc(a.nm)}</span></label>`).join('')}</div></fieldset>
-  <p class="err" id="e" role="alert"></p><button class="btn">Continuar</button></form></section>`;
-  $('#f').onsubmit=ev=>{ev.preventDefault();const r=document.querySelector('input[name=al]:checked');if(!r){$('#e').textContent='Escolhe o teu número.';return}S.aluno=D.al.find(a=>a.id===r.value);ecraForm()}}
+  ${D.pes?`<label for="pc">O teu código pessoal</label><p class="mut peq" style="margin-top:-2px">Está no teu papel (5 letras e números). Assim, só tu podes responder por ti.</p><input id="pc" class="pc" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="5" placeholder="XXXXX" autocomplete="off">`:''}
+  <p class="err" id="e" role="alert">${esc(msg||'')}</p><button class="btn">Continuar</button></form></section>`;
+  const pc=$('#pc');if(pc)pc.addEventListener('input',()=>{pc.value=norm(pc.value).slice(0,5)});
+  $('#f').onsubmit=ev=>{ev.preventDefault();const r=document.querySelector('input[name=al]:checked');if(!r){$('#e').textContent='Escolhe o teu número.';return}
+    if(D.pes){const c=norm(pc.value);if(c.length!==5||[...c].some(x=>!ALF.includes(x))){$('#e').textContent='Escreve o código pessoal que está no teu papel (5 letras e números).';pc.focus();return}S.chave=c}
+    S.aluno=D.al.find(a=>a.id===r.value);ecraForm()}}
+/* papel lido mas a autoavaliação ainda não abriu */
+function ecraFechada(){app.innerHTML=`<section class="card ok"><div class="ico" aria-hidden="true" style="background:var(--acc2);color:var(--acc)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+  <h1>Ainda não está aberta</h1><p class="mut">A autoavaliação da tua turma ainda não começou (ou já fechou). Quando o professor disser, volta a apontar a câmara ao teu papel.</p><button class="btn sec" id="rt">Tentar de novo</button></section>`;
+  $('#rt').onclick=()=>{app.innerHTML=`<section class="card"><p>${espera('A verificar…')}</p></section>`;abrir(PRE.code)}}
 
 /* 3. autoavaliação */
 function ecraForm(R){const D=S.D,q=D.q||{},a=S.aluno;R=R||{dom:{},plano:{}};
@@ -120,13 +130,15 @@ function ecraForm(R){const D=S.D,q=D.q||{},a=S.aluno;R=R||{dom:{},plano:{}};
     ${q.melhorar!==false?campo('melhorar','O que posso melhorar','ex.: estudar com mais regularidade',R.melhorar):''}</section>`:''}
   ${q.plano!==false?`<section class="card"><h2>Compromisso para o próximo ${esc((D.W||'período').toLowerCase())}</h2>
     ${campo('meta','A minha meta','ex.: subir um nível em Produção Escrita',R.plano.meta)}${campo('estr','Como vou lá chegar','ex.: rever a matéria todas as semanas',R.plano.estr)}${campo('apoio','O que preciso do professor','ex.: feedback nos textos escritos',R.plano.apoio)}</section>`:''}
+  ${q.sug!==false?`<section class="card"><h2>Sugestões para as aulas</h2><p class="mut peq">O que podia tornar as aulas melhores para ti? O professor lê as sugestões <b>sem o teu nome</b>.</p>
+    <label for="sug" class="sr">Sugestões para as aulas</label><textarea id="sug" rows="3" maxlength="800" placeholder="ex.: mais trabalhos em grupo, mais exemplos antes dos exercícios…">${esc(R.sug||'')}</textarea></section>`:''}
   <p class="err" id="e" role="alert"></p><button class="btn" id="b">Enviar ao professor</button></form>`;
-  $('#troca').onclick=()=>ecraQuem();
+  $('#troca').onclick=()=>{S.chave='';ecraQuem()};
   $('#f').onsubmit=async ev=>{ev.preventDefault();const e=$('#e'),b=$('#b');e.textContent='';
-    const r={v:1,aid:a.id,n:a.n,dom:{},plano:{},q:Date.now()};
+    const r={v:2,aid:a.id,n:a.n,k:S.chave||'',p:D.p,dom:{},plano:{},q:Date.now()};
     D.dom.forEach(d=>{const x=document.querySelector(`input[name="d-${CSS.escape(d.id)}"]:checked`);if(x)r.dom[d.id]=+x.value});
     const v=id=>{const el=$('#'+id);return el?el.value.trim().slice(0,600):''};
-    r.nota=v('nota').replace(',','.');r.forte=v('forte');r.melhorar=v('melhorar');r.plano={meta:v('meta'),estr:v('estr'),apoio:v('apoio')};
+    r.nota=v('nota').replace(',','.');r.forte=v('forte');r.melhorar=v('melhorar');r.plano={meta:v('meta'),estr:v('estr'),apoio:v('apoio')};{const sg=$('#sug');r.sug=sg?sg.value.trim().slice(0,800):''}
     if(r.nota){const n=+r.nota;const max=D.esc==='20'?20:5,min=D.esc==='20'?0:1;if(!isFinite(n)||n<min||n>max){e.textContent='A classificação tem de estar entre '+min+' e '+max+'.';$('#nota').focus();return}}
     const falta=q.dom!==false?D.dom.filter(d=>!r.dom[d.id]):[];if(falta.length&&!confirm('Não escolheste o nível em '+falta.length+' domínio(s). Enviar assim mesmo?'))return;
     b.disabled=true;b.innerHTML=espera('A enviar…');
@@ -138,7 +150,8 @@ function ecraOk(r){app.innerHTML=`<section class="card ok"><div class="ico" aria
   <h1>Obrigado, ${esc(S.aluno.nm.split(' ')[0])}!</h1><p class="mut">A tua autoavaliação foi enviada ao professor.</p><button class="btn sec" id="ed">Corrigir a minha resposta</button></section>`;
   $('#ed').onclick=()=>ecraForm(r);try{$('.ok h1').focus()}catch(_){}}
 
-const h=norm(decodeURIComponent((location.hash||'').slice(1)));
+const raw=decodeURIComponent((location.hash||'').slice(1)).trim();const mP=raw.match(/^([0-9A-Za-z]{4}-?[0-9A-Za-z]{4})\.([a-z0-9]{6,32})\.([0-9A-Za-z]{5})$/);
+if(mP)PRE={code:norm(mP[1]),aid:mP[2],chave:norm(mP[3])};const h=PRE?PRE.code:norm(raw);
 if(!window.crypto||!crypto.subtle){app.innerHTML='<section class="card"><h1>Navegador antigo</h1><p>Abre esta página num navegador atualizado (Safari, Chrome, Firefox ou Edge).</p></section>'}
 else if(h.length===8){app.innerHTML=`<section class="card"><p>${espera('A abrir a autoavaliação…')}</p></section>`;abrir(h)}else ecraCodigo('',h?h:'')
 })();

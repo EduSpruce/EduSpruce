@@ -61,13 +61,21 @@ function sbEcraEntrar(){document.body.classList.add('login-on');let o=$('#login'
     <p class="lgbdn">${ic('shield',14)}<span>Entra-se com a <b>conta Google autorizada</b> pelo administrador. Os seus dados aparecem logo, em qualquer aparelho — sem códigos e sem nada para configurar.</span></p></form>`;
   document.body.appendChild(o);try{loginHero()}catch(_){}try{loginLegal()}catch(_){}return o}
 let _sbEntrouAgora=false;
-pedirLogin=function(){return new Promise(async ok=>{try{await authCfg()}catch(_){}
+/* v0.942 · cortina: nada da app fica à vista enquanto a sessão se confirma ou antes de pedir o código de acesso */
+function esCortina(on){let o=$('#escofre');if(!on){if(o)o.remove();return}if(o)return;o=document.createElement('div');o.id='escofre';o.setAttribute('aria-busy','true');o.innerHTML='<span class="sr" role="status">A abrir…</span><i aria-hidden="true"></i>';document.body.appendChild(o)}
+const sbGuardadaValida=()=>{try{const j=JSON.parse(localStorage.getItem(SB_SES)||'null');return !!(j&&j.expires_at&&j.expires_at*1000>Date.now()+30000)}catch(_){return false}};
+pedirLogin=function(){return new Promise(async ok=>{try{authCfg().catch(()=>{})}catch(_){}
   const entrar=(pf,papel)=>{const ant=sessaoAtual();const m=ant&&ant.tipo==='google'&&String(ant.u||'').toLowerCase()===pf.email?ant:null;
     const s={u:pf.email,nome:pf.nome||(m&&m.nome)||pf.email,papel:papel||(m&&m.papel)||'professor',tipo:'google',foto:pf.foto||(m&&m.foto)||'',desde:(m&&m.desde)||Date.now()};
     SESSAO=s;guardarSessao(s,true);document.body.classList.remove('login-on');const o=$('#login');if(o){o.classList.add('sai');setTimeout(()=>o.remove(),280)}
+    try{if(localStorage.getItem('es.pin')==='1')esCortina(true)}catch(_){}
     try{sessBox()}catch(_){}setTimeout(esAbrir,0);ok(s)};
-  const volta=/[?&]code=/.test(location.search);const g=sbGuardada();
-  if(g&&!volta)return entrar(g); /* sessão neste aparelho: entra logo, como uma app normal */
+  const volta=/[?&]code=/.test(location.search);let g=sbGuardada();
+  if(g&&!volta&&sbGuardadaValida())return entrar(g); /* sessão válida neste aparelho: entra logo, como uma app normal */
+  if(g&&!volta){/* sessão guardada mas já caducada (ex.: atalho no ecrã principal aberto dias depois): confirma-se primeiro, sem mostrar a app */
+    esCortina(true);let pf=null;try{const p=await sbObter();pf=await Promise.race([p.sessao(),new Promise(r=>setTimeout(()=>r(undefined),8000))])}catch(e){pf=(e&&e.rede)?undefined:null}
+    if(pf)return entrar(pf);if(pf===undefined){esCortina(false);return entrar(g)} /* sem internet ou rede lenta: a abertura normal trata disso (aviso «sem ligação») */
+    esCortina(false);sbEsquecer();g=null}
   /* sem sessão (ou a voltar do Google): a sessão antiga da app, sozinha, já não abre nada */
   try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY)}catch(_){}SESSAO=null;
   let msg='';try{msg=sessionStorage.getItem('es.lgmsg')||'';sessionStorage.removeItem('es.lgmsg')}catch(_){}
@@ -132,7 +140,7 @@ function esEsqueleto(modo,tit,txt){let o=$('#esabrir');if(!modo){document.body.c
   if(modo==='abrir'){o.setAttribute('aria-busy','true');o.innerHTML=`<span class="sr" role="status">A abrir os seus dados…</span><div class="eskg" aria-hidden="true"><div class="esk eskh"></div><div class="eskr"><div class="esk"></div><div class="esk"></div><div class="esk"></div><div class="esk"></div></div><div class="eskc"><div class="esk eskb"></div><div class="esk eskb"></div></div><div class="esk eskl"></div><div class="esk eskl"></div><div class="esk eskl c"></div></div>`;return}
   o.removeAttribute('aria-busy');o.innerHTML=`<div class="esmsg" role="alert"><span class="esmi">${ic(modo==='offline'?'cloud':'alert',30)}</span><h2>${esc(tit)}</h2><p>${esc(txt)}</p><div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="btn pri" id="esab-r">${ic('refresh',15)} Tentar de Novo</button><button type="button" class="btn" id="esab-s">Terminar Sessão</button></div></div>`;
   o.querySelector('#esab-r').onclick=()=>{if(sbModuloFalhou()){window.__esSair=true;return location.reload()}esAbrir()};o.querySelector('#esab-s').onclick=()=>sbTerminar()}
-function esFalha(e){const rede=!navigator.onLine||(e&&e.rede);console.warn('[EduSpruce] abrir dados:',e&&e.message);
+function esFalha(e){esCortina(false);const rede=!navigator.onLine||(e&&e.rede);console.warn('[EduSpruce] abrir dados:',e&&e.message);
   if(rede)esEsqueleto('offline','Sem ligação à internet','Os seus dados estão guardados na base de dados. Assim que houver ligação, abrem sozinhos.');
   else esEsqueleto('erro','Não foi possível abrir os seus dados',(e&&e.message)||'Tente de novo dentro de momentos.');
   clearTimeout(esFalha._t);esFalha._t=setTimeout(()=>{if(window.__esPronto||!navigator.onLine||document.visibilityState!=='visible')return;if(e&&e.semModulo&&sbModuloFalhou()){if(sbRecarregar())return}esAbrir()},rede?4000:20000)}
@@ -174,7 +182,8 @@ async function esPosCarga(pf){
   if(S.cfg.pinHash&&!esPosCarga._pin){esPosCarga._pin=true;
     let rep=null;try{rep=JSON.parse(localStorage.getItem('es.pinrep')||'null');localStorage.removeItem('es.pinrep')}catch(_){}
     if(rep&&rep.e===pf.email&&Date.now()-rep.q<15*60*1000&&_sbEntrouAgora){delete S.cfg.pinHash;try{audit('Segurança','Código de acesso retirado (entrou de novo com a conta Google)',pf.email)}catch(_){}save();setTimeout(()=>toast('Código de acesso retirado. Pode definir um novo em Definições › Dados e Segurança.','ok'),900)}
-    else{try{await pedirPin()}catch(e){console.warn(e)}}}
+    else{try{const pp=pedirPin();esCortina(false);await pp}catch(e){console.warn(e)}}}
+  try{if(S.cfg.pinHash)localStorage.setItem('es.pin','1');else localStorage.removeItem('es.pin')}catch(_){}esCortina(false);
   esEsqueleto(null);try{aplicarPrefs()}catch(_){}try{go(VIEW||'inicio')}catch(e){console.warn(e)}
   try{if(_sbEntrouAgora){_sbEntrouAgora=false;regista('Sessão','',pf.email+' entrou')}}catch(_){}
   try{let m=false;const c=S.cfg;
@@ -373,6 +382,7 @@ async function esLimparAparelho(){if(_esLimpo)return;const L=nvL();if(L.prov!=='
   return r}}
 (()=>{const st=document.createElement('style');st.textContent=`#esbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:99999;pointer-events:none;opacity:0;transition:opacity .25s}#esbar.on{opacity:1}#esbar i{display:block;height:100%;width:40%;background:var(--acc,#1b93c6);animation:esbarra 1.1s ease-in-out infinite}@keyframes esbarra{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
 body.es-abrir #view,body.es-abrir #barx,body.es-abrir #nffab,body.es-abrir #tabbar .tbdg{display:none!important}
+#escofre{position:fixed;inset:0;z-index:190;background:var(--bg,#f3f6f8);display:grid;place-items:center}#escofre i{width:34px;height:34px;border-radius:50%;border:3px solid color-mix(in srgb,var(--acc,#0e6a93) 25%,transparent);border-top-color:var(--acc,#0e6a93);animation:escf .8s linear infinite}@keyframes escf{to{transform:rotate(360deg)}}
 #esabrir{flex:1;min-height:0;overflow:hidden;padding:20px;box-sizing:border-box}body.dev-tlm #esabrir{padding:12px}
 .eskg{display:grid;gap:14px;max-width:1100px}.esk{border-radius:14px;background:linear-gradient(100deg,color-mix(in srgb,var(--mut,#777) 13%,transparent) 30%,color-mix(in srgb,var(--mut,#777) 6%,transparent) 50%,color-mix(in srgb,var(--mut,#777) 13%,transparent) 70%);background-size:300% 100%;animation:eskb 1.4s ease-in-out infinite;height:64px}
 .eskh{height:34px;width:min(320px,60%)}.eskr{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.eskr .esk{height:86px}.eskc{display:grid;grid-template-columns:2fr 1fr;gap:14px}.eskb{height:190px}.eskl{height:54px}.eskl.c{width:70%}

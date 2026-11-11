@@ -2,6 +2,16 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.942
+- Autoavaliação v2 (papéis anuais, código pessoal, recusas/duplicados, sugestões)
+- Anos letivos sem nomes repetidos + juntar
+- Início sem seletor de turma
+- Bloqueio: aviso de 1 s + modal
+- Tarefas: aumentar
+- Entrada: cortina e sessão caducada confirmada antes
+- theme-color = cor da barra
+- manterPosicao não puxa o scroll; toque só vigiado nos cartões
+
 ## 0.941
 - Menu só ícones: sessão/tema compactos, tema num só botão
 - Recolher menu: só ícone no fundo
