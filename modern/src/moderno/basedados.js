@@ -171,6 +171,7 @@ async function esAbrir0(){clearTimeout(esFalha._t);esEsqueleto('abrir');let b=$(
   try{nvSet({base:null,mod:{}})}catch(_){}
   if(!(await sbIndiceOk(p))){const e=new Error('O índice dos seus dados não foi encontrado, mas há dados na conta. Por segurança nada foi alterado. Contacte o suporte.');throw e}
   let r=null;window.__nvSemFotos=true;_esDentro=true;window.__esAbrirBD=true;try{r=await nvSincronizar(false)}finally{window.__nvSemFotos=false;_esDentro=false;window.__esAbrirBD=false;sbMemo.limpar()}
+  if(!r&&/recusou a operação/i.test(nvL().erro||'')&&S.anos&&S.anos.length){/* leu os dados mas a base de dados recusa gravar: abre na mesma e avisa */r={soLeitura:true};setTimeout(()=>esSemGravar(nvL().erro),600)}
   if(!r){const m=nvL().erro||'';const e=new Error(m||'Não foi possível abrir os dados.');if(/Sem ligação|internet|rede/i.test(m))e.rede=true;throw e}
   window.__esPronto=true;clearTimeout(esFalha._t);try{sessionStorage.removeItem('es.rl')}catch(_){}
   if(!_sbCanal)_sbCanal=p.tempoReal(pf.id,sbPuxar)||1;
@@ -335,6 +336,11 @@ async function recDrive(){if(!window.__esPronto)return toast('Os dados ainda est
     const foot=c.querySelector('.nvfoot');const card=c.querySelector('.card:not(.nvhero)')||c;if(foot)card.insertBefore(s,foot);else card.appendChild(s);s.querySelector('#nv-recgd').onclick=recDrive}}catch(e){console.warn(e)}return r}}
 (()=>{const st=document.createElement('style');st.textContent='.recdlg{max-width:min(860px,96vw);width:860px}.recg{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-height:52vh;overflow:auto;margin:10px 0}.recg h3{margin:0 0 6px;font-size:14px}.recano{margin:0 0 10px}.recano ul{margin:4px 0 0;padding-left:18px;font-size:13px}@media(max-width:700px){.recg{grid-template-columns:1fr}}';document.head.appendChild(st)})();
 
+/* aviso claro quando a base de dados recusa gravar (em vez de terminar a sessão sem explicação) */
+function esSemGravar(det){let o=$('#essemgrav');if(!o){o=document.createElement('div');o.id='essemgrav';o.setAttribute('role','alert');document.body.appendChild(o)}
+  o.innerHTML=`<b>${ic('alert',16)} As alterações não estão a ser guardadas</b><span>${esc(String(det||''))}</span><button type="button" class="btn sm" id="essg-x">Fechar</button>`;o.querySelector('#essg-x').onclick=()=>o.remove()}
+(()=>{const st=document.createElement('style');st.textContent='#essemgrav{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:100001;max-width:min(680px,94vw);display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:12px 16px;border-radius:14px;background:#7f1d1d;color:#fff;box-shadow:0 18px 50px rgba(0,0,0,.4);font-size:14px}#essemgrav b{display:flex;gap:6px;align-items:center}#essemgrav span{flex:1 1 260px;opacity:.9;font-size:12.5px;word-break:break-word}#essemgrav .btn{background:rgba(255,255,255,.14);color:#fff;border-color:transparent}';document.head.appendChild(st)})();
+
 /* ===== a lista «Quem Pode Entrar com Google» (Definições › Conta e Acesso) manda também na base de dados =====
    só o administrador a envia; vai a impressão digital de cada e-mail (como no eduspruce-config.json), nunca o e-mail */
 async function sbContasLista(){const M=new Map();let C=null;try{C=await acCentral()}catch(_){}if(!C||!C.ok||!Array.isArray(C.contas))return null; /* sem a lista do site não se mexe em nada */
@@ -382,7 +388,11 @@ async function esLimparAparelho(){if(_esLimpo)return;const L=nvL();if(L.prov!=='
 {const _ns=nvSincronizar;nvSincronizar=async function(){if(nvL().prov==='supabase'&&!window.__esPronto&&!_esDentro)return null;
   const r=await _ns.apply(this,arguments);
   try{if(r&&nvL().prov==='supabase')setTimeout(esLimparAparelho,200);
-    if(!r&&window.__esPronto){const e=nvL().erro||'';if(/sessão terminou/i.test(e))sbTerminar(e);else if(/não está autorizada/i.test(e))sbTerminar(e)}}catch(_){}
+    if(!r&&window.__esPronto){const e=nvL().erro||'';if(/sessão terminou/i.test(e))sbTerminar(e);
+      else if(/não está autorizada|recusou a operação/i.test(e)){/* v0.948 · uma gravação recusada não é o mesmo que a conta não estar autorizada: só sai se a conta deixou mesmo de estar autorizada */
+        let aut=true;try{aut=await (await sbObter()).autorizado()}catch(_){}
+        if(!aut)sbTerminar('A conta '+((SESSAO&&SESSAO.u)||'')+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.');
+        else if(!esSemGravar._q||Date.now()-esSemGravar._q>60000){esSemGravar._q=Date.now();esSemGravar(e)}}}}catch(_){}
   return r}}
 (()=>{const st=document.createElement('style');st.textContent=`#esbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:99999;pointer-events:none;opacity:0;transition:opacity .25s}#esbar.on{opacity:1}#esbar i{display:block;height:100%;width:40%;background:var(--acc,#1b93c6);animation:esbarra 1.1s ease-in-out infinite}@keyframes esbarra{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
 body.es-abrir #view,body.es-abrir #barx,body.es-abrir #nffab,body.es-abrir #tabbar .tbdg{display:none!important}

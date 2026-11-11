@@ -5,7 +5,7 @@
 const CHAVE_SESSAO='eduspruce.sb';
 const eRede=e=>{const m=(e&&e.message)||String(e||'');return /Failed to fetch|NetworkError|Load failed|network|fetch failed|timeout|aborted/i.test(m)||(e&&(e.name==='AuthRetryableFetchError'||e.status===0||e.status>=500))};
 const msg=e=>{const c=e&&e.code,m=(e&&e.message)||String(e);let x;
-  if(c==='42501'||/row-level security|permission denied/i.test(m)){x=new Error('Esta conta Google não está autorizada na EduSpruce. Peça ao administrador para a autorizar.');x.semAcesso=true}
+  if(c==='42501'||/row-level security|permission denied/i.test(m)){x=new Error('A base de dados recusou a operação ('+String(m).slice(0,160)+').');x.semAcesso=true;x.recusa=true}
   else if(c==='PGRST205'||/does not exist|schema cache/i.test(m))x=new Error('A base de dados ainda não foi preparada (falta correr o script SQL).');
   else if(eRede(e)){x=new Error('Sem ligação à base de dados. Verifique a internet ou se a rede da escola a bloqueia.');x.rede=true}
   else if(c==='PGRST301'||/JWT|401|invalid.*token|not authenticated/i.test(m)){x=new Error('A sessão terminou. Entre de novo com a sua conta Google.');x.semSessao=true}
@@ -24,7 +24,7 @@ export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'})
     async sessao(){const {data,error}=await sb.auth.getSession();if(data&&data.session)return perfil(data.session.user);if(error&&eRede(error))throw msg(error);return null},
     aoMudar(cb){try{sb.auth.onAuthStateChange((ev,ses)=>{setTimeout(()=>{try{cb(ev,ses?perfil(ses.user):null)}catch(_){}},0)})}catch(_){}},
     async entrarGoogle(email){const qp=email?{login_hint:email}:{prompt:'select_account'};const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname,queryParams:qp}});if(error)throw msg(error)},
-    async autorizado(){const r=await sb.rpc('eduspruce_autorizado');if(r.error)throw msg(r.error);return r.data===true},
+    async autorizado(){const r=await sb.rpc('eduspruce_autorizado');if(r.error){if(r.error.code==='42501')return false;throw msg(r.error)}return r.data===true},
     tempoReal(uid,cb){try{const c=sb.channel('es-'+uid).on('postgres_changes',{event:'*',schema:'public',table:'eduspruce_sinal',filter:'user_id=eq.'+uid},()=>cb()).subscribe();return c}catch(e){console.warn('[EduSpruce] tempo real indisponível',e);return null}},
     async sair(){try{await sb.auth.signOut({scope:'local'})}catch(_){}},
     async lista(){await uid();const o={};let de=0;for(;;){const d=ok(await sb.from(tabela).select('nome,tamanho').order('nome').range(de,de+999));d.forEach(r=>o[r.nome]=r.tamanho);if(d.length<1000)break;de+=1000}return o},

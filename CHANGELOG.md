@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.948
+- Gravação recusada (42501) deixa de ser tratada como conta não autorizada; aviso #essemgrav com o detalhe; abertura só de leitura
+- SQL 0007: regras de gravação repostas e histórico que nunca bloqueia
+
 ## 0.947
 - Regresso do OAuth: cortina por cima do ecrã de entrada até abrir; erros continuam a aparecer no formulário
 
