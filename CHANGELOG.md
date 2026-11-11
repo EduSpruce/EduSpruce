@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.952
+- cl
+- Entrada: verificação da conta mais robusta e com diagnóstico
+
 ## 0.951
 - autorizado(): nova tentativa após renovar a sessão e erro detalhado
 

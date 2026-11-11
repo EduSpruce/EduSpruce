@@ -91,7 +91,7 @@ pedirLogin=function(){return new Promise(async ok=>{try{authCfg().catch(()=>{})}
   const recusar=async(p,m)=>{esCortina(false);try{await p.sair()}catch(_){}sbEsquecer();ocup('');er.textContent=m};
   const concluir=async()=>{ocup('A entrar…');er.textContent='';
     try{const p=await sbObter();const pf=await p.sessao();if(!pf){esCortina(false);ocup('');if(volta)er.textContent='Não foi possível concluir a entrada. Toque em «Entrar com Google» outra vez.';return}
-      if(!(await p.autorizado()))return recusar(p,'A conta '+pf.email+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.');
+      if(!(await p.autorizado())){let d='';try{d=p.diagAut?await p.diagAut():''}catch(_){}return recusar(p,'A conta '+pf.email+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.'+(d?' ['+d+']':''))}
       let papel='';try{papel=(await acVerificar(pf.email)).papel||''}catch(e){if(e&&e.semAcesso)return recusar(p,e.message)}
       _sbEntrouAgora=true;esAbrir._aut={e:pf.email,q:Date.now()};entrar(pf,papel)}
     catch(e){esCortina(false);ocup('');er.textContent=(e&&e.message)||'Não foi possível entrar. Tente de novo.'}};
@@ -167,7 +167,7 @@ async function esAbrir0(){clearTimeout(esFalha._t);esEsqueleto('abrir');let b=$(
   /* um só vaivém: confirma que a conta está autorizada e traz os dados todos (menos fotografias e anexos, que chegam depois) */
   const jaAut=esAbrir._aut&&esAbrir._aut.e===pf.email&&Date.now()-esAbrir._aut.q<15000;
   let aut,D;try{[aut,D]=await Promise.all([jaAut?true:p.autorizado(),p.lerDados?p.lerDados().catch(e=>{if(e&&e.semAcesso)return null;throw e}):null])}catch(e){if(e&&e.semSessao)return sbTerminar(e.message);throw e}
-  if(!aut)return sbTerminar('A conta '+pf.email+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.');
+  if(!aut){let d='';try{d=p.diagAut?await p.diagAut():''}catch(_){}return sbTerminar('A conta '+pf.email+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.'+(d?' ['+d+']':''))}
   /* o perfil (administrador, professor…) confirma-se sem atrasar a abertura */
   acVerificar(pf.email).then(r=>{if(r&&r.papel&&SESSAO&&r.papel!==SESSAO.papel){SESSAO.papel=r.papel;guardarSessao(SESSAO,true);try{sessBox()}catch(_){}if(window.__esPronto){try{go(VIEW)}catch(_){}}}}).catch(e=>{if(e&&e.semAcesso)sbTerminar(e.message)});
   {const L=nvL();const o={sb:1,conta:pf.email,semSync:false,renovar:false};if(L.prov!=='supabase')Object.assign(o,{prov:'supabase',base:null,mod:{},erro:'',sbDe:L.prov||''});if(L.auto===false)o.auto=true;nvSet(o)}

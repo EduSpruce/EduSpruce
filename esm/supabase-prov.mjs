@@ -32,12 +32,22 @@ export async function criarProvSupabase({url,anonKey,tabela='eduspruce_partes'})
     async definirSenha(senha){const {error}=await sb.auth.updateUser({password:String(senha||'')});if(!error)return;const m=error.message||'';
       if(/reauth|recent/i.test(m))throw new Error('Por segurança, termine a sessão, entre de novo com Google e defina logo a palavra-passe.');
       if(/weak|at least|should be|characters|pwned/i.test(m))throw new Error('Palavra-passe fraca: '+m);if(/same.*password|different from the old/i.test(m))throw new Error('Essa já é a palavra-passe atual.');throw msg(error)},
-    async autorizado(){let r=await sb.rpc('eduspruce_autorizado');
-      /* sem testemunho de sessão no pedido (aparece como «anon»): renova a sessão e tenta outra vez antes de recusar */
-      if(r.error&&(r.error.code==='42501'||r.status===401)){try{await sb.auth.refreshSession()}catch(_){}r=await sb.rpc('eduspruce_autorizado')}
-      if(r.error){let info='';try{const {data}=await sb.auth.getSession();const t=data&&data.session&&data.session.access_token;if(!t)info='sem sessão no pedido';else{const j=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));info='papel '+j.role+', expira em '+Math.round(j.exp-Date.now()/1000)+' s'}}catch(_){}
-        const e=new Error('A verificação da conta falhou na base de dados ('+(r.error.code||r.status)+': '+String(r.error.message||'erro').slice(0,140)+(info?' · '+info:'')+').');e.code=r.error.code;e.detalhe=true;throw e}
-      return r.data===true},
+    async autorizado(){
+      /* pede a verificação com o testemunho da sessão posto explicitamente no pedido (não depende do cliente) */
+      const tok=async()=>{const {data}=await sb.auth.getSession();return data&&data.session&&data.session.access_token};
+      const pedir=async t=>{const h={apikey:anonKey,'Content-Type':'application/json','x-es-ver':ver};if(t)h.Authorization='Bearer '+t;
+        const r=await fetch(url+'/rest/v1/rpc/eduspruce_autorizado',{method:'POST',headers:h,body:'{}',cache:'no-store'});const tx=await r.text();return {st:r.status,tx}};
+      let t=await tok(),r=await pedir(t);
+      if(r.st!==200||r.tx.trim()!=='true'){try{await sb.auth.refreshSession()}catch(_){}t=await tok();r=await pedir(t)}
+      if(r.st===200&&r.tx.trim()==='true')return true;
+      let info='';try{if(!t)info='sem sessão';else{const j=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+        const u=await fetch(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:'Bearer '+t}});
+        info='papel '+j.role+', e-mail no testemunho '+(j.email||'(nenhum)')+', servidor de contas '+u.status+', alg '+(JSON.parse(atob(t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/'))).alg||'?')}}catch(_){}
+      if(r.st===200&&r.tx.trim()==='false')return false;
+      const e=new Error('A verificação da conta falhou na base de dados ('+r.st+': '+r.tx.slice(0,140)+(info?' · '+info:'')+').');e.detalhe=true;throw e},
+    async diagAut(){const {data}=await sb.auth.getSession();const t=data&&data.session&&data.session.access_token;if(!t)return 'sem sessão';
+      const j=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));const u=await fetch(url+'/auth/v1/user',{headers:{apikey:anonKey,Authorization:'Bearer '+t}});
+      return 'papel '+j.role+' · e-mail '+(j.email||'(nenhum)')+' · contas '+u.status+' · alg '+(JSON.parse(atob(t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/'))).alg||'?')},
     tempoReal(uid,cb){try{const c=sb.channel('es-'+uid).on('postgres_changes',{event:'*',schema:'public',table:'eduspruce_sinal',filter:'user_id=eq.'+uid},()=>cb()).subscribe();return c}catch(e){console.warn('[EduSpruce] tempo real indisponível',e);return null}},
     async sair(){try{await sb.auth.signOut({scope:'local'})}catch(_){}},
     async lista(){await uid();const o={};let de=0;for(;;){const d=ok(await sb.from(tabela).select('nome,tamanho').order('nome').range(de,de+999));d.forEach(r=>o[r.nome]=r.tamanho);if(d.length<1000)break;de+=1000}return o},
