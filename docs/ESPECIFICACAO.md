@@ -1020,3 +1020,7 @@ pinOk (sha antigo + verificarSenha); avEstatistica; corTurma/pintarTurmas; body.
 
 ## v0.938
 
+
+
+## v0.939
+Arrasto de cartões único (wgIniciar/wgAtivar/wgPosicionar/wgFim) com áreas .wgarea; S.cfg.menuModo auto|icones|completo (body.menu-ico, CSS clonado das regras ≤1100px); dpLer() para datas escritas; mpFixo() envolve as vistas de go._f para manter o scroll.

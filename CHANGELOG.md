@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.939
+- Início: novo motor de arrasto (rato/toque/teclado) para qualquer área designada; chaves de posição estáveis
+- Menu lateral só com ícones em PCs pequenos, escolha do utilizador (S.cfg.menuModo)
+- Seletor de datas: escrever a data; rato não bloqueia o campo
+- Re-desenho das vistas mantém o scroll (mpFixo)
+- Autoavaliação: botões no Painel e na Avaliação; «Perfil de Aprendizagem»
+
 ## 0.938
 - cl
 - Ícone de sincronização removido no modo base de dados
