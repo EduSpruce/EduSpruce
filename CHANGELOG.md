@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.957
+- cl
+- Alunos: tamanho das fotografias ajustável (+/−)
+
 ## 0.956
 - cl
 - Barra de topo sem o seletor de turma
