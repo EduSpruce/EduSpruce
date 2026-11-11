@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.951
+- autorizado(): nova tentativa após renovar a sessão e erro detalhado
+
 ## 0.950
 - autorizado(): nova tentativa após renovar a sessão e erro detalhado
 
