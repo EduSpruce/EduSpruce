@@ -4,13 +4,11 @@
    - abre sempre a versão mais recente da app quando há internet; a cópia guardada só serve sem rede (nunca corre uma versão antiga com internet)
    - os módulos da ligação à base de dados (esm/) ficam guardados por versão: a app abre sem esperar pela rede
    Não guarda dados de alunos: esses estão na base de dados, na conta do professor. */
-const CACHE='eduspruce-app-v4';
+const CACHE='eduspruce-app-v5';
 const APP=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 /* versao.json nunca é guardado: é por ele que a app sabe que há versão nova */
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP)).catch(()=>{}).then(()=>self.skipWaiting()))});
-self.addEventListener('activate',e=>{e.waitUntil((async()=>{const K=await caches.keys();await Promise.all(K.filter(k=>k!==CACHE).map(k=>caches.delete(k)));await self.clients.claim();
-  /* v0.945 · ao ativar um service worker novo, as janelas abertas recarregam para a versão mais recente */
-  if(K.some(k=>k!==CACHE)){try{const L=await self.clients.matchAll({type:'window'});for(const c of L){try{if(!/[?&]code=|aluno\.html/.test(c.url))await c.navigate(c.url)}catch(_){}}}catch(_){}}})())});
+self.addEventListener('activate',e=>{e.waitUntil((async()=>{const K=await caches.keys();await Promise.all(K.filter(k=>k!==CACHE).map(k=>caches.delete(k)));await self.clients.claim();})())});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);if(u.origin!==location.origin)return;
   if(/eduspruce-config\.json$/.test(u.pathname))return; /* sempre da rede */
   if(/\/esm\/[^/]+\.m?js$/.test(u.pathname)){
