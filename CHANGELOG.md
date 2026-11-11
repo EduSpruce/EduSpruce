@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.943
+- Digitalização de testes (digit.js): captura página a página, envio selado (linhas ef-f-dg-*, só criar/ler), vista em livro, verificação SHA-256
+- SQL 0006: a base de dados recusa alterar/apagar páginas digitalizadas
+
 ## 0.942
 - Autoavaliação v2 (papéis anuais, código pessoal, recusas/duplicados, sugestões)
 - Anos letivos sem nomes repetidos + juntar
