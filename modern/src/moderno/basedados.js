@@ -1,53 +1,235 @@
-
-/* ===================== EduSpruce · Base de Dados EduSpruce (Supabase, UE) — sincronização automática =====================
-   Os dados continuam a ser encriptados no aparelho (AES-256-GCM) antes de sair; a base de dados só guarda texto ilegível.
-   · entra sozinho na base de dados com a mesma conta Google da app (uma vez por aparelho)
-   · passa os dados do Google Drive para a base de dados automaticamente (o Drive fica como cópia)
-   · tempo real: uma alteração num aparelho aparece nos outros aparelhos abertos em ~1 s */
+/* ===================== EduSpruce · a app é um site ligado a uma base de dados =====================
+   Entra-se com a conta Google e os dados aparecem — em qualquer telemóvel, tablet ou computador.
+   · sem códigos nem passos de sincronização: a chave que cifra os dados fica guardada na conta e chega sozinha a cada aparelho
+   · nada fica guardado no aparelho: ao abrir, os dados vêm da base de dados; ao mudar algo, é lá que fica guardado
+   · uma alteração num aparelho aparece nos outros aparelhos abertos em ~1 s
+   · as boas-vindas aparecem uma única vez, a quem ainda não tem nada na conta */
 NV_LOGO.supabase='<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M13.2 2.6c.5-.6 1.5-.2 1.5.6v7.3h6.1c.9 0 1.4 1 .8 1.7l-9.1 10.5c-.5.6-1.5.2-1.5-.6v-7.3H4.9c-.9 0-1.4-1-.8-1.7z" fill="#3ecf8e"/></svg>';
-const sbObter=async()=>{for(let i=0;i<120;i++){const m=window.EduSpruceModerno;if(m&&m.supabase)return m.supabase;if(m&&m.pronto&&!m.supabase)throw new Error(m.erro||'A base de dados não está configurada.');await new Promise(r=>setTimeout(r,100))}throw new Error('A base de dados não respondeu. Verifique a ligação à internet.')};
-PROV.supabase={n:'Base de dados EduSpruce',async lista(){return (await sbObter()).lista()},async ler(n){return (await sbObter()).ler(n)},async escrever(n,t){return (await sbObter()).escrever(n,t)},async apagar(n){return (await sbObter()).apagar(n)}};
+const sbObter=async()=>{for(let i=0;i<150;i++){const m=window.EduSpruceModerno;if(m&&m.supabase)return m.supabase;if(m&&m.pronto&&!m.supabase){const e=new Error(m.erro||'A base de dados não está configurada.');e.rede=true;e.semModulo=true;throw e}if(!navigator.onLine&&i>25)break;await new Promise(r=>setTimeout(r,100))}const e=new Error('A base de dados não respondeu. Verifique a ligação à internet.');e.rede=true;e.semModulo=true;throw e};
+/* a ligação à base de dados não chegou a carregar (sem rede ao abrir): só recarregando a página */
+const sbModuloFalhou=()=>{const m=window.EduSpruceModerno;return !m||!m.pronto||!m.supabase};
+const sbRecarregar=()=>{let n=0;try{n=+sessionStorage.getItem('es.rl')||0;sessionStorage.setItem('es.rl',String(n+1))}catch(_){}if(n<4){window.__esSair=true;location.reload();return true}return false};
+/* ao abrir, os dados da conta vêm todos num só pedido (sbMemo); a seguir cada leitura e gravação vai à base de dados */
+const sbMemo={m:new Map(),lidos:new Set(),tudo:false,q:0,limpar(){this.m.clear();this.lidos.clear();this.tudo=false},
+  por(o){this.limpar();Object.keys(o||{}).forEach(k=>this.m.set(k,o[k]));this.tudo=true;this.q=Date.now()},
+  ler(n){if(Date.now()-this.q>20000){this.limpar();return undefined}if(this.m.has(n)){const t=this.m.get(n);this.m.delete(n);this.lidos.add(n);return t}
+    if(this.tudo&&!this.lidos.has(n)&&!/^ef-f-/.test(n)){this.lidos.add(n);return null}return undefined}};
+PROV.supabase={n:'Base de dados EduSpruce',async lista(){return (await sbObter()).lista()},async ler(n){const t=sbMemo.ler(n);if(t!==undefined)return t;return (await sbObter()).ler(n)},async escrever(n,t){sbMemo.lidos.add(n);sbMemo.m.delete(n);return (await sbObter()).escrever(n,t)},async apagar(n){sbMemo.lidos.add(n);sbMemo.m.delete(n);return (await sbObter()).apagar(n)}};
+window.__esPronto=false; /* os dados da conta já chegaram da base de dados? */
+
+/* ---------- 1. a conta ---------- */
+const SB_SES='eduspruce.sb',SB_CH='conta-chave';
+const sbPerfilDe=u=>{const m=(u&&u.user_metadata)||{};return {id:u.id,email:String(u.email||'').toLowerCase(),nome:m.full_name||m.name||'',foto:m.avatar_url||m.picture||''}};
+/* sessão guardada neste aparelho (lê-se sem esperar pela rede: a app abre logo) */
+const sbGuardada=()=>{try{const j=JSON.parse(localStorage.getItem(SB_SES)||'null');if(j&&j.user&&j.user.email&&j.refresh_token)return sbPerfilDe(j.user)}catch(_){}return null};
 const sbEmailApp=()=>{try{return SESSAO&&SESSAO.tipo==='google'?String(SESSAO.u||'').trim().toLowerCase():''}catch(_){return ''}};
-async function sbLigar(silencioso){const p=await sbObter();const {data}=await p.cliente.auth.getSession();
-  if(data&&data.session){nvSet({sb:1,conta:data.session.user.email||'',renovar:false});return}
-  if(silencioso===true||silencioso==='silencioso'){nvSet({sb:0});return}
-  nvSet({prov:'supabase',sb:0});await p.entrarGoogle(sbEmailApp()||undefined);await sbVerificar()}
-let _sbCanal=null,_sbOcup=false,_sbAviso=0;
-function sbPuxar(){const L=nvL();if(L.prov!=='supabase'||!(L.k||_nvK)||document.getElementById('nvgate'))return;clearTimeout(sbPuxar._t);sbPuxar._t=setTimeout(()=>{nvSincronizar(false).then(()=>{try{nvBadge()}catch(_){}}).catch(()=>{})},150)}
-function sbRedesenhar(){try{nvBadge()}catch(_){}try{const c=$('#nv-card');if(c&&typeof nvPainel==='function'){const d=document.createElement('div');d.innerHTML=nvPainel();c.replaceWith(d.firstElementChild);bindNvPainel()}}catch(_){}}
-async function sbVerificar(){if(_sbOcup||nvL().semSync)return;_sbOcup=true;try{const p=await sbObter();const {data}=await p.cliente.auth.getSession();const ses=data&&data.session;const em=sbEmailApp();
-  if(!ses){if(nvL().sb)nvSet({sb:0});
-    /* entra sozinho com a mesma conta Google (uma vez por separador, para nunca ficar em ciclo) */
-    let ja='';try{ja=sessionStorage.getItem('es.sbauto')||''}catch(_){}
-    if(em&&!ja&&navigator.onLine&&!document.getElementById('nvgate')){try{sessionStorage.setItem('es.sbauto','1')}catch(_){}await p.entrarGoogle(em)}
-    return}
-  const se=String(ses.user.email||'').toLowerCase();
-  if(em&&se&&se!==em){await p.sair();nvSet({sb:0});try{sessionStorage.removeItem('es.sbauto')}catch(_){}_sbOcup=false;return sbVerificar()}
-  if(!nvL().sb||nvL().conta!==se)nvSet({sb:1,conta:se});
-  if(!(await p.autorizado())){if(Date.now()-_sbAviso>6e5){_sbAviso=Date.now();toast('Esta conta Google ainda não está autorizada na base de dados EduSpruce.','erro')}return}
-  if(!_sbCanal)_sbCanal=p.tempoReal(ses.user.id,sbPuxar)||1;
-  const L=nvL();const chave=!!(L.k||_nvK);
-  if(L.prov!=='supabase'&&chave){/* passar os dados para a base de dados (o Google Drive fica intacto, como cópia) */
-    nvSet({prov:'supabase',base:null,mod:{},erro:'',renovar:false,sbDesde:L.sbDesde||Date.now(),sbDe:L.prov||''});toast('A passar os dados para a base de dados…');
-    const r=await nvSincronizar(true).catch(e=>{toast(e.message,'erro');return null});sbFecharPortao();if(r!==null&&!nvL().erro)toast('Os dados estão na base de dados. As alterações passam a aparecer nos outros aparelhos em segundos.','ok');sbRedesenhar()}
-  else if(L.prov==='supabase'&&chave)sbPuxar();
-  else{/* aparelho novo: a base de dados passa a ser o sítio dos dados; falta só o código de encriptação (uma vez) */
-    if(L.prov!=='supabase')nvSet({prov:'supabase',base:null,mod:{},erro:'',renovar:false});
-    setTimeout(()=>{try{sbLembrete()}catch(_){}},600);
-    sbRedesenhar()}}
-  catch(e){console.warn('[EduSpruce] base de dados:',e.message)}finally{_sbOcup=false}}
+/* tira deste aparelho tudo o que é da conta (a conta e os dados continuam na base de dados) */
+function sbEsquecer(){try{Object.keys(localStorage).forEach(k=>{if(k===SB_SES||k.startsWith(SB_SES+'-'))localStorage.removeItem(k)})}catch(_){}
+  try{const L=nvL();const o={sb:0,conta:'',base:null,mod:{},erro:'',rekey:null};if(L.kConta){o.k=null;o.salt=null;o.kDe='';o.kConta=0;try{_nvK=null}catch(_){}}nvSet(o)}catch(_){}
+  try{localStorage.removeItem('eskeep')}catch(_){}}
+async function sbTerminar(msgEntrada){if(sbTerminar._on)return;sbTerminar._on=true;
+  try{if(window.__esPronto&&navigator.onLine&&Object.keys(nvL().mod||{}).length)await Promise.race([nvSincronizar(false),new Promise(r=>setTimeout(r,6000))])}catch(_){}
+  try{const p=await Promise.race([sbObter(),new Promise((_,ko)=>setTimeout(()=>ko(new Error('t')),3000))]);await Promise.race([p.sair(),new Promise(r=>setTimeout(r,3000))])}catch(_){}
+  sbEsquecer();try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY);sessionStorage.removeItem('es.loc')}catch(_){}
+  try{if(msgEntrada)sessionStorage.setItem('es.lgmsg',msgEntrada)}catch(_){}
+  window.__esSair=true;location.replace(location.origin+location.pathname)}
+terminarSessao=function(){try{if(window.__esPronto&&Object.keys(nvL().mod||{}).length&&!navigator.onLine&&!confirm('Há alterações que ainda não ficaram guardadas (sem internet). Se terminar a sessão agora, perdem-se.\n\nTerminar mesmo assim?'))return}catch(_){}sbTerminar()};
+/* quem deixa de estar autorizado sai também da base de dados (senão voltava a entrar sozinho) */
+{const _av=acVerificar;acVerificar=async function(){try{return await _av.apply(this,arguments)}catch(e){if(e&&e.semAcesso){sbEsquecer();try{sessionStorage.setItem('es.lgmsg',e.message)}catch(_){}}throw e}}}
 
-/* regresso do Google com erro (ex.: segredo do cliente errado no Supabase): explica e limpa o endereço, sem voltar a tentar sozinho */
+/* ecrã de entrada: um só botão */
+function sbEcraEntrar(){document.body.classList.add('login-on');let o=$('#login');if(o)o.remove();o=document.createElement('div');o.id='login';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Iniciar sessão');
+  o.innerHTML=`<form class="lgb lgbd" onsubmit="return false"><div class="lgh"><span class="lgi">${ic('flow',30)}</span><div><b>Edu<em>Spruce</em></b><span>Menos papelada. Mais tempo para ensinar.</span></div></div>
+    <h1>Iniciar Sessão</h1>
+    <button type="button" class="btn mslg lggd" id="lg-gg"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg> <span class="lggt">Entrar com Google</span></button>
+    <div class="lgerr" id="lg-err" role="alert"></div>
+    <p class="lgbdn">${ic('shield',14)}<span>Entra-se com a <b>conta Google autorizada</b> pelo administrador. Os seus dados aparecem logo, em qualquer aparelho — sem códigos e sem nada para configurar.</span></p></form>`;
+  document.body.appendChild(o);try{loginHero()}catch(_){}try{loginLegal()}catch(_){}return o}
+let _sbEntrouAgora=false;
+pedirLogin=function(){return new Promise(async ok=>{try{await authCfg()}catch(_){}
+  const entrar=(pf,papel)=>{const ant=sessaoAtual();const m=ant&&ant.tipo==='google'&&String(ant.u||'').toLowerCase()===pf.email?ant:null;
+    const s={u:pf.email,nome:pf.nome||(m&&m.nome)||pf.email,papel:papel||(m&&m.papel)||'professor',tipo:'google',foto:pf.foto||(m&&m.foto)||'',desde:(m&&m.desde)||Date.now()};
+    SESSAO=s;guardarSessao(s,true);document.body.classList.remove('login-on');const o=$('#login');if(o){o.classList.add('sai');setTimeout(()=>o.remove(),280)}
+    try{sessBox()}catch(_){}setTimeout(esAbrir,0);ok(s)};
+  const volta=/[?&]code=/.test(location.search);const g=sbGuardada();
+  if(g&&!volta)return entrar(g); /* sessão neste aparelho: entra logo, como uma app normal */
+  /* sem sessão (ou a voltar do Google): a sessão antiga da app, sozinha, já não abre nada */
+  try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY)}catch(_){}SESSAO=null;
+  let msg='';try{msg=sessionStorage.getItem('es.lgmsg')||'';sessionStorage.removeItem('es.lgmsg')}catch(_){}
+  const o=sbEcraEntrar();const bt=o.querySelector('#lg-gg'),er=o.querySelector('#lg-err');if(msg)er.textContent=msg;
+  const ocup=t=>{bt.disabled=!!t;bt.classList.toggle('ocp',!!t);bt.querySelector('.lggt').textContent=t||'Entrar com Google'};
+  const recusar=async(p,m)=>{try{await p.sair()}catch(_){}sbEsquecer();ocup('');er.textContent=m};
+  const concluir=async()=>{ocup('A entrar…');er.textContent='';
+    try{const p=await sbObter();const pf=await p.sessao();if(!pf){ocup('');if(volta)er.textContent='Não foi possível concluir a entrada. Toque em «Entrar com Google» outra vez.';return}
+      if(!(await p.autorizado()))return recusar(p,'A conta '+pf.email+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.');
+      let papel='';try{papel=(await acVerificar(pf.email)).papel||''}catch(e){if(e&&e.semAcesso)return recusar(p,e.message)}
+      _sbEntrouAgora=true;esAbrir._aut={e:pf.email,q:Date.now()};entrar(pf,papel)}
+    catch(e){ocup('');er.textContent=(e&&e.message)||'Não foi possível entrar. Tente de novo.'}};
+  bt.onclick=async()=>{er.textContent='';if(!navigator.onLine){er.textContent='Sem ligação à internet.';return}ocup('A abrir a Google…');try{const p=await sbObter();await p.entrarGoogle();setTimeout(()=>ocup(''),10000)}catch(e){ocup('');er.textContent=(e&&e.message)||'Não foi possível abrir a Google.'}};
+  if(volta||g)concluir()})};
+/* regresso do Google com erro: explica no ecrã de entrada e limpa o endereço */
 try{const q=new URLSearchParams(location.search),h=new URLSearchParams(location.hash.slice(1));const er=q.get('error_description')||h.get('error_description');
-  if(er&&(q.get('error_code')||h.get('error_code'))){history.replaceState(null,'',location.pathname);try{sessionStorage.setItem('es.sbauto','1')}catch(_){}
-    setTimeout(()=>toast('Não foi possível entrar na base de dados ('+decodeURIComponent(er).replace(/\+/g,' ')+'). Os dados continuam no Google Drive.','erro'),1500)}}catch(_){}
-/* arranque: espera pela sessão da app; depois verifica de novo sempre que fizer falta (palavra-passe definida, volta à app, rede) */
-{let _ok=false;const t=setInterval(()=>{if(_ok)return;if(sbEmailApp()||(SESSAO&&nvL().prov==='supabase')){_ok=true;clearInterval(t);sbVerificar()}},700);
-  setInterval(()=>{const L=nvL();if(SESSAO&&L.sb&&L.prov!=='supabase'&&(L.k||_nvK))sbVerificar()},5000);
-  {const _dp=nvDefinirPalavra;nvDefinirPalavra=async function(){const r=await _dp.apply(this,arguments);try{if(nvL().prov==='supabase')setTimeout(sbPuxar,200)}catch(_){}return r}}
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&SESSAO&&nvL().prov==='supabase')setTimeout(sbPuxar,300)});
-  addEventListener('online',()=>{if(SESSAO)setTimeout(sbVerificar,800)})}
+  if(er&&(q.get('error')||h.get('error')||q.get('error_code')||h.get('error_code'))){history.replaceState(null,'',location.pathname);try{sessionStorage.setItem('es.lgmsg','A Google não concluiu a entrada ('+decodeURIComponent(er).replace(/\+/g,' ')+'). Tente de novo.')}catch(_){}}}catch(_){}
 
+/* ---------- 2. a chave da conta chega sozinha (nunca se escreve) ---------- */
+async function sbChaveAuto(p,pf,D){const L0=nvL();const lerC=async n=>D&&Object.prototype.hasOwnProperty.call(D,n)?D[n]:D?null:await p.ler(n);
+  if(L0.k&&L0.kDe&&L0.kDe!==pf.email){try{_nvK=null}catch(_){}nvSet({k:null,salt:null,kDe:'',kConta:0,base:null,mod:{}})} /* chave de outra conta que usou este aparelho */
+  const manTxt=await lerC(NV_PREF+'manifest.json');let man=null;try{man=manTxt?JSON.parse(manTxt):null}catch(_){}
+  const abre=async k=>{if(!k)return false;if(!man||!man.chk)return true;try{const ck=await crypto.subtle.importKey('raw',unb64(k),'AES-GCM',false,['decrypt']);return await nvDecifrar(man.chk,ck)==='eduflow'}catch(_){return false}};
+  const usar=(k,salt)=>{const L=nvL();const mudou=L.k!==k;try{_nvK=null}catch(_){}nvSet({k,salt:salt||L.salt||'',kDe:pf.email,kConta:1,...(mudou?{base:null,mod:{}}:{})})};
+  const reg=(k,salt)=>JSON.stringify({v:1,k,salt:salt||'',q:Date.now()});
+  let conta=null;{const t=await lerC(SB_CH);try{const j=t?JSON.parse(t):null;if(j&&j.k)conta=j}catch(_){}}
+  if(conta&&await abre(conta.k))return usar(conta.k,conta.salt||(man&&man.salt));
+  const L=nvL();
+  if(L.k&&await abre(L.k)){/* este aparelho já abria os dados: a chave passa a ficar na conta e os outros aparelhos deixam de precisar de código */
+    const salt=(man&&man.salt)||L.salt||'';if(conta)await p.escrever(SB_CH,reg(L.k,salt));else if(!(await p.criar(SB_CH,reg(L.k,salt))))return sbChaveAuto(p,pf);
+    try{audit('Conta','Chave dos dados guardada na conta','')}catch(_){}return usar(L.k,salt)}
+  if(man&&man.chk){const e=new Error('Os dados desta conta foram guardados com um código antigo.');e.semChave=true;throw e}
+  /* conta nova: a chave cria-se sozinha */
+  const k=b64(crypto.getRandomValues(new Uint8Array(32))),salt=b64(crypto.getRandomValues(new Uint8Array(16)));
+  if(conta)await p.escrever(SB_CH,reg(k,salt));else if(!(await p.criar(SB_CH,reg(k,salt))))return sbChaveAuto(p,pf);
+  return usar(k,salt)}
+/* sempre que a chave mudar neste aparelho (código antigo confirmado, por exemplo), a conta fica com ela */
+async function sbGuardarChaveNaConta(){const L=nvL();if(L.prov!=='supabase'||!L.k)return;const p=await sbObter();await p.escrever(SB_CH,JSON.stringify({v:1,k:L.k,salt:L.salt||'',q:Date.now()}));nvSet({kConta:1,kDe:sbEmailApp()||L.kDe||''})}
+{const _gk=nvGuardarChave;nvGuardarChave=async function(){const r=await _gk.apply(this,arguments);setTimeout(()=>{sbGuardarChaveNaConta().catch(e=>console.warn('[EduSpruce] chave na conta:',e.message))},60);return r}}
+/* contas antigas, em que nenhum aparelho com os dados abertos passou ainda por aqui: pede-se o código antigo uma última vez */
+function sbPedirCodigoAntigo(p,pf){return new Promise(res=>{const d=document.createElement('dialog');d.className='nvmc sbcod';d.setAttribute('aria-labelledby','sbc-t');
+  d.innerHTML=`<form class="nvmcf" autocomplete="off"><h2 id="sbc-t">${ic('cadeadoAb',18)} Só mais esta vez</h2>
+    <p class="hint">Os seus dados foram guardados com o <b>código de encriptação antigo</b>. Escreva-o aqui uma última vez: a partir de agora basta entrar com a conta Google, em qualquer aparelho.</p>
+    <label for="sbc-1">Código de encriptação antigo</label><input type="password" id="sbc-1" autocomplete="off" autocapitalize="none" spellcheck="false">
+    <div class="nverr" id="sbc-e" role="alert"></div>
+    <div class="row" style="gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap"><button type="button" class="btn" id="sbc-s">Terminar Sessão</button><button type="submit" class="btn pri" id="sbc-ok">${ic('check',15)} Abrir os Meus Dados</button></div>
+    <p class="hint sbcalt">${ic('info',14)}<span><b>Não se lembra do código?</b> Abra a EduSpruce no aparelho onde os seus dados aparecem (por exemplo, o computador). Fica resolvido sozinho e este pedido desaparece aqui.</span></p></form>`;
+  document.body.appendChild(d);d.addEventListener('cancel',e=>e.preventDefault());d.addEventListener('keydown',e=>e.stopPropagation());try{d.showModal()}catch(_){d.setAttribute('open','')}
+  const er=d.querySelector('#sbc-e'),inp=d.querySelector('#sbc-1'),okb=d.querySelector('#sbc-ok');setTimeout(()=>inp.focus(),60);let fechado=false;
+  const fim=v=>{if(fechado)return;fechado=true;clearInterval(t);try{d.close()}catch(_){}d.remove();res(v)};
+  /* se, entretanto, a chave aparecer na conta (abriu a app no outro aparelho), continua sozinho */
+  const t=setInterval(async()=>{try{const x=await p.ler(SB_CH);if(x&&JSON.parse(x).k){await sbChaveAuto(p,pf);fim(true)}}catch(_){}},4000);
+  d.querySelector('#sbc-s').onclick=()=>{fim(false);sbTerminar()};
+  d.querySelector('form').onsubmit=async e=>{e.preventDefault();er.textContent='';const c=inp.value;if(!c){er.textContent='Escreva o código.';return}okb.disabled=true;
+    try{await nvDefinirPalavra(c);await sbGuardarChaveNaConta();try{audit('Conta','Código antigo confirmado pela última vez','')}catch(_){}fim(true)}
+    catch(e2){okb.disabled=false;er.textContent=/errad|não corresponde/i.test(e2.message||'')?'Código errado. Tente de novo.':(e2.message||'Não foi possível confirmar.');inp.select()}}})}
+
+/* ---------- 3. abrir: os dados vêm da base de dados; até chegarem, a app mostra o esqueleto das páginas ---------- */
+function esEsqueleto(modo,tit,txt){let o=$('#esabrir');if(!modo){document.body.classList.remove('es-abrir');if(o)o.remove();return}
+  document.body.classList.add('es-abrir');if(!o){o=document.createElement('div');o.id='esabrir';const v=$('#view');if(v&&v.parentNode)v.parentNode.insertBefore(o,v);else document.body.appendChild(o)}
+  if(o.dataset.m===modo&&modo==='abrir')return;o.dataset.m=modo;
+  if(modo==='abrir'){o.setAttribute('aria-busy','true');o.innerHTML=`<span class="sr" role="status">A abrir os seus dados…</span><div class="eskg" aria-hidden="true"><div class="esk eskh"></div><div class="eskr"><div class="esk"></div><div class="esk"></div><div class="esk"></div><div class="esk"></div></div><div class="eskc"><div class="esk eskb"></div><div class="esk eskb"></div></div><div class="esk eskl"></div><div class="esk eskl"></div><div class="esk eskl c"></div></div>`;return}
+  o.removeAttribute('aria-busy');o.innerHTML=`<div class="esmsg" role="alert"><span class="esmi">${ic(modo==='offline'?'cloud':'alert',30)}</span><h2>${esc(tit)}</h2><p>${esc(txt)}</p><div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="btn pri" id="esab-r">${ic('refresh',15)} Tentar de Novo</button><button type="button" class="btn" id="esab-s">Terminar Sessão</button></div></div>`;
+  o.querySelector('#esab-r').onclick=()=>{if(sbModuloFalhou()){window.__esSair=true;return location.reload()}esAbrir()};o.querySelector('#esab-s').onclick=()=>sbTerminar()}
+function esFalha(e){const rede=!navigator.onLine||(e&&e.rede);console.warn('[EduSpruce] abrir dados:',e&&e.message);
+  if(rede)esEsqueleto('offline','Sem ligação à internet','Os seus dados estão guardados na base de dados. Assim que houver ligação, abrem sozinhos.');
+  else esEsqueleto('erro','Não foi possível abrir os seus dados',(e&&e.message)||'Tente de novo dentro de momentos.');
+  clearTimeout(esFalha._t);esFalha._t=setTimeout(()=>{if(window.__esPronto||!navigator.onLine||document.visibilityState!=='visible')return;if(e&&e.semModulo&&sbModuloFalhou()){if(sbRecarregar())return}esAbrir()},rede?4000:20000)}
+let _esAbrirP=null,_esDentro=false,_sbCanal=null;
+function esAbrir(){if(window.__esPronto||window.__esSair||!SESSAO||document.body.classList.contains('login-on'))return Promise.resolve();if(_esAbrirP)return _esAbrirP;
+  _esAbrirP=esAbrir0().catch(e=>esFalha(e)).finally(()=>{_esAbrirP=null;const b=$('#esbar');if(b)b.className=''});return _esAbrirP}
+async function esAbrir0(){clearTimeout(esFalha._t);esEsqueleto('abrir');let b=$('#esbar');if(!b){b=document.createElement('div');b.id='esbar';b.innerHTML='<i></i>';document.body.appendChild(b)}b.className='on';
+  const p=await sbObter();const pf=await p.sessao();
+  if(!pf)return sbTerminar('A sessão terminou. Entre de novo com a sua conta Google.');
+  if(pf.email!==sbEmailApp()){SESSAO.u=pf.email;if(pf.nome)SESSAO.nome=pf.nome;guardarSessao(SESSAO,true);try{sessBox()}catch(_){}}
+  /* um só vaivém: confirma que a conta está autorizada e traz os dados todos (menos fotografias e anexos, que chegam depois) */
+  const jaAut=esAbrir._aut&&esAbrir._aut.e===pf.email&&Date.now()-esAbrir._aut.q<15000;
+  let aut,D;try{[aut,D]=await Promise.all([jaAut?true:p.autorizado(),p.lerDados?p.lerDados().catch(e=>{if(e&&e.semAcesso)return null;throw e}):null])}catch(e){if(e&&e.semSessao)return sbTerminar(e.message);throw e}
+  if(!aut)return sbTerminar('A conta '+pf.email+' não está autorizada a usar a EduSpruce. Peça ao administrador para a acrescentar.');
+  /* o perfil (administrador, professor…) confirma-se sem atrasar a abertura */
+  acVerificar(pf.email).then(r=>{if(r&&r.papel&&SESSAO&&r.papel!==SESSAO.papel){SESSAO.papel=r.papel;guardarSessao(SESSAO,true);try{sessBox()}catch(_){}if(window.__esPronto){try{go(VIEW)}catch(_){}}}}).catch(e=>{if(e&&e.semAcesso)sbTerminar(e.message)});
+  {const L=nvL();const o={sb:1,conta:pf.email,semSync:false,renovar:false};if(L.prov!=='supabase')Object.assign(o,{prov:'supabase',base:null,mod:{},erro:'',sbDe:L.prov||''});if(L.auto===false)o.auto=true;nvSet(o)}
+  try{await sbChaveAuto(p,pf,D||undefined)}catch(e){if(!(e&&e.semChave))throw e;b.className='';if(!(await sbPedirCodigoAntigo(p,pf)))return;b.className='on';D=null}
+  if(D)sbMemo.por(D);
+  /* ao abrir sem nada no aparelho, o registo de auditoria só tem o ruído do arranque: não se mistura com o da conta */
+  try{if(!window.__esLerLocal&&Array.isArray(S.audit))S.audit=S.audit.filter(e=>!(e&&e.area==='Dados'&&/^Formato atualizado/.test(e.acao||'')))}catch(_){}
+  let r=null;window.__nvSemFotos=true;_esDentro=true;try{r=await nvSincronizar(false)}finally{window.__nvSemFotos=false;_esDentro=false;sbMemo.limpar()}
+  if(!r){const m=nvL().erro||'';const e=new Error(m||'Não foi possível abrir os dados.');if(/Sem ligação|internet|rede/i.test(m))e.rede=true;throw e}
+  window.__esPronto=true;clearTimeout(esFalha._t);try{sessionStorage.removeItem('es.rl')}catch(_){}
+  if(!_sbCanal)_sbCanal=p.tempoReal(pf.id,sbPuxar)||1;
+  await esPosCarga(pf);try{nvFotosFundo()}catch(_){}}
+
+/* o que só faz sentido com os dados à frente: ano/turma, código de acesso, boas-vindas (uma única vez), avisos */
+const esLocGuardar=()=>{try{sessionStorage.setItem('es.loc',JSON.stringify({a:S.anoAtivo||'',t:S.turmaAtiva||'',e:S.escolaAtiva||'',f:S.filtroOferta||''}))}catch(_){}};
+const esVer=v=>parseFloat(String(v||'0').replace(/[^0-9.]/g,''))||0;
+async function esPosCarga(pf){
+  try{let l=null;try{l=JSON.parse(sessionStorage.getItem('es.loc')||'null')}catch(_){}
+    if(l&&l.a&&S.anos.some(a=>a.id===l.a)){S.anoAtivo=l.a;if(l.e!==undefined&&l.e!=='')S.escolaAtiva=l.e;if(l.f!==undefined&&l.f!=='')S.filtroOferta=l.f;const an=S.anos.find(a=>a.id===l.a);if(l.t&&an.turmas.some(t=>t.id===l.t))S.turmaAtiva=l.t}
+    else if(S.anos.length){const ult=anoPorData();if(ult&&S.anoAtivo!==ult.id){S.anoAtivo=ult.id;const TF=turmasFiltradas(A());S.turmaAtiva=TF[0]?TF[0].id:null}}}catch(e){console.warn(e)}
+  if(S.cfg.pinHash&&!esPosCarga._pin){esPosCarga._pin=true;
+    let rep=null;try{rep=JSON.parse(localStorage.getItem('es.pinrep')||'null');localStorage.removeItem('es.pinrep')}catch(_){}
+    if(rep&&rep.e===pf.email&&Date.now()-rep.q<15*60*1000&&_sbEntrouAgora){delete S.cfg.pinHash;try{audit('Segurança','Código de acesso retirado (entrou de novo com a conta Google)',pf.email)}catch(_){}save();setTimeout(()=>toast('Código de acesso retirado. Pode definir um novo em Definições › Dados e Segurança.','ok'),900)}
+    else{try{await pedirPin()}catch(e){console.warn(e)}}}
+  esEsqueleto(null);try{aplicarPrefs()}catch(_){}try{go(VIEW||'inicio')}catch(e){console.warn(e)}
+  try{if(_sbEntrouAgora){_sbEntrouAgora=false;regista('Sessão','',pf.email+' entrou')}}catch(_){}
+  try{let m=false;const c=S.cfg;
+    if(!S.anos.length){if(!c.bemVindo){c.bemVindo=Date.now();c.tourVisto=true;m=true;setTimeout(()=>{try{passosModal(true)}catch(e){console.warn(e)}},500)}} /* conta nova: boas-vindas, uma única vez */
+    else{if(!c.bemVindo){c.bemVindo=1;m=true}if(!c.tourVisto){c.tourVisto=true;m=true}
+      if(esVer(VERSAO)>esVer(c.versaoVista)){const tinha=!!c.versaoVista;c.versaoVista=VERSAO;m=true;if(tinha)setTimeout(()=>toast('Nova versão '+VERSAO+' — veja as novidades em Definições › Ferramentas','ok'),900)}}
+    if(m)save()}catch(e){console.warn(e)}
+  setTimeout(()=>{try{mostrarAvisos(false)}catch(_){}},700)}
+posArranque=function(){/* as boas-vindas e a nota de versão só depois de os dados chegarem (esPosCarga) */};
+/* avisos e lembretes só com os dados à frente */
+{const _ma=mostrarAvisos;mostrarAvisos=function(){if(!window.__esPronto||$('#esabrir'))return;return _ma.apply(this,arguments)}}
+/* as boas-vindas («primeiros passos») nunca se abrem sozinhas ao desenhar o Início: só na 1.ª vez da conta ou quando a pessoa as pede */
+{const _pm=passosModal;passosModal=function(forcar){if(!forcar)return;return _pm.apply(this,arguments)}}
+/* se o código de acesso já foi pedido ao abrir (aparelho antigo, com dados cá guardados), não se pede segunda vez */
+{const _pp=pedirPin;pedirPin=function(){const p=_pp.apply(this,arguments);Promise.resolve(p).then(()=>{esPosCarga._pin=true}).catch(()=>{});return p}}
+/* o ano e a turma escolhidos ficam lembrados enquanto a app está aberta neste aparelho (não são dados de alunos) */
+{const _sv=save;save=function(){const r=_sv.apply(this,arguments);if(window.__esPronto)esLocGuardar();return r}}
+{const _g=go;go=function(){const r=_g.apply(this,arguments);if(window.__esPronto)esLocGuardar();return r}}
+
+/* ---------- 4. guardar e receber: tudo sozinho e em silêncio ---------- */
+function sbPuxar(){const L=nvL();if(!window.__esPronto||L.prov!=='supabase'||!(L.k||_nvK))return;clearTimeout(sbPuxar._t);sbPuxar._t=setTimeout(()=>{nvSincronizar(false).then(()=>{try{nvBadge()}catch(_){}}).catch(()=>{})},150)}
+function sbRedesenhar(){try{nvBadge()}catch(_){}try{const c=$('#nv-card');if(c&&typeof nvPainel==='function'){const d=document.createElement('div');d.innerHTML=nvPainel();c.replaceWith(d.firstElementChild);bindNvPainel()}}catch(_){}}
+async function sbLigar(){return esAbrir()}
+function sbLembrete(){}
+nvAssist=function(){};
+nvSyncGate=async function(){const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}return esAbrir()};
+{const g=document.getElementById('nvgate');if(g)g.remove()}
+/* mensagens: nada de «sincronizar» — os dados simplesmente estão guardados */
+{const _t=toast;toast=function(m,tipo){try{let s=String(m==null?'':m);
+    if(/^Recebidas alterações de outro dispositivo|código de encriptação foi mudado noutro aparelho|^Defina a palavra-passe de encriptação|^Acabou de mudar o código/.test(s))return;
+    if(/^Sincronizado/.test(s))s='Tudo guardado';s=s.replace('Definições › Sincronização','Definições › Conta e Dados');arguments[0]=s}catch(_){}return _t.apply(this,arguments)}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible'||!SESSAO)return;if(window.__esPronto)setTimeout(sbPuxar,300);else if(!document.body.classList.contains('login-on'))setTimeout(esAbrir,200)});
+addEventListener('online',()=>{if(!SESSAO)return;if(window.__esPronto)setTimeout(sbPuxar,500);else setTimeout(()=>{if(sbModuloFalhou()&&$('#esabrir')&&$('#esabrir').dataset.m==='offline'&&sbRecarregar())return;esAbrir()},300)});
+addEventListener('es-bd',()=>{if(SESSAO&&!window.__esPronto&&$('#esabrir')&&$('#esabrir').dataset.m!=='abrir')esAbrir()});
+/* sair da página com alterações por guardar: avisa (não há cópia no aparelho) */
+addEventListener('beforeunload',e=>{try{if(!window.__esSair&&window.__esPronto&&nvL().prov==='supabase'&&Object.keys(nvL().mod||{}).length){e.preventDefault();e.returnValue=''}}catch(_){}});
+/* indicador na barra: só aparece quando há algo a dizer (por guardar, sem internet, erro) */
+nvBadge=function(){try{const bar=$('#bar');if(!bar)return;let b=$('#nv-badge');const L=nvL();const pend=Object.keys(L.mod||{}).length>0;
+  if(pend){nvBadge._d=nvBadge._d||Date.now()}else nvBadge._d=0;
+  const est=!window.__esPronto?'':!navigator.onLine?'offline':L.erro&&pend?'erro':pend&&Date.now()-nvBadge._d>4000?'pend':'';
+  if(!est){if(b)b.remove();return}
+  if(!b){b=document.createElement('button');b.type='button';b.id='nv-badge';b.className='btn ico nvbd';const bi=bar.querySelector('.barico');if(bi)bi.insertBefore(b,bi.firstChild);else bar.appendChild(b);
+    b.onclick=async()=>{if(!navigator.onLine)return toast('Sem internet — as alterações são guardadas assim que a ligação voltar.','aviso');b.classList.add('gira');try{await nvSincronizar(true)}finally{b.classList.remove('gira');nvBadge()}}}
+  const tt={offline:'Sem internet — as alterações são guardadas assim que a ligação voltar',erro:'Não foi possível guardar ('+(L.erro||'')+') — toque para tentar de novo',pend:'A guardar…'}[est];
+  if(b.dataset.e!==est||b.title!==tt){b.dataset.e=est;b.title=tt;b.setAttribute('aria-label',tt);b.innerHTML=ic('cloud',19)+'<span class="nvdot"></span>'}}catch(_){}};
+
+/* ---------- 5. Definições › Conta e Dados ---------- */
+nvPainel=function(){const L=nvL();const C=nvConflitos();const pend=Object.keys(L.mod||{}).length;const em=sbEmailApp()||L.conta||'';
+  const est=!window.__esPronto?['off','A abrir os dados…','']:!navigator.onLine?['off','Sem internet','As alterações são guardadas assim que a ligação voltar.']:L.erro&&pend?['err','Não foi possível guardar',L.erro]:pend?['pend','A guardar…','']:['ok','Tudo guardado','Última gravação '+nvQuando(L.ultimo)+'.'];
+  const sec=(t,d,c)=>`<section class="nvs"><div class="nvsh"><h3>${t}</h3>${d?`<p>${d}</p>`:''}</div><div class="nvsb">${c}</div></section>`;
+  return `<div class="nvpw2" id="nv-card">
+  <div class="card nvhero nvst-${est[0]}"><div class="nvhi">${ic('cloud',30)}</div><div class="nvht"><div class="nvhk">Conta e Dados</div><h2>${est[1]}</h2><p>${esc(est[2])}</p>
+    <div class="nvhm"><span>${NV_LOGO.supabase} Base de dados EduSpruce · União Europeia</span>${em?`<span>${ic('user',13)} ${esc(em)}</span>`:''}</div></div>
+    <div class="nvha">${pend||L.erro?`<button class="btn pri" id="nv2-agora">${ic('refresh',15)} Guardar Agora</button>`:''}</div></div>
+  <div class="card nvbody">
+  ${sec('Como funciona','',`<p class="nvhint" style="margin:0">Os seus dados estão guardados na base de dados EduSpruce. Em qualquer telemóvel, tablet ou computador, abra <b>${esc(location.host||'eduspruce.pt')}</b>, entre com a mesma conta Google e está tudo lá — não há códigos nem nada para configurar. O que mudar num aparelho aparece nos outros em segundos.</p>`)}
+  ${sec('Conta','Neste aparelho não fica nada guardado: ao terminar a sessão, os dados continuam na sua conta.',`<div class="nvrow"><div class="nvrt">${ic('check',15)} <b>${esc(em||'Sessão iniciada')}</b> <span class="mut">· ${esc(nvDisp())}</span></div><button class="btn" id="nv2-sair">${ic('back',14)} Terminar Sessão</button></div>`)}
+  ${C.length?sec('Versões guardadas','Quando a mesma parte muda em dois aparelhos ao mesmo tempo, fica a mais recente; a outra fica aqui, para a poder repor.',C.map((c,i)=>`<div class="nvrow nvcf"><div class="nvrt"><b>${esc(nvRotulo(c.parte))}</b> <span class="mut">· ${esc(c.de)} · ${new Date(c.q).toLocaleString('pt-PT',{dateStyle:'short',timeStyle:'short'})}</span></div><div class="nvbtns"><button class="btn sm" data-nvrep2="${i}">Repor</button><button class="btn sm ico" data-nvdel2="${i}" aria-label="Descartar">${ic('x',12)}</button></div></div>`).join('')):''}
+  <div class="nvfoot"><span class="mut">${ic('shield',13)} Dados cifrados (AES-256) e acessíveis só com a sua conta Google · <a href="privacidade.html" target="_blank" rel="noopener">Privacidade</a></span></div>
+  </div></div>`};
+{const _bP=bindNvPainel;bindNvPainel=function(){const r=_bP.apply(this,arguments);try{const s=$('#nv2-sair');if(s)s.onclick=()=>{if(confirm('Terminar a sessão neste aparelho?\n\nOs seus dados continuam guardados na sua conta.'))terminarSessao()};const ag=$('#nv2-agora');if(ag)ag.onclick=async()=>{ag.disabled=true;await nvSincronizar(true);sbRedesenhar()}}catch(e){console.warn(e)}return r}}
+/* «Esqueci-me do código de acesso»: confirma-se com a conta Google (já não existe código de encriptação) */
+pinRecuperar=async function(){const em=sbEmailApp();if(!em)return;if(!confirm('Esqueceu-se do código de acesso?\n\nPara confirmar que é você, vai entrar outra vez com a conta Google ('+em+'). Depois disso o código antigo é retirado e pode escolher um novo em Definições › Dados e Segurança.\n\nContinuar?'))return;
+  try{localStorage.setItem('es.pinrep',JSON.stringify({e:em,q:Date.now()}))}catch(_){}sbTerminar('Entre com a conta '+em+' para retirar o código de acesso.')};
+
+/* Definições › Conta e Acesso: no modo base de dados só se entra com a conta Google — as contas locais e a preparação do Microsoft 365 não se mostram */
+{const _vD=vDefinicoes;vDefinicoes=function(){const r=_vD.apply(this,arguments);try{if((UI.defTab||'geral')==='conta')$$('#view .card').forEach(c=>{const h=((c.querySelector('h2')||{}).textContent||'').trim();if(/^Contas Locais/.test(h)||/^Microsoft 365 \(Office\)/.test(h))c.remove()})}catch(e){console.warn(e)}return r};if(go._f)go._f.definicoes=vDefinicoes}
+/* Ajuda: os temas da sincronização antiga dão lugar a um só — entrar com a conta Google */
+try{['gsync','nuvem','nuvemcfg'].forEach(id=>{const i=AJUDA.findIndex(a=>a.id===id);if(i>=0)AJUDA.splice(i,1)});
+  const aj=(id,t,txt)=>{const a=AJUDA.find(x=>x.id===id);if(a){if(t)a.t=t;a.txt=txt;a.gif=null}else AJUDA.push({id,ic:'cloud',t,gif:null,txt})};
+  aj('nuvem2','Usar em vários aparelhos (computador, iPad, telemóvel)',`<p>Abra <b>${esc(location.host||'eduspruce.pt')}</b> em qualquer computador, iPad ou telemóvel e toque em <b>Entrar com Google</b>: os seus dados aparecem logo. Não há códigos, palavras-passe de encriptação nem nada para configurar.</p><ul><li>O que mudar num aparelho aparece nos outros em segundos.</li><li>No iPhone/iPad pode adicionar a app ao ecrã principal (Partilhar › Adicionar ao ecrã principal).</li><li>Nos aparelhos não fica nada guardado: ao <b>terminar a sessão</b>, os dados continuam na sua conta.</li><li>Sem internet, a app avisa; as alterações são guardadas assim que a ligação voltar (mantenha a app aberta).</li></ul>`);
+  aj('dados','Dados e Cópias de Segurança',`<p>Os seus dados ficam guardados na sua conta, na <b>base de dados EduSpruce</b> (União Europeia): não dependem do aparelho nem do navegador. Em <b>Definições › Dados e Segurança</b> pode exportar uma cópia (ficheiro JSON, com fotografias) para ter uma reserva sua; e, em <b>Definições › Conta e Dados</b>, ligar uma cópia diária no seu Google Drive.</p>`);
+  {const a=AJUDA.find(x=>x.id==='legal');if(a)a.txt=a.txt.replace('(no dispositivo e, se quiser, encriptados na sua nuvem)','(na base de dados EduSpruce, na União Europeia)')}
+  {const a=AJUDA.find(x=>x.id==='importados');if(a)a.txt=a.txt.replace('e na sincronização com a conta Google','e fica guardado na sua conta')}}catch(e){console.warn(e)}
 
 /* janela de progresso: título, barra, percentagem, «x de y» e tempo que falta */
 function esProgresso(tit,feito,total,sub,t0){let o=$('#ocup');if(!o){o=document.createElement('div');o.id='ocup';o.setAttribute('role','status');document.body.appendChild(o)}
@@ -55,16 +237,12 @@ function esProgresso(tit,feito,total,sub,t0){let o=$('#ocup');if(!o){o=document.
   if(!o.querySelector('.esprg')){o.innerHTML=`<div class="ocb esprg"><div class="esph">${ic('cloud',18)}<b class="espt"></b></div><div class="espb" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i></i></div><div class="espn"><b class="espp"></b><span class="espx"></span><span class="sp1"></span><span class="espf"></span></div><p class="esps"></p></div>`}
   o.classList.add('on');o.querySelector('.espt').textContent=tit;o.querySelector('.espb i').style.width=pc+'%';o.querySelector('.espb').setAttribute('aria-valuenow',pc);
   o.querySelector('.espp').textContent=pc+'%';o.querySelector('.espx').textContent=`${feito} de ${total} partes`;o.querySelector('.espf').textContent=falta;o.querySelector('.esps').textContent=sub||''}
-(()=>{const st=document.createElement('style');st.textContent=`#ocup .esprg{min-width:min(440px,86vw);text-align:left;align-items:stretch}#ocup .esprg>*{width:100%;align-self:stretch}.esprg .esph{justify-content:flex-start;display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--acc,#1b93c6)}.esph b{color:var(--ink,#222);font-size:17px}
-.esprg .espb{display:block;height:10px;border-radius:99px;background:color-mix(in srgb,var(--mut,#777) 18%,transparent);overflow:hidden}.espb i{display:block;height:100%;width:0;background:var(--acc,#1b93c6);border-radius:inherit;transition:width .25s ease}
-.espn{display:flex;align-items:baseline;gap:8px;margin-top:10px;font-size:14px}.espn b{font-size:18px;font-variant-numeric:tabular-nums}.espx,.espf{color:var(--mut,#666);font-variant-numeric:tabular-nums}.esps{margin:8px 0 0;font-size:13px;color:var(--mut,#666)}
-body.est-sge .espb,body.est-sge .espb i{border-radius:0}`;document.head.appendChild(st)})();
-/* ===== Google Drive como cópia fria (opcional): a base de dados é o sítio dos dados; o Drive guarda, se quiser, uma cópia encriptada ===== */
+/* ===== Google Drive como cópia de reserva (opcional): a base de dados é o sítio dos dados; o Drive guarda, se quiser, uma cópia cifrada ===== */
 /* o estado da cópia (ligada, última cópia, n.º de partes) vai com os dados — vê-se igual em todos os aparelhos; os resumos (hashes) ficam em cada aparelho */
 const gdFrio=()=>{let c={};try{c=(S.cfg&&S.cfg.gdFrio)||{}}catch(_){}const l=nvL().gdFrio||{};return {auto:c.auto!=null?c.auto:!!l.auto,ultima:Math.max(c.ultima||0,l.ultima||0),n:c.n||l.n||0,h:nvL().gdFrioH||l.h||{}}};
 const gdFrioSet=o=>{const x={...gdFrio(),...o};try{S.cfg.gdFrio={auto:!!x.auto,ultima:x.ultima||0,n:x.n||0};save()}catch(_){}nvSet({gdFrioH:x.h||{},gdFrio:null})};
 async function gdTokenOk(interativo){try{await gsToken(interativo?true:'silencioso');return true}catch(_){return false}}
-async function gdCopiar(interativo){const L=nvL();if(L.prov!=='supabase'||!(L.k||_nvK))return interativo&&toast('Só disponível com a Base de Dados EduSpruce e o código de encriptação.','erro');
+async function gdCopiar(interativo){const L=nvL();if(!window.__esPronto||L.prov!=='supabase'||!(L.k||_nvK))return interativo&&toast('Os dados ainda estão a abrir. Tente dentro de momentos.','erro');
   if(gdCopiar._ocup)return;gdCopiar._ocup=true;try{
   if(interativo)ocupado('A preparar a cópia…');try{await nvSincronizar(false)}catch(_){}
   if(!(await gdTokenOk(interativo))){if(interativo){livre();toast('Não foi possível ligar ao Google Drive.','erro')}return}
@@ -74,95 +252,60 @@ async function gdCopiar(interativo){const L=nvL();if(L.prov!=='supabase'||!(L.k|
   await nvPool(N,4,async k=>{try{const t=await PROV.supabase.ler(k);if(t==null)return;const hh=nvHash(t);if(m[k]&&H[k]===hh)return;await G.escrever(k,t);H[k]=hh;n++}finally{feito++;if(interativo)esProgresso('Cópia no Google Drive',feito,N.length,n?`${n} parte${n>1?'s':''} atualizada${n>1?'s':''} · ${feito-n} já estava${feito-n===1?'':'m'} em dia`:'A comparar com a cópia anterior…',t0)}});
   Object.keys(H).forEach(k=>{if(!bd[k])delete H[k]});
   /* espelho exato: tira do Drive o que já não existe na base de dados */
-  const sobra=Object.keys(m).filter(k=>k.startsWith(NV_PREF)&&!bd[k]);await nvPool(sobra,4,async k=>{try{await G.apagar(k)}catch(_){}});
-  gdFrioSet({ultima:Date.now(),n:N.length,h:H});G._ids=null;try{audit('Sincronização','Cópia fria no Google Drive',N.length+' partes')}catch(_){}
-  if(interativo)toast(n?`Cópia guardada no Google Drive: ${n} parte${n>1?'s':''} atualizada${n>1?'s':''} de ${N.length} (encriptadas).`:`A cópia no Google Drive já estava em dia (${N.length} partes).`,'ok');sbRedesenhar()}
-  catch(e){if(interativo)toast('Cópia no Google Drive: '+e.message,'erro');else console.warn('[EduSpruce] cópia fria:',e.message)}
+  const sobra=Object.keys(m).filter(k=>(k.startsWith(NV_PREF)||k===SB_CH)&&!bd[k]);await nvPool(sobra,4,async k=>{try{await G.apagar(k)}catch(_){}});
+  gdFrioSet({ultima:Date.now(),n:N.length,h:H});G._ids=null;try{audit('Conta','Cópia de reserva no Google Drive',N.length+' partes')}catch(_){}
+  if(interativo)toast(n?`Cópia guardada no Google Drive: ${n} parte${n>1?'s':''} atualizada${n>1?'s':''} de ${N.length}.`:`A cópia no Google Drive já estava em dia (${N.length} partes).`,'ok');sbRedesenhar()}
+  catch(e){if(interativo)toast('Cópia no Google Drive: '+e.message,'erro');else console.warn('[EduSpruce] cópia de reserva:',e.message)}
   finally{gdCopiar._ocup=false;if(interativo)livre()}}
-async function gdApagar(){const L=nvL();if(L.prov!=='supabase')return toast('Só disponível com a Base de Dados EduSpruce escolhida.','erro');
-  if(!(L.k||_nvK))return toast('Escreva primeiro o código de encriptação.','erro');
+async function gdApagar(){const L=nvL();if(!window.__esPronto||L.prov!=='supabase'||!(L.k||_nvK))return toast('Os dados ainda estão a abrir. Tente dentro de momentos.','erro');
   let bd;try{await nvSincronizar(true);bd=await PROV.supabase.lista()}catch(e){return toast('Não foi possível confirmar a base de dados: '+e.message,'erro')}
   const nb=Object.keys(bd).length;if(!bd[NV_PREF+'manifest.json']||nb<2)return toast('A base de dados ainda não tem os seus dados. Nada foi apagado.','erro');
-  if(nvL().erro||Object.keys(nvL().mod||{}).length)return toast('Há alterações por enviar para a base de dados. Tente daqui a uns segundos.','erro');
+  if(nvL().erro||Object.keys(nvL().mod||{}).length)return toast('Há alterações por guardar na base de dados. Tente daqui a uns segundos.','erro');
   ocupado('A ligar ao Google Drive…');let m;try{await gsToken(true);m=await PROV.google._mapa(true)}catch(e){livre();return toast('Google Drive: '+e.message,'erro')}livre();
-  const N=Object.keys(m||{}).filter(k=>k.startsWith(NV_PREF));if(!N.length){gdFrioSet({auto:false,ultima:0,n:0});sbRedesenhar();return toast('O Google Drive já não tem dados da EduSpruce.','ok')}
+  const N=Object.keys(m||{}).filter(k=>k.startsWith(NV_PREF)||k===SB_CH);if(!N.length){gdFrioSet({auto:false,ultima:0,n:0});sbRedesenhar();return toast('O Google Drive já não tem dados da EduSpruce.','ok')}
   const w=(prompt(`Vai apagar ${N.length} ficheiro${N.length>1?'s':''} da EduSpruce do seu Google Drive (pasta privada da app).\n\nOs dados ficam só na Base de Dados EduSpruce (${nb} partes, confirmadas agora). A cópia diária fica desligada. Não é possível desfazer.\n\nPara confirmar, escreva APAGAR`)||'').trim().toUpperCase();
   if(w!=='APAGAR')return toast('Nada foi apagado.');
   ocupado('A apagar do Google Drive…');let ok=0,f=0;try{await nvPool(N,6,async n=>{try{await PROV.google.apagar(n);ok++}catch(_){f++}})}finally{livre()}
-  PROV.google._ids=null;gdFrioSet({auto:false,ultima:0,n:0,h:{}});try{localStorage.removeItem(NV_KEEP)}catch(_){}try{audit('Sincronização','Dados apagados do Google Drive',ok+' ficheiros')}catch(_){}
+  PROV.google._ids=null;gdFrioSet({auto:false,ultima:0,n:0,h:{}});try{localStorage.removeItem(NV_KEEP)}catch(_){}try{audit('Conta','Dados apagados do Google Drive',ok+' ficheiros')}catch(_){}
   toast(f?`Apagados ${ok}; ${f} não foi possível apagar — tente outra vez.`:`Google Drive limpo: ${ok} ficheiro${ok>1?'s':''} apagado${ok>1?'s':''}. Os dados estão na base de dados.`,f?'erro':'ok');sbRedesenhar()}
 /* cópia diária automática (só se estiver ligada): no máximo uma vez por dia, em silêncio */
-setInterval(()=>{try{const L=nvL(),F=gdFrio();if(SESSAO&&L.prov==='supabase'&&F.auto&&(L.k||_nvK)&&navigator.onLine&&document.visibilityState==='visible'&&Date.now()-(F.ultima||0)>864e5)gdCopiar(false)}catch(_){}},60000);
+setInterval(()=>{try{const L=nvL(),F=gdFrio();if(SESSAO&&window.__esPronto&&L.prov==='supabase'&&F.auto&&(L.k||_nvK)&&navigator.onLine&&document.visibilityState==='visible'&&Date.now()-(F.ultima||0)>864e5)gdCopiar(false)}catch(_){}},60000);
 {const _bP=bindNvPainel;bindNvPainel=function(){const r=_bP.apply(this,arguments);try{const c=$('#nv-card');const L=nvL();
   if(c&&L.prov==='supabase'&&!c.querySelector('#nv-gdf')){const F=gdFrio();const s=document.createElement('section');s.className='nvs';s.id='nv-gdf';
     const q=F.ultima?new Date(F.ultima).toLocaleString('pt-PT',{dateStyle:'short',timeStyle:'short'}):'';
-    s.innerHTML=`<div class="nvsh"><h3>Cópia no Google Drive (opcional)</h3><p>Os seus dados vivem na base de dados. Se quiser, o Google Drive guarda uma cópia encriptada, só de reserva — nunca é usada para sincronizar.</p></div>
+    s.innerHTML=`<div class="nvsh"><h3>Cópia de reserva no Google Drive (opcional)</h3><p>Não é preciso para a app funcionar. Se quiser, o seu Google Drive guarda uma segunda cópia dos dados (cifrada, na pasta privada da app).</p></div>
       <div class="nvsb"><label class="chk"><input type="checkbox" id="nv-gdauto" ${F.auto?'checked':''}> Guardar uma cópia por dia, automaticamente</label>
-      <p class="hint" style="margin:6px 0 10px">${q?`Última cópia: <b>${esc(q)}</b> · ${F.n||0} partes`:'Ainda não foi feita nenhuma cópia a partir da base de dados. (O Google Drive pode ter ainda os dados da sincronização antiga — pode apagá-los aqui.)'}</p>
+      <p class="hint" style="margin:6px 0 10px">${q?`Última cópia: <b>${esc(q)}</b> · ${F.n||0} partes`:'Ainda não foi feita nenhuma cópia.'}</p>
       <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn" id="nv-gdcp">${ic('upload',15)} Guardar Cópia Agora</button><button type="button" class="btn dng" id="nv-gdx">${ic('trash',15)} Apagar os Dados do Google Drive</button></div>
       <p class="hint" style="margin:8px 0 0">Antes de apagar, a app confirma que a base de dados tem tudo e pede para escrever APAGAR.</p></div>`;
-    const card=c.querySelector('.card:not(.nvhero)')||c;card.appendChild(s);
+    const foot=c.querySelector('.nvfoot');const card=c.querySelector('.card:not(.nvhero)')||c;if(foot)card.insertBefore(s,foot);else card.appendChild(s);
     s.querySelector('#nv-gdcp').onclick=()=>gdCopiar(true);s.querySelector('#nv-gdx').onclick=gdApagar;
     s.querySelector('#nv-gdauto').onchange=e=>{gdFrioSet({auto:e.target.checked});toast(e.target.checked?'Cópia diária no Google Drive ligada.':'Cópia diária desligada. A cópia que já existe fica no Drive até a apagar.','ok');if(e.target.checked&&!gdFrio().ultima)gdCopiar(true)}}}catch(e){console.warn(e)}return r}}
-/* depois de passar para a base de dados, o ecrã «A sincronizar» antigo (do Google Drive) não fica preso */
-function sbFecharPortao(){try{const g=document.getElementById('nvgate');if(g&&nvL().prov==='supabase'){const b=[...g.querySelectorAll('[data-g]')].find(x=>/Continuar/.test(x.textContent));if(b)b.click();else if(g.classList.contains('erro'))g.remove()}}catch(_){}}
 
 /* ===== a lista «Quem Pode Entrar com Google» (Definições › Conta e Acesso) manda também na base de dados =====
    só o administrador a envia; vai a impressão digital de cada e-mail (como no eduspruce-config.json), nunca o e-mail */
 async function sbContasLista(){const M=new Map();let C=null;try{C=await acCentral()}catch(_){}if(!C||!C.ok||!Array.isArray(C.contas))return null; /* sem a lista do site não se mexe em nada */
   C.contas.forEach(x=>M.set(x.h,x.papel||'professor'));
   for(const x of (acLocal().gContas||[])){if(x&&x.email){try{M.set(await acHash(x.email),x.papel||'professor')}catch(_){}}}return M}
-async function sbContasSincronizar(forcar){try{if(!SESSAO||SESSAO.papel!=='admin'||nvL().prov!=='supabase'||!nvL().sb)return;const p=await sbObter();
+async function sbContasSincronizar(forcar){try{if(!SESSAO||!window.__esPronto||SESSAO.papel!=='admin'||nvL().prov!=='supabase'||!nvL().sb)return;const p=await sbObter();
   const M=await sbContasLista();if(!M||!M.size)return;const assin=[...M].sort().join('|');if(!forcar&&assin===sbContasSincronizar._a)return;
   if(sbContasSincronizar._parado)return;const sb=p.cliente;const {data:bd,error}=await sb.from('eduspruce_autorizados').select('h,papel');if(error){/* sem o script das contas no Supabase: pára até recarregar, para não encher os registos de erros */if(/42501|PGRST|permission|does not exist/i.test((error.code||'')+' '+error.message))sbContasSincronizar._parado=true;return console.warn('[EduSpruce] contas na base de dados:',error.message)}
   const tem=new Map((bd||[]).map(r=>[r.h,r.papel]));const juntar=[...M].filter(([h,pp])=>tem.get(h)!==pp).map(([h,papel])=>({h,papel}));
   if(juntar.length){const r=await sb.from('eduspruce_autorizados').upsert(juntar,{onConflict:'h'});if(r.error)return console.warn(r.error.message)}
   const tirar=[...tem.keys()].filter(h=>!M.has(h));if(tirar.length){const r=await sb.from('eduspruce_autorizados').delete().in('h',tirar);if(r.error)console.warn(r.error.message)}
-  sbContasSincronizar._a=assin;if(juntar.length||tirar.length){try{audit('Sincronização','Contas autorizadas na base de dados',`+${juntar.length} −${tirar.length}`)}catch(_){}if(forcar)toast('Base de dados atualizada: '+M.size+' conta'+(M.size>1?'s':'')+' autorizada'+(M.size>1?'s':'')+'.','ok')}}
+  sbContasSincronizar._a=assin;if(juntar.length||tirar.length){try{audit('Conta','Contas autorizadas na base de dados',`+${juntar.length} −${tirar.length}`)}catch(_){}if(forcar)toast('Base de dados atualizada: '+M.size+' conta'+(M.size>1?'s':'')+' autorizada'+(M.size>1?'s':'')+'.','ok')}}
   catch(e){console.warn('[EduSpruce] contas na base de dados:',e.message)}}
 setInterval(()=>sbContasSincronizar(false),15000);
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#ac-add,#ac-col,[data-acdel],[data-acpp],#view select');if(b&&VIEW==='definicoes')setTimeout(()=>sbContasSincronizar(true),900)},true);
 document.addEventListener('change',e=>{if(VIEW==='definicoes'&&e.target.closest&&e.target.closest('.card'))setTimeout(()=>sbContasSincronizar(false),900)},true);
 
-/* ===== abrir como uma app normal: com a base de dados e dados neste aparelho, nada de ecrã «A sincronizar» =====
-   mostra logo os dados deste aparelho e atualiza em segundo plano (tempo real); o ecrã de espera só aparece num aparelho novo, sem dados */
-{const _sg=nvSyncGate;nvSyncGate=async function(){try{const L=nvL();const temDados=S&&Array.isArray(S.anos)&&S.anos.length>0;
-  if(L.prov==='supabase'&&temDados&&(L.k||_nvK)){const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}setTimeout(sbPuxar,400);return}}catch(_){}return _sg.apply(this,arguments)}}
-
-/* ===== sem perguntas ao entrar: um lembrete discreto em vez do assistente; e a opção «Não Sincronizar» ===== */
-let _gesto=0;['pointerdown','keydown'].forEach(t=>addEventListener(t,e=>{if(e.isTrusted)_gesto=Date.now()},true));
-{const _as=nvAssist;nvAssist=function(forcar){/* só abre o assistente quando a pessoa o pede (toque/clique); ao entrar, mostra apenas o lembrete */
-  if(Date.now()-_gesto<1500)return _as.apply(this,arguments);try{sbLembrete()}catch(_){}}}
-function sbNaoSincronizar(){nvSet({semSync:true,prov:'',base:null,mod:{},erro:'',renovar:false});try{_nvK=null}catch(_){}
-  $$('dialog.nvas').forEach(d=>{try{d.close()}catch(_){}d.remove()});const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');
-  const l=document.getElementById('sblemb');if(l)l.remove();try{nvBadge()}catch(_){}try{audit('Sincronização','Não sincronizar neste aparelho','')}catch(_){}
-  toast('Sem sincronização neste aparelho: os dados ficam só aqui. Pode ativar em Definições › Sincronização.','ok');sbRedesenhar()}
-function sbAtivarSync(){nvSet({semSync:false,prov:'supabase',base:null,mod:{},erro:''});const l=document.getElementById('sblemb');if(l)l.remove();
-  UI.defTab='sync';go('definicoes');setTimeout(()=>{sbVerificar();const i=$('#nv2-p1');if(i)i.focus()},400)}
-function sbLembrete(){try{const L=nvL();if(!SESSAO||L.semSync||(L.k||_nvK)||document.getElementById('sblemb')||document.body.classList.contains('login-on'))return;
-  let vis='';try{vis=sessionStorage.getItem('es.sblemb')||''}catch(_){}if(vis)return;
-  const d=document.createElement('div');d.id='sblemb';d.setAttribute('role','status');
-  d.innerHTML=`<span class="sbli">${ic('cloud',18)}</span><div class="sblt"><b>Sincronização por ativar</b><span>Os seus dados vivem na base de dados. Escreva o seu código de encriptação para os abrir neste aparelho — sem ele, o que fizer aqui não fica guardado.</span></div><div class="sbla"><button type="button" class="btn pri sm" id="sbl-at">Ativar</button><button type="button" class="btn sm ico" id="sbl-x" aria-label="Fechar">${ic('x',14)}</button></div>`;
-  document.body.appendChild(d);d.querySelector('#sbl-at').onclick=sbAtivarSync;
-  d.querySelector('#sbl-x').onclick=()=>{try{sessionStorage.setItem('es.sblemb','1')}catch(_){}d.remove()}}catch(e){console.warn(e)}}
-/* o assistente (quando a pessoa o abre) e o painel também têm «Não Sincronizar»; com a sincronização desligada, o painel mostra como voltar a ligar */
-if(false)setInterval(()=>{const d=$('dialog.nvas');if(d&&!d.querySelector('#nvas-nosync')){const f=d.querySelector('footer');if(f){const b=document.createElement('button');b.type='button';b.className='btn';b.id='nvas-nosync';b.textContent='Não Sincronizar';b.onclick=e=>{e.preventDefault();sbNaoSincronizar()};f.insertBefore(b,f.firstChild)}}},500);
-{const _bP=bindNvPainel;bindNvPainel=function(){const r=_bP.apply(this,arguments);try{const c=$('#nv-card');const L=nvL();if(!c)return r;
-  const o=c.querySelector('.nvobr');if(o)o.remove();
-  if(L.semSync&&!c.querySelector('#nv-semsync')){const s=document.createElement('div');s.id='nv-semsync';s.className='alert';s.innerHTML=`${ic('info',16)} <span><b>Sincronização desligada neste aparelho.</b> Os dados ficam só aqui (não vão para a base de dados nem para os outros aparelhos).</span> <button type="button" class="btn pri sm" id="nv-ssat">Ativar Sincronização</button>`;c.insertBefore(s,c.firstChild);s.querySelector('#nv-ssat').onclick=sbAtivarSync}
-  else if(false){const card=c.querySelector('.card:not(.nvhero)')||c;const s=document.createElement('section');s.className='nvs';s.innerHTML=`<div class="nvsh"><h3>Não Sincronizar</h3><p>Usar a app só neste aparelho, mesmo com a conta Google. Os dados deixam de ir para a base de dados.</p></div><div class="nvsb"><button type="button" class="btn" id="nv-ssno">${ic('x',15)} Não Sincronizar neste Aparelho</button></div>`;card.appendChild(s);
-    s.querySelector('#nv-ssno').onclick=()=>{if(confirm('Deixar de sincronizar neste aparelho?\n\nOs dados ficam só aqui. Os outros aparelhos e a base de dados não recebem as alterações feitas aqui.'))sbNaoSincronizar()}}}catch(e){console.warn(e)}return r}}
-(()=>{const st=document.createElement('style');st.textContent=`#sblemb{position:fixed;left:12px;right:12px;margin:0 auto;bottom:max(16px,env(safe-area-inset-bottom));z-index:9000;max-width:680px;box-sizing:border-box;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 14px;background:var(--panel,#fff);color:var(--ink,#222);border:1px solid var(--line,#ddd);border-left:4px solid var(--acc,#1b93c6);border-radius:12px;box-shadow:0 14px 40px -12px rgba(0,0,0,.35);animation:egUp .35s ease both}
-#sblemb .sbli{color:var(--acc,#1b93c6);display:flex}#sblemb .sblt{flex:1 1 260px;min-width:0}#sblemb .sblt b{display:block;font-size:14.5px}#sblemb .sblt span{display:block;font-size:13px;color:var(--mut,#666);line-height:1.35}
-#sblemb .sbla{display:flex;gap:6px;flex-wrap:wrap}body.est-sge #sblemb{border-radius:0}#nv-semsync{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}#nv-semsync span{flex:1 1 260px}`;document.head.appendChild(st)})();
-
 /* ===== dados só na base de dados (sem cópia neste aparelho) ===== */
 if(nvL().semSync)nvSet({semSync:false,prov:nvL().prov||'supabase'});
-/* ficha MRA (antes só neste aparelho): passa a ir com os dados, numa parte própria */
+/* ficha MRA (antes só neste aparelho): vai com os dados, numa parte própria */
 window.__esMraMud=()=>{clearTimeout(window.__esMraMud._t);window.__esMraMud._t=setTimeout(()=>{try{save()}catch(_){}},400)};
 {const _p=nvPartes;nvPartes=function(){const P=_p.apply(this,arguments);try{const o={};Object.keys(ES_MEM).filter(k=>k.startsWith('mra.')).sort().forEach(k=>o[k]=ES_MEM[k]);if(Object.keys(o).length)P['loc-mra']=o}catch(_){}return P}}
 {const _m=nvMontar;nvMontar=function(P){try{const o=P&&P['loc-mra'];if(o&&typeof o==='object')Object.keys(o).forEach(k=>{if(k.startsWith('mra.'))ES_MEM[k]=String(o[k])})}catch(_){}return _m.apply(this,arguments)}}
-/* evidências (fotografia, áudio, ficheiro por aluno): deixam o IndexedDB e vão encriptadas com os anexos da sincronização */
+/* evidências (fotografia, áudio, ficheiro por aluno): deixam o IndexedDB e vão cifradas com os anexos */
 const evMetaDe=(t,instId,aid,criar)=>{if(!t)return [];if(criar){t.evMeta=t.evMeta||{};t.evMeta[instId]=t.evMeta[instId]||{};t.evMeta[instId][aid]=t.evMeta[instId][aid]||[]}return ((t.evMeta||{})[instId]||{})[aid]||[]};
 const evParaURL=b=>new Promise((ok,ko)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>ko(r.error);r.readAsDataURL(b)});
 evLista=async function(t,instId,aid){const M=evMetaDe(t,instId,aid);const out=[];for(const m of M){const d=FOTOS['ev-'+m.id];let blob=null;if(d){try{blob=await (await fetch(d)).blob()}catch(_){}}out.push({...m,k:evKey(t,instId,aid),t:t.id,inst:instId,aluno:aid,blob:blob||new Blob([],{type:m.mime||''}),falta:!d})}return out.sort((a,b)=>a.q-b.q)};
@@ -172,8 +315,8 @@ async function esMigrarEvidencias(){try{if(!indexedDB.databases)return 0;const L
   const recs=await evTx('readonly',st=>new Promise(ok=>{const q=st.getAll();q.onsuccess=()=>ok(q.result||[]);q.onerror=()=>ok([])}));let n=0;
   for(const r of recs){let t=null;for(const a of S.anos)for(const x of a.turmas)if(x.id===r.t)t=x;if(!t||!r.blob)continue;const M=evMetaDe(t,r.inst,r.aluno,true);if(M.some(m=>m.id===r.id))continue;
     FOTOS['ev-'+r.id]=await evParaURL(r.blob);M.push({id:r.id,tipo:r.tipo,nome:r.nome||'',mime:r.mime||r.blob.type,tam:r.tam||r.blob.size,q:r.q||Date.now()});evSetConta(t,r.inst,r.aluno,M.length);n++}
-  if(n){save();try{audit('Sincronização','Evidências passadas para a base de dados',n+'')}catch(_){}}return recs.length}catch(e){console.warn('[EduSpruce] evidências:',e);return -1}}
-/* depois da 1.ª sincronização completa com a base de dados, apaga a cópia antiga que ficou no aparelho (estado, cópias, fotografias, evidências) */
+  if(n){save();try{audit('Conta','Evidências passadas para a base de dados',n+'')}catch(_){}}return recs.length}catch(e){console.warn('[EduSpruce] evidências:',e);return -1}}
+/* depois da 1.ª gravação completa na base de dados, apaga a cópia antiga que ficou no aparelho (estado, cópias, fotografias, evidências) */
 let _esLimpo=false,_esEvMig=false;
 async function esLimparAparelho(){if(_esLimpo)return;const L=nvL();if(L.prov!=='supabase'||Object.keys(L.mod||{}).length||L.erro)return;
   if(!_esEvMig){_esEvMig=true;const n=await esMigrarEvidencias();if(n>0){setTimeout(()=>{try{nvSincronizar(false)}catch(_){}},300);return}}
@@ -182,13 +325,25 @@ async function esLimparAparelho(){if(_esLimpo)return;const L=nvL();if(L.prov!=='
   try{if(IDB){const tx=IDB.transaction(['estado','fotos'],'readwrite');tx.objectStore('estado').clear();tx.objectStore('fotos').clear()}}catch(_){}
   try{indexedDB.deleteDatabase(EV_DB)}catch(_){}
   try{localStorage.removeItem('eskeep')}catch(_){}}
-{const _ns=nvSincronizar;nvSincronizar=async function(){const r=await _ns.apply(this,arguments);try{if(r&&nvL().prov==='supabase')setTimeout(esLimparAparelho,200)}catch(_){}return r}}
-/* sair da página com alterações por enviar: avisa (já não há cópia no aparelho) */
-addEventListener('beforeunload',e=>{try{if(nvL().prov==='supabase'&&Object.keys(nvL().mod||{}).length){e.preventDefault();e.returnValue=''}}catch(_){}});
-/* ao abrir: entra logo na app, como uma app normal — os dados chegam da base de dados numa barra fina no topo, sem ecrã de espera */
-async function esCarregar(){if(esCarregar._on)return;esCarregar._on=true;let b=document.getElementById('esbar');if(!b){b=document.createElement('div');b.id='esbar';b.innerHTML='<i></i>';document.body.appendChild(b)}b.className='on';
-  const fim=()=>{b.className='';esCarregar._on=false;try{window.__nvGateFila&&window.__nvGateFila()}catch(_){}setTimeout(()=>{try{mostrarAvisos(false)}catch(_){}},400)};
-  if(!navigator.onLine){fim();toast('Sem internet: os seus dados estão na base de dados. Ligue-se à internet para os abrir.','erro');addEventListener('online',()=>esCarregar(),{once:true});return}
-  try{window.__nvSemFotos=true;const r=await nvSincronizar(false);window.__nvSemFotos=false;if(r){try{go(VIEW)}catch(_){}if(!r.rapida)try{nvFotosFundo()}catch(_){}}else if(nvL().erro)toast('Não foi possível abrir os dados: '+nvL().erro,'erro')}catch(e){window.__nvSemFotos=false;toast(e.message,'erro')}fim()}
-{const _sg=nvSyncGate;nvSyncGate=async function(){try{const L=nvL();if(L.prov==='supabase'){const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');if(L.k||_nvK)return esCarregar();return}}catch(_){}return _sg.apply(this,arguments)}}
-(()=>{const st=document.createElement('style');st.textContent=`#esbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:99999;pointer-events:none;opacity:0;transition:opacity .25s}#esbar.on{opacity:1}#esbar i{display:block;height:100%;width:40%;background:var(--acc,#1b93c6);animation:esbarra 1.1s ease-in-out infinite}@keyframes esbarra{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}`;document.head.appendChild(st)})();
+/* a app só fala com a base de dados depois de os dados da conta terem chegado; sessão terminada ou conta retirada → ecrã de entrada */
+{const _ns=nvSincronizar;nvSincronizar=async function(){if(nvL().prov==='supabase'&&!window.__esPronto&&!_esDentro)return null;
+  const r=await _ns.apply(this,arguments);
+  try{if(r&&nvL().prov==='supabase')setTimeout(esLimparAparelho,200);
+    if(!r&&window.__esPronto){const e=nvL().erro||'';if(/sessão terminou/i.test(e))sbTerminar(e);else if(/não está autorizada/i.test(e))sbTerminar(e)}}catch(_){}
+  return r}}
+(()=>{const st=document.createElement('style');st.textContent=`#esbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:99999;pointer-events:none;opacity:0;transition:opacity .25s}#esbar.on{opacity:1}#esbar i{display:block;height:100%;width:40%;background:var(--acc,#1b93c6);animation:esbarra 1.1s ease-in-out infinite}@keyframes esbarra{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+body.es-abrir #view,body.es-abrir #barx,body.es-abrir #nffab,body.es-abrir #tabbar .tbdg{display:none!important}
+#esabrir{flex:1;min-height:0;overflow:hidden;padding:20px;box-sizing:border-box}body.dev-tlm #esabrir{padding:12px}
+.eskg{display:grid;gap:14px;max-width:1100px}.esk{border-radius:14px;background:linear-gradient(100deg,color-mix(in srgb,var(--mut,#777) 13%,transparent) 30%,color-mix(in srgb,var(--mut,#777) 6%,transparent) 50%,color-mix(in srgb,var(--mut,#777) 13%,transparent) 70%);background-size:300% 100%;animation:eskb 1.4s ease-in-out infinite;height:64px}
+.eskh{height:34px;width:min(320px,60%)}.eskr{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.eskr .esk{height:86px}.eskc{display:grid;grid-template-columns:2fr 1fr;gap:14px}.eskb{height:190px}.eskl{height:54px}.eskl.c{width:70%}
+@media (max-width:700px){.eskr{grid-template-columns:repeat(2,1fr)}.eskc{grid-template-columns:1fr}.eskb{height:130px}}
+@keyframes eskb{0%{background-position:100% 0}100%{background-position:-100% 0}}@media (prefers-reduced-motion:reduce){.esk{animation:none}#esbar i{animation:none;width:100%}}
+body.est-sge .esk{border-radius:0}
+.esmsg{max-width:460px;margin:8vh auto 0;text-align:center;display:grid;gap:10px;justify-items:center;padding:28px 22px;background:var(--panel,#fff);border:1px solid var(--line,#ddd);border-radius:18px}.esmsg .esmi{color:var(--acc,#1b93c6);display:flex}.esmsg h2{margin:0;font-size:20px;color:var(--ink,#222);text-transform:none}.esmsg p{margin:0 0 6px;color:var(--mut,#666);line-height:1.45}body.est-sge .esmsg{border-radius:0}
+#nv-card .nvobr{display:none!important}
+#login .lgbd .lggd{width:100%;min-height:52px;font-size:16px}#login .lgbd .lggd.ocp{opacity:.75;cursor:progress}#login .lgbd .lgerr{margin-top:10px}#login .lgbd .lgerr:empty{display:none}
+.lgbdn{font-size:12.5px;line-height:1.45;color:var(--mut);margin:12px 0 4px;display:flex;gap:6px;align-items:flex-start}.lgbdn .ic{flex:none;margin-top:2px;color:var(--acc)}.lgbdn>span{flex:1;min-width:0}
+.sbcod .sbcalt{display:flex;gap:6px;align-items:flex-start;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line,#ddd)}.sbcod .sbcalt .ic{flex:none;margin-top:2px;color:var(--acc)}.sbcod .sbcalt>span{flex:1;min-width:0}
+.nvbd.gira .ic{animation:nvgira 1s linear infinite}`;document.head.appendChild(st)})();
+/* arranque: se já há sessão neste aparelho, a página abre logo com o esqueleto e os dados chegam a seguir */
+try{if(sbGuardada()&&!/[?&]code=/.test(location.search)){document.body.classList.remove('login-on');esEsqueleto('abrir')}}catch(_){}

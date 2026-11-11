@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.937
+- cl
+- Modo base de dados: sessão Supabase como sessão da app; chave da conta guardada na conta (conta-chave) e entregue a cada aparelho; arranque com lerDados; autoavaliação dos alunos (aluno.html, SQL 0004) cifrada com chave derivada do código
+
 ## 0.936
 - cl
 - barx do iPad com fundo do painel, desfoque, botões 44 px em pílula; margem negativa do tema anulada; nffab acima da barra
