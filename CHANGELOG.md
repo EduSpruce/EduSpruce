@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.944
+- Importar do Outlook: olHub (colar, ICS link/ficheiro, Microsoft Graph Calendars.Read/Mail.Read com ID de aplicação próprio)
+
 ## 0.943
 - Digitalização de testes (digit.js): captura página a página, envio selado (linhas ef-f-dg-*, só criar/ler), vista em livro, verificação SHA-256
 - SQL 0006: a base de dados recusa alterar/apagar páginas digitalizadas
