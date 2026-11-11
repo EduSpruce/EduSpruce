@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.936
+- cl
+- barx do iPad com fundo do painel, desfoque, botões 44 px em pílula; margem negativa do tema anulada; nffab acima da barra
+
 ## 0.935
 - cl
 - Auditoria automática de 29 vistas em 4 formatos; CSS tlm/ipad com especificidade acima do tema; cartões alst; barx flex-start + scroll; cores TIPOS_DIA no calendário de avaliações e cpm-cal
