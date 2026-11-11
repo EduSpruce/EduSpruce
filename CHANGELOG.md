@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.962
+- cl
+- App offline exporta todos os dados
+
 ## 0.961
 - cl
 - Definições › Dados: exportar app offline para cópias de segurança
