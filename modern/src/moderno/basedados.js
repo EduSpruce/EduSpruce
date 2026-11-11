@@ -42,7 +42,7 @@ const sbEmailApp=()=>{try{return SESSAO&&SESSAO.tipo==='google'?String(SESSAO.u|
 function sbEsquecer(){try{Object.keys(localStorage).forEach(k=>{if(k===SB_SES||k.startsWith(SB_SES+'-'))localStorage.removeItem(k)})}catch(_){}
   try{const L=nvL();const o={sb:0,conta:'',base:null,mod:{},erro:'',rekey:null};if(L.kConta){o.k=null;o.salt=null;o.kDe='';o.kConta=0;try{_nvK=null}catch(_){}}nvSet(o)}catch(_){}
   try{localStorage.removeItem('eskeep')}catch(_){}}
-async function sbTerminar(msgEntrada){if(sbTerminar._on)return;sbTerminar._on=true;
+async function sbTerminar(msgEntrada){try{esCortina(false)}catch(_){}if(sbTerminar._on)return;sbTerminar._on=true;
   try{if(window.__esPronto&&navigator.onLine&&Object.keys(nvL().mod||{}).length)await Promise.race([nvSincronizar(false),new Promise(r=>setTimeout(r,6000))])}catch(_){}
   try{const p=await Promise.race([sbObter(),new Promise((_,ko)=>setTimeout(()=>ko(new Error('t')),3000))]);await Promise.race([p.sair(),new Promise(r=>setTimeout(r,3000))])}catch(_){}
   sbEsquecer();try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY);sessionStorage.removeItem('es.loc')}catch(_){}
@@ -62,7 +62,9 @@ function sbEcraEntrar(){document.body.classList.add('login-on');let o=$('#login'
   document.body.appendChild(o);try{loginHero()}catch(_){}try{loginLegal()}catch(_){}return o}
 let _sbEntrouAgora=false;
 /* v0.942 · cortina: nada da app fica à vista enquanto a sessão se confirma ou antes de pedir o código de acesso */
-function esCortina(on){let o=$('#escofre');if(!on){if(o)o.remove();return}if(o)return;o=document.createElement('div');o.id='escofre';o.setAttribute('aria-busy','true');o.innerHTML='<span class="sr" role="status">A abrir…</span><i aria-hidden="true"></i>';document.body.appendChild(o)}
+function esCortina(on){let o=$('#escofre');if(!on){if(o)o.remove();return}if(o)return;o=document.createElement('div');o.id='escofre';o.setAttribute('aria-busy','true');o.innerHTML='<span class="sr" role="status">A abrir…</span><i aria-hidden="true"></i>';document.body.appendChild(o);
+  /* nunca fica presa: sai se aparecer o ecrã de entrada, uma mensagem de erro ou ao fim de 12 s */
+  const t0=Date.now();const t=setInterval(()=>{const c=$('#escofre');if(!c){clearInterval(t);return}if(document.body.classList.contains('login-on')||$('#pinlock')||$('#esabrir.falha')||$('#esabrir .esab-f')||Date.now()-t0>12000){clearInterval(t);c.remove()}},250)}
 const sbGuardadaValida=()=>{try{const j=JSON.parse(localStorage.getItem(SB_SES)||'null');return !!(j&&j.expires_at&&j.expires_at*1000>Date.now()+30000)}catch(_){return false}};
 pedirLogin=function(){return new Promise(async ok=>{try{authCfg().catch(()=>{})}catch(_){}
   const entrar=(pf,papel)=>{const ant=sessaoAtual();const m=ant&&ant.tipo==='google'&&String(ant.u||'').toLowerCase()===pf.email?ant:null;

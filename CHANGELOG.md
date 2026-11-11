@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.946
+- Cortina de entrada com saída garantida (login, erro, 12 s) e removida ao terminar sessão
+
 ## 0.945
 - sw.js v4: navegação com carimbo no endereço e no-store; ao ativar recarrega as janelas
 - versao.json + esVerNova() (verificação de versão e recarga única)
