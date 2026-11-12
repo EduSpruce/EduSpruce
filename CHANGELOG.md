@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.969
+- Digitalizador de documentos no telemóvel
+- Apagar digitalizações
+- Fotografias com tamanho uniforme
+
 ## 0.968
 - Teste de Avaliação Completo
 - Momentos de Produção Oral manuais
