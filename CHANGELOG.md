@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.977
+- Tabela de instrumentos ajustada ao iPad
+
 ## 0.976
 - Sorteio nos Módulos Opcionais
 
