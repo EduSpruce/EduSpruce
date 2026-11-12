@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.970
+- Digitalização de testes como módulo opcional
+
 ## 0.969
 - Digitalizador de documentos no telemóvel
 - Apagar digitalizações
