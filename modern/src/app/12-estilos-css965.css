@@ -1,3 +1,6 @@
+.dtmail{display:block;font-weight:500;font-size:12.5px;margin-top:1px}.dtmail a{color:var(--acc,#127fa6);text-decoration:none;display:inline-flex;align-items:center;gap:4px;word-break:break-all}.dtmail a:hover{text-decoration:underline}
+.ctl{margin-top:12px}.ctl td{vertical-align:middle}.ctl .ctg{display:block;font-size:12.5px}.ctl td a{color:var(--acc,#127fa6);word-break:break-all}.ctl .ctact{white-space:nowrap;width:1%;text-align:right}.ctl .ctact .btn{margin-left:4px}
+
 html body dialog.fecho{width:min(640px,calc(100vw - 24px));max-width:none;padding:0;border:0;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
 dialog.fecho form{padding:22px 24px 20px;display:flex;flex-direction:column;gap:6px}
 dialog.fecho .fah{display:flex;gap:12px;align-items:center;margin-bottom:6px}dialog.fecho .fah h2{margin:0;font-size:21px}dialog.fecho .fah p{margin:2px 0 0;font-size:14px}
