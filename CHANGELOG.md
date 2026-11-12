@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.988
+- Menu alinhado
+
 ## 0.987
 - EduSpruce Pulso: avaliação em tempo real
 
