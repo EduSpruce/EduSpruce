@@ -1,3 +1,16 @@
+html body dialog.fecho{width:min(640px,calc(100vw - 24px));max-width:none;padding:0;border:0;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog.fecho form{padding:22px 24px 20px;display:flex;flex-direction:column;gap:6px}
+dialog.fecho .fah{display:flex;gap:12px;align-items:center;margin-bottom:6px}dialog.fecho .fah h2{margin:0;font-size:21px}dialog.fecho .fah p{margin:2px 0 0;font-size:14px}
+dialog.fecho .faic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--acc,#127fa6) 14%,transparent);color:var(--acc,#127fa6);flex:none}
+dialog.fecho .fsteps{list-style:none;margin:0;padding:0;counter-reset:fa;display:flex;flex-direction:column;gap:14px}
+dialog.fecho .fsteps>li{counter-increment:fa;position:relative;padding-left:36px;display:flex;flex-direction:column;gap:6px}
+dialog.fecho .fsteps>li::before{content:counter(fa);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--acc,#127fa6);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center}
+dialog.fecho .fal{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0;font-size:15px}dialog.fecho .fal .mut{font-size:13px;font-weight:500}
+html body dialog.fecho :is(textarea,input:not([type=checkbox])){width:100%!important;max-width:none!important;box-sizing:border-box;font-size:16px}dialog.fecho textarea{min-height:84px;resize:vertical}
+dialog.fecho .fach{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer;margin:0}dialog.fecho .fach>span{display:flex;flex-wrap:wrap;gap:0 4px;align-items:baseline}dialog.fecho .fach small{flex-basis:100%;color:var(--mut);font-size:12.5px}dialog.fecho .fafal{color:var(--bad,#b91c1c)}
+dialog.fecho .faact{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}dialog.fecho .faact .btn{min-height:46px;padding:0 20px}
+@media (max-width:520px){dialog.fecho form{padding:18px 16px}dialog.fecho .fsteps>li{padding-left:0}dialog.fecho .fsteps>li::before{display:none}}
+
 .dmx .dmvz{margin-top:14px;width:100%;max-width:none;box-sizing:border-box;align-self:stretch;text-align:left}.dmvzl{margin:0;padding-left:18px}.dmvzl li{margin:3px 0}.dmvzl .mut{margin-left:8px;font-size:13px}
 
 .navsub[data-v="sorteio"]{padding-left:34px}
