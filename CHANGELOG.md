@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.983
+- Correção das fotografias órfãs
+
 ## 0.982
 - Contactos em cartões, com ícone
 
