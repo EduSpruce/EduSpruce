@@ -42,6 +42,8 @@ function fillCtx(){{const be=$('#brandEsc');if(be){const e=EC();be.textContent=e
 }
 /* ---------- ícones (SVG, traço) ---------- */
 const ICONS={
+ phone:'<path d="M5 4h3.5l1.7 4.3-2.2 1.4a11 11 0 0 0 6.3 6.3l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/>',
+ mail:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/>',
  flow:'<rect x="4" y="4" width="7" height="7" rx="2.2"/><rect x="13" y="13" width="7" height="7" rx="2.2"/><path d="M7.5 11v1.5a3 3 0 0 0 3 3H13"/>',
  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>',
  meet:'<circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="7" r="2.5"/><path d="M3 21v-4a4 4 0 0 1 8 0"/><path d="M13 17a4 4 0 0 1 8 0v4"/><path d="M2 21h20"/><path d="M12 13v8"/>',
