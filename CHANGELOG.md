@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.975
+- Página Sorteio no menu da turma
+
 ## 0.974
 - Módulo Sorteio (roda da sorte, pares e grupos)
 

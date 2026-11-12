@@ -1,3 +1,11 @@
+html body .sortpg [data-se][aria-pressed=true]{background:var(--acc,#127fa6)!important;color:#fff!important;border-color:transparent!important}
+
+.sortgo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px}.sortbig{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:18px 12px;min-height:130px;border-radius:16px;border:1px solid var(--line);background:var(--panel);cursor:pointer;text-align:center;transition:transform .15s,box-shadow .15s}
+.sortbig:hover,.sortgr button:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.1)}.sortbig:focus-visible,.sortgr button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}.sortbig span{font-size:40px;line-height:1}.sortbig b{font-size:17px}.sortbig small{color:var(--mut)}
+.sortgr{cursor:default;padding:0}.sortgr button{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:16px 12px 6px;width:100%;border-radius:16px 16px 0 0;transition:transform .15s}.sortgr button span{font-size:40px;line-height:1}.sortgr label{display:inline-flex;gap:6px;align-items:center;padding:0 0 12px;color:var(--mut)}.sortgr input{width:60px!important;text-align:center;font-weight:700}
+.sortal{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px}.sortch{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;border-radius:12px;border:1px solid var(--line);cursor:pointer;font-size:14px}.sortch span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sortch.off{opacity:.45;text-decoration:line-through}.sortch:focus-visible{outline:3px solid var(--acc)}.sortch img,.sortch .avatar{width:32px!important;height:40px!important;border-radius:8px!important;flex:none}
+@media (max-width:640px){.sortgo{grid-template-columns:1fr}.sortbig{min-height:96px}}
+
 .rdn[hidden]{display:none!important}
 
 .magr>.rodacard{grid-column:-2/-1}.rodah{display:flex;align-items:center;gap:12px;margin-bottom:10px}.rodah p{margin:0;font-size:13px}
