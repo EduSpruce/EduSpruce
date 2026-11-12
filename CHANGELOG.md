@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.967
+- Registo de Autoavaliação do departamento
+- Sorteio, grupos automáticos, simulador de nota, alerta precoce, lembrete de cópia offline
+
 ## 0.966
 - Notas flutuantes refeitas
 - Quadros ajustam-se ao ecrã
