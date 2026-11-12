@@ -2,60 +2,51 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.966
+- Notas flutuantes refeitas
+- Quadros ajustam-se ao ecrã
+- Autoavaliação como módulo opcional
+
 ## 0.965
-- cl
 - Vários acertos de aspeto
 
 ## 0.964
-- cl
 - Lista de alunos bloqueada sem aspeto editável
 
 ## 0.963
-- cl
 - Cópia de Segurança numa só linha
 
 ## 0.962
-- cl
 - App offline exporta todos os dados
 
 ## 0.961
-- cl
 - Definições › Dados: exportar app offline para cópias de segurança
 
 ## 0.960
-- cl
 - Fotografias inteiras em todas as vistas
 
 ## 0.959
-- cl
 - Chamada com fotografias ajustáveis
 
 ## 0.958
-- cl
 - Relatório individual com autoavaliação e assinatura digitalizada
 
 ## 0.957
-- cl
 - Alunos: tamanho das fotografias ajustável (+/−)
 
 ## 0.956
-- cl
 - Barra de topo sem o seletor de turma
 
 ## 0.955
-- cl
 - Alunos: cabeçalhos e valores centrados
 
 ## 0.954
-- cl
 - Entrada: deteta bloqueadores que alteram os pedidos
 
 ## 0.953
-- cl
 - Entrada: diagnóstico mais completo
 
 ## 0.952
-- cl
 - Entrada: verificação da conta mais robusta e com diagnóstico
 
 ## 0.951
@@ -119,23 +110,18 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Autoavaliação: botões no Painel e na Avaliação; «Perfil de Aprendizagem»
 
 ## 0.938
-- cl
 - Ícone de sincronização removido no modo base de dados
 
 ## 0.937
-- cl
 - Modo base de dados: sessão Supabase como sessão da app; chave da conta guardada na conta (conta-chave) e entregue a cada aparelho; arranque com lerDados; autoavaliação dos alunos (aluno.html, SQL 0004) cifrada com chave derivada do código
 
 ## 0.936
-- cl
 - barx do iPad com fundo do painel, desfoque, botões 44 px em pílula; margem negativa do tema anulada; nffab acima da barra
 
 ## 0.935
-- cl
 - Auditoria automática de 29 vistas em 4 formatos; CSS tlm/ipad com especificidade acima do tema; cartões alst; barx flex-start + scroll; cores TIPOS_DIA no calendário de avaliações e cpm-cal
 
 ## 0.934
-- cl
 - Arrastar cartões: alvo encontrado mesmo com cartões dentro de invólucros; calendário sem conflito com a classe .aula; anoBadge com cor da turma; botão Perfil no dossiê
 
 ## 0.933
