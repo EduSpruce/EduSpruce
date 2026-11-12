@@ -176,7 +176,9 @@ begin
   if s.estado <> 'espera' and s.tipo = 'vivo' and coalesce((s.cfg->>'tardias')::boolean, true) = false then return jsonb_build_object('erro','tardia'); end if;
   select count(*) into n from public.eduspruce_arena_jogador where sala = p_id;
   if n >= 80 then return jsonb_build_object('erro','cheia'); end if;
-  insert into public.eduspruce_arena_jogador (sala, alcunha, ref, avatar, token) values (p_id, a, p_ref, p_avatar, h) returning * into j;
+  begin
+    insert into public.eduspruce_arena_jogador (sala, alcunha, ref, avatar, token) values (p_id, a, p_ref, p_avatar, h) returning * into j;
+  exception when unique_violation then return jsonb_build_object('erro','emuso'); end;
   update public.eduspruce_arena_sala set versao = versao + 1 where id = p_id;
   return jsonb_build_object('j', j.id, 'alcunha', j.alcunha, 'avatar', j.avatar, 'pontos', 0, 'voltou', false, 'sala', public.arena_publico(s));
 end $$;

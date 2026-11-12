@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f6f96">
+<meta name="robots" content="noindex">
+<title>EduSpruce Pulso</title>
+<link rel="icon" href="favicon.png">
+<style>
+:root{--bg:#f2f6f9;--panel:#fff;--line:#d9e2ea;--ink:#16222d;--mut:#5d6d7c;--acc:#0f7fa8;--acc2:#e3f2f8;--ok:#15803d;--bad:#b91c1c;--r:16px}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1720;--panel:#16212c;--line:#2a3a49;--ink:#e8eef3;--mut:#9fb1c1;--acc:#38bdf8;--acc2:#12384a}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{padding:max(12px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(90px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+#app{max-width:640px;margin:0 auto}
+header.top{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+header.top .lg{width:34px;height:34px;border-radius:10px;background:var(--acc);color:#fff;display:grid;place-items:center;font-weight:900}
+header.top b{font-size:16px}header.top b em{font-style:normal;color:var(--acc)}header.top .sp{flex:1}header.top small{color:var(--mut);font-size:13px;text-align:right}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:0 0 12px}
+h1{font-size:23px;margin:0 0 6px;line-height:1.2}h2{font-size:19px;margin:0 0 8px}p{margin:0 0 10px}.mut{color:var(--mut)}.peq{font-size:14px}
+label.l{display:block;font-weight:700;margin:14px 0 6px}
+input,textarea{width:100%;font:inherit;font-size:18px;color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:52px}
+textarea{min-height:110px;resize:vertical}input:focus,textarea:focus{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);border-color:var(--acc)}
+#cod,.cp{font:800 28px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;text-align:center}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;border-radius:14px;background:var(--acc);color:#fff;font-weight:800;font-size:17px;margin-top:14px;text-align:center;padding:0 16px}
+.btn.sec{background:transparent;color:var(--acc);border:1.5px solid var(--line)}.btn[disabled]{opacity:.5;pointer-events:none}
+.err{color:var(--bad);font-weight:600;margin:10px 0 0}.err:empty{display:none}
+.lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;max-height:46vh;overflow:auto}
+.lista button{all:unset;cursor:pointer;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:650}.lista button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.qh{display:flex;align-items:center;gap:8px;margin-bottom:8px;color:var(--mut);font-size:14px;font-weight:600}.qh .sp{flex:1}
+.qt{font-size:clamp(19px,5vw,24px);font-weight:750;line-height:1.3;margin:0 0 12px}
+.qi{max-width:100%;max-height:34vh;border-radius:12px;display:block;margin:0 auto 12px;background:#fff}
+.ops{display:flex;flex-direction:column;gap:8px}
+.op{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:14px;padding:12px 14px;min-height:56px;font-size:17px;background:var(--panel)}
+.op .lt{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--acc2);color:var(--acc);flex:none}
+.op.on{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,var(--panel))}.op.on .lt{background:var(--acc);color:#fff}
+.op.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--panel))}.op.ok .lt{background:var(--ok);color:#fff}
+.op.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--panel))}.op.no .lt{background:var(--bad);color:#fff}
+.op[disabled]{cursor:default}
+.fb{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}.fb.ok{background:color-mix(in srgb,var(--ok) 14%,var(--panel));color:var(--ok)}.fb.no{background:color-mix(in srgb,var(--bad) 12%,var(--panel));color:var(--bad)}.fb.neu{background:var(--acc2);color:var(--acc)}
+.fb p{margin:6px 0 0;color:var(--ink);font-weight:400}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}.nav button{all:unset;cursor:pointer;width:38px;height:38px;border-radius:10px;border:1.5px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:15px}
+.nav button.r{background:var(--acc2);border-color:var(--acc)}.nav button.at{outline:3px solid var(--acc)}
+.row{display:flex;gap:8px;align-items:center}.row .btn{margin-top:0}
+.esp{text-align:center;padding:40px 10px}.esp .ic{font-size:64px;line-height:1}
+.dots span{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--acc);margin:0 4px;animation:pt 1.2s infinite}.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes pt{50%{opacity:.25;transform:scale(.7)}}
+.nota{font-size:56px;font-weight:900;color:var(--acc);line-height:1}
+.esc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.esc .op{min-width:0;font-size:15px;padding:10px}
+.mao{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:62px;height:62px;border-radius:50%;border:0;background:var(--panel);box-shadow:0 6px 20px rgba(0,0,0,.2);font-size:28px;cursor:pointer;z-index:5}
+.mao.on{background:#f59e0b;animation:pul 1.4s infinite}@keyframes pul{50%{transform:scale(1.08)}}
+.eq{display:flex;align-items:center;gap:10px;background:var(--acc2);border-radius:12px;padding:8px 12px;margin-bottom:10px;font-weight:700}
+.vt{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;border:2px solid var(--line);border-radius:12px;padding:12px;margin:6px 0;background:var(--panel)}.vt.on{border-color:var(--acc);background:var(--acc2)}
+.rev{border-top:1px solid var(--line);padding:10px 0}.rev:first-child{border-top:0}.rev small{display:block}
+.lig{position:fixed;left:50%;transform:translateX(-50%);top:max(10px,env(safe-area-inset-top));background:#7f1d1d;color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:13px;z-index:8}
+</style>
+</head>
+<body>
+<div id="app"><div class="esp"><p class="mut">A abrir…</p></div></div>
+<script>window.__ES_SB="__ES_SB__";</script>
+<script>
+/*ARENA_COMUM*/
+</script>
+<script>
+(()=>{const U=window.ARENA;const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];const app=$('#app');
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LT='ABCDE';const ESC=['Percebi tudo','Percebi quase tudo','Percebi pouco','Não percebi'];const COR=['#ef4444','#3b82f6','#f59e0b','#22c55e','#a855f7','#ec4899','#14b8a6','#f97316','#64748b','#84cc16'];
+let CFG=null;const st={};let tPoll=null,canal=null,ocup=false,ecraK='';
+async function cfg(){if(CFG)return CFG;let c=window.__ES_SB;if(!c||typeof c!=='object'){try{c=await (await fetch('supabase-config.json',{cache:'no-store'})).json()}catch(_){c=null}}if(!c||!c.url)throw new Error('O Pulso não está configurado.');CFG=c;return c}
+async function rpc(fn,args){const c=await cfg();let r;try{r=await fetch(c.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:c.anonKey,Authorization:'Bearer '+c.anonKey},body:JSON.stringify(args)})}catch(e){const x=new Error('Sem ligação. A tentar de novo…');x.rede=true;throw x}
+  if(!r.ok){const x=new Error(r.status===404?'O Pulso ainda não está disponível nesta escola.':'Erro do servidor ('+r.status+').');x.http=r.status;throw x}return r.json()}
+const MSG={sala:'Não encontrei essa sala. Confirma o código.',ativ:'A atividade já terminou.',lista:'Escolhe o teu nome.',codigo:'O código pessoal não está certo. Confirma com o professor.',nome:'Escreve o teu nome (2 a 40 letras).',emuso:'Esse nome está a ser usado noutro aparelho. Espera uns segundos e tenta de novo.',cheia:'A sala está cheia.',pedido:'Pedido inválido.'};
+const ls=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(_){return null}};
+const topo=()=>`<header class="top"><span class="lg">P</span><b>EduSpruce <em>Pulso</em></b><span class="sp"></span>${st.info?`<small>${esc(st.info.nome)}${st.eu?'<br>'+esc(st.eu.nome):''}</small>`:''}</header>`;
+function ecra(k,h){ecraK=k;app.innerHTML=topo()+h;maoBtn();window.scrollTo(0,0)}
+let ligEl=null;const semRede=v=>{if(v&&!ligEl){ligEl=document.createElement('div');ligEl.className='lig';ligEl.textContent='Sem ligação · a tentar de novo…';document.body.appendChild(ligEl)}if(!v&&ligEl){ligEl.remove();ligEl=null}};
+/* baralhar de forma estável para cada aluno */
+const rng=s=>{let h=2166136261;for(const ch of String(s)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h^=h<<13;h^=h>>>17;h^=h<<5;return ((h>>>0)%10000)/10000}};
+const ordem=(n,on,seed)=>{const o=[...Array(n).keys()];if(!on)return o;const r=rng(seed);for(let i=n-1;i>0;i--){const j=Math.floor(r()*(i+1));[o[i],o[j]]=[o[j],o[i]]}return o};
+
+/* ---------- entrar ---------- */
+function ecraCodigo(msg,cod){parar();st.info=null;st.eu=null;ecra('cod',`<div class="card"><h1>Entra na sala</h1><p class="mut">Escreve o código da sala que o professor te deu.</p><input id="cod" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false" value="${esc(U.fmt(cod||''))}" aria-label="Código da sala"><button class="btn" id="b-ok">Entrar</button><p class="err" id="e">${esc(msg||'')}</p></div><p class="mut peq" style="text-align:center">Sem contas. Só guardamos o teu nome e as tuas respostas.</p>`);
+  const i=$('#cod');i.oninput=()=>{i.value=U.fmt(U.limpaCod(i.value))};i.onkeydown=e=>{if(e.key==='Enter')$('#b-ok').click()};$('#b-ok').onclick=()=>abrirSala(U.limpaCod(i.value))}
+async function abrirSala(code){const e=$('#e'),b=$('#b-ok');if(code.length!==6){if(e)e.textContent='O código tem 6 carateres.';return}if(b){b.disabled=true;b.textContent='A procurar…'}
+  try{st.code=code;st.sala=(await U.sha('es-pulso:'+code)).slice(0,40);const info=await rpc('pulso_sala_info',{p_sala:st.sala});if(!info){if(b){b.disabled=false;b.textContent='Entrar'}if(e)e.textContent=MSG.sala;return}history.replaceState(null,'','#'+code);st.info=info;ligarCanal();salaPronta()}
+  catch(x){if(b){b.disabled=false;b.textContent='Entrar'}if(e)e.textContent=x.message}}
+async function ligarCanal(){try{const c=await cfg();const m=await import('./esm/supabase-2.117.3.min.js');const sb=m.createClient(c.url,c.anonKey,{auth:{persistSession:false,autoRefreshToken:false}});canal=sb.channel('pulso-'+st.sala,{config:{broadcast:{self:false}}});canal.on('broadcast',{event:'s'},()=>{clearTimeout(st.tAv);st.tAv=setTimeout(atualizar,100+Math.random()*500)}).subscribe()}catch(_){}}
+function parar(){clearTimeout(tPoll);tPoll=null}
+function agendar(ms){clearTimeout(tPoll);tPoll=setTimeout(async()=>{await atualizar();agendar(ms)},ms)}
+/* sala sem atividade: espera; com atividade: identificar e entrar */
+async function salaPronta(){const I=st.info;if(!I.ativ){st.ativ=null;if(['esp','fim','res'].includes(ecraK)){agendar(3500);return}ecra('esp',`<div class="card esp"><div class="ic">⏳</div><h1>À espera do professor</h1><p class="mut">Quando o professor lançar uma atividade, ela aparece aqui sozinha.</p><div class="dots"><span></span><span></span><span></span></div></div>`);agendar(3500);return}
+  const A=I.ativ;const g=ls('pulso.a.'+A.id);if(g&&g.a&&g.tok){st.a=g.a;st.tok=g.tok;st.ativ=A;const r=await rpc('pulso_estado',{p_ativ:A.id,p_a:st.a,p_tok:st.tok}).catch(()=>null);if(r&&!r.erro){return iniciar(r)}ls('pulso.a.'+A.id,null)}
+  st.ativ=A;const id=ls('pulso.id.'+st.sala)||{};
+  if(I.lista){let L=[];try{L=await U.decifrar(I.lista_c,st.code)}catch(_){return ecraCodigo('Não foi possível abrir a lista da turma.',st.code)}
+    if(id.ref&&id.cod)return entrar(id.nome,id.ref,id.cod,true);
+    ecra('nome',`<div class="card"><p class="mut" style="margin:0">${esc(A.titulo||'')}</p><h1>Quem és?</h1><div class="lista" id="lst">${L.map((x,k)=>`<button type="button" data-k="${k}">${esc(x.n)}</button>`).join('')}</div><label class="l">O teu código pessoal</label><input id="cp" class="cp" maxlength="5" autocomplete="off" autocapitalize="characters"><button class="btn" id="b-e">Entrar</button><p class="err" id="e"></p></div>`);
+    let sel=null;$$('#lst [data-k]').forEach(b=>b.onclick=()=>{sel=L[+b.dataset.k];$$('#lst [data-k]').forEach(z=>z.classList.toggle('on',z===b))});
+    $('#b-e').onclick=()=>{if(!sel)return $('#e').textContent=MSG.lista;const w=sel.n.replace(/^\d+\.\s*/,'').split(/\s+/);entrar(w[0]+(w.length>1?' '+w[w.length-1][0]+'.':''),sel.r,$('#cp').value.trim().toUpperCase())};return}
+  if(A.nomes===false)return entrar('',null,null,true);
+  if(id.nome)return entrar(id.nome,null,null,true);
+  ecra('nome',`<div class="card"><p class="mut" style="margin:0">${esc(A.titulo||'')}</p><h1>Como te chamas?</h1><input id="nm" maxlength="40" autocomplete="name" placeholder="Nome e apelido"><button class="btn" id="b-e">Entrar</button><p class="err" id="e"></p></div>`);
+  const n=$('#nm');n.onkeydown=e=>{if(e.key==='Enter')$('#b-e').click()};$('#b-e').onclick=()=>{const v=n.value.trim().replace(/\s+/g,' ');if(v.length<2)return $('#e').textContent=MSG.nome;if(U.impropria(v))return $('#e').textContent='Escreve o teu nome verdadeiro.';entrar(v)}}
+async function entrar(nome,ref,cod,auto){const A=st.ativ;st.tok=st.tok&&st.tokA===A.id?st.tok:U.token();st.tokA=A.id;const b=$('#b-e');if(b)b.disabled=true;
+  try{const r=await rpc('pulso_entrar',{p_sala:st.sala,p_ativ:A.id,p_nome:nome||'',p_tok:st.tok,p_ref:ref||null,p_cod:cod||null});
+    if(!r||r.erro){if(auto){ls('pulso.id.'+st.sala,null);return salaPronta()}if(b)b.disabled=false;const e=$('#e');if(e)e.textContent=MSG[r&&r.erro]||'Não foi possível entrar.';return}
+    st.a=r.a;ls('pulso.a.'+A.id,{a:r.a,tok:st.tok});if(ref||nome)ls('pulso.id.'+st.sala,{nome:ref?r.nome:nome,ref:ref||null,cod:cod||null});
+    const s=await rpc('pulso_estado',{p_ativ:A.id,p_a:st.a,p_tok:st.tok});iniciar(s)}catch(x){if(b)b.disabled=false;const e=$('#e');if(e)e.textContent=x.message}}
+
+/* ---------- atividade ---------- */
+function iniciar(r){st.r=r;st.eu=r.eu;st.qi=st.qi||0;desenhar();agendar(r.ativ.tipo==='quiz'&&r.ativ.modo==='prof'?2500:5000)}
+async function atualizar(){try{if(st.ativ&&st.a){const r=await rpc('pulso_estado',{p_ativ:st.ativ.id,p_a:st.a,p_tok:st.tok});semRede(false);if(r.erro){ls('pulso.a.'+st.ativ.id,null);st.a=null;return verSala()}const mud=!st.r||r.ativ.versao!==st.r.ativ.versao||r.ativ.estado!==st.r.ativ.estado||r.ativ.atual!==st.r.ativ.atual;st.r=r;st.eu=r.eu;if(r.ativ.estado==='fim')return fimAtiv();if(mud)desenhar(true)}else await verSala()}catch(x){if(x.rede)semRede(true)}}
+async function verSala(){const info=await rpc('pulso_sala_info',{p_sala:st.sala});if(!info)return ecraCodigo(MSG.sala);const antes=st.info&&st.info.ativ&&st.info.ativ.id;st.info=info;if(!info.ativ||!st.ativ||info.ativ.id!==antes||!st.a){if(!st.a||!info.ativ||info.ativ.id!==(st.ativ||{}).id){st.a=null;st.r=null;st.qi=0;salaPronta()}}}
+function fimAtiv(){const r=st.r,t=r.ativ;const id=t.id;st.a=null;ls('pulso.a.'+id,null);
+  if(t.tipo==='quiz'&&ecraK!=='res'&&(t.cfg.nota||t.cfg.feedback)&&r.resp.length)return resumo(r,true);
+  ecra('fim',`<div class="card esp"><div class="ic">✅</div><h1>Atividade terminada</h1><p class="mut">Obrigado! Fica nesta página: a próxima atividade aparece sozinha.</p></div>`);st.r=null;st.ativ=null;agendar(3500)}
+function desenhar(doPoll){const r=st.r,t=r.ativ;if(t.estado==='fim')return fimAtiv();
+  if(t.tipo==='saida')return saida(r);if(t.tipo==='rapida')return rapida(r,doPoll);
+  if(st.eu.submetido)return resumo(r);
+  if(t.modo==='prof')return quizProf(r,doPoll);if(t.modo==='livre')return quizLivre(r,doPoll);return quizSeq(r,doPoll)}
+const minha=(r,i)=>(r.resp||[]).find(x=>x.p===i);
+function pergHTML(t,p,i,sel,dis,sol){const ord=ordem((p.o||[]).length,t.cfg.baralharO,st.a+':'+i);const tp=p.tp;
+  let h=`<div class="qt">${esc(p.t||'Responde à pergunta do professor.')}</div>${p.img?`<img class="qi" src="${p.img}" alt="">`:''}`;
+  if(tp==='rc'||tp==='txt')h+=`<textarea id="rt" maxlength="2000" placeholder="A tua resposta" ${dis?'disabled':''}>${esc(sel&&sel.texto||'')}</textarea>`;
+  else{const so=sol&&sol.c?(sol.c.c||[]):null;h+=`<div class="ops">${ord.map(k=>{const on=sel&&(sel.opc||[]).includes(k);const cls=so?(so.includes(k)?'ok':on?'no':''):on?'on':'';return `<button type="button" class="op ${cls}" data-k="${k}" ${dis?'disabled':''}><span class="lt">${tp==='vf'||tp==='escala'?(tp==='vf'?(k?'F':'V'):k+1):LT[t.cfg.baralharO?ord.indexOf(k):k]}</span><span>${esc(tp==='em'&&/^[A-E]$/.test(p.o[k])?'':p.o[k])}</span></button>`}).join('')}</div>${tp==='ev'&&!dis?'<p class="mut peq" style="margin-top:6px">Podes escolher mais do que uma.</p>':''}`}
+  return h}
+function lerSel(p){if(p.tp==='rc'||p.tp==='txt'){const v=($('#rt')||{}).value||'';return v.trim()?{texto:v.trim()}:null}const k=$$('.op.on').map(b=>+b.dataset.k);return k.length?{opc:k}:null}
+function ligarOps(p,auto){$$('.op').forEach(b=>b.onclick=()=>{if(p.tp==='ev')b.classList.toggle('on');else{$$('.op').forEach(z=>z.classList.toggle('on',z===b))}if(auto)auto()})}
+async function enviar(i,v){if(ocup)return null;ocup=true;try{const x=await rpc('pulso_responder',{p_ativ:st.ativ.id,p_a:st.a,p_tok:st.tok,p_perg:i,p_opc:v.opc||null,p_texto:v.texto||null});ocup=false;semRede(false);return x}catch(e){ocup=false;semRede(true);return {erro:'rede'}}}
+function eqBar(r){const t=r.ativ;if(t.tipo!=='corrida'||!st.eu.equipa)return '';const e=(r.equipas||[]).find(z=>z.e===st.eu.equipa)||{};return `<div class="eq"><span style="color:${COR[(st.eu.equipa-1)%COR.length]};font-size:22px">⛵</span> Equipa ${st.eu.equipa}<span style="flex:1"></span><small class="mut">${e.n||1} na equipa</small></div>`}
+/* correção imediata e corrida: uma pergunta de cada vez */
+function quizSeq(r,doPoll){const t=r.ativ;const P=t.perguntas;const ord=ordem(P.length,t.cfg.baralharP,st.a);if(doPoll&&ecraK.startsWith('q'))return;
+  let pos=ord.findIndex(i=>!minha(r,i));if(pos<0)return resumo(r);const i=ord[pos];const p=P[i];
+  ecra('q'+i,`${eqBar(r)}<div class="card"><div class="qh"><span>Pergunta ${pos+1} de ${P.length}</span><span class="sp"></span>${t.fim_em?'<span id="rel"></span>':''}</div>${pergHTML(t,p,i,null,false)}<button class="btn" id="b-r">Responder</button><div id="fbk"></div></div>`);relogio();ligarOps(p);
+  $('#b-r').onclick=async()=>{const v=lerSel(p);if(!v)return;const b=$('#b-r');b.disabled=true;const x=await enviar(i,v);if(!x||x.erro){b.disabled=false;if(x&&x.erro==='fechada')return atualizar();return}
+    (st.r.resp=st.r.resp||[]).push({p:i,opc:v.opc,texto:v.texto,certa:x.certa});$$('.op').forEach(z=>z.disabled=true);const ta=$('#rt');if(ta)ta.disabled=true;
+    if(x.sol&&x.sol.c&&x.sol.c.c)$$('.op').forEach(z=>{const k=+z.dataset.k;z.classList.remove('on');if(x.sol.c.c.includes(k))z.classList.add('ok');else if((v.opc||[]).includes(k))z.classList.add('no')});
+    $('#fbk').innerHTML=`<div class="fb ${x.certa===true?'ok':x.certa===false?'no':'neu'}">${x.certa===true?'✓ Certo!':x.certa===false?'✗ Não está certo'+(p.tp==='rc'&&x.sol&&x.sol.c&&x.sol.c.a&&x.sol.c.a.length?' — resposta: '+esc(x.sol.c.a[0]):''):'Resposta enviada (o professor vai corrigir)'}${x.sol&&x.sol.exp?`<p>${esc(x.sol.exp)}</p>`:''}</div>`;
+    if(x.certa===true){U.tocar('certo');U.vibrar(30)}else if(x.certa===false){U.tocar('errado');U.vibrar(150)}
+    b.textContent=pos+1<P.length?'Seguinte ›':'Ver resultado';b.disabled=false;b.onclick=()=>{ecraK='';quizSeq(st.r)}}}
+/* navegação livre: o aluno salta entre perguntas e submete no fim */
+function quizLivre(r,doPoll){const t=r.ativ;const P=t.perguntas;const ord=ordem(P.length,t.cfg.baralharP,st.a);if(doPoll&&ecraK.startsWith('l'))return;st.qi=Math.min(st.qi||0,P.length-1);const pos=st.qi,i=ord[pos],p=P[i];const sel=minha(r,i);
+  ecra('l'+i,`<div class="nav">${ord.map((q,k)=>`<button type="button" data-n="${k}" class="${minha(r,q)?'r':''} ${k===pos?'at':''}">${k+1}</button>`).join('')}</div><div class="card"><div class="qh"><span>Pergunta ${pos+1} de ${P.length}</span><span class="sp"></span><span id="gv"></span></div>${pergHTML(t,p,i,sel,false)}
+    <div class="row" style="margin-top:14px"><button class="btn sec" id="b-a" ${pos?'':'disabled'}>‹ Anterior</button><button class="btn" id="b-s">${pos<P.length-1?'Seguinte ›':'Rever e submeter'}</button></div></div><button class="btn sec" id="b-sub">Submeter respostas (${r.resp.length}/${P.length})</button>`);
+  const guarda=async()=>{const v=lerSel(p);if(!v)return true;const ant=minha(st.r,i);if(ant&&JSON.stringify(ant.opc||null)===JSON.stringify(v.opc||null)&&(ant.texto||'')===(v.texto||''))return true;const x=await enviar(i,v);if(!x||x.erro){if(x&&x.erro==='fechada'){atualizar();return false}return false}
+    if(ant)Object.assign(ant,v);else st.r.resp.push({p:i,...v});const g=$('#gv');if(g)g.textContent='✓ guardada';return true};
+  ligarOps(p,()=>{if(p.tp!=='ev')guarda()});const ta=$('#rt');if(ta)ta.onblur=guarda;
+  $$('.nav [data-n]').forEach(b=>b.onclick=async()=>{await guarda();st.qi=+b.dataset.n;ecraK='';quizLivre(st.r)});
+  $('#b-a').onclick=async()=>{await guarda();st.qi=pos-1;ecraK='';quizLivre(st.r)};
+  $('#b-s').onclick=async()=>{await guarda();if(pos<P.length-1){st.qi=pos+1;ecraK='';quizLivre(st.r)}else $('#b-sub').click()};
+  $('#b-sub').onclick=async()=>{await guarda();const falta=P.length-st.r.resp.length;if(!confirm((falta?'Ainda tens '+falta+' pergunta'+(falta>1?'s':'')+' sem resposta. ':'')+'Submeter? Depois já não podes mudar.'))return;const x=await rpc('pulso_submeter',{p_ativ:st.ativ.id,p_a:st.a,p_tok:st.tok}).catch(()=>null);if(x&&!x.erro){st.r=x;st.eu=x.eu;resumo(x)}}}
+/* ao ritmo do professor */
+function quizProf(r,doPoll){const t=r.ativ;const p=t.pergunta;const i=t.atual;const sel=minha(r,i);const k='p'+i+(sel?'x':'');if(doPoll&&ecraK===k)return;
+  if(sel){ecra(k,`<div class="card esp"><div class="ic">📨</div><h1>Resposta enviada</h1><p class="mut">Espera pela próxima pergunta do professor.</p><div class="dots"><span></span><span></span><span></span></div></div>`);return}
+  ecra(k,`<div class="card"><div class="qh"><span>Pergunta ${i+1} de ${t.n_perg}</span></div>${pergHTML(t,p,i,null,false)}<button class="btn" id="b-r">Responder</button></div>`);ligarOps(p);
+  $('#b-r').onclick=async()=>{const v=lerSel(p);if(!v)return;$('#b-r').disabled=true;const x=await enviar(i,v);if(x&&!x.erro){st.r.resp.push({p:i,...v});ecraK='';quizProf(st.r)}else{$('#b-r').disabled=false;if(x&&x.erro==='fora')atualizar()}}}
+/* resultado final (nota e revisão, se o professor deixar) */
+function resumo(r,fim){const t=r.ativ;const P=t.perguntas||[];const mx=P.reduce((s,p)=>s+(+p.pts||1),0)||1;const fb=t.cfg.feedback!==false;
+  ecra('res',`<div class="card" style="text-align:center"><h1>${fim?'Atividade terminada':'Respostas enviadas!'}</h1>${t.cfg.nota!==false&&t.tipo!=='saida'?`<div class="nota">${Math.round(100*(+st.eu.pontos||0)/mx)}%</div><p class="mut">${st.eu.certas} certa${st.eu.certas===1?'':'s'} em ${P.length}</p>`:'<p class="mut">Obrigado!</p>'}</div>
+    ${fb&&r.sol&&P.length?`<div class="card"><h2>Revisão</h2>${P.map((p,i)=>{const m=minha(r,i);const s=(r.sol||[])[i];return `<div class="rev"><b>${i+1}. ${esc(p.t)}</b><small>${m?(m.certa===true?'<span style="color:var(--ok)">✓</span> ':m.certa===false?'<span style="color:var(--bad)">✗</span> ':'')+esc(m.texto||(m.opc||[]).map(k=>p.tp==='vf'?p.o[k]:LT[k]+') '+p.o[k]).join('; ')):'<span class="mut">Sem resposta</span>'}</small>${s&&s.c?`<small class="mut">Certa: ${esc(s.c.a?(s.c.a||[]).join(' / ')||'(corrigida pelo professor)':(s.c.c||[]).map(k=>p.tp==='vf'?p.o[k]:LT[k]+') '+p.o[k]).join('; '))}</small>`:''}${s&&s.exp?`<small>${esc(s.exp)}</small>`:''}</div>`}).join('')}</div>`:''}<p class="mut peq" style="text-align:center">Fica nesta página: a próxima atividade aparece sozinha.</p>`);
+  if(fim){st.r=null;st.ativ=null;agendar(3500)}}
+/* bilhete de saída */
+function saida(r){const t=r.ativ;if(st.eu.submetido||r.resp.length>=3){if(ecraK!=='sx')ecra('sx',`<div class="card esp"><div class="ic">🚪</div><h1>Obrigado!</h1><p class="mut">O teu bilhete de saída foi entregue.</p></div>`);return}if(ecraK==='s')return;
+  const P=t.perguntas;ecra('s',`<div class="card"><h1>Bilhete de saída</h1>${P.map((p,i)=>`<div style="margin-top:14px"><div class="qt" style="font-size:18px">${i+1}. ${esc(p.t)}</div>${p.tp==='escala'?`<div class="esc">${p.o.map((o,k)=>`<button type="button" class="op" data-e="${k}"><span class="lt">${['😀','🙂','😕','😟'][k]}</span><span>${esc(o)}</span></button>`).join('')}</div>`:`<textarea data-t="${i}" maxlength="2000" placeholder="Escreve aqui…"></textarea>`}</div>`).join('')}<button class="btn" id="b-s">Entregar</button><p class="err" id="e"></p></div>`);
+  let e0=null;$$('[data-e]').forEach(b=>b.onclick=()=>{e0=+b.dataset.e;$$('[data-e]').forEach(z=>z.classList.toggle('on',z===b))});
+  $('#b-s').onclick=async()=>{const t1=$('[data-t="1"]').value.trim(),t2=$('[data-t="2"]').value.trim();if(e0==null||!t1||!t2)return $('#e').textContent='Responde às três perguntas.';$('#b-s').disabled=true;
+    const a=await enviar(0,{opc:[e0]});const b=await enviar(1,{texto:t1});const c=await enviar(2,{texto:t2});if([a,b,c].some(x=>!x||x.erro&&x.erro!=='repetida')){$('#b-s').disabled=false;return $('#e').textContent='Não foi possível entregar. Tenta outra vez.'}st.eu.submetido=true;ecraK='';saida(st.r)}}
+/* pergunta rápida (e votação) */
+function rapida(r,doPoll){const t=r.ativ,p=t.perguntas[0];
+  if(t.estado==='voto'){const k='v'+(r.votei||'');if(doPoll&&ecraK===k)return;const L=(r.votacao||[]).filter(x=>!(r.resp||[]).some(m=>m.texto===x.texto&&false));
+    ecra(k,`<div class="card"><h1>Vota na melhor resposta</h1><p class="mut">${esc(p.t||'')}</p>${L.map(x=>`<button type="button" class="vt ${r.votei===x.id?'on':''}" data-v="${x.id}">${esc(x.texto)}</button>`).join('')}${r.votei?'<p class="mut peq">Voto registado. Podes mudar até o professor terminar.</p>':''}</div>`);
+    $$('[data-v]').forEach(b=>b.onclick=async()=>{await rpc('pulso_votar',{p_ativ:t.id,p_a:st.a,p_tok:st.tok,p_resp:+b.dataset.v}).catch(()=>{});await atualizar()});return}
+  const ja=(r.resp||[]).length;if(ja&&!t.cfg.varias){if(ecraK!=='rx')ecra('rx',`<div class="card esp"><div class="ic">📨</div><h1>Resposta enviada</h1><p class="mut">Espera pelo professor.</p></div>`);return}if(doPoll&&ecraK==='r')return;
+  ecra('r',`<div class="card">${pergHTML(t,p,0,null,false)}<button class="btn" id="b-r">Enviar</button>${t.cfg.varias&&ja?`<p class="mut peq">Já enviaste ${ja}. Podes enviar outra.</p>`:''}</div>`);ligarOps(p);
+  $('#b-r').onclick=async()=>{const v=lerSel(p);if(!v)return;$('#b-r').disabled=true;const x=await enviar(0,v);if(x&&!x.erro){st.r.resp.push({p:0,...v});U.tocar('entra');ecraK='';rapida(st.r)}else $('#b-r').disabled=false}}
+function relogio(){const t=st.r&&st.r.ativ;const el=$('#rel');if(!el||!t||!t.fim_em)return;const off=new Date(t.agora).getTime()-Date.now();clearInterval(st.tr);const f=()=>{const e=$('#rel');if(!e)return clearInterval(st.tr);const s=Math.max(0,(new Date(t.fim_em).getTime()-Date.now()-off)/1000);e.textContent='⏱ '+Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');if(s<=0){clearInterval(st.tr);atualizar()}};f();st.tr=setInterval(f,500)}
+/* mão levantada (só o professor vê) */
+function maoBtn(){const old=$('#mao');if(old)old.remove();if(!st.info||st.info.mao===false||!st.a||!st.ativ)return;const b=document.createElement('button');b.id='mao';b.className='mao'+(st.maoOn?' on':'');b.setAttribute('aria-label',st.maoOn?'Baixar a mão':'Levantar a mão');b.textContent='✋';document.body.appendChild(b);
+  b.onclick=async()=>{st.maoOn=!st.maoOn;b.classList.toggle('on',st.maoOn);try{await rpc('pulso_mao',{p_ativ:st.ativ.id,p_a:st.a,p_tok:st.tok,p_levantar:st.maoOn})}catch(_){}if(st.maoOn){U.vibrar(30);toastL('Mão levantada — só o professor vê')}}}
+function toastL(t){const d=document.createElement('div');d.className='lig';d.style.background='#1e3a8a';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&st.sala)atualizar()});addEventListener('online',()=>{semRede(false);if(st.sala)atualizar()});
+const h=U.limpaCod(decodeURIComponent(location.hash.slice(1)));ecraCodigo('',h);if(h.length===6)abrirSala(h);
+})();
+</script>
+</body>
+</html>

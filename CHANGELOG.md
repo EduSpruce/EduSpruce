@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.987
+- EduSpruce Pulso: avaliação em tempo real
+
 ## 0.986
 - EduSpruce Arena: jogos de perguntas em tempo real
 
