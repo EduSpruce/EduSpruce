@@ -1,3 +1,5 @@
+.navsub[data-v="sorteio"]{padding-left:34px}
+
 #view table.lst:has(tr[data-irow]){min-width:0}
 #view .card:has(table.lst tr[data-irow]){container-type:inline-size;overflow-x:auto;-webkit-overflow-scrolling:touch}
 #view table.lst tr[data-irow] .ityp{display:none;font-size:12.5px;font-weight:500;margin-top:2px}

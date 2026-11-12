@@ -194,7 +194,8 @@ function vSorteio(){const t=T();if(!t)return go('turmas');const c=rodaCfg();cons
 {const _gSo=go;go=function(v){if(v==='sorteio'&&!rodaOn())v='aula';if(go._f&&go._f.sorteio!==vSorteio)go._f.sorteio=vSorteio;const r=_gSo.call(this,v);
   try{const h=$('#tnavHold');const ref=h&&h.querySelector('[data-v="sumarios"]');let b=h&&h.querySelector('[data-v="sorteio"]');
     if(ref&&!b){ref.insertAdjacentHTML('afterend',`<button class="nav tnav" data-v="sorteio" title="Sorteio: escolher ao acaso um aluno, pares ou grupos"><span data-ico="target"></span><span class="lbl">Sorteio</span></button>`);b=h.querySelector('[data-v="sorteio"]');b.querySelector('[data-ico]').innerHTML=ic('target',18);b.onclick=()=>go('sorteio')}
-    $$('[data-v="sorteio"].nav').forEach(x=>{x.hidden=!rodaOn();x.classList.toggle('on',VIEW==='sorteio');x.disabled=!T()})}catch(e){console.warn(e)}return r};go._f=_gSo._f;if(go._f)go._f.sorteio=vSorteio}
+    ['#tnavHold','#tTree','#side'].forEach(sel=>{const H=document.querySelector(sel);if(!H)return;const su=H.querySelector('[data-v="sumarios"].nav'),so=H.querySelector('[data-v="sorteio"].nav');if(su&&so&&su.nextElementSibling!==so)su.after(so)});
+    $$('[data-v="sorteio"].nav').forEach(x=>{x.classList.add('navsub');x.hidden=!rodaOn();x.classList.toggle('on',VIEW==='sorteio');x.disabled=!T()})}catch(e){console.warn(e)}return r};go._f=_gSo._f;if(go._f)go._f.sorteio=vSorteio}
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
 /* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
