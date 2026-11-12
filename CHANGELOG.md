@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.985
+- Análise de resultados, dificuldades, ficha integral e registo de contactos
+
 ## 0.984
 - E-mail do DT por baixo do nome
 

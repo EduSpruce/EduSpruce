@@ -1204,3 +1204,7 @@ Incidente 11/11/2026: um iPad com uma versão antiga em cache e estado de sincro
 
 ## v0.984
 
+
+
+## v0.985
+

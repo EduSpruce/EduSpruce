@@ -49,6 +49,7 @@
 49-bloco-cp-cargo.js
 50-bloco-sn-on.js
 51-sorteio-equitativo-grupos-automaticos-alerta-pre.js
-52-msai-catalogo-como-no-sge-data.js
-53-pautas-oficiais-profij-fpct-e-classificacao.js
-54-fecho.html
+52-sprucenote-e-jornalnote-todos-os-elementos.js
+53-perfil-onde-estou-e-como-avancar.js
+54-bloco-pin-ok.js
+55-fecho.html
