@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.974
+- Módulo Sorteio (roda da sorte, pares e grupos)
+
 ## 0.973
 - Correções da revisão de erros
 
