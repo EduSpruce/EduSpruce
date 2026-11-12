@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.968
+- Teste de Avaliação Completo
+- Momentos de Produção Oral manuais
+
 ## 0.967
 - Registo de Autoavaliação do departamento
 - Sorteio, grupos automáticos, simulador de nota, alerta precoce, lembrete de cópia offline
