@@ -3,26 +3,29 @@
    No PROFIJ: Plano de Recuperação da Assiduidade e Plano de Recuperação das Aprendizagens (por formando). */
 const PREC_T={assid:'Plano de Recuperação da Assiduidade',aprend:'Plano de Recuperação das Aprendizagens'};
 const PREC_E={curso:['Em curso',''],ok:['Cumprido','ok'],nao:['Não cumprido','bad']};
-const precTec=t=>/ufcd|tecnol/i.test(normT(t.disciplina||''));
-const precLim=t=>t.precLim!=null?+t.precLim:precTec(t)?80:90;
+const precComp=t=>/ufcd|tecnol/i.test(normT(t.disciplina||''))?'tecnologica':cpmCompDe(t.disciplina||'')==='cientifica'?'cientifica':'sociocultural';
+const PREC_CN={sociocultural:'Sociocultural',cientifica:'Científica',tecnologica:'Tecnológica'};
+const precCfg=()=>S.cfg.precLim=S.cfg.precLim||{};
+/* limites de assiduidade aprovados pelo conselho pedagógico: escritos à mão (sem valores por defeito); a turma pode ter um limite próprio */
+const precLim=t=>{if(t.precLim!=null&&t.precLim!=='')return +t.precLim;const v=precCfg()[precComp(t)];return v!=null&&v!==''?+v:null};
 function vPrecup(){const t=T();const v=$('#view');if(!t)return go('turmas');
   if(ofertaDe(t)!=='profij'){v.innerHTML=`<div class="card empty">${ic('refresh',30)}<br><b>Só para turmas PROFIJ</b><br><span class="mut">${ehProfT(t)?'Nas turmas do ensino profissional usa-se o Mecanismo de Recuperação (MRA), por módulo.':'Os planos de recuperação do PROFIJ aparecem nas turmas PROFIJ.'}</span>${ehProfT(t)?`<br><br><button class="btn pri" id="pr-mra">Abrir o MRA</button>`:''}</div>`;const b=$('#pr-mra');if(b)b.onclick=()=>go('mra');return}
   t.planosRec=t.planosRec||[];const a=A();const tab=UI.precTab||'assid';const lim=precLim(t);
   let D=null;try{D=pnlDados(t,a,null)}catch(e){console.warn(e)}const L=D&&D.linhas?D.linhas:alunosAval(t).map(x=>({a:x,ass:null,f:{tot:0},nota:null,neg:false}));
   const pl=(aid,tp)=>t.planosRec.filter(p=>p.aid===aid&&p.tipo===tp);
-  const cand=x=>tab==='assid'?(x.ass!=null&&x.ass<lim):x.neg;
+  const cand=x=>tab==='assid'?(lim!=null&&x.ass!=null&&x.ass<lim):x.neg;
   const lin=L.map(x=>{const P=pl(x.a.id,tab);const c=cand(x);return `<tr class="${c&&!P.length?'pnrb':''}"><td class="n">${esc(numAl(x.a))}</td><td style="text-align:left"><b>${esc(x.a.nome)}</b></td>
-      <td>${tab==='assid'?(x.ass==null?'<span class="mut">sem dados</span>':`<span class="${x.ass<lim?'neg':''}">${x.ass}%</span> <small class="mut">${x.f.tot} falta(s)</small>`):(x.nota==null?'<span class="mut">sem nota</span>':`<span class="${x.neg?'neg':''}">${esc(String(fmtNota(t,x.nota)))}</span>`)}</td>
+      <td>${tab==='assid'?(x.ass==null?'<span class="mut">sem dados</span>':`<span class="${lim!=null&&x.ass<lim?'neg':''}">${x.ass}%</span> <small class="mut">${x.f.tot} falta(s)</small>`):(x.nota==null?'<span class="mut">sem nota</span>':`<span class="${x.neg?'neg':''}">${esc(String(fmtNota(t,x.nota)))}</span>`)}</td>
       <td>${P.length?P.map(p=>`<button type="button" class="tag ${PREC_E[p.estado||'curso'][1]}" data-prv="${p.id}" title="Abrir o plano">${PREC_E[p.estado||'curso'][0]}${p.prazo?' · até '+cpdDM(p.prazo):''}</button>`).join(' '):c?'<span class="tag bad">sugerido</span>':'<span class="mut">—</span>'}</td>
       <td class="act"><button class="btn sm" data-prn="${x.a.id}">${ic('plus',13)} Plano</button></td></tr>`}).join('');
   const nP=t.planosRec.filter(p=>p.tipo===tab).length,nC=L.filter(cand).length;
   v.innerHTML=`<div class="prec"><section class="card"><div class="row" style="gap:10px;flex-wrap:wrap"><div><h2 style="margin:0">${ic('refresh',18)} Planos de Recuperação · PROFIJ</h2><div class="mut">${esc(t.nome)} · ${esc(t.disciplina)}</div></div><span class="sp1"></span>
       <div class="cpd-seg" role="group"><button type="button" data-prt="assid" class="${tab==='assid'?'on':''}">Assiduidade</button><button type="button" data-prt="aprend" class="${tab==='aprend'?'on':''}">Aprendizagens</button></div></div>
-    <p class="hint" style="margin:10px 0 0">${tab==='assid'?`<b>${PREC_T.assid}</b>: para formandos abaixo do limite de assiduidade (faltas justificadas). Limite nesta disciplina: <input type="number" id="pr-lim" min="50" max="100" value="${lim}" style="width:64px"> % <span class="mut">(PROFIJ nível II: 80% na componente tecnológica; confirme no regulamento interno)</span>.`:`<b>${PREC_T.aprend}</b>: para formandos com aprendizagens por recuperar (classificação negativa ou UFCD por concluir), definido pelo conselho de turma com o coordenador.`} O Mecanismo de Recuperação (MRA) é só do ensino profissional.</p>
-    <div class="cpm-kp"><div class="${nC?'w':''}"><small>${tab==='assid'?'Abaixo do limite':'Com negativa'}</small><b>${nC}</b></div><div><small>Planos</small><b>${nP}</b></div><div class="${t.planosRec.some(p=>p.tipo===tab&&p.estado==='nao')?'bad':''}"><small>Não cumpridos</small><b>${t.planosRec.filter(p=>p.tipo===tab&&p.estado==='nao').length}</b></div></div></section>
+    <p class="hint" style="margin:10px 0 0">${tab==='assid'?`<b>${PREC_T.assid}</b>: para formandos abaixo do limite de assiduidade (faltas justificadas).</p>${precLimHTML(t)}<p class="hint" style="margin:6px 0 0">`:`<b>${PREC_T.aprend}</b>: para formandos com aprendizagens por recuperar (classificação negativa ou UFCD por concluir), definido pelo conselho de turma com o coordenador.`} O Mecanismo de Recuperação (MRA) é só do ensino profissional.</p>
+    <div class="cpm-kp"><div class="${nC?'w':''}"><small>${tab==='assid'?'Abaixo do limite':'Com negativa'}</small><b>${tab==='assid'&&lim==null?'—':nC}</b>${tab==='assid'&&lim==null?'<small>defina o limite</small>':''}</div><div><small>Planos</small><b>${nP}</b></div><div class="${t.planosRec.some(p=>p.tipo===tab&&p.estado==='nao')?'bad':''}"><small>Não cumpridos</small><b>${t.planosRec.filter(p=>p.tipo===tab&&p.estado==='nao').length}</b></div></div></section>
     <section class="card"><div class="tblw"><table class="lst"><thead><tr><th>N.º</th><th>Formando</th><th>${tab==='assid'?'Assiduidade':'Classificação'}</th><th>Plano</th><th></th></tr></thead><tbody>${lin||'<tr><td colspan="5" class="mut">Sem formandos.</td></tr>'}</tbody></table></div></section></div>`;
   v.querySelectorAll('[data-prt]').forEach(b=>b.onclick=()=>{UI.precTab=b.dataset.prt;vPrecup()});
-  const li=$('#pr-lim');if(li)li.onchange=()=>{t.precLim=Math.min(100,Math.max(50,+li.value||lim));save();manterPosicao(vPrecup)};
+  v.querySelectorAll('[data-prl]').forEach(i=>i.onchange=()=>{const k=i.dataset.prl,x=i.value.trim()===''?'':Math.min(100,Math.max(0,+i.value.replace(',','.')||0));if(k==='turma'){if(x==='')delete t.precLim;else t.precLim=x}else{if(x==='')delete precCfg()[k];else precCfg()[k]=x}save();manterPosicao(vPrecup)});
   v.querySelectorAll('[data-prn]').forEach(b=>b.onclick=()=>precDlg(t,{aid:b.dataset.prn,tipo:tab}));
   v.querySelectorAll('[data-prv]').forEach(b=>b.onclick=()=>precDlg(t,t.planosRec.find(p=>p.id===b.dataset.prv)))}
 function precDlg(t,p){const novo=!p.id;p=Object.assign({id:uid(),inicio:isoHoje(),prazo:'',motivo:'',medidas:'',estado:'curso',res:'',horas:''},p);const al=t.alunos.find(x=>x.id===p.aid)||{nome:''};
@@ -82,6 +85,10 @@ function pfjCursoDlg(nome){const M=cpmM(nome);const a=A();const h=horarioDe(a,no
           const d=nova.find(z=>z.comp!=='tecnologica'&&normT(z.nome).replace(/\bi\b/g,'').replace(/\s+/g,' ')===normT(nm).replace(/\bi\b/g,'').replace(/\s+/g,' '));if(d){if(!(d.sig||[]).some(x=>normSig(x)===normSig(sg)))d.sig=[...(d.sig||[]),sg];if(!d.prof&&l.profs)d.prof=l.profs.join(', ')}})}
       M.disc=nova;M.tipoPfj=tp;M.curso=$('#pf-c').value.trim();M.ref=$('#pf-cod').value.trim();M.area=$('#pf-ar').value.trim();M.anoCurso=(+$('#pf-a').value+1)+'.º';M.esp2=e2;M.nivel=tp.startsWith('IV')?'IV':'II';M.fct.horas=$('#pf-f').value;
       save();closeDrawer();vCProfij();toast('Matriz criada: '+nova.length+' disciplinas e UFCD. Marque na coluna «Eu» as que leciona.')}};ligar()}
+
+function precLimHTML(t){const c=precCfg(),k=precComp(t);const inp=(id,v,lab,on)=>`<label class="prl ${on?'on':''}"><span>${lab}</span><input type="number" min="0" max="100" step="0.5" data-prl="${id}" value="${v!=null?esc(String(v)):''}" placeholder="—"> %</label>`;
+  return `<div class="prlims"><b>Limites de assiduidade aprovados pelo conselho pedagógico</b><div class="row" style="gap:8px;flex-wrap:wrap;margin-top:6px">${Object.keys(PREC_CN).map(x=>inp(x,c[x],'Componente '+PREC_CN[x],x===k&&(t.precLim==null||t.precLim===''))).join('')}${inp('turma',t.precLim,'Só nesta turma',t.precLim!=null&&t.precLim!=='')}</div>
+    <small class="mut">Os limites por componente valem para todas as turmas PROFIJ; «Só nesta turma» sobrepõe-se. Esta turma: componente ${PREC_CN[k].toLowerCase()} → ${precLim(t)!=null?'<b>'+precLim(t)+'%</b>':'<b class="neg">sem limite definido</b>'}.</small></div>`}
 /*V0996-FIM*/
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}

@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.998
+- PROFIJ: limites de assiduidade manuais (por componente e por turma), sem valores por defeito
+
 ## 0.997
 - PROFIJ: assistente Criar Curso Completo (Portaria 52/2016 + UFCD do Catálogo)
 - PROFIJ: Planos de Recuperação da Assiduidade e das Aprendizagens; MRA só no profissional
