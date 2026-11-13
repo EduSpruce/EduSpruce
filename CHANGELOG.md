@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.007
+- Pautas, FPCT e CFA/CFC responsivas
+
 ## 1.006
 - PROFIJ: anos de curso por tipo (II-2 2 anos, II-3 1 ano, IV-4 3 anos)
 - PAF e classificação final só no ano terminal; cadeado só este ano/todos os anos

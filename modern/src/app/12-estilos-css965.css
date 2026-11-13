@@ -451,4 +451,24 @@ html body.est-sge .ptdoc{border-radius:0}
 html body .ptw.pt-in .ptexp,html body .ptw.pt-in .ptcfg{display:none!important}
 html body .cpcur{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:8px}
 html body .cpcur select{width:auto!important;padding:4px 6px;font-size:12.5px}
+/* v1.007 · avaliação da FPCT, classificação anual/final e pautas oficiais: responsivo */
+html body .ptw .ptbar{display:flex!important;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:10px 12px}
+html body .ptw .ptbar #pt-cl{width:auto!important;min-width:130px;max-width:100%}
+html body .ptw .ptbar .pt-tt{white-space:nowrap}
+html body .ptw .ptbar .cpcur{margin-left:0}
+html body .ptw .ptbar .cpcur select{max-width:220px}
+html body .ptw .tblw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+html body #view .ptw table.pttb{width:100%;border-collapse:separate;border-spacing:0}
+html body #view .ptw table.pttb :is(td,th){padding:5px 6px;white-space:nowrap;vertical-align:middle}
+html body #view .ptw table.pttb td[style*="text-align:left"]{white-space:normal;min-width:150px;max-width:300px}
+html body #view .ptw table.pttb input.ptin{width:58px!important;min-width:0!important;max-width:72px;height:32px;padding:3px 4px!important;text-align:center;box-sizing:border-box}
+html body #view .ptw table.pttb input.ptin.sm{width:76px!important;max-width:90px}
+html body #view .ptw table.pttb td.calc{text-align:center;min-width:42px}
+html body #view .ptw table.pttb thead th{text-align:center}
+html body #view .ptw table.pttb thead th[style*="text-align:left"]{text-align:left}
+@media (max-width:900px){html body .ptw .ptbar .cpcur{flex-basis:100%}html body .ptw .ptbar .cpcur select{flex:1 1 140px;max-width:none}html body #view .ptw table.pttb td[style*="text-align:left"]{min-width:120px}}
+@media (max-width:600px){html body .ptw .ptbar{padding:8px}html body .ptw .ptbar .pt-tt{flex-basis:100%;white-space:normal}html body .ptw .ptbar #pt-cl{flex:1 1 100%}html body .ptw .ptbar .cpcur>*{flex:1 1 auto}
+  html body #view .ptw table.pttb :is(td,th){padding:4px}html body #view .ptw table.pttb input.ptin{width:48px!important;height:30px}
+  html body #view .ptw table.pttb tbody td[style*="text-align:left"]{position:sticky;left:0;z-index:1;background:var(--panel);box-shadow:2px 0 0 var(--line)}
+  html body .ptdoc{flex-direction:column;align-items:stretch}html body .ptdoc .row{justify-content:stretch}html body .ptdoc .row .btn{flex:1}}
 /*V0996-FIM*/
