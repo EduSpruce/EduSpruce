@@ -332,3 +332,40 @@ html body #view #av-bloq+#av-aa{margin-left:8px!important}
 html body .cmw.sbcol .cmsbt .ic{transform:rotate(180deg)}
 html body #view table.pntb>tbody>tr>td{vertical-align:middle}html body #view table.pntb>tbody>tr>td :is(.tag,.pill){white-space:nowrap}html body #view table.pntb>tbody>tr>td:is(:nth-child(8),:nth-child(10)){white-space:nowrap}
 /*V0990-FIM*/
+/*V0996-INI*/
+/* v0.996 · PROFIJ › Distribuição e Horários */
+html body .cpd-seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+html body .cpd-seg button{all:unset;cursor:pointer;padding:7px 12px;font-size:13px;color:var(--ink)}
+html body .cpd-seg button.on{background:var(--acc);color:#fff}
+html body .cpd-seg button:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+html body .cpd-t tr.bad td:first-child{box-shadow:inset 3px 0 0 var(--bad,#c0392b)}
+html body .cpd-t tr.w td:first-child{box-shadow:inset 3px 0 0 var(--warn,#d98b00)}
+html body .cpd-t small{line-height:1.35}
+html body .cpd-fm{max-width:150px;padding:4px 6px;font-size:12.5px}
+html body .cpd-rl{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+html body .cpd-rl li{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:10px}
+html body .cpd-rl li>span{flex:1}
+html body table.cpd-gr{border-collapse:separate;border-spacing:4px;width:100%;min-width:640px;table-layout:fixed}
+html body table.cpd-gr th{font-size:12px;font-weight:700;color:var(--mut);padding:4px;text-align:center}
+html body table.cpd-gr th:first-child{width:62px}
+html body table.cpd-gr th.cpd-h{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+html body table.cpd-gr th.cpd-h small{display:block;font-weight:400;color:var(--mut)}
+html body table.cpd-gr th.cpd-nl{color:var(--mut);opacity:.75}
+html body .cpd-tp{font-weight:400;font-size:11px}
+html body table.cpd-gr td{height:54px;border-radius:9px;padding:5px 7px;vertical-align:top;font-size:12px;position:relative}
+html body table.cpd-gr td.cpd-v{background:transparent}
+html body table.cpd-gr td.cpd-nl{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--line) 55%,transparent) 0 6px,transparent 6px 12px);color:var(--mut)}
+html body table.cpd-gr td.cpd-c{background:color-mix(in srgb,var(--dc,var(--acc)) 13%,var(--panel));border-left:4px solid var(--dc,var(--acc));cursor:pointer}
+html body table.cpd-gr td.cpd-c:hover,html body table.cpd-gr td.cpd-c:focus-visible{outline:2px solid var(--dc,var(--acc));outline-offset:0}
+html body table.cpd-gr td.cpd-c b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body table.cpd-gr td.cpd-c small{display:block;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body table.cpd-gr td.cpd-c i{position:absolute;right:6px;bottom:4px;font-style:normal;font-weight:700;font-size:11.5px;font-variant-numeric:tabular-nums}
+html body table.cpd-gr td.cpd-c em{position:absolute;right:6px;top:4px;font-style:normal;font-size:10px;padding:0 4px;border-radius:4px;background:var(--panel);color:var(--mut);border:1px solid var(--line)}
+html body table.cpd-gr td.cpd-c.livre{background:color-mix(in srgb,#f2b705 14%,var(--panel));border-left-color:#d9a300}
+html body table.cpd-gr td.cpd-c.ov{box-shadow:inset 0 0 0 2px var(--acc)}
+html body .cpd-rod{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px}
+html body .cpd-rod span{padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--bad,#c0392b) 10%,var(--panel))}
+html body .cpd-rod span.ok{background:color-mix(in srgb,var(--ok,#2e8b57) 12%,var(--panel))}
+html body .cpd-op{display:grid;gap:4px;max-height:52vh;overflow:auto}
+html body.est-sge .cpd-seg,html body.est-sge table.cpd-gr td,html body.est-sge .cpd-rl li,html body.est-sge .cpd-rod span{border-radius:0}
+/*V0996-FIM*/

@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.996
+- PROFIJ: Distribuição e Horários (simulação por tempos, contagem global por professor, cedências, substituições, horários semanais, exportações)
+- Modo professor a partir da matriz (coluna Eu)
+- Nome Língua Estrangeira I - Inglês
+
 ## 0.995
 - Contactos: barra lateral encolhível
 - Painel: ícone dos Perfis de Aprendizagem junto ao dossiê; espaçamento das linhas

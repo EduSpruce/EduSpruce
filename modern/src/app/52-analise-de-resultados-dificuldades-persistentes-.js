@@ -213,236 +213,214 @@ function cmSbAplicar(){const w=document.getElementById('cm-w');if(!w)return;cons
   t.innerHTML=ic('back',14)+(col?'':'<span>Encolher</span>');t.title=col?'Mostrar as listas':'Encolher a barra das listas';t.setAttribute('aria-label',t.title);t.setAttribute('aria-expanded',String(!col))}
 {let _cmQ=0;new MutationObserver(()=>{if(_cmQ)return;_cmQ=requestAnimationFrame(()=>{_cmQ=0;const w=document.getElementById('cm-w');if(w&&(!w.querySelector('.cmsbt')||w.classList.contains('sbcol')!==!!(S.cfg&&S.cfg.cmSbCol)))cmSbAplicar()})}).observe(document.getElementById('view')||document.body,{childList:true,subtree:true})}
 /*V0990-FIM*/
+/*V0996-INI*/
+/* v0.996 · Coord. PROFIJ › Distribuição e Horários
+   Simulação tempo a tempo (45 min) do ano da turma, com:
+   · contagem global por professor (um professor com várias disciplinas/UFCD: quando uma acaba, os tempos dela passam para as outras dele);
+   · cedência de tempos (ex.: quando TIC acaba, os tempos de TIC passam para Inglês), com data ou «quando acabar»;
+   · tempos livres (de quem já acabou) entregues a quem está atrasado;
+   · substituição de professor a partir de uma data; data de fim manual ou automática;
+   · horários semanais com datas (alterações só nessa semana) e contagem do que falta;
+   · exportação: cronogramas por professor, horários semanais, matriz com distribuição de serviço e horário original. */
+const CPD_DS=[1,2,3,4,5];
+const cpdSeg=iso=>{const d=dataDeIso(iso);const w=d.getDay();d.setDate(d.getDate()-((w+6)%7));return isoData(d)};
+const cpdMais=(iso,n)=>{const d=dataDeIso(iso);d.setDate(d.getDate()+n);return isoData(d)};
+const cpdHm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const cpdDM=iso=>{const p=iso.split('-');return p[2]+'/'+p[1]};
+const cpdSk=x=>x.dia+'|'+x.ini;
+function cpdProfEm(d,iso){let p=d.prof||'';(d.subs||[]).slice().sort((x,y)=>x.desde.localeCompare(y.desde)).forEach(s=>{if(s.desde&&s.desde<=iso&&s.prof)p=s.prof});return (p||'Sem professor').trim()}
+const cpdProfs=d=>{const L=[(d.prof||'Sem professor').trim()];(d.subs||[]).forEach(s=>{if(s.prof&&!L.includes(s.prof.trim()))L.push(s.prof.trim())});return L};
+const cpdCurto=d=>{const s=(d.sig||[])[0];return d.comp==='tecnologica'&&d.det?d.det:(s&&normSig(s)!=='ufcd'?s:d.nome.replace(/^UFCD\s*/i,'').slice(0,18))};
+/* opt.ini: simular desde o início do ano sem pontos de situação (planeamento inicial) */
+function cpdSim(a,nome,opt){opt=opt||{};const M=cpmM(nome),L=cpmLimites(a,M),c=CAL(),h=horarioDe(a,nome);const hoje=isoHoje();
+  const D=M.disc.filter(d=>cpmAulas(d.horas)>0);const need={},done={},fim={},log=[],livres=[];D.forEach(d=>{need[d.id]=cpmAulas(d.horas);done[d.id]=0});
+  const P0=opt.ini?null:(M.pontos||[]).filter(p=>p.data<=hoje).sort((x,y)=>x.data.localeCompare(y.data)).pop()||null;
+  let desde=L.ini;if(P0){desde=cpdMais(P0.data,1);D.forEach(d=>{const v=P0.dadas&&P0.dadas[d.id];if(v!=null&&v!=='')done[d.id]=+v})}
+  if(!opt.ini)D.forEach(d=>{done[d.id]+=+d.aj||0});
+  D.forEach(d=>{if(done[d.id]>=need[d.id])fim[d.id]='feito'});
+  const aulas=h?h.aulas.slice().sort((x,y)=>x.dia-y.dia||x.ini-y.ini):[];
+  const base=x=>{const k=normSig(x.ab);return D.filter(d=>(d.sig||[]).some(s=>normSig(s)===k))};
+  const R=opt.ini?[]:(M.reat||[]).filter(r=>r.destino);const SEM=opt.ini?{}:M.sem||{};const pool=M.pool!==false;
+  const aberta=id=>id&&need[id]!=null&&done[id]<need[id];
+  let manAplic=!!opt.ini;
+  for(let iso=L.ini;iso<=L.fim;iso=cpdMais(iso,1)){
+    if(!manAplic&&iso>=hoje){D.forEach(d=>{if(d.dadas!=null&&d.dadas!==''){done[d.id]=+d.dadas;if(done[d.id]>=need[d.id]&&!fim[d.id])fim[d.id]='feito'}});manAplic=true}
+    if(iso<desde)continue;
+    const t=cpmTipo(iso,M,L,c);if(t!=='let')continue;const w=dataDeIso(iso).getDay();const wk=SEM[cpdSeg(iso)]||{};
+    aulas.filter(x=>x.dia===w).forEach(x=>{const sk=cpdSk(x);const B=base(x);if(!B.length&&wk[sk]==null)return;
+      let id=null,via='horario';
+      if(wk[sk]!=null&&wk[sk]!==''){id=wk[sk]==='livre'?null:wk[sk];via='semana';if(id&&!aberta(id))id=null}
+      else{const B0=B.find(d=>aberta(d.id))||null;const dono=B[B.length-1];
+        for(const r of R){if(r.desde&&iso<r.desde)continue;if(r.ate&&iso>r.ate)continue;if(!aberta(r.destino))continue;
+          if(r.origem==='*'){continue}
+          if(!B.some(d=>d.id===r.origem))continue;if(r.quando==='fim'&&aberta(r.origem))continue;id=r.destino;via='cedido';break}
+        if(!id&&B0)id=B0.id;
+        if(!id&&pool){const pr=cpdProfEm(dono,iso);const o=D.find(d=>aberta(d.id)&&cpdProfEm(d,iso)===pr);if(o){id=o.id;via='professor'}}
+        if(!id){for(const r of R){if(r.origem!=='*')continue;if(r.desde&&iso<r.desde)continue;if(r.ate&&iso>r.ate)continue;if(aberta(r.destino)){id=r.destino;via='livre';break}}}}
+      if(!id){livres.push({iso,sk,x});log.push({iso,sk,id:null,via:'livre'});return}
+      done[id]++;const d=D.find(z=>z.id===id);log.push({iso,sk,id,n:done[id],via,prof:cpdProfEm(d,iso)});if(done[id]>=need[id]&&!fim[id])fim[id]=iso})}
+  /* por professor: total global de tempos (todas as disciplinas e UFCD dele) */
+  const P={};D.forEach(d=>{const pr=cpdProfEm(d,L.fim);const p=P[pr]=P[pr]||{nome:pr,disc:[],need:0,done:0,fim:'',falta:0};p.disc.push(d);p.need+=need[d.id];p.done+=Math.min(done[d.id],need[d.id]);p.falta+=Math.max(0,need[d.id]-done[d.id])});
+  Object.values(P).forEach(p=>{p.fim=p.falta?'':p.disc.map(d=>fim[d.id]).filter(f=>f&&f!=='feito').sort().pop()||'feito'});
+  const tot=D.reduce((s,d)=>s+Math.max(0,need[d.id]-done[d.id]),0);const fins=D.map(d=>fim[d.id]).filter(f=>f&&f!=='feito').sort();
+  /* tempos que ainda faltam a cada um, semana a semana (para os horários semanais) */
+  const dh={};D.forEach(d=>dh[d.id]=done[d.id]);log.forEach(e=>{if(e.id&&e.iso>hoje)dh[e.id]--});Object.values(P).forEach(p=>{p.dh=p.disc.reduce((s,d)=>s+Math.min(Math.max(0,dh[d.id]),need[d.id]),0)});
+  return {M,L,c,h,D,need,done,dh,fim,log,livres,P,P0,aulas,turmaFim:tot?'':(fins.pop()||'feito'),falta:tot,hoje}}
+/* contagem no fim de cada dia (para os horários semanais: «faltam X» no fim da semana) */
+function cpdAte(S_,iso){const n={};S_.D.forEach(d=>n[d.id]=0);let ini={};S_.D.forEach(d=>ini[d.id]=S_.done[d.id]);
+  /* parte do total final e desconta o que foi dado depois de iso */
+  S_.log.forEach(e=>{if(e.id&&e.iso>iso)ini[e.id]--});return ini}
+function cpdSemanasFalta(S_,iso){const n=S_.L.fim>iso?Math.max(1,Math.ceil((dataDeIso(S_.L.fim)-dataDeIso(iso))/(7*864e5))):1;return n}
+/* ---------- vista ---------- */
+function cpdHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return cpmMatrizHTML(a,C);const nome=UI.cpmT&&N.includes(UI.cpmT)?UI.cpmT:N[0];UI.cpmT=nome;
+  const M=cpmM(nome);const modo=UI.cpdModo||'atual';const S_=cpdSim(a,nome,{ini:modo==='ini'});const S0=modo==='ini'?S_:cpdSim(a,nome,{ini:true});
+  const sel=`<div class="row cpm-sel noprint" style="gap:8px;flex-wrap:wrap">${N.map(n=>`<button type="button" class="chip ${n===nome?'on':''}" data-cpmt="${esc(n)}">${esc(n)}</button>`).join('')}</div>`;
+  if(!S_.h)return sel+`<section class="card empty">${ic('calendar',28)}<br><b>Falta o horário da turma</b><br><span class="mut">Importe o horário da turma (PDF ou Excel) em «Matriz e Ponto de Situação» para simular os tempos de cada professor.</span></section>`;
+  if(!S_.D.length)return sel+`<section class="card empty">${ic('grid',28)}<br><b>A matriz ainda não tem horas</b><br><span class="mut">Preencha as horas das disciplinas e UFCD em «Matriz e Ponto de Situação».</span></section>`;
+  const FD=f=>f==='feito'?'<span class="tag ok">concluída</span>':f?fmtIsoL(f):'<span class="neg">não acaba</span>';
+  const sem=cpdSemanasFalta(S_,S_.hoje>S_.L.ini?S_.hoje:S_.L.ini);
+  const fct=M.fct||{};
+  const glob=`<section class="card cpd-g"><div class="row" style="gap:10px;flex-wrap:wrap;align-items:flex-start"><div style="flex:1;min-width:260px"><div class="cpm-tit">${esc(M.curso||'Curso PROFIJ — '+nome)}</div>
+      <div class="mut">${fmtIsoL(S_.L.ini)} a ${fmtIsoL(S_.L.fim)} · ${S_.aulas.length} tempos por semana no horário${S_.P0&&modo!=='ini'?` · desde o ponto de situação de ${fmtIsoL(S_.P0.data)}`:''}</div></div>
+      <div class="cpd-seg noprint" role="group" aria-label="Simulação"><button type="button" data-cpdm="atual" class="${modo!=='ini'?'on':''}">Situação atual</button><button type="button" data-cpdm="ini" class="${modo==='ini'?'on':''}">Planeamento inicial</button></div></div>
+    <div class="cpm-kp"><div class="${S_.falta?'bad':''}"><small>A turma acaba</small><b>${S_.turmaFim==='feito'?'concluída':S_.turmaFim?fmtIsoL(S_.turmaFim):'não acaba'}</b>${S_.falta?`<small class="neg">faltam ${S_.falta} tempos a ${fmtIsoL(S_.L.fim)}</small>`:''}</div>
+      <div><small>Planeamento inicial</small><b>${S0.turmaFim==='feito'?'—':S0.turmaFim?fmtIsoL(S0.turmaFim):'não acaba'}</b></div>
+      <div><small>Tempos livres até ao fim</small><b>${S_.livres.filter(l=>l.iso>=S_.hoje).length}</b><small>de quem já acabou</small></div>
+      <div class="${fct.ini&&fct.fim?'':'w'}"><small>FPCT</small><b>${fct.ini&&fct.fim?cpdDM(fct.ini)+' a '+cpdDM(fct.fim):'por marcar'}</b>${fct.horas?`<small>${cpmCalc(a,nome).fctH} h de ${fct.horas} h</small>`:''}</div></div>
+    <div class="row noprint" style="gap:6px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" id="cpd-ced">${ic('repeat',14)} Ceder Tempos</button><button class="btn sm" id="cpd-sub">${ic('user',14)} Substituir Professor(a)</button><button class="btn sm" id="cpm-fct">${ic('building',14)} Período da FPCT</button>
+      <label class="chk" style="margin:0 6px"><input type="checkbox" id="cpd-pool" ${M.pool!==false?'checked':''}> <span>Quando uma disciplina acaba, os tempos passam para as outras do mesmo professor</span></label>
+      <span class="sp1"></span><button class="btn sm" id="cpd-x-cron">${ic('download',14)} Cronogramas</button><button class="btn sm" id="cpd-x-sem">${ic('calendar',14)} Horários Semanais</button><button class="btn sm pri" id="cpd-x-mat">${ic('printer',14)} Matriz e Distribuição de Serviço</button></div></section>`;
+  /* professores (contagem global) */
+  const PR=Object.values(S_.P).sort((x,y)=>x.nome.localeCompare(y.nome,'pt'));
+  const prof=`<section class="card"><h2 style="margin:0 0 8px">${ic('users',18)} Professores — Contagem Global</h2><div class="cpm-tw"><table class="lst cpd-t"><thead><tr><th>Professor(a)</th><th>Disciplinas e UFCD</th><th class="n">Tempos</th><th class="n">Dados até hoje</th><th class="n">Ficam por dar</th><th>Acaba</th><th>Plano inicial</th><th class="noprint">Simulação</th></tr></thead><tbody>${PR.map(p=>{const p0=S0.P[p.nome];
+      const pre=p.falta?Math.ceil(p.falta/sem):0;const lv=S_.livres.filter(l=>l.iso>=S_.hoje).length;
+      return `<tr class="${p.falta?'bad':''}"><td><b>${esc(p.nome)}</b></td><td><small>${p.disc.map(d=>`${esc(d.nome)} <span class="mut">(${S_.need[d.id]})</span>`).join(' + ')}</small></td><td class="n"><b>${p.need}</b></td><td class="n">${p.dh}</td><td class="n ${p.falta?'neg':'mut'}">${p.falta}</td><td>${FD(p.fim)}</td><td>${p0?FD(p0.fim):'—'}</td>
+        <td class="noprint">${p.falta?`<small>precisa de mais ${pre} tempo(s) por semana${lv?` · há ${lv} livre(s)`:''}</small> <button class="btn sm" data-cpdlv="${esc(p.nome)}">${ic('plus',13)} Dar Tempos Livres</button>`:`<small class="mut">${p.fim==='feito'?'concluído':'chega ao fim'}</small>`}</td></tr>`}).join('')}</tbody></table></div>
+    <p class="hint">Cada professor conta a totalidade dos tempos (45 min) de todas as suas disciplinas e UFCD. Quando uma acaba, os tempos dela continuam com as outras do mesmo professor (se a opção acima estiver ligada).</p></section>`;
+  /* disciplinas */
+  const disc=`<section class="card"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('grid',18)} Disciplinas e UFCD</h2><span class="sp1"></span>${S_.D.some(cpdMinha)?`<button class="btn sm noprint" id="cpd-my">${ic('user',14)} Criar as Minhas no Modo Professor</button>`:''}</div><p class="hint" style="margin:4px 0 8px">Assinale na coluna «Eu» as disciplinas e UFCD que leciona: essas passam para o modo professor (avaliação, sumários); o resto fica só na coordenação.</p><div class="cpm-tw"><table class="lst cpd-t"><thead><tr><th>Disciplina / UFCD</th><th>Professor(a)</th><th class="n">Tempos</th><th class="n">Dados até hoje</th><th class="n">Ficam por dar</th><th>Fim previsto</th><th>Fim marcado</th><th class="noprint" title="Disciplinas que eu leciono (passam para o modo professor)">Eu</th><th class="noprint"></th></tr></thead><tbody>${S_.D.map(d=>{const f=S_.fim[d.id];const fa=Math.max(0,S_.need[d.id]-S_.done[d.id]);const atr=d.fimMan&&f&&f!=='feito'&&f>d.fimMan;
+      return `<tr class="${fa?'bad':atr?'w':''}"><td><b>${esc(d.nome)}</b>${d.det?` <span class="mut">${esc(d.det)}</span>`:''}</td><td>${esc(d.prof||'—')}${(d.subs||[]).map(s=>`<div class="hint">→ ${esc(s.prof)} desde ${cpdDM(s.desde)}</div>`).join('')}</td><td class="n">${S_.need[d.id]}</td><td class="n">${Math.min(Math.max(0,S_.dh[d.id]),S_.need[d.id])}</td><td class="n ${fa?'neg':'mut'}">${fa}</td><td>${FD(f)}</td>
+        <td class="noprint"><input type="date" class="cpd-fm" data-cpdfm="${d.id}" value="${esc(d.fimMan||'')}" title="Data de fim marcada à mão (deixe vazio para automática)">${atr?`<div class="hint neg">a previsão passa a data marcada</div>`:''}</td><td class="noprint"><input type="checkbox" data-cpdmy="${d.id}" ${cpdMinha(d)?'checked':''} aria-label="Eu leciono ${esc(d.nome)}"></td><td class="noprint"><button class="btn sm ghost" data-cpdsub="${d.id}" title="Substituir professor a partir de uma data">${ic('user',14)}</button></td></tr>`}).join('')}</tbody></table></div></section>`;
+  /* cedências */
+  const RE=(M.reat||[]);const dn=id=>{const d=M.disc.find(x=>x.id===id);return d?d.nome:'—'};
+  const ced=`<section class="card"><div class="row"><h2 style="margin:0">${ic('repeat',18)} Cedências de Tempos</h2><span class="sp1"></span><button class="btn sm noprint" id="cpd-ced2">${ic('plus',14)} Nova</button></div>
+    ${RE.length?`<ul class="cpd-rl">${RE.map(r=>`<li><span>${r.origem==='*'?'<b>Tempos livres</b>':`Tempos de <b>${esc(dn(r.origem))}</b>`} → <b>${esc(dn(r.destino))}</b> <span class="mut">${r.quando==='fim'&&r.origem!=='*'?'quando acabar':''}${r.desde?' desde '+fmtIsoL(r.desde):''}${r.ate?' até '+fmtIsoL(r.ate):''}</span></span><button class="btn sm ghost noprint" data-cpdrx="${r.id}" title="Apagar">${ic('trash',13)}</button></li>`).join('')}</ul>`:`<p class="mut" style="margin:8px 0 0">Ex.: quando TIC acabar, os tempos de TIC passam para Inglês. A app recalcula logo a nova data de fim de cada um.</p>`}</section>`;
+  return sel+glob+prof+disc+ced+cpdSemanaHTML(a,nome,S_)}
+/* horário semanal com datas */
+function cpdSemanaHTML(a,nome,S_){const M=S_.M;const hj=S_.hoje<S_.L.ini?S_.L.ini:S_.hoje>S_.L.fim?S_.L.fim:S_.hoje;const seg=UI.cpdSem||cpdSeg(hj);
+  return `<section class="card cpd-sw"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('calendar',18)} Horário Semanal</h2><span class="sp1"></span>
+    <div class="row noprint" style="gap:4px"><button class="btn sm" data-cpdw="-7" aria-label="Semana anterior">${ic('back',14)}</button><button class="btn sm" data-cpdw="0">Esta Semana</button><button class="btn sm" data-cpdw="7" aria-label="Semana seguinte"><span style="display:inline-block;transform:rotate(180deg)">${ic('back',14)}</span></button></div></div>
+    ${cpdGrelha(S_,seg,true)}<p class="hint noprint">Toque num tempo para o mudar só nesta semana (outra disciplina, ou livre). O número é o tempo dessa disciplina (ex.: 31/94). Em baixo, o que falta a cada professor no fim da semana.</p></section>`}
+function cpdGrelha(S_,seg,edit){const M=S_.M;const dias=CPD_DS.map(w=>cpdMais(seg,w-1));const T=[...new Set(S_.aulas.map(x=>x.ini))].sort((x,y)=>x-y);
+  const E={};S_.log.forEach(e=>{if(e.iso>=seg&&e.iso<=dias[4])E[e.iso+'|'+e.sk]=e});const wk=(M.sem||{})[seg]||{};
+  const dd=id=>S_.D.find(d=>d.id===id);
+  const cab=`<tr><th></th>${dias.map((iso,i)=>{const t=cpmTipo(iso,M,S_.L,S_.c);return `<th class="${t!=='let'?'cpd-nl':''}">${DIAS_C[i+1]} ${cpdDM(iso)}${t!=='let'?`<div class="cpd-tp">${{fer:'feriado',int:'interrupção',fct:'FPCT',nl:'sem aulas',fora:'fora do ano',fds:''}[t]||''}</div>`:''}</th>`}).join('')}</tr>`;
+  const lin=T.map(ini=>{const x0=S_.aulas.find(x=>x.ini===ini);return `<tr><th class="cpd-h">${cpdHm(ini)}<small>${x0?cpdHm(x0.fim):''}</small></th>${dias.map((iso,i)=>{const w=i+1;const x=S_.aulas.find(z=>z.dia===w&&z.ini===ini);if(!x)return '<td class="cpd-v"></td>';
+      const sk=cpdSk(x);const t=cpmTipo(iso,M,S_.L,S_.c);const e=E[iso+'|'+sk];const ov=wk[sk]!=null&&wk[sk]!=='';
+      if(t!=='let')return `<td class="cpd-nl"><small>${esc(x.ab)}</small></td>`;
+      if(!e)return `<td class="cpd-v"><small>${esc(x.ab)}</small></td>`;
+      const d=e.id&&dd(e.id);const at=edit?` data-cpdc="${esc(seg+'|'+sk)}" tabindex="0" role="button"`:'';
+      return d?`<td class="cpd-c ${ov?'ov':''} v-${e.via}"${at} style="--dc:${corDisc(d.nome)}"><b>${esc(cpdCurto(d))}</b><small>${esc(e.prof.split(' ')[0])}${e.prof.split(' ').length>1?' '+esc(e.prof.split(' ').slice(-1)[0]):''}</small><i>${e.n}/${S_.need[d.id]}</i>${e.via==='professor'||e.via==='cedido'||e.via==='livre'?`<em title="tempo de ${esc(x.ab)}">${esc(x.ab)}</em>`:''}</td>`
+        :`<td class="cpd-c livre ${ov?'ov':''}"${at}><b>livre</b><small>${esc(x.ab)}</small></td>`}).join('')}</tr>`}).join('');
+  const fimS=dias[4];const n=cpdAte(S_,fimS);const PR={};S_.D.forEach(d=>{const p=cpdProfEm(d,fimS);PR[p]=(PR[p]||0)+Math.max(0,S_.need[d.id]-n[d.id])});
+  const rod=`<div class="cpd-rod">${Object.entries(PR).sort((x,y)=>x[0].localeCompare(y[0],'pt')).map(([p,f])=>`<span class="${f?'':'ok'}"><b>${esc(p)}</b> ${f?'faltam '+f:'acabou'}</span>`).join('')}</div>`;
+  return `<div class="cpm-tw"><table class="cpd-gr"><thead>${cab}</thead><tbody>${lin}</tbody></table></div>${rod}`}
+const corDisc=n=>{let h=0;for(const ch of String(n))h=(h*31+ch.charCodeAt(0))%360;return `hsl(${h} 55% 45%)`};
+/* ---------- diálogos ---------- */
+function cpdCedDlg(nome,pre){const M=cpmM(nome);const D=M.disc.filter(d=>cpmAulas(d.horas)>0);const op=(v,s)=>D.map(d=>`<option value="${d.id}" ${v===d.id?'selected':''}>${esc(d.nome)}${d.prof?' · '+esc(d.prof):''}</option>`).join('');pre=pre||{};
+  openDrawer('Ceder Tempos · '+nome,`<div class="ed"><label>Os tempos de</label><select id="cd-o"><option value="*" ${pre.origem==='*'?'selected':''}>Qualquer tempo livre (de quem já acabou)</option>${op(pre.origem)}</select>
+    <label>passam para</label><select id="cd-d">${op(pre.destino)}</select>
+    <label>Quando</label><select id="cd-q"><option value="fim">Quando a disciplina de origem acabar</option><option value="data">Já, a partir da data indicada (mesmo que a origem não tenha acabado)</option></select>
+    <div class="row" style="gap:10px"><div style="flex:1"><label>Desde</label><input type="date" id="cd-i" value="${esc(pre.desde||'')}"></div><div style="flex:1"><label>Até (opcional)</label><input type="date" id="cd-f"></div></div>
+    <p class="hint">A app volta a simular o ano e mostra a nova data de fim de cada professor. Pode apagar a cedência a qualquer momento.</p>
+    <div class="row" style="margin-top:12px"><span class="sp1"></span><button class="btn" id="cd-x">Cancelar</button><button class="btn pri" id="cd-ok">Guardar</button></div></div>`);
+  $('#cd-x').onclick=closeDrawer;$('#cd-ok').onclick=()=>{const o=$('#cd-o').value,d=$('#cd-d').value;if(o===d)return toast('Escolha disciplinas diferentes.','aviso');
+    M.reat=M.reat||[];M.reat.push({id:uid(),origem:o,destino:d,quando:$('#cd-q').value,desde:$('#cd-i').value,ate:$('#cd-f').value});save();closeDrawer();vCProfij();toast('Cedência guardada: datas recalculadas.')}}
+function cpdSubDlg(nome,id){const M=cpmM(nome);const d=M.disc.find(x=>x.id===id)||M.disc[0];if(!d)return;
+  openDrawer('Substituir Professor(a)',`<div class="ed"><label>Disciplina / UFCD</label><select id="sb-d">${M.disc.map(x=>`<option value="${x.id}" ${x.id===d.id?'selected':''}>${esc(x.nome)}</option>`).join('')}</select>
+    <label>Novo(a) professor(a)</label><input id="sb-p" placeholder="nome"><label>A partir de</label><input type="date" id="sb-i" value="${isoHoje()}">
+    <div id="sb-l">${(d.subs||[]).length?`<p class="hint">Já registadas: ${(d.subs||[]).map(s=>esc(s.prof)+' desde '+fmtIsoL(s.desde)).join(' · ')} <button class="btn sm ghost" id="sb-lx">Limpar</button></p>`:''}</div>
+    <p class="hint">Os tempos dados até essa data contam para o(a) professor(a) anterior; os seguintes contam para o(a) novo(a), também na contagem global dele(a).</p>
+    <div class="row" style="margin-top:12px"><span class="sp1"></span><button class="btn" id="sb-x">Cancelar</button><button class="btn pri" id="sb-ok">Guardar</button></div></div>`);
+  const lx=$('#sb-lx');if(lx)lx.onclick=()=>{d.subs=[];save();closeDrawer();vCProfij()};
+  $('#sb-x').onclick=closeDrawer;$('#sb-ok').onclick=()=>{const x=M.disc.find(z=>z.id===$('#sb-d').value);const p=$('#sb-p').value.trim(),i=$('#sb-i').value;if(!p||!i)return toast('Indique o professor e a data.','aviso');x.subs=x.subs||[];x.subs.push({desde:i,prof:p});save();closeDrawer();vCProfij()}}
+function cpdCelDlg(nome,seg,sk){const M=cpmM(nome);M.sem=M.sem||{};const W=M.sem[seg]=M.sem[seg]||{};const D=M.disc.filter(d=>cpmAulas(d.horas)>0);const [w,ini]=sk.split('|').map(Number);const v=W[sk]||'';
+  openDrawer(DIAS[w]+' '+cpdDM(cpdMais(seg,w-1))+' · '+cpdHm(ini),`<div class="ed"><p class="hint" style="margin-top:0">Muda só este tempo, só nesta semana.</p><div class="cpd-op">
+    <label class="chk"><input type="radio" name="cpdo" value="" ${!v?'checked':''}> <span>Automático (horário e cedências)</span></label>
+    <label class="chk"><input type="radio" name="cpdo" value="livre" ${v==='livre'?'checked':''}> <span>Livre (não há aula)</span></label>
+    ${D.map(d=>`<label class="chk"><input type="radio" name="cpdo" value="${d.id}" ${v===d.id?'checked':''}> <span>${esc(d.nome)} <small class="mut">${esc(d.prof||'')}</small></span></label>`).join('')}</div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="cc-all">Limpar a Semana</button><span class="sp1"></span><button class="btn" id="cc-x">Cancelar</button><button class="btn pri" id="cc-ok">Guardar</button></div></div>`);
+  $('#cc-x').onclick=closeDrawer;$('#cc-all').onclick=()=>{delete M.sem[seg];save();closeDrawer();vCProfij()};
+  $('#cc-ok').onclick=()=>{const r=document.querySelector('input[name=cpdo]:checked');const x=r?r.value:'';if(x)W[sk]=x;else delete W[sk];if(!Object.keys(W).length)delete M.sem[seg];save();closeDrawer();vCProfij()}}
+function cpdBind(v,a){const nome=UI.cpmT;const M=cpmM(nome);const q=s=>v.querySelector(s);
+  v.querySelectorAll('[data-cpmt]').forEach(b=>b.onclick=()=>{UI.cpmT=b.dataset.cpmt;vCProfij()});
+  v.querySelectorAll('[data-cpdm]').forEach(b=>b.onclick=()=>{UI.cpdModo=b.dataset.cpdm;manterPosicao(vCProfij)});
+  [q('#cpd-ced'),q('#cpd-ced2')].forEach(b=>b&&(b.onclick=()=>cpdCedDlg(nome)));
+  const sb=q('#cpd-sub');if(sb)sb.onclick=()=>cpdSubDlg(nome);v.querySelectorAll('[data-cpdsub]').forEach(b=>b.onclick=()=>cpdSubDlg(nome,b.dataset.cpdsub));
+  const fc=q('#cpm-fct');if(fc)fc.onclick=()=>cpmFctDlg(nome);
+  const pl=q('#cpd-pool');if(pl)pl.onchange=()=>{M.pool=pl.checked;save();manterPosicao(vCProfij)};
+  v.querySelectorAll('[data-cpdfm]').forEach(i=>i.onchange=()=>{const d=M.disc.find(x=>x.id===i.dataset.cpdfm);if(d){d.fimMan=i.value;save();manterPosicao(vCProfij)}});
+  v.querySelectorAll('[data-cpdrx]').forEach(b=>b.onclick=()=>{M.reat=(M.reat||[]).filter(r=>r.id!==b.dataset.cpdrx);save();manterPosicao(vCProfij)});
+  v.querySelectorAll('[data-cpdlv]').forEach(b=>b.onclick=()=>{const S_=cpdSim(a,nome);const p=S_.P[b.dataset.cpdlv];const d=p&&p.disc.find(x=>S_.done[x.id]<S_.need[x.id]);if(d)cpdCedDlg(nome,{origem:'*',destino:d.id,desde:isoHoje()})});
+  v.querySelectorAll('[data-cpdw]').forEach(b=>b.onclick=()=>{const n=+b.dataset.cpdw;UI.cpdSem=n?cpdMais(UI.cpdSem||cpdSeg(isoHoje()),n):cpdSeg(isoHoje());manterPosicao(vCProfij)});
+  v.querySelectorAll('[data-cpdc]').forEach(c=>{const f=()=>{const [s,sk]=[c.dataset.cpdc.slice(0,10),c.dataset.cpdc.slice(11)];cpdCelDlg(nome,s,sk)};c.onclick=f;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}});
+  v.querySelectorAll('[data-cpdmy]').forEach(i=>i.onchange=()=>{const d=M.disc.find(x=>x.id===i.dataset.cpdmy);if(d){d.minha=i.checked;save();manterPosicao(vCProfij)}});
+  const my=q('#cpd-my');if(my)my.onclick=()=>cpdCriarMinhas(a,nome);
+  const xc=q('#cpd-x-cron');if(xc)xc.onclick=()=>cpdExpCron(a,nome);const xs=q('#cpd-x-sem');if(xs)xs.onclick=()=>cpdExpSem(a,nome);const xm=q('#cpd-x-mat');if(xm)xm.onclick=()=>cpdExpMat(a,nome)}
+/* ---------- exportação (documento para imprimir ou guardar em PDF) ---------- */
+const CPD_CSS=`body{font:11px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;color:#111;margin:0}h1{font-size:16px;margin:0 0 2px}h2{font-size:13px;margin:14px 0 6px}.m{color:#555;margin:0 0 8px}
+table{border-collapse:collapse;width:100%;margin:0 0 8px}th,td{border:1px solid #9aa4ad;padding:3px 5px;text-align:left;vertical-align:top}th{background:#eef2f5}td.n,th.n{text-align:right}
+.pg{break-after:page;page-break-after:always}.pg:last-child{break-after:auto}.cpd-gr td,.cpd-gr th{text-align:center;width:18%}.cpd-gr th:first-child{width:8%}.cpd-gr b{display:block}.cpd-gr small{display:block;color:#555}.cpd-gr i{font-style:normal;font-weight:700}
+.nl{background:#f1f1f1;color:#888}.lv{background:#fff7d6}.rod span{display:inline-block;margin:0 12px 0 0}.ass{margin-top:28px;display:flex;justify-content:flex-end}.ass div{text-align:center;min-width:240px}.ass i{display:block;border-top:1px solid #333;margin-bottom:4px}
+@page{size:A4;margin:12mm}@page land{size:A4 landscape}.land{page:land}`;
+function cpdDoc(tit,corpo){const f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);
+  const w=f.contentWindow;w.document.open();w.document.write(`<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><title>${esc(tit)}</title><style>${CPD_CSS}</style></head><body>${corpo}</body></html>`);w.document.close();
+  setTimeout(()=>{try{w.focus();w.print()}catch(e){console.warn(e)}setTimeout(()=>f.remove(),60000)},300)}
+const cpdCab=(M,nome,t)=>`<h1>${esc(t)}</h1><p class="m">${esc(M.curso||'Curso PROFIJ')} · ${esc(nome)}${S.cfg.escola?' · '+esc(S.cfg.escola):''} · ${fmtIsoL(isoHoje())}</p>`;
+const cpdAss=()=>`<div class="ass"><div><i></i>O(A) Coordenador(a) do PROFIJ<br>${esc(S.cfg.professor||'')}</div></div>`;
+function cpdExpCron(a,nome){const S_=cpdSim(a,nome);const M=S_.M;const PR=Object.values(S_.P).sort((x,y)=>x.nome.localeCompare(y.nome,'pt'));
+  const dn=id=>{const d=S_.D.find(x=>x.id===id);return d?cpdCurto(d):''};
+  const html=PR.map(p=>{const L=S_.log.filter(e=>e.id&&e.prof===p.nome);const porD={};L.forEach(e=>(porD[e.iso]=porD[e.iso]||[]).push(e));let ac=0;
+    const lin=Object.keys(porD).sort().map(iso=>{const E=porD[iso];ac+=E.length;const d=dataDeIso(iso);return `<tr><td>${cpdDM(iso)}/${iso.slice(0,4)}</td><td>${DIAS_C[d.getDay()]}</td><td>${E.map(e=>esc(dn(e.id))+' '+e.n).join(' · ')}</td><td class="n">${E.length}</td><td class="n">${ac}</td></tr>`}).join('');
+    return `<section class="pg">${cpdCab(M,nome,'Cronograma — '+p.nome)}<p class="m">${p.disc.map(d=>esc(d.nome)+' ('+S_.need[d.id]+' tempos)').join(' + ')} = <b>${p.need} tempos</b> · acaba: <b>${p.fim==='feito'?'concluído':p.fim?fmtIsoL(p.fim):'não acaba (faltam '+p.falta+')'}</b></p>
+      <table><thead><tr><th>Data</th><th>Dia</th><th>Tempos (disciplina e n.º do tempo)</th><th class="n">No dia</th><th class="n">Acumulado</th></tr></thead><tbody>${lin||'<tr><td colspan="5">Sem tempos a partir da data de referência.</td></tr>'}</tbody></table>${cpdAss()}</section>`}).join('');
+  cpdDoc('Cronogramas '+nome,html);
+  const q=v=>{v=v==null?'':String(v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const R=[['Data','Dia','Hora','Tempo do horário','Disciplina/UFCD','N.º do tempo','Total','Professor(a)','Origem']];
+  S_.log.forEach(e=>{const x=S_.aulas.find(z=>cpdSk(z)===e.sk)||{};const d=e.id&&S_.D.find(z=>z.id===e.id);R.push([e.iso,DIAS_C[dataDeIso(e.iso).getDay()],x.ini!=null?cpdHm(x.ini):'',x.ab||'',d?d.nome:'livre',e.n||'',d?S_.need[d.id]:'',e.prof||'',{horario:'horário',professor:'mesmo professor',cedido:'cedência',livre:'tempo livre',semana:'alteração da semana'}[e.via]||e.via])});
+  download('cronograma-'+normSig(nome)+'-'+isoHoje()+'.csv','﻿'+R.map(l=>l.map(q).join(';')).join('\n'),'text/csv')}
+function cpdExpSem(a,nome){const S_=cpdSim(a,nome);const M=S_.M;const de=prompt('Primeira semana (AAAA-MM-DD):',cpdSeg(S_.hoje<S_.L.ini?S_.L.ini:S_.hoje));if(!de)return;const ate=prompt('Última semana (AAAA-MM-DD):',S_.turmaFim&&S_.turmaFim!=='feito'?S_.turmaFim:S_.L.fim);if(!ate)return;
+  let html='';for(let s=cpdSeg(de);s<=ate;s=cpdMais(s,7)){html+=`<section class="pg land">${cpdCab(M,nome,'Horário Semanal — '+fmtIsoL(s)+' a '+fmtIsoL(cpdMais(s,4)))}${cpdGrelha(S_,s,false).replace(/class="cpd-nl"/g,'class="nl"').replace(/cpd-c livre/g,'lv').replace(/<div class="cpd-rod">/,'<p class="rod"><b>No fim da semana:</b> ').replace(/<\/div>$/,'</p>')}${cpdAss()}</section>`}
+  cpdDoc('Horários semanais '+nome,html)}
+function cpdExpMat(a,nome){const S_=cpdSim(a,nome);const S0=cpdSim(a,nome,{ini:true});const M=S_.M;const K=cpmCalc(a,nome);
+  const comp=CPM_COMP.filter(([k])=>k!=='pratica').map(([k,l])=>{const L=S_.D.filter(d=>d.comp===k);if(!L.length)return '';const hh=L.reduce((s,d)=>s+(+d.horas||0),0),tt=L.reduce((s,d)=>s+S_.need[d.id],0);
+    return `<tr><th colspan="9">${l}</th></tr>${L.map(d=>{const r=K.R.find(x=>x.d.id===d.id)||{};return `<tr><td>${esc(d.nome)}${d.det?' <small>'+esc(d.det)+'</small>':''}</td><td class="n">${d.horas}</td><td class="n">${S_.need[d.id]}</td><td>${esc(d.prof||'')}${(d.subs||[]).map(s=>'<br><small>→ '+esc(s.prof)+' desde '+cpdDM(s.desde)+'</small>').join('')}</td><td>${esc((d.sig||[]).join(', '))}</td><td class="n">${r.semT||''}</td><td class="n">${Math.min(Math.max(0,S_.dh[d.id]),S_.need[d.id])}</td><td>${S0.fim[d.id]&&S0.fim[d.id]!=='feito'?fmtIsoL(S0.fim[d.id]):'—'}</td><td>${S_.fim[d.id]==='feito'?'concluída':S_.fim[d.id]?fmtIsoL(S_.fim[d.id]):'não acaba'}${d.fimMan?'<br><small>marcada: '+fmtIsoL(d.fimMan)+'</small>':''}</td></tr>`}).join('')}<tr><td><b>Total da componente</b></td><td class="n"><b>${hh}</b></td><td class="n"><b>${tt}</b></td><td colspan="6"></td></tr>`}).join('');
+  const f=M.fct||{};
+  const mat=`<section class="pg">${cpdCab(M,nome,'Matriz Curricular e Distribuição de Serviço')}<p class="m">${[M.area&&'Área: '+esc(M.area),M.nivel&&'Nível: '+esc(M.nivel),M.anoCurso&&'Ano: '+esc(M.anoCurso),M.ref&&'Referencial: '+esc(M.ref)].filter(Boolean).join(' · ')} · ${fmtIsoL(S_.L.ini)} a ${fmtIsoL(S_.L.fim)}</p>
+    <table><thead><tr><th>Disciplina / UFCD</th><th class="n">Horas</th><th class="n">Tempos (45 min)</th><th>Professor(a)</th><th>No horário</th><th class="n">Tempos/sem.</th><th class="n">Dados até hoje</th><th>Fim (plano inicial)</th><th>Fim previsto</th></tr></thead><tbody>${comp}</tbody></table>
+    ${f.ini&&f.fim?`<p><b>FPCT:</b> ${fmtIsoL(f.ini)} a ${fmtIsoL(f.fim)} · ${K.fctH} h possíveis${f.horas?' de '+f.horas+' h exigidas':''}</p>`:''}
+    <p><b>A turma acaba:</b> ${S_.turmaFim==='feito'?'concluída':S_.turmaFim?fmtIsoL(S_.turmaFim):'não acaba no ano (faltam '+S_.falta+' tempos)'} · plano inicial: ${S0.turmaFim&&S0.turmaFim!=='feito'?fmtIsoL(S0.turmaFim):'—'}</p>
+    <h2>Distribuição de Serviço (contagem global por professor)</h2><table><thead><tr><th>Professor(a)</th><th>Disciplinas e UFCD</th><th class="n">Tempos</th><th class="n">Dados até hoje</th><th class="n">Ficam por dar</th><th>Acaba</th></tr></thead><tbody>${Object.values(S_.P).sort((x,y)=>x.nome.localeCompare(y.nome,'pt')).map(p=>`<tr><td>${esc(p.nome)}</td><td>${p.disc.map(d=>esc(d.nome)+' ('+S_.need[d.id]+')').join(' + ')}</td><td class="n">${p.need}</td><td class="n">${p.dh}</td><td class="n">${p.falta}</td><td>${p.fim==='feito'?'concluído':p.fim?fmtIsoL(p.fim):'não acaba'}</td></tr>`).join('')}</tbody></table>${cpdAss()}</section>`;
+  /* horário original da turma */
+  const T=[...new Set(S_.aulas.map(x=>x.ini))].sort((x,y)=>x-y);const leg=(S_.h.legenda||[]);
+  const hor=`<section class="pg land">${cpdCab(M,nome,'Horário Original da Turma')}<table class="cpd-gr"><thead><tr><th></th>${CPD_DS.map(w=>`<th>${DIAS[w]}</th>`).join('')}</tr></thead><tbody>${T.map(ini=>{const x0=S_.aulas.find(x=>x.ini===ini);return `<tr><th>${cpdHm(ini)}<small>${x0?cpdHm(x0.fim):''}</small></th>${CPD_DS.map(w=>{const x=S_.aulas.find(z=>z.dia===w&&z.ini===ini);if(!x)return '<td></td>';const l=leg.find(l=>normSig(l.ab)===normSig(x.ab));return `<td><b>${esc(x.ab)}</b><small>${esc(l?(l.profs||[]).join(', '):'')}${x.sala?' · '+esc(x.sala):''}</small></td>`}).join('')}</tr>`}).join('')}</tbody></table>
+    ${leg.length?`<table><thead><tr><th>Sigla</th><th>Atividade</th><th>Professor(a)</th></tr></thead><tbody>${leg.map(l=>`<tr><td>${esc(l.ab)}</td><td>${esc(l.nome||'')}</td><td>${esc((l.profs||[]).join(', '))}</td></tr>`).join('')}</tbody></table>`:''}</section>`;
+  cpdDoc('Matriz e distribuição de serviço '+nome,mat+hor)}
+
+const cpdMinha=d=>d.minha!=null?!!d.minha:!!(S.cfg.professor&&d.prof&&String(d.prof).split(/,\s*/).some(p=>mesmoNome(p,S.cfg.professor)));
+/* cria no modo professor as turmas·disciplinas que o coordenador leciona (com os formandos da turma, se já existirem) */
+function cpdCriarMinhas(a,nome){const M=cpmM(nome);const L=M.disc.filter(cpdMinha);const novas=L.filter(d=>!a.turmas.some(t=>normTurma(t.nome)===normTurma(nome)&&normT(t.disciplina)===normT(d.nome)));
+  if(!novas.length)return toast('As suas disciplinas desta turma já estão no modo professor.');
+  if(!confirm('Criar no modo professor:\n\n'+novas.map(d=>'· '+nome+' — '+d.nome).join('\n')+'\n\nOs formandos são copiados da turma, se ela já existir.'))return;
+  const base=a.turmas.find(t=>normTurma(t.nome)===normTurma(nome)&&t.alunos&&t.alunos.length);
+  novas.forEach(d=>{const anoEsc=base?base.anoEsc:'10',ciclo=cicloDoAno(anoEsc);
+    const t={id:uid(),nome,anoEsc,ciclo,oferta:'profij',disciplina:d.nome,dominios:mkDominiosDisc(d.nome,'profij',ciclo),mencoes:MENCOES_DEF.map(m=>({...m})),regra:{2:'media',3:'media'},alunos:[],instrumentos:[],modulos:[],cpmDisc:d.id};
+    if(base){if(base.origens)t.origens=base.origens.slice();t.alunos=JSON.parse(JSON.stringify(base.alunos)).map(x=>Object.assign(x,{id:uid()+Math.random().toString(36).slice(2,5),frequenta:true,autoav:{},obsPer:{},sintese:{}}))}
+    a.turmas.push(t)});
+  saveNow();vCProfij();toast(novas.length+' disciplina(s) criada(s) no modo professor.')}
+/*V0996-FIM*/
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
 /* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
 setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
-
-/* ===================== v0.918 · SpruceNote e JornalNote: todos os elementos ===================== */
-try{Object.assign(ICONS,{video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/>',map:'<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/>',dots:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',scribble:'<path d="M3 17c3-6 5-9 7-9s-1 8 2 8 4-7 6-7 1 5 3 5"/>',bubble:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/>',line:'<path d="M5 19 19 5"/><path d="M13 5h6v6"/>',lines:'<path d="M4 6h16M4 12h16M4 18h10"/>',todo:'<path d="M4 6l2 2 3-3M4 13l2 2 3-3"/><path d="M12 7h8M12 14h8M12 20h8"/>'})}catch(_){}
-Object.assign(MQ_T,{nota:['lines','Anotação'],tarefa:['todo','Pendências'],seta:['line','Linha'],comentario:['bubble','Comentário'],audio:['mic','Áudio'],video:['video','Vídeo'],mapa:['map','Mapa'],documento:['file','Documento'],esboco:['scribble','Esboço'],tabela:['table','Tabela'],ficheiro:['upload','Enviar'],desenho:['pencil','Desenho'],traco:['pencil','Desenho']});
-const MQ_PRINC=['nota','link','tarefa','seta','quadro','coluna','comentario'],MQ_MAIS=['audio','titulo','video','mapa','documento','cor','esboco','tabela'],MQ_FIM=['imagem','ficheiro','desenho'];
-const MQ_NOVOS=new Set(['comentario','audio','video','mapa','documento','esboco','tabela','ficheiro','traco']);
-const mqStore=()=>UI.mqCtx==='jornal'?(S.snj=S.snj||{}):(S.sn=S.sn||{});
-function mqBarra(){const b=t=>`<button type="button" class="mq-tool" data-mqt="${t}" title="${MQ_T[t][1]}">${ic(MQ_T[t][0],20)}<span>${MQ_T[t][1]}</span></button>`;
-  return MQ_PRINC.map(b).join('')+MQ_MAIS.map(t=>b(t).replace('class="mq-tool"','class="mq-tool mq-x"')).join('')+`<button type="button" class="mq-more" id="mq-more" aria-haspopup="true" aria-expanded="false" title="Mais elementos">${ic('dots',18)}</button>`+MQ_FIM.map(b).join('')+`<span class="sp1"></span><button type="button" class="mq-lixob" id="mq-lixo" title="Lixeira">${ic('trash',20)}<span>Lixeira</span><i id="mq-lixon"></i></button><input type="file" id="mq-f" accept="image/*" multiple hidden><input type="file" id="mq-ff" multiple hidden>`}
-const mqTxt=h=>{const d=document.createElement('div');d.innerHTML=mqLimpa(h||'');return (d.textContent||'').trim()};
-const mqIniciais=n=>String(n||'?').split(/\s+/).filter(Boolean).map(w=>w[0]).filter((_,i,a)=>i===0||i===a.length-1).join('').toUpperCase()||'?';
-const mqEmbed=u=>{u=String(u||'');let m=u.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/i);if(m)return 'https://www.youtube-nocookie.com/embed/'+m[1];m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/i);if(m)return 'https://player.vimeo.com/video/'+m[1];return ''};
-const mqTam=b=>b<1024?b+' B':b<1048576?Math.round(b/1024)+' KB':(b/1048576).toFixed(1).replace('.',',')+' MB';
-const mqExt=n=>(String(n||'').split('.').pop()||'').slice(0,4).toUpperCase();
-{const _h=mqHTML;mqHTML=function(it,q){if(!MQ_NOVOS.has(it.t))return _h.apply(this,arguments);
-  const sel=mqUI().sel.includes(it.id)?' sel':'';const cl=`mq-it mq-${it.t}${sel}${it.cor?' tem-cor':''}`;
-  const st=it.pai?(it.cor?` style="--mqc:${it.cor}"`:''):` style="left:${it.x}px;top:${it.y}px;width:${it.w}px${it.t==='traco'?';height:'+it.h+'px':''}${it.cor?';--mqc:'+it.cor:''}"`;
-  const rz=it.pai||it.t==='traco'?'':'<span class="mq-rz" data-rz aria-hidden="true"></span>';const A=`class="${cl}" data-mq="${it.id}"${st}`;
-  if(it.t==='comentario'){const R=it.resp||[];return `<div ${A}><div class="mq-cmh"><span class="mq-cma">${esc(mqIniciais(it.aut))}</span><b>${esc(it.aut||'Professor')}</b><small>${esc(it.qd?new Date(it.qd).toLocaleDateString('pt-PT',{day:'numeric',month:'short'}):'')}</small><span class="sp1"></span><button type="button" class="mq-cmok ${it.res?'on':''}" data-cmres title="${it.res?'Reabrir':'Marcar como resolvido'}">${ic('check',13)}</button></div><div class="mq-txt" data-ed>${mqLimpa(it.txt)||'<span class="mq-ph">Escreva um comentário…</span>'}</div>${R.map((r,k)=>`<div class="mq-cmr"><span class="mq-cma sm">${esc(mqIniciais(r.a))}</span><div><b>${esc(r.a||'')}</b> ${esc(r.t)}</div><button type="button" class="mq-cmx" data-cmdel="${k}" aria-label="Apagar resposta">×</button></div>`).join('')}<input class="mq-cmi" data-cmi placeholder="Responder…" aria-label="Responder ao comentário">${rz}</div>`}
-  if(it.t==='audio'){const src=FOTOS[it.fid];return `<div ${A}><div class="mq-ah2"><span class="mq-aic">${ic('mic',18)}</span><input class="mq-nm" data-tit value="${esc(it.tit||'')}" placeholder="Áudio" aria-label="Nome do áudio"></div>${src?`<audio controls preload="metadata" src="${src}"></audio>`:'<div class="mq-semimg"><small>áudio ainda não disponível neste aparelho</small></div>'}${rz}</div>`}
-  if(it.t==='video'){const em=mqEmbed(it.url);const src=it.fid&&FOTOS[it.fid];return `<div ${A}><div class="mq-vh">${ic('video',15)}<input class="mq-nm" data-tit value="${esc(it.tit||'')}" placeholder="Vídeo" aria-label="Nome do vídeo">${it.url?`<a class="btn sm ghost" href="${esc(it.url)}" target="_blank" rel="noopener" title="Abrir">${ic('link',13)}</a>`:''}</div><div class="mq-vid">${em?`<iframe class="mq-ifr" src="${em}" title="${esc(it.tit||'Vídeo')}" allow="encrypted-media; picture-in-picture; fullscreen" loading="lazy"></iframe>`:src?`<video controls preload="metadata" src="${src}"></video>`:it.url?`<video controls preload="metadata" src="${esc(it.url)}"></video>`:'<div class="mq-semimg"><small>vídeo indisponível</small></div>'}</div>${rz}</div>`}
-  if(it.t==='mapa')return `<div ${A}><div class="mq-vh">${ic('map',15)}<input class="mq-nm" data-tit value="${esc(it.tit||it.lq||'')}" placeholder="Mapa" aria-label="Nome do mapa"><a class="btn sm ghost" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.lq||'')}" target="_blank" rel="noopener" title="Abrir no mapa">${ic('link',13)}</a></div><div class="mq-vid mq-map"><iframe class="mq-ifr" src="https://maps.google.com/maps?q=${encodeURIComponent(it.lq||'')}&z=${it.z||15}&output=embed" title="Mapa: ${esc(it.lq||'')}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>${rz}</div>`;
-  if(it.t==='documento'){const tx=mqTxt(it.html);return `<div ${A}><div class="mq-doc"><span class="mq-doci">${ic('file',22)}</span><div><b>${esc(it.tit||'Documento sem título')}</b><small>${tx?tx.split(/\s+/).length+' palavras':'vazio'}</small></div></div>${tx?`<p class="mq-docp">${esc(tx.slice(0,180))}${tx.length>180?'…':''}</p>`:''}<button type="button" class="btn sm" data-abrir>${ic('pencil',13)} Abrir documento</button>${rz}</div>`}
-  if(it.t==='esboco'){const src=it.fid&&FOTOS[it.fid];return `<div ${A}><div class="mq-esb">${src?`<img src="${src}" alt="${esc(it.tit||'Esboço')}" draggable="false">`:`<div class="mq-esbv">${ic('scribble',28)}<small>Toque duas vezes para desenhar</small></div>`}</div><input class="mq-leg" data-tit value="${esc(it.tit||'')}" placeholder="Esboço…" aria-label="Nome do esboço">${rz}</div>`}
-  if(it.t==='tabela'){const L=it.lin||[['','',''],['','','']];return `<div ${A}><div class="mq-tbw"><table class="mq-tb"><tbody>${L.map((r,i)=>`<tr>${r.map((c,j)=>`<td><input data-tc="${i}|${j}" value="${esc(c)}" aria-label="Linha ${i+1}, coluna ${j+1}"></td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="mq-tba"><button type="button" class="btn sm ghost" data-tbl="+">${ic('plus',12)} Linha</button><button type="button" class="btn sm ghost" data-tbc="+">${ic('plus',12)} Coluna</button><span class="sp1"></span><button type="button" class="btn sm ghost" data-tbl="-" title="Tirar a última linha">− L</button><button type="button" class="btn sm ghost" data-tbc="-" title="Tirar a última coluna">− C</button></div>${rz}</div>`}
-  if(it.t==='ficheiro')return `<div ${A}><div class="mq-fic"><span class="mq-fext">${esc(mqExt(it.nome)||'FICH')}</span><div><b title="${esc(it.nome||'')}">${esc(it.nome||'Ficheiro')}</b><small>${esc(mqTam(+it.tam||0))}</small></div></div><button type="button" class="btn sm" data-abrir>${ic('download',13)} Abrir</button>${rz}</div>`;
-  if(it.t==='traco')return `<div ${A}><svg width="${it.w}" height="${it.h}" viewBox="0 0 ${it.w} ${it.h}" aria-hidden="true"><path class="mq-trh" d="${it.d}" stroke-width="${Math.max(14,(+it.esp||3)+10)}"/><path d="${it.d}" fill="none" stroke="${esc(it.cor||'#1f2937')}" stroke-width="${+it.esp||3}" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
-  return ''}}
-/* criação */
-{const _c=mqCriar;mqCriar=function(t,p){p=p||mqCentro();
-  if(t==='comentario'){const it=mqNovo('comentario',p.x,p.y,{w:240,txt:'',aut:S.cfg.professor||'Professor',qd:Date.now(),resp:[]});setTimeout(()=>mqEditar(it.id),40);return}
-  if(t==='tabela')return mqNovo('tabela',p.x,p.y,{w:340,lin:[['','',''],['','',''],['','','']]});
-  if(t==='documento'){const it=mqNovo('documento',p.x,p.y,{w:240,tit:'',html:''});setTimeout(()=>mqDocAbrir(it.id),60);return}
-  if(t==='esboco'){const it=mqNovo('esboco',p.x,p.y,{w:260,tit:''});setTimeout(()=>mqEsbocoAbrir(it.id),60);return}
-  if(t==='audio')return mqAudioDlg(p);if(t==='video')return mqVideoDlg(p);if(t==='mapa')return mqMapaDlg(p);
-  if(t==='ficheiro'){mqLinkPos=p;$('#mq-ff').click();return}if(t==='desenho')return mqDesenho(!UI.mqDraw);
-  return _c.apply(this,arguments)}}
-function mqDocGuardar(fid,dataURL){const id=fid||('mq:'+uid());FOTOS[id]=dataURL;idbPor(id,dataURL);return id}
-const mqLerURL=f=>new Promise((ok,ko)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>ko(r.error);r.readAsDataURL(f)});
-async function mqFicheiros(files,x,y){let k=0;for(const f of files){if(f.size>25*1048576){toast(f.name+': maior que 25 MB','erro');continue}
-  try{const u=await mqLerURL(f);const fid=mqDocGuardar(null,u);const P={x:x+k*28,y:y+k*28};
-    if(/^audio\//.test(f.type))mqNovo('audio',P.x,P.y,{w:280,fid,tit:f.name.replace(/\.[^.]+$/,'')});else if(/^video\//.test(f.type))mqNovo('video',P.x,P.y,{w:380,fid,tit:f.name.replace(/\.[^.]+$/,'')});
-    else mqNovo('ficheiro',P.x,P.y,{w:250,fid,nome:f.name,tam:f.size,tipo:f.type});k++}catch(e){toast(e.message||'Não foi possível ler '+f.name,'erro')}}}
-{const _mi=mqImagens;mqImagens=async function(files,x,y){const F=[...files];const im=F.filter(f=>/^image\//.test(f.type)),out=F.filter(f=>!/^image\//.test(f.type));if(im.length)await _mi.call(this,im,x,y);if(out.length)await mqFicheiros(out,x+im.length*30,y+im.length*30)}}
-function mqAudioDlg(p){let rec=null,chunks=[],t0=0,tm=null;
-  openDrawer('Áudio',`<div class="ed"><p class="hint" style="margin-top:0">Grave uma nota de voz ou escolha um ficheiro de áudio.</p>
-    <div class="mq-rec"><button type="button" class="btn pri" id="ma-rec">${ic('mic',16)} Gravar</button><span class="mq-rect" id="ma-t">0:00</span></div>
-    <label class="btn" style="margin-top:12px;display:inline-flex">${ic('upload',15)} Escolher ficheiro de áudio<input type="file" id="ma-f" accept="audio/*" hidden></label></div>`);
-  const fim=async blob=>{const u=await mqLerURL(blob);const fid=mqDocGuardar(null,u);closeDrawer();mqNovo('audio',p.x,p.y,{w:280,fid,tit:'Nota de voz '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})})};
-  $('#ma-f').onchange=e=>{const f=e.target.files[0];if(f){closeDrawer();mqFicheiros([f],p.x,p.y)}};
-  $('#ma-rec').onclick=async()=>{const b=$('#ma-rec');if(rec){rec.stop();return}
-    try{const st=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(st);chunks=[];rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
-      rec.onstop=()=>{clearInterval(tm);st.getTracks().forEach(x=>x.stop());fim(new Blob(chunks,{type:rec.mimeType||'audio/webm'}))};rec.start();t0=Date.now();b.innerHTML=ic('check',16)+' Parar e guardar';b.classList.add('dng');
-      tm=setInterval(()=>{const s=Math.round((Date.now()-t0)/1000);const e_=$('#ma-t');if(e_)e_.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')},250)}catch(e){toast('Não foi possível usar o microfone: '+(e.message||e.name),'erro')}}}
-function mqVideoDlg(p){openDrawer('Vídeo',`<div class="ed"><label for="mv-u">Endereço do vídeo</label><input id="mv-u" type="url" inputmode="url" placeholder="https://www.youtube.com/watch?v=…" autocapitalize="none"><p class="hint">YouTube, Vimeo ou ligação direta para um ficheiro de vídeo.</p>
-    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn pri" id="mv-ok">${ic('check',14)} Acrescentar</button><label class="btn" style="display:inline-flex">${ic('upload',15)} Enviar ficheiro (até 25 MB)<input type="file" id="mv-f" accept="video/*" hidden></label></div></div>`);
-  setTimeout(()=>$('#mv-u').focus(),60);$('#mv-f').onchange=e=>{const f=e.target.files[0];if(f){closeDrawer();mqFicheiros([f],p.x,p.y)}};
-  $('#mv-ok').onclick=()=>{let u=$('#mv-u').value.trim();if(u&&!/^https?:/i.test(u))u='https://'+u;if(!/^https?:\/\/\S+\.\S+/.test(u))return toast('Escreva um endereço válido','erro');closeDrawer();let d='';try{d=new URL(u).hostname.replace(/^www\./,'')}catch(_){}mqNovo('video',p.x,p.y,{w:380,url:u,tit:d})}}
-function mqMapaDlg(p,it){openDrawer('Mapa',`<div class="ed"><label for="mm-q">Morada ou local</label><input id="mm-q" value="${esc(it&&it.lq||'')}" placeholder="ex.: Escola Secundária, Ponta Delgada"><label for="mm-z" style="margin-top:10px">Aproximação</label><input id="mm-z" type="range" min="5" max="19" value="${it&&it.z||15}">
-    <div class="row" style="margin-top:14px"><button class="btn pri" id="mm-ok">${ic('check',14)} ${it?'Guardar':'Acrescentar'}</button></div></div>`);
-  setTimeout(()=>$('#mm-q').focus(),60);$('#mm-ok').onclick=()=>{const q_=$('#mm-q').value.trim();if(!q_)return toast('Escreva uma morada ou local','erro');const z=+$('#mm-z').value;closeDrawer();if(it){mqAntes();it.lq=q_;it.z=z;save();mqRender()}else mqNovo('mapa',p.x,p.y,{w:360,lq:q_,z,tit:q_})}}
-/* documento: editor em vista ampla */
-function mqDocAbrir(id){const q=mqQ(mqUI().q),it=mqItem(q,id);if(!it)return;const el=document.createElement('div');el.className='mq-doced';
-  el.innerHTML=`<input class="mq-doct" value="${esc(it.tit||'')}" placeholder="Título do documento" aria-label="Título do documento"><div class="mq-docb" role="toolbar">${[['bold','B'],['italic','I'],['underline','U'],['h2','Título'],['h3','Subtítulo'],['insertUnorderedList','• Lista'],['insertOrderedList','1. Lista'],['blockquote','❝'],['link','Ligação']].map(([c,l])=>`<button type="button" class="btn sm" data-dc="${c}">${l}</button>`).join('')}</div><div class="mq-docc" contenteditable="true" spellcheck="true">${mqLimpa(it.html)||''}</div>`;
-  el.querySelectorAll('[data-dc]').forEach(b=>{b.onpointerdown=e=>e.preventDefault();b.onclick=()=>{const c=b.dataset.dc;if(c==='h2'||c==='h3'||c==='blockquote')document.execCommand('formatBlock',false,c);else if(c==='link'){const l=prompt('Endereço da ligação:','https://');if(l&&/^https?:\/\//.test(l))document.execCommand('createLink',false,l)}else document.execCommand(c)}});
-  ecraAmplo({titulo:it.tit||'Documento',sub:mqQ(mqUI().q).nome,el,aoFechar:()=>{const t=el.querySelector('.mq-doct').value.trim(),h=mqLimpa(el.querySelector('.mq-docc').innerHTML.replace(/<h2/g,'<h3').replace(/<\/h2>/g,'</h3>'));if(t!==(it.tit||'')||h!==(it.html||'')){mqAntes();it.tit=t;it.html=h;save()}mqRender()}});
-  setTimeout(()=>{const c=el.querySelector(it.tit?'.mq-docc':'.mq-doct');c&&c.focus()},60)}
-/* esboço: desenhar num cartão */
-function mqEsbocoAbrir(id){const q=mqQ(mqUI().q),it=mqItem(q,id);if(!it)return;const el=document.createElement('div');el.className='mq-esbed';
-  const CORES=['#1f2937','#e11d48','#f59e0b','#16a34a','#2563eb','#7c3aed','#ffffff'];let cor=CORES[0],esp=4,borr=false;const hist=[];
-  el.innerHTML=`<div class="mq-esbt">${CORES.map((c,k)=>`<button type="button" class="mq-esc ${k?'':'on'}" data-ec="${c}" style="background:${c}" aria-label="Cor"></button>`).join('')}<span class="mq-sep"></span>${[2,4,8,14].map(n=>`<button type="button" class="mq-esz ${n===4?'on':''}" data-ez="${n}" aria-label="Espessura ${n}"><i style="width:${n+2}px;height:${n+2}px"></i></button>`).join('')}<span class="mq-sep"></span><button type="button" class="btn sm" data-eb>Borracha</button><button type="button" class="btn sm" data-eu>${ic('undo',13)} Anular</button><button type="button" class="btn sm" data-ex>Limpar</button></div><canvas width="1200" height="800" class="mq-esbc"></canvas>`;
-  const cv=el.querySelector('canvas'),g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,1200,800);
-  const src=it.fid&&FOTOS[it.fid];if(src){const im=new Image();im.onload=()=>g.drawImage(im,0,0,1200,800);im.src=src}
-  const pt=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*1200/r.width,(e.clientY-r.top)*800/r.height]};let dn=false,last=null,mud=false;
-  cv.onpointerdown=e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);dn=true;last=pt(e);hist.push(g.getImageData(0,0,1200,800));if(hist.length>25)hist.shift();g.beginPath();g.fillStyle=borr?'#fff':cor;g.arc(last[0],last[1],(borr?esp*3:esp)/2,0,7);g.fill();mud=true};
-  cv.onpointermove=e=>{if(!dn)return;const p=pt(e);g.strokeStyle=borr?'#fff':cor;g.lineWidth=borr?esp*3:esp;g.lineCap='round';g.lineJoin='round';g.beginPath();g.moveTo(last[0],last[1]);g.lineTo(p[0],p[1]);g.stroke();last=p};
-  cv.onpointerup=cv.onpointercancel=()=>{dn=false};
-  el.querySelectorAll('[data-ec]').forEach(b=>b.onclick=()=>{cor=b.dataset.ec;borr=false;el.querySelectorAll('[data-ec]').forEach(x=>x.classList.toggle('on',x===b));el.querySelector('[data-eb]').classList.remove('on')});
-  el.querySelectorAll('[data-ez]').forEach(b=>b.onclick=()=>{esp=+b.dataset.ez;el.querySelectorAll('[data-ez]').forEach(x=>x.classList.toggle('on',x===b))});
-  el.querySelector('[data-eb]').onclick=e=>{borr=!borr;e.currentTarget.classList.toggle('on',borr)};
-  el.querySelector('[data-eu]').onclick=()=>{const h=hist.pop();if(h){g.putImageData(h,0,0);mud=true}};
-  el.querySelector('[data-ex]').onclick=()=>{hist.push(g.getImageData(0,0,1200,800));g.fillStyle='#fff';g.fillRect(0,0,1200,800);mud=true};
-  ecraAmplo({titulo:it.tit||'Esboço',sub:'Desenhe com o dedo, a caneta ou o rato · fecha e guarda',el,aoFechar:()=>{if(mud){mqAntes();it.fid=mqDocGuardar(it.fid,cv.toDataURL('image/png'));save()}mqRender()}})}
-/* desenho livre por cima do quadro */
-function mqDesenho(on){UI.mqDraw=!!on;const cv=$('#mq-cv');if(!cv)return;cv.querySelectorAll('.mq-drov,.mq-drbar').forEach(x=>x.remove());$$('[data-mqt="desenho"]').forEach(b=>b.classList.toggle('on',!!on));if(!on)return;
-  UI.mqDrCor=UI.mqDrCor||'#1f2937';UI.mqDrEsp=UI.mqDrEsp||3;const CORES=['#1f2937','#e11d48','#f59e0b','#16a34a','#2563eb','#7c3aed'];
-  cv.insertAdjacentHTML('beforeend',`<div class="mq-drov" aria-label="Área de desenho"><svg class="mq-drsv"><path/></svg></div><div class="mq-drbar">${ic('pencil',15)} <b>Desenho</b>${CORES.map(c=>`<button type="button" data-dc="${c}" class="${UI.mqDrCor===c?'on':''}" style="background:${c}" aria-label="Cor"></button>`).join('')}<span class="mq-sep"></span>${[2,3,6,10].map(n=>`<button type="button" data-de="${n}" class="mq-esz ${UI.mqDrEsp===n?'on':''}" aria-label="Espessura ${n}"><i style="width:${n+2}px;height:${n+2}px"></i></button>`).join('')}<span class="mq-sep"></span><button type="button" class="btn sm pri" data-dfim>${ic('check',13)} Concluir</button></div>`);
-  const ov=cv.querySelector('.mq-drov'),sv=ov.querySelector('svg'),pa=sv.querySelector('path');let P=null;
-  cv.querySelectorAll('[data-dc]').forEach(b=>b.onclick=()=>{UI.mqDrCor=b.dataset.dc;cv.querySelectorAll('[data-dc]').forEach(x=>x.classList.toggle('on',x===b))});
-  cv.querySelectorAll('[data-de]').forEach(b=>b.onclick=()=>{UI.mqDrEsp=+b.dataset.de;cv.querySelectorAll('[data-de]').forEach(x=>x.classList.toggle('on',x===b))});
-  cv.querySelector('[data-dfim]').onclick=()=>mqDesenho(false);
-  ov.onpointerdown=e=>{e.preventDefault();e.stopPropagation();ov.setPointerCapture(e.pointerId);const r=ov.getBoundingClientRect();P={r,s:[[e.clientX-r.left,e.clientY-r.top]],w:[mqPt(e.clientX,e.clientY)]};pa.setAttribute('stroke',UI.mqDrCor);pa.setAttribute('stroke-width',UI.mqDrEsp*mqVis(mqUI().q).z);pa.setAttribute('d','')};
-  ov.onpointermove=e=>{if(!P)return;P.s.push([e.clientX-P.r.left,e.clientY-P.r.top]);P.w.push(mqPt(e.clientX,e.clientY));pa.setAttribute('d','M'+P.s.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L'))};
-  ov.onpointerup=ov.onpointercancel=()=>{if(!P)return;const W=P.w;P=null;pa.setAttribute('d','');if(W.length<2)return;const e_=UI.mqDrEsp,pad=e_+4;const xs=W.map(p=>p.x),ys=W.map(p=>p.y);const x0=Math.min(...xs)-pad,y0=Math.min(...ys)-pad,x1=Math.max(...xs)+pad,y1=Math.max(...ys)+pad;
-    const pts=[];W.forEach((p,k)=>{if(!k||k===W.length-1||Math.hypot(p.x-W[k-1].x,p.y-W[k-1].y)>1.2)pts.push(p)});
-    const d='M'+pts.map(p=>(p.x-x0).toFixed(1)+' '+(p.y-y0).toFixed(1)).join('L');mqNovo('traco',x0,y0,{w:Math.round(x1-x0),h:Math.round(y1-y0),d,cor:UI.mqDrCor,esp:e_});mqUI().sel=[];mqRender()}}
-{const _r=mqRender;mqRender=function(){const r=_r.apply(this,arguments);try{if(UI.mqDraw&&$('#mq-cv')&&!$('#mq-cv .mq-drov'))mqDesenho(true);mqLixoN()}catch(_){}return r}}
-/* lixeira: o que se apaga pode ser recuperado */
-function mqLixo(){const s=mqStore();s.lixo=(s.lixo||[]).filter(x=>Date.now()-x.qd<30*864e5);return s.lixo}
-function mqLixoN(){const n=$('#mq-lixon');if(n){const k=mqLixo().length;n.textContent=k||'';n.hidden=!k}}
-{const _ap=mqApagar;mqApagar=function(){const u=mqUI(),q=mqQ(u.q);const antI=q.itens.slice(),antS=q.setas.slice(),antQ=MQ().slice();const r=_ap.apply(this,arguments);try{
-  const fica=new Set(q.itens.map(i=>i.id));const foram=antI.filter(i=>!fica.has(i.id));if(!foram.length)return r;const qs=new Set(MQ().map(x=>x.id));
-  mqLixo().unshift({id:uid(),qd:Date.now(),qid:q.id,itens:JSON.parse(JSON.stringify(foram)),setas:JSON.parse(JSON.stringify(antS.filter(s=>!q.setas.some(z=>z.id===s.id)))),quadros:JSON.parse(JSON.stringify(antQ.filter(z=>!qs.has(z.id))))});
-  if(mqLixo().length>200)mqStore().lixo.length=200;save();mqLixoN();toast(foram.length===1?'Enviado para a lixeira':foram.length+' elementos enviados para a lixeira','ok')}catch(e){console.warn(e)}return r}}
-function mqResumo(i){const t=MQ_T[i.t]?MQ_T[i.t][1]:i.t;const x=i.t==='nota'||i.t==='titulo'||i.t==='comentario'?mqTxt(i.txt):i.t==='quadro'?((MQ().find(z=>z.id===i.ref)||{}).nome||'Quadro'):(i.tit||i.nome||i.lq||i.url||i.leg||'');return {t,x:String(x||'').slice(0,80)}}
-function mqLixoDlg(){const L=mqLixo();const nomeQ=id=>(MQ().find(z=>z.id===id)||{}).nome||'(quadro apagado)';
-  openDrawer('Lixeira',`<div class="ed">${L.length?`<p class="hint" style="margin-top:0">Os elementos apagados ficam aqui durante 30 dias.</p><div class="mq-lxl">${L.map(e=>{const p=e.itens.filter(i=>!e.itens.some(z=>z.t==='coluna'&&z.id===i.pai));const r=mqResumo(p[0]||e.itens[0]);return `<div class="mq-lx"><span class="mq-lxi">${ic((MQ_T[(p[0]||{}).t]||['grid'])[0],16)}</span><div><b>${esc(r.t)}${p.length>1?' + '+(p.length-1):''}</b><small>${esc(r.x||'—')}</small><small class="mut">${esc(nomeQ(e.qid))} · ${new Date(e.qd).toLocaleString('pt-PT',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</small></div><span class="sp1"></span><button type="button" class="btn sm" data-lxr="${e.id}">${ic('undo',13)} Recuperar</button><button type="button" class="btn sm ico dng" data-lxd="${e.id}" aria-label="Apagar de vez">${ic('trash',13)}</button></div>`}).join('')}</div>
-    <div class="row" style="margin-top:14px"><span class="sp1"></span><button class="btn dng" id="lx-all">${ic('trash',14)} Esvaziar Lixeira</button></div>`:`<div class="empty">${ic('trash',30)}<br>A lixeira está vazia.</div>`}</div>`);
-  $$('[data-lxr]').forEach(b=>b.onclick=()=>{const e=L.find(x=>x.id===b.dataset.lxr);if(!e)return;const q=MQ().find(z=>z.id===e.qid)||mqQ(mqUI().q);const S_=mqStore();
-    e.quadros.forEach(z=>{if(!S_.quadros.some(y=>y.id===z.id))S_.quadros.push(z)});const ids=new Set(q.itens.map(i=>i.id));e.itens.forEach(i=>{if(!ids.has(i.id))q.itens.push(i)});
-    const all=new Set(q.itens.map(i=>i.id));e.setas.forEach(s=>{if(all.has(s.de)&&all.has(s.para)&&!q.setas.some(z=>z.id===s.id))q.setas.push(s)});
-    S_.lixo=S_.lixo.filter(x=>x!==e);save();mqUI().q=q.id;mqUI().sel=e.itens.filter(i=>!i.pai).map(i=>i.id);closeDrawer();mqRender();toast('Recuperado','ok')});
-  $$('[data-lxd]').forEach(b=>b.onclick=()=>{const S_=mqStore();S_.lixo=S_.lixo.filter(x=>x.id!==b.dataset.lxd);save();mqLixoDlg();mqLixoN()});
-  const all=$('#lx-all');if(all)all.onclick=()=>{if(!confirm('Apagar de vez tudo o que está na lixeira?'))return;mqStore().lixo=[];save();closeDrawer();mqLixoN()}}
-/* barra: menu «•••», enviar ficheiros, lixeira */
-{const _b=mqBind;mqBind=function(){const r=_b.apply(this,arguments);try{
-  const mb=$('#mq-more');if(mb)mb.onclick=e=>{e.stopPropagation();const ex=$('#mq-mpop');if(ex){ex.remove();mb.setAttribute('aria-expanded','false');return}
-    const pop=document.createElement('div');pop.id='mq-mpop';pop.className='mq-mpop';pop.setAttribute('role','menu');pop.innerHTML=MQ_MAIS.filter(t=>{const x=document.querySelector('.mq-bar .mq-x[data-mqt="'+t+'"]');return !x||x.hidden}).map(t=>`<button type="button" class="mq-tool mq-mt" data-mqt="${t}" role="menuitem"><span class="mq-mti mq-mti-${t}">${ic(MQ_T[t][0],22)}</span><span>${MQ_T[t][1]}</span></button>`).join('');
-    document.body.appendChild(pop);const rr=mb.getBoundingClientRect();pop.style.left=(rr.right+8)+'px';pop.style.top=Math.min(innerHeight-pop.offsetHeight-8,Math.max(8,rr.top-pop.offsetHeight/2+rr.height/2))+'px';mb.setAttribute('aria-expanded','true');
-    const cv=$('#mq-cv');pop.querySelectorAll('.mq-tool').forEach(b=>{b.onpointerdown=ev=>{ev.preventDefault();const t=b.dataset.mqt;let g=null;const x0=ev.clientX,y0=ev.clientY;
-      const mv=e2=>{if(!g&&Math.hypot(e2.clientX-x0,e2.clientY-y0)>6){g=document.createElement('div');g.className='mq-ghost';g.innerHTML=ic(MQ_T[t][0],18)+' '+MQ_T[t][1];document.body.appendChild(g);pop.style.opacity=.3}if(g){g.style.left=e2.clientX+'px';g.style.top=e2.clientY+'px'}};
-      const up=e2=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);pop.remove();mb.setAttribute('aria-expanded','false');if(g){g.remove();const r_=cv.getBoundingClientRect();if(e2.clientX>r_.left&&e2.clientX<r_.right&&e2.clientY>r_.top&&e2.clientY<r_.bottom){const p=mqPt(e2.clientX,e2.clientY);mqCriar(t,{x:p.x-40,y:p.y-20})}}else mqCriar(t)};
-      addEventListener('pointermove',mv);addEventListener('pointerup',up)}});
-    setTimeout(()=>document.addEventListener('pointerdown',function f(ev){if(!pop.contains(ev.target)&&ev.target!==mb){pop.remove();mb.setAttribute('aria-expanded','false');document.removeEventListener('pointerdown',f,true)}},true),0)};
-  const ff=$('#mq-ff');if(ff)ff.onchange=e=>{const p=mqLinkPos||mqCentro();mqFicheiros([...e.target.files],p.x,p.y);e.target.value=''};
-  const lx=$('#mq-lixo');if(lx)lx.onclick=mqLixoDlg;mqLixoN();
-  const cv=$('#mq-cv');if(cv)cv.addEventListener('keydown',e=>{if(e.key==='Escape'&&UI.mqDraw)mqDesenho(false)});if(UI.mqDraw)mqDesenho(true)}catch(e){console.warn(e)}return r}}
-/* elementos novos: edição */
-{const _ib=mqItensBind;mqItensBind=function(){const r=_ib.apply(this,arguments);try{const u=mqUI(),q=mqQ(u.q);
-  $$('#mq-its .mq-it').forEach(el=>{const id=el.dataset.mq,it=mqItem(q,id);if(!it||!MQ_NOVOS.has(it.t))return;
-    el.ondblclick=e=>{e.stopPropagation();if(it.t==='documento')return mqDocAbrir(id);if(it.t==='esboco')return mqEsbocoAbrir(id);if(it.t==='comentario')return mqEditar(id);if(it.t==='mapa')return mqMapaDlg(null,it);if(it.t==='ficheiro')return abrirDoc(it.fid,it.nome)};
-    const ab=el.querySelector('[data-abrir]');if(ab)ab.onclick=()=>it.t==='documento'?mqDocAbrir(id):abrirDoc(it.fid,it.nome);
-    el.querySelectorAll('[data-tit]').forEach(i=>{if(i.closest('.mq-it')!==el)return;i.onchange=()=>{mqAntes();it.tit=i.value.trim();save()}});
-    if(it.t==='comentario'){const ci=el.querySelector('[data-cmi]');ci.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter'&&ci.value.trim()){mqAntes();(it.resp=it.resp||[]).push({t:ci.value.trim(),a:S.cfg.professor||'Professor',qd:Date.now()});save();mqRender();setTimeout(()=>{const n=$(`[data-mq="${id}"] [data-cmi]`);n&&n.focus()},20)}};
-      el.querySelectorAll('[data-cmdel]').forEach(b=>b.onclick=()=>{mqAntes();it.resp.splice(+b.dataset.cmdel,1);save();mqRender()});const rs=el.querySelector('[data-cmres]');if(rs)rs.onclick=()=>{mqAntes();it.res=!it.res;save();mqRender()};el.classList.toggle('res',!!it.res)}
-    if(it.t==='tabela'){el.querySelectorAll('[data-tc]').forEach(c=>{const [i,j]=c.dataset.tc.split('|').map(Number);c.onchange=()=>{it.lin[i][j]=c.value;save()};c.onkeydown=e=>{e.stopPropagation();const mv={Enter:[1,0],ArrowDown:[1,0],ArrowUp:[-1,0]}[e.key]||(e.key==='Tab'?null:null);if(mv){e.preventDefault();const n=el.querySelector(`[data-tc="${i+mv[0]}|${j}"]`);if(n)n.focus();else if(e.key==='Enter'){it.lin[i][j]=c.value;mqAntes();it.lin.push(it.lin[0].map(()=>''));save();mqRender();setTimeout(()=>{const z=$(`[data-mq="${id}"] [data-tc="${i+1}|${j}"]`);z&&z.focus()},20)}}}});
-      el.querySelectorAll('[data-tbl]').forEach(b=>b.onclick=()=>{mqAntes();if(b.dataset.tbl==='+')it.lin.push(it.lin[0].map(()=>''));else if(it.lin.length>1)it.lin.pop();save();mqRender()});
-      el.querySelectorAll('[data-tbc]').forEach(b=>b.onclick=()=>{mqAntes();if(b.dataset.tbc==='+')it.lin.forEach(rw=>rw.push(''));else if(it.lin[0].length>1)it.lin.forEach(rw=>rw.pop());save();mqRender()})}})}catch(e){console.warn(e)}return r}}
-{const _cx=mqCtx;mqCtx=function(){const r=_cx.apply(this,arguments);try{const u=mqUI(),q=mqQ(u.q);const box=$('#mq-ctx');if(!box||box.hidden||u.sel.length!==1)return r;const it=mqItem(q,u.sel[0]);if(!it)return r;
-  const acc={documento:['pencil','Abrir',()=>mqDocAbrir(it.id)],esboco:['scribble','Desenhar',()=>mqEsbocoAbrir(it.id)],mapa:['map','Mudar local',()=>mqMapaDlg(null,it)],ficheiro:['download','Abrir',()=>abrirDoc(it.fid,it.nome)]}[it.t];
-  if(acc&&!box.querySelector('[data-ca2]')){box.insertAdjacentHTML('afterbegin',`<button type="button" class="btn sm" data-ca2>${ic(acc[0],13)} ${acc[1]}</button>`);box.querySelector('[data-ca2]').onclick=acc[2]}}catch(_){}return r}}
-
-/* v0.919 · o tema SGE passa a ser o predefinido (os outros ficam como opções) */
-{const _apSg=aplicarPrefs;aplicarPrefs=function(){try{if(S.cfg&&!S.cfg._sge919){S.cfg._sge919=1;if(!S.cfg.estilo||S.cfg.estilo==='institucional')S.cfg.estilo='sge';if(!S.cfg.logoApp||S.cfg.logoApp==='monograma')S.cfg.logoApp='auto';if(!S.cfg.logoAnim)S.cfg.logoAnim='auto';try{save()}catch(_){}}}catch(_){}return _apSg.apply(this,arguments)}}
-try{aplicarPrefs()}catch(_){}
-try{const st=document.createElement('style');st.textContent='#view .jn-li{content-visibility:auto;contain-intrinsic-size:auto 96px}#view{overscroll-behavior:contain}html body #barx>*,html body #barmais{animation:none!important}html body #bar #ctxTurma,#ctxTurma.semt{display:none!important}';document.head.appendChild(st)}catch(_){}
-/* v0.919 · cabeçalho: quando as ações não cabem, as que sobram vão para «Mais» (em vez de uma 2.ª linha) */
-{const _cab=cabecalho;let _cabIn=false;cabecalho=function(){if(_cabIn)return _cab.apply(this,arguments);_cabIn=true;try{const b=$('#bar'),x=$('#barx');
-  /* v0.941 · o botão «Mais» é reaproveitado (antes era apagado e criado de novo a cada medição, e piscava) */
-  if(x){x.querySelectorAll('[data-ovf]').forEach(e=>{e.style.removeProperty('display');delete e.dataset.ovf});const m=x.querySelector('#barmais');if(m){m.style.setProperty('display','none','important');m.dataset.esc=1}}
-  const r=_cab.apply(this,arguments);if(!b||!x||!b.classList.contains('hgrid')||b.classList.contains('hx1'))return r;
-  if(!x.querySelector('button:not(#barmais)')){const m=x.querySelector('#barmais');if(m)m.remove();return r}
-  const B=[...x.children].filter(e=>e.tagName==='BUTTON'&&e.id!=='barmais');if(B.length<2)return r;
-  {let m=x.querySelector('#barmais');if(!m){x.insertAdjacentHTML('beforeend',`<button type="button" class="btn" id="barmais" aria-haspopup="true" aria-expanded="false">${ic('dots',16)} Mais</button>`)}else{if(x.lastElementChild!==m)x.appendChild(m);m.style.removeProperty('display');delete m.dataset.esc}}
-  for(let k=B.length-1;k>=0;k--){B[k].dataset.ovf=1;B[k].style.setProperty('display','none','important');_cab.apply(this,arguments);if(b.classList.contains('hx1'))break}
-  if(!b.classList.contains('hx1')){B.forEach(e=>{e.style.removeProperty('display');delete e.dataset.ovf});x.querySelector('#barmais').style.setProperty('display','none','important');_cab.apply(this,arguments);return r}
-  const mb=x.querySelector('#barmais');mb.onclick=e=>{e.stopPropagation();const ex=document.getElementById('barmpop');if(ex){ex.remove();mb.setAttribute('aria-expanded','false');return}
-    const pop=document.createElement('div');pop.id='barmpop';pop.className='barmpop';pop.setAttribute('role','menu');const H=B.filter(z=>z.dataset.ovf);
-    pop.innerHTML=H.map((z,k)=>`<button type="button" role="menuitem" data-k="${k}">${z.innerHTML}</button>`).join('');document.body.appendChild(pop);
-    const rr=mb.getBoundingClientRect();pop.style.top=(rr.bottom+6)+'px';pop.style.left=Math.max(8,Math.min(innerWidth-pop.offsetWidth-8,rr.right-pop.offsetWidth))+'px';mb.setAttribute('aria-expanded','true');
-    pop.querySelectorAll('[data-k]').forEach(z=>z.onclick=()=>{pop.remove();mb.setAttribute('aria-expanded','false');H[+z.dataset.k].click()});
-    setTimeout(()=>document.addEventListener('pointerdown',function f(ev){if(!pop.contains(ev.target)&&ev.target!==mb){pop.remove();mb.setAttribute('aria-expanded','false');document.removeEventListener('pointerdown',f,true)}},true),0);
-    pop.addEventListener('keydown',ev=>{if(ev.key==='Escape'){pop.remove();mb.focus()}});const f0=pop.querySelector('button');f0&&f0.focus()};
-  return r}finally{_cabIn=false}}}
-/* barra lateral: o último item tocado não fica realçado (toque no iPad) */
-document.addEventListener('click',e=>{const n=e.target.closest&&e.target.closest('#side .nav');if(n&&!document.documentElement.classList.contains('kbd'))setTimeout(()=>{try{n.blur()}catch(_){}},0)},true);
-{const _gNv=go;go=function(v){const r=_gNv.apply(this,arguments);try{$$('#side .nav.on[data-v]').forEach(b=>{if(b.dataset.v!==VIEW&&!b.classList.contains('navsub')&&!(b.dataset.v==='aula'&&VIEW==='sumarios'))b.classList.remove('on')})}catch(_){}return r}}
-/* v0.919 · um ícone diferente para cada função da barra lateral */
-try{Object.assign(ICONS,{nvpainel:'<rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/>',
-  nvplanta:'<rect x="3" y="3" width="18" height="18" rx="2"/><rect x="6" y="7" width="4" height="3" rx=".8"/><rect x="14" y="7" width="4" height="3" rx=".8"/><rect x="6" y="13" width="4" height="3" rx=".8"/><rect x="14" y="13" width="4" height="3" rx=".8"/>',
-  nvsn:'<rect x="3" y="5" width="8" height="8" rx="1" transform="rotate(-8 7 9)"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="8" y="13" width="8" height="8" rx="1" transform="rotate(5 12 17)"/>',
-  nvjn:'<path d="M20 3c-7 1-12 6-14 14l-2 4"/><path d="M15 7c-3 1-5 3-6 7"/><path d="M10 21h10"/>',
-  nvhoras:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-  nvaula:'<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8M7 9h6M7 12h4"/>',
-  nvtestes:'<path d="M4 20 9 5l5 15M6 15h6"/><path d="M18 7v6M15 10h6"/>',
-  nvrel:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M9 18v-3M12 18v-6M15 18v-4"/>'})}catch(_){}
-const NAV_IC={painel:'nvpainel',planta:'nvplanta',sprucenote:'nvsn',snjornal:'nvjn',meuhorario:'nvhoras',aula:'nvaula',testes:'nvtestes',relatorios:'nvrel'};
-function navIcones(){$$('#side .nav[data-v],#tnavHold .nav[data-v]').forEach(b=>{const k=NAV_IC[b.dataset.v];if(!k||b.dataset.icu===k)return;const sv=b.querySelector('svg');if(!sv)return;const sz=+sv.getAttribute('width')||18;const t=document.createElement('template');t.innerHTML=ic(k,sz).trim();const n=t.content.firstElementChild;if(n){sv.replaceWith(n);b.dataset.icu=k}})}
-{const _gIc=go;go=function(){const r=_gIc.apply(this,arguments);try{navIcones()}catch(_){}return r}}
-new MutationObserver(()=>{try{navIcones()}catch(_){}}).observe(document.getElementById('side')||document.body,{childList:true,subtree:true});setTimeout(navIcones,300);setTimeout(navIcones,1800);
-/* v0.919 · lista de turmas responsiva (cartões quando não cabe) */
-{const _vTu=vTurmas;vTurmas=function(){const r=_vTu.apply(this,arguments);try{const tb=[...document.querySelectorAll('#view table.lst')].find(t=>t.querySelector('[data-open]'));if(tb){tb.classList.add('tbtur');const c=tb.closest('.card');if(c)c.classList.add('ctur');const w=tb.parentElement;if(w&&w!==c&&/tblw|gwrap/.test(w.className))w.classList.add('tbtw');
-  const L=['Turma','Disciplina','Alunos','Instrumentos','Horário',''];tb.querySelectorAll('tbody tr:not(.gr)').forEach(tr=>[...tr.children].forEach((td,k)=>{if(L[k])td.dataset.l=L[k]}))}}catch(e){console.warn(e)}return r}}
-/* v0.919 · sincronização mais rápida e à prova de bloqueadores
-   1) verificação rápida a cada segundo (só a «versão» do índice na nuvem — um pedido de poucos bytes); a sincronização completa só corre quando outro aparelho mudou alguma coisa
-   2) se um bloqueador impedir o script de início de sessão da Google, a app usa automaticamente o início de sessão por redirecionamento, que nenhum bloqueador trava */
-window.__gsiBloq=(()=>{try{return sessionStorage.getItem('es.gsib')==='1'}catch(_){return false}})();
-{const _gc=gsCarregar;gsCarregar=async function(){try{return await Promise.race([_gc.apply(this,arguments),new Promise((_,ko)=>setTimeout(()=>ko(new Error('O início de sessão da Google demorou demasiado (bloqueador de conteúdo?).')),6000))])}catch(e){window.__gsiBloq=true;try{sessionStorage.setItem('es.gsib','1')}catch(_){}throw e}}}
-setTimeout(()=>{if(!/^https:/.test(location.protocol)||window.google&&google.accounts)return;gsCarregar().then(()=>{window.__gsiBloq=false;try{sessionStorage.removeItem('es.gsib')}catch(_){}}).catch(()=>{})},300);
-{let _ver=null,_lc=0,_ocup=false;window.__nvRapido=false;
-  const rapido=async()=>{try{const L=nvL();if(_ocup||L.prov!=='google'||document.visibilityState!=='visible'||!navigator.onLine||L.auto===false||L.renovar||_nvBusy||!(L.k||_nvK)||!SESSAO||document.getElementById('nvgate')||document.body.classList.contains('priv-on')){if(L.prov!=='google')window.__nvRapido=false;return}
-    _ocup=true;window.__nvRapido=true;const g=PROV.google;let m=await g._mapa();let f=m[NV_PREF+'manifest.json'];if(!f){m=await g._mapa(true);f=m[NV_PREF+'manifest.json']}
-    if(!f){if(Date.now()-_lc>4000){_lc=Date.now();await nvSincronizar(false)}return}
-    const r=await gsFetch('https://www.googleapis.com/drive/v3/files/'+f.id+'?fields=version');const j=await r.json();const v=String(j.version||'');
-    if(v&&v!==_ver){const prim=_ver===null;_ver=v;if(!prim||Date.now()-_lc>4000){_lc=Date.now();await nvSincronizar(false);try{const r2=await gsFetch('https://www.googleapis.com/drive/v3/files/'+f.id+'?fields=version');_ver=String((await r2.json()).version||_ver)}catch(_){}}}
-    else if(Date.now()-_lc>60000){_lc=Date.now();await nvSincronizar(false)}}catch(e){if(/404/.test(e&&e.message||'')){try{PROV.google._ids=null}catch(_){}}}finally{_ocup=false}};
-  setInterval(rapido,1000);addEventListener('focus',()=>setTimeout(rapido,100));document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')setTimeout(rapido,100)})}
-/* v0.919 · ecrã do código: efemérides do dia e uma citação de um pedagogo */
-const EFEM={'01-01':['Dia Mundial da Paz'],'01-24':['Dia Internacional da Educação'],'01-27':['Dia Internacional em Memória das Vítimas do Holocausto'],'02-11':['Dia Internacional das Mulheres e Raparigas na Ciência'],'02-13':['Nasce Agostinho da Silva (1906)'],'02-14':['Dia de São Valentim'],'02-21':['Dia Internacional da Língua Materna'],
-  '03-08':['Dia Internacional da Mulher','Nasce João de Deus, poeta e pedagogo (1830)'],'03-14':['Dia Internacional da Matemática (Dia do π)'],'03-17':['St. Patrick’s Day'],'03-20':['Dia Internacional da Felicidade','Dia Internacional da Francofonia'],'03-21':['Dia Mundial da Poesia','Dia Internacional das Florestas','Dia Internacional para a Eliminação da Discriminação Racial'],'03-22':['Dia Mundial da Água'],'03-27':['Dia Mundial do Teatro'],
-  '04-02':['Dia Internacional do Livro Infantil','Dia Mundial da Consciencialização do Autismo'],'04-07':['Dia Mundial da Saúde'],'04-10':['Nasce Sebastião da Gama, poeta e professor (1924)'],'04-22':['Dia da Terra'],'04-23':['Dia Mundial do Livro e dos Direitos de Autor','Dia da Língua Inglesa (ONU)'],'04-25':['Dia da Liberdade'],'04-29':['Dia Mundial da Dança'],
-  '05-01':['Dia do Trabalhador'],'05-03':['Dia Mundial da Liberdade de Imprensa'],'05-05':['Dia Mundial da Língua Portuguesa'],'05-09':['Dia da Europa'],'05-15':['Dia Internacional da Família'],'05-18':['Dia Internacional dos Museus'],'05-22':['Dia Internacional da Diversidade Biológica'],
-  '06-01':['Dia Mundial da Criança'],'06-05':['Dia Mundial do Ambiente'],'06-08':['Dia Mundial dos Oceanos'],'06-10':['Dia de Portugal, de Camões e das Comunidades Portuguesas'],'06-13':['Nasce Fernando Pessoa (1888)'],'06-20':['Dia Mundial do Refugiado'],
-  '08-09':['Nasce Jean Piaget (1896)'],'08-12':['Dia Internacional da Juventude'],'08-31':['Nasce Maria Montessori (1870)'],
-  '09-08':['Dia Internacional da Literacia'],'09-19':['Nasce Paulo Freire (1921)'],'09-21':['Dia Internacional da Paz'],'09-26':['Dia Europeu das Línguas'],'09-27':['Dia Mundial do Turismo'],
-  '10-01':['Dia Mundial da Música','Dia Internacional das Pessoas Idosas'],'10-04':['Dia Mundial do Animal'],'10-05':['Dia Mundial do Professor','Implantação da República (1910)'],'10-16':['Dia Mundial da Alimentação'],'10-20':['Nasce John Dewey (1859)'],'10-24':['Dia das Nações Unidas'],'10-31':['Halloween'],
-  '11-01':['Dia de Todos os Santos'],'11-10':['Dia Mundial da Ciência pela Paz e pelo Desenvolvimento'],'11-11':['Dia de São Martinho'],'11-16':['Dia Internacional da Tolerância','Dia Nacional do Mar'],'11-17':['Nasce Lev Vygotsky (1896)'],'11-20':['Dia Universal dos Direitos da Criança'],'11-25':['Dia Internacional para a Eliminação da Violência contra as Mulheres'],
-  '12-01':['Restauração da Independência (1640)'],'12-03':['Dia Internacional das Pessoas com Deficiência'],'12-08':['Dia da Imaculada Conceição'],'12-10':['Dia dos Direitos Humanos'],'12-25':['Natal']};
-const CITAS=[['Ensinar não é transferir conhecimento, mas criar as possibilidades para a sua própria produção ou a sua construção.','Paulo Freire','Pedagogia da Autonomia'],
-  ['Ninguém educa ninguém, ninguém se educa a si mesmo: os homens educam-se entre si, mediatizados pelo mundo.','Paulo Freire','Pedagogia do Oprimido'],
-  ['O maior sinal de sucesso de um professor é poder dizer: as crianças estão agora a trabalhar como se eu não existisse.','Maria Montessori','A Mente Absorvente'],
-  ['A educação é um processo de vida e não uma preparação para a vida futura.','John Dewey','O Meu Credo Pedagógico'],
-  ['O que a criança consegue fazer hoje em colaboração, conseguirá fazer sozinha amanhã.','Lev Vygotsky','Pensamento e Linguagem'],
-  ['Ensinar tudo a todos.','João Amós Coménio','Didática Magna'],
-  ['Começai por estudar os vossos alunos, porque decerto não os conheceis.','Jean-Jacques Rousseau','Emílio'],
-  ['A única pessoa educada é aquela que aprendeu a aprender e a mudar.','Carl Rogers','Liberdade para Aprender'],
-  ['A mente não é um vaso para encher, mas lenha que basta acender.','Plutarco','Sobre a Arte de Ouvir'],
-  ['Uma criança, um professor, uma caneta e um livro podem mudar o mundo.','Malala Yousafzai','Discurso na ONU, 2013'],
-  ['Não se pode obrigar a beber um cavalo que não tem sede.','Célestin Freinet','Os Ditos de Mathieu'],
-  ['A educação é a arma mais poderosa que podemos usar para mudar o mundo.','Nelson Mandela','2003']];
-function efemHoje(){const d=new Date();const k=String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(EFEM[k])return {hoje:true,L:EFEM[k]};
-  for(let i=1;i<=40;i++){const x=new Date(d);x.setDate(d.getDate()+i);const kk=String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');if(EFEM[kk])return {hoje:false,em:i,dia:x,L:EFEM[kk]}}return null}
-function pinExtras(){const P=document.querySelector('#login.pinmode .pinside');if(!P||P.querySelector('.psx'))return;const e=efemHoje();let ci=Math.floor(Math.random()*CITAS.length);
-  P.insertAdjacentHTML('beforeend',`<div class="psx">${e?`<div class="psef"><span class="psl">${e.hoje?'Hoje':e.em===1?'Amanhã':'Daqui a '+e.em+' dias · '+e.dia.toLocaleDateString('pt-PT',{day:'numeric',month:'long'})}</span>${e.L.map(x=>`<b>${esc(x)}</b>`).join('')}</div>`:''}<figure class="psq"><blockquote></blockquote><figcaption></figcaption><button type="button" class="psqn" aria-label="Outra citação" title="Outra citação">↻</button></figure></div>`);
-  const q=P.querySelector('.psq');const pinta=()=>{const c=CITAS[ci];q.querySelector('blockquote').textContent='«'+c[0]+'»';q.querySelector('figcaption').innerHTML=`<b>${esc(c[1])}</b>${c[2]?' · '+esc(c[2]):''}`;q.classList.remove('in');void q.offsetWidth;q.classList.add('in')};pinta();
-  q.querySelector('.psqn').onclick=e=>{e.stopPropagation();ci=(ci+1+Math.floor(Math.random()*(CITAS.length-1)))%CITAS.length;pinta()};P.removeAttribute('aria-hidden')}
-{const _pl=pinLado;pinLado=function(){const r=_pl.apply(this,arguments);try{pinExtras()}catch(e){console.warn(e)}return r}}
-setInterval(()=>{if(document.querySelector('#login.pinmode .pinside:not(:has(.psx))'))try{pinExtras()}catch(_){}},800);
 

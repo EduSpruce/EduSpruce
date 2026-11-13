@@ -50,6 +50,7 @@
 50-bloco-sn-on.js
 51-sorteio-equitativo-grupos-automaticos-alerta-pre.js
 52-analise-de-resultados-dificuldades-persistentes-.js
-53-msai-catalogo-como-no-sge-data.js
-54-pautas-oficiais-profij-fpct-e-classificacao.js
-55-fecho.html
+53-sprucenote-e-jornalnote-todos-os-elementos.js
+54-perfil-onde-estou-e-como-avancar.js
+55-bloco-pin-ok.js
+56-fecho.html
