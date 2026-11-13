@@ -191,7 +191,7 @@ function alinharBar(){const b=$('#bar'),v=$('#view');if(!b||!v)return;if(!docume
   if(!isFinite(L))return;const pl=Math.max(16,Math.round(L-br.left)),pr=Math.max(16,Math.round(br.right-R));if(pl+pr>br.width*.6)return;
   /* tudo na mesma linha sempre que possível: só aplica a margem que não faz a barra quebrar */
   b.style.paddingLeft=b.style.paddingRight='16px';try{cabecalho()}catch(_){}const h0=b.offsetHeight,a0=cabecalho.aperto||0;let lo=0,hi=1;const ap=f=>{b.style.paddingLeft=Math.max(16,Math.round(pl*f))+'px';b.style.paddingRight=Math.max(16,Math.round(pr*f))+'px';try{cabecalho()}catch(_){}};const bom=()=>b.offsetHeight<=h0+1&&(cabecalho.aperto||0)<=a0;
-  ap(1);if(bom())return;for(let i=0;i<7;i++){const m=(lo+hi)/2;ap(m);if(bom())lo=m;else hi=m}ap(lo)}
+  ap(1);if(bom())return;for(let i=0;i<4;i++){const m=(lo+hi)/2;ap(m);if(bom())lo=m;else hi=m}ap(lo)}
 {const _gAB=go;go=function(){const r=_gAB.apply(this,arguments);requestAnimationFrame(()=>requestAnimationFrame(alinharBar));setTimeout(alinharBar,400);return r}}
 addEventListener('resize',()=>{clearTimeout(alinharBar._t);alinharBar._t=setTimeout(alinharBar,120)});
 

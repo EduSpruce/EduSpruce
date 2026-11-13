@@ -28,14 +28,14 @@ async function aaQrLib(){if(window.qrcode)return;await new Promise((ok,ko)=>{con
 function aaQR(txt){const q=window.qrcode(0,'M');q.addData(txt);q.make();const n=q.getModuleCount(),m=2;let d='';for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(q.isDark(y,x))d+=`M${x+m} ${y+m}h1v1h-1z`;
   return `<svg viewBox="0 0 ${n+2*m} ${n+2*m}" role="img" aria-label="QR code da autoavaliação" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#000"/></svg>`}
 /* abrir uma sessão */
-async function aaAbrir(t,p,q,min){for(const s0 of [...aaSess(t)]){try{await aaFechar(t,s0)}catch(_){}}const code=aaTurmaCod(t);aaAtivos(t).forEach(a=>aaChave(t,a.id));const {id,k}=await aaCh(code);const sec=isSec(t);
-  const D={v:2,pes:1,t:t.nome,d:t.disciplina,p,pn:perNome(p),W:perW(),esc:sec?'20':'5',prof:S.cfg.professor||'',q,dom:(t.dominios||[]).map(d=>({id:d.id,n:d.nome})),
+async function aaAbrir(t,p,q,min,pes){pes=pes===undefined?(t.autoavModo!=='geral'):!!pes;for(const s0 of [...aaSess(t)]){try{await aaFechar(t,s0)}catch(_){}}const code=aaTurmaCod(t);aaAtivos(t).forEach(a=>aaChave(t,a.id));const {id,k}=await aaCh(code);const sec=isSec(t);
+  const D={v:2,pes:pes?1:0,t:t.nome,d:t.disciplina,p,pn:perNome(p),W:perW(),esc:sec?'20':'5',prof:S.cfg.professor||'',q,dom:(t.dominios||[]).map(d=>({id:d.id,n:d.nome})),
     al:t.alunos.filter(a=>a.frequenta!==false).sort((a,b)=>(+a.num||0)-(+b.num||0)).map(a=>({id:a.id,n:a.num||'',nm:aaCurto(a.nome)}))};
   const expira=new Date(Date.now()+min*60000).toISOString();const sb=await aaSb();
   const linha={id,dados:await aaCifrar(D,k),expira};let r=await sb.from('eduspruce_autoav').insert(linha);
   if(r.error&&(r.error.code==='23505'||/duplicate key/i.test(r.error.message||''))){await sb.from('eduspruce_autoav').delete().eq('id',id);r=await sb.from('eduspruce_autoav').insert(linha)}
   if(r.error)throw new Error(aaErro(r.error));
-  const s={code,p,pes:1,q,criado:Date.now(),expira:Date.parse(expira),n:0,vistos:[],esc:{}};aaSess(t).push(s);save();try{audit('Avaliação','Autoavaliação pelo telemóvel aberta',t.nome+' · '+perNome(p))}catch(_){}return s}
+  const s={code,p,pes:pes?1:0,q,criado:Date.now(),expira:Date.parse(expira),n:0,vistos:[],esc:{}};aaSess(t).push(s);save();try{audit('Avaliação','Autoavaliação pelo telemóvel aberta',t.nome+' · '+perNome(p))}catch(_){}return s}
 /* trazer as respostas para o Perfil de Aprendizagem */
 async function aaImportar(t,s){const {id,k}=await aaCh(s.code);const sb=await aaSb();const r=await sb.from('eduspruce_autoav_resp').select('id,conteudo').eq('sessao',id).order('id');
   if(r.error)throw new Error(aaErro(r.error));const ult={},V={},rej=[];s.esc=s.esc||{};
@@ -98,6 +98,9 @@ async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma t
         <label class="chk"><input type="checkbox" id="aa-qr" checked> O que fizeram bem e o que podem melhorar</label>
         <label class="chk"><input type="checkbox" id="aa-qp" checked> Compromisso para o próximo ${esc(perW().toLowerCase())}</label>
         <label class="chk"><input type="checkbox" id="aa-qs" checked> Sugestões para as aulas <span class="mut">(aparecem aqui sem o nome do aluno)</span></label></fieldset>
+      <fieldset class="aaq"><legend>Como os alunos se identificam</legend>
+        <label class="chk"><input type="radio" name="aa-modo" value="pes" ${t.autoavModo!=='geral'?'checked':''}> <span><b>Com o código pessoal</b> do papel <span class="mut">— só o próprio aluno pode responder por si</span></span></label>
+        <label class="chk"><input type="radio" name="aa-modo" value="geral" ${t.autoavModo==='geral'?'checked':''}> <span><b>Só com o código da turma</b> <span class="mut">— cada aluno escolhe o seu número, sem código pessoal (confia que escolhe o certo)</span></span></label></fieldset>
       <p class="nverr" role="alert">${esc(msg||'')}</p>
       <div class="row aaa"><button type="button" class="btn" id="aa-c">Cancelar</button><button type="button" class="btn pri" id="aa-ok">${ic('sparkle',15)} Abrir a Autoavaliação</button></div></section>
       <details class="aabox"><summary><b>${ic('chat',15)} Sugestões dos alunos para as aulas</b> <span class="mut">(${(t.autoavSug||[]).length})</span></summary>${aaSugHtml(t,0)}</details>
@@ -109,10 +112,11 @@ async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma t
       for(const s0 of [...aaSess(t)]){try{await aaFechar(t,s0)}catch(_){}}delete t.autoavCod;t.autoavCh={};t.autoavImp=[];aaTurmaCod(t);save();try{audit('Avaliação','Códigos da autoavaliação renovados',t.nome)}catch(_){}toast('Códigos novos criados. Imprima os papéis novos.','ok');formulario()};
     d.querySelector('#aa-ok').onclick=async()=>{const b=d.querySelector('#aa-ok');b.disabled=true;b.innerHTML=ic('refresh',15)+' A abrir…';
       const q={dom:d.querySelector('#aa-qd').checked,nota:d.querySelector('#aa-qn').checked,forte:d.querySelector('#aa-qr').checked,melhorar:d.querySelector('#aa-qr').checked,plano:d.querySelector('#aa-qp').checked,sug:d.querySelector('#aa-qs').checked};
-      try{await aaQrLib();const s=await aaAbrir(t,+d.querySelector('#aa-p').value,q,+d.querySelector('#aa-m').value);aberta(s)}catch(e){formulario(aaErro(e))}}};
+      const md=(d.querySelector('input[name=aa-modo]:checked')||{}).value||'pes';t.autoavModo=md==='geral'?'geral':'pes';save();
+      try{await aaQrLib();const s=await aaAbrir(t,+d.querySelector('#aa-p').value,q,+d.querySelector('#aa-m').value,md!=='geral');aberta(s)}catch(e){formulario(aaErro(e))}}};
   const aberta=s=>{const url=aaUrl(s.code);
     d.innerHTML=`<div class="aaw aaon"><header class="aah"><h2 id="aa-t">${ic('users',18)} ${esc(t.nome)} · ${esc(perNome(s.p))} · <span class="aaab">aberta</span></h2><button type="button" class="btn ico" id="aa-x" aria-label="Fechar a janela (a autoavaliação continua aberta)">${ic('x',16)}</button></header>
-      <div class="aaqr"><div class="aaqi">${aaQR(url)}</div><div class="aaqt"><p class="aadica"><b>Os alunos apontam a câmara ao seu papel.</b></p><p class="mut">Quem não tiver o papel aponta a este código (ou abre <b>${esc(url.replace(/#.*$/,'').replace(/^https?:\/\//,''))}</b> e escreve o código da turma), escolhe o número e escreve o seu código pessoal.</p><p class="aacod" aria-label="Código da turma ${esc(s.code.split('').join(' '))}">${esc(aaFmt(s.code))}</p>
+      <div class="aaqr"><div class="aaqi">${aaQR(url)}</div><div class="aaqt">${s.pes?`<p class="aadica"><b>Os alunos apontam a câmara ao seu papel.</b></p><p class="mut">Quem não tiver o papel aponta a este código (ou abre <b>${esc(url.replace(/#.*$/,'').replace(/^https?:\/\//,''))}</b> e escreve o código da turma), escolhe o número e escreve o seu código pessoal.</p>`:`<p class="aadica"><b>Os alunos apontam a câmara a este código.</b></p><p class="mut">Ou abrem <b>${esc(url.replace(/#.*$/,'').replace(/^https?:\/\//,''))}</b> e escrevem o código da turma. Depois escolhem o seu número — <b>sem código pessoal</b>. Quem tiver o papel também pode usá-lo.</p>`}<p class="aamodo"><span class="tag ${s.pes?'':'ok'}">${s.pes?'Com código pessoal':'Só com o código da turma'}</span> <button type="button" class="btn sm" id="aa-modo">${s.pes?'Deixar responder sem código pessoal':'Voltar a exigir o código pessoal'}</button></p><p class="aacod" aria-label="Código da turma ${esc(s.code.split('').join(' '))}">${esc(aaFmt(s.code))}</p>
         <p class="aaest"><b id="aa-n">0</b> de ${ativos.length} responderam · <span id="aa-exp"></span></p></div></div>
       <div class="aavis" id="aa-vis"></div><div id="aa-av"></div>
       ${s.q&&s.q.sug===false?'':`<details class="aabox" id="aa-sugd"><summary><b>${ic('chat',15)} Sugestões para as aulas</b> <span class="mut" id="aa-sugn"></span></summary><div id="aa-sug"></div></details>`}
@@ -131,7 +135,9 @@ async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma t
     atual();clearInterval(tm);tm=setInterval(puxar,4000);puxar();
     d.querySelector('#aa-x').onclick=fim;
     d.querySelector('#aa-fs').onclick=()=>{d.classList.toggle('aafs');const w=d.querySelector('.aaw');try{if(!document.fullscreenElement&&w.requestFullscreen)w.requestFullscreen();else if(document.fullscreenElement)document.exitFullscreen()}catch(_){}};
-    d.querySelector('#aa-cp').onclick=async()=>{try{await navigator.clipboard.writeText(url+'\nCódigo da turma: '+aaFmt(s.code));toast('Link copiado (cada aluno precisa também do seu código pessoal)','ok')}catch(_){prompt('Copie:',url)}};
+    d.querySelector('#aa-cp').onclick=async()=>{try{await navigator.clipboard.writeText(url+'\nCódigo da turma: '+aaFmt(s.code));toast(s.pes?'Link copiado (cada aluno precisa também do seu código pessoal)':'Link copiado (os alunos só precisam de escolher o número)','ok')}catch(_){prompt('Copie:',url)}};
+    {const bm=d.querySelector('#aa-modo');if(bm)bm.onclick=async()=>{const novo=!s.pes;if(!novo&&!confirm('Deixar os alunos responderem só com o código da turma?\n\nCada aluno escolhe o seu número sem código pessoal: confia que escolhe o certo.'))return;
+      bm.disabled=true;bm.textContent='A mudar…';try{if(tm){clearInterval(tm);tm=0}const min=Math.max(5,Math.ceil((s.expira-Date.now())/60000));t.autoavModo=novo?'pes':'geral';const s2=await aaAbrir(t,s.p,s.q,min,novo);toast(novo?'Volta a ser preciso o código pessoal':'Agora basta o código da turma','ok');aberta(s2)}catch(e){bm.disabled=false;toast(aaErro(e),'erro')}}}
     d.querySelector('#aa-mais').onclick=async()=>{try{await aaMais(t,s,30);atual();if(!tm)tm=setInterval(puxar,4000);toast('Mais 30 minutos','ok')}catch(e){toast(aaErro(e),'erro')}};
     d.querySelector('#aa-fim').onclick=async()=>{const b=d.querySelector('#aa-fim');b.disabled=true;try{await aaFechar(t,s);toast('Autoavaliação fechada: '+(s.n||0)+' resposta(s) guardada(s) no Perfil de Aprendizagem. Os papéis continuam a servir na próxima.','ok');fim()}catch(e){b.disabled=false;toast(aaErro(e),'erro')}}};
   const ab=aaSess(t).find(s=>Date.now()<s.expira);try{d.showModal()}catch(_){d.setAttribute('open','')}
@@ -150,7 +156,7 @@ dialog.aadlg{border:0;border-radius:22px;padding:0;width:min(760px,96vw);max-hei
 .aaw{padding:20px 22px;display:flex;flex-direction:column;gap:10px}.aah{display:flex;align-items:center;gap:10px}.aah h2{margin:0;flex:1;font-size:19px;display:flex;gap:8px;align-items:center;text-transform:none;color:var(--ink)}
 .aag{display:grid;grid-template-columns:1fr 1fr;gap:10px}.aag label{display:block;font-size:13px;color:var(--mut);margin-bottom:4px}.aag select{width:100%}
 .aaq{border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:grid;gap:6px}.aaq legend{font-size:13px;color:var(--mut);padding:0 4px}
-.aaa{gap:8px;flex-wrap:wrap}.aaa .btn{min-height:44px}
+.aaa{gap:8px;flex-wrap:wrap}.aamodo{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 0}.aaa .btn{min-height:44px}
 .aaqr{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:22px;align-items:center}.aaqi{background:#fff;border-radius:16px;padding:8px;border:1px solid var(--line)}.aaqi svg{display:block;width:100%;height:auto}
 .aaqt p{margin:0 0 6px}.aaurl{font-weight:700;font-size:18px;word-break:break-all}.aacod{font:800 clamp(30px,6vw,52px)/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;color:var(--acc);margin:4px 0 10px!important}
 .aaest{font-size:15px}.aaest b{font-size:20px}

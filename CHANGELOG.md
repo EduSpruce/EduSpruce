@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.990
+- Calendário: correção das cores dos dias
+- Separadores alinhados
+- Desempenho: contraste em lotes, cabeçalho e animações
+- Autoavaliação: modo geral sem código pessoal
+- Arena: 8 modos novos e 24 Bichos (precisa do SQL 0014)
+- Anular com limite de memória
+
 ## 0.989
 - Contactos estilo macOS (listas, cartão, vCard, duplicados)
 - Sorteio em ecrã inteiro no tema SGE

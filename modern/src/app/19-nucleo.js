@@ -141,7 +141,7 @@ let saveT;function save(){if(window.__ES_OFF)return;clearTimeout(saveT);estadoGu
 /* guardar: localStorage + IndexedDB (cópia principal para turmas grandes), histórico para Anular e cópia de recuperação diária */
 const HIST=[];let _ultimoJ=null,_semHist=false;
 function saveNow(){clearTimeout(saveT);if(window.__ES_OFF){try{estadoGuardar('ok')}catch(_){}return}let j;try{arrumarFotos();S._ts=Date.now();j=JSON.stringify(S)}catch(e){return}
-  if(_ultimoJ!=null&&!_semHist){const a=_ultimoJ.replace(/"_ts":\d+,?/,''),b=j.replace(/"_ts":\d+,?/,'');if(a!==b){const _n=Date.now();S._mod=_n;j=/"_mod":\d+/.test(j)?j.replace(/"_mod":\d+/,'"_mod":'+_n):j.replace(/"_ts":/,'"_mod":'+_n+',"_ts":');HIST.push(_ultimoJ);if(HIST.length>40)HIST.shift();atualizarAnular()}}
+  if(_ultimoJ!=null&&!_semHist){const a=_ultimoJ.replace(/"_ts":\d+,?/,''),b=j.replace(/"_ts":\d+,?/,'');if(a!==b){const _n=Date.now();S._mod=_n;j=/"_mod":\d+/.test(j)?j.replace(/"_mod":\d+/,'"_mod":'+_n):j.replace(/"_ts":/,'"_mod":'+_n+',"_ts":');HIST.push(_ultimoJ);if(HIST.length>40)HIST.shift();/* dados muito grandes: menos cópias para Anular (no máximo ~80 MB em memória) */{let tot=0;for(let i=HIST.length-1;i>=0;i--){tot+=HIST[i].length;if(tot>8e7&&i<HIST.length-1){HIST.splice(0,i+1);break}}}atualizarAnular()}}
   _ultimoJ=j;_semHist=false;idbEstado(j);
   try{localStorage.setItem(KEY,j);const hj=isoData(new Date());if(localStorage.getItem(KEY+'.bakd')!==hj){localStorage.setItem(KEY+'.bak',j);localStorage.setItem(KEY+'.bakd',hj)}
     if(j.length>4.2e6&&!saveNow.av){saveNow.av=1;toast('Atenção: o espaço do browser está quase cheio — os dados continuam guardados no IndexedDB; exporte uma cópia de segurança','aviso')}}

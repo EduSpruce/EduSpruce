@@ -151,6 +151,17 @@ function rcCorpo(a,n,AL){const L=rcLista(a,n,AL);const F=UI.rcF=UI.rcF||{m:'',al
     $('#rc-csv').onclick=()=>{const q_=v_=>'"'+String(v_==null?'':v_).replace(/"/g,'""')+'"';const rows=[['Data','Hora','Meio','Sentido','Aluno','Com quem','Assunto','Síntese','Compromisso','Acompanhar em'],...LL().map(z=>[z.c.data,z.c.hora||'',z.c.meio||'',z.c.sentido==='rec'?'Recebido':'Efetuado',z.o?z.o.x.nome:(z.nomeAl||'Turma '+n),z.c.quem||'',z.c.assunto||'',z.c.sintese||'',z.c.compromisso||'',z.c.acomp||''])];
       const b_=new Blob(['﻿'+rows.map(r_=>r_.map(q_).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'});const u=URL.createObjectURL(b_);const l=document.createElement('a');l.href=u;l.download='Registo de contactos '+n.replace(/[\\/:*?"<>|]/g,'')+'.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);audit('Direção de Turma','Exportação do registo de contactos',n)}}}catch(e){console.warn(e)}return r};if(go._f)go._f.direcao=vDirecao}
 {const _hRc=historicoDT;historicoDT=function(a,n,AL){const H=_hRc.apply(this,arguments)||[];try{const D=dtDados(a,n);(D.contGerais||[]).forEach(c=>H.push({data:c.data,tipo:'Contacto ('+(c.meio||'')+')',desc:'Turma · '+(c.assunto||c.sintese||'')}));H.sort((x,y)=>String(y.data).localeCompare(String(x.data)))}catch(_){}return H}}
+/*V0990-INI*/
+/* ===================== v0.990 · separadores do topo alinhados com o conteúdo que vem por baixo (ecrãs largos) ===================== */
+function alinharTabsTopo(){const v=document.getElementById('view');if(!v)return;const t=v.querySelector(':scope>.tabs,:scope>.deftabs');if(!t)return;t.style.removeProperty('margin-left');
+  const n=t.nextElementSibling;if(!n||!n.matches('.vlay,.card,.kpis,.mtlay,.inlay,.anv,.cmw'))return;const vr=v.getBoundingClientRect(),nr=n.getBoundingClientRect();if(!nr.width)return;
+  const d=nr.left-vr.left-(parseFloat(getComputedStyle(v).paddingLeft)||0);t.style.setProperty('margin-left',Math.max(0,Math.round(d))+'px','important')}
+{let _at=0;const q=()=>{cancelAnimationFrame(_at);_at=requestAnimationFrame(()=>{try{alinharTabsTopo()}catch(_){}})};const v=document.getElementById('view');if(v)new MutationObserver(q).observe(v,{childList:true});addEventListener('resize',q)}
+/* v0.990 · desempenho: o alinhamento do cabeçalho junta as chamadas repetidas num só cálculo e não se repete se nada mudou */
+{const assin=()=>{const b=document.getElementById('bar');if(!b)return '';return b.clientWidth+'|'+b.textContent.length+'|'+b.querySelectorAll('button:not([hidden])').length+'|'+document.body.classList.contains('dev-pc')};
+  const _alb=alinharBar;let ka='',fila=0;const kAl=()=>{const v=document.getElementById('view');const f=v&&v.firstElementChild;return VIEW+'|'+(v?v.clientWidth:0)+'|'+(v?v.children.length:0)+'|'+(f?f.className:'')+'|'+assin()};
+  alinharBar=function(){if(fila)return;fila=requestAnimationFrame(()=>{fila=0;const k=kAl();if(k===ka)return;try{_alb()}catch(e){console.warn(e)}ka=kAl()})}}
+/*V0990-FIM*/
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
 /* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
