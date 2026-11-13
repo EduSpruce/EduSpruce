@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.010
+- Planeamento Anual com casas que crescem com o ecrã
+- Fotografias dos formandos nas listas da coordenação PROFIJ
+
 ## 1.009
 - Coord. PROFIJ: sem separador repetido na Legislação
 

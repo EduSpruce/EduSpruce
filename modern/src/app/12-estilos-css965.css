@@ -475,4 +475,6 @@ html body .cpm-lin{position:relative}html body .cpm-assimg{position:absolute;lef
 html body #view#view .tabs.cptabs{justify-content:center!important}
 @media (max-width:700px){html body #view#view .tabs.cptabs{justify-content:flex-start!important}}
 html body #view#view .tabs.cptabs[hidden]{display:none!important}
+html body .cpfo{display:inline-flex;align-items:center;gap:9px;min-width:0}html body .cpfo>.ava,html body .cpfo>img{flex:none}
+html body table.cpm-cal thead th{font-size:clamp(8px,calc(var(--cs,24px)*.4),13px)!important;padding:2px 0!important;letter-spacing:-.02em}
 /*V0996-FIM*/
