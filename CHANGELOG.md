@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.993
+- Oral: indicador do colega corrigido, pares ligados ao colega, ordem A→B
+
 ## 0.992
 - Produção Oral: organização individual/pares/grupos, formação equilibrada pela PO e guiões A/B
 
