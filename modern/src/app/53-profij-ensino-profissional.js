@@ -154,7 +154,7 @@ function pfjLigarSiglas(a,nome,lista){const h=horarioDe(a,nome);if(!h)return;con
 function cpGrupos(){return [
   {k:'cria',n:'Criação do Curso',d:'no início: matriz, equipa, horário e planeamento',i:'layers',t:[['turmas','users','Turmas e Formandos','Turmas'],['matriz','grid','Matriz Curricular','Matriz'],['equipa','users','Equipa Pedagógica e Distribuição de Serviço','Equipa'],['plano','calendar','Planeamento Anual','Planeamento']]},
   {k:'dia',n:'Dia a Dia',d:'pontos de situação, horários semanais, recuperações',i:'calendar',t:[['painel','chart','Painel','Painel'],['pontos','flag','Pontos de Situação','Pontos'],['dist','flow','Horários Semanais e Cedências','Horários'],['recup','refresh','Recuperação das Aprendizagens e da Assiduidade','Recuperações'],['cc','meet','Conselho dos Cursos','Conselho']]},
-  {k:'aval',n:'Avaliação e Conclusão',d:'FPCT, PAF, PEA, médias finais e pautas',i:'award',t:[['fpct','building','Formação Prática em Contexto de Trabalho (FPCT)','FPCT'],['paf','clipboard','Prova de Avaliação Final (PAF)','PAF'],['pea','clipboard','Prova Especial de Avaliação (PEA)','PEA'],['pautas','award','Médias Finais e Pautas','Pautas']]},
+  {k:'aval',n:'Avaliação e Conclusão',d:'FPCT, PAF, PEA, classificação final e pautas',i:'award',t:[['fpct','building','Formação Prática em Contexto de Trabalho (FPCT)','FPCT'],['paf','clipboard','Prova de Avaliação Final (PAF)','PAF'],['pea','clipboard','Prova Especial de Avaliação (PEA)','PEA'],['pautas','award','Classificação Final de Curso (Médias Finais)','Classificação Final'],['oficiais','file','Pautas Oficiais (Word e PDF)','Pautas Oficiais']]},
   {k:'leg',n:'Legislação',d:'portarias e regulamentos',i:'book',t:[['leg','book','Legislação','Legislação']]}]}
 function cpGruposHTML(G,g){return `<nav class="cpgs noprint" aria-label="Fases do trabalho">${G.map((x,i)=>`<button type="button" data-cpg="${x.k}" class="cpg ${x===g?'on':''} ${x.k==='leg'?'cpg-l':''}" aria-current="${x===g?'step':'false'}">${x.k==='leg'?'':`<span class="cpg-n">${i+1}</span>`}<span class="cpg-t">${ic(x.i,16)} <b>${x.n}</b><small>${x.d}</small></span></button>`).join('')}</nav>`}
 /* resumo das recuperações (PROFIJ) de todas as turmas: abre a turma para trabalhar */
@@ -166,6 +166,43 @@ function cpRecupHTML(a){const T=(a?a.turmas:[]).filter(t=>ofertaDe(t)==='profij'
   return `<section class="card"><h2 style="margin:0 0 4px">${ic('refresh',18)} Recuperação das Aprendizagens e da Assiduidade</h2><p class="hint" style="margin:0 0 10px">Plano de Recuperação da Assiduidade e Plano de Recuperação das Aprendizagens de cada turma PROFIJ (o MRA é só do ensino profissional). Os limites de assiduidade são os aprovados pelo conselho pedagógico.</p>
     <div class="tblw"><table class="lst"><thead><tr><th>Turma · disciplina</th><th class="n">Abaixo do limite</th><th class="n">Planos de assiduidade</th><th class="n">Com negativa</th><th class="n">Planos de aprendizagens</th><th class="n">Não cumpridos</th><th></th></tr></thead><tbody>${lin}</tbody></table></div></section>`}
 function cpRecupBind(v){v.querySelectorAll('[data-cprt]').forEach(b=>b.onclick=()=>{S.turmaAtiva=b.dataset.cprt;save();go('precup')})}
+
+/* ===================== v1.003 · Pautas Oficiais = só os documentos (a avaliação faz-se na FPCT e na Classificação Final de Curso) ===================== */
+function ptDocsPinta(el,cl,C,P,L,pinta){const fN=(v,d)=>v==null?'—':ptN(v,d);const nF=L.filter(x=>x.fin!=null).length,nC=L.filter(x=>x.cfc!=null).length,n=L.length;
+  const doc=(t,tit,sub,ok)=>`<div class="ptdoc ${ok?'':'inc'}"><div><b>${tit}</b><small>${sub}</small></div><div class="row" style="gap:6px"><button type="button" class="btn sm pri" data-ptx="${t}|w">${ic('file',13)} Word</button><button type="button" class="btn sm" data-ptx="${t}|p">${ic('printer',13)} PDF</button></div></div>`;
+  el.classList.remove('pt-in');
+  el.innerHTML=`<div class="ptbar"><select id="pt-cl" aria-label="Turma">${C.map(c=>`<option ${c.nome===cl.nome?'selected':''}>${esc(c.nome)}</option>`).join('')}</select><b class="pt-tt">Pautas Oficiais · ${esc(cl.nome)}</b><span class="sp1"></span></div>
+    <p class="hint" style="margin:6px 0 10px">Os documentos finais, com a composição dos modelos da escola. As notas vêm da <button type="button" class="lnk" data-ptir="fpct">avaliação da FPCT</button> e da <button type="button" class="lnk" data-ptir="pautas">Classificação Final de Curso</button>.</p>
+    <div class="ptdocs"><h3>${ic('building',15)} Formação Prática em Contexto de Trabalho <span class="tag ${nF===n&&n?'ok':'w'}">${nF}/${n} avaliados</span></h3>${doc('fpctF','Pauta Final','N.º, BI/CC, nome e nota',nF===n)}${doc('fpctD','Pauta Detalhada','Relatório, avaliação da entidade, nota e nota final',nF===n)}
+      <h3>${ic('award',15)} Classificação Final de Curso <span class="tag ${nC===n&&n?'ok':'w'}">${nC}/${n} com CFC</span></h3>${doc('cfcF','Pauta Final','N.º, BI/CC, nome e nota',nC===n)}${doc('cfcD','Pauta Detalhada','CFA1, CFA2, CFA3, CPAF e nota final, com as fórmulas',nC===n)}</div>
+    <div class="tblw" style="margin-top:12px"><table class="lst"><thead><tr><th>N.º</th><th style="text-align:left">Nome</th><th>FPCT</th><th>CFA1</th><th>CFA2</th><th>CFA3</th><th>CPAF</th><th>CFC</th></tr></thead><tbody>${L.map(x=>`<tr><td>${esc(x.proc)}</td><td style="text-align:left">${esc(x.nome)}</td><td>${x.fin==null?'—':x.fin}</td><td>${fN(x.cfa[1].cfa)}</td><td>${fN(x.cfa[2].cfa)}</td><td>${fN(x.cfa[3].cfa)}</td><td>${fN(x.cpaf)}</td><td><b>${x.cfc==null?'—':x.cfc}</b></td></tr>`).join('')}</tbody></table></div>
+    <details class="ptcfg"><summary>${ic('sliders',14)} Cabeçalho e assinatura</summary><div class="ptg">
+      <label>Entidade<input data-ptc="sec" value="${esc(P.sec)}"></label><label>Ano letivo<input data-ptc="ano" value="${esc(P.ano)}"></label>
+      <label>Curso (FPCT)<input data-ptc="curso" value="${esc(P.curso)}"></label><label>Curso (Classificação Final)<input data-ptc="cursoCF" value="${esc(P.cursoCF)}"></label>
+      <label class="w2">Legislação<input data-ptc="port" value="${esc(P.port)}"></label><label>Localidade<input data-ptc="local" value="${esc(P.local)}"></label><label>Data<input type="date" data-ptc="data" value="${esc(P.data)}"></label>
+      <label>Assinatura<input data-ptc="assin" value="${esc(P.assin)}"></label><label>Ano do curso desta turma<select data-ptc="anoC">${[1,2,3].map(n=>`<option value="${n}" ${+P.anoC===n?'selected':''}>${n}.º ano</option>`).join('')}</select></label>
+      <div class="w2 ptlg"><span>Logótipos do cabeçalho: o da escola (Definições) à esquerda${(CP().c.ptLogos||[]).length?' e '+(CP().c.ptLogos.length)+' imagem(ns) do seu modelo à direita':''}.</span><label class="btn sm">${ic('upload',13)} Usar os logótipos do meu modelo Word<input type="file" id="pt-mod" accept=".docx" hidden></label>${(CP().c.ptLogos||[]).length?'<button type="button" class="btn sm" id="pt-modx">Retirar</button>':''}</div></div></details>`;
+  el.querySelector('#pt-cl').onchange=e=>{UI.ptCl=e.target.value;pinta()};
+  el.querySelectorAll('[data-ptc]').forEach(i=>i.onchange=()=>{P[i.dataset.ptc]=i.dataset.ptc==='anoC'?+i.value:i.value;save();pinta()});
+  el.querySelectorAll('[data-ptx]').forEach(b=>b.onclick=()=>{const [t,f_]=b.dataset.ptx.split('|');(f_==='w'?ptDocx:ptPdf)(cl,t).catch(e=>alert(e.message))});
+  el.querySelectorAll('[data-ptir]').forEach(b=>b.onclick=()=>{UI.cpTab=b.dataset.ptir;const x=document.querySelector('#ampv #amp-x');if(x)x.click();if(VIEW!=='cprofij')go('cprofij');else vCProfij()});
+  const md=el.querySelector('#pt-mod');if(md)md.onchange=async()=>{try{CP().c.ptLogos=await ptModeloLogos(md.files[0]);save();toast('Logótipos do modelo guardados','ok');pinta()}catch(e){toast(e.message,'erro')}};
+  const mx=el.querySelector('#pt-modx');if(mx)mx.onclick=()=>{CP().c.ptLogos=[];save();pinta()}}
+/* grelha de avaliação da FPCT (Excel da escola: folhas «Relatório» e «Final») → avaliação da FPCT da turma */
+async function ptImportarGrelha(cl,file){const F=await ptXlsxFolhas(file);const P=ptCfg(cl);
+  const shR=F.find(x=>/relat/i.test(x.nome))||F[0],shF=F.find(x=>/final/i.test(x.nome));const g=(sh,r)=>sh?(sh.C.get(r)||'').trim():'';
+  const col=s=>s.split('').reduce((n,ch)=>n*26+ch.charCodeAt(0)-64,0),ltr=n=>{let s='';while(n){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s};
+  const acha=(sh,re)=>{if(!sh)return null;for(const [k,v] of sh.C)if(re.test(v)){const m=k.match(/^([A-Z]+)(\d+)$/);return {c:col(m[1]),r:+m[2]}}return null};
+  const hN=acha(shR,/^nome$/i),hRel=acha(shR,/^relat[oó]rio$/i);if(!hN||!hRel)throw new Error('Não encontrei a grelha (colunas NOME e Relatório) neste ficheiro.');
+  let rc=hRel.r+1;while(rc<hRel.r+6&&!g(shR,ltr(hRel.c)+rc))rc++;const crit=[];for(let c=hRel.c;c<hRel.c+12;c++){const t=g(shR,ltr(c)+rc);if(!t)continue;if(/nota|classif/i.test(t))break;crit.push({c,n:t,m:+String(g(shR,ltr(c)+(rc+1))).replace(',','.')||20})}
+  if(crit.length)P.crit=crit.map(c=>({n:c.n,m:c.m}));
+  const ent={},bi={};if(shF){const fN=acha(shF,/^nome$/i),fE=acha(shF,/entidade/i),fR=acha(shF,/^relat[oó]rio$/i),fB=acha(shF,/^bi\/?cc$/i);
+    if(fR){const w=+String(g(shF,ltr(fR.c)+(fR.r+2))).replace(',','.');if(w>0&&w<1)P.pRel=Math.round(w*100)}
+    if(fN)for(let r=fN.r+1;r<fN.r+80;r++){const n=g(shF,ltr(fN.c)+r);if(!n)continue;if(fE){const v=g(shF,ltr(fE.c)+r);if(/^\d/.test(v))ent[normT(n)]=+v.replace(',','.')}if(fB)bi[normT(n)]=g(shF,ltr(fB.c)+r)}}
+  let n=0;for(let r=rc+2;r<rc+80;r++){const nome=g(shR,ltr(hN.c)+r);if(!nome||!/[a-zà-ÿ]{3}/i.test(nome))continue;
+    const al=cl.formandos.find(x=>normT(x.nome)===normT(nome));if(!al)continue;const f=ptFp(cl,al);const d=f.det=f.det||{};
+    d.rel=crit.map(c=>{const v=g(shR,ltr(c.c)+r);return /^\d/.test(v)?+v.replace(',','.'):null});if(ent[normT(nome)]!=null)d.ent=ent[normT(nome)];if(bi[normT(nome)]&&!d.cc)d.cc=bi[normT(nome)];ptGravarNota(cl,al);n++}
+  save();return n}
 
 /* ===================== v0.999 · Coord. PROFIJ › Classificações e Pautas =====================
    Histórico de classificações do SGE (Excel, uma folha por formando) → médias por componente e por ano,

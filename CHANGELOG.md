@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.003
+- Pautas Oficiais só com os documentos; avaliação da FPCT no separador FPCT; CFC em Avaliação e Conclusão
+
 ## 1.002
 - Coord. PROFIJ por fases: Criação do Curso / Dia a Dia / Avaliação e Conclusão
 - Equipa Pedagógica separada dos Horários Semanais; Pontos de Situação separados da Matriz
