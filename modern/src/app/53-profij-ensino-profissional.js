@@ -116,7 +116,20 @@ function cpmLerMatrizTxt(L){const T=L.join('\n');const g=re=>{const m=T.match(re
   return r}
 function cpmImportarMatrizPdf(nome){const inp=document.createElement('input');inp.type='file';inp.accept='.pdf,application/pdf';inp.onchange=async()=>{const f=inp.files[0];if(!f)return;
   try{toast('A ler a matriz…');const r=cpmLerMatrizTxt(await cpmLinhasPdf(f));if(!r.disc.length&&!r.ufcd.length)return toast('Não encontrei a matriz curricular neste PDF.','aviso');
-    const M=cpmM(nome);if(M.disc.length&&!confirm(`Importar a matriz de «${r.curso||f.name}»?\n\n${r.disc.length} disciplinas e ${r.ufcd.length} UFCD${r.data?' · ponto de situação de '+fmtIsoL(r.data):''}.\nAs disciplinas com o mesmo nome são atualizadas (mantêm as siglas do horário).`))return;
+    cpmMatrizPrev(nome,r,f.name)}
+  catch(e){console.warn(e);toast('Não foi possível ler o PDF: '+e.message,'erro')}};inp.click()}
+function cpmMatrizPrev(nome,r,fn){const M=cpmM(nome);const nn=n=>normT(n).replace(/\bi\b/g,'').replace(/\s+/g,' ');
+  const fora=M.disc.filter(d=>!r.disc.some(x=>nn(x.nome)===nn(d.nome))&&!r.ufcd.some(u=>u.cod===d.det||normT(u.nome)===normT(d.nome)));
+  const L=[...r.disc.map(x=>({...x,k:x.comp==='sociocultural'?'Sociocultural':'Científica'})),...r.ufcd.map(u=>({...u,nome:u.cod+' - '+u.nome,k:'UFCD'}))];
+  openDrawer('Importar Matriz · '+nome,`<div class="ed"><p style="margin-top:0"><b>${esc(r.curso||fn)}</b>${r.ref?' · referencial '+esc(r.ref):''}${r.ano?' · '+r.ano+'.º ano':''}${r.area?' · '+esc(r.area):''}${r.nivel?' · nível '+esc(r.nivel)+(r.tipo?' tipo '+r.tipo:''):''}</p>
+    <div class="cpm-tw"><table class="lst"><thead><tr><th></th><th>Disciplina / UFCD</th><th class="n">Horas</th><th class="n">Tempos</th><th class="n">Dadas</th><th>Professor(a)</th></tr></thead><tbody>${L.map((x,i)=>`<tr><td><small class="mut">${x.k}</small></td><td>${esc(x.nome)}</td><td class="n">${x.horas}</td><td class="n">${cpmAulas(x.horas)}</td><td class="n">${x.dadas}</td><td>${esc(x.prof||'—')}</td></tr>`).join('')}
+      <tr><td><small class="mut">FPCT</small></td><td>CPFCT</td><td class="n">${esc(r.fct||'—')}</td><td></td><td></td><td></td></tr></tbody></table></div>
+    <p class="hint">${L.length} linhas · ${L.reduce((s,x)=>s+x.horas,0)} h${r.data?' · as «dadas» entram como ponto de situação de '+fmtIsoL(r.data):''}.</p>
+    ${fora.length?`<label class="chk"><input type="checkbox" id="mi-sub" checked> <span>Retirar da matriz o que não está no PDF: ${fora.map(d=>esc(d.nome)).join(', ')}</span></label>`:''}
+    <label class="chk"><input type="checkbox" id="mi-pt" ${r.data?'checked':''} ${r.data?'':'disabled'}> <span>Criar o ponto de situação com as aulas dadas</span></label>
+    <div class="row" style="margin-top:12px"><span class="sp1"></span><button class="btn" id="mi-x">Cancelar</button><button class="btn pri" id="mi-ok">${ic('check',14)} Importar</button></div></div>`);
+  $('#mi-x').onclick=closeDrawer;$('#mi-ok').onclick=()=>{const sub=$('#mi-sub')&&$('#mi-sub').checked,pt=$('#mi-pt').checked;closeDrawer();cpmMatrizAplicar(nome,r,fn,{sub,pt,fora})}}
+function cpmMatrizAplicar(nome,r,fn,o){const M=cpmM(nome);const f={name:fn};{
     const igual=n=>M.disc.find(d=>normT(d.nome).replace(/\bi\b/g,'').replace(/\s+/g,' ')===normT(n).replace(/\bi\b/g,'').replace(/\s+/g,' '));const dadas={};
     r.disc.forEach(x=>{let d=igual(x.nome);if(!d){d={id:uid(),sig:[],aj:0,dadas:null,det:''};M.disc.push(d)}Object.assign(d,{nome:x.nome,comp:x.comp,horas:x.horas});if(x.prof)d.prof=x.prof;dadas[d.id]=x.dadas});
     r.ufcd.forEach(x=>{let d=M.disc.find(z=>z.comp==='tecnologica'&&(z.det===x.cod||normT(z.nome)===normT(x.nome)));if(!d){d={id:uid(),sig:[],aj:0,dadas:null};M.disc.push(d)}Object.assign(d,{nome:x.nome,comp:'tecnologica',horas:x.horas,det:x.cod});if(x.prof)d.prof=x.prof;dadas[d.id]=x.dadas});
@@ -124,11 +137,11 @@ function cpmImportarMatrizPdf(nome){const inp=document.createElement('input');in
     if(r.ufcd.length){const gen=M.disc.filter(d=>d.comp==='tecnologica'&&!d.det&&/^ufcd/i.test(d.nome));const sg=[...new Set(gen.flatMap(d=>d.sig||[]))];M.disc=M.disc.filter(d=>!gen.includes(d));M.disc.filter(d=>d.comp==='tecnologica'&&!(d.sig||[]).length).forEach(d=>d.sig=sg.slice())}
     pfjLigarSiglas(A(),nome,M.disc);
     Object.assign(M,{curso:r.curso||M.curso,area:r.area||M.area,nivel:r.nivel||M.nivel,cod:r.cod||M.cod,ref:r.ref||M.ref,anoCurso:r.ano?r.ano+'.º':M.anoCurso,tipoPfj:r.nivel==='IV'?'IV-4':r.tipo==='3'?'II-3':'II-2'});if(r.fct)M.fct.horas=r.fct;
-    if(r.data&&Object.keys(dadas).length){M.pontos=M.pontos||[];M.pontos=M.pontos.filter(p=>p.data!==r.data);M.pontos.push({id:uid(),data:r.data,dadas,obs:'Importado de '+f.name})}
+    if(o.sub&&o.fora&&o.fora.length){const keep=new Set(o.fora.map(d=>d.id));const gsig=[...new Set(o.fora.filter(d=>d.comp==='tecnologica').flatMap(d=>d.sig||[]))];M.disc=M.disc.filter(d=>!keep.has(d.id));if(gsig.length)M.disc.filter(d=>d.comp==='tecnologica'&&!(d.sig||[]).length).forEach(d=>d.sig=gsig.slice())}
+    if(o.pt&&r.data&&Object.keys(dadas).length){M.pontos=M.pontos||[];M.pontos=M.pontos.filter(p=>p.data!==r.data);M.pontos.push({id:uid(),data:r.data,dadas,obs:'Importado de '+f.name})}
     if(r.ref&&r.ufcd.length){const {c}=CP();c.refs=c.refs||{};const R=c.refs[r.ref]=c.refs[r.ref]||{curso:r.curso,area:r.area,tipo:M.tipoPfj,anos:{}};R.anos[r.ano||'1']=r.ufcd.map(u=>[u.cod,u.nome,u.horas])}
     const ord={sociocultural:0,cientifica:1,tecnologica:2};M.disc.sort((x,y)=>(ord[x.comp]-ord[y.comp])||(x.comp==='tecnologica'?0:0));
-    save();vCProfij();toast(`Matriz importada: ${r.disc.length} disciplinas, ${r.ufcd.length} UFCD${r.data?', ponto de situação de '+fmtIsoL(r.data):''}.`)}
-  catch(e){console.warn(e);toast('Não foi possível ler o PDF: '+e.message,'erro')}};inp.click()}
+    save();vCProfij();toast(`Matriz importada: ${r.disc.length} disciplinas, ${r.ufcd.length} UFCD${o.pt&&r.data?', ponto de situação de '+fmtIsoL(r.data):''}.`)}}
 /* siglas do horário da turma pelas legendas (usado na criação do curso e na importação da matriz) */
 function pfjLigarSiglas(a,nome,lista){const h=horarioDe(a,nome);if(!h)return;const leg=h.legenda||[];const sigs=[...new Set(h.aulas.map(x=>x.ab))];const nn=n=>normT(n).replace(/\bi\b/g,'').replace(/\s+/g,' ');
   sigs.forEach(sg=>{const l=leg.find(x=>normSig(x.ab)===normSig(sg))||{};const nm=l.nome&&normSig(l.nome)!==normSig(sg)?l.nome:cpmNomeSig(sg);
@@ -187,7 +200,7 @@ function pzCFC(p,fo){const L=[];for(let a=1;a<=p.anos;a++)L.push(pzAno(p,fo,a).C
 /* ---------- vista ---------- */
 function pzHTML(a){const P=PZS();const L=Object.values(P).sort((x,y)=>x.nome.localeCompare(y.nome,'pt',{numeric:true}));const p=P[UI.pzId]||L[0];if(p)UI.pzId=p.id;
   const sel=`<div class="row cpm-sel noprint" style="gap:8px;flex-wrap:wrap">${L.map(x=>`<button type="button" class="chip ${p&&x.id===p.id?'on':''}" data-pzid="${x.id}">${esc(x.nome)}</button>`).join('')}<button type="button" class="chip" id="pz-novo">${ic('plus',13)} Novo</button><button type="button" class="chip" id="pz-imp">${ic('upload',13)} Importar Histórico do SGE (Excel)</button></div>`;
-  if(!p)return sel+`<section class="card empty">${ic('award',28)}<br><b>Classificações e Pautas</b><br><span class="mut">Importe o «Histórico de classificações do aluno» exportado do SGE (Excel, uma folha por formando). A app calcula as médias por componente, a CFA de cada ano, a FPCT e a CFC, e faz as pautas.</span><br><br><button class="btn pri" id="pz-imp2">${ic('upload',14)} Importar Histórico (Excel)</button></section>`;
+  if(!p)return sel+`<section class="card empty">${ic('award',28)}<br><b>Classificações e Pautas</b><br><span class="mut">Importe o «Histórico de classificações do aluno» exportado do SGE (Excel, uma folha por formando). A app calcula as médias por componente, a CFA de cada ano, a FPCT e a CFC, e faz as pautas.</span><br><br><button class="btn pri" id="pz-imp2">${ic('upload',14)} Importar Histórico (Excel)</button> <button class="btn" id="pz-ifp0">${ic('upload',14)} Importar Grelha da FPCT</button></section>`;
   const W=p.pesos;const ft=PZ_COMP.filter(([k])=>+W[k]>0).map(([k])=>(+W[k]===1?'':W[k])+k).join('+');
   const cab=`<section class="card"><div class="pz-cab">
       <div class="pz-w2"><label>Curso (como na pauta)</label><input data-pzc="curso" value="${esc(p.curso)}" placeholder="ex.: Animador/a Sociocultural"></div>
@@ -216,7 +229,7 @@ function pzHTML(a){const P=PZS();const L=Object.values(P).sort((x,y)=>x.nome.loc
     <p class="hint">Cada componente é a média das classificações das suas disciplinas e UFCD desse ano (às décimas). Escreva «u)» ou «i)» para excluído / sem avaliação.</p></section>`;
   /* FPCT */
   const FC=p.fpct;const fp=`<section class="card"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('building',18)} Grelha de Avaliação da FPCT — ${p.anoAtual}.º ano</h2><span class="sp1"></span>
-      <label class="prl"><span>Relatório</span><input type="number" step="0.05" min="0" max="1" data-pzp="pRel" value="${FC.pRel}"></label><label class="prl"><span>Entidade</span><input type="number" step="0.05" min="0" max="1" data-pzp="pEnt" value="${FC.pEnt}"></label><button class="btn sm noprint" id="pz-crit">${ic('pencil',13)} Critérios do Relatório</button></div>
+      <label class="prl"><span>Relatório</span><input type="number" step="0.05" min="0" max="1" data-pzp="pRel" value="${FC.pRel}"></label><label class="prl"><span>Entidade</span><input type="number" step="0.05" min="0" max="1" data-pzp="pEnt" value="${FC.pEnt}"></label><button class="btn sm noprint" id="pz-crit">${ic('pencil',13)} Critérios do Relatório</button><button class="btn sm pri noprint" id="pz-ifp">${ic('upload',13)} Importar Grelha da FPCT (Excel)</button></div>
     <div class="cpm-tw"><table class="lst pz-g"><thead><tr><th>Formando</th>${FC.crit.map(c=>`<th class="n" title="${esc(c[0])}">${esc(c[0].split(' ').slice(0,2).join(' '))}<br><small>${c[1]}</small></th>`).join('')}<th class="n">Relatório</th><th class="n">Aval. Entidade</th><th class="n">Nota</th><th class="n">Nota Final</th></tr></thead><tbody>
     ${p.form.map(f=>{const x=FC.v[f.id]||{};const r=pzFpct(p,f);return `<tr><td>${esc(f.nome)}</td>${FC.crit.map((c,i)=>`<td class="n"><input class="pz-n" data-pzq="${f.id}|c${i}" value="${x['c'+i]==null?'':esc(String(x['c'+i]))}"></td>`).join('')}<td class="n">${pzF(r.rel,2)||'—'}</td><td class="n"><input class="pz-n" data-pzq="${f.id}|ent" value="${x.ent==null?'':esc(String(x.ent).replace('.',','))}"></td><td class="n">${pzF(r.nota,2)||'—'}</td><td class="n"><b>${r.fin==null?'—':r.fin}</b></td></tr>`}).join('')}</tbody></table></div>
     <p class="hint">Relatório = soma dos critérios ÷ ${(FC.crit.reduce((s,c)=>s+(+c[1]||0),0)/20)||10} (0–20). Nota = Relatório × ${FC.pRel} + Entidade × ${FC.pEnt}; a nota final (arredondada) entra na FP do ${p.anoAtual}.º ano.</p>
@@ -230,6 +243,7 @@ function pzHTML(a){const P=PZS();const L=Object.values(P).sort((x,y)=>x.nome.loc
 function pzBind(v,a){const P=PZS();const p=P[UI.pzId];const re=()=>manterPosicao(vCProfij);
   v.querySelectorAll('[data-pzid]').forEach(b=>b.onclick=()=>{UI.pzId=b.dataset.pzid;vCProfij()});
   [v.querySelector('#pz-imp'),v.querySelector('#pz-imp2'),v.querySelector('#pz-imp3')].forEach(b=>b&&(b.onclick=()=>pzImportar(b.id==='pz-imp3'?UI.pzId:null)));
+  const if0=v.querySelector('#pz-ifp0');if(if0)if0.onclick=()=>pzImportarFpct(null);
   const nv=v.querySelector('#pz-novo');if(nv)nv.onclick=()=>{const n=(prompt('Nome do curso/turma (ex.: ASC 3):')||'').trim();if(!n)return;const x=pzNovo(n);UI.pzId=x.id;save();vCProfij()};
   if(!p)return;
   v.querySelectorAll('[data-pzc]').forEach(i=>i.onchange=()=>{const k=i.dataset.pzc;let x=i.value;if(k==='anos'||k==='anoAtual')x=Math.min(3,Math.max(1,+x||1));p[k]=x;if(k==='tipo'){p._tipoMan=true;const A_={'II-2':2,'II-3':1,'IV-4':3}[x];p.anos=A_;p.anoAtual=Math.min(p.anoAtual,A_)}save();re()});
@@ -245,9 +259,10 @@ function pzBind(v,a){const P=PZS();const p=P[UI.pzId];const re=()=>manterPosicao
   v.querySelectorAll('[data-pzdc]').forEach(s=>s.onchange=()=>{const d=p.disc.find(x=>x.id===s.dataset.pzdc);if(d){d.comp=s.value;save();re()}});
   const val=x=>{x=String(x).trim();if(x==='')return null;if(/^\d+([.,]\d+)?$/.test(x))return +x.replace(',','.');return x};
   v.querySelectorAll('[data-pzn]').forEach(i=>i.onchange=()=>{const k=i.dataset.pzn;const x=val(i.value);if(x==null)delete p.notas[k];else p.notas[k]=x;save();re()});
-  v.querySelectorAll('[data-pzq]').forEach(i=>i.onchange=()=>{const [id,k]=i.dataset.pzq.split('|');const o=p.fpct.v[id]=p.fpct.v[id]||{};const x=val(i.value);if(x==null)delete o[k];else o[k]=x;save();re()});
+  v.querySelectorAll('[data-pzq]').forEach(i=>i.onchange=()=>{const [id,k]=i.dataset.pzq.split('|');const o=p.fpct.v[id]=p.fpct.v[id]||{};const x=val(i.value);if(x==null)delete o[k];else o[k]=x;pzFpctParaCoord(p);save();re()});
   v.querySelectorAll('[data-pzcp]').forEach(i=>i.onchange=()=>{const x=val(i.value);if(x==null)delete p.cpaf[i.dataset.pzcp];else p.cpaf[i.dataset.pzcp]=x;save();re()});
   const cr=v.querySelector('#pz-crit');if(cr)cr.onclick=()=>{const t=prompt('Critérios do relatório, um por linha: nome ; máximo\n(ex.: Análise Crítica ; 60)',p.fpct.crit.map(c=>c[0]+' ; '+c[1]).join(' | '));if(t==null)return;const L=t.split(/\||\n/).map(x=>x.split(';').map(y=>y.trim())).filter(x=>x[0]).map(x=>[x[0],+x[1]||20]);if(L.length){p.fpct.crit=L;save();re()}};
+  const ifp=v.querySelector('#pz-ifp');if(ifp)ifp.onclick=()=>pzImportarFpct(p.id);
   const wd=v.querySelector('#pz-word');if(wd)wd.onchange=()=>{UI.pzWord=wd.checked};
   v.querySelectorAll('[data-pzx]').forEach(b=>b.onclick=()=>pzExportar(p,b.dataset.pzx))}
 /* ---------- pautas (Word ou imprimir) ---------- */
@@ -274,6 +289,31 @@ function pzExportar(p,k){const F=p.form.slice().sort((x,y)=>x.nome.localeCompare
   if(k==='med'){const q=x=>{x=x==null?'':String(x);return /[;"\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x};const R=[['N.º','Nome',...Array.from({length:p.anos},(_,i)=>['FSC','FC','FT','FP','CFA'].map(c=>c+(i+1))).flat(),'CPAF','CFC']];
     F.forEach(f=>{const row=[f.num||'',f.nome];for(let a=1;a<=p.anos;a++){const r=pzAno(p,f,a);['FSC','FC','FT','FP','CFA'].forEach(c=>row.push(pzF(r[c],1)))}const c=pzCFC(p,f);row.push(pzF(c.cpaf),c.cfc??'');R.push(row)});
     download('medias-detalhadas-'+normSig(p.nome)+'.csv','﻿'+R.map(l=>l.map(q).join(';')).join('\n'),'text/csv')}}
+/* ---------- v1.000 · importar a «Grelha de Avaliação da FPCT» (Excel: folhas Relatório e Final) ---------- */
+async function pzImportarFpct(pid){const inp=document.createElement('input');inp.type='file';inp.accept='.xlsx';inp.onchange=async()=>{const f=inp.files[0];if(!f)return;
+  try{const F=await ptXlsxFolhas(f);const P=PZS();let p=pid&&P[pid];
+    const shR=F.find(x=>/relat/i.test(x.nome))||F[0],shF=F.find(x=>/final/i.test(x.nome));const g=(sh,r)=>sh?(sh.C.get(r)||'').trim():'';
+    const col=s=>s.split('').reduce((n,ch)=>n*26+ch.charCodeAt(0)-64,0),ltr=n=>{let s='';while(n){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s};
+    const acha=(sh,re)=>{for(const [k,v] of sh.C)if(re.test(v)){const m=k.match(/^([A-Z]+)(\d+)$/);return {c:col(m[1]),r:+m[2]}}return null};
+    const hN=acha(shR,/^nome$/i),hNum=acha(shR,/^n[uú]mero$|^n\.?º$/i),hRel=acha(shR,/^relat[oó]rio$/i);if(!hN||!hRel)return toast('Não encontrei a grelha (colunas NOME e Relatório) neste ficheiro.','aviso');
+    /* critérios: textos por baixo de «Relatório» até à coluna da nota; máximos na linha seguinte */
+    let rc=hRel.r+1;while(rc<hRel.r+6&&!g(shR,ltr(hRel.c)+rc))rc++;const crit=[];for(let c=hRel.c;c<hRel.c+12;c++){const t=g(shR,ltr(c)+rc);if(!t)continue;if(/nota|classif/i.test(t))break;const mx=+String(g(shR,ltr(c)+(rc+1))).replace(',','.')||0;crit.push({c,t,mx})}
+    const tit=[...shR.C.values()].find(v=>/^curso\s/i.test(v))||'';
+    if(!p){const gs=(tit.replace(/^curso\s*/i,'').split(/\s[-–]\s/)[0]||f.name).trim();p=Object.values(P).find(x=>normT(x.curso||x.nome)===normT(gs))||pzNovo((prompt('Nome deste curso/turma na app:',gs)||gs).trim());UI.pzId=p.id}
+    if(!p.curso&&tit)p.curso=tit.replace(/^curso\s*/i,'').split(/\s[-–]\s/)[0].trim();
+    if(crit.length)p.fpct.crit=crit.map(c=>[c.t,c.mx||20]);
+    /* pesos e avaliação da entidade (folha Final) */
+    let ent={},bi={};if(shF){const fN=acha(shF,/^nome$/i),fE=acha(shF,/entidade/i),fR=acha(shF,/^relat[oó]rio$/i),fB=acha(shF,/^bi\/?cc$/i);
+      if(fR){const w=+String(g(shF,ltr(fR.c)+(fR.r+2))).replace(',','.');if(w>0&&w<1)p.fpct.pRel=w}if(fE){const w=+String(g(shF,ltr(fE.c)+(fE.r+2))).replace(',','.');if(w>0&&w<1)p.fpct.pEnt=w}
+      if(fN)for(let r=fN.r+1;r<fN.r+80;r++){const n=g(shF,ltr(fN.c)+r);if(!n||/coordenador|^\w+,\s*\d/i.test(n))continue;if(fE){const v=g(shF,ltr(fE.c)+r);if(/^\d/.test(v))ent[normT(n)]=+v.replace(',','.')}if(fB)bi[normT(n)]=g(shF,ltr(fB.c)+r)}}
+    let n=0,novos=0;for(let r=rc+2;r<rc+80;r++){const nome=g(shR,ltr(hN.c)+r);if(!nome||!/[a-zà-ÿ]{3}/i.test(nome))continue;if(/coordenador/i.test(nome))break;
+      let fo=p.form.find(x=>normT(x.nome)===normT(nome));if(!fo){fo={id:uid(),nome,num:'',bi:''};p.form.push(fo);novos++}
+      const num=hNum?g(shR,ltr(hNum.c)+r):'';if(num&&!fo.num)fo.num=num;if(bi[normT(nome)]&&!fo.bi)fo.bi=bi[normT(nome)];
+      const o=p.fpct.v[fo.id]=p.fpct.v[fo.id]||{};crit.forEach((c,i)=>{const v=g(shR,ltr(c.c)+r);if(/^\d/.test(v))o['c'+i]=+v.replace(',','.')});if(ent[normT(nome)]!=null)o.ent=ent[normT(nome)];n++}
+    pzFpctParaCoord(p);save();UI.cpTab='pautas';vCProfij();toast(`Grelha da FPCT importada: ${n} formando(s)${novos?' ('+novos+' novo(s))':''}, ${crit.length} critério(s).`)}
+  catch(e){console.warn(e);toast('Não foi possível ler a grelha: '+e.message,'erro')}};inp.click()}
+/* a nota final da FPCT passa também para o separador FPCT da coordenação (formandos com o mesmo nome) */
+function pzFpctParaCoord(p){try{const {y,a}=CP();if(!a)return;cpClasses(a).forEach(cl=>cl.formandos.forEach(al=>{const fo=p.form.find(x=>normT(x.nome)===normT(al.nome));if(!fo)return;const r=pzFpct(p,fo);if(r.fin==null)return;const k=cl.nome+'|'+al.k;y.fpct[k]=Object.assign(y.fpct[k]||{},{nota:r.fin})}))}catch(e){console.warn(e)}}
 /*V0996-FIM*/
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}

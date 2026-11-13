@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.000
+- PROFIJ: pré-visualização ao importar a matriz em PDF
+- PROFIJ: importar a grelha de avaliação da FPCT (Excel)
+- PROFIJ: PAF e PEA em separadores próprios
+- Planeamento Anual responsivo
+
 ## 0.999
 - PROFIJ: importar matriz/ponto de situação em PDF (UFCD automáticas) e referenciais guardados
 - PROFIJ: Classificações e Pautas (histórico SGE, CFA, CFC, FPCT, pautas Word/PDF)

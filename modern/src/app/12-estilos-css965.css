@@ -392,4 +392,17 @@ html body #view .pz-n{width:56px!important;min-width:0!important;height:30px;pad
 html body table.pz-g select{min-width:70px}
 html body table.pz-g>tbody>tr>td{padding-top:3px;padding-bottom:3px}
 html body #view .prl input{width:64px!important}
+/* v1.000 · Planeamento Anual responsivo: a grelha ocupa a largura toda e as casas encolhem/crescem com o ecrã */
+html body .cpm-cw{width:100%}
+html body table.cpm-cal{width:100%;min-width:640px;table-layout:fixed;font-size:clamp(9.5px,calc(var(--cs,24px)*.42),17px)}
+html body table.cpm-cal thead th:first-child,html body table.cpm-cal tbody th{width:66px!important;min-width:66px!important;max-width:none!important}
+@media (min-width:1200px){html body table.cpm-cal thead th:first-child,html body table.cpm-cal tbody th{width:96px!important}}
+html body table.cpm-cal tbody th{font-size:clamp(11px,.95em,16px);overflow:hidden;text-overflow:ellipsis}
+html body table.cpm-cal thead th:nth-last-child(-n+2){width:44px}
+@media (min-width:1200px){html body table.cpm-cal thead th:nth-last-child(-n+2){width:60px}}
+html body table.cpm-cal td{width:auto!important;min-width:0!important;height:var(--cs,24px)!important;line-height:1}
+html body table.cpm-cal tbody td:nth-last-child(-n+2){font-size:.92em}
+html body #ampv .cpm-plano,html body .ampv .cpm-plano{max-width:none!important;width:100%!important;box-sizing:border-box}
+@media (max-width:700px){html body table.cpm-cal{min-width:600px;border-spacing:1px}html body .cpm-leg{font-size:12px;gap:6px 10px}}
+@media print{html body table.cpm-cal{min-width:0}}
 /*V0996-FIM*/
