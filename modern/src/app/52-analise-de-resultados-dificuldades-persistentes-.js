@@ -392,7 +392,7 @@ function cpdDoc(tit,corpo){const f=document.createElement('iframe');f.style.cssT
   const w=f.contentWindow;w.document.open();w.document.write(`<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><title>${esc(tit)}</title><style>${CPD_CSS}</style></head><body>${corpo}</body></html>`);w.document.close();
   setTimeout(()=>{try{w.focus();w.print()}catch(e){console.warn(e)}setTimeout(()=>f.remove(),60000)},300)}
 const cpdCab=(M,nome,t)=>`<h1>${esc(t)}</h1><p class="m">${esc(M.curso||'Curso PROFIJ')} · ${esc(nome)}${S.cfg.escola?' · '+esc(S.cfg.escola):''} · ${fmtIsoL(isoHoje())}</p>`;
-const cpdAss=()=>`<div class="ass"><div><i></i>O(A) Coordenador(a) do PROFIJ<br>${esc(S.cfg.professor||'')}</div></div>`;
+const cpdAss=()=>`<div class="ass"><div>${cpAssImg()}<i></i>O(A) Coordenador(a) do PROFIJ<br>${esc(S.cfg.professor||'')}</div></div>`;
 function cpdExpCron(a,nome){const S_=cpdSim(a,nome);const M=S_.M;const PR=Object.values(S_.P).sort((x,y)=>x.nome.localeCompare(y.nome,'pt'));
   const dn=id=>{const d=S_.D.find(x=>x.id===id);return d?cpdCurto(d):''};
   const html=PR.map(p=>{const L=S_.log.filter(e=>e.id&&e.prof===p.nome);const porD={};L.forEach(e=>(porD[e.iso]=porD[e.iso]||[]).push(e));let ac=0;
