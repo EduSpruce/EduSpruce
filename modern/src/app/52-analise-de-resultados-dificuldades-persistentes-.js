@@ -272,7 +272,7 @@ function cpdAte(S_,iso){const n={};S_.D.forEach(d=>n[d.id]=0);let ini={};S_.D.fo
   S_.log.forEach(e=>{if(e.id&&e.iso>iso)ini[e.id]--});return ini}
 function cpdSemanasFalta(S_,iso){const n=S_.L.fim>iso?Math.max(1,Math.ceil((dataDeIso(S_.L.fim)-dataDeIso(iso))/(7*864e5))):1;return n}
 /* ---------- vista ---------- */
-function cpdHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return cpmMatrizHTML(a,C);const nome=UI.cpmT&&N.includes(UI.cpmT)?UI.cpmT:N[0];UI.cpmT=nome;
+function cpdHTML(a,C,vista){const N=cpmNomes(a,C);if(!N.length)return cpmMatrizHTML(a,C);const nome=UI.cpmT&&N.includes(UI.cpmT)?UI.cpmT:N[0];UI.cpmT=nome;
   const M=cpmM(nome);const modo=UI.cpdModo||'atual';const S_=cpdSim(a,nome,{ini:modo==='ini'});const S0=modo==='ini'?S_:cpdSim(a,nome,{ini:true});
   const sel=`<div class="row cpm-sel noprint" style="gap:8px;flex-wrap:wrap">${N.map(n=>`<button type="button" class="chip ${n===nome?'on':''}" data-cpmt="${esc(n)}">${esc(n)}</button>`).join('')}</div>`;
   if(!S_.h)return sel+`<section class="card empty">${ic('calendar',28)}<br><b>Falta o horário da turma</b><br><span class="mut">Importe o horário da turma (PDF ou Excel) em «Matriz e Ponto de Situação» para simular os tempos de cada professor.</span></section>`;
@@ -305,7 +305,9 @@ function cpdHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return cpmMatrizHTML(a,
   const RE=(M.reat||[]);const dn=id=>{const d=M.disc.find(x=>x.id===id);return d?d.nome:'—'};
   const ced=`<section class="card"><div class="row"><h2 style="margin:0">${ic('repeat',18)} Cedências de Tempos</h2><span class="sp1"></span><button class="btn sm noprint" id="cpd-ced2">${ic('plus',14)} Nova</button></div>
     ${RE.length?`<ul class="cpd-rl">${RE.map(r=>`<li><span>${r.origem==='*'?'<b>Tempos livres</b>':`Tempos de <b>${esc(dn(r.origem))}</b>`} → <b>${esc(dn(r.destino))}</b> <span class="mut">${r.quando==='fim'&&r.origem!=='*'?'quando acabar':''}${r.desde?' desde '+fmtIsoL(r.desde):''}${r.ate?' até '+fmtIsoL(r.ate):''}</span></span><button class="btn sm ghost noprint" data-cpdrx="${r.id}" title="Apagar">${ic('trash',13)}</button></li>`).join('')}</ul>`:`<p class="mut" style="margin:8px 0 0">Ex.: quando TIC acabar, os tempos de TIC passam para Inglês. A app recalcula logo a nova data de fim de cada um.</p>`}</section>`;
-  return sel+glob+prof+disc+ced+cpdSemanaHTML(a,nome,S_)}
+  if(vista==='equipa'){const eq=`<section class="card"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('users',18)} Equipa Pedagógica · ${esc(nome)}</h2><span class="sp1"></span><button class="btn sm" id="cpd-sub">${ic('user',14)} Substituir Professor(a)</button><button class="btn sm pri" id="cpd-x-mat">${ic('printer',14)} Matriz e Distribuição de Serviço</button></div><p class="hint" style="margin:6px 0 0">Quem leciona cada disciplina e UFCD, a contagem global de tempos de cada professor e quando acaba no planeamento inicial. Assinale na coluna «Eu» o que leciona (passa para o modo professor).</p>
+      <label class="chk" style="margin:8px 0 0"><input type="checkbox" id="cpd-pool" ${M.pool!==false?'checked':''}> <span>Quando uma disciplina acaba, os tempos passam para as outras do mesmo professor</span></label></section>`;return sel+eq+disc+prof}
+  return sel+glob+ced+cpdSemanaHTML(a,nome,S_)+prof}
 /* horário semanal com datas */
 function cpdSemanaHTML(a,nome,S_){const M=S_.M;const hj=S_.hoje<S_.L.ini?S_.L.ini:S_.hoje>S_.L.fim?S_.L.fim:S_.hoje;const seg=UI.cpdSem||cpdSeg(hj);
   return `<section class="card cpd-sw"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('calendar',18)} Horário Semanal</h2><span class="sp1"></span>

@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.002
+- Coord. PROFIJ por fases: Criação do Curso / Dia a Dia / Avaliação e Conclusão
+- Equipa Pedagógica separada dos Horários Semanais; Pontos de Situação separados da Matriz
+- Resumo das recuperações PROFIJ
+
 ## 1.001
 - Coord. PROFIJ: separadores responsivos (nome curto/completo, faixa deslizante no telemóvel)
 

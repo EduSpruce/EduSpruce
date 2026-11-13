@@ -150,6 +150,23 @@ function pfjLigarSiglas(a,nome,lista){const h=horarioDe(a,nome);if(!h)return;con
 /* separador aberto sempre visível na faixa deslizante (telemóvel) */
 {let _cpq=0;new MutationObserver(()=>{if(_cpq)return;_cpq=requestAnimationFrame(()=>{_cpq=0;const b=document.querySelector('#view .cptabs>button.on');const t=b&&b.parentElement;if(t&&t.scrollWidth>t.clientWidth+4&&!t.dataset.cen){t.dataset.cen=1;t.scrollLeft=Math.max(0,b.offsetLeft-t.clientWidth/2+b.offsetWidth/2)}})}).observe(document.getElementById('view')||document.body,{childList:true})}
 
+/* ===================== v1.002 · Coord. PROFIJ por fases: Criação do Curso · Dia a Dia · Avaliação e Conclusão ===================== */
+function cpGrupos(){return [
+  {k:'cria',n:'Criação do Curso',d:'no início: matriz, equipa, horário e planeamento',i:'layers',t:[['turmas','users','Turmas e Formandos','Turmas'],['matriz','grid','Matriz Curricular','Matriz'],['equipa','users','Equipa Pedagógica e Distribuição de Serviço','Equipa'],['plano','calendar','Planeamento Anual','Planeamento']]},
+  {k:'dia',n:'Dia a Dia',d:'pontos de situação, horários semanais, recuperações',i:'calendar',t:[['painel','chart','Painel','Painel'],['pontos','flag','Pontos de Situação','Pontos'],['dist','flow','Horários Semanais e Cedências','Horários'],['recup','refresh','Recuperação das Aprendizagens e da Assiduidade','Recuperações'],['cc','meet','Conselho dos Cursos','Conselho']]},
+  {k:'aval',n:'Avaliação e Conclusão',d:'FPCT, PAF, PEA, médias finais e pautas',i:'award',t:[['fpct','building','Formação Prática em Contexto de Trabalho (FPCT)','FPCT'],['paf','clipboard','Prova de Avaliação Final (PAF)','PAF'],['pea','clipboard','Prova Especial de Avaliação (PEA)','PEA'],['pautas','award','Médias Finais e Pautas','Pautas']]},
+  {k:'leg',n:'Legislação',d:'portarias e regulamentos',i:'book',t:[['leg','book','Legislação','Legislação']]}]}
+function cpGruposHTML(G,g){return `<nav class="cpgs noprint" aria-label="Fases do trabalho">${G.map((x,i)=>`<button type="button" data-cpg="${x.k}" class="cpg ${x===g?'on':''} ${x.k==='leg'?'cpg-l':''}" aria-current="${x===g?'step':'false'}">${x.k==='leg'?'':`<span class="cpg-n">${i+1}</span>`}<span class="cpg-t">${ic(x.i,16)} <b>${x.n}</b><small>${x.d}</small></span></button>`).join('')}</nav>`}
+/* resumo das recuperações (PROFIJ) de todas as turmas: abre a turma para trabalhar */
+function cpRecupHTML(a){const T=(a?a.turmas:[]).filter(t=>ofertaDe(t)==='profij');
+  if(!T.length)return `<section class="card empty">${ic('refresh',28)}<br><b>Sem turmas PROFIJ neste ano letivo</b></section>`;
+  const lin=T.map(t=>{const P=t.planosRec||[];const lim=precLim(t);let ab=0,neg=0;try{const D=pnlDados(t,a,null);ab=lim==null?null:D.linhas.filter(x=>x.ass!=null&&x.ass<lim).length;neg=D.linhas.filter(x=>x.neg).length}catch(_){}
+    const c=(tp,e)=>P.filter(p=>p.tipo===tp&&(!e||(p.estado||'curso')===e)).length;
+    return `<tr><td><b>${esc(t.nome)}</b><div class="hint">${esc(t.disciplina)}</div></td><td class="n">${ab==null?'<span class="mut" title="limite por definir">—</span>':ab}</td><td class="n">${c('assid')}</td><td class="n">${neg}</td><td class="n">${c('aprend')}</td><td class="n ${P.some(p=>p.estado==='nao')?'neg':''}">${P.filter(p=>p.estado==='nao').length}</td><td class="act"><button class="btn sm" data-cprt="${t.id}">${ic('refresh',13)} Abrir</button></td></tr>`}).join('');
+  return `<section class="card"><h2 style="margin:0 0 4px">${ic('refresh',18)} Recuperação das Aprendizagens e da Assiduidade</h2><p class="hint" style="margin:0 0 10px">Plano de Recuperação da Assiduidade e Plano de Recuperação das Aprendizagens de cada turma PROFIJ (o MRA é só do ensino profissional). Os limites de assiduidade são os aprovados pelo conselho pedagógico.</p>
+    <div class="tblw"><table class="lst"><thead><tr><th>Turma · disciplina</th><th class="n">Abaixo do limite</th><th class="n">Planos de assiduidade</th><th class="n">Com negativa</th><th class="n">Planos de aprendizagens</th><th class="n">Não cumpridos</th><th></th></tr></thead><tbody>${lin}</tbody></table></div></section>`}
+function cpRecupBind(v){v.querySelectorAll('[data-cprt]').forEach(b=>b.onclick=()=>{S.turmaAtiva=b.dataset.cprt;save();go('precup')})}
+
 /* ===================== v0.999 · Coord. PROFIJ › Classificações e Pautas =====================
    Histórico de classificações do SGE (Excel, uma folha por formando) → médias por componente e por ano,
    CFA = (FSC + FC + 2·FT + FP) / 5 (às décimas), CFC = (CFA1 + … + CPAF) / n (às unidades),
