@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.009
+- Coord. PROFIJ: sem separador repetido na Legislação
+
 ## 1.008
 - Assinatura do coordenador nos documentos PROFIJ (Word, PDF e impressões)
 - Separadores das fases centrados
