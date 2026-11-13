@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.006
+- PROFIJ: anos de curso por tipo (II-2 2 anos, II-3 1 ano, IV-4 3 anos)
+- PAF e classificação final só no ano terminal; cadeado só este ano/todos os anos
+- CFC conforme o art. 39.º da Portaria 52/2016; FPCT de todos os anos
+
 ## 1.005
 - Coord. PROFIJ: Legislação como fase 0, à esquerda e com ícone
 

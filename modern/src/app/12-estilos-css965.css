@@ -449,4 +449,6 @@ html body .ptdoc small{color:var(--mut)}
 html body .ptdoc.inc{border-style:dashed}
 html body.est-sge .ptdoc{border-radius:0}
 html body .ptw.pt-in .ptexp,html body .ptw.pt-in .ptcfg{display:none!important}
+html body .cpcur{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:8px}
+html body .cpcur select{width:auto!important;padding:4px 6px;font-size:12.5px}
 /*V0996-FIM*/

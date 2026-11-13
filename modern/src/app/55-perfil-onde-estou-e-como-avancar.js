@@ -220,10 +220,10 @@ const ptR=(v,d)=>v==null||isNaN(v)?null:Math.round(v*Math.pow(10,d)+1e-9)/Math.p
 const ptNum=s=>{if(s==null||s==='')return null;const v=parseFloat(String(s).replace(',','.').replace(/[^\d.\-]/g,''));return isNaN(v)?null:v};
 function ptCfg(cl){const {y}=CP();y.pautas=y.pautas||{};const M=(()=>{try{return cpmM(cl.nome)}catch(_){return {}}})();const a=A();
   const P=y.pautas[cl.nome]=y.pautas[cl.nome]||{};const ano=(a&&a.nome)||'';const ac=((M.anoCurso||'').match(/\d/)||[''])[0];
-  const base=(cl.curso||M.curso||'').trim();const niv=M.nivel||'IV';
-  P.sec=P.sec||PT_SEC;P.port=P.port||PT_PORT;P.ano=P.ano||ano;P.curso=P.curso||((base||cl.nome)+(ac?' – '+ac+'.º ano':'')+' – PROFIJ '+niv+' – Tipo 4');P.cursoCF=P.cursoCF||((base||cl.nome)+' – PROFIJ '+niv+' – Tipo 4');
+  const base=(cl.curso||M.curso||'').trim();const CI=cpCurso(cl.nome);
+  P.sec=P.sec||PT_SEC;P.port=P.port||PT_PORT;P.ano=P.ano||ano;P.curso=P.curso||((base||cl.nome)+' – '+CI.ano+'.º ano – '+CI.rot);P.cursoCF=P.cursoCF||((base||cl.nome)+' – '+CI.rot);
   P.local=P.local||(S.cfg.localidade||'');P.data=P.data||isoData(new Date());P.assin=P.assin||((typeof profGenProfX==='function'&&profGenProfX()==='F')?'A Coordenadora do Programa PROFIJ':'O Coordenador do Programa PROFIJ');
-  P.pRel=P.pRel==null?20:P.pRel;P.crit=P.crit||PT_CRIT.map(([n,m])=>({n,m}));P.anoC=P.anoC||(+ac||3);return P}
+  P.pRel=P.pRel==null?20:P.pRel;P.crit=P.crit||PT_CRIT.map(([n,m])=>({n,m}));P.anoC=CI.ano;return P}
 const ptHist=()=>{const c=S.cprofij=S.cprofij||{};return c.hist=c.hist||{}};
 const ptFp=(cl,al)=>{const {y}=CP();const k=cl.nome+'|'+al.k;return y.fpct[k]=y.fpct[k]||{}};
 /* linhas da pauta com todos os cálculos (como nas folhas de cálculo da escola) */
@@ -233,9 +233,9 @@ function ptLinhas(cl){const P=ptCfg(cl);const a=A();const H=ptHist();
     const ent=ptNum(d.ent);const nota=relC!=null&&ent!=null?ptR(relC*P.pRel/100+ent*(100-P.pRel)/100,2):null;const fin=nota!=null?Math.round(nota):(f.nota!=null&&f.nota!==''?+f.nota:null);
     const h=H[al.k]=H[al.k]||{};const r=(()=>{try{return cpLinha(cl,al,a)}catch(_){return {comp:{}}}})();
     const atual={fsc:r.comp.sociocultural?ptR(r.comp.sociocultural.v,1):null,fc:r.comp.cientifica?ptR(r.comp.cientifica.v,1):null,ft:r.comp.tecnologica?ptR(r.comp.tecnologica.v,1):null,fp:fin};
-    const cfa={};[1,2,3].forEach(n=>{const o=Object.assign({},n===P.anoC?atual:{},h['a'+n]||{});['fsc','fc','ft','fp'].forEach(k=>{if(h['a'+n]&&h['a'+n][k]!=null&&h['a'+n][k]!=='')o[k]=ptNum(h['a'+n][k])});
+    const CI=cpCurso(cl.nome);const fpAnt=ptFpAnteriores(al,CI);const cfa={};[1,2,3].forEach(n=>{const o=Object.assign({},n===P.anoC?atual:{},n<P.anoC&&fpAnt[n]!=null?{fp:fpAnt[n]}:{},h['a'+n]||{});['fsc','fc','ft','fp'].forEach(k=>{if(h['a'+n]&&h['a'+n][k]!=null&&h['a'+n][k]!=='')o[k]=ptNum(h['a'+n][k])});
       o.cfa=['fsc','fc','ft','fp'].every(k=>o[k]!=null)?ptR((o.fsc+o.fc+2*o.ft+o.fp)/5,1):(h['a'+n]&&h['a'+n].cfa!=null&&h['a'+n].cfa!==''?ptNum(h['a'+n].cfa):null);cfa[n]=o});
-    const cpaf=h.cpaf!=null&&h.cpaf!==''?ptNum(h.cpaf):(r.paf!=null?r.paf:null);const cfc=[cfa[1].cfa,cfa[2].cfa,cfa[3].cfa,cpaf].every(v=>v!=null)?Math.round((cfa[1].cfa+cfa[2].cfa+cfa[3].cfa+cpaf)/4):null;
+    const cpaf=h.cpaf!=null&&h.cpaf!==''?ptNum(h.cpaf):(r.paf!=null?r.paf:null);const cfc=cpCFC(CI,cfa,cpaf);
     return {al,proc,cc:d.cc||(al.ref&&al.ref.cc)||'',nome:al.nome,rel,relT,relC,ent,nota,fin,cfa,cpaf,cfc,f,d,h}})}
 const ptMaiusc=s=>String(s||'').toLocaleUpperCase('pt-PT');
 const ptDataExt=iso=>{if(!iso)return '';const d=dataDeIso(iso);return d.getDate()+' de '+['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][d.getMonth()]+' de '+d.getFullYear()};
@@ -244,11 +244,11 @@ function ptDoc(cl,tipo){const P=ptCfg(cl);const L=ptLinhas(cl);const fpct=/^fpct
   const tit=[P.sec,(fpct?'FORMAÇÃO PRÁTICA EM CONTEXTO DE TRABALHO ':'CLASSIFICAÇÃO FINAL DE CURSO ')+P.ano,'PAUTA DE AVALIAÇÃO','Curso '+(fpct?P.curso:P.cursoCF),'Programa Formativo de Inserção de Jovens (PROFIJ)'];
   const linhas=L.map(x=>({num:String(x.proc||''),cc:x.cc?(String(x.cc).startsWith('…')?x.cc:'…'+String(x.cc).slice(-3)):'',nome:ptMaiusc(x.nome),
     nota:fpct?(x.fin!=null?String(x.fin):''):(x.cfc!=null?String(x.cfc):''),
-    det:fpct?[ptN(x.relC),x.ent!=null?ptN(x.ent):'',x.nota!=null?ptN(x.nota,2):'',x.fin!=null?String(x.fin):'']:[ptN(x.cfa[1].cfa),ptN(x.cfa[2].cfa),ptN(x.cfa[3].cfa),x.cpaf!=null?ptN(x.cpaf):'',x.cfc!=null?String(x.cfc):'']}));
-  const cab=fpct?['RELATÓRIO','AVAL. ENT.','NOTA','NOTA FINAL']:['CFA1','CFA2','CFA3','CPAF','NOTA FINAL'];const nv=ptNivel(P.cursoCF);
-  const notas=!fpct&&det?[{i:true,t:'CFA1 – Classificação Final Anual 1.º ano – CFA2 – Classificação Final Anual 2.º Ano – CFA3 – Classificação Final Anual 3.º ano – CPAF – Classificação Final Prova de Avaliação Final'},
+    det:fpct?[ptN(x.relC),x.ent!=null?ptN(x.ent):'',x.nota!=null?ptN(x.nota,2):'',x.fin!=null?String(x.fin):'']:[...cpAnosArr(cpCurso(cl.nome)).map(n=>ptN(x.cfa[n].cfa)),x.cpaf!=null?ptN(x.cpaf):'',x.cfc!=null?String(x.cfc):'']}));
+  const CIx=cpCurso(cl.nome);const cab=fpct?['RELATÓRIO','AVAL. ENT.','NOTA','NOTA FINAL']:[...cpAnosArr(CIx).map(n=>CIx.anos===1?'CFA':'CFA'+n),'CPAF','NOTA FINAL'];const nv=CIx.nivelTxt;
+  const notas=!fpct&&det?[{i:true,t:cpAnosArr(CIx).map(n=>(CIx.anos===1?'CFA – Classificação Final Anual':'CFA'+n+' – Classificação Final Anual '+n+'.º ano')).join(' – ')+' – CPAF – Classificação Final Prova de Avaliação Final'},
     {t:'A classificação de cada ano de formação de um curso de '+nv+', obtém-se pela aplicação da seguinte fórmula: ',b:'CFA = (FSC+FC+2FT+FP)/5',t2:', cujo resultado é arredondado às décimas.'},
-    {t:'A classificação final respeitante à conclusão dos itinerários de '+nv.replace('nível','nível')+' obtém-se pela aplicação da seguinte fórmula: ',b:'CFC = (CFA1+CFA2+ CFA3+CPAF)/4',t2:', cujo resultado é arredondado às unidades.'}]:[];
+    {t:'A classificação final respeitante à conclusão dos itinerários de '+nv.replace('nível','nível')+' obtém-se pela aplicação da seguinte fórmula: ',b:CIx.formula,t2:', cujo resultado é arredondado às unidades.'}]:[];
   return {tit,port:P.port,det,cab,linhas,notas,local:P.local,data:ptDataExt(P.data),assin:P.assin,ano:P.ano,nome:(fpct?'FPCT':'CFC')+' - Pauta '+(det?'Detalhada':'Final')+' - '+cl.nome}}
 /* ---- imagens do cabeçalho (logótipo da escola + os do modelo Word, se o carregar) ---- */
 function ptImgInfo(src){return new Promise(ok=>{if(!src)return ok(null);const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);const u=c.toDataURL('image/png');const b=atob(u.split(',')[1]);const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);ok({w:im.naturalWidth,h:im.naturalHeight,png:a,src})}catch(_){ok(null)}};im.onerror=()=>ok(null);im.src=src})}
@@ -278,7 +278,7 @@ async function ptDocx(cl,tipo){const D=ptDoc(cl,tipo);const LG=await ptLogos();c
   if(!D.det){const tabs='<w:tab w:val="left" w:pos="850"/><w:tab w:val="left" w:pos="1701"/><w:tab w:val="right" w:leader="dot" w:pos="9600"/>';
     body+=par(run('N.º\tBI/CC\tNOME',{b:false})+run('\t',{})+run('NOTA'),{tabs:'<w:tab w:val="left" w:pos="850"/><w:tab w:val="left" w:pos="1701"/><w:tab w:val="right" w:pos="9600"/>',bdr:'<w:top w:val="single" w:sz="6" w:space="2" w:color="000000"/><w:left w:val="single" w:sz="6" w:space="4" w:color="000000"/><w:bottom w:val="single" w:sz="6" w:space="2" w:color="000000"/><w:right w:val="single" w:sz="6" w:space="4" w:color="000000"/>',af:200});
     D.linhas.forEach((l,k)=>{body+=par(run(l.num+'\t'+l.cc+'\t'+l.nome+'\t'+l.nota),{tabs,af:160,bdr:k===D.linhas.length-1?'<w:bottom w:val="single" w:sz="6" w:space="2" w:color="000000"/>':''})})}
-  else{const W=D.cab.length===4?[800,800,3138,1300,1300,1100,1200]:[800,800,2838,1000,1000,1000,1000,1200];const H=['N.º','BI/CC','NOME',...D.cab];const tot=W.reduce((s,v)=>s+v,0);
+  else{const W=D.cab.length===3?[800,800,3838,1300,1300,1600]:D.cab.length===4?[800,800,3138,1300,1300,1100,1200]:[800,800,2838,1000,1000,1000,1000,1200];const H=['N.º','BI/CC','NOME',...D.cab];const tot=W.reduce((s,v)=>s+v,0);
     const cell=(t,w,o)=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>${par(run(t,{b:o&&o.b,sz:o&&o.sz||20}),{jc:o&&o.jc||'center'})}</w:tc>`;
     body+=`<w:tbl><w:tblPr><w:tblW w:w="${tot}" w:type="dxa"/><w:jc w:val="center"/><w:tblBorders><w:top w:val="single" w:sz="6" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="6" w:space="0" w:color="000000"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${W.map(w=>`<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>
       <w:tr><w:trPr><w:tblHeader/></w:trPr>${H.map((h,i)=>cell(h,W[i],{b:true})).join('')}</w:tr>${D.linhas.map(l=>`<w:tr>${[l.num,l.cc,l.nome,...l.det].map((v,i)=>cell(v,W[i],{jc:i===2?'left':'center',sz:i<3?20:18})).join('')}</w:tr>`).join('')}</w:tbl>`;
@@ -307,7 +307,7 @@ async function ptPdf(cl,tipo){const D=ptDoc(cl,tipo);const LG=await ptLogos();oc
     if(!D.det){const c1=M+4,c2=M+46,c3=M+92,cR=pdf.W-M-4;pdf.rect(M,y-12,LW,18,null,'#000000',.6);pdf.txt(c1,y,'N.º',9.5);pdf.txt(c2,y,'BI/CC',9.5);pdf.txt(c3,y,'NOME',9.5);pdf.txt(cR-pdfW('NOTA',9.5),y,'NOTA',9.5);y+=24;
       D.linhas.forEach((l,k)=>{pdf.txt(c1,y,l.num,9.5);pdf.txt(c2,y,l.cc,9.5);pdf.txt(c3,y,l.nome,9.5);const xa=c3+pdfW(l.nome,9.5)+4,xb=cR-pdfW(l.nota||'',9.5)-4;for(let x=xa;x<xb-1;x+=3)pdf.txt(x,y,'.',9.5);if(l.nota)pdf.txt(cR-pdfW(l.nota,9.5),y,l.nota,9.5);y+=21});
       pdf.linha(M,y-12,pdf.W-M,y-12,'#000000',.6);y+=20}
-    else{const W0=D.cab.length===4?[.08,.08,.32,.13,.13,.11,.15]:[.08,.08,.29,.1,.1,.1,.1,.15];const W=W0.map(w=>w*LW);const H=['N.º','BI/CC','NOME',...D.cab];
+    else{const W0=D.cab.length===3?[.08,.08,.4,.14,.14,.16]:D.cab.length===4?[.08,.08,.32,.13,.13,.11,.15]:[.08,.08,.29,.1,.1,.1,.1,.15];const W=W0.map(w=>w*LW);const H=['N.º','BI/CC','NOME',...D.cab];
       const fila=(cells,b,sz)=>{const lines=cells.map((c,i)=>i===2?pdfWrap(String(c),W[i]-6,sz,b):[String(c)]);const n=Math.max(...lines.map(x=>x.length));const h=n*(sz+2.5)+8;let x=M;
         cells.forEach((c,i)=>{lines[i].forEach((l,k)=>{const tx=i===2&&!b?x+3:x+W[i]/2-pdfW(l,sz,b)/2;pdf.txt(tx,y+sz+3+k*(sz+2.5),l,sz,{b})});x+=W[i]});y+=h;pdf.linha(M,y,M+LW,y,'#000000',.5)};
       pdf.linha(M,y,M+LW,y,'#000000',.7);fila(H,true,8.5);D.linhas.forEach(l=>fila([l.num,l.cc,l.nome,...l.det],false,8.5));y+=24;
@@ -346,7 +346,7 @@ function ptAbrir(clNome,opt){opt=opt||{};const modo=opt.modo||'';const a=A();con
   const pinta=()=>{cl=cpClasses(A()).find(c=>c.nome===UI.ptCl)||C[0];const P=ptCfg(cl);const L=ptLinhas(cl);const f=modo?modo==='fpct':UI.ptTab==='fpct';const fN=(v,d)=>v==null?'—':ptN(v,d);
     if(modo==='docs')return ptDocsPinta(el,cl,C,P,L,pinta);el.classList.toggle('pt-in',!!modo);
     el.innerHTML=`<div class="ptbar"><select id="pt-cl" aria-label="Turma">${C.map(c=>`<option ${c.nome===cl.nome?'selected':''}>${esc(c.nome)}</option>`).join('')}</select>
-      ${modo?`<b class="pt-tt">${f?'Avaliação da FPCT':'Classificação Final de Curso'}</b>${f?`<label class="btn sm pri">${ic('upload',13)} Importar Grelha de Avaliação (Excel)<input type="file" id="pt-grl" accept=".xlsx,.xlsm" hidden></label>`:''}`:`<div class="seg"><button type="button" data-ptt="fpct" class="${f?'on':''}">FPCT</button><button type="button" data-ptt="cfc" class="${f?'':'on'}">Classificação Final de Curso</button></div>`}<span class="sp1"></span>
+      ${modo?`<b class="pt-tt">${f?'Avaliação da FPCT':cpCurso(cl.nome).terminal||UI.cpTodos?'Classificação Final de Curso':'Classificação Anual (CFA)'}</b>${cpCursoChip(cl.nome)}${f?`<label class="btn sm pri">${ic('upload',13)} Importar Grelha de Avaliação (Excel)<input type="file" id="pt-grl" accept=".xlsx,.xlsm" hidden></label>`:''}`:`<div class="seg"><button type="button" data-ptt="fpct" class="${f?'on':''}">FPCT</button><button type="button" data-ptt="cfc" class="${f?'':'on'}">Classificação Final de Curso</button></div>`}<span class="sp1"></span>
       <div class="ptexp" ${modo?'hidden':''}><b>${f?'FPCT':'CFC'}</b><button type="button" class="btn sm" data-ptx="${f?'fpctF':'cfcF'}|w">${ic('file',13)} Pauta Final · Word</button><button type="button" class="btn sm" data-ptx="${f?'fpctF':'cfcF'}|p">PDF</button><button type="button" class="btn sm pri" data-ptx="${f?'fpctD':'cfcD'}|w">${ic('file',13)} Pauta Detalhada · Word</button><button type="button" class="btn sm" data-ptx="${f?'fpctD':'cfcD'}|p">PDF</button></div></div>
     <details class="ptcfg" ${modo?'hidden':''}><summary>${ic('sliders',14)} Cabeçalho e assinatura</summary><div class="ptg">
       <label>Entidade<input data-ptc="sec" value="${esc(P.sec)}"></label><label>Ano letivo<input data-ptc="ano" value="${esc(P.ano)}"></label>
@@ -358,12 +358,7 @@ function ptAbrir(clNome,opt){opt=opt||{};const modo=opt.modo||'';const a=A();con
       <div class="tblw"><table class="lst pttb"><thead><tr><th>N.º</th><th>BI/CC</th><th style="text-align:left">Nome</th>${P.crit.map((c,i)=>`<th title="${esc(c.n)}">C${i+1}<small>${esc(c.n.split(' ')[0])}<br>/${c.m}</small></th>`).join('')}<th>Relatório<small>/20</small></th><th>Aval. Ent.<small>/20</small></th><th>Nota</th><th>Final</th></tr></thead><tbody>
       ${L.map(x=>`<tr data-k="${esc(x.al.k)}"><td>${esc(x.proc)}</td><td><input class="ptin sm" data-pf="cc" value="${esc(x.cc)}" placeholder="…000" aria-label="BI/CC"></td><td style="text-align:left"><b>${esc(x.nome)}</b></td>${P.crit.map((c,i)=>`<td><input class="ptin" data-pr="${i}" value="${esc(x.d.rel&&x.d.rel[i]!=null?String(x.d.rel[i]).replace('.',','):'')}" inputmode="decimal" aria-label="${esc(c.n)}"></td>`).join('')}
         <td class="calc">${fN(x.relC)}</td><td><input class="ptin" data-pf="ent" value="${esc(x.d.ent!=null?String(x.d.ent).replace('.',','):'')}" inputmode="decimal" aria-label="Avaliação da entidade"></td><td class="calc">${fN(x.nota,2)}</td><td class="calc"><b class="${x.fin!=null&&x.fin<10?'neg':''}">${x.fin==null?'—':x.fin}</b></td></tr>`).join('')}</tbody></table></div>`
-    :`<p class="hint">CFA = (FSC + FC + 2 × FT + FP) ÷ 5, às décimas · CFC = (CFA1 + CFA2 + CFA3 + CPAF) ÷ 4, às unidades (como na média detalhada). O ${P.anoC}.º ano vem da app (componentes e FPCT); os outros anos importam-se do Excel da escola ou escrevem-se.</p>
-      <div class="row" style="gap:8px;margin-bottom:8px"><label class="btn sm">${ic('upload',13)} Importar Excel (histórico ou média detalhada)<input type="file" id="pt-imp" accept=".xlsx,.xlsm" hidden></label></div>
-      <div class="tblw"><table class="lst pttb ptcf"><thead><tr><th rowspan="2">N.º</th><th rowspan="2" style="text-align:left">Nome</th>${[1,2,3].map(n=>`<th colspan="5" class="${n===P.anoC?'atual':''}">${n}.º ano${n===P.anoC?' · app':''}</th>`).join('')}<th rowspan="2">CPAF</th><th rowspan="2">CFC</th></tr>
-        <tr>${[1,2,3].map(()=>['FSC','FC','FT','FP','CFA'].map(h=>`<th>${h}</th>`).join('')).join('')}</tr></thead><tbody>
-      ${L.map(x=>`<tr data-k="${esc(x.al.k)}"><td>${esc(x.proc)}</td><td style="text-align:left"><b>${esc(x.nome)}</b></td>${[1,2,3].map(n=>['fsc','fc','ft','fp'].map(k=>{const ov=x.h['a'+n]&&x.h['a'+n][k]!=null&&x.h['a'+n][k]!=='';return `<td><input class="ptin ${ov?'man':''}" data-ph="${n}|${k}" value="${esc(ptN(x.cfa[n][k]))}" inputmode="decimal" placeholder="—" aria-label="${n}.º ano ${k.toUpperCase()}"></td>`}).join('')+`<td class="calc"><b>${fN(x.cfa[n].cfa)}</b></td>`).join('')}
-        <td><input class="ptin" data-pcp value="${esc(x.cpaf!=null?ptN(x.cpaf):'')}" inputmode="decimal" aria-label="CPAF"></td><td class="calc"><b class="${x.cfc!=null&&x.cfc<10?'neg':''}">${x.cfc==null?'—':x.cfc}</b></td></tr>`).join('')}</tbody></table></div>`}`;
+    :ptCfcHTML(cl,P,L,fN)}`;
     el.querySelector('#pt-cl').onchange=e=>{UI.ptCl=e.target.value;pinta()};el.querySelectorAll('[data-ptt]').forEach(b=>b.onclick=()=>{UI.ptTab=b.dataset.ptt;pinta()});
     el.querySelectorAll('[data-ptc]').forEach(i=>i.onchange=()=>{P[i.dataset.ptc]=i.dataset.ptc==='anoC'?+i.value:i.value;save();if(i.dataset.ptc==='anoC')pinta()});
     el.querySelectorAll('[data-ptx]').forEach(b=>b.onclick=()=>{const [t,f_]=b.dataset.ptx.split('|');(f_==='w'?ptDocx:ptPdf)(cl,t).catch(e=>alert(e.message))});
