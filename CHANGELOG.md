@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.004
+- Tab/Shift+Tab de célula em célula em todas as tabelas
+
 ## 1.003
 - Pautas Oficiais só com os documentos; avaliação da FPCT no separador FPCT; CFC em Avaliação e Conclusão
 

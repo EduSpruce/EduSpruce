@@ -371,8 +371,4 @@ async function pzImportarFpct(pid){const inp=document.createElement('input');inp
 /* a nota final da FPCT passa também para o separador FPCT da coordenação (formandos com o mesmo nome) */
 function pzFpctParaCoord(p){try{const {y,a}=CP();if(!a)return;cpClasses(a).forEach(cl=>cl.formandos.forEach(al=>{const fo=p.form.find(x=>normT(x.nome)===normT(al.nome));if(!fo)return;const r=pzFpct(p,fo);if(r.fin==null)return;const k=cl.nome+'|'+al.k;y.fpct[k]=Object.assign(y.fpct[k]||{},{nota:r.fin})}))}catch(e){console.warn(e)}}
 /*V0996-FIM*/
-/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
-{const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
-/* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
-setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
-
+/*V0990-INI*/
