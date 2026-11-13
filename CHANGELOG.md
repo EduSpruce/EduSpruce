@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.989
+- Contactos estilo macOS (listas, cartão, vCard, duplicados)
+- Sorteio em ecrã inteiro no tema SGE
+- Análise por domínio redesenhada
+
 ## 0.988
 - Menu alinhado
 
