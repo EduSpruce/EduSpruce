@@ -331,6 +331,18 @@ html body #view #av-bloq,html body #view #av-aa{font-size:14px;padding:9px 16px;
 html body #view #av-bloq+#av-aa{margin-left:8px!important}
 html body .cmw.sbcol .cmsbt .ic{transform:rotate(180deg)}
 html body #view table.pntb>tbody>tr>td{vertical-align:middle}html body #view table.pntb>tbody>tr>td :is(.tag,.pill){white-space:nowrap}html body #view table.pntb>tbody>tr>td:is(:nth-child(8),:nth-child(10)){white-space:nowrap}
+/* v1.011 · auditoria responsiva (telemóvel e tablet) */
+@media (max-width:900px){html body .ajg{grid-template-columns:minmax(0,1fr)!important}html body .ajg>*{min-width:0;max-width:100%}html body .ajf img{max-width:100%;height:auto}}
+html body #view>.tabs{max-width:100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+html body #view>.tabs::-webkit-scrollbar{display:none}
+html body #view :is(.card,section)>:is(table,.tblw,.cpm-tw){max-width:100%}
+html body #view img,html body #view svg:not(.ic){max-width:100%}
+html body #view :is(input,select,textarea){max-width:100%}
+@media (pointer:coarse){html body .tpc>button{min-width:34px;min-height:34px}html body :is(.chk,label)>input[type=checkbox]{min-width:22px;min-height:22px}}
+@media (max-width:600px){html body #view .card{padding-left:12px;padding-right:12px}html body #view h2{font-size:clamp(16px,4.6vw,20px)}html body .cpd-rod{font-size:12px}}
+html body #view>.tabs.deftabs{max-width:100%!important;flex-wrap:wrap!important;overflow:visible!important;width:auto!important}
+@media (max-width:760px){html body #view>.tabs.deftabs{flex-wrap:nowrap!important;overflow-x:auto!important}}
+html body .ajmn{white-space:normal!important}
 /*V0990-FIM*/
 /*V0996-INI*/
 /* v0.996 · PROFIJ › Distribuição e Horários */
@@ -471,7 +483,7 @@ html body #view .ptw table.pttb thead th[style*="text-align:left"]{text-align:le
   html body #view .ptw table.pttb :is(td,th){padding:4px}html body #view .ptw table.pttb input.ptin{width:48px!important;height:30px}
   html body #view .ptw table.pttb tbody td[style*="text-align:left"]{position:sticky;left:0;z-index:1;background:var(--panel);box-shadow:2px 0 0 var(--line)}
   html body .ptdoc{flex-direction:column;align-items:stretch}html body .ptdoc .row{justify-content:stretch}html body .ptdoc .row .btn{flex:1}}
-html body .cpm-lin{position:relative}html body .cpm-assimg{position:absolute;left:50%;bottom:-2mm;transform:translateX(-50%);height:15mm;max-width:60mm;object-fit:contain}
+html body .cpm-lin{position:relative}html body .cpm-assimg{position:absolute;left:50%;bottom:1mm;transform:translateX(-50%);height:14mm;max-width:58mm;object-fit:contain;mix-blend-mode:multiply}
 html body #view#view .tabs.cptabs{justify-content:center!important}
 @media (max-width:700px){html body #view#view .tabs.cptabs{justify-content:flex-start!important}}
 html body #view#view .tabs.cptabs[hidden]{display:none!important}

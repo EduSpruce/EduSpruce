@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.011
+- Auditoria responsiva (telemóvel e tablet)
+- Ajuda atualizada com todos os módulos
+- Manual em PDF refeito com capturas
+- Assinatura sem fundo; ano do curso gravado
+
 ## 1.010
 - Planeamento Anual com casas que crescem com o ecrã
 - Fotografias dos formandos nas listas da coordenação PROFIJ
