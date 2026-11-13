@@ -1,82 +1,3 @@
-/* ===================== v0.990 · separadores do topo alinhados com o conteúdo que vem por baixo (ecrãs largos) ===================== */
-function alinharTabsTopo(){const v=document.getElementById('view');if(!v)return;const t=v.querySelector(':scope>.tabs,:scope>.deftabs');if(!t)return;t.style.removeProperty('margin-left');
-  const n=t.nextElementSibling;if(!n||!n.matches('.vlay,.card,.kpis,.mtlay,.inlay,.anv,.cmw'))return;const vr=v.getBoundingClientRect(),nr=n.getBoundingClientRect();if(!nr.width)return;
-  const d=nr.left-vr.left-(parseFloat(getComputedStyle(v).paddingLeft)||0);t.style.setProperty('margin-left',Math.max(0,Math.round(d))+'px','important')}
-{let _at=0;const q=()=>{cancelAnimationFrame(_at);_at=requestAnimationFrame(()=>{try{alinharTabsTopo()}catch(_){}})};const v=document.getElementById('view');if(v)new MutationObserver(q).observe(v,{childList:true});addEventListener('resize',q)}
-/* v0.990 · desempenho: o alinhamento do cabeçalho junta as chamadas repetidas num só cálculo e não se repete se nada mudou */
-{const assin=()=>{const b=document.getElementById('bar');if(!b)return '';return b.clientWidth+'|'+b.textContent.length+'|'+b.querySelectorAll('button:not([hidden])').length+'|'+document.body.classList.contains('dev-pc')};
-  const _alb=alinharBar;let ka='',fila=0;const kAl=()=>{const v=document.getElementById('view');const f=v&&v.firstElementChild;return VIEW+'|'+(v?v.clientWidth:0)+'|'+(v?v.children.length:0)+'|'+(f?f.className:'')+'|'+assin()};
-  alinharBar=function(){if(fila)return;fila=requestAnimationFrame(()=>{fila=0;const k=kAl();if(k===ka)return;try{_alb()}catch(e){console.warn(e)}ka=kAl()})}}
-/* v0.992 · Produção Oral: organização individual / pares / grupos, formação pelo sorteio (aleatória ou equilibrada pela nota da PO) e guiões A/B */
-function oralOrg(o){o.orgI=o.orgI||{};const k=oralKey(o)||'_proprio';const g=o.orgI[k]=o.orgI[k]||{};if(!g.modo)g.modo='ind';if(!(g.n>=3))g.n=3;if(!g.form)g.form='aleat';if(!g.gui)g.gui='aleat';return g}
-/* nota de referência para equilibrar: média do domínio da oralidade nos períodos já avaliados; se não houver, média dos outros momentos orais */
-function oralNotaRef(t,aid){const d=domOral(t);let v=[];if(d)for(let p=1;p<=4;p++){const x=domPer(t,aid,d.id,p);if(x!=null)v.push(x)}
-  if(!v.length){const o=oralM(t);const k0=oralKey(o);oralMomentos(t).forEach(m=>{if(m.k===k0)return;const tt=oralTotK(t,m.k,aid);const c=oralCfgDe(o,m.k);if(tt&&tt.completo&&c.total)v.push(100*tt.pts/c.total)})}
-  return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
-const _bar=A=>{const B=A.slice();for(let i=B.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[B[i],B[j]]=[B[j],B[i]]}return B};
-/* formação equilibrada: ordena pela nota e divide em faixas (boas → fracas); cada par/grupo leva um aluno de cada faixa */
-function oralEquilibrar(t,AL,n){const com=AL.map(a=>({a,v:oralNotaRef(t,a.id)}));const sem=_bar(com.filter(x=>x.v==null)).map(x=>x.a);
-  const ord=_bar(com.filter(x=>x.v!=null)).sort((x,y)=>y.v-x.v).map(x=>x.a);const mid=Math.floor(ord.length/2);const L=[...ord.slice(0,mid),...sem,...ord.slice(mid)];
-  const k=Math.max(1,Math.floor(L.length/n));const G=Array.from({length:k},()=>[]);
-  for(let b=0;b<n;b++){const faixa=_bar(L.slice(b*k,b*k+k));faixa.forEach((a,i)=>G[i].push(a))}
-  const resto=L.slice(n*k);resto.forEach((a,i)=>G[(Math.floor(k/2)+i)%k].push(a));return G}
-/* guiões: em cada par/grupo, um A e um B (alternados, ao acaso); individual: metade A, metade B */
-function oralGuioes(G){const m={};G.forEach(g=>{const ab=_bar(['A','B']);_bar(g).forEach((a,i)=>m[a.id]=ab[i%2])});/* no resultado, sempre do A para o B */G.forEach(g=>g.sort((x,y)=>(m[x.id]||'').localeCompare(m[y.id]||'')));return m}
-function oralAplicar(t,o,org,G,gui){G.forEach((g,i)=>g.forEach(a=>{const r=o.regs[a.id]=o.regs[a.id]||{n:{}};r.p=i+1;/* o colega de par (indicador por baixo do nome) */if(g.length===2)r.par=g.find(x=>x!==a).id;else delete r.par}));if(gui)Object.entries(gui).forEach(([aid,g])=>{const r=o.regs[aid]=o.regs[aid]||{n:{}};r.g=g});save()}
-function oralOrgCard(t,o,org,al){const seg=(nm,k,ops)=>`<div class="seg" role="group" aria-label="${nm}">${ops.map(([v,l])=>`<button type="button" data-oo="${k}|${v}" class="${org[k]===v?'on':''}">${l}</button>`).join('')}</div>`;
-  const ind=org.modo==='ind';const nomeG=org.modo==='par'?'pares':'grupos';const temNotas=al.some(a=>oralNotaRef(t,a.id)!=null);const ng=new Set(al.map(a=>(o.regs[a.id]||{}).p).filter(Boolean)).size;
-  return `<div class="card ororg"><div class="row" style="flex-wrap:wrap;gap:10px;align-items:center"><h2 style="margin:0">${ic('users',18)} Organização</h2><span class="tag">A classificação é sempre individual</span><span class="sp1"></span>${seg('Modalidade','modo',[['ind','Individual'],['par','Pares'],['grp','Grupos']])}${org.modo==='grp'?`<label class="mut" style="margin:0">de <input type="number" id="oo-n" min="3" max="8" value="${org.n}" style="width:60px" inputmode="numeric" aria-label="Alunos por grupo"> alunos</label>`:''}</div>
-    <div class="ororgl">${ind?'':`<div><span class="oolab">Formação dos ${nomeG}</span>${seg('Formação','form',[['aleat','Aleatória'],['equil','Equilibrada pela nota da PO'],['manual','Manual']])}</div>`}
-      <div><span class="oolab">Guiões A/B</span>${seg('Guiões','gui',[['aleat','Ao acaso'],['manual','Manual']])}</div></div>
-    ${!ind&&org.form==='equil'?`<p class="hint">${temNotas?'Cada '+(org.modo==='par'?'par junta':'grupo junta')+' alunos com notas mais altas e mais baixas na Produção Oral (média dos períodos já avaliados).':'Ainda não há notas de Produção Oral: a formação fica aleatória até haver avaliações.'}</p>`:''}
-    ${!ind&&org.form==='manual'?`<p class="hint">Escreva o número do ${org.modo==='par'?'par':'grupo'} de cada aluno na coluna «${org.modo==='par'?'Par':'Grupo'}» da ficha.</p>`:''}
-    ${org.gui==='manual'?`<p class="hint">Escreva A ou B na coluna «Guião» da ficha.</p>`:`<p class="hint">Guiões ao acaso: ${ind?'metade da turma com o A e metade com o B':'em cada '+(org.modo==='par'?'par':'grupo')+' há um A e um B'}, sorteados com ${ind?'o botão abaixo':'os '+(org.modo==='par'?'pares':'grupos')}.</p>`}
-    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px">${!ind&&org.form!=='manual'?`<button type="button" class="btn pri" id="oo-sort">${ic('refresh',15)} Sortear ${nomeG} na roda</button><button type="button" class="btn" id="oo-rap">Formar sem animação</button>`:''}
-      ${org.gui==='aleat'?`<button type="button" class="btn" id="oo-gui">${ic('refresh',15)} Sortear guiões${ind?'':' (nos '+nomeG+' atuais)'}</button>`:''}
-      ${!ind&&ng?`<button type="button" class="btn" id="oo-lim">${ic('x',14)} Limpar ${nomeG}</button><span class="mut" style="align-self:center">${ng} ${ng===1?(org.modo==='par'?'par':'grupo'):nomeG} formado${ng===1?'':'s'}</span>`:''}</div></div>`}
-function oralGruposAtuais(o,al){const M={};al.forEach(a=>{const p=(o.regs[a.id]||{}).p;if(p)(M[p]=M[p]||[]).push(a)});return Object.keys(M).sort((a,b)=>a-b).map(k=>M[k])}
-function oralOrgLigar(t,o,org,al,re){
-  $$('[data-oo]').forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.oo.split('|');/* de Manual para Aleatória/Equilibrada: os pares feitos à mão são limpos */if(k==='form'&&org.form==='manual'&&v!=='manual'){let n=0;al.forEach(a=>{const x=o.regs[a.id];if(x&&(x.p||x.par)){delete x.p;delete x.par;n++}});if(n)toast((org.modo==='par'?'Pares':'Grupos')+' manuais limpos','ok')}org[k]=v;save();re()});
-  const nn=$('#oo-n');if(nn)nn.onchange=()=>{org.n=Math.max(3,Math.min(8,+nn.value||3));save();re()};
-  const n=org.modo==='par'?2:org.n;const formar=AL=>org.form==='equil'?oralEquilibrar(t,AL,n):rodaPartir(AL,n);
-  const AV=()=>alunosAval(t).filter(a=>al.some(x=>x.id===a.id));
-  const s=$('#oo-sort');if(s)s.onclick=()=>{let gui=null;rodaAbrir(t,AV().map(a=>a.id),{modo:org.modo==='par'?'pares':'grupos',n,formar,
-      depois:G=>{gui=org.gui==='aleat'?oralGuioes(G):null},etiqueta:a=>gui&&gui[a.id]?`<em class="rdgu">Guião ${gui[a.id]}</em>`:'',
-      destino:{t:'Usar na Produção Oral',fn:G=>{oralAplicar(t,o,org,G,gui);toast((org.modo==='par'?'Pares':'Grupos')+' guardados na ficha','ok');re()}}})};
-  const r=$('#oo-rap');if(r)r.onclick=()=>{const G=formar(AV());oralAplicar(t,o,org,G,org.gui==='aleat'?oralGuioes(G):null);toast((org.modo==='par'?'Pares formados':'Grupos formados')+(org.gui==='aleat'?' e guiões sorteados':''),'ok');re()};
-  const g=$('#oo-gui');if(g)g.onclick=()=>{const G=org.modo==='ind'?al.map(a=>[a]):oralGruposAtuais(o,al);if(!G.length)return toast('Forme primeiro os '+(org.modo==='par'?'pares':'grupos'),'aviso');
-    let m;if(org.modo==='ind'){const ab=_bar(al).map((a,i)=>[a.id,i%2?'B':'A']);m=Object.fromEntries(ab)}else m=oralGuioes(G);oralAplicar(t,o,org,[],m);toast('Guiões sorteados','ok');re()};
-  const l=$('#oo-lim');if(l)l.onclick=()=>{if(!confirm('Limpar os '+(org.modo==='par'?'pares':'grupos')+' deste momento? As classificações ficam.'))return;al.forEach(a=>{const x=o.regs[a.id];if(x){delete x.p;delete x.par}});save();re()};
-  $$('[data-orp]').forEach(i=>i.onchange=()=>{const x=o.regs[i.dataset.orp]=o.regs[i.dataset.orp]||{n:{}};const v=parseInt(i.value,10);if(v>0)x.p=v;else delete x.p;save()});
-  $$('[data-org]').forEach(i=>i.addEventListener('input',()=>{i.value=i.value.toUpperCase()}))}
-
-/* v0.995 · Contactos: a barra das listas pode encolher (fica só com os ícones) */
-function cmSbAplicar(){const w=document.getElementById('cm-w');if(!w)return;const sb=w.querySelector('.cmsb');if(!sb)return;
-  const col=!!(S.cfg&&S.cfg.cmSbCol);w.classList.toggle('sbcol',col);
-  sb.querySelectorAll('.cmli').forEach(b=>{if(!b.title){const sp=b.querySelector('span');if(sp)b.title=sp.textContent.trim()}});
-  let t=sb.querySelector('.cmsbt');if(!t){t=document.createElement('button');t.type='button';t.className='cmsbt';sb.prepend(t);
-    t.onclick=()=>{S.cfg=S.cfg||{};S.cfg.cmSbCol=!S.cfg.cmSbCol;try{save()}catch(_){}cmSbAplicar()}}
-  t.innerHTML=ic('back',14)+(col?'':'<span>Encolher</span>');t.title=col?'Mostrar as listas':'Encolher a barra das listas';t.setAttribute('aria-label',t.title);t.setAttribute('aria-expanded',String(!col))}
-{let _cmQ=0;new MutationObserver(()=>{if(_cmQ)return;_cmQ=requestAnimationFrame(()=>{_cmQ=0;const w=document.getElementById('cm-w');if(w&&(!w.querySelector('.cmsbt')||w.classList.contains('sbcol')!==!!(S.cfg&&S.cfg.cmSbCol)))cmSbAplicar()})}).observe(document.getElementById('view')||document.body,{childList:true,subtree:true})}
-/* v1.004 · Tab (e Shift+Tab) anda de célula em célula nas tabelas de toda a app, saltando botões e caixas de seleção;
-   se a tabela se redesenhar ao gravar, o cursor volta à célula certa */
-{const CAMPO='input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]):not([type=file]):not([type=hidden]):not([type=range]),select,textarea,[contenteditable=""],[contenteditable=true]';
-  const campos=t=>[...t.querySelectorAll(CAMPO)].filter(x=>!x.disabled&&!x.readOnly&&x.offsetParent!==null&&x.closest('table,[role=grid]')===t);
-  const assin=x=>{const d=[...x.attributes].filter(a=>/^data-|^name$|^id$/.test(a.name)).map(a=>a.name+'='+a.value).join('&');const tr=x.closest('tr');return d+'|'+(tr?[...tr.attributes].filter(a=>/^data-/.test(a.name)).map(a=>a.name+'='+a.value).join('&'):'')+'|'+(x.closest('td,th')?x.closest('td,th').cellIndex:'')};
-  const marca=el=>{try{el.focus({preventScroll:false});if(el.select&&/^(text|number|search|tel|url|email|)$/.test(el.type||''))el.select();else if(el.isContentEditable){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}el.scrollIntoView({block:'nearest',inline:'nearest'})}catch(_){}};
-  document.addEventListener('keydown',e=>{if(e.key!=='Tab'||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey)return;const cur=e.target;if(!cur||!cur.matches||!cur.matches(CAMPO))return;
-    const t=cur.closest('table,[role=grid]');if(!t)return;const L=campos(t);const i=L.indexOf(cur);if(i<0)return;const j=i+(e.shiftKey?-1:1);const nx=L[j];if(!nx)return;
-    e.preventDefault();const tabs=[...document.querySelectorAll('table,[role=grid]')];const ti=tabs.indexOf(t);const sg=assin(nx);marca(nx);
-    /* muitas tabelas redesenham-se no «change» da célula anterior: voltar a encontrar a célula seguinte */
-    const repor=()=>{if(nx.isConnected&&document.activeElement===nx)return;const a=document.activeElement;if(a&&a!==document.body&&a.isConnected&&a.matches&&a.matches(CAMPO)&&a!==cur)return;
-      const T=[...document.querySelectorAll('table,[role=grid]')];const t2=T[ti]||T.find(x=>x.isConnected);if(!t2)return;const L2=campos(t2);const alvo=L2.find(x=>assin(x)===sg)||L2[j];if(alvo)marca(alvo)};
-    setTimeout(repor,0);setTimeout(repor,60);setTimeout(repor,200);requestAnimationFrame(()=>requestAnimationFrame(repor))},false)}
-/*V0990-FIM*/
-/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
-{const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
-/* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
-setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
-
 /* ===================== v0.918 · SpruceNote e JornalNote: todos os elementos ===================== */
 try{Object.assign(ICONS,{video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/>',map:'<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/>',dots:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',scribble:'<path d="M3 17c3-6 5-9 7-9s-1 8 2 8 4-7 6-7 1 5 3 5"/>',bubble:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/>',line:'<path d="M5 19 19 5"/><path d="M13 5h6v6"/>',lines:'<path d="M4 6h16M4 12h16M4 18h10"/>',todo:'<path d="M4 6l2 2 3-3M4 13l2 2 3-3"/><path d="M12 7h8M12 14h8M12 20h8"/>'})}catch(_){}
 Object.assign(MQ_T,{nota:['lines','Anotação'],tarefa:['todo','Pendências'],seta:['line','Linha'],comentario:['bubble','Comentário'],audio:['mic','Áudio'],video:['video','Vídeo'],mapa:['map','Mapa'],documento:['file','Documento'],esboco:['scribble','Esboço'],tabela:['table','Tabela'],ficheiro:['upload','Enviar'],desenho:['pencil','Desenho'],traco:['pencil','Desenho']});
@@ -304,4 +225,54 @@ function pinExtras(){const P=document.querySelector('#login.pinmode .pinside');i
   q.querySelector('.psqn').onclick=e=>{e.stopPropagation();ci=(ci+1+Math.floor(Math.random()*(CITAS.length-1)))%CITAS.length;pinta()};P.removeAttribute('aria-hidden')}
 {const _pl=pinLado;pinLado=function(){const r=_pl.apply(this,arguments);try{pinExtras()}catch(e){console.warn(e)}return r}}
 setInterval(()=>{if(document.querySelector('#login.pinmode .pinside:not(:has(.psx))'))try{pinExtras()}catch(_){}},800);
+
+/* ===================== v0.920 · MSAI: catálogo como no SGE (Data de início · Ação · Disciplina) ===================== */
+const MSAI_SGE={
+  univ:{t:'Medidas Universais',cats:[
+    {k:'dif',t:'Diferenciação pedagógica',leg:['univ',0],it:['Adequar o tempo de realização de tarefas ao aluno','Apresentar os conceitos recorrendo a múltiplas representações','Criar grupos de alunos segundo os seus interesses, temas ou capacidades','Disponibilizar material suplementar e ferramentas organizacionais','Escolher textos de acordo com o nível de leitura dos alunos','Explorar a interdisciplinaridade das noções e dos conceitos','Fornecer fichas de trabalho diferentes aos alunos, conforme as suas dificuldades de aprendizagem e ritmo de produção','Propor a realização de uma tarefa com diferentes materiais','Proporcionar oportunidades de trabalho em grupo','Usar maneiras diferentes de completar tarefas, testes e atividades']},
+    {k:'psi',t:'Apoio psicopedagógico',leg:['selet',2],it:['Capacitação do(s) professor(es) ou de um outro agente educativo para desenvolver nos alunos estratégias de autorregulação da aprendizagem, da tomada de decisão e da resolução de problemas','Capacitação do(s) professor(es) ou de um outro agente educativo para intervir na resolução de problemas comportamentais','Capacitação do(s) professor(es) para potenciar a sua relação pedagógica']},
+    {k:'aco',t:'Acomodações curriculares',leg:['univ',1],it:['Apresentação do conteúdo','Comportamento','Localização do aluno na sala de aula','Outra','Testes e fichas de trabalho'],outra:3},
+    {k:'int',t:'Intervenção com foco académico ou comportamental em contexto de sala de aula, mas também em pequenos grupos;',leg:['univ',4],it:['Apoio ao estudo a um determinado ciclo','Atividades de Apoio à Aprendizagem (conforme alínea a) do n.º 1 do artigo 8.º e n.ºs 19,20, e 21 do artigo 9.º do DLR n.º 16/2019/A, de 23 de julho)','Criação de uma oficina de escrita','Grupos de promoção de competências matemáticas','Intervenção do professor, com alguma sistematicidade, junto de um grupo selecionado de alunos, na sala de aula, para apoio mais individualizado.']},
+    {k:'enr',t:'Enriquecimento curricular',leg:['univ',2],it:['Atividades de complemento curricular (conforme alínea b) do n.º 1 do artigo 8.º e 15.º do DLR n.º 16/2019/A, de 23 de julho','Biblioteca escolar','Clubes escolares','Desporto escolar','Outras iniciativas da escola que complementem o currículo','Projetos de âmbito local, nacional e internacional','Sala de estudo']},
+    {k:'pro',t:'Promoção do comportamento pró-social',leg:['univ',3],it:['Currículos e programas centrados no desenvolvimento de competências','Definição e ensino de expetativas comportamentais claras e declaradas de forma positiva','Ensino, modelagem e prática de procedimentos, regras e rotinas','Estratégias eficazes de gestão de comportamentos','Respostas adequadas e consistentes a comportamentos problemáticos','Sistemas de reconhecimento e reforço positivo dos comportamentos desejados']},
+    {k:'tut',t:'Apoio tutorial',leg:['selet',4],it:['Atribuição de um tutor, docente ou par, com caráter preventivo e temporário']}]},
+  selet:{t:'Medidas Seletivas',cats:[{k:'sel',t:'Medidas seletivas',leg:['selet',-1],it:MEDIDAS.selet.l.slice()}]},
+  adic:{t:'Medidas Adicionais',cats:[{k:'adi',t:'Medidas adicionais',leg:['adic',-1],it:MEDIDAS.adic.l.slice()}]}};
+const msaiId=(ac,c,i)=>ac+'.'+c+'.'+i;
+function msaiDiscs(t,a){const A_=A();const L=new Set([t.disciplina]);try{(A_.turmas||[]).forEach(x=>{if(x===t)return;if((x.alunos||[]).some(y=>(a.processo&&y.processo===a.processo)||normT(y.nome)===normT(a.nome)))L.add(x.disciplina)})}catch(_){}return [...L].filter(Boolean)}
+/* reflete o registo SGE nas medidas da app (quadro MSAI, PDF e CSV) */
+function msaiLegado(a){const R=a.msaiSge||{};a.medidas=a.medidas||{};const auto=a.medSgeAuto=a.medSgeAuto||{};
+  Object.keys(auto).forEach(k=>{a.medidas[k]=(a.medidas[k]||[]).filter(i=>!(auto[k]||[]).includes(i))});const nv={};
+  Object.entries(MSAI_SGE).forEach(([ac,A_])=>A_.cats.forEach(c=>c.it.forEach((x,i)=>{const r=R[msaiId(ac,c.k,i)];if(!r||!Object.keys(r.d||{}).length)return;const [k,idx]=c.leg;const j=idx<0?i:idx;(nv[k]=nv[k]||new Set()).add(j);
+    if(c.k==='aco'&&i===2){a.acomod=a.acomod||[];if(!a.acomod.includes(0))a.acomod.push(0)}})));
+  a.medSgeAuto={};Object.entries(nv).forEach(([k,S_])=>{const ja=new Set(a.medidas[k]||[]);a.medSgeAuto[k]=[...S_].filter(j=>!ja.has(j));a.medidas[k]=[...new Set([...(a.medidas[k]||[]),...S_])].sort((p,q)=>p-q)})}
+function msaiSgeAbrir(tid,aid){const t=A().turmas.find(x=>x.id===tid)||T();const a=t&&t.alunos.find(x=>x.id===aid);if(!a)return;a.msaiSge=a.msaiSge||{};const R=a.msaiSge;
+  const st={ac:UI.msaiAc||'univ',disc:UI.msaiDisc&&msaiDiscs(t,a).includes(UI.msaiDisc)?UI.msaiDisc:'',ini:UI.msaiIni||isoData(new Date())};const el=document.createElement('div');el.className='msge';
+  const D=msaiDiscs(t,a);let e={};try{e=escolaDe(t)||{}}catch(_){}
+  const pinta=()=>{const A_=MSAI_SGE[st.ac];
+    el.innerHTML=`<div class="msgeh"><div><b>N.º Processo:</b> ${esc(a.processo||'—')}</div><div><b>Aluno:</b> ${esc(a.nome)}</div><div><b>Entidade:</b> ${esc(nomeEscola(e)||S.cfg.escola||'—')}</div><div><b>Escolaridade:</b> ${esc((CICLOS[t.ciclo]||'')+(t.anoEsc?'/'+t.anoEsc+' Ano':''))}</div><div><b>Turma:</b> ${esc(a.origem||t.nome)}</div></div>
+    <div class="msgef"><label for="ms-ini">Data de início:</label><input type="date" id="ms-ini" value="${esc(st.ini)}">
+      <label for="ms-ac">Ação:</label><select id="ms-ac">${Object.entries(MSAI_SGE).map(([k,x])=>`<option value="${k}" ${k===st.ac?'selected':''}>${esc(x.t)}</option>`).join('')}</select>
+      <label for="ms-di">Disciplina:</label><select id="ms-di"><option value="">selecionar</option>${D.map(d=>`<option ${d===st.disc?'selected':''}>${esc(d)}</option>`).join('')}<option value="*" ${st.disc==='*'?'selected':''}>Todas as disciplinas</option></select></div>
+    ${st.disc?'':'<p class="msgew">Selecione a disciplina para assinalar as medidas.</p>'}
+    <table class="msget"><thead><tr><th>${esc(A_.t)}</th><th></th><th>Disciplina(s)</th></tr></thead><tbody>
+    ${A_.cats.map(c=>`<tr class="msgec"><td colspan="3">${esc(c.t)}</td></tr>`+c.it.map((x,i)=>{const id=msaiId(st.ac,c.k,i);const r=R[id];const ds=r?Object.keys(r.d||{}):[];const on=st.disc==='*'?D.every(d=>ds.includes(d))&&ds.length>0:ds.includes(st.disc);
+      return `<tr class="msgei ${i===c.it.length-1?'ult':''}"><td><span class="msgel"></span>${esc(x)}${c.outra===i?` <input class="msgeo" data-mso="${id}" value="${esc(r&&r.outra||'')}" aria-label="Outra acomodação">`:''}</td><td class="ck"><input type="checkbox" data-msi="${id}" ${on?'checked':''} ${st.disc?'':'disabled'} aria-label="${esc(x)}"></td><td class="ds">${ds.map(d=>`<span title="Desde ${esc(fmtIsoL(r.d[d]))}">${esc(d)}</span>`).join('<br>')}</td></tr>`}).join('')).join('')}</tbody></table>`;
+    el.querySelector('#ms-ac').onchange=ev=>{st.ac=UI.msaiAc=ev.target.value;pinta()};el.querySelector('#ms-di').onchange=ev=>{st.disc=UI.msaiDisc=ev.target.value;pinta()};el.querySelector('#ms-ini').onchange=ev=>{st.ini=UI.msaiIni=ev.target.value||isoData(new Date())};
+    el.querySelectorAll('[data-msi]').forEach(cb=>cb.onchange=()=>{const id=cb.dataset.msi;const r=R[id]=R[id]||{d:{}};const alvo=st.disc==='*'?D:[st.disc];
+      alvo.forEach(d=>{if(cb.checked)r.d[d]=r.d[d]||st.ini;else delete r.d[d]});if(!Object.keys(r.d).length&&!r.outra)delete R[id];msaiLegado(a);save();audit('MSAI',cb.checked?'Medida assinalada':'Medida retirada',a.nome+' · '+id);pinta()});
+    el.querySelectorAll('[data-mso]').forEach(i=>i.onchange=()=>{const id=i.dataset.mso;const r=R[id]=R[id]||{d:{}};r.outra=i.value.trim();if(!Object.keys(r.d).length&&!r.outra)delete R[id];save()})};
+  pinta();
+  const pdf=document.createElement('button');pdf.className='btn sm';pdf.type='button';pdf.innerHTML=ic('file',14)+' Exportar PDF';pdf.onclick=()=>{try{exportarMsaiPdf(t,[a])}catch(e){toast(e.message,'erro')}};
+  ecraAmplo({titulo:'Medidas de Suporte — '+a.nome,sub:'Registo como no SGE · '+(a.origem||t.nome),el,acoes:[pdf],aoFechar:()=>{try{if(UI._fichaId===a.id&&$('#drawer.on'))fichaAluno(a.id,'msai');else if(VIEW==='alunos')vAlunos()}catch(_){}}})}
+function msaiSgeResumo(a){const R=a.msaiSge||{};const L=[];Object.entries(MSAI_SGE).forEach(([ac,A_])=>A_.cats.forEach(c=>c.it.forEach((x,i)=>{const r=R[msaiId(ac,c.k,i)];if(r&&Object.keys(r.d||{}).length)L.push({ac:A_.t,cat:c.t,x:x+(r.outra?': '+r.outra:''),d:r.d})})));return L}
+/* na ficha do aluno (separador MSAI) */
+{const _fM=fichaAluno;fichaAluno=function(id,tab){const r=_fM.apply(this,arguments);try{if((tab||UI.fichaTab)==='msai'){const dw=$('#dw-b');const t=T();const a=t&&t.alunos.find(x=>x.id===id);if(dw&&a&&!dw.querySelector('.msgeb')){const L=msaiSgeResumo(a);
+  const alvo=dw.querySelector('.fichatabs')||dw.firstElementChild;alvo.insertAdjacentHTML('afterend',`<div class="msgeb"><div class="msgebh"><div><b>${ic('access',16)} Registo como no SGE</b><span>Data de início, ação e disciplina, com o catálogo de medidas do SGE.</span></div><button type="button" class="btn pri" data-msge="${esc(id)}">${ic('list',15)} Abrir Catálogo</button></div>
+    ${L.length?`<ul class="msgel2">${L.map(x=>`<li><small>${esc(x.ac)} · ${esc(x.cat)}</small>${esc(x.x)}<span>${Object.entries(x.d).map(([d,i])=>esc(d)+' desde '+esc(fmtIso(i))).join(' · ')}</span></li>`).join('')}</ul>`:''}</div>`);
+  dw.querySelector('[data-msge]').onclick=()=>msaiSgeAbrir(t.id,id)}}}catch(e){console.warn(e)}return r}}
+/* no quadro MSAI: abrir o catálogo de qualquer aluno */
+{const _vMs=vMsai;vMsai=function(t,al){const r=_vMs.apply(this,arguments);try{const bx=$('#barx');if(bx&&!$('#b-msge')){bx.insertAdjacentHTML('afterbegin',`<button class="btn" id="b-msge">${ic('list',15)} Catálogo SGE</button>`);$('#b-msge').onclick=()=>{
+  openDrawer('Catálogo SGE — escolher aluno',`<div class="ed"><p class="hint" style="margin-top:0">Escolha o aluno para registar as medidas como no SGE.</p><div class="msgea">${al.map(a=>{const n=msaiSgeResumo(a).length;return `<button type="button" class="btn" data-msa="${a.id}"><b class="n">${esc(numAl(a))}</b> ${esc(a.nome)}${n?` <span class="tag">${n}</span>`:''}</button>`}).join('')}</div></div>`);
+  $$('[data-msa]').forEach(b=>b.onclick=()=>{closeDrawer();msaiSgeAbrir(t.id,b.dataset.msa)})}}}catch(e){console.warn(e)}return r}}
 

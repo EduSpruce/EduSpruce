@@ -51,7 +51,7 @@
 51-sorteio-equitativo-grupos-automaticos-alerta-pre.js
 52-analise-de-resultados-dificuldades-persistentes-.js
 53-profij-ensino-profissional.js
-54-separadores-do-topo-alinhados-com-o.js
-55-msai-catalogo-como-no-sge-data.js
-56-pautas-oficiais-profij-fpct-e-classificacao.js
+54-sprucenote-e-jornalnote-todos-os-elementos.js
+55-perfil-onde-estou-e-como-avancar.js
+56-bloco-pin-ok.js
 57-fecho.html

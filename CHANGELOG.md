@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.005
+- Coord. PROFIJ: Legislação como fase 0, à esquerda e com ícone
+
 ## 1.004
 - Tab/Shift+Tab de célula em célula em todas as tabelas
 

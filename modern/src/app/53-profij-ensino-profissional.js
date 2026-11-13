@@ -152,11 +152,12 @@ function pfjLigarSiglas(a,nome,lista){const h=horarioDe(a,nome);if(!h)return;con
 
 /* ===================== v1.002 · Coord. PROFIJ por fases: Criação do Curso · Dia a Dia · Avaliação e Conclusão ===================== */
 function cpGrupos(){return [
+  {k:'leg',n:'Legislação',d:'portarias e regulamentos',i:'book',t:[['leg','book','Legislação','Legislação']]},
   {k:'cria',n:'Criação do Curso',d:'no início: matriz, equipa, horário e planeamento',i:'layers',t:[['turmas','users','Turmas e Formandos','Turmas'],['matriz','grid','Matriz Curricular','Matriz'],['equipa','users','Equipa Pedagógica e Distribuição de Serviço','Equipa'],['plano','calendar','Planeamento Anual','Planeamento']]},
   {k:'dia',n:'Dia a Dia',d:'pontos de situação, horários semanais, recuperações',i:'calendar',t:[['painel','chart','Painel','Painel'],['pontos','flag','Pontos de Situação','Pontos'],['dist','flow','Horários Semanais e Cedências','Horários'],['recup','refresh','Recuperação das Aprendizagens e da Assiduidade','Recuperações'],['cc','meet','Conselho dos Cursos','Conselho']]},
   {k:'aval',n:'Avaliação e Conclusão',d:'FPCT, PAF, PEA, classificação final e pautas',i:'award',t:[['fpct','building','Formação Prática em Contexto de Trabalho (FPCT)','FPCT'],['paf','clipboard','Prova de Avaliação Final (PAF)','PAF'],['pea','clipboard','Prova Especial de Avaliação (PEA)','PEA'],['pautas','award','Classificação Final de Curso (Médias Finais)','Classificação Final'],['oficiais','file','Pautas Oficiais (Word e PDF)','Pautas Oficiais']]},
-  {k:'leg',n:'Legislação',d:'portarias e regulamentos',i:'book',t:[['leg','book','Legislação','Legislação']]}]}
-function cpGruposHTML(G,g){return `<nav class="cpgs noprint" aria-label="Fases do trabalho">${G.map((x,i)=>`<button type="button" data-cpg="${x.k}" class="cpg ${x===g?'on':''} ${x.k==='leg'?'cpg-l':''}" aria-current="${x===g?'step':'false'}">${x.k==='leg'?'':`<span class="cpg-n">${i+1}</span>`}<span class="cpg-t">${ic(x.i,16)} <b>${x.n}</b><small>${x.d}</small></span></button>`).join('')}</nav>`}
+]}
+function cpGruposHTML(G,g){return `<nav class="cpgs noprint" aria-label="Fases do trabalho">${G.map((x,i)=>`<button type="button" data-cpg="${x.k}" class="cpg ${x===g?'on':''} ${x.k==='leg'?'cpg-l':''}" aria-current="${x===g?'step':'false'}"><span class="cpg-n">${i}</span><span class="cpg-t">${ic(x.i,16)} <b>${x.n}</b><small>${x.d}</small></span></button>`).join('')}</nav>`}
 /* resumo das recuperações (PROFIJ) de todas as turmas: abre a turma para trabalhar */
 function cpRecupHTML(a){const T=(a?a.turmas:[]).filter(t=>ofertaDe(t)==='profij');
   if(!T.length)return `<section class="card empty">${ic('refresh',28)}<br><b>Sem turmas PROFIJ neste ano letivo</b></section>`;
@@ -371,4 +372,8 @@ async function pzImportarFpct(pid){const inp=document.createElement('input');inp
 /* a nota final da FPCT passa também para o separador FPCT da coordenação (formandos com o mesmo nome) */
 function pzFpctParaCoord(p){try{const {y,a}=CP();if(!a)return;cpClasses(a).forEach(cl=>cl.formandos.forEach(al=>{const fo=p.form.find(x=>normT(x.nome)===normT(al.nome));if(!fo)return;const r=pzFpct(p,fo);if(r.fin==null)return;const k=cl.nome+'|'+al.k;y.fpct[k]=Object.assign(y.fpct[k]||{},{nota:r.fin})}))}catch(e){console.warn(e)}}
 /*V0996-FIM*/
-/*V0990-INI*/
+/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
+{const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
+/* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
+setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
+
