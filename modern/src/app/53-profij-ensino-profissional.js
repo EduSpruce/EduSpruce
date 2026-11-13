@@ -147,6 +147,8 @@ function pfjLigarSiglas(a,nome,lista){const h=horarioDe(a,nome);if(!h)return;con
   sigs.forEach(sg=>{const l=leg.find(x=>normSig(x.ab)===normSig(sg))||{};const nm=l.nome&&normSig(l.nome)!==normSig(sg)?l.nome:cpmNomeSig(sg);
     if(/^ufcd|unidades de forma|tecnolog/i.test(normT(nm))||/^ufcd/i.test(sg)){lista.filter(d=>d.comp==='tecnologica'&&!(d.sig||[]).length).forEach(d=>d.sig=[sg]);return}
     const d=lista.find(z=>z.comp!=='tecnologica'&&nn(z.nome)===nn(nm));if(d&&!(d.sig||[]).some(x=>normSig(x)===normSig(sg)))d.sig=[...(d.sig||[]),sg]})}
+/* separador aberto sempre visível na faixa deslizante (telemóvel) */
+{let _cpq=0;new MutationObserver(()=>{if(_cpq)return;_cpq=requestAnimationFrame(()=>{_cpq=0;const b=document.querySelector('#view .cptabs>button.on');const t=b&&b.parentElement;if(t&&t.scrollWidth>t.clientWidth+4&&!t.dataset.cen){t.dataset.cen=1;t.scrollLeft=Math.max(0,b.offsetLeft-t.clientWidth/2+b.offsetWidth/2)}})}).observe(document.getElementById('view')||document.body,{childList:true})}
 
 /* ===================== v0.999 · Coord. PROFIJ › Classificações e Pautas =====================
    Histórico de classificações do SGE (Excel, uma folha por formando) → médias por componente e por ano,

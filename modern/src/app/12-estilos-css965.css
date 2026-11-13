@@ -405,4 +405,18 @@ html body table.cpm-cal tbody td:nth-last-child(-n+2){font-size:.92em}
 html body #ampv .cpm-plano,html body .ampv .cpm-plano{max-width:none!important;width:100%!important;box-sizing:border-box}
 @media (max-width:700px){html body table.cpm-cal{min-width:600px;border-spacing:1px}html body .cpm-leg{font-size:12px;gap:6px 10px}}
 @media print{html body table.cpm-cal{min-width:0}}
+/* v1.001 · separadores da Coord. PROFIJ: cabem sempre (nome curto no ecrã apertado, nome completo no separador aberto e na dica) */
+html body #view#view .tabs.cptabs{display:flex!important;flex-wrap:wrap!important;gap:6px!important;border:0!important;overflow:visible!important;padding:2px 0 4px!important;margin:0 0 12px!important;scrollbar-width:none!important}
+html body #view#view .tabs.cptabs::-webkit-scrollbar{display:none!important}
+html body #view#view .tabs.cptabs>button{all:unset;box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;gap:7px!important;padding:8px 13px!important;border:1px solid var(--line)!important;border-radius:999px!important;background:var(--panel)!important;color:var(--ink)!important;font-size:13.5px!important;font-weight:500!important;cursor:pointer!important;white-space:nowrap!important;line-height:1.2!important;transition:background .15s,border-color .15s!important}
+html body #view#view .tabs.cptabs>button .ic{flex:none!important;color:var(--mut)!important}
+html body #view#view .tabs.cptabs>button:hover{border-color:color-mix(in srgb,var(--acc) 45%,var(--line))!important;background:color-mix(in srgb,var(--acc) 6%,var(--panel))!important}
+html body #view#view .tabs.cptabs>button.on{background:var(--acc)!important;border-color:var(--acc)!important;color:#fff!important;font-weight:600!important}
+html body #view#view .tabs.cptabs>button.on .ic{color:#fff!important}
+html body #view#view .tabs.cptabs>button:focus-visible{outline:2px solid var(--acc)!important;outline-offset:2px!important}
+html body #view#view .tabs.cptabs .ts{display:none!important}
+@media (max-width:1500px){html body #view#view .tabs.cptabs>button:not(.on) .tl{display:none!important}html body #view#view .tabs.cptabs>button:not(.on) .ts{display:inline!important}}
+@media (max-width:700px){html body #view#view .tabs.cptabs{flex-wrap:nowrap!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;scroll-snap-type:x proximity!important;margin-left:-4px!important;margin-right:-4px!important;padding-left:4px!important;padding-right:4px!important}html body #view#view .tabs.cptabs>button{scroll-snap-align:start!important;padding:7px 11px!important;font-size:13px!important}html body #view#view .tabs.cptabs>button.on .tl{display:none!important}html body #view#view .tabs.cptabs>button.on .ts{display:inline!important}}
+html body.est-sge #view#view .tabs.cptabs>button{border-radius:0!important}
+html body.escurox #view#view .tabs.cptabs>button:not(.on){background:transparent!important}
 /*V0996-FIM*/
