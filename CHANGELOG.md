@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.994
+- Oral: limpar pares manuais ao mudar de formação
+
 ## 0.993
 - Oral: indicador do colega corrigido, pares ligados ao colega, ordem A→B
 

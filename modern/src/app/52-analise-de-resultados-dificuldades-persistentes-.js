@@ -190,7 +190,7 @@ function oralOrgCard(t,o,org,al){const seg=(nm,k,ops)=>`<div class="seg" role="g
       ${!ind&&ng?`<button type="button" class="btn" id="oo-lim">${ic('x',14)} Limpar ${nomeG}</button><span class="mut" style="align-self:center">${ng} ${ng===1?(org.modo==='par'?'par':'grupo'):nomeG} formado${ng===1?'':'s'}</span>`:''}</div></div>`}
 function oralGruposAtuais(o,al){const M={};al.forEach(a=>{const p=(o.regs[a.id]||{}).p;if(p)(M[p]=M[p]||[]).push(a)});return Object.keys(M).sort((a,b)=>a-b).map(k=>M[k])}
 function oralOrgLigar(t,o,org,al,re){
-  $$('[data-oo]').forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.oo.split('|');org[k]=v;save();re()});
+  $$('[data-oo]').forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.oo.split('|');/* de Manual para Aleatória/Equilibrada: os pares feitos à mão são limpos */if(k==='form'&&org.form==='manual'&&v!=='manual'){let n=0;al.forEach(a=>{const x=o.regs[a.id];if(x&&(x.p||x.par)){delete x.p;delete x.par;n++}});if(n)toast((org.modo==='par'?'Pares':'Grupos')+' manuais limpos','ok')}org[k]=v;save();re()});
   const nn=$('#oo-n');if(nn)nn.onchange=()=>{org.n=Math.max(3,Math.min(8,+nn.value||3));save();re()};
   const n=org.modo==='par'?2:org.n;const formar=AL=>org.form==='equil'?oralEquilibrar(t,AL,n):rodaPartir(AL,n);
   const AV=()=>alunosAval(t).filter(a=>al.some(x=>x.id===a.id));
