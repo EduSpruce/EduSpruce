@@ -263,7 +263,7 @@ function domFichaAluno(t,d,X,o,tipo){if(!o)return '';const c=domCor(t,d);const v
     <ul class="dfal"><li>${dif>=0?'▲':'▼'} <b>${isSec(t)?(Math.abs(dif)*20).toFixed(1).replace('.',',')+' valores':Math.round(Math.abs(dif)*100)+' pp'}</b> ${dif>=0?'acima':'abaixo'} da média da turma</li>
       <li>Intervalo: ${pctD(t,o.min)} – ${pctD(t,o.max)}${o.tend!=null?` · evolução ${o.tend>=0?'+':'−'}${isSec(t)?(Math.abs(o.tend)*20).toFixed(1).replace('.',','):Math.round(Math.abs(o.tend)*100)+' pp'}`:''}</li>
       ${best?`<li>Melhor momento: <b>${esc(best.i.nome)}</b> (${pctD(t,best.v)} vs ${pctD(t,best.m)} da turma)</li>`:''}${worst&&worst!==best?`<li>Momento mais difícil: <b>${esc(worst.i.nome)}</b> (${pctD(t,worst.v)})</li>`:''}</ul>
-    <button type="button" class="btn sm" data-dfp="${o.a.id}">${ic('user',13)} Perfil de Aprendizagem</button></div>`}
+    <button type="button" class="btn sm" data-dfp="${o.a.id}">${ic('user',13)} Perfis de Aprendizagem</button></div>`}
 {const _vDm=vDominios;vDominios=function(){const r=_vDm.apply(this,arguments);try{const t=T();if(!t||!t.dominios.length)return r;const d=domById(t,UI.dom);const X=domAnalise(t,d);const card=$('#view .card.wide');if(!card)return r;const c=domCor(t,d);const sec=isSec(t);
   if(!X.ok.length){/* sem classificações neste domínio: mesmo aspeto, com os valores vazios e o caminho para as registar */
     const oral=typeof domOral==='function'&&domOral(t)&&domOral(t).id===d.id;const kp0=(l,s_)=>`<div class="kpi"><div class="l">${l}</div><div class="v">—</div><div class="mut">${s_}</div></div>`;

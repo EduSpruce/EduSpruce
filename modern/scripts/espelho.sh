@@ -19,6 +19,6 @@ if git diff --cached --quiet; then echo "espelho: sem alterações"; exit 0; fi
 git commit -qm "${1:-Atualizar espelho} ($(cat versao.json))
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_015dy1762oecfNm11xnNLKDJ"
+Claude-Session: https://claude.ai/code/session_015dy178Uw5yoCwPqMyhg4Ad"
 git push -q origin HEAD:main 2>&1 | grep -iv "moved\|location\|\.git$" || true
 echo "espelho: $(git log --oneline -1)"

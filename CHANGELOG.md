@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.995
+- Contactos: barra lateral encolhível
+- Painel: ícone dos Perfis de Aprendizagem junto ao dossiê; espaçamento das linhas
+- Perfis de Aprendizagem abre no aluno escolhido
+- Avaliação Final: botões maiores
+- Autoavaliação: papel do QR sem texto a sair
+
 ## 0.994
 - Oral: limpar pares manuais ao mudar de formação
 

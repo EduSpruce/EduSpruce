@@ -203,6 +203,15 @@ function oralOrgLigar(t,o,org,al,re){
   const l=$('#oo-lim');if(l)l.onclick=()=>{if(!confirm('Limpar os '+(org.modo==='par'?'pares':'grupos')+' deste momento? As classificações ficam.'))return;al.forEach(a=>{const x=o.regs[a.id];if(x){delete x.p;delete x.par}});save();re()};
   $$('[data-orp]').forEach(i=>i.onchange=()=>{const x=o.regs[i.dataset.orp]=o.regs[i.dataset.orp]||{n:{}};const v=parseInt(i.value,10);if(v>0)x.p=v;else delete x.p;save()});
   $$('[data-org]').forEach(i=>i.addEventListener('input',()=>{i.value=i.value.toUpperCase()}))}
+
+/* v0.995 · Contactos: a barra das listas pode encolher (fica só com os ícones) */
+function cmSbAplicar(){const w=document.getElementById('cm-w');if(!w)return;const sb=w.querySelector('.cmsb');if(!sb)return;
+  const col=!!(S.cfg&&S.cfg.cmSbCol);w.classList.toggle('sbcol',col);
+  sb.querySelectorAll('.cmli').forEach(b=>{if(!b.title){const sp=b.querySelector('span');if(sp)b.title=sp.textContent.trim()}});
+  let t=sb.querySelector('.cmsbt');if(!t){t=document.createElement('button');t.type='button';t.className='cmsbt';sb.prepend(t);
+    t.onclick=()=>{S.cfg=S.cfg||{};S.cfg.cmSbCol=!S.cfg.cmSbCol;try{save()}catch(_){}cmSbAplicar()}}
+  t.innerHTML=ic('back',14)+(col?'':'<span>Encolher</span>');t.title=col?'Mostrar as listas':'Encolher a barra das listas';t.setAttribute('aria-label',t.title);t.setAttribute('aria-expanded',String(!col))}
+{let _cmQ=0;new MutationObserver(()=>{if(_cmQ)return;_cmQ=requestAnimationFrame(()=>{_cmQ=0;const w=document.getElementById('cm-w');if(w&&(!w.querySelector('.cmsbt')||w.classList.contains('sbcol')!==!!(S.cfg&&S.cfg.cmSbCol)))cmSbAplicar()})}).observe(document.getElementById('view')||document.body,{childList:true,subtree:true})}
 /*V0990-FIM*/
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
