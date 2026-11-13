@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.991
+- Sorteio: painel de pares/grupos responsivo durante a animação
+
 ## 0.990
 - Calendário: correção das cores dos dias
 - Separadores alinhados
