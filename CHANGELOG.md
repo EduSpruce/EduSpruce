@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.012
+- Módulo Forms (formulários e testes online por QR code/código, correção automática, envio para a avaliação)
+
 ## 1.011
 - Auditoria responsiva (telemóvel e tablet)
 - Ajuda atualizada com todos os módulos
