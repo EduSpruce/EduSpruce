@@ -300,4 +300,9 @@ html body dialog.rodadlg .rdsplit .rdgs.mini .rdchip img,html body dialog.rodadl
 html body dialog.rodadlg .rdmonte .rdchip{font-size:clamp(14px,1.3vmin + 8px,26px);width:clamp(230px,26vmin,380px)}
 @media (max-width:760px){html body dialog.rodadlg .rdsplit .rdgs.mini .rdg{min-height:0}}
 html body dialog.rodadlg .rdsplit .rdgs.mini .rdchip span{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.15;overflow:hidden}
+/* v0.992 · Produção Oral: organização e guiões */
+html body .ororgl{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:10px}html body .ororgl>div{display:flex;flex-direction:column;gap:4px}html body .oolab{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+html body .orpar{display:inline-grid;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:999px;color:#fff;font-weight:700;font-size:12px}
+html body dialog.rodadlg .rdchip .rdgu{font-style:normal;font-size:.72em;font-weight:800;padding:2px 8px;border-radius:999px;background:#0e7095;color:#fff;white-space:nowrap;margin-left:auto}
+html body dialog.rodadlg .rdgs.fim .rdchip .rdgu{margin-left:0}
 /*V0990-FIM*/
