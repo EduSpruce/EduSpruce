@@ -418,9 +418,4 @@ function cpdCriarMinhas(a,nome){const M=cpmM(nome);const L=M.disc.filter(cpdMinh
     if(base){if(base.origens)t.origens=base.origens.slice();t.alunos=JSON.parse(JSON.stringify(base.alunos)).map(x=>Object.assign(x,{id:uid()+Math.random().toString(36).slice(2,5),frequenta:true,autoav:{},obsPer:{},sintese:{}}))}
     a.turmas.push(t)});
   saveNow();vCProfij();toast(novas.length+' disciplina(s) criada(s) no modo professor.')}
-/*V0996-FIM*/
-/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
-{const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
-/* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
-setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
 

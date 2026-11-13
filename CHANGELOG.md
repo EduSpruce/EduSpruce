@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 0.997
+- PROFIJ: assistente Criar Curso Completo (Portaria 52/2016 + UFCD do Catálogo)
+- PROFIJ: Planos de Recuperação da Assiduidade e das Aprendizagens; MRA só no profissional
+
 ## 0.996
 - PROFIJ: Distribuição e Horários (simulação por tempos, contagem global por professor, cedências, substituições, horários semanais, exportações)
 - Modo professor a partir da matriz (coluna Eu)

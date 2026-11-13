@@ -333,7 +333,7 @@ function cpmMatrizHTML(a,C){const N=cpmNomes(a,C);if(!N.length)return `<section 
   const cab=`<section class="card cpm-cab"><div><div><div class="cpm-tit">${esc(M.curso||'Curso PROFIJ — '+nome)}</div>
     <div class="mut cpm-meta">${[M.area&&'Área de Educação e Formação: '+esc(M.area),M.nivel&&'Nível de Qualificação do QNQ: '+esc(M.nivel),M.cod&&'Cód. interno: '+esc(M.cod),M.anoCurso&&'Ano: '+esc(M.anoCurso),M.ref&&'Referencial: '+esc(M.ref)].filter(Boolean).join(' · ')||'Toque em «Dados do Curso» para preencher o cabeçalho.'}</div>
     <div class="cpm-ps"><b>Situação atual — ${isoHoje().split('-').reverse().join('.')}</b>${K.P0?` <span class="tag ok">desde o ponto de ${fmtIsoL(K.P0.data)}</span>`:''} <span class="mut">· ${esc(nome)} · ${fmtIsoL(K.L.ini)} a ${fmtIsoL(K.L.fim)}${M.nasInt?' · com sessões nas interrupções':''}</span></div></div>
-    <div class="row noprint" style="gap:6px;flex-wrap:wrap;margin-top:10px"><button class="btn sm" id="cpm-curso">${ic('pencil',14)} Dados do Curso</button><button class="btn sm" id="cpm-pdf">${ic('upload',14)} Horário da Turma (PDF ou Excel)</button>${h?`<button class="btn sm" id="cpm-ger">${ic('flow',14)} Gerar do Horário</button>`:''}<button class="btn sm" id="cpm-add">${ic('plus',14)} Disciplina / UFCD</button><button class="btn sm" id="cpm-csv">${ic('download',14)} CSV</button><button class="btn sm pri" id="cpm-imp">${ic('printer',14)} Imprimir</button></div></div>
+    <div class="row noprint" style="gap:6px;flex-wrap:wrap;margin-top:10px"><button class="btn sm pri" id="cpm-pfj">${ic('layers',14)} Criar Curso Completo</button><button class="btn sm" id="cpm-curso">${ic('pencil',14)} Dados do Curso</button><button class="btn sm" id="cpm-pdf">${ic('upload',14)} Horário da Turma (PDF ou Excel)</button>${h?`<button class="btn sm" id="cpm-ger">${ic('flow',14)} Gerar do Horário</button>`:''}<button class="btn sm" id="cpm-add">${ic('plus',14)} Disciplina / UFCD</button><button class="btn sm" id="cpm-csv">${ic('download',14)} CSV</button><button class="btn sm pri" id="cpm-imp">${ic('printer',14)} Imprimir</button></div></div>
     ${!K.c?`<div class="alert w noprint" style="margin-top:10px">${ic('alert',15)} Sem calendário escolar: só os fins de semana são descontados. Importe o calendário (Calendário › Importar) para descontar feriados e interrupções letivas.</div>`:''}
     ${!h?`<div class="alert noprint" style="margin-top:10px">${ic('calendar',15)} Importe o horário da turma (PDF «Horário da Turma») para a app contar sozinha as aulas dadas e prever quando termina cada disciplina.</div>`:''}
     <div class="cpm-kp"><div><small>Aulas previstas</small><b>${tot.a}</b></div><div><small>Dadas</small><b>${tot.d}</b><i class="cpm-bar"><i style="width:${pc}%"></i></i></div><div><small>Em falta</small><b>${tot.f}</b></div><div class="${tot.b?'bad':''}"><small>Não chegam ao fim</small><b>${tot.b}</b></div></div></section>`;
@@ -422,11 +422,11 @@ function cpmCSV(a,nome){const K=cpmCalc(a,nome);const q=v=>{v=v==null?'':String(
   download('ponto-situacao-'+normSig(nome)+'-'+isoHoje()+'.csv','﻿'+R.map(l=>l.map(q).join(';')).join('\n'),'text/csv')}
 function cpmBindMatriz(v,a){const nome=UI.cpmT;const g=id=>v.querySelector('#'+id);
   v.querySelectorAll('[data-cpmt]').forEach(b=>b.onclick=()=>{UI.cpmT=b.dataset.cpmt;vCProfij()});
-  const nv=g('cpm-nova');if(nv)nv.onclick=()=>{const n=(prompt('Nome da turma (como no horário, ex.: Profij 2):')||'').trim();if(!n)return;cpmM(n);UI.cpmT=n;save();vCProfij()};
+  const nv=g('cpm-nova');if(nv)nv.onclick=()=>{const n=(prompt('Nome da turma (como no horário, ex.: Profij 2):')||'').trim();if(!n)return;cpmM(n);UI.cpmT=n;save();vCProfij();pfjCursoDlg(n)};
   const pdf=g('cpm-pdf');if(pdf)pdf.onclick=()=>cpmImportarPdf(nome);
   const ge=g('cpm-ger');if(ge)ge.onclick=()=>{cpmGerar(a,nome);vCProfij()};
   const ad=g('cpm-add');if(ad)ad.onclick=()=>cpmDiscDlg(nome);
-  const cu=g('cpm-curso');if(cu)cu.onclick=()=>cpmCursoDlg(nome);
+  const cu=g('cpm-curso');if(cu)cu.onclick=()=>cpmCursoDlg(nome);const pj=g('cpm-pfj');if(pj)pj.onclick=()=>pfjCursoDlg(nome);
   const fc=g('cpm-fct');if(fc)fc.onclick=()=>cpmFctDlg(nome);
   const cs=g('cpm-csv');if(cs)cs.onclick=()=>cpmCSV(a,nome);
   const im=g('cpm-imp');if(im)im.onclick=()=>imprimirVista();

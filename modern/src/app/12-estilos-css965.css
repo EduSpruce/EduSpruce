@@ -368,4 +368,7 @@ html body .cpd-rod span{padding:4px 10px;border-radius:999px;background:color-mi
 html body .cpd-rod span.ok{background:color-mix(in srgb,var(--ok,#2e8b57) 12%,var(--panel))}
 html body .cpd-op{display:grid;gap:4px;max-height:52vh;overflow:auto}
 html body.est-sge .cpd-seg,html body.est-sge table.cpd-gr td,html body.est-sge .cpd-rl li,html body.est-sge .cpd-rod span{border-radius:0}
+html body .pf-tb input{padding:4px 6px}
+html body .pf-tb td{vertical-align:middle}
+html body .prec .tag[data-prv]{cursor:pointer;border:0}
 /*V0996-FIM*/

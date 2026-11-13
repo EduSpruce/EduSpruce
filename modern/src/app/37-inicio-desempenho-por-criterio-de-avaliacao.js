@@ -168,6 +168,7 @@ async function mraAbrir(t,m,a){let html;try{html=await mraFonte()}catch(e){retur
   o.querySelector('#mra-x').onclick=fechar;setTimeout(()=>o.querySelector('#mra-x').focus(),50)}
 /* vista: Turma › Recuperação (MRA) */
 function vMra(){const t=T();if(!t)return go('turmas');const U=unidMod(t);const v=$('#view');
+  if(ofertaDe(t)==='profij'){go('precup');return}
   if(!ehModular(t)){v.innerHTML=`<div class="card empty">${ic('layers',30)}<br><b>Só para turmas do ensino profissional e PROFIJ</b><br><span class="mut">O Mecanismo de Recuperação é feito por ${U.um}.</span></div>`;return}
   const M=t.modulos||[];if(!M.length){v.innerHTML=`<div class="card empty">${ic('layers',30)}<br><b>Esta turma ainda não tem ${U.p.toLowerCase()}</b><br><button class="btn pri" style="margin-top:10px" data-goview="modulos">${ic('plus',15)} Criar ${U.p}</button></div>`;v.querySelector('[data-goview]').onclick=()=>go('modulos');return}
   if(!_mraDef)mraFonte().then(()=>{if(VIEW==='mra')manterPosicao(vMra)}).catch(()=>{});
@@ -218,10 +219,10 @@ function vMra(){const t=T();if(!t)return go('turmas');const U=unidMod(t);const v
   {const e=$('#mra-edt');if(e)e.onclick=()=>{editarTurmaDlg(t);const obs=new MutationObserver(()=>{if(!$('#drawer.on')){obs.disconnect();if(VIEW==='mra')manterPosicao(vMra)}});obs.observe($('#drawer'),{attributes:true,attributeFilter:['class']})}}}
 TITLES.mra='Recuperação (MRA)';NEEDS_T.push('mra');MOD_VISTAS.add('mra');
 {const _gR=go;go=function(v){const r=_gR.apply(this,arguments);if(go._f&&!go._f.mra)go._f.mra=vMra;try{navMra()}catch(_){}return r}}
-function navMra(){const t=T();const on=!!t&&ehModular(t);$$('#side [data-v="mra"],#tnavHold [data-v="mra"]').forEach(b=>{b.hidden=!on;b.style.display=on?'':'none'})}
+function navMra(){const t=T();const on=!!t&&ehProfT(t);$$('#side [data-v="mra"],#tnavHold [data-v="mra"]').forEach(b=>{b.hidden=!on;b.style.display=on?'':'none'})}
 {const h=$('#tnavHold');const ref=h&&h.querySelector('[data-v="modulos"]');if(ref&&!h.querySelector('[data-v="mra"]')){ref.insertAdjacentHTML('afterend',`<button class="nav tnav" data-v="mra" title="Mecanismo de Recuperação (faltas por módulo)" hidden><span data-ico="refresh"></span><span class="lbl">Recuperação (MRA)</span></button>`);const b=h.querySelector('[data-v="mra"] [data-ico]');if(b)b.innerHTML=ic('refresh',18);h.querySelector('[data-v="mra"]').onclick=()=>go('mra')}}
 /* atalho na lista de módulos */
-{const _vmR=vModulos;vModulos=function(){const r=_vmR.apply(this,arguments);try{const t=T();if(t&&ehModular(t)&&(t.modulos||[]).length){$$('#view table.modlst tbody tr').forEach((tr,i)=>{const m=t.modulos[i];const cel=tr.lastElementChild;if(m&&cel&&!cel.querySelector('[data-modmra]'))cel.insertAdjacentHTML('afterbegin',`<button class="btn sm ico" data-modmra="${m.id}" title="Mecanismo de Recuperação (MRA)" aria-label="Recuperação de ${esc(m.nome)}">${ic('refresh',14)}</button>`)});
+{const _vmR=vModulos;vModulos=function(){const r=_vmR.apply(this,arguments);try{const t=T();if(t&&ehProfT(t)&&(t.modulos||[]).length){$$('#view table.modlst tbody tr').forEach((tr,i)=>{const m=t.modulos[i];const cel=tr.lastElementChild;if(m&&cel&&!cel.querySelector('[data-modmra]'))cel.insertAdjacentHTML('afterbegin',`<button class="btn sm ico" data-modmra="${m.id}" title="Mecanismo de Recuperação (MRA)" aria-label="Recuperação de ${esc(m.nome)}">${ic('refresh',14)}</button>`)});
   $$('[data-modmra]').forEach(b=>b.onclick=()=>{modEscolher(t,b.dataset.modmra);go('mra')})}}catch(e){console.warn(e)}return r}}
 AJUDA.push({id:'mra',ic:'refresh',t:'Mecanismo de Recuperação (MRA) por módulo',gif:null,txt:`<p>Nas turmas do ensino profissional, Turma › <b>Recuperação (MRA)</b> mostra, para cada módulo, as faltas de cada aluno, o limite (10% das horas, arredondado para cima) e o excesso. <b>Preencher Ficha</b> abre a ficha oficial do Mecanismo de Recuperação (a mesma folha da app MRA, com Imprimir e Exportar PDF), já com o curso, o formador, o formando, a disciplina, o módulo, as horas e as faltas. A ficha guarda-se sozinha na turma.</p>`});
 
