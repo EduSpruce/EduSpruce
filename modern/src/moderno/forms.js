@@ -327,9 +327,9 @@ try{AJUDA.push({id:'forms',ic:'clipboard',t:'Forms — Formulários e Testes Onl
 <li>No instrumento da turma aparece o teste ligado (Abrir · Lançar agora) e o botão <b>Ligar teste do Forms</b>, que também cria um teste novo com uma pergunta por item.</li>
 <li><b>Respostas</b>: resumo com gráficos por pergunta, respostas individuais (correção e comentários), classificações, exportação para Excel (CSV) e <b>Publicar Classificações</b> (os alunos veem as respostas certas e os comentários).</li></ul>`})}catch(_){}
 (()=>{const st=document.createElement('style');st.id='forms-css';st.textContent=`
-.fm{--fc:#0f6cbd;max-width:1100px;margin:0 auto}
+.fm{--fc:#0f6cbd;width:100%;max-width:none;margin:0}
 .fmhero{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
-.fmhero h2{margin:0 0 4px;display:flex;gap:8px;align-items:center}.fmhero p{margin:0;max-width:520px}
+.fmhero h2{margin:0 0 4px;display:flex;gap:8px;align-items:center}.fmhero p{margin:0;max-width:760px}
 .fmnovos{display:flex;gap:10px;flex-wrap:wrap}.fmnv{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:190px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:color-mix(in srgb,#0f6cbd 8%,var(--panel));color:var(--ink);cursor:pointer;text-align:left;font:inherit}
 .fmnv.q{background:color-mix(in srgb,#8764b8 10%,var(--panel))}.fmnv svg{color:#0f6cbd}.fmnv.q svg{color:#8764b8}.fmnv small{color:var(--mut)}.fmnv:hover{border-color:currentColor}
 .fmgr{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
@@ -341,7 +341,7 @@ try{AJUDA.push({id:'forms',ic:'clipboard',t:'Forms — Formulários e Testes Onl
 .fmtabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 18px;font:inherit;font-weight:700;color:var(--mut);cursor:pointer;min-height:44px}
 .fmtabs button.on{color:var(--fc);border-bottom-color:var(--fc)}.fmn{display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:var(--fc);color:#fff;font-size:12px}
 .fmrec{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;border-radius:12px;background:color-mix(in srgb,#16a34a 12%,var(--panel));margin-bottom:12px;font-size:14px}
-.fmpg{max-width:800px;margin:0 auto}
+.fmpg{max-width:1000px;margin:0 auto}
 .fmcab{background:var(--panel);border:1px solid var(--line);border-top:10px solid var(--fc);border-radius:14px;padding:16px;margin-bottom:12px}
 .fmtitulo{font-size:24px!important;font-weight:700;border:0!important;border-bottom:1.5px solid var(--line)!important;border-radius:0!important;background:transparent!important;width:100%;padding:6px 0!important}
 .fmcab textarea{width:100%;margin-top:8px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;resize:vertical}

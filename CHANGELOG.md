@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.018
+- Forms à largura toda
+
 ## 1.017
 - Ajuda sem legenda do tema nas imagens
 

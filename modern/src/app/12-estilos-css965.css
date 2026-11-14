@@ -517,4 +517,5 @@ html body.est-sge.est-sge.est-sge.est-sge #bar #barx .btn.pri{background:#767676
 html body.est-sge.est-sge.est-sge.est-sge #bar #barx .btn.pri:hover:not(:disabled){background:#858585!important}
 html body.est-sge.est-sge.est-sge.est-sge #bar #barx>.btn:last-child,html body.est-sge.est-sge.est-sge.est-sge #bar #barx>.btn:has(+ #barmais[style*="none"]){border-right:0!important}
 html body.est-sge.est-sge.est-sge.est-sge #bar #barx:empty{display:none!important}
+html body #view>.fm{max-width:none!important;width:100%!important}
 /*V0990-FIM*/
