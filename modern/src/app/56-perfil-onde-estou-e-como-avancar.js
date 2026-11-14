@@ -382,7 +382,7 @@ const AJ_VISTA={comecar:'inicio',turmas:'alunos',msai:'msai',horarios:'horario',
 const AJ_TEMAS={sge:'SGE',institucional:'Institucional',ios27:'iOS',coral:'Coral',social:'Social',gradiente:'Gradiente',academico:'Académico'};
 {const _vAj=vAjuda;vAjuda=function(){const r=_vAj.apply(this,arguments);try{const t=AJ_TEMAS[S.cfg.estilo]?S.cfg.estilo:'sge';
   $$('#view .ajs').forEach(c=>{const id=c.id.replace(/^aj-/,'');const v=AJ_VISTA[id];if(!v||c.querySelector('.ajcap'))return;const g=c.querySelector('.ajg');if(!g)return;const old=g.querySelector('.ajf');if(old)old.remove();g.classList.remove('sem');
-    g.insertAdjacentHTML('beforeend',`<figure class="ajf ajcap"><img src="ajuda/${t}/${v}.webp" alt="Ecrã: ${esc(c.querySelector('h2').textContent.trim())} (tema ${AJ_TEMAS[t]})" loading="lazy"><figcaption>Ecrã no tema <b>${AJ_TEMAS[t]}</b> — muda quando muda o tema</figcaption></figure>`);
+    g.insertAdjacentHTML('beforeend',`<figure class="ajf ajcap"><img src="ajuda/${t}/${v}.webp" alt="Ecrã: ${esc(c.querySelector('h2').textContent.trim())} (tema ${AJ_TEMAS[t]})" loading="lazy"></figure>`);
     const im=g.querySelector('.ajcap img');im.onerror=()=>{const f=im.closest('figure');if(f)f.remove();g.classList.add('sem')};im.onclick=()=>{const w=document.createElement('div');w.className='ajzoom';w.innerHTML=`<img src="${im.src}" alt="${esc(im.alt)}">`;w.onclick=()=>w.remove();document.body.appendChild(w)}});
   const h=$('#view .ajhd p');if(h&&!h.dataset.t){h.dataset.t=1;h.innerHTML='Tudo o que a app faz, passo a passo, com animações e capturas do ecrã no tema que está a usar (<b>'+AJ_TEMAS[t]+'</b>).'}}catch(e){console.warn(e)}return r};if(go._f)go._f.ajuda=vAjuda}
 

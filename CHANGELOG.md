@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.017
+- Ajuda sem legenda do tema nas imagens
+
 ## 1.016
 - Forms sem botões repetidos; botões do cabeçalho SGE uniformes
 
