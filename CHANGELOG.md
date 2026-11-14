@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.019
+- Banco por ano letivo (Forms, Arena, Pulso); Forms coerente com Arena e Pulso
+
 ## 1.018
 - Forms à largura toda
 
