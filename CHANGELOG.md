@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.014
+- Horário semanal PROFIJ: dias antes do ponto de situação preenchidos
+
 ## 1.013
 - Forms: associação a turmas e momentos de avaliação, com lançamento automático das classificações
 

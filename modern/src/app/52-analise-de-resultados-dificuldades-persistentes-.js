@@ -272,6 +272,17 @@ function cpdSim(a,nome,opt){opt=opt||{};const M=cpmM(nome),L=cpmLimites(a,M),c=C
         if(!id){for(const r of R){if(r.origem!=='*')continue;if(r.desde&&iso<r.desde)continue;if(r.ate&&iso>r.ate)continue;if(aberta(r.destino)){id=r.destino;via='livre';break}}}}
       if(!id){livres.push({iso,sk,x});log.push({iso,sk,id:null,via:'livre'});return}
       done[id]++;const d=D.find(z=>z.id===id);log.push({iso,sk,id,n:done[id],via,prof:cpdProfEm(d,iso)});if(done[id]>=need[id]&&!fim[id])fim[id]=iso})}
+  /* antes do último ponto de situação: as aulas já contadas nesse ponto também aparecem no horário semanal
+     (numeradas para trás a partir dos tempos dados que o ponto registou) */
+  if(P0&&desde>L.ini){const cnt={};D.forEach(d=>{const v=P0.dadas&&P0.dadas[d.id];cnt[d.id]=v!=null&&v!==''?+v:0});const H=[];
+    for(let iso=cpdMais(desde,-1);iso>=L.ini;iso=cpdMais(iso,-1)){const t=cpmTipo(iso,M,L,c);if(t!=='let')continue;const w=dataDeIso(iso).getDay();const wk=SEM[cpdSeg(iso)]||{};
+      aulas.filter(x=>x.dia===w).slice().reverse().forEach(x=>{const sk=cpdSk(x);const B=base(x);let id=null;
+        if(wk[sk]!=null&&wk[sk]!==''){id=wk[sk]==='livre'?null:wk[sk];if(id&&!(cnt[id]>0))id=null}
+        else{const d=B.slice().reverse().find(d=>cnt[d.id]>0);if(d)id=d.id}
+        if(!B.length&&!id&&wk[sk]==null)return;
+        if(!id){H.push({iso,sk,id:null,via:'livre',hist:1});return}
+        const d=D.find(z=>z.id===id);H.push({iso,sk,id,n:cnt[id],via:'hist',hist:1,prof:cpdProfEm(d,iso)});cnt[id]--})}
+    log.unshift(...H.reverse())}
   /* por professor: total global de tempos (todas as disciplinas e UFCD dele) */
   const P={};D.forEach(d=>{const pr=cpdProfEm(d,L.fim);const p=P[pr]=P[pr]||{nome:pr,disc:[],need:0,done:0,fim:'',falta:0};p.disc.push(d);p.need+=need[d.id];p.done+=Math.min(done[d.id],need[d.id]);p.falta+=Math.max(0,need[d.id]-done[d.id])});
   Object.values(P).forEach(p=>{p.fim=p.falta?'':p.disc.map(d=>fim[d.id]).filter(f=>f&&f!=='feito').sort().pop()||'feito'});
@@ -335,7 +346,7 @@ function cpdGrelha(S_,seg,edit){const M=S_.M;const dias=CPD_DS.map(w=>cpdMais(se
       if(t!=='let')return `<td class="cpd-nl"><small>${esc(x.ab)}</small></td>`;
       if(!e)return `<td class="cpd-v"><small>${esc(x.ab)}</small></td>`;
       const d=e.id&&dd(e.id);const at=edit?` data-cpdc="${esc(seg+'|'+sk)}" tabindex="0" role="button"`:'';
-      return d?`<td class="cpd-c ${ov?'ov':''} v-${e.via}"${at} style="--dc:${corDisc(d.nome)}"><b>${esc(cpdCurto(d))}</b><small>${esc(e.prof.split(' ')[0])}${e.prof.split(' ').length>1?' '+esc(e.prof.split(' ').slice(-1)[0]):''}</small><i>${e.n}/${S_.need[d.id]}</i>${e.via==='professor'||e.via==='cedido'||e.via==='livre'?`<em title="tempo de ${esc(x.ab)}">${esc(x.ab)}</em>`:''}</td>`
+      return d?`<td class="cpd-c ${ov?'ov':''} v-${e.via}"${at} style="--dc:${corDisc(d.nome)}"${e.hist?` title="Aula já contada no ponto de situação de ${S_.P0?esc(fmtIsoL(S_.P0.data)):''}"`:''}><b>${esc(cpdCurto(d))}</b><small>${esc(e.prof.split(' ')[0])}${e.prof.split(' ').length>1?' '+esc(e.prof.split(' ').slice(-1)[0]):''}</small><i>${e.n}/${S_.need[d.id]}</i>${e.via==='professor'||e.via==='cedido'||e.via==='livre'?`<em title="tempo de ${esc(x.ab)}">${esc(x.ab)}</em>`:''}</td>`
         :`<td class="cpd-c livre ${ov?'ov':''}"${at}><b>livre</b><small>${esc(x.ab)}</small></td>`}).join('')}</tr>`}).join('');
   const fimS=dias[4];const n=cpdAte(S_,fimS);const PR={};S_.D.forEach(d=>{const p=cpdProfEm(d,fimS);PR[p]=(PR[p]||0)+Math.max(0,S_.need[d.id]-n[d.id])});
   const rod=`<div class="cpd-rod">${Object.entries(PR).sort((x,y)=>x[0].localeCompare(y[0],'pt')).map(([p,f])=>`<span class="${f?'':'ok'}"><b>${esc(p)}</b> ${f?'faltam '+f:'acabou'}</span>`).join('')}</div>`;
