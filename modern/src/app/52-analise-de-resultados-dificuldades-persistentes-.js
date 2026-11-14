@@ -11,12 +11,16 @@ function dificuldades(t,x,lim){lim=lim||difLim();const R=[];const I=anInsts(t,nu
 function anSpark(pts,lim){const W=96,H=26;if(!pts.length)return '';const n=pts.length;const sx=k=>4+k*((W-8)/Math.max(1,n-1)),sy=p=>H-3-Math.max(0,Math.min(1,p))*(H-6);
   return `<svg class="ansp" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><line x1="0" x2="${W}" y1="${sy(lim)}" y2="${sy(lim)}" stroke="#c0392b" stroke-dasharray="2 2" stroke-width=".8"/><polyline fill="none" stroke="#5b6b7b" stroke-width="1.5" points="${pts.map((z,k)=>sx(k)+','+sy(z.p)).join(' ')}"/>${pts.map((z,k)=>`<circle cx="${sx(k)}" cy="${sy(z.p)}" r="2.4" fill="${anCor(z.p)}"/>`).join('')}</svg>`}
 function anBarras(rows){return `<div class="anbs">${rows.map(r=>`<div class="anb${r.k?' anck':''}" ${r.k?`data-ank="${esc(r.k)}" role="button" tabindex="0"`:''}><span class="anl">${r.l}</span><span class="ant"><i style="width:${Math.max(0,Math.min(100,(r.v||0)*100)).toFixed(1)}%;background:${r.c||anCor(r.v)}"></i>${r.v2!=null?`<u style="left:${Math.max(0,Math.min(100,r.v2*100)).toFixed(1)}%" title="Média da turma"></u>`:''}<em>${r.txt!=null?r.txt:anP(r.v)}</em></span>${r.s?`<small>${r.s}</small>`:''}</div>`).join('')}</div>`}
-function anLinha(S1,S2,lab){const W=640,H=210,pl=40,pr=44,top=14,bot=34;const n=lab.length;if(!n)return '';const ch=H-top-bot;const sx=k=>pl+(n===1?(W-pl-pr)/2:k*((W-pl-pr)/(n-1))),sy=p=>top+ch-Math.max(0,Math.min(1,p))*ch;
+function anLinha(S1,S2,lab,W0){const W=Math.max(320,Math.round(W0||640)),H=W0?240:210,pl=44,pr=56,top=28,bot=36;const n=lab.length;if(!n)return '';const ch=H-top-bot,ip=W0?26:0;const sx=k=>pl+ip+(n===1?(W-pl-pr-2*ip)/2:k*((W-pl-pr-2*ip)/(n-1))),sy=p=>top+ch-Math.max(0,Math.min(1,p))*ch;
   const grid=[0,.5,1].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${sy(v)}" y2="${sy(v)}" stroke="${v===.5?'#c0392b':'#d5dbe1'}" ${v?'stroke-dasharray="3 3"':''}/><text x="${pl-5}" y="${sy(v)+3}" font-size="9" text-anchor="end" fill="#6b7785">${v*100}%</text>`).join('');
   const ln=(P,cor,w,dash)=>{const q=P.map((p,k)=>p==null?null:[sx(k),sy(p)]).filter(Boolean);return q.length?`<polyline fill="none" stroke="${cor}" stroke-width="${w}" ${dash?'stroke-dasharray="5 4"':''} points="${q.map(z=>z.join(',')).join(' ')}"/>`:''};
   const dots=S1.map((p,k)=>p==null?'':`<circle cx="${sx(k)}" cy="${sy(p)}" r="4.5" fill="${anCor(p)}" stroke="#fff" stroke-width="1.5"/><text x="${sx(k)}" y="${sy(p)-9}" font-size="10" font-weight="700" text-anchor="middle" fill="#2b3640">${Math.round(p*100)}</text>`).join('');
-  const lb=lab.map((l,k)=>`<text x="${sx(k)}" y="${H-bot+14}" font-size="9.5" text-anchor="middle" fill="#4a5663">${esc(l[0])}</text><text x="${sx(k)}" y="${H-bot+26}" font-size="8.5" text-anchor="middle" fill="#8a95a1">${esc(l[1]||'')}</text>`).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" width="100%" class="anln" role="img" aria-label="Evolução nos instrumentos de avaliação">${grid}${ln(S2,'#9aa5b1',2,1)}${ln(S1,'#127fa6',2.5)}${dots}${lb}</svg>`}
+  const esp=n>1?(W-pl-pr)/(n-1):W-pl-pr,cap=Math.max(6,Math.floor(esp/6.2)-1);const lb=lab.map((l,k)=>`<text x="${sx(k)}" y="${H-bot+14}" font-size="10" text-anchor="middle" fill="#4a5663"><title>${esc(l[0])}</title>${esc(l[0].length>cap?l[0].slice(0,cap-1).trim()+'…':l[0])}</text><text x="${sx(k)}" y="${H-bot+26}" font-size="8.5" text-anchor="middle" fill="#8a95a1">${esc(l[1]||'')}</text>`).join('');
+  const svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" class="anln" role="img" aria-label="Evolução nos instrumentos de avaliação">${grid}${ln(S2,'#9aa5b1',2,1)}${ln(S1,'#127fa6',2.5)}${dots}${lb}</svg>`;
+  if(W0)return svg;try{anLinha._k=(anLinha._k||0)+1;(anLinha._d=anLinha._d||{})[anLinha._k]=[S1,S2,lab]}catch(_){}return `<div class="anlw" data-anl="${anLinha._k}">${svg}</div>`}
+/* o gráfico ocupa a largura toda do cartão (desenhado à medida, sem esticar o texto) */
+function anLinhaAjusta(){document.querySelectorAll('#view .anlw[data-anl]').forEach(w=>{const d=(anLinha._d||{})[w.dataset.anl];if(!d)return;const W=Math.round(w.clientWidth);if(!W||Math.abs(W-(+w.dataset.w||0))<4)return;w.dataset.w=W;w.innerHTML=anLinha(d[0],d[1],d[2],W)})}
+{let t=0;const ag=()=>{clearTimeout(t);t=setTimeout(anLinhaAjusta,40)};new MutationObserver(ag).observe(document.getElementById('view')||document.body,{childList:true,subtree:true});addEventListener('resize',ag)}
 TITLES.analise='Análise de Resultados';NEEDS_T.push('analise');
 {const h=$('#tnavHold');const ref=h&&h.querySelector('[data-v="dominios"]');if(ref&&!h.querySelector('[data-v="analise"]')){ref.insertAdjacentHTML('afterend',`<button class="nav tnav" data-v="analise" title="Análise de Resultados"><span data-ico="chart"></span><span class="lbl">Análise de Resultados</span></button>`);const b=h.querySelector('[data-v="analise"]');b.querySelector('[data-ico]').innerHTML=ic('target',18);b.onclick=()=>go('analise')}}
 function vAnalise(){const t=T();if(!t)return go('turmas');const an=A();const P=periodos();const tab=UI.anTab||'dom';const per=UI.anPer===''||UI.anPer==null?(UI.anPer==null?perAtual(t):null):+UI.anPer;if(UI.anPer==null)UI.anPer=String(per);
@@ -44,7 +48,7 @@ function vAnalise(){const t=T();if(!t)return go('turmas');const an=A();const P=p
     const rows=(t.dominios||[]).map(d=>({l:`<b>${esc(d.nome)}</b>`,v:domAl(x,d),v2:avg(AL.map(z=>domAl(z,d))),s:`turma: ${anP(avg(AL.map(z=>domAl(z,d))))}`}));
     body=`<div class="card"><div class="row anals"><select id="an-al" aria-label="Aluno">${AL.map(z=>`<option value="${z.id}" ${z.id===x.id?'selected':''}>${esc(numAl(z))}. ${esc(z.nome)}</option>`).join('')}</select><span class="sp1"></span><button class="btn" id="an-fi">${ic('idcard',15)} Ficha Integral</button></div>
       <div class="row anhd">${avatar(x,52)}<div><b style="font-size:17px">${esc(x.nome)}</b><div class="mut">${per!=null?perNome(per):'Ano letivo'} · classificação ${nf_==null?'—':`<b style="color:${anCor(nf_)}">${esc(fmtNota(t,nf_))}</b> (nível ${nivel(t,nf_)})`}</div>${dif.length?`<div class="anchips">${dif.map(o=>`<span class="tag bad">${ic('alert',12)} ${esc(o.d.nome)}</span>`).join('')}</div>`:''}</div></div></div>
-      <div class="card"><h2>${ic('chart',18)} Evolução nos instrumentos</h2><div class="anleg"><span><i style="background:#127fa6"></i>${esc(x.nome.split(' ')[0])}</span><span><i class="dsh"></i>Média da turma</span></div>${II.length?anLinha(S1,S2,II.map(i=>[i.nome.length>14?i.nome.slice(0,13)+'…':i.nome,i.data?fmtIso(i.data):''])):'<p class="mut">Sem instrumentos.</p>'}</div>
+      <div class="card"><h2>${ic('chart',18)} Evolução nos instrumentos</h2><div class="anleg"><span><i style="background:#127fa6"></i>${esc(x.nome.split(' ')[0])}</span><span><i class="dsh"></i>Média da turma</span></div>${II.length?anLinha(S1,S2,II.map(i=>[i.nome,i.data?fmtIso(i.data):''])):'<p class="mut">Sem instrumentos.</p>'}</div>
       <div class="card"><h2>${ic('layers',18)} Domínios: aluno e turma</h2><p class="hint" style="margin-top:0">A barra é o aluno; o traço vertical é a média da turma.</p>${anBarras(rows)}</div>`}}
   else if(tab==='dif'){const porDom=(t.dominios||[]).map(d=>({d,n:DIF.filter(o=>o.r.some(z=>z.d.id===d.id)).length})).filter(z=>z.n);
     body=`<div class="card"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('alert',18)} Dificuldades persistentes</h2><span class="sp1"></span><label style="margin:0">Abaixo de</label><select id="an-lim" style="width:auto">${[.4,.45,.5,.55,.6].map(v=>`<option value="${v}" ${Math.abs(v-lim)<1e-6?'selected':''}>${Math.round(v*100)}%</option>`).join('')}</select></div>
@@ -151,81 +155,6 @@ function rcCorpo(a,n,AL){const L=rcLista(a,n,AL);const F=UI.rcF=UI.rcF||{m:'',al
     $('#rc-csv').onclick=()=>{const q_=v_=>'"'+String(v_==null?'':v_).replace(/"/g,'""')+'"';const rows=[['Data','Hora','Meio','Sentido','Aluno','Com quem','Assunto','Síntese','Compromisso','Acompanhar em'],...LL().map(z=>[z.c.data,z.c.hora||'',z.c.meio||'',z.c.sentido==='rec'?'Recebido':'Efetuado',z.o?z.o.x.nome:(z.nomeAl||'Turma '+n),z.c.quem||'',z.c.assunto||'',z.c.sintese||'',z.c.compromisso||'',z.c.acomp||''])];
       const b_=new Blob(['﻿'+rows.map(r_=>r_.map(q_).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'});const u=URL.createObjectURL(b_);const l=document.createElement('a');l.href=u;l.download='Registo de contactos '+n.replace(/[\\/:*?"<>|]/g,'')+'.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);audit('Direção de Turma','Exportação do registo de contactos',n)}}}catch(e){console.warn(e)}return r};if(go._f)go._f.direcao=vDirecao}
 {const _hRc=historicoDT;historicoDT=function(a,n,AL){const H=_hRc.apply(this,arguments)||[];try{const D=dtDados(a,n);(D.contGerais||[]).forEach(c=>H.push({data:c.data,tipo:'Contacto ('+(c.meio||'')+')',desc:'Turma · '+(c.assunto||c.sintese||'')}));H.sort((x,y)=>String(y.data).localeCompare(String(x.data)))}catch(_){}return H}}
-/*V0990-INI*/
-/* ===================== v0.990 · separadores do topo alinhados com o conteúdo que vem por baixo (ecrãs largos) ===================== */
-function alinharTabsTopo(){const v=document.getElementById('view');if(!v)return;const t=v.querySelector(':scope>.tabs,:scope>.deftabs');if(!t)return;t.style.removeProperty('margin-left');
-  const n=t.nextElementSibling;if(!n||!n.matches('.vlay,.card,.kpis,.mtlay,.inlay,.anv,.cmw'))return;const vr=v.getBoundingClientRect(),nr=n.getBoundingClientRect();if(!nr.width)return;
-  const d=nr.left-vr.left-(parseFloat(getComputedStyle(v).paddingLeft)||0);t.style.setProperty('margin-left',Math.max(0,Math.round(d))+'px','important')}
-{let _at=0;const q=()=>{cancelAnimationFrame(_at);_at=requestAnimationFrame(()=>{try{alinharTabsTopo()}catch(_){}})};const v=document.getElementById('view');if(v)new MutationObserver(q).observe(v,{childList:true});addEventListener('resize',q)}
-/* v0.990 · desempenho: o alinhamento do cabeçalho junta as chamadas repetidas num só cálculo e não se repete se nada mudou */
-{const assin=()=>{const b=document.getElementById('bar');if(!b)return '';return b.clientWidth+'|'+b.textContent.length+'|'+b.querySelectorAll('button:not([hidden])').length+'|'+document.body.classList.contains('dev-pc')};
-  const _alb=alinharBar;let ka='',fila=0;const kAl=()=>{const v=document.getElementById('view');const f=v&&v.firstElementChild;return VIEW+'|'+(v?v.clientWidth:0)+'|'+(v?v.children.length:0)+'|'+(f?f.className:'')+'|'+assin()};
-  alinharBar=function(){if(fila)return;fila=requestAnimationFrame(()=>{fila=0;const k=kAl();if(k===ka)return;try{_alb()}catch(e){console.warn(e)}ka=kAl()})}}
-/* v0.992 · Produção Oral: organização individual / pares / grupos, formação pelo sorteio (aleatória ou equilibrada pela nota da PO) e guiões A/B */
-function oralOrg(o){o.orgI=o.orgI||{};const k=oralKey(o)||'_proprio';const g=o.orgI[k]=o.orgI[k]||{};if(!g.modo)g.modo='ind';if(!(g.n>=3))g.n=3;if(!g.form)g.form='aleat';if(!g.gui)g.gui='aleat';return g}
-/* nota de referência para equilibrar: média do domínio da oralidade nos períodos já avaliados; se não houver, média dos outros momentos orais */
-function oralNotaRef(t,aid){const d=domOral(t);let v=[];if(d)for(let p=1;p<=4;p++){const x=domPer(t,aid,d.id,p);if(x!=null)v.push(x)}
-  if(!v.length){const o=oralM(t);const k0=oralKey(o);oralMomentos(t).forEach(m=>{if(m.k===k0)return;const tt=oralTotK(t,m.k,aid);const c=oralCfgDe(o,m.k);if(tt&&tt.completo&&c.total)v.push(100*tt.pts/c.total)})}
-  return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
-const _bar=A=>{const B=A.slice();for(let i=B.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[B[i],B[j]]=[B[j],B[i]]}return B};
-/* formação equilibrada: ordena pela nota e divide em faixas (boas → fracas); cada par/grupo leva um aluno de cada faixa */
-function oralEquilibrar(t,AL,n){const com=AL.map(a=>({a,v:oralNotaRef(t,a.id)}));const sem=_bar(com.filter(x=>x.v==null)).map(x=>x.a);
-  const ord=_bar(com.filter(x=>x.v!=null)).sort((x,y)=>y.v-x.v).map(x=>x.a);const mid=Math.floor(ord.length/2);const L=[...ord.slice(0,mid),...sem,...ord.slice(mid)];
-  const k=Math.max(1,Math.floor(L.length/n));const G=Array.from({length:k},()=>[]);
-  for(let b=0;b<n;b++){const faixa=_bar(L.slice(b*k,b*k+k));faixa.forEach((a,i)=>G[i].push(a))}
-  const resto=L.slice(n*k);resto.forEach((a,i)=>G[(Math.floor(k/2)+i)%k].push(a));return G}
-/* guiões: em cada par/grupo, um A e um B (alternados, ao acaso); individual: metade A, metade B */
-function oralGuioes(G){const m={};G.forEach(g=>{const ab=_bar(['A','B']);_bar(g).forEach((a,i)=>m[a.id]=ab[i%2])});/* no resultado, sempre do A para o B */G.forEach(g=>g.sort((x,y)=>(m[x.id]||'').localeCompare(m[y.id]||'')));return m}
-function oralAplicar(t,o,org,G,gui){G.forEach((g,i)=>g.forEach(a=>{const r=o.regs[a.id]=o.regs[a.id]||{n:{}};r.p=i+1;/* o colega de par (indicador por baixo do nome) */if(g.length===2)r.par=g.find(x=>x!==a).id;else delete r.par}));if(gui)Object.entries(gui).forEach(([aid,g])=>{const r=o.regs[aid]=o.regs[aid]||{n:{}};r.g=g});save()}
-function oralOrgCard(t,o,org,al){const seg=(nm,k,ops)=>`<div class="seg" role="group" aria-label="${nm}">${ops.map(([v,l])=>`<button type="button" data-oo="${k}|${v}" class="${org[k]===v?'on':''}">${l}</button>`).join('')}</div>`;
-  const ind=org.modo==='ind';const nomeG=org.modo==='par'?'pares':'grupos';const temNotas=al.some(a=>oralNotaRef(t,a.id)!=null);const ng=new Set(al.map(a=>(o.regs[a.id]||{}).p).filter(Boolean)).size;
-  return `<div class="card ororg"><div class="row" style="flex-wrap:wrap;gap:10px;align-items:center"><h2 style="margin:0">${ic('users',18)} Organização</h2><span class="tag">A classificação é sempre individual</span><span class="sp1"></span>${seg('Modalidade','modo',[['ind','Individual'],['par','Pares'],['grp','Grupos']])}${org.modo==='grp'?`<label class="mut" style="margin:0">de <input type="number" id="oo-n" min="3" max="8" value="${org.n}" style="width:60px" inputmode="numeric" aria-label="Alunos por grupo"> alunos</label>`:''}</div>
-    <div class="ororgl">${ind?'':`<div><span class="oolab">Formação dos ${nomeG}</span>${seg('Formação','form',[['aleat','Aleatória'],['equil','Equilibrada pela nota da PO'],['manual','Manual']])}</div>`}
-      <div><span class="oolab">Guiões A/B</span>${seg('Guiões','gui',[['aleat','Ao acaso'],['manual','Manual']])}</div></div>
-    ${!ind&&org.form==='equil'?`<p class="hint">${temNotas?'Cada '+(org.modo==='par'?'par junta':'grupo junta')+' alunos com notas mais altas e mais baixas na Produção Oral (média dos períodos já avaliados).':'Ainda não há notas de Produção Oral: a formação fica aleatória até haver avaliações.'}</p>`:''}
-    ${!ind&&org.form==='manual'?`<p class="hint">Escreva o número do ${org.modo==='par'?'par':'grupo'} de cada aluno na coluna «${org.modo==='par'?'Par':'Grupo'}» da ficha.</p>`:''}
-    ${org.gui==='manual'?`<p class="hint">Escreva A ou B na coluna «Guião» da ficha.</p>`:`<p class="hint">Guiões ao acaso: ${ind?'metade da turma com o A e metade com o B':'em cada '+(org.modo==='par'?'par':'grupo')+' há um A e um B'}, sorteados com ${ind?'o botão abaixo':'os '+(org.modo==='par'?'pares':'grupos')}.</p>`}
-    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px">${!ind&&org.form!=='manual'?`<button type="button" class="btn pri" id="oo-sort">${ic('refresh',15)} Sortear ${nomeG} na roda</button><button type="button" class="btn" id="oo-rap">Formar sem animação</button>`:''}
-      ${org.gui==='aleat'?`<button type="button" class="btn" id="oo-gui">${ic('refresh',15)} Sortear guiões${ind?'':' (nos '+nomeG+' atuais)'}</button>`:''}
-      ${!ind&&ng?`<button type="button" class="btn" id="oo-lim">${ic('x',14)} Limpar ${nomeG}</button><span class="mut" style="align-self:center">${ng} ${ng===1?(org.modo==='par'?'par':'grupo'):nomeG} formado${ng===1?'':'s'}</span>`:''}</div></div>`}
-function oralGruposAtuais(o,al){const M={};al.forEach(a=>{const p=(o.regs[a.id]||{}).p;if(p)(M[p]=M[p]||[]).push(a)});return Object.keys(M).sort((a,b)=>a-b).map(k=>M[k])}
-function oralOrgLigar(t,o,org,al,re){
-  $$('[data-oo]').forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.oo.split('|');/* de Manual para Aleatória/Equilibrada: os pares feitos à mão são limpos */if(k==='form'&&org.form==='manual'&&v!=='manual'){let n=0;al.forEach(a=>{const x=o.regs[a.id];if(x&&(x.p||x.par)){delete x.p;delete x.par;n++}});if(n)toast((org.modo==='par'?'Pares':'Grupos')+' manuais limpos','ok')}org[k]=v;save();re()});
-  const nn=$('#oo-n');if(nn)nn.onchange=()=>{org.n=Math.max(3,Math.min(8,+nn.value||3));save();re()};
-  const n=org.modo==='par'?2:org.n;const formar=AL=>org.form==='equil'?oralEquilibrar(t,AL,n):rodaPartir(AL,n);
-  const AV=()=>alunosAval(t).filter(a=>al.some(x=>x.id===a.id));
-  const s=$('#oo-sort');if(s)s.onclick=()=>{let gui=null;rodaAbrir(t,AV().map(a=>a.id),{modo:org.modo==='par'?'pares':'grupos',n,formar,
-      depois:G=>{gui=org.gui==='aleat'?oralGuioes(G):null},etiqueta:a=>gui&&gui[a.id]?`<em class="rdgu">Guião ${gui[a.id]}</em>`:'',
-      destino:{t:'Usar na Produção Oral',fn:G=>{oralAplicar(t,o,org,G,gui);toast((org.modo==='par'?'Pares':'Grupos')+' guardados na ficha','ok');re()}}})};
-  const r=$('#oo-rap');if(r)r.onclick=()=>{const G=formar(AV());oralAplicar(t,o,org,G,org.gui==='aleat'?oralGuioes(G):null);toast((org.modo==='par'?'Pares formados':'Grupos formados')+(org.gui==='aleat'?' e guiões sorteados':''),'ok');re()};
-  const g=$('#oo-gui');if(g)g.onclick=()=>{const G=org.modo==='ind'?al.map(a=>[a]):oralGruposAtuais(o,al);if(!G.length)return toast('Forme primeiro os '+(org.modo==='par'?'pares':'grupos'),'aviso');
-    let m;if(org.modo==='ind'){const ab=_bar(al).map((a,i)=>[a.id,i%2?'B':'A']);m=Object.fromEntries(ab)}else m=oralGuioes(G);oralAplicar(t,o,org,[],m);toast('Guiões sorteados','ok');re()};
-  const l=$('#oo-lim');if(l)l.onclick=()=>{if(!confirm('Limpar os '+(org.modo==='par'?'pares':'grupos')+' deste momento? As classificações ficam.'))return;al.forEach(a=>{const x=o.regs[a.id];if(x){delete x.p;delete x.par}});save();re()};
-  $$('[data-orp]').forEach(i=>i.onchange=()=>{const x=o.regs[i.dataset.orp]=o.regs[i.dataset.orp]||{n:{}};const v=parseInt(i.value,10);if(v>0)x.p=v;else delete x.p;save()});
-  $$('[data-org]').forEach(i=>i.addEventListener('input',()=>{i.value=i.value.toUpperCase()}))}
-
-/* v0.995 · Contactos: a barra das listas pode encolher (fica só com os ícones) */
-function cmSbAplicar(){const w=document.getElementById('cm-w');if(!w)return;const sb=w.querySelector('.cmsb');if(!sb)return;
-  const col=!!(S.cfg&&S.cfg.cmSbCol);w.classList.toggle('sbcol',col);
-  sb.querySelectorAll('.cmli').forEach(b=>{if(!b.title){const sp=b.querySelector('span');if(sp)b.title=sp.textContent.trim()}});
-  let t=sb.querySelector('.cmsbt');if(!t){t=document.createElement('button');t.type='button';t.className='cmsbt';sb.prepend(t);
-    t.onclick=()=>{S.cfg=S.cfg||{};S.cfg.cmSbCol=!S.cfg.cmSbCol;try{save()}catch(_){}cmSbAplicar()}}
-  t.innerHTML=ic('back',14)+(col?'':'<span>Encolher</span>');t.title=col?'Mostrar as listas':'Encolher a barra das listas';t.setAttribute('aria-label',t.title);t.setAttribute('aria-expanded',String(!col))}
-{let _cmQ=0;new MutationObserver(()=>{if(_cmQ)return;_cmQ=requestAnimationFrame(()=>{_cmQ=0;const w=document.getElementById('cm-w');if(w&&(!w.querySelector('.cmsbt')||w.classList.contains('sbcol')!==!!(S.cfg&&S.cfg.cmSbCol)))cmSbAplicar()})}).observe(document.getElementById('view')||document.body,{childList:true,subtree:true})}
-/* v1.004 · Tab (e Shift+Tab) anda de célula em célula nas tabelas de toda a app, saltando botões e caixas de seleção;
-   se a tabela se redesenhar ao gravar, o cursor volta à célula certa */
-{const CAMPO='input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]):not([type=file]):not([type=hidden]):not([type=range]),select,textarea,[contenteditable=""],[contenteditable=true]';
-  const campos=t=>[...t.querySelectorAll(CAMPO)].filter(x=>!x.disabled&&!x.readOnly&&x.offsetParent!==null&&x.closest('table,[role=grid]')===t);
-  const assin=x=>{const d=[...x.attributes].filter(a=>/^data-|^name$|^id$/.test(a.name)).map(a=>a.name+'='+a.value).join('&');const tr=x.closest('tr');return d+'|'+(tr?[...tr.attributes].filter(a=>/^data-/.test(a.name)).map(a=>a.name+'='+a.value).join('&'):'')+'|'+(x.closest('td,th')?x.closest('td,th').cellIndex:'')};
-  const marca=el=>{try{el.focus({preventScroll:false});if(el.select&&/^(text|number|search|tel|url|email|)$/.test(el.type||''))el.select();else if(el.isContentEditable){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}el.scrollIntoView({block:'nearest',inline:'nearest'})}catch(_){}};
-  document.addEventListener('keydown',e=>{if(e.key!=='Tab'||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey)return;const cur=e.target;if(!cur||!cur.matches||!cur.matches(CAMPO))return;
-    const t=cur.closest('table,[role=grid]');if(!t)return;const L=campos(t);const i=L.indexOf(cur);if(i<0)return;const j=i+(e.shiftKey?-1:1);const nx=L[j];if(!nx)return;
-    e.preventDefault();const tabs=[...document.querySelectorAll('table,[role=grid]')];const ti=tabs.indexOf(t);const sg=assin(nx);marca(nx);
-    /* muitas tabelas redesenham-se no «change» da célula anterior: voltar a encontrar a célula seguinte */
-    const repor=()=>{if(nx.isConnected&&document.activeElement===nx)return;const a=document.activeElement;if(a&&a!==document.body&&a.isConnected&&a.matches&&a.matches(CAMPO)&&a!==cur)return;
-      const T=[...document.querySelectorAll('table,[role=grid]')];const t2=T[ti]||T.find(x=>x.isConnected);if(!t2)return;const L2=campos(t2);const alvo=L2.find(x=>assin(x)===sg)||L2[j];if(alvo)marca(alvo)};
-    setTimeout(repor,0);setTimeout(repor,60);setTimeout(repor,200);requestAnimationFrame(()=>requestAnimationFrame(repor))},false)}
-/*V0990-FIM*/
 /*V0996-INI*/
 /* v0.996 · Coord. PROFIJ › Distribuição e Horários
    Simulação tempo a tempo (45 min) do ano da turma, com:
@@ -399,7 +328,14 @@ table{border-collapse:collapse;width:100%;margin:0 0 8px}th,td{border:1px solid 
 .pg{break-after:page;page-break-after:always}.pg:last-child{break-after:auto}.cpd-gr td,.cpd-gr th{text-align:center;width:18%}.cpd-gr th:first-child{width:8%}.cpd-gr b{display:block}.cpd-gr small{display:block;color:#555}.cpd-gr i{font-style:normal;font-weight:700}
 .nl{background:#f1f1f1;color:#888}.lv{background:#fff7d6}.rod span{display:inline-block;margin:0 12px 0 0}.ass{margin-top:28px;display:flex;justify-content:flex-end}.ass div{text-align:center;min-width:240px}.ass i{display:block;border-top:1px solid #333;margin-bottom:4px}
 @page{size:A4;margin:12mm}@page land{size:A4 landscape}.land{page:land}`;
-function cpdDoc(tit,corpo){const f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);
+/* logótipos da escola (canto superior direito e centrado em baixo) em todas as páginas dos documentos impressos */
+function docLogosHTML(corpo,sel){const e=(typeof EC==='function'&&EC())||{};if(!e.logoDir&&!e.logoBaixo)return corpo;const D=e.logoDir?`<img class="lgD" src="${e.logoDir}" alt="">`:'',B=e.logoBaixo?`<img class="lgB" src="${e.logoBaixo}" alt="">`:'';
+  const css=`<style>.lgpg{position:relative;display:flex;flex-direction:column;box-sizing:border-box}.lgpg>*{flex:none}.lgpg>h1,.lgpg>.hdr{padding-right:46mm}.lgD{position:absolute;top:0;right:0;max-height:14mm;max-width:42mm;object-fit:contain}.lgB{margin-top:auto;align-self:center;max-height:12mm;max-width:60mm;object-fit:contain;padding-top:4mm}@media print{.lgpg{min-height:265mm}.lgpg.land{min-height:180mm}}</style>`;
+  let n=0;const out=corpo.replace(new RegExp('<section class="('+(sel||'pg')+')([^"]*)"','g'),(m,a,b)=>{n++;return `<section class="${a}${b} lgpg"`}).replace(/<section class="([^"]*\blgpg\b[^"]*)"([^>]*)>/g,(m)=>m+D);
+  if(!n)return css+D+corpo+`<div style="text-align:center">${B}</div>`;
+  /* rodapé: antes do fecho de cada página */
+  let k=0;const partes=out.split('</section>');return css+partes.map((p,i)=>i<partes.length-1&&/lgpg/.test(p.slice(p.lastIndexOf('<section')))?p+B:p).join('</section>')}
+function cpdDoc(tit,corpo){corpo=docLogosHTML(corpo);const f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);
   const w=f.contentWindow;w.document.open();w.document.write(`<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><title>${esc(tit)}</title><style>${CPD_CSS}</style></head><body>${corpo}</body></html>`);w.document.close();
   setTimeout(()=>{try{w.focus();w.print()}catch(e){console.warn(e)}setTimeout(()=>f.remove(),60000)},300)}
 const cpdCab=(M,nome,t)=>`<h1>${esc(t)}</h1><p class="m">${esc(M.curso||'Curso PROFIJ')} · ${esc(nome)}${S.cfg.escola?' · '+esc(S.cfg.escola):''} · ${fmtIsoL(isoHoje())}</p>`;

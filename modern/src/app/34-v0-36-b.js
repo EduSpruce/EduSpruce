@@ -364,7 +364,7 @@ async function nvDefinirPalavra(pw){const prov=nvProv();if(!prov)throw new Error
   const salt=man&&man.salt?man.salt:b64(crypto.getRandomValues(new Uint8Array(16)));const k=await nvChaveDe(pw,salt);
   if(man&&man.chk){let ok=false;try{ok=await nvDecifrar(man.chk,k)==='eduflow'}catch(_){}if(!ok)throw new Error('Palavra-passe errada: não corresponde à dos dados já guardados na nuvem.')}
   await nvGuardarChave(k);nvSet({salt,base:null,mod:{}});return !!man}
-/* --- cartão em Definições › Dados e Segurança --- */
+/* --- cartão em Definições › Segurança --- */
 function cartaoNuvem(){const L=nvL();const prov=PROV[L.prov];const lig=prov&&(L.prov==='google'?!!(gsCfg().clientId):!!L.ms);const C=nvConflitos();const https=nvHttps();
   const ultimo=L.ultimo?new Date(L.ultimo).toLocaleString('pt-PT',{dateStyle:'short',timeStyle:'short'}):'nunca';
   return `<div class="card" id="nv-card"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('refresh',18)} Sincronização na Nuvem</h2><span class="tag ${lig&&L.k?'ok':''}">${lig&&L.k?'Ativa · '+esc(prov.n):'Desligada'}</span><span class="sp1"></span>${lig&&L.k?`<button class="btn pri" id="nv-agora">${ic('refresh',15)} Sincronizar Agora</button>`:''}</div>

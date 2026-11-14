@@ -195,7 +195,7 @@ async function esPosCarga(pf){
     else if(S.anos.length){const ult=anoPorData();if(ult&&S.anoAtivo!==ult.id){S.anoAtivo=ult.id;const TF=turmasFiltradas(A());S.turmaAtiva=TF[0]?TF[0].id:null}}}catch(e){console.warn(e)}
   if(S.cfg.pinHash&&!esPosCarga._pin){esPosCarga._pin=true;
     let rep=null;try{rep=JSON.parse(localStorage.getItem('es.pinrep')||'null');localStorage.removeItem('es.pinrep')}catch(_){}
-    if(rep&&rep.e===pf.email&&Date.now()-rep.q<15*60*1000&&_sbEntrouAgora){delete S.cfg.pinHash;try{audit('Segurança','Código de acesso retirado (entrou de novo com a conta Google)',pf.email)}catch(_){}save();setTimeout(()=>toast('Código de acesso retirado. Pode definir um novo em Definições › Dados e Segurança.','ok'),900)}
+    if(rep&&rep.e===pf.email&&Date.now()-rep.q<15*60*1000&&_sbEntrouAgora){delete S.cfg.pinHash;try{audit('Segurança','Código de acesso retirado (entrou de novo com a conta Google)',pf.email)}catch(_){}save();setTimeout(()=>toast('Código de acesso retirado. Pode definir um novo em Definições › Segurança.','ok'),900)}
     else{try{const pp=pedirPin();esCortina(false);await pp}catch(e){console.warn(e)}}}
   try{if(S.cfg.pinHash)localStorage.setItem('es.pin','1');else localStorage.removeItem('es.pin')}catch(_){}esCortina(false);
   esEsqueleto(null);try{aplicarPrefs()}catch(_){}try{go(VIEW||'inicio')}catch(e){console.warn(e)}
@@ -254,7 +254,7 @@ nvPainel=function(){const L=nvL();const C=nvConflitos();const pend=Object.keys(L
   </div></div>`};
 {const _bP=bindNvPainel;bindNvPainel=function(){const r=_bP.apply(this,arguments);try{const s=$('#nv2-sair');if(s)s.onclick=()=>{if(confirm('Terminar a sessão neste aparelho?\n\nOs seus dados continuam guardados na sua conta.'))terminarSessao()};const ag=$('#nv2-agora');if(ag)ag.onclick=async()=>{ag.disabled=true;await nvSincronizar(true);sbRedesenhar()}}catch(e){console.warn(e)}return r}}
 /* «Esqueci-me do código de acesso»: confirma-se com a conta Google (já não existe código de encriptação) */
-pinRecuperar=async function(){const em=sbEmailApp();if(!em)return;if(!confirm('Esqueceu-se do código de acesso?\n\nPara confirmar que é você, vai entrar outra vez com a conta Google ('+em+'). Depois disso o código antigo é retirado e pode escolher um novo em Definições › Dados e Segurança.\n\nContinuar?'))return;
+pinRecuperar=async function(){const em=sbEmailApp();if(!em)return;if(!confirm('Esqueceu-se do código de acesso?\n\nPara confirmar que é você, vai entrar outra vez com a conta Google ('+em+'). Depois disso o código antigo é retirado e pode escolher um novo em Definições › Segurança.\n\nContinuar?'))return;
   try{localStorage.setItem('es.pinrep',JSON.stringify({e:em,q:Date.now()}))}catch(_){}sbTerminar('Entre com a conta '+em+' para retirar o código de acesso.')};
 
 /* Definições › Conta e Acesso: no modo base de dados só se entra com a conta Google — as contas locais e a preparação do Microsoft 365 não se mostram */
@@ -263,7 +263,7 @@ pinRecuperar=async function(){const em=sbEmailApp();if(!em)return;if(!confirm('E
 try{['gsync','nuvem','nuvemcfg'].forEach(id=>{const i=AJUDA.findIndex(a=>a.id===id);if(i>=0)AJUDA.splice(i,1)});
   const aj=(id,t,txt)=>{const a=AJUDA.find(x=>x.id===id);if(a){if(t)a.t=t;a.txt=txt;a.gif=null}else AJUDA.push({id,ic:'cloud',t,gif:null,txt})};
   aj('nuvem2','Usar em vários aparelhos (computador, iPad, telemóvel)',`<p>Abra <b>${esc(location.host||'eduspruce.pt')}</b> em qualquer computador, iPad ou telemóvel e toque em <b>Entrar com Google</b>: os seus dados aparecem logo. Não há códigos, palavras-passe de encriptação nem nada para configurar.</p><ul><li>O que mudar num aparelho aparece nos outros em segundos.</li><li>No iPhone/iPad pode adicionar a app ao ecrã principal (Partilhar › Adicionar ao ecrã principal).</li><li>Nos aparelhos não fica nada guardado: ao <b>terminar a sessão</b>, os dados continuam na sua conta.</li><li>Sem internet, a app avisa; as alterações são guardadas assim que a ligação voltar (mantenha a app aberta).</li></ul>`);
-  aj('dados','Dados e Cópias de Segurança',`<p>Os seus dados ficam guardados na sua conta, na <b>base de dados EduSpruce</b> (União Europeia): não dependem do aparelho nem do navegador. Em <b>Definições › Dados e Segurança</b> pode exportar uma cópia (ficheiro JSON, com fotografias) para ter uma reserva sua; e, em <b>Definições › Conta e Dados</b>, ligar uma cópia diária no seu Google Drive.</p>`);
+  aj('dados','Dados e Cópias de Segurança',`<p>Os seus dados ficam guardados na sua conta, na <b>base de dados EduSpruce</b> (União Europeia): não dependem do aparelho nem do navegador. Em <b>Definições › Segurança</b> pode exportar uma cópia (ficheiro JSON, com fotografias) para ter uma reserva sua; e, em <b>Definições › Conta e Dados</b>, ligar uma cópia diária no seu Google Drive.</p>`);
   {const a=AJUDA.find(x=>x.id==='legal');if(a)a.txt=a.txt.replace('(no dispositivo e, se quiser, encriptados na sua nuvem)','(na base de dados EduSpruce, na União Europeia)')}
   {const a=AJUDA.find(x=>x.id==='importados');if(a)a.txt=a.txt.replace('e na sincronização com a conta Google','e fica guardado na sua conta')}}catch(e){console.warn(e)}
 

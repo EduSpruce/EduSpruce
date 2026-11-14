@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.015
+- Cabeçalho sem «Mais» quando cabe; logótipos direito e de rodapé nos documentos; melhorias de horário, separadores, gráfico e definições
+
 ## 1.014
 - Horário semanal PROFIJ: dias antes do ponto de situação preenchidos
 

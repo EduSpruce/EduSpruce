@@ -148,6 +148,7 @@ function grelhaSemanal(aulas,opts){
   opts=opts||{};if(!aulas.length)return '<div class="empty">Sem aulas.</div>';
   const dias=[...new Set(aulas.map(a=>a.dia))].sort();const ds=dias.length?[1,2,3,4,5,...(dias.includes(6)?[6]:[])]:[1,2,3,4,5];
   const slots=[];[...(opts.slots||[]),...aulas].forEach(a=>{if(!slots.some(s=>s.ini===a.ini))slots.push({ini:a.ini,fim:a.fim})});slots.sort((x,y)=>x.ini-y.ini);
+  if(opts.semVazias){for(let i=slots.length-1;i>=0;i--)if(!aulas.some(a=>a.ini===slots[i].ini))slots.splice(i,1)}
   const hoje=new Date().getDay(),mins=new Date().getHours()*60+new Date().getMinutes();
   return `<div style="overflow:auto"><table class="hor"><thead><tr><th class="tm"></th>${ds.map(d=>`<th class="${d===hoje?'hj':''}">${DIAS[d]}</th>`).join('')}</tr></thead><tbody>
   ${slots.map((s,i)=>`${i&&s.ini-slots[i-1].fim>=15?`<tr class="pausa"><td colspan="${ds.length+1}"></td></tr>`:''}<tr><td class="tm">${fmtHM(s.ini)}<br><span>${fmtHM(s.fim)}</span></td>
@@ -402,7 +403,7 @@ function vMeuHorario(){
   const TT=turmasFiltradas(a);const H=a.horProf;
   const aulas=[];TT.forEach(t=>aulasTurma(t,a).forEach(x=>aulas.push({...x,t})));
   // aulas do horário do professor sem turma na app (ex.: turmas que não acompanha aqui)
-  const outras=H&&!S.filtroOferta?H.aulas.filter(x=>!H.mapa[chaveAula(x)]).map(x=>({dia:x.dia,ini:x.ini,fim:x.fim,ab:x.sig,sala:x.sala,turma:x.turma,outra:true})):[];
+  const outras=H&&!S.filtroOferta?H.aulas.filter(x=>!H.mapa[chaveAula(x)]&&!aulas.some(y=>y.dia===x.dia&&y.ini<x.fim&&x.ini<y.fim)).map(x=>({dia:x.dia,ini:x.ini,fim:x.fim,ab:x.sig,sala:x.sala,turma:x.turma,outra:true})):[];
   const NL=(a.naoLetivos||[]).map(x=>({...x,ab:x.sig,nl:true}));
   const semH=TT.filter(t=>!aulasTurma(t,a).length);
   const hojeL=proximasAulas(aulas,40).filter(p=>p.k===0);
@@ -428,7 +429,7 @@ function vMeuHorario(){
     ${hoje.length?hoje.map(linhaHoje).join(''):`<p class="mut" style="margin:4px 0">${diaLet?'Sem mais tempos hoje.':'Hoje não há atividades letivas.'}</p>`}</div>
   <div class="card wide"><div class="row" style="margin-bottom:10px"><h2 style="margin:0">O Meu Horário Semanal</h2>${a.horProf||NL.length||Object.keys(a.horarios||{}).length?`<button class="btn sm dng hdel" id="mh-del">${ic('calx',15)} Apagar Horário</button>`:''}${NL.length?'<span class="hint noprint" style="margin:0 0 0 6px">Arraste um tempo não letivo para outro dia ou hora.</span>':''}<span class="sp1"></span>
     <span class="hleg">${TT.filter(t=>aulasTurma(t,a).length).map(t=>`<span class="leg"><span class="dot" style="background:${corT(t)}"></span>${esc(t.nome)} · ${esc(t.disciplina)}</span>`).join('')}${outras.length?'<span class="leg"><span class="dot" style="background:#8e8e93"></span>Outras turmas</span>':''}${NL.length?'<span class="leg"><span class="aula nl mini"></span>Não letivo</span>':''}</span></div>
-    ${todos.length?grelhaSemanal(todos,{minha:x=>!x.nl&&!x.outra,cor:x=>x.nl?corNL(x.sig):x.outra?'':corT(x.t),slots:slotsConhecidos(a),cls:x=>x.nl?'nl':x.outra?'outra':'',attr:x=>x.nl?`data-nl="${x.g}" data-nid="${x.id}"`:'',rotulo:x=>x.nl?x.sig:x.outra?x.turma+' · '+x.ab:x.t.nome,titulo:x=>x.nl?x.nome:x.outra?x.turma+' · '+x.ab:x.t.nome+' · '+x.t.disciplina})
+    ${todos.length?grelhaSemanal(todos,{semVazias:true,minha:x=>!x.nl&&!x.outra,cor:x=>x.nl?corNL(x.sig):x.outra?'':corT(x.t),slots:slotsConhecidos(a),cls:x=>x.nl?'nl':x.outra?'outra':'',attr:x=>x.nl?`data-nl="${x.g}" data-nid="${x.id}"`:'',rotulo:x=>x.nl?x.sig:x.outra?x.turma+' · '+x.ab:x.t.nome,titulo:x=>x.nl?x.nome:x.outra?x.turma+' · '+x.ab:x.t.nome+' · '+x.t.disciplina})
       :`<div class="empty">${ic('calendar',26)}<br>Importe o PDF do seu horário (programa da escola → Horário do professor) para ver as aulas e os tempos não letivos, ou importe os horários das turmas.<br><br><button class="btn pri" id="hp-imp">${ic('upload',15)} Importar o Meu Horário (PDF ou Excel)</button></div>`}
   </div>
   <div class="card"><div class="row" style="margin-bottom:8px"><h2 style="margin:0">Tempos Não Letivos</h2><span class="sp1"></span><button class="btn sm" id="nl-tipos">${ic('sliders',14)} Tipos</button><button class="btn sm" id="nl-add">${ic('plus',14)} Acrescentar</button></div>

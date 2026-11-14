@@ -171,7 +171,7 @@ try{const s0=sessaoAtual();const L0=JSON.parse(localStorage.getItem(NV_KEY)||'{}
 let _pinTent=0;
 async function pinRecuperar(alvo){if(!(alvo instanceof Element))alvo=null;const L=(()=>{try{return nvL()}catch(_){return {}}})();const s=SESSAO||{};const conta=((S.cfg.auth||{}).contas||[]).find(c=>c.u===s.u);
   const modo=L.k&&L.salt?'nuvem':conta?'conta':null;
-  if(!modo){alert('Não há outra forma de confirmar a sua identidade neste aparelho.\n\nToque em «Sair», entre de novo com a sua conta e defina um código novo em Definições › Dados e Segurança.');return}
+  if(!modo){alert('Não há outra forma de confirmar a sua identidade neste aparelho.\n\nToque em «Sair», entre de novo com a sua conta e defina um código novo em Definições › Segurança.');return}
   const d=document.createElement('dialog');d.className='nvmc';d.innerHTML=`<form class="nvmcf" onsubmit="return false" autocomplete="on"><input type="text" name="username" autocomplete="username" value="${esc(gsCfg&&gsCfg().email||s.u||'')}" hidden readonly><h2>${ic('cadeadoAb',18)} Esqueci-me do Código</h2>
     <p class="hint">${modo==='nuvem'?'Para confirmar que é você, escreva o <b>código de encriptação da sincronização</b> (o que usa para os dados na nuvem, com pelo menos 8 algarismos).':'Para confirmar que é você, escreva a <b>palavra-passe da sua conta</b> ('+esc(s.u)+').'}</p>
     <label for="rp-0">${modo==='nuvem'?'Código de encriptação':'Palavra-passe'}</label><input type="password" id="${modo==='nuvem'?'rp-0':'rp-0p'}" autocomplete="current-password" ${modo==='nuvem'?'inputmode="numeric"':''}>
@@ -520,7 +520,7 @@ let _repA=false;
 async function repVerificar(){if(_repA)return false;try{const s=sessaoAtual();if(!s||s.tipo!=='google')return false;const C=await acCentral();if(!C||!C.repor||!C.repor.length)return false;
   const h=await acHash(s.u);const o=C.repor.filter(x=>x.h===h).sort((a,b)=>b.q-a.q)[0];if(!o)return false;const F=repFeitas();if((F[h]||0)>=o.q)return false;
   _repA=true;const g=document.getElementById('nvgate');if(g)g.remove();document.body.classList.remove('nv-gating');
-  const r=await avisoModal('Reposição dos seus dados',['O administrador da EduSpruce pediu a reposição dos dados desta conta ('+s.u+') em '+new Date(o.q).toLocaleDateString('pt-PT')+'.','Todos os dados desta conta — na nuvem (Google Drive) e neste aparelho — vão ser apagados definitivamente. A app volta a começar do zero.','Se precisar de alguma coisa, exporte primeiro uma cópia em Definições › Dados e Segurança.'],[{t:'Exportar Cópia Primeiro',v:'copia'},{t:'Repor Agora',c:'dng',v:'sim'}]);
+  const r=await avisoModal('Reposição dos seus dados',['O administrador da EduSpruce pediu a reposição dos dados desta conta ('+s.u+') em '+new Date(o.q).toLocaleDateString('pt-PT')+'.','Todos os dados desta conta — na nuvem (Google Drive) e neste aparelho — vão ser apagados definitivamente. A app volta a começar do zero.','Se precisar de alguma coisa, exporte primeiro uma cópia em Definições › Segurança.'],[{t:'Exportar Cópia Primeiro',v:'copia'},{t:'Repor Agora',c:'dng',v:'sim'}]);
   if(r==='copia'){_repA=false;try{UI.defTab='dados';go('definicoes')}catch(_){}toast('Depois de exportar, termine a sessão e volte a entrar para concluir a reposição.','aviso');return true}
   if(r!=='sim'){_repA=false;return false}
   ocupado('A apagar os dados…');

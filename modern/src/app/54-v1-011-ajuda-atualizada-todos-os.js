@@ -204,236 +204,97 @@ async function pzImportarFpct(pid){const inp=document.createElement('input');inp
 /* a nota final da FPCT passa também para o separador FPCT da coordenação (formandos com o mesmo nome) */
 function pzFpctParaCoord(p){try{const {y,a}=CP();if(!a)return;cpClasses(a).forEach(cl=>cl.formandos.forEach(al=>{const fo=p.form.find(x=>normT(x.nome)===normT(al.nome));if(!fo)return;const r=pzFpct(p,fo);if(r.fin==null)return;const k=cl.nome+'|'+al.k;y.fpct[k]=Object.assign(y.fpct[k]||{},{nota:r.fin})}))}catch(e){console.warn(e)}}
 /*V0996-FIM*/
+/*V0990-INI*/
+/* ===================== v0.990 · separadores do topo alinhados com o conteúdo que vem por baixo (ecrãs largos) ===================== */
+function alinharTabsTopo(){const v=document.getElementById('view');if(!v)return;const t=v.querySelector(':scope>.tabs,:scope>.deftabs');if(!t)return;t.style.removeProperty('margin-left');
+  const n=t.nextElementSibling;if(!n||!n.matches('.vlay,.card,.kpis,.mtlay,.inlay,.anv,.cmw'))return;const vr=v.getBoundingClientRect(),nr=n.getBoundingClientRect();if(!nr.width)return;
+  const d=nr.left-vr.left-(parseFloat(getComputedStyle(v).paddingLeft)||0);t.style.setProperty('margin-left',Math.max(0,Math.round(d))+'px','important')}
+{let _at=0;const q=()=>{cancelAnimationFrame(_at);_at=requestAnimationFrame(()=>{try{alinharTabsTopo()}catch(_){}})};const v=document.getElementById('view');if(v)new MutationObserver(q).observe(v,{childList:true});addEventListener('resize',q)}
+/* v0.990 · desempenho: o alinhamento do cabeçalho junta as chamadas repetidas num só cálculo e não se repete se nada mudou */
+{const assin=()=>{const b=document.getElementById('bar');if(!b)return '';return b.clientWidth+'|'+b.textContent.length+'|'+b.querySelectorAll('button:not([hidden])').length+'|'+document.body.classList.contains('dev-pc')};
+  const _alb=alinharBar;let ka='',fila=0;const kAl=()=>{const v=document.getElementById('view');const f=v&&v.firstElementChild;return VIEW+'|'+(v?v.clientWidth:0)+'|'+(v?v.children.length:0)+'|'+(f?f.className:'')+'|'+assin()};
+  alinharBar=function(){if(fila)return;fila=requestAnimationFrame(()=>{fila=0;const k=kAl();if(k===ka)return;try{_alb()}catch(e){console.warn(e)}ka=kAl()})}}
+/* v0.992 · Produção Oral: organização individual / pares / grupos, formação pelo sorteio (aleatória ou equilibrada pela nota da PO) e guiões A/B */
+function oralOrg(o){o.orgI=o.orgI||{};const k=oralKey(o)||'_proprio';const g=o.orgI[k]=o.orgI[k]||{};if(!g.modo)g.modo='ind';if(!(g.n>=3))g.n=3;if(!g.form)g.form='aleat';if(!g.gui)g.gui='aleat';return g}
+/* nota de referência para equilibrar: média do domínio da oralidade nos períodos já avaliados; se não houver, média dos outros momentos orais */
+function oralNotaRef(t,aid){const d=domOral(t);let v=[];if(d)for(let p=1;p<=4;p++){const x=domPer(t,aid,d.id,p);if(x!=null)v.push(x)}
+  if(!v.length){const o=oralM(t);const k0=oralKey(o);oralMomentos(t).forEach(m=>{if(m.k===k0)return;const tt=oralTotK(t,m.k,aid);const c=oralCfgDe(o,m.k);if(tt&&tt.completo&&c.total)v.push(100*tt.pts/c.total)})}
+  return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
+const _bar=A=>{const B=A.slice();for(let i=B.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[B[i],B[j]]=[B[j],B[i]]}return B};
+/* formação equilibrada: ordena pela nota e divide em faixas (boas → fracas); cada par/grupo leva um aluno de cada faixa */
+function oralEquilibrar(t,AL,n){const com=AL.map(a=>({a,v:oralNotaRef(t,a.id)}));const sem=_bar(com.filter(x=>x.v==null)).map(x=>x.a);
+  const ord=_bar(com.filter(x=>x.v!=null)).sort((x,y)=>y.v-x.v).map(x=>x.a);const mid=Math.floor(ord.length/2);const L=[...ord.slice(0,mid),...sem,...ord.slice(mid)];
+  const k=Math.max(1,Math.floor(L.length/n));const G=Array.from({length:k},()=>[]);
+  for(let b=0;b<n;b++){const faixa=_bar(L.slice(b*k,b*k+k));faixa.forEach((a,i)=>G[i].push(a))}
+  const resto=L.slice(n*k);resto.forEach((a,i)=>G[(Math.floor(k/2)+i)%k].push(a));return G}
+/* guiões: em cada par/grupo, um A e um B (alternados, ao acaso); individual: metade A, metade B */
+function oralGuioes(G){const m={};G.forEach(g=>{const ab=_bar(['A','B']);_bar(g).forEach((a,i)=>m[a.id]=ab[i%2])});/* no resultado, sempre do A para o B */G.forEach(g=>g.sort((x,y)=>(m[x.id]||'').localeCompare(m[y.id]||'')));return m}
+function oralAplicar(t,o,org,G,gui){G.forEach((g,i)=>g.forEach(a=>{const r=o.regs[a.id]=o.regs[a.id]||{n:{}};r.p=i+1;/* o colega de par (indicador por baixo do nome) */if(g.length===2)r.par=g.find(x=>x!==a).id;else delete r.par}));if(gui)Object.entries(gui).forEach(([aid,g])=>{const r=o.regs[aid]=o.regs[aid]||{n:{}};r.g=g});save()}
+function oralOrgCard(t,o,org,al){const seg=(nm,k,ops)=>`<div class="seg" role="group" aria-label="${nm}">${ops.map(([v,l])=>`<button type="button" data-oo="${k}|${v}" class="${org[k]===v?'on':''}">${l}</button>`).join('')}</div>`;
+  const ind=org.modo==='ind';const nomeG=org.modo==='par'?'pares':'grupos';const temNotas=al.some(a=>oralNotaRef(t,a.id)!=null);const ng=new Set(al.map(a=>(o.regs[a.id]||{}).p).filter(Boolean)).size;
+  return `<div class="card ororg"><div class="row" style="flex-wrap:wrap;gap:10px;align-items:center"><h2 style="margin:0">${ic('users',18)} Organização</h2><span class="tag">A classificação é sempre individual</span><span class="sp1"></span>${seg('Modalidade','modo',[['ind','Individual'],['par','Pares'],['grp','Grupos']])}${org.modo==='grp'?`<label class="mut" style="margin:0">de <input type="number" id="oo-n" min="3" max="8" value="${org.n}" style="width:60px" inputmode="numeric" aria-label="Alunos por grupo"> alunos</label>`:''}</div>
+    <div class="ororgl">${ind?'':`<div><span class="oolab">Formação dos ${nomeG}</span>${seg('Formação','form',[['aleat','Aleatória'],['equil','Equilibrada pela nota da PO'],['manual','Manual']])}</div>`}
+      <div><span class="oolab">Guiões A/B</span>${seg('Guiões','gui',[['aleat','Ao acaso'],['manual','Manual']])}</div></div>
+    ${!ind&&org.form==='equil'?`<p class="hint">${temNotas?'Cada '+(org.modo==='par'?'par junta':'grupo junta')+' alunos com notas mais altas e mais baixas na Produção Oral (média dos períodos já avaliados).':'Ainda não há notas de Produção Oral: a formação fica aleatória até haver avaliações.'}</p>`:''}
+    ${!ind&&org.form==='manual'?`<p class="hint">Escreva o número do ${org.modo==='par'?'par':'grupo'} de cada aluno na coluna «${org.modo==='par'?'Par':'Grupo'}» da ficha.</p>`:''}
+    ${org.gui==='manual'?`<p class="hint">Escreva A ou B na coluna «Guião» da ficha.</p>`:`<p class="hint">Guiões ao acaso: ${ind?'metade da turma com o A e metade com o B':'em cada '+(org.modo==='par'?'par':'grupo')+' há um A e um B'}, sorteados com ${ind?'o botão abaixo':'os '+(org.modo==='par'?'pares':'grupos')}.</p>`}
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px">${!ind&&org.form!=='manual'?`<button type="button" class="btn pri" id="oo-sort">${ic('refresh',15)} Sortear ${nomeG} na roda</button><button type="button" class="btn" id="oo-rap">Formar sem animação</button>`:''}
+      ${org.gui==='aleat'?`<button type="button" class="btn" id="oo-gui">${ic('refresh',15)} Sortear guiões${ind?'':' (nos '+nomeG+' atuais)'}</button>`:''}
+      ${!ind&&ng?`<button type="button" class="btn" id="oo-lim">${ic('x',14)} Limpar ${nomeG}</button><span class="mut" style="align-self:center">${ng} ${ng===1?(org.modo==='par'?'par':'grupo'):nomeG} formado${ng===1?'':'s'}</span>`:''}</div></div>`}
+function oralGruposAtuais(o,al){const M={};al.forEach(a=>{const p=(o.regs[a.id]||{}).p;if(p)(M[p]=M[p]||[]).push(a)});return Object.keys(M).sort((a,b)=>a-b).map(k=>M[k])}
+function oralOrgLigar(t,o,org,al,re){
+  $$('[data-oo]').forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.oo.split('|');/* de Manual para Aleatória/Equilibrada: os pares feitos à mão são limpos */if(k==='form'&&org.form==='manual'&&v!=='manual'){let n=0;al.forEach(a=>{const x=o.regs[a.id];if(x&&(x.p||x.par)){delete x.p;delete x.par;n++}});if(n)toast((org.modo==='par'?'Pares':'Grupos')+' manuais limpos','ok')}org[k]=v;save();re()});
+  const nn=$('#oo-n');if(nn)nn.onchange=()=>{org.n=Math.max(3,Math.min(8,+nn.value||3));save();re()};
+  const n=org.modo==='par'?2:org.n;const formar=AL=>org.form==='equil'?oralEquilibrar(t,AL,n):rodaPartir(AL,n);
+  const AV=()=>alunosAval(t).filter(a=>al.some(x=>x.id===a.id));
+  const s=$('#oo-sort');if(s)s.onclick=()=>{let gui=null;rodaAbrir(t,AV().map(a=>a.id),{modo:org.modo==='par'?'pares':'grupos',n,formar,
+      depois:G=>{gui=org.gui==='aleat'?oralGuioes(G):null},etiqueta:a=>gui&&gui[a.id]?`<em class="rdgu">Guião ${gui[a.id]}</em>`:'',
+      destino:{t:'Usar na Produção Oral',fn:G=>{oralAplicar(t,o,org,G,gui);toast((org.modo==='par'?'Pares':'Grupos')+' guardados na ficha','ok');re()}}})};
+  const r=$('#oo-rap');if(r)r.onclick=()=>{const G=formar(AV());oralAplicar(t,o,org,G,org.gui==='aleat'?oralGuioes(G):null);toast((org.modo==='par'?'Pares formados':'Grupos formados')+(org.gui==='aleat'?' e guiões sorteados':''),'ok');re()};
+  const g=$('#oo-gui');if(g)g.onclick=()=>{const G=org.modo==='ind'?al.map(a=>[a]):oralGruposAtuais(o,al);if(!G.length)return toast('Forme primeiro os '+(org.modo==='par'?'pares':'grupos'),'aviso');
+    let m;if(org.modo==='ind'){const ab=_bar(al).map((a,i)=>[a.id,i%2?'B':'A']);m=Object.fromEntries(ab)}else m=oralGuioes(G);oralAplicar(t,o,org,[],m);toast('Guiões sorteados','ok');re()};
+  const l=$('#oo-lim');if(l)l.onclick=()=>{if(!confirm('Limpar os '+(org.modo==='par'?'pares':'grupos')+' deste momento? As classificações ficam.'))return;al.forEach(a=>{const x=o.regs[a.id];if(x){delete x.p;delete x.par}});save();re()};
+  $$('[data-orp]').forEach(i=>i.onchange=()=>{const x=o.regs[i.dataset.orp]=o.regs[i.dataset.orp]||{n:{}};const v=parseInt(i.value,10);if(v>0)x.p=v;else delete x.p;save()});
+  $$('[data-org]').forEach(i=>i.addEventListener('input',()=>{i.value=i.value.toUpperCase()}))}
+
+/* v0.995 · Contactos: a barra das listas pode encolher (fica só com os ícones) */
+function cmSbAplicar(){const w=document.getElementById('cm-w');if(!w)return;const sb=w.querySelector('.cmsb');if(!sb)return;
+  const col=!!(S.cfg&&S.cfg.cmSbCol);w.classList.toggle('sbcol',col);
+  sb.querySelectorAll('.cmli').forEach(b=>{if(!b.title){const sp=b.querySelector('span');if(sp)b.title=sp.textContent.trim()}});
+  let t=sb.querySelector('.cmsbt');if(!t){t=document.createElement('button');t.type='button';t.className='cmsbt';sb.prepend(t);
+    t.onclick=()=>{S.cfg=S.cfg||{};S.cfg.cmSbCol=!S.cfg.cmSbCol;try{save()}catch(_){}cmSbAplicar()}}
+  t.innerHTML=ic('back',14)+(col?'':'<span>Encolher</span>');t.title=col?'Mostrar as listas':'Encolher a barra das listas';t.setAttribute('aria-label',t.title);t.setAttribute('aria-expanded',String(!col))}
+{let _cmQ=0;new MutationObserver(()=>{if(_cmQ)return;_cmQ=requestAnimationFrame(()=>{_cmQ=0;const w=document.getElementById('cm-w');if(w&&(!w.querySelector('.cmsbt')||w.classList.contains('sbcol')!==!!(S.cfg&&S.cfg.cmSbCol)))cmSbAplicar()})}).observe(document.getElementById('view')||document.body,{childList:true,subtree:true})}
+/* v1.004 · Tab (e Shift+Tab) anda de célula em célula nas tabelas de toda a app, saltando botões e caixas de seleção;
+   se a tabela se redesenhar ao gravar, o cursor volta à célula certa */
+{const CAMPO='input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]):not([type=file]):not([type=hidden]):not([type=range]),select,textarea,[contenteditable=""],[contenteditable=true]';
+  const campos=t=>[...t.querySelectorAll(CAMPO)].filter(x=>!x.disabled&&!x.readOnly&&x.offsetParent!==null&&x.closest('table,[role=grid]')===t);
+  const assin=x=>{const d=[...x.attributes].filter(a=>/^data-|^name$|^id$/.test(a.name)).map(a=>a.name+'='+a.value).join('&');const tr=x.closest('tr');return d+'|'+(tr?[...tr.attributes].filter(a=>/^data-/.test(a.name)).map(a=>a.name+'='+a.value).join('&'):'')+'|'+(x.closest('td,th')?x.closest('td,th').cellIndex:'')};
+  const marca=el=>{try{el.focus({preventScroll:false});if(el.select&&/^(text|number|search|tel|url|email|)$/.test(el.type||''))el.select();else if(el.isContentEditable){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}el.scrollIntoView({block:'nearest',inline:'nearest'})}catch(_){}};
+  document.addEventListener('keydown',e=>{if(e.key!=='Tab'||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey)return;const cur=e.target;if(!cur||!cur.matches||!cur.matches(CAMPO))return;
+    const t=cur.closest('table,[role=grid]');if(!t)return;const L=campos(t);const i=L.indexOf(cur);if(i<0)return;const j=i+(e.shiftKey?-1:1);const nx=L[j];if(!nx)return;
+    e.preventDefault();const tabs=[...document.querySelectorAll('table,[role=grid]')];const ti=tabs.indexOf(t);const sg=assin(nx);marca(nx);
+    /* muitas tabelas redesenham-se no «change» da célula anterior: voltar a encontrar a célula seguinte */
+    const repor=()=>{if(nx.isConnected&&document.activeElement===nx)return;const a=document.activeElement;if(a&&a!==document.body&&a.isConnected&&a.matches&&a.matches(CAMPO)&&a!==cur)return;
+      const T=[...document.querySelectorAll('table,[role=grid]')];const t2=T[ti]||T.find(x=>x.isConnected);if(!t2)return;const L2=campos(t2);const alvo=L2.find(x=>assin(x)===sg)||L2[j];if(alvo)marca(alvo)};
+    setTimeout(repor,0);setTimeout(repor,60);setTimeout(repor,200);requestAnimationFrame(()=>requestAnimationFrame(repor))},false)}
+
+/* 1.015 · cabeçalho: quando as ações da barra mudam (ex.: dentro do mesmo ecrã), volta a medir; «Mais» só quando não cabem */
+{const x=document.getElementById('barx');if(x){let t=0;new MutationObserver(M=>{if(M.every(m=>[...m.addedNodes,...m.removedNodes].every(n=>n.id==='barmais')))return;clearTimeout(t);t=setTimeout(()=>{try{alinharBar()}catch(_){}},60)}).observe(x,{childList:true})}
+ try{document.fonts&&document.fonts.ready.then(()=>{try{alinharBar()}catch(_){}})}catch(_){}
+ document.addEventListener('load',e=>{if(e.target&&e.target.tagName==='IMG'&&e.target.closest&&e.target.closest('#bar')){clearTimeout(alinharBar._t);alinharBar._t=setTimeout(alinharBar,80)}},true)}
+/* 1.015 · separadores numa só linha (Direção de Turma, fichas): encolhem o espaço, depois o texto, tiram os ícones e usam nomes curtos; só no fim deslizam */
+const ABA_CURTO={'Encarregados de Educação':'Enc. Educação','Registo de Contactos':'Contactos','Convocatórias e Comunicações':'Convocatórias','Intervenções e Ocorrências':'Ocorrências','Conselhos de Turma':'Conselhos','Avaliação Intercalar':'Intercalar','Planos de Acompanhamento':'Planos','Histórico de Diligências':'Diligências','Informações Gerais':'Informações'};
+function abasUmaLinha(){document.querySelectorAll('#view .dttabs,#view .fichatabs').forEach(el=>{const B=[...el.querySelectorAll(':scope>button')];if(!B.length)return;
+  B.forEach(b=>{if(!b.dataset.lbl){const tn=[...b.childNodes].filter(n=>n.nodeType===3&&n.nodeValue.trim());const t=tn.map(n=>n.nodeValue).join('').trim();b.dataset.lbl=t;if(!b.title)b.title=t;tn.forEach((n,k)=>{if(k)n.remove()});if(tn[0]){const sp=document.createElement('span');sp.className='abl';sp.textContent=t;tn[0].replaceWith(sp)}}});
+  const cabe=()=>el.scrollWidth<=el.clientWidth+1;el.classList.add('ab1l');[['flex-wrap','nowrap'],['overflow-x','auto'],['overflow-y','hidden'],['display','flex']].forEach(([k,v])=>el.style.setProperty(k,v,'important'));el.classList.remove('ab-a','ab-b','ab-c','ab-d');B.forEach(b=>{const s=b.querySelector('.abl');if(s)s.textContent=b.dataset.lbl});
+  for(const c of ['ab-a','ab-b','ab-c']){if(cabe())return;el.classList.add(c)}
+  if(cabe())return;B.forEach(b=>{const s=b.querySelector('.abl');if(s&&ABA_CURTO[b.dataset.lbl])s.textContent=ABA_CURTO[b.dataset.lbl]});if(!cabe())el.classList.add('ab-d')})}
+{let t=0;const ag=()=>{clearTimeout(t);t=setTimeout(abasUmaLinha,30)};new MutationObserver(ag).observe(document.getElementById('view')||document.body,{childList:true});addEventListener('resize',ag);
+ const _gAb=go;go=function(){const r=_gAb.apply(this,arguments);ag();return r}}
+/*V0990-FIM*/
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
 /* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
 setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
-
-/* ===================== v0.918 · SpruceNote e JornalNote: todos os elementos ===================== */
-try{Object.assign(ICONS,{video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/>',map:'<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/>',dots:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',scribble:'<path d="M3 17c3-6 5-9 7-9s-1 8 2 8 4-7 6-7 1 5 3 5"/>',bubble:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/>',line:'<path d="M5 19 19 5"/><path d="M13 5h6v6"/>',lines:'<path d="M4 6h16M4 12h16M4 18h10"/>',todo:'<path d="M4 6l2 2 3-3M4 13l2 2 3-3"/><path d="M12 7h8M12 14h8M12 20h8"/>'})}catch(_){}
-Object.assign(MQ_T,{nota:['lines','Anotação'],tarefa:['todo','Pendências'],seta:['line','Linha'],comentario:['bubble','Comentário'],audio:['mic','Áudio'],video:['video','Vídeo'],mapa:['map','Mapa'],documento:['file','Documento'],esboco:['scribble','Esboço'],tabela:['table','Tabela'],ficheiro:['upload','Enviar'],desenho:['pencil','Desenho'],traco:['pencil','Desenho']});
-const MQ_PRINC=['nota','link','tarefa','seta','quadro','coluna','comentario'],MQ_MAIS=['audio','titulo','video','mapa','documento','cor','esboco','tabela'],MQ_FIM=['imagem','ficheiro','desenho'];
-const MQ_NOVOS=new Set(['comentario','audio','video','mapa','documento','esboco','tabela','ficheiro','traco']);
-const mqStore=()=>UI.mqCtx==='jornal'?(S.snj=S.snj||{}):(S.sn=S.sn||{});
-function mqBarra(){const b=t=>`<button type="button" class="mq-tool" data-mqt="${t}" title="${MQ_T[t][1]}">${ic(MQ_T[t][0],20)}<span>${MQ_T[t][1]}</span></button>`;
-  return MQ_PRINC.map(b).join('')+MQ_MAIS.map(t=>b(t).replace('class="mq-tool"','class="mq-tool mq-x"')).join('')+`<button type="button" class="mq-more" id="mq-more" aria-haspopup="true" aria-expanded="false" title="Mais elementos">${ic('dots',18)}</button>`+MQ_FIM.map(b).join('')+`<span class="sp1"></span><button type="button" class="mq-lixob" id="mq-lixo" title="Lixeira">${ic('trash',20)}<span>Lixeira</span><i id="mq-lixon"></i></button><input type="file" id="mq-f" accept="image/*" multiple hidden><input type="file" id="mq-ff" multiple hidden>`}
-const mqTxt=h=>{const d=document.createElement('div');d.innerHTML=mqLimpa(h||'');return (d.textContent||'').trim()};
-const mqIniciais=n=>String(n||'?').split(/\s+/).filter(Boolean).map(w=>w[0]).filter((_,i,a)=>i===0||i===a.length-1).join('').toUpperCase()||'?';
-const mqEmbed=u=>{u=String(u||'');let m=u.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/i);if(m)return 'https://www.youtube-nocookie.com/embed/'+m[1];m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/i);if(m)return 'https://player.vimeo.com/video/'+m[1];return ''};
-const mqTam=b=>b<1024?b+' B':b<1048576?Math.round(b/1024)+' KB':(b/1048576).toFixed(1).replace('.',',')+' MB';
-const mqExt=n=>(String(n||'').split('.').pop()||'').slice(0,4).toUpperCase();
-{const _h=mqHTML;mqHTML=function(it,q){if(!MQ_NOVOS.has(it.t))return _h.apply(this,arguments);
-  const sel=mqUI().sel.includes(it.id)?' sel':'';const cl=`mq-it mq-${it.t}${sel}${it.cor?' tem-cor':''}`;
-  const st=it.pai?(it.cor?` style="--mqc:${it.cor}"`:''):` style="left:${it.x}px;top:${it.y}px;width:${it.w}px${it.t==='traco'?';height:'+it.h+'px':''}${it.cor?';--mqc:'+it.cor:''}"`;
-  const rz=it.pai||it.t==='traco'?'':'<span class="mq-rz" data-rz aria-hidden="true"></span>';const A=`class="${cl}" data-mq="${it.id}"${st}`;
-  if(it.t==='comentario'){const R=it.resp||[];return `<div ${A}><div class="mq-cmh"><span class="mq-cma">${esc(mqIniciais(it.aut))}</span><b>${esc(it.aut||'Professor')}</b><small>${esc(it.qd?new Date(it.qd).toLocaleDateString('pt-PT',{day:'numeric',month:'short'}):'')}</small><span class="sp1"></span><button type="button" class="mq-cmok ${it.res?'on':''}" data-cmres title="${it.res?'Reabrir':'Marcar como resolvido'}">${ic('check',13)}</button></div><div class="mq-txt" data-ed>${mqLimpa(it.txt)||'<span class="mq-ph">Escreva um comentário…</span>'}</div>${R.map((r,k)=>`<div class="mq-cmr"><span class="mq-cma sm">${esc(mqIniciais(r.a))}</span><div><b>${esc(r.a||'')}</b> ${esc(r.t)}</div><button type="button" class="mq-cmx" data-cmdel="${k}" aria-label="Apagar resposta">×</button></div>`).join('')}<input class="mq-cmi" data-cmi placeholder="Responder…" aria-label="Responder ao comentário">${rz}</div>`}
-  if(it.t==='audio'){const src=FOTOS[it.fid];return `<div ${A}><div class="mq-ah2"><span class="mq-aic">${ic('mic',18)}</span><input class="mq-nm" data-tit value="${esc(it.tit||'')}" placeholder="Áudio" aria-label="Nome do áudio"></div>${src?`<audio controls preload="metadata" src="${src}"></audio>`:'<div class="mq-semimg"><small>áudio ainda não disponível neste aparelho</small></div>'}${rz}</div>`}
-  if(it.t==='video'){const em=mqEmbed(it.url);const src=it.fid&&FOTOS[it.fid];return `<div ${A}><div class="mq-vh">${ic('video',15)}<input class="mq-nm" data-tit value="${esc(it.tit||'')}" placeholder="Vídeo" aria-label="Nome do vídeo">${it.url?`<a class="btn sm ghost" href="${esc(it.url)}" target="_blank" rel="noopener" title="Abrir">${ic('link',13)}</a>`:''}</div><div class="mq-vid">${em?`<iframe class="mq-ifr" src="${em}" title="${esc(it.tit||'Vídeo')}" allow="encrypted-media; picture-in-picture; fullscreen" loading="lazy"></iframe>`:src?`<video controls preload="metadata" src="${src}"></video>`:it.url?`<video controls preload="metadata" src="${esc(it.url)}"></video>`:'<div class="mq-semimg"><small>vídeo indisponível</small></div>'}</div>${rz}</div>`}
-  if(it.t==='mapa')return `<div ${A}><div class="mq-vh">${ic('map',15)}<input class="mq-nm" data-tit value="${esc(it.tit||it.lq||'')}" placeholder="Mapa" aria-label="Nome do mapa"><a class="btn sm ghost" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.lq||'')}" target="_blank" rel="noopener" title="Abrir no mapa">${ic('link',13)}</a></div><div class="mq-vid mq-map"><iframe class="mq-ifr" src="https://maps.google.com/maps?q=${encodeURIComponent(it.lq||'')}&z=${it.z||15}&output=embed" title="Mapa: ${esc(it.lq||'')}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>${rz}</div>`;
-  if(it.t==='documento'){const tx=mqTxt(it.html);return `<div ${A}><div class="mq-doc"><span class="mq-doci">${ic('file',22)}</span><div><b>${esc(it.tit||'Documento sem título')}</b><small>${tx?tx.split(/\s+/).length+' palavras':'vazio'}</small></div></div>${tx?`<p class="mq-docp">${esc(tx.slice(0,180))}${tx.length>180?'…':''}</p>`:''}<button type="button" class="btn sm" data-abrir>${ic('pencil',13)} Abrir documento</button>${rz}</div>`}
-  if(it.t==='esboco'){const src=it.fid&&FOTOS[it.fid];return `<div ${A}><div class="mq-esb">${src?`<img src="${src}" alt="${esc(it.tit||'Esboço')}" draggable="false">`:`<div class="mq-esbv">${ic('scribble',28)}<small>Toque duas vezes para desenhar</small></div>`}</div><input class="mq-leg" data-tit value="${esc(it.tit||'')}" placeholder="Esboço…" aria-label="Nome do esboço">${rz}</div>`}
-  if(it.t==='tabela'){const L=it.lin||[['','',''],['','','']];return `<div ${A}><div class="mq-tbw"><table class="mq-tb"><tbody>${L.map((r,i)=>`<tr>${r.map((c,j)=>`<td><input data-tc="${i}|${j}" value="${esc(c)}" aria-label="Linha ${i+1}, coluna ${j+1}"></td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="mq-tba"><button type="button" class="btn sm ghost" data-tbl="+">${ic('plus',12)} Linha</button><button type="button" class="btn sm ghost" data-tbc="+">${ic('plus',12)} Coluna</button><span class="sp1"></span><button type="button" class="btn sm ghost" data-tbl="-" title="Tirar a última linha">− L</button><button type="button" class="btn sm ghost" data-tbc="-" title="Tirar a última coluna">− C</button></div>${rz}</div>`}
-  if(it.t==='ficheiro')return `<div ${A}><div class="mq-fic"><span class="mq-fext">${esc(mqExt(it.nome)||'FICH')}</span><div><b title="${esc(it.nome||'')}">${esc(it.nome||'Ficheiro')}</b><small>${esc(mqTam(+it.tam||0))}</small></div></div><button type="button" class="btn sm" data-abrir>${ic('download',13)} Abrir</button>${rz}</div>`;
-  if(it.t==='traco')return `<div ${A}><svg width="${it.w}" height="${it.h}" viewBox="0 0 ${it.w} ${it.h}" aria-hidden="true"><path class="mq-trh" d="${it.d}" stroke-width="${Math.max(14,(+it.esp||3)+10)}"/><path d="${it.d}" fill="none" stroke="${esc(it.cor||'#1f2937')}" stroke-width="${+it.esp||3}" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
-  return ''}}
-/* criação */
-{const _c=mqCriar;mqCriar=function(t,p){p=p||mqCentro();
-  if(t==='comentario'){const it=mqNovo('comentario',p.x,p.y,{w:240,txt:'',aut:S.cfg.professor||'Professor',qd:Date.now(),resp:[]});setTimeout(()=>mqEditar(it.id),40);return}
-  if(t==='tabela')return mqNovo('tabela',p.x,p.y,{w:340,lin:[['','',''],['','',''],['','','']]});
-  if(t==='documento'){const it=mqNovo('documento',p.x,p.y,{w:240,tit:'',html:''});setTimeout(()=>mqDocAbrir(it.id),60);return}
-  if(t==='esboco'){const it=mqNovo('esboco',p.x,p.y,{w:260,tit:''});setTimeout(()=>mqEsbocoAbrir(it.id),60);return}
-  if(t==='audio')return mqAudioDlg(p);if(t==='video')return mqVideoDlg(p);if(t==='mapa')return mqMapaDlg(p);
-  if(t==='ficheiro'){mqLinkPos=p;$('#mq-ff').click();return}if(t==='desenho')return mqDesenho(!UI.mqDraw);
-  return _c.apply(this,arguments)}}
-function mqDocGuardar(fid,dataURL){const id=fid||('mq:'+uid());FOTOS[id]=dataURL;idbPor(id,dataURL);return id}
-const mqLerURL=f=>new Promise((ok,ko)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>ko(r.error);r.readAsDataURL(f)});
-async function mqFicheiros(files,x,y){let k=0;for(const f of files){if(f.size>25*1048576){toast(f.name+': maior que 25 MB','erro');continue}
-  try{const u=await mqLerURL(f);const fid=mqDocGuardar(null,u);const P={x:x+k*28,y:y+k*28};
-    if(/^audio\//.test(f.type))mqNovo('audio',P.x,P.y,{w:280,fid,tit:f.name.replace(/\.[^.]+$/,'')});else if(/^video\//.test(f.type))mqNovo('video',P.x,P.y,{w:380,fid,tit:f.name.replace(/\.[^.]+$/,'')});
-    else mqNovo('ficheiro',P.x,P.y,{w:250,fid,nome:f.name,tam:f.size,tipo:f.type});k++}catch(e){toast(e.message||'Não foi possível ler '+f.name,'erro')}}}
-{const _mi=mqImagens;mqImagens=async function(files,x,y){const F=[...files];const im=F.filter(f=>/^image\//.test(f.type)),out=F.filter(f=>!/^image\//.test(f.type));if(im.length)await _mi.call(this,im,x,y);if(out.length)await mqFicheiros(out,x+im.length*30,y+im.length*30)}}
-function mqAudioDlg(p){let rec=null,chunks=[],t0=0,tm=null;
-  openDrawer('Áudio',`<div class="ed"><p class="hint" style="margin-top:0">Grave uma nota de voz ou escolha um ficheiro de áudio.</p>
-    <div class="mq-rec"><button type="button" class="btn pri" id="ma-rec">${ic('mic',16)} Gravar</button><span class="mq-rect" id="ma-t">0:00</span></div>
-    <label class="btn" style="margin-top:12px;display:inline-flex">${ic('upload',15)} Escolher ficheiro de áudio<input type="file" id="ma-f" accept="audio/*" hidden></label></div>`);
-  const fim=async blob=>{const u=await mqLerURL(blob);const fid=mqDocGuardar(null,u);closeDrawer();mqNovo('audio',p.x,p.y,{w:280,fid,tit:'Nota de voz '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})})};
-  $('#ma-f').onchange=e=>{const f=e.target.files[0];if(f){closeDrawer();mqFicheiros([f],p.x,p.y)}};
-  $('#ma-rec').onclick=async()=>{const b=$('#ma-rec');if(rec){rec.stop();return}
-    try{const st=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(st);chunks=[];rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
-      rec.onstop=()=>{clearInterval(tm);st.getTracks().forEach(x=>x.stop());fim(new Blob(chunks,{type:rec.mimeType||'audio/webm'}))};rec.start();t0=Date.now();b.innerHTML=ic('check',16)+' Parar e guardar';b.classList.add('dng');
-      tm=setInterval(()=>{const s=Math.round((Date.now()-t0)/1000);const e_=$('#ma-t');if(e_)e_.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')},250)}catch(e){toast('Não foi possível usar o microfone: '+(e.message||e.name),'erro')}}}
-function mqVideoDlg(p){openDrawer('Vídeo',`<div class="ed"><label for="mv-u">Endereço do vídeo</label><input id="mv-u" type="url" inputmode="url" placeholder="https://www.youtube.com/watch?v=…" autocapitalize="none"><p class="hint">YouTube, Vimeo ou ligação direta para um ficheiro de vídeo.</p>
-    <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn pri" id="mv-ok">${ic('check',14)} Acrescentar</button><label class="btn" style="display:inline-flex">${ic('upload',15)} Enviar ficheiro (até 25 MB)<input type="file" id="mv-f" accept="video/*" hidden></label></div></div>`);
-  setTimeout(()=>$('#mv-u').focus(),60);$('#mv-f').onchange=e=>{const f=e.target.files[0];if(f){closeDrawer();mqFicheiros([f],p.x,p.y)}};
-  $('#mv-ok').onclick=()=>{let u=$('#mv-u').value.trim();if(u&&!/^https?:/i.test(u))u='https://'+u;if(!/^https?:\/\/\S+\.\S+/.test(u))return toast('Escreva um endereço válido','erro');closeDrawer();let d='';try{d=new URL(u).hostname.replace(/^www\./,'')}catch(_){}mqNovo('video',p.x,p.y,{w:380,url:u,tit:d})}}
-function mqMapaDlg(p,it){openDrawer('Mapa',`<div class="ed"><label for="mm-q">Morada ou local</label><input id="mm-q" value="${esc(it&&it.lq||'')}" placeholder="ex.: Escola Secundária, Ponta Delgada"><label for="mm-z" style="margin-top:10px">Aproximação</label><input id="mm-z" type="range" min="5" max="19" value="${it&&it.z||15}">
-    <div class="row" style="margin-top:14px"><button class="btn pri" id="mm-ok">${ic('check',14)} ${it?'Guardar':'Acrescentar'}</button></div></div>`);
-  setTimeout(()=>$('#mm-q').focus(),60);$('#mm-ok').onclick=()=>{const q_=$('#mm-q').value.trim();if(!q_)return toast('Escreva uma morada ou local','erro');const z=+$('#mm-z').value;closeDrawer();if(it){mqAntes();it.lq=q_;it.z=z;save();mqRender()}else mqNovo('mapa',p.x,p.y,{w:360,lq:q_,z,tit:q_})}}
-/* documento: editor em vista ampla */
-function mqDocAbrir(id){const q=mqQ(mqUI().q),it=mqItem(q,id);if(!it)return;const el=document.createElement('div');el.className='mq-doced';
-  el.innerHTML=`<input class="mq-doct" value="${esc(it.tit||'')}" placeholder="Título do documento" aria-label="Título do documento"><div class="mq-docb" role="toolbar">${[['bold','B'],['italic','I'],['underline','U'],['h2','Título'],['h3','Subtítulo'],['insertUnorderedList','• Lista'],['insertOrderedList','1. Lista'],['blockquote','❝'],['link','Ligação']].map(([c,l])=>`<button type="button" class="btn sm" data-dc="${c}">${l}</button>`).join('')}</div><div class="mq-docc" contenteditable="true" spellcheck="true">${mqLimpa(it.html)||''}</div>`;
-  el.querySelectorAll('[data-dc]').forEach(b=>{b.onpointerdown=e=>e.preventDefault();b.onclick=()=>{const c=b.dataset.dc;if(c==='h2'||c==='h3'||c==='blockquote')document.execCommand('formatBlock',false,c);else if(c==='link'){const l=prompt('Endereço da ligação:','https://');if(l&&/^https?:\/\//.test(l))document.execCommand('createLink',false,l)}else document.execCommand(c)}});
-  ecraAmplo({titulo:it.tit||'Documento',sub:mqQ(mqUI().q).nome,el,aoFechar:()=>{const t=el.querySelector('.mq-doct').value.trim(),h=mqLimpa(el.querySelector('.mq-docc').innerHTML.replace(/<h2/g,'<h3').replace(/<\/h2>/g,'</h3>'));if(t!==(it.tit||'')||h!==(it.html||'')){mqAntes();it.tit=t;it.html=h;save()}mqRender()}});
-  setTimeout(()=>{const c=el.querySelector(it.tit?'.mq-docc':'.mq-doct');c&&c.focus()},60)}
-/* esboço: desenhar num cartão */
-function mqEsbocoAbrir(id){const q=mqQ(mqUI().q),it=mqItem(q,id);if(!it)return;const el=document.createElement('div');el.className='mq-esbed';
-  const CORES=['#1f2937','#e11d48','#f59e0b','#16a34a','#2563eb','#7c3aed','#ffffff'];let cor=CORES[0],esp=4,borr=false;const hist=[];
-  el.innerHTML=`<div class="mq-esbt">${CORES.map((c,k)=>`<button type="button" class="mq-esc ${k?'':'on'}" data-ec="${c}" style="background:${c}" aria-label="Cor"></button>`).join('')}<span class="mq-sep"></span>${[2,4,8,14].map(n=>`<button type="button" class="mq-esz ${n===4?'on':''}" data-ez="${n}" aria-label="Espessura ${n}"><i style="width:${n+2}px;height:${n+2}px"></i></button>`).join('')}<span class="mq-sep"></span><button type="button" class="btn sm" data-eb>Borracha</button><button type="button" class="btn sm" data-eu>${ic('undo',13)} Anular</button><button type="button" class="btn sm" data-ex>Limpar</button></div><canvas width="1200" height="800" class="mq-esbc"></canvas>`;
-  const cv=el.querySelector('canvas'),g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,1200,800);
-  const src=it.fid&&FOTOS[it.fid];if(src){const im=new Image();im.onload=()=>g.drawImage(im,0,0,1200,800);im.src=src}
-  const pt=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*1200/r.width,(e.clientY-r.top)*800/r.height]};let dn=false,last=null,mud=false;
-  cv.onpointerdown=e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);dn=true;last=pt(e);hist.push(g.getImageData(0,0,1200,800));if(hist.length>25)hist.shift();g.beginPath();g.fillStyle=borr?'#fff':cor;g.arc(last[0],last[1],(borr?esp*3:esp)/2,0,7);g.fill();mud=true};
-  cv.onpointermove=e=>{if(!dn)return;const p=pt(e);g.strokeStyle=borr?'#fff':cor;g.lineWidth=borr?esp*3:esp;g.lineCap='round';g.lineJoin='round';g.beginPath();g.moveTo(last[0],last[1]);g.lineTo(p[0],p[1]);g.stroke();last=p};
-  cv.onpointerup=cv.onpointercancel=()=>{dn=false};
-  el.querySelectorAll('[data-ec]').forEach(b=>b.onclick=()=>{cor=b.dataset.ec;borr=false;el.querySelectorAll('[data-ec]').forEach(x=>x.classList.toggle('on',x===b));el.querySelector('[data-eb]').classList.remove('on')});
-  el.querySelectorAll('[data-ez]').forEach(b=>b.onclick=()=>{esp=+b.dataset.ez;el.querySelectorAll('[data-ez]').forEach(x=>x.classList.toggle('on',x===b))});
-  el.querySelector('[data-eb]').onclick=e=>{borr=!borr;e.currentTarget.classList.toggle('on',borr)};
-  el.querySelector('[data-eu]').onclick=()=>{const h=hist.pop();if(h){g.putImageData(h,0,0);mud=true}};
-  el.querySelector('[data-ex]').onclick=()=>{hist.push(g.getImageData(0,0,1200,800));g.fillStyle='#fff';g.fillRect(0,0,1200,800);mud=true};
-  ecraAmplo({titulo:it.tit||'Esboço',sub:'Desenhe com o dedo, a caneta ou o rato · fecha e guarda',el,aoFechar:()=>{if(mud){mqAntes();it.fid=mqDocGuardar(it.fid,cv.toDataURL('image/png'));save()}mqRender()}})}
-/* desenho livre por cima do quadro */
-function mqDesenho(on){UI.mqDraw=!!on;const cv=$('#mq-cv');if(!cv)return;cv.querySelectorAll('.mq-drov,.mq-drbar').forEach(x=>x.remove());$$('[data-mqt="desenho"]').forEach(b=>b.classList.toggle('on',!!on));if(!on)return;
-  UI.mqDrCor=UI.mqDrCor||'#1f2937';UI.mqDrEsp=UI.mqDrEsp||3;const CORES=['#1f2937','#e11d48','#f59e0b','#16a34a','#2563eb','#7c3aed'];
-  cv.insertAdjacentHTML('beforeend',`<div class="mq-drov" aria-label="Área de desenho"><svg class="mq-drsv"><path/></svg></div><div class="mq-drbar">${ic('pencil',15)} <b>Desenho</b>${CORES.map(c=>`<button type="button" data-dc="${c}" class="${UI.mqDrCor===c?'on':''}" style="background:${c}" aria-label="Cor"></button>`).join('')}<span class="mq-sep"></span>${[2,3,6,10].map(n=>`<button type="button" data-de="${n}" class="mq-esz ${UI.mqDrEsp===n?'on':''}" aria-label="Espessura ${n}"><i style="width:${n+2}px;height:${n+2}px"></i></button>`).join('')}<span class="mq-sep"></span><button type="button" class="btn sm pri" data-dfim>${ic('check',13)} Concluir</button></div>`);
-  const ov=cv.querySelector('.mq-drov'),sv=ov.querySelector('svg'),pa=sv.querySelector('path');let P=null;
-  cv.querySelectorAll('[data-dc]').forEach(b=>b.onclick=()=>{UI.mqDrCor=b.dataset.dc;cv.querySelectorAll('[data-dc]').forEach(x=>x.classList.toggle('on',x===b))});
-  cv.querySelectorAll('[data-de]').forEach(b=>b.onclick=()=>{UI.mqDrEsp=+b.dataset.de;cv.querySelectorAll('[data-de]').forEach(x=>x.classList.toggle('on',x===b))});
-  cv.querySelector('[data-dfim]').onclick=()=>mqDesenho(false);
-  ov.onpointerdown=e=>{e.preventDefault();e.stopPropagation();ov.setPointerCapture(e.pointerId);const r=ov.getBoundingClientRect();P={r,s:[[e.clientX-r.left,e.clientY-r.top]],w:[mqPt(e.clientX,e.clientY)]};pa.setAttribute('stroke',UI.mqDrCor);pa.setAttribute('stroke-width',UI.mqDrEsp*mqVis(mqUI().q).z);pa.setAttribute('d','')};
-  ov.onpointermove=e=>{if(!P)return;P.s.push([e.clientX-P.r.left,e.clientY-P.r.top]);P.w.push(mqPt(e.clientX,e.clientY));pa.setAttribute('d','M'+P.s.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L'))};
-  ov.onpointerup=ov.onpointercancel=()=>{if(!P)return;const W=P.w;P=null;pa.setAttribute('d','');if(W.length<2)return;const e_=UI.mqDrEsp,pad=e_+4;const xs=W.map(p=>p.x),ys=W.map(p=>p.y);const x0=Math.min(...xs)-pad,y0=Math.min(...ys)-pad,x1=Math.max(...xs)+pad,y1=Math.max(...ys)+pad;
-    const pts=[];W.forEach((p,k)=>{if(!k||k===W.length-1||Math.hypot(p.x-W[k-1].x,p.y-W[k-1].y)>1.2)pts.push(p)});
-    const d='M'+pts.map(p=>(p.x-x0).toFixed(1)+' '+(p.y-y0).toFixed(1)).join('L');mqNovo('traco',x0,y0,{w:Math.round(x1-x0),h:Math.round(y1-y0),d,cor:UI.mqDrCor,esp:e_});mqUI().sel=[];mqRender()}}
-{const _r=mqRender;mqRender=function(){const r=_r.apply(this,arguments);try{if(UI.mqDraw&&$('#mq-cv')&&!$('#mq-cv .mq-drov'))mqDesenho(true);mqLixoN()}catch(_){}return r}}
-/* lixeira: o que se apaga pode ser recuperado */
-function mqLixo(){const s=mqStore();s.lixo=(s.lixo||[]).filter(x=>Date.now()-x.qd<30*864e5);return s.lixo}
-function mqLixoN(){const n=$('#mq-lixon');if(n){const k=mqLixo().length;n.textContent=k||'';n.hidden=!k}}
-{const _ap=mqApagar;mqApagar=function(){const u=mqUI(),q=mqQ(u.q);const antI=q.itens.slice(),antS=q.setas.slice(),antQ=MQ().slice();const r=_ap.apply(this,arguments);try{
-  const fica=new Set(q.itens.map(i=>i.id));const foram=antI.filter(i=>!fica.has(i.id));if(!foram.length)return r;const qs=new Set(MQ().map(x=>x.id));
-  mqLixo().unshift({id:uid(),qd:Date.now(),qid:q.id,itens:JSON.parse(JSON.stringify(foram)),setas:JSON.parse(JSON.stringify(antS.filter(s=>!q.setas.some(z=>z.id===s.id)))),quadros:JSON.parse(JSON.stringify(antQ.filter(z=>!qs.has(z.id))))});
-  if(mqLixo().length>200)mqStore().lixo.length=200;save();mqLixoN();toast(foram.length===1?'Enviado para a lixeira':foram.length+' elementos enviados para a lixeira','ok')}catch(e){console.warn(e)}return r}}
-function mqResumo(i){const t=MQ_T[i.t]?MQ_T[i.t][1]:i.t;const x=i.t==='nota'||i.t==='titulo'||i.t==='comentario'?mqTxt(i.txt):i.t==='quadro'?((MQ().find(z=>z.id===i.ref)||{}).nome||'Quadro'):(i.tit||i.nome||i.lq||i.url||i.leg||'');return {t,x:String(x||'').slice(0,80)}}
-function mqLixoDlg(){const L=mqLixo();const nomeQ=id=>(MQ().find(z=>z.id===id)||{}).nome||'(quadro apagado)';
-  openDrawer('Lixeira',`<div class="ed">${L.length?`<p class="hint" style="margin-top:0">Os elementos apagados ficam aqui durante 30 dias.</p><div class="mq-lxl">${L.map(e=>{const p=e.itens.filter(i=>!e.itens.some(z=>z.t==='coluna'&&z.id===i.pai));const r=mqResumo(p[0]||e.itens[0]);return `<div class="mq-lx"><span class="mq-lxi">${ic((MQ_T[(p[0]||{}).t]||['grid'])[0],16)}</span><div><b>${esc(r.t)}${p.length>1?' + '+(p.length-1):''}</b><small>${esc(r.x||'—')}</small><small class="mut">${esc(nomeQ(e.qid))} · ${new Date(e.qd).toLocaleString('pt-PT',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</small></div><span class="sp1"></span><button type="button" class="btn sm" data-lxr="${e.id}">${ic('undo',13)} Recuperar</button><button type="button" class="btn sm ico dng" data-lxd="${e.id}" aria-label="Apagar de vez">${ic('trash',13)}</button></div>`}).join('')}</div>
-    <div class="row" style="margin-top:14px"><span class="sp1"></span><button class="btn dng" id="lx-all">${ic('trash',14)} Esvaziar Lixeira</button></div>`:`<div class="empty">${ic('trash',30)}<br>A lixeira está vazia.</div>`}</div>`);
-  $$('[data-lxr]').forEach(b=>b.onclick=()=>{const e=L.find(x=>x.id===b.dataset.lxr);if(!e)return;const q=MQ().find(z=>z.id===e.qid)||mqQ(mqUI().q);const S_=mqStore();
-    e.quadros.forEach(z=>{if(!S_.quadros.some(y=>y.id===z.id))S_.quadros.push(z)});const ids=new Set(q.itens.map(i=>i.id));e.itens.forEach(i=>{if(!ids.has(i.id))q.itens.push(i)});
-    const all=new Set(q.itens.map(i=>i.id));e.setas.forEach(s=>{if(all.has(s.de)&&all.has(s.para)&&!q.setas.some(z=>z.id===s.id))q.setas.push(s)});
-    S_.lixo=S_.lixo.filter(x=>x!==e);save();mqUI().q=q.id;mqUI().sel=e.itens.filter(i=>!i.pai).map(i=>i.id);closeDrawer();mqRender();toast('Recuperado','ok')});
-  $$('[data-lxd]').forEach(b=>b.onclick=()=>{const S_=mqStore();S_.lixo=S_.lixo.filter(x=>x.id!==b.dataset.lxd);save();mqLixoDlg();mqLixoN()});
-  const all=$('#lx-all');if(all)all.onclick=()=>{if(!confirm('Apagar de vez tudo o que está na lixeira?'))return;mqStore().lixo=[];save();closeDrawer();mqLixoN()}}
-/* barra: menu «•••», enviar ficheiros, lixeira */
-{const _b=mqBind;mqBind=function(){const r=_b.apply(this,arguments);try{
-  const mb=$('#mq-more');if(mb)mb.onclick=e=>{e.stopPropagation();const ex=$('#mq-mpop');if(ex){ex.remove();mb.setAttribute('aria-expanded','false');return}
-    const pop=document.createElement('div');pop.id='mq-mpop';pop.className='mq-mpop';pop.setAttribute('role','menu');pop.innerHTML=MQ_MAIS.filter(t=>{const x=document.querySelector('.mq-bar .mq-x[data-mqt="'+t+'"]');return !x||x.hidden}).map(t=>`<button type="button" class="mq-tool mq-mt" data-mqt="${t}" role="menuitem"><span class="mq-mti mq-mti-${t}">${ic(MQ_T[t][0],22)}</span><span>${MQ_T[t][1]}</span></button>`).join('');
-    document.body.appendChild(pop);const rr=mb.getBoundingClientRect();pop.style.left=(rr.right+8)+'px';pop.style.top=Math.min(innerHeight-pop.offsetHeight-8,Math.max(8,rr.top-pop.offsetHeight/2+rr.height/2))+'px';mb.setAttribute('aria-expanded','true');
-    const cv=$('#mq-cv');pop.querySelectorAll('.mq-tool').forEach(b=>{b.onpointerdown=ev=>{ev.preventDefault();const t=b.dataset.mqt;let g=null;const x0=ev.clientX,y0=ev.clientY;
-      const mv=e2=>{if(!g&&Math.hypot(e2.clientX-x0,e2.clientY-y0)>6){g=document.createElement('div');g.className='mq-ghost';g.innerHTML=ic(MQ_T[t][0],18)+' '+MQ_T[t][1];document.body.appendChild(g);pop.style.opacity=.3}if(g){g.style.left=e2.clientX+'px';g.style.top=e2.clientY+'px'}};
-      const up=e2=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);pop.remove();mb.setAttribute('aria-expanded','false');if(g){g.remove();const r_=cv.getBoundingClientRect();if(e2.clientX>r_.left&&e2.clientX<r_.right&&e2.clientY>r_.top&&e2.clientY<r_.bottom){const p=mqPt(e2.clientX,e2.clientY);mqCriar(t,{x:p.x-40,y:p.y-20})}}else mqCriar(t)};
-      addEventListener('pointermove',mv);addEventListener('pointerup',up)}});
-    setTimeout(()=>document.addEventListener('pointerdown',function f(ev){if(!pop.contains(ev.target)&&ev.target!==mb){pop.remove();mb.setAttribute('aria-expanded','false');document.removeEventListener('pointerdown',f,true)}},true),0)};
-  const ff=$('#mq-ff');if(ff)ff.onchange=e=>{const p=mqLinkPos||mqCentro();mqFicheiros([...e.target.files],p.x,p.y);e.target.value=''};
-  const lx=$('#mq-lixo');if(lx)lx.onclick=mqLixoDlg;mqLixoN();
-  const cv=$('#mq-cv');if(cv)cv.addEventListener('keydown',e=>{if(e.key==='Escape'&&UI.mqDraw)mqDesenho(false)});if(UI.mqDraw)mqDesenho(true)}catch(e){console.warn(e)}return r}}
-/* elementos novos: edição */
-{const _ib=mqItensBind;mqItensBind=function(){const r=_ib.apply(this,arguments);try{const u=mqUI(),q=mqQ(u.q);
-  $$('#mq-its .mq-it').forEach(el=>{const id=el.dataset.mq,it=mqItem(q,id);if(!it||!MQ_NOVOS.has(it.t))return;
-    el.ondblclick=e=>{e.stopPropagation();if(it.t==='documento')return mqDocAbrir(id);if(it.t==='esboco')return mqEsbocoAbrir(id);if(it.t==='comentario')return mqEditar(id);if(it.t==='mapa')return mqMapaDlg(null,it);if(it.t==='ficheiro')return abrirDoc(it.fid,it.nome)};
-    const ab=el.querySelector('[data-abrir]');if(ab)ab.onclick=()=>it.t==='documento'?mqDocAbrir(id):abrirDoc(it.fid,it.nome);
-    el.querySelectorAll('[data-tit]').forEach(i=>{if(i.closest('.mq-it')!==el)return;i.onchange=()=>{mqAntes();it.tit=i.value.trim();save()}});
-    if(it.t==='comentario'){const ci=el.querySelector('[data-cmi]');ci.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter'&&ci.value.trim()){mqAntes();(it.resp=it.resp||[]).push({t:ci.value.trim(),a:S.cfg.professor||'Professor',qd:Date.now()});save();mqRender();setTimeout(()=>{const n=$(`[data-mq="${id}"] [data-cmi]`);n&&n.focus()},20)}};
-      el.querySelectorAll('[data-cmdel]').forEach(b=>b.onclick=()=>{mqAntes();it.resp.splice(+b.dataset.cmdel,1);save();mqRender()});const rs=el.querySelector('[data-cmres]');if(rs)rs.onclick=()=>{mqAntes();it.res=!it.res;save();mqRender()};el.classList.toggle('res',!!it.res)}
-    if(it.t==='tabela'){el.querySelectorAll('[data-tc]').forEach(c=>{const [i,j]=c.dataset.tc.split('|').map(Number);c.onchange=()=>{it.lin[i][j]=c.value;save()};c.onkeydown=e=>{e.stopPropagation();const mv={Enter:[1,0],ArrowDown:[1,0],ArrowUp:[-1,0]}[e.key]||(e.key==='Tab'?null:null);if(mv){e.preventDefault();const n=el.querySelector(`[data-tc="${i+mv[0]}|${j}"]`);if(n)n.focus();else if(e.key==='Enter'){it.lin[i][j]=c.value;mqAntes();it.lin.push(it.lin[0].map(()=>''));save();mqRender();setTimeout(()=>{const z=$(`[data-mq="${id}"] [data-tc="${i+1}|${j}"]`);z&&z.focus()},20)}}}});
-      el.querySelectorAll('[data-tbl]').forEach(b=>b.onclick=()=>{mqAntes();if(b.dataset.tbl==='+')it.lin.push(it.lin[0].map(()=>''));else if(it.lin.length>1)it.lin.pop();save();mqRender()});
-      el.querySelectorAll('[data-tbc]').forEach(b=>b.onclick=()=>{mqAntes();if(b.dataset.tbc==='+')it.lin.forEach(rw=>rw.push(''));else if(it.lin[0].length>1)it.lin.forEach(rw=>rw.pop());save();mqRender()})}})}catch(e){console.warn(e)}return r}}
-{const _cx=mqCtx;mqCtx=function(){const r=_cx.apply(this,arguments);try{const u=mqUI(),q=mqQ(u.q);const box=$('#mq-ctx');if(!box||box.hidden||u.sel.length!==1)return r;const it=mqItem(q,u.sel[0]);if(!it)return r;
-  const acc={documento:['pencil','Abrir',()=>mqDocAbrir(it.id)],esboco:['scribble','Desenhar',()=>mqEsbocoAbrir(it.id)],mapa:['map','Mudar local',()=>mqMapaDlg(null,it)],ficheiro:['download','Abrir',()=>abrirDoc(it.fid,it.nome)]}[it.t];
-  if(acc&&!box.querySelector('[data-ca2]')){box.insertAdjacentHTML('afterbegin',`<button type="button" class="btn sm" data-ca2>${ic(acc[0],13)} ${acc[1]}</button>`);box.querySelector('[data-ca2]').onclick=acc[2]}}catch(_){}return r}}
-
-/* v0.919 · o tema SGE passa a ser o predefinido (os outros ficam como opções) */
-{const _apSg=aplicarPrefs;aplicarPrefs=function(){try{if(S.cfg&&!S.cfg._sge919){S.cfg._sge919=1;if(!S.cfg.estilo||S.cfg.estilo==='institucional')S.cfg.estilo='sge';if(!S.cfg.logoApp||S.cfg.logoApp==='monograma')S.cfg.logoApp='auto';if(!S.cfg.logoAnim)S.cfg.logoAnim='auto';try{save()}catch(_){}}}catch(_){}return _apSg.apply(this,arguments)}}
-try{aplicarPrefs()}catch(_){}
-try{const st=document.createElement('style');st.textContent='#view .jn-li{content-visibility:auto;contain-intrinsic-size:auto 96px}#view{overscroll-behavior:contain}html body #barx>*,html body #barmais{animation:none!important}html body #bar #ctxTurma,#ctxTurma.semt{display:none!important}';document.head.appendChild(st)}catch(_){}
-/* v0.919 · cabeçalho: quando as ações não cabem, as que sobram vão para «Mais» (em vez de uma 2.ª linha) */
-{const _cab=cabecalho;let _cabIn=false;cabecalho=function(){if(_cabIn)return _cab.apply(this,arguments);_cabIn=true;try{const b=$('#bar'),x=$('#barx');
-  /* v0.941 · o botão «Mais» é reaproveitado (antes era apagado e criado de novo a cada medição, e piscava) */
-  if(x){x.querySelectorAll('[data-ovf]').forEach(e=>{e.style.removeProperty('display');delete e.dataset.ovf});const m=x.querySelector('#barmais');if(m){m.style.setProperty('display','none','important');m.dataset.esc=1}}
-  const r=_cab.apply(this,arguments);if(!b||!x||!b.classList.contains('hgrid')||b.classList.contains('hx1'))return r;
-  if(!x.querySelector('button:not(#barmais)')){const m=x.querySelector('#barmais');if(m)m.remove();return r}
-  const B=[...x.children].filter(e=>e.tagName==='BUTTON'&&e.id!=='barmais');if(B.length<2)return r;
-  {let m=x.querySelector('#barmais');if(!m){x.insertAdjacentHTML('beforeend',`<button type="button" class="btn" id="barmais" aria-haspopup="true" aria-expanded="false">${ic('dots',16)} Mais</button>`)}else{if(x.lastElementChild!==m)x.appendChild(m);m.style.removeProperty('display');delete m.dataset.esc}}
-  for(let k=B.length-1;k>=0;k--){B[k].dataset.ovf=1;B[k].style.setProperty('display','none','important');_cab.apply(this,arguments);if(b.classList.contains('hx1'))break}
-  if(!b.classList.contains('hx1')){B.forEach(e=>{e.style.removeProperty('display');delete e.dataset.ovf});x.querySelector('#barmais').style.setProperty('display','none','important');_cab.apply(this,arguments);return r}
-  const mb=x.querySelector('#barmais');mb.onclick=e=>{e.stopPropagation();const ex=document.getElementById('barmpop');if(ex){ex.remove();mb.setAttribute('aria-expanded','false');return}
-    const pop=document.createElement('div');pop.id='barmpop';pop.className='barmpop';pop.setAttribute('role','menu');const H=B.filter(z=>z.dataset.ovf);
-    pop.innerHTML=H.map((z,k)=>`<button type="button" role="menuitem" data-k="${k}">${z.innerHTML}</button>`).join('');document.body.appendChild(pop);
-    const rr=mb.getBoundingClientRect();pop.style.top=(rr.bottom+6)+'px';pop.style.left=Math.max(8,Math.min(innerWidth-pop.offsetWidth-8,rr.right-pop.offsetWidth))+'px';mb.setAttribute('aria-expanded','true');
-    pop.querySelectorAll('[data-k]').forEach(z=>z.onclick=()=>{pop.remove();mb.setAttribute('aria-expanded','false');H[+z.dataset.k].click()});
-    setTimeout(()=>document.addEventListener('pointerdown',function f(ev){if(!pop.contains(ev.target)&&ev.target!==mb){pop.remove();mb.setAttribute('aria-expanded','false');document.removeEventListener('pointerdown',f,true)}},true),0);
-    pop.addEventListener('keydown',ev=>{if(ev.key==='Escape'){pop.remove();mb.focus()}});const f0=pop.querySelector('button');f0&&f0.focus()};
-  return r}finally{_cabIn=false}}}
-/* barra lateral: o último item tocado não fica realçado (toque no iPad) */
-document.addEventListener('click',e=>{const n=e.target.closest&&e.target.closest('#side .nav');if(n&&!document.documentElement.classList.contains('kbd'))setTimeout(()=>{try{n.blur()}catch(_){}},0)},true);
-{const _gNv=go;go=function(v){const r=_gNv.apply(this,arguments);try{$$('#side .nav.on[data-v]').forEach(b=>{if(b.dataset.v!==VIEW&&!b.classList.contains('navsub')&&!(b.dataset.v==='aula'&&VIEW==='sumarios'))b.classList.remove('on')})}catch(_){}return r}}
-/* v0.919 · um ícone diferente para cada função da barra lateral */
-try{Object.assign(ICONS,{nvpainel:'<rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/>',
-  nvplanta:'<rect x="3" y="3" width="18" height="18" rx="2"/><rect x="6" y="7" width="4" height="3" rx=".8"/><rect x="14" y="7" width="4" height="3" rx=".8"/><rect x="6" y="13" width="4" height="3" rx=".8"/><rect x="14" y="13" width="4" height="3" rx=".8"/>',
-  nvsn:'<rect x="3" y="5" width="8" height="8" rx="1" transform="rotate(-8 7 9)"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="8" y="13" width="8" height="8" rx="1" transform="rotate(5 12 17)"/>',
-  nvjn:'<path d="M20 3c-7 1-12 6-14 14l-2 4"/><path d="M15 7c-3 1-5 3-6 7"/><path d="M10 21h10"/>',
-  nvhoras:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-  nvaula:'<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8M7 9h6M7 12h4"/>',
-  nvtestes:'<path d="M4 20 9 5l5 15M6 15h6"/><path d="M18 7v6M15 10h6"/>',
-  nvrel:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M9 18v-3M12 18v-6M15 18v-4"/>'})}catch(_){}
-const NAV_IC={painel:'nvpainel',planta:'nvplanta',sprucenote:'nvsn',snjornal:'nvjn',meuhorario:'nvhoras',aula:'nvaula',testes:'nvtestes',relatorios:'nvrel'};
-function navIcones(){$$('#side .nav[data-v],#tnavHold .nav[data-v]').forEach(b=>{const k=NAV_IC[b.dataset.v];if(!k||b.dataset.icu===k)return;const sv=b.querySelector('svg');if(!sv)return;const sz=+sv.getAttribute('width')||18;const t=document.createElement('template');t.innerHTML=ic(k,sz).trim();const n=t.content.firstElementChild;if(n){sv.replaceWith(n);b.dataset.icu=k}})}
-{const _gIc=go;go=function(){const r=_gIc.apply(this,arguments);try{navIcones()}catch(_){}return r}}
-new MutationObserver(()=>{try{navIcones()}catch(_){}}).observe(document.getElementById('side')||document.body,{childList:true,subtree:true});setTimeout(navIcones,300);setTimeout(navIcones,1800);
-/* v0.919 · lista de turmas responsiva (cartões quando não cabe) */
-{const _vTu=vTurmas;vTurmas=function(){const r=_vTu.apply(this,arguments);try{const tb=[...document.querySelectorAll('#view table.lst')].find(t=>t.querySelector('[data-open]'));if(tb){tb.classList.add('tbtur');const c=tb.closest('.card');if(c)c.classList.add('ctur');const w=tb.parentElement;if(w&&w!==c&&/tblw|gwrap/.test(w.className))w.classList.add('tbtw');
-  const L=['Turma','Disciplina','Alunos','Instrumentos','Horário',''];tb.querySelectorAll('tbody tr:not(.gr)').forEach(tr=>[...tr.children].forEach((td,k)=>{if(L[k])td.dataset.l=L[k]}))}}catch(e){console.warn(e)}return r}}
-/* v0.919 · sincronização mais rápida e à prova de bloqueadores
-   1) verificação rápida a cada segundo (só a «versão» do índice na nuvem — um pedido de poucos bytes); a sincronização completa só corre quando outro aparelho mudou alguma coisa
-   2) se um bloqueador impedir o script de início de sessão da Google, a app usa automaticamente o início de sessão por redirecionamento, que nenhum bloqueador trava */
-window.__gsiBloq=(()=>{try{return sessionStorage.getItem('es.gsib')==='1'}catch(_){return false}})();
-{const _gc=gsCarregar;gsCarregar=async function(){try{return await Promise.race([_gc.apply(this,arguments),new Promise((_,ko)=>setTimeout(()=>ko(new Error('O início de sessão da Google demorou demasiado (bloqueador de conteúdo?).')),6000))])}catch(e){window.__gsiBloq=true;try{sessionStorage.setItem('es.gsib','1')}catch(_){}throw e}}}
-setTimeout(()=>{if(!/^https:/.test(location.protocol)||window.google&&google.accounts)return;gsCarregar().then(()=>{window.__gsiBloq=false;try{sessionStorage.removeItem('es.gsib')}catch(_){}}).catch(()=>{})},300);
-{let _ver=null,_lc=0,_ocup=false;window.__nvRapido=false;
-  const rapido=async()=>{try{const L=nvL();if(_ocup||L.prov!=='google'||document.visibilityState!=='visible'||!navigator.onLine||L.auto===false||L.renovar||_nvBusy||!(L.k||_nvK)||!SESSAO||document.getElementById('nvgate')||document.body.classList.contains('priv-on')){if(L.prov!=='google')window.__nvRapido=false;return}
-    _ocup=true;window.__nvRapido=true;const g=PROV.google;let m=await g._mapa();let f=m[NV_PREF+'manifest.json'];if(!f){m=await g._mapa(true);f=m[NV_PREF+'manifest.json']}
-    if(!f){if(Date.now()-_lc>4000){_lc=Date.now();await nvSincronizar(false)}return}
-    const r=await gsFetch('https://www.googleapis.com/drive/v3/files/'+f.id+'?fields=version');const j=await r.json();const v=String(j.version||'');
-    if(v&&v!==_ver){const prim=_ver===null;_ver=v;if(!prim||Date.now()-_lc>4000){_lc=Date.now();await nvSincronizar(false);try{const r2=await gsFetch('https://www.googleapis.com/drive/v3/files/'+f.id+'?fields=version');_ver=String((await r2.json()).version||_ver)}catch(_){}}}
-    else if(Date.now()-_lc>60000){_lc=Date.now();await nvSincronizar(false)}}catch(e){if(/404/.test(e&&e.message||'')){try{PROV.google._ids=null}catch(_){}}}finally{_ocup=false}};
-  setInterval(rapido,1000);addEventListener('focus',()=>setTimeout(rapido,100));document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')setTimeout(rapido,100)})}
-/* v0.919 · ecrã do código: efemérides do dia e uma citação de um pedagogo */
-const EFEM={'01-01':['Dia Mundial da Paz'],'01-24':['Dia Internacional da Educação'],'01-27':['Dia Internacional em Memória das Vítimas do Holocausto'],'02-11':['Dia Internacional das Mulheres e Raparigas na Ciência'],'02-13':['Nasce Agostinho da Silva (1906)'],'02-14':['Dia de São Valentim'],'02-21':['Dia Internacional da Língua Materna'],
-  '03-08':['Dia Internacional da Mulher','Nasce João de Deus, poeta e pedagogo (1830)'],'03-14':['Dia Internacional da Matemática (Dia do π)'],'03-17':['St. Patrick’s Day'],'03-20':['Dia Internacional da Felicidade','Dia Internacional da Francofonia'],'03-21':['Dia Mundial da Poesia','Dia Internacional das Florestas','Dia Internacional para a Eliminação da Discriminação Racial'],'03-22':['Dia Mundial da Água'],'03-27':['Dia Mundial do Teatro'],
-  '04-02':['Dia Internacional do Livro Infantil','Dia Mundial da Consciencialização do Autismo'],'04-07':['Dia Mundial da Saúde'],'04-10':['Nasce Sebastião da Gama, poeta e professor (1924)'],'04-22':['Dia da Terra'],'04-23':['Dia Mundial do Livro e dos Direitos de Autor','Dia da Língua Inglesa (ONU)'],'04-25':['Dia da Liberdade'],'04-29':['Dia Mundial da Dança'],
-  '05-01':['Dia do Trabalhador'],'05-03':['Dia Mundial da Liberdade de Imprensa'],'05-05':['Dia Mundial da Língua Portuguesa'],'05-09':['Dia da Europa'],'05-15':['Dia Internacional da Família'],'05-18':['Dia Internacional dos Museus'],'05-22':['Dia Internacional da Diversidade Biológica'],
-  '06-01':['Dia Mundial da Criança'],'06-05':['Dia Mundial do Ambiente'],'06-08':['Dia Mundial dos Oceanos'],'06-10':['Dia de Portugal, de Camões e das Comunidades Portuguesas'],'06-13':['Nasce Fernando Pessoa (1888)'],'06-20':['Dia Mundial do Refugiado'],
-  '08-09':['Nasce Jean Piaget (1896)'],'08-12':['Dia Internacional da Juventude'],'08-31':['Nasce Maria Montessori (1870)'],
-  '09-08':['Dia Internacional da Literacia'],'09-19':['Nasce Paulo Freire (1921)'],'09-21':['Dia Internacional da Paz'],'09-26':['Dia Europeu das Línguas'],'09-27':['Dia Mundial do Turismo'],
-  '10-01':['Dia Mundial da Música','Dia Internacional das Pessoas Idosas'],'10-04':['Dia Mundial do Animal'],'10-05':['Dia Mundial do Professor','Implantação da República (1910)'],'10-16':['Dia Mundial da Alimentação'],'10-20':['Nasce John Dewey (1859)'],'10-24':['Dia das Nações Unidas'],'10-31':['Halloween'],
-  '11-01':['Dia de Todos os Santos'],'11-10':['Dia Mundial da Ciência pela Paz e pelo Desenvolvimento'],'11-11':['Dia de São Martinho'],'11-16':['Dia Internacional da Tolerância','Dia Nacional do Mar'],'11-17':['Nasce Lev Vygotsky (1896)'],'11-20':['Dia Universal dos Direitos da Criança'],'11-25':['Dia Internacional para a Eliminação da Violência contra as Mulheres'],
-  '12-01':['Restauração da Independência (1640)'],'12-03':['Dia Internacional das Pessoas com Deficiência'],'12-08':['Dia da Imaculada Conceição'],'12-10':['Dia dos Direitos Humanos'],'12-25':['Natal']};
-const CITAS=[['Ensinar não é transferir conhecimento, mas criar as possibilidades para a sua própria produção ou a sua construção.','Paulo Freire','Pedagogia da Autonomia'],
-  ['Ninguém educa ninguém, ninguém se educa a si mesmo: os homens educam-se entre si, mediatizados pelo mundo.','Paulo Freire','Pedagogia do Oprimido'],
-  ['O maior sinal de sucesso de um professor é poder dizer: as crianças estão agora a trabalhar como se eu não existisse.','Maria Montessori','A Mente Absorvente'],
-  ['A educação é um processo de vida e não uma preparação para a vida futura.','John Dewey','O Meu Credo Pedagógico'],
-  ['O que a criança consegue fazer hoje em colaboração, conseguirá fazer sozinha amanhã.','Lev Vygotsky','Pensamento e Linguagem'],
-  ['Ensinar tudo a todos.','João Amós Coménio','Didática Magna'],
-  ['Começai por estudar os vossos alunos, porque decerto não os conheceis.','Jean-Jacques Rousseau','Emílio'],
-  ['A única pessoa educada é aquela que aprendeu a aprender e a mudar.','Carl Rogers','Liberdade para Aprender'],
-  ['A mente não é um vaso para encher, mas lenha que basta acender.','Plutarco','Sobre a Arte de Ouvir'],
-  ['Uma criança, um professor, uma caneta e um livro podem mudar o mundo.','Malala Yousafzai','Discurso na ONU, 2013'],
-  ['Não se pode obrigar a beber um cavalo que não tem sede.','Célestin Freinet','Os Ditos de Mathieu'],
-  ['A educação é a arma mais poderosa que podemos usar para mudar o mundo.','Nelson Mandela','2003']];
-function efemHoje(){const d=new Date();const k=String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(EFEM[k])return {hoje:true,L:EFEM[k]};
-  for(let i=1;i<=40;i++){const x=new Date(d);x.setDate(d.getDate()+i);const kk=String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');if(EFEM[kk])return {hoje:false,em:i,dia:x,L:EFEM[kk]}}return null}
-function pinExtras(){const P=document.querySelector('#login.pinmode .pinside');if(!P||P.querySelector('.psx'))return;const e=efemHoje();let ci=Math.floor(Math.random()*CITAS.length);
-  P.insertAdjacentHTML('beforeend',`<div class="psx">${e?`<div class="psef"><span class="psl">${e.hoje?'Hoje':e.em===1?'Amanhã':'Daqui a '+e.em+' dias · '+e.dia.toLocaleDateString('pt-PT',{day:'numeric',month:'long'})}</span>${e.L.map(x=>`<b>${esc(x)}</b>`).join('')}</div>`:''}<figure class="psq"><blockquote></blockquote><figcaption></figcaption><button type="button" class="psqn" aria-label="Outra citação" title="Outra citação">↻</button></figure></div>`);
-  const q=P.querySelector('.psq');const pinta=()=>{const c=CITAS[ci];q.querySelector('blockquote').textContent='«'+c[0]+'»';q.querySelector('figcaption').innerHTML=`<b>${esc(c[1])}</b>${c[2]?' · '+esc(c[2]):''}`;q.classList.remove('in');void q.offsetWidth;q.classList.add('in')};pinta();
-  q.querySelector('.psqn').onclick=e=>{e.stopPropagation();ci=(ci+1+Math.floor(Math.random()*(CITAS.length-1)))%CITAS.length;pinta()};P.removeAttribute('aria-hidden')}
-{const _pl=pinLado;pinLado=function(){const r=_pl.apply(this,arguments);try{pinExtras()}catch(e){console.warn(e)}return r}}
-setInterval(()=>{if(document.querySelector('#login.pinmode .pinside:not(:has(.psx))'))try{pinExtras()}catch(_){}},800);
 

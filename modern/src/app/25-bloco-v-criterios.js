@@ -306,7 +306,7 @@ function regAutoav(t,a,perAte){const c={...S.cfg,...escolaDe(t)};const P=periodo
       <div class="rgc"><b>Comentário / Reflexão:</b> ${refl||''}</div></div>`};
   const ns=P.map(p=>p<=perAte?parseFloat(String(nAv(p)).replace(',','.')):NaN);const ok=ns.filter(x=>!isNaN(x));const fin=ok.length===P.length&&P.every(p=>p<=perAte)?Math.round(ok.reduce((s,x)=>s+x,0)/ok.length*10)/10:null;
   return `<section class="sheet rgsheet">
-    <div class="hdr"><span class="hl">${c.logo?`<img src="${c.logo}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>${esc(S.cfg.departamento||(S.cfg.grupo?'Grupo '+S.cfg.grupo:''))}</span></span><span style="text-align:right">Ano letivo ${esc((A()||{}).nome||'')}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
+    <div class="hdr"><span class="hl">${c.logo?`<img src="${c.logo}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>${esc(S.cfg.departamento||(S.cfg.grupo?'Grupo '+S.cfg.grupo:''))}</span></span><span style="text-align:right">${c.logoDir?`<img src="${c.logoDir}" alt="" style="max-height:34px;max-width:120px;display:block;margin-left:auto;object-fit:contain">`:''}Ano letivo ${esc((A()||{}).nome||'')}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
     <h1>Registo de Autoavaliação – ${esc(t.disciplina||'')}</h1><div class="sub">Critérios: ${crit}</div>
     <div class="rgal"><span><small>Aluno</small><b>${esc(a.nome)}</b></span><span><small>N.º</small><b>${esc(numAl(a))}</b></span><span><small>Turma</small><b>${esc(a.origem||t.nome)}</b></span></div>
     ${P.map(bloco).join('')}

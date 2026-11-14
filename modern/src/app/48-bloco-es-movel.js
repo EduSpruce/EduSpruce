@@ -436,17 +436,17 @@ const ES_DOM='eduspruce.pt';
   try{esSplash('A abrir '+ES_DOM+'… Entre com Google e escreva o seu código: os dados vêm da nuvem.')}catch(_){}
   setTimeout(()=>location.replace(destino),1600)}catch(e){console.warn(e)}})();
 
-/* v1.00 · bloqueio dos dados de base: aviso só 5 s; desbloquear apenas em Definições › Dados e Segurança */
+/* v1.00 · bloqueio dos dados de base: aviso só 5 s; desbloquear apenas em Definições › Segurança */
 let _bloqBanAte=0;
-function bloqIrDef(){toast('Para desbloquear: Definições › Dados e Segurança','aviso');UI.defTab='dados';go('definicoes');setTimeout(()=>{const c=$('#bloq-card');if(c){c.scrollIntoView({behavior:'smooth',block:'center'});c.classList.add('realce');setTimeout(()=>c.classList.remove('realce'),1800)}},350)}
+function bloqIrDef(){toast('Para desbloquear: Definições › Segurança','aviso');UI.defTab='dados';go('definicoes');setTimeout(()=>{const c=$('#bloq-card');if(c){c.scrollIntoView({behavior:'smooth',block:'center'});c.classList.add('realce');setTimeout(()=>c.classList.remove('realce'),1800)}},350)}
 {const _gBB=go;go=function(v){if(v!==go._bbUlt){_bloqBanAte=Date.now()+5000;go._bbUlt=v}return _gBB.apply(this,arguments)};if(go._f)go._f=go._f}
 {const _ba=bloqAlternar;bloqAlternar=async function(ligar){if(ligar)_bloqBanAte=Date.now()+5000;return _ba.apply(this,arguments)}}
 {const _bu3=bloqUI;bloqUI=function(){const r=_bu3.apply(this,arguments);try{
   const bb=$('#view .bloqban:not(.sug)');if(bb){const falta=_bloqBanAte-Date.now();if(falta<=0){bb.remove()}else{
       const b=bb.querySelector('[data-bloqoff]');if(b){b.innerHTML=ic('gear',14)+' Definições';b.onclick=bloqIrDef}
-      const t=bb.querySelector('span:not(.sp1)');if(t&&!t.querySelector('.bloqdef'))t.insertAdjacentHTML('beforeend',' <span class="bloqdef">Para desbloquear: <b>Definições › Dados e Segurança</b>.</span>');
+      const t=bb.querySelector('span:not(.sp1)');if(t&&!t.querySelector('.bloqdef'))t.insertAdjacentHTML('beforeend',' <span class="bloqdef">Para desbloquear: <b>Definições › Segurança</b>.</span>');
       clearTimeout(bloqUI._t);bloqUI._t=setTimeout(()=>{const x=$('#view .bloqban:not(.sug)');if(x){x.classList.add('fora');setTimeout(()=>x.remove(),450)}},falta)}}
-  if(bloqOn())['#bloqBar','#bloqNav'].forEach(q=>{const e=$(q);if(e){e.onclick=bloqIrDef;e.title='Dados de base bloqueados — desbloqueie em Definições › Dados e Segurança';e.setAttribute('aria-label',e.title)}});
+  if(bloqOn())['#bloqBar','#bloqNav'].forEach(q=>{const e=$(q);if(e){e.onclick=bloqIrDef;e.title='Dados de base bloqueados — desbloqueie em Definições › Segurança';e.setAttribute('aria-label',e.title)}});
   else['#bloqBar','#bloqNav'].forEach(q=>{const e=$(q);if(e)e.onclick=()=>bloqAlternar(true)});
 }catch(e){console.warn(e)}return r}}
 

@@ -52,6 +52,7 @@
 52-analise-de-resultados-dificuldades-persistentes-.js
 53-profij-ensino-profissional.js
 54-v1-011-ajuda-atualizada-todos-os.js
-55-msai-catalogo-como-no-sge-data.js
-56-pautas-oficiais-profij-fpct-e-classificacao.js
-57-fecho.html
+55-sprucenote-e-jornalnote-todos-os-elementos.js
+56-perfil-onde-estou-e-como-avancar.js
+57-bloco-pin-ok.js
+58-fecho.html
