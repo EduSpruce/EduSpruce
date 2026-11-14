@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.016
+- Forms sem botões repetidos; botões do cabeçalho SGE uniformes
+
 ## 1.015
 - Cabeçalho sem «Mais» quando cabe; logótipos direito e de rodapé nos documentos; melhorias de horário, separadores, gráfico e definições
 

@@ -513,4 +513,8 @@ html body #view .lgxb.tem{border-style:solid;background:#fff}html body #view .lg
 html body #view .lgxb img{max-width:100%;max-height:100%;object-fit:contain}
 html body #view .lgxi b{font-size:14px}
 @media (max-width:900px){html body #view .lgx{margin-left:0;width:100%;justify-content:center}}
+html body.est-sge.est-sge.est-sge.est-sge #bar #barx .btn.pri{background:#767676!important;color:#fff!important;font-weight:700}
+html body.est-sge.est-sge.est-sge.est-sge #bar #barx .btn.pri:hover:not(:disabled){background:#858585!important}
+html body.est-sge.est-sge.est-sge.est-sge #bar #barx>.btn:last-child,html body.est-sge.est-sge.est-sge.est-sge #bar #barx>.btn:has(+ #barmais[style*="none"]){border-right:0!important}
+html body.est-sge.est-sge.est-sge.est-sge #bar #barx:empty{display:none!important}
 /*V0990-FIM*/
