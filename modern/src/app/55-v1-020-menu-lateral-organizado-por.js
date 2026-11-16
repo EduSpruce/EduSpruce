@@ -91,7 +91,7 @@ function menuRender(){try{navIc0()}catch(_){return}const P=mnPrep();if(!P)return
     const el=folha(n,false);if(el)L.push(el);
     if(n.f&&n.f.length){const c=reuse(`.msub[data-p="${n.v}"]`,`<div class="msub msubv" data-p="${n.v}"></div>`);mnOrdem(c,n.f.map(x=>folha(x,true)).filter(Boolean));L.push(c)}});
   mnOrdem(box,L);
-  [...box.querySelectorAll('.nav[data-v],#mnProf,#bloqNav,#ofsel')].forEach(e=>{if(!usados.has(e))off.appendChild(e)});
+  [...box.querySelectorAll('.nav[data-v],#mnProf,#bloqNav,#ofsel')].forEach(e=>{if(!usados.has(e)&&!e.classList.contains('tnav')&&!e.closest('#mnTurmas'))off.appendChild(e)});
   sd.querySelectorAll(':scope>.nav[data-v]:not(.tnav),:scope>#ofsel,:scope>#mnProf').forEach(e=>{if(!usados.has(e))off.appendChild(e)});
   const bq=$('#bloqNav');if(bq&&!usados.has(bq))off.appendChild(bq);
   const pf=$('#mnProf'),df=document.querySelector('#side .nav[data-v="definicoes"]');if(pf){const on=VIEW==='definicoes'&&UI.defTab==='prof';pf.classList.toggle('on',on);if(df&&on)df.classList.remove('on')}

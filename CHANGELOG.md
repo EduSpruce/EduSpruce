@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.023
+- Secções das turmas de volta no menu lateral
+
 ## 1.022
 - Menu lateral reposto como na 1.019
 - Editor do menu lateral parte do menu original: secções, menus, separadores, ícone Original
