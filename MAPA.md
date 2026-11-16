@@ -9,18 +9,22 @@ Responder sempre em português, curto. Versões 0.900–0.999 (nunca 1.0); a atu
 - Nunca nomes reais em código, ajuda ou exemplos. Nunca a chave secreta do Supabase (só a publicável).
 - Não mexer no eduspruce.app nem no PDF até à versão final.
 - Arena: nunca conta para a nota. Pulso: sempre formativo, só conta se o professor escolher um domínio.
+- Arena: personagens e nomes de modos sempre originais (inspirados no Blooket, nunca copiados).
 
 ## Onde está cada coisa
 - Fonte da app: `modern/src/app/` (módulos = index.html byte a byte; `modern/scripts/partir.py juntar|partir|conferir`). Na sessão: `/home/claude/edugest/index.html`.
-- Só na versão com base de dados: `modern/src/moderno/` (basedados, autoav, digit, arena-comum + arena, pulso), juntados por `modern/scripts/db.mjs`.
+- Só na versão com base de dados: `modern/src/moderno/` (basedados, autoav, digit, arena-comum + arena, pulso), juntados por `modern/scripts/db.mjs`, que também aplica `modern/src/moderno/patches.json` (agora versionado no Git).
 - Páginas dos alunos: `aluno.html`, `modern/src/arena/arena.html` → `arena.html`, `modern/src/pulso/pulso.html` → `pulso.html`.
-- SQL para correr no Supabase: `modern/supabase/migrations/`.
+- SQL para correr no Supabase: `modern/supabase/migrations/` (último: `0014_arena_modos.sql`, modos novos da Arena).
 - Espelho para a rede da escola: repositório `EduSpruce/eduspruce.github.io`.
 
 ## Convenções
 - Código novo antes da âncora `/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */`.
 - CSS novo em `<style id="css965">`, com seletores fortes (`html body …`) por causa do tema SGE.
 - Vistas: `TITLES.x`, envolver `go` e `go._f.x=vX`; módulos desativáveis põem o interruptor em `#def-mods`.
+- Cores próprias de elementos (ex.: dias do calendário) não podem depender do ajuste automático de contraste: ele só repõe o que mudou (`data-cgc`/`data-cgb`).
+- Menu lateral (1.020): estrutura em `MENU_DEF()` / `S.cfg.menu` (grupos `{id,nome,ic,f:[…]}` e itens `{v}`; especiais `@turmas`, `@prof`, `@bloq`, `@sep`), desenhado por `menuRender()` dentro de `#mnav`; editor em Definições › Menu Lateral (`defMenu`/`bindMenu`). Um botão novo com `data-v` na barra lateral entra sozinho no fim do menu; para o pôr num grupo, juntá-lo a `MENU_DEF()` e dar-lhe nome/ícone em `MN_NOME`/`MN_IC`.
+- Escolas (1.021): cada escola tem calendário e organização próprios (`a.porEscola[id]`, cópia independente da principal ao primeiro acesso, aviso enquanto `calCopia`); cargos de DT só da escola ativa (`minhasDT`).
 
 ## Sessão nova
 ```
@@ -28,10 +32,15 @@ git clone https://github.com/EduSpruce/eduspruce.git /home/claude/eduspruce
 git clone https://github.com/EduSpruce/eduspruce.github.io.git /home/claude/eduspruce.github.io
 bash /home/claude/eduspruce/modern/scripts/sessao/preparar.sh
 ```
+Se o envio para o GitHub der 403 («not in this session's authorized repository set»), o repositório tem de ser acrescentado às fontes da sessão.
+
 ## Publicar
 ```
 CLAUDE_SESSION=<link da sessão> /tmp/es/pubm.sh 0.9XX "novidade 1|novidade 2" "changelog" "mensagem do commit"
 ```
+## Testar sem ecrã (quando pedido)
+- Chrome + Playwright disponíveis; a app corre dentro de uma função fechada: usar `EduGest.ev("código")` (ou injetar `window.__ev=x=>eval(x);` numa cópia); para saltar a entrada, usar o `INIT` de `modern/tests/comum.mjs`.
+- PostgreSQL 16 local: dá para correr os scripts SQL (com um stub de `auth.uid()`) e jogar a Arena de ponta a ponta.
 
 ## Índice: onde está cada parte (modern/src/app)
 Os módulos mais recentes (número maior) reescrevem funções dos anteriores: procurar sempre com `grep -l "texto visível" modern/src/app/*` e editar o último que aparecer.
