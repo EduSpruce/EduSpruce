@@ -18,6 +18,10 @@ Responder sempre em português, curto. Versões 0.900–0.999 (nunca 1.0); a atu
 - Espelho para a rede da escola: repositório `EduSpruce/eduspruce.github.io`.
 
 ## Convenções
+- Desempenho: NUNCA `:has()` com `[style…]` dentro (nem `:not(:has(...[style]))`) — obriga a recalcular o estilo da página inteira a cada medição do cabeçalho (era o que deixava a app lenta nos PCs antigos; 1.020). Modo leve: `html.leve` (Definições › Aparência › Desempenho, `localStorage es.leve`).
+- Privacidade (modo de apresentação, 1.020): `apresPrep`/`apresAplicar` + observador do documento filtram TUDO o que aparece (texto, atributos, valores, listas, canvas). Memória por turma em `S.cfg.apresT[turmaId]` (`auto` = liga ao abrir a turma). Código novo não precisa de fazer nada — mas não desenhar nomes de alunos em imagens.
+- Em teste: `S.emt[instId]` (temporizador); entrada `.emtnav` por baixo da turma no menu. Coordenação só (sem docência): `CP().y.coordT` (nunca em `a.turmas`).
+- Demonstração: `criarDemo()` cria 3 anos letivos (o atual + 2 anteriores com os mesmos alunos) e exemplos na Biblioteca, Contactos e SpruceNote.
 - Código novo antes da âncora `/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */`.
 - CSS novo em `<style id="css965">`, com seletores fortes (`html body …`) por causa do tema SGE.
 - Vistas: `TITLES.x`, envolver `go` e `go._f.x=vX`; módulos desativáveis põem o interruptor em `#def-mods`.

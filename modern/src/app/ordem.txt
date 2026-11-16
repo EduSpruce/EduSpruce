@@ -52,7 +52,8 @@
 52-analise-de-resultados-dificuldades-persistentes-.js
 53-profij-ensino-profissional.js
 54-v1-011-ajuda-atualizada-todos-os.js
-55-sprucenote-e-jornalnote-todos-os-elementos.js
-56-perfil-onde-estou-e-como-avancar.js
-57-bloco-pin-ok.js
-58-fecho.html
+55-v1-020-privacidade-no-modo-de.js
+56-v1-020-ajuda-privacidade-em-teste.js
+57-perfil-onde-estou-e-como-avancar.js
+58-bloco-pin-ok.js
+59-fecho.html

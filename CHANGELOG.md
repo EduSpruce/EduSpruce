@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.020
+- Desempenho (PCs antigos) e modo leve; modo «Em teste»; modo de apresentação com memória por turma e privacidade instantânea em todos os menus; disciplinas/UFCD; coordenação ≠ docência; demonstração com 3 anos; Forms com V/F, espaços, ligar e modo exame
+
 ## 1.019
 - Banco por ano letivo (Forms, Arena, Pulso); Forms coerente com Arena e Pulso
 
