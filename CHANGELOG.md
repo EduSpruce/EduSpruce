@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.025
+- Seta da escola no cabeçalho já não tapa o nome
+
 ## 1.024
 - Almoço do horário com altura fixa
 

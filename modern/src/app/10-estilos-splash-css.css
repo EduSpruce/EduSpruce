@@ -396,7 +396,9 @@ table.grid td:has(>input.atr),table.grid td:has(>input[data-av]){text-align:cent
 html:not(.kbd) #side .nav:focus,html:not(.kbd) #side .nav:focus-visible,html:not(.kbd) #side button:focus-visible{outline:none!important;box-shadow:none!important}
 html:not(.kbd) body.est-sge #side .nav:focus{outline:none!important}
 /* tema SGE: escola no cabeçalho sem «pílula» escura */
-html body.est-sge.est-sge.est-sge #bar #ctxEsc .escsw{background:transparent!important;border:0!important;border-radius:4px!important;box-shadow:none!important;padding:4px 8px 4px 4px!important}
+html body.est-sge.est-sge.est-sge #bar #ctxEsc .escsw{background:transparent!important;border:0!important;border-radius:4px!important;box-shadow:none!important;padding:4px 30px 4px 4px!important}
+html body.est-sge.est-sge.est-sge #bar #ctxEsc.unica .escsw{padding-right:8px!important}
+html body.est-sge.est-sge.est-sge #bar #ctxEsc .escchev{right:8px;color:rgba(255,255,255,.85)}
 html body.est-sge.est-sge.est-sge #bar #ctxEsc .escsw:hover{background:rgba(255,255,255,.12)!important}
 html body.est-sge.est-sge.est-sge #bar #ctxEsc img{background:#fff!important;border-radius:3px!important;padding:2px!important;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
 /* fotografia: caixote do lixo no canto */
