@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.020
+- Menu lateral em grupos com ícones próprios
+- Definições › Menu Lateral: reordenar, mudar nomes e ícones, criar menus e separadores
+- O Meu Calendário na Agenda
+
 ## 1.019
 - Banco por ano letivo (Forms, Arena, Pulso); Forms coerente com Arena e Pulso
 
