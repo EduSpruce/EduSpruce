@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.024
+- Almoço do horário com altura fixa
+
 ## 1.023
 - Secções das turmas de volta no menu lateral
 
