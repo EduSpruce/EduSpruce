@@ -32,6 +32,31 @@ bash /home/claude/eduspruce/modern/scripts/sessao/preparar.sh
 ```
 CLAUDE_SESSION=<link da sessão> /tmp/es/pubm.sh 0.9XX "novidade 1|novidade 2" "changelog" "mensagem do commit"
 ```
-## Para gastar menos
+
+## Índice: onde está cada parte (modern/src/app)
+Os módulos mais recentes (número maior) reescrevem funções dos anteriores: procurar sempre com `grep -l "texto visível" modern/src/app/*` e editar o último que aparecer.
+- Estilos: CSS novo em `12-estilos-css965.css`. Cabeçalho, menu e HTML base: `01-cabeca.html`, `13-corpo.html`.
+- Dados embutidos (não abrir, são enormes): `14`–`17` (gifs, pdf.js, MRA).
+- Núcleo (estado `S`, `A()`, `T()`, escolas por ano `prepAno`/`CTX_ESC`, cálculos): `19-nucleo.js`.
+- Início: `20` (vInicio0), `31` (vInicio, tarefas), `40` (cartões), `37` (desempenho), `48` (telemóvel). Turmas/ano letivo: `20` (vTurmas).
+- Calendário escolar, aulas previstas, intercalar: `21`. O Meu Calendário: `55`. Menu lateral: `55`.
+- Reuniões, marcação de testes: `22`. Horário da turma e O Meu Horário: `23`, grelha nova `39`.
+- Alunos, fotos, MSAI: `24`, catálogo MSAI `56`. Critérios, instrumentos, avaliação, relatórios: `25`, relatórios PDF/intercalar da turma `42`.
+- Escola e escolas (dados, procurar na internet, tipologia), módulos profissionais: `26`.
+- Definições: `27`, `28` (também `VERSAO` e Novidades). Ajuda: `27`, `54`.
+- Sumários e planta da sala: `29`. Direção de Turma, documentos, biblioteca: `30`.
+- Oral e conselho de turma: `33`. Entrar/autenticação: `35`. Google Drive: `36`.
+- Perfis de utilizador e muitas funções mistas (575 KB, evitar ler): `41`.
+- Aula e turma completa: `43`. Transferências de escola: `45`. Jornal/PAA: `46`. Segurança: `47`.
+- Conselho PROFIJ e cargos: `49`. SpruceNote: `50`. Contactos e sorteio: `51`. Análise de resultados: `52`.
+- PROFIJ: planos de recuperação (`vPrecup`, Portaria 52/2016) e MRA: `53`, `37`. Pautas PROFIJ/FPCT: `57`. FCT e PAP no calendário: `54`.
+- Só na versão com base de dados (`modern/src/moderno/`): base de dados, cópia no Drive, palavra-passe → `basedados.js` (+ `modern/src/esm/supabase-prov.mjs` = `esm/`); Forms → `forms.js`; Arena, Pulso, banco de perguntas, autoavaliação → os ficheiros com esse nome.
+
+## Para gastar menos (pedidos)
+- Uma conversa nova por lote de pedidos; nunca duas sessões a publicar ao mesmo tempo.
+- Procurar pelo texto exato do ecrã; não ler módulos inteiros nem o index.html (7 MB).
+- Testar no browser só mudanças de lógica; «sem testar» = não testar.
+
+## Para gastar menos (trabalho)
 - Mudanças pequenas: procurar com grep pelo texto visível no ecrã e editar só essa linha.
 - Sem capturas de teste quando o utilizador disser «sem testar».
