@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.021
+- Calendário e organização do ano por escola (cópia independente); DT por escola
+- Sem intercalar nas escolas profissionais; Apreciação Global por período/semestre
+- FCT e momentos da PAP por curso, no calendário
+- Planos de recuperação PROFIJ conforme a Portaria 52/2016 art. 37.º
+- Almoço no horário; data da versão AAAAMMDDHHMM
+- Forms: div por fechar na pergunta de escolha; procura da escola sem navigator.onLine; erros de palavra-passe traduzidos; CSS de cartões, reuniões e cópia no Drive
+
 ## 1.020
 - Menu lateral em grupos com ícones próprios
 - Definições › Menu Lateral: reordenar, mudar nomes e ícones, criar menus e separadores

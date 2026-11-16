@@ -293,3 +293,32 @@ function abasUmaLinha(){document.querySelectorAll('#view .dttabs,#view .fichatab
 {let t=0;const ag=()=>{clearTimeout(t);t=setTimeout(abasUmaLinha,30)};new MutationObserver(ag).observe(document.getElementById('view')||document.body,{childList:true});addEventListener('resize',ag);
  const _gAb=go;go=function(){const r=_gAb.apply(this,arguments);ag();return r}}
 /*V0990-FIM*/
+/* 1.021 · FCT e momentos da PAP: definidos em cada curso (Editar Turma); aparecem no calendário escolar só se algum curso os tiver */
+const FP_M=[['fct','Formação em Contexto de Trabalho (FCT)','#2e7d32'],['ante','Anteprojeto da PAP','#7a4fd0'],['m1','1.º momento da PAP','#1e6fd9'],['m2','2.º momento da PAP','#0f8b8d'],['pap','Prova de Aptidão Profissional (PAP)','#c0392b']];
+const fpCfg=(a,nome)=>{const k=normTurma(nome);const o=turmaDM(a)[k]=turmaDM(a)[k]||{};return o.pap=o.pap||{}};
+function fpEventos(a){if(!a)return [];const ea=escAtiva();const vis=new Set();const E=[];
+  a.turmas.filter(t=>ehModular(t)&&escId(escolaDe(t))===ea).forEach(t=>{const k=normTurma(t.nome);if(vis.has(k))return;vis.add(k);const P=((turmaDM(a)[k]||{}).pap)||{};
+    FP_M.forEach(([id,n,cor])=>{const m=P[id];if(m&&m.on)E.push({id,n,cor,turma:t.nome,curso:t.curso||(t.cnq&&t.cnq.nome)||'',ini:m.ini||'',fim:m.fim||m.ini||''})})});
+  return E.sort((x,y)=>(x.ini||'9999').localeCompare(y.ini||'9999')||FP_M.findIndex(m=>m[0]===x.id)-FP_M.findIndex(m=>m[0]===y.id))}
+function cartaoFormProf(a,c){const E=fpEventos(a);if(!E.length)return '';const hj=isoHoje();
+  return `<div class="card wide fpcard"><div class="row" style="gap:10px;margin-bottom:6px"><h2 style="margin:0">${ic('award',18)} FCT e Prova de Aptidão Profissional</h2></div>
+    <p class="hint" style="margin:0 0 10px">Momentos indicados nas definições de cada curso (Turma › Editar Turma). Os dias aparecem marcados no calendário.</p>
+    <div class="fpl">${E.map(e=>`<div class="fpi ${e.fim&&e.fim<hj?'pas':''}"><span class="sw" style="background:${e.cor}"></span><b>${esc(e.n)}</b><span class="mut">${esc(e.turma)}${e.curso&&e.curso!==e.turma?' · '+esc(e.curso):''}</span><span class="hh">${e.ini?esc(fmtIsoL(e.ini))+(e.fim&&e.fim!==e.ini?' a '+esc(fmtIsoL(e.fim)):''):'<span class="mut">datas por definir</span>'}</span></div>`).join('')}</div></div>`}
+function fpMarcar(){if(VIEW!=='calendario')return;const E=fpEventos(A()).filter(e=>e.ini);if(!E.length)return;
+  $$('#view [data-cd]').forEach(b=>{const iso=b.dataset.cd;const M=E.filter(e=>iso>=e.ini&&iso<=(e.fim||e.ini));if(!M.length||b.classList.contains('fpm'))return;b.classList.add('fpm');b.style.setProperty('--fpc',M[0].cor);b.title+=' · '+M.map(e=>e.n+' ('+e.turma+')').join(' · ')})}
+function fpFieldset(t){const a=A();const P=((turmaDM(a)[normTurma(t.nome)]||{}).pap)||{};
+  return `<fieldset class="etmra fpset"><legend>${ic('award',14)} Curso · FCT e PAP</legend><p class="hint" style="margin:0 0 8px">Indique o que este curso tem neste ano letivo. Só o que estiver marcado aparece no calendário escolar.</p>
+    ${FP_M.map(([id,n])=>{const m=P[id]||{};return `<div class="fprow"><label class="chk" style="margin:0"><input type="checkbox" data-fpk="${id}|on" ${m.on?'checked':''}> <span>${esc(n)}</span></label><span class="fpd" ${m.on?'':'hidden'}><label>De <input type="date" data-fpk="${id}|ini" value="${esc(m.ini||'')}"></label><label>Até <input type="date" data-fpk="${id}|fim" value="${esc(m.fim||'')}"></label></span></div>`}).join('')}</fieldset>`}
+{const _etd=editarTurmaDlg;editarTurmaDlg=function(t){const r=_etd.apply(this,arguments);try{if(ehModular(t)){const ref=$('#drawer .etmra')||$('#et-prof');if(ref&&!$('#drawer .fpset'))ref.insertAdjacentHTML('afterend',fpFieldset(t))}}catch(e){console.warn(e)}return r}}
+document.addEventListener('change',e=>{const el=e.target;if(!el||!el.dataset||!el.dataset.fpk)return;const a=A();const t=T();const nome=($('#et-nome')||{}).value||(t&&t.nome);if(!a||!nome)return;
+  const [id,k]=el.dataset.fpk.split('|');const P=fpCfg(a,nome);const m=P[id]=P[id]||{};
+  if(k==='on'){m.on=el.checked;const d=el.closest('.fprow').querySelector('.fpd');if(d)d.hidden=!el.checked}else m[k]=el.value;
+  if(m.ini&&m.fim&&m.fim<m.ini){m.fim=m.ini;const f=el.closest('.fprow').querySelector('[data-fpk$="|fim"]');if(f)f.value=m.ini}
+  save();toast('Guardado no curso '+nome,'ok')},true);
+{const _vcFP=vCalendario;vCalendario=function(){const r=_vcFP.apply(this,arguments);try{fpMarcar()}catch(e){console.warn(e)}return r}}
+{const _gFP=go;go=function(v){const r=_gFP.apply(this,arguments);try{$$('[data-v="intercalar"]').forEach(b=>{b.style.display=semIntercalar()?'none':''});fpMarcar()}catch(e){console.warn(e)}return r}}
+/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
+{const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
+/* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
+setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
+

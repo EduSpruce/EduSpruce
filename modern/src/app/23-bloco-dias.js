@@ -151,7 +151,7 @@ function grelhaSemanal(aulas,opts){
   if(opts.semVazias){for(let i=slots.length-1;i>=0;i--)if(!aulas.some(a=>a.ini===slots[i].ini))slots.splice(i,1)}
   const hoje=new Date().getDay(),mins=new Date().getHours()*60+new Date().getMinutes();
   return `<div style="overflow:auto"><table class="hor"><thead><tr><th class="tm"></th>${ds.map(d=>`<th class="${d===hoje?'hj':''}">${DIAS[d]}</th>`).join('')}</tr></thead><tbody>
-  ${slots.map((s,i)=>`${i&&s.ini-slots[i-1].fim>=15?`<tr class="pausa"><td colspan="${ds.length+1}"></td></tr>`:''}<tr><td class="tm">${fmtHM(s.ini)}<br><span>${fmtHM(s.fim)}</span></td>
+  ${slots.map((s,i)=>`${i&&s.ini-slots[i-1].fim>=15?(()=>{const f0=slots[i-1].fim,alm=s.ini-f0>=45&&f0>=11*60&&f0<=14*60+30;return `<tr class="pausa${alm?' alm':''}"><td colspan="${ds.length+1}">${alm?`<span>${ic('clock',13)} Almoço · ${fmtHM(f0)}–${fmtHM(s.ini)}</span>`:''}</td></tr>`})():''}<tr><td class="tm">${fmtHM(s.ini)}<br><span>${fmtHM(s.fim)}</span></td>
     ${ds.map(d=>{const L=aulas.filter(a=>a.dia===d&&a.ini===s.ini);const now=d===hoje&&s.ini<=mins&&s.fim>mins;
       return `<td class="${d===hoje?'hj':''} ${now?'agora':''}" data-cel="${d}|${s.ini}">${L.map(a=>{const m=opts.minha?opts.minha(a):false;return `<div class="aula ${m?'minha':''} ${opts.cls?opts.cls(a):''}" ${opts.attr?opts.attr(a):''} style="${opts.cor&&opts.cor(a)?'--ac:'+opts.cor(a):''}" title="${esc((opts.titulo?opts.titulo(a):a.ab)+(a.sala?' · Sala '+a.sala:''))}"><b>${esc(opts.rotulo?opts.rotulo(a):a.ab)}</b>${a.sala?`<span>${esc(a.sala)}</span>`:''}</div>`}).join('')}</td>`}).join('')}</tr>`).join('')}
   </tbody></table></div>`;

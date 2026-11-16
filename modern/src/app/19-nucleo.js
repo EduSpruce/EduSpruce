@@ -168,8 +168,8 @@ const fotoSrc=a=>!a||!a.foto?'':a.foto.startsWith('f:')?(FOTOS[a.foto.slice(2)]|
 function escAtiva(){let st;try{st=S}catch(_){return 'principal'}const id=(st&&st.escolaAtiva)||'principal';return id==='principal'||((st.escolas||[]).some(e=>e.id===id))?id:'principal'}
 function prepAno(a){if(!a||a._prep)return a;const pe=a.porEscola=a.porEscola||{};pe.principal=pe.principal||{};
   CTX_ESC.forEach(k=>{const d=Object.getOwnPropertyDescriptor(a,k);if(d&&'value' in d){if(pe.principal[k]===undefined)pe.principal[k]=d.value;delete a[k]}
-    Object.defineProperty(a,k,{enumerable:false,configurable:true,get(){const e=escAtiva();const o=pe[e]&&pe[e][k];if(o!==undefined)return o;return CTX_HERDA.includes(k)&&e!=='principal'?pe.principal[k]:undefined},
-      set(v){const e=escAtiva();(pe[e]=pe[e]||{})[k]=v}})});
+    Object.defineProperty(a,k,{enumerable:false,configurable:true,get(){const e=escAtiva();const o=pe[e]&&pe[e][k];if(o!==undefined)return o;if(CTX_HERDA.includes(k)&&e!=='principal'&&pe.principal[k]!==undefined){/* cada escola tem o seu calendário e organização: parte de uma cópia da principal, independente */const q=pe[e]=pe[e]||{};q[k]=JSON.parse(JSON.stringify(pe.principal[k]));if(k==='calendario')q.calCopia=1;return q[k]}return undefined},
+      set(v){const e=escAtiva();const q=pe[e]=pe[e]||{};q[k]=v;if(k==='calendario')delete q.calCopia}})});
   Object.defineProperty(a,'_prep',{value:true,enumerable:false});return a}
 const proprioEsc=(a,k)=>{const e=escAtiva();return !!(a.porEscola&&a.porEscola[e]&&a.porEscola[e][k]!==undefined)};
 const A=()=>prepAno(S.anos.find(a=>a.id===S.anoAtivo)||null)||null;

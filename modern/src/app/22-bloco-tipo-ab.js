@@ -22,9 +22,10 @@ function ocorrenciasTurma(t,a){
   return out;
 }
 /* ---------- avaliação intercalar: global ao ano letivo ---------- */
-function intercalarPeriodos(a){const c=a.calendario;const P=c?c.periodos.map(p=>p.n):periodos();const x=a.intercalar&&a.intercalar.periodos;return x?x.filter(n=>P.includes(n)):P}
+function intercalarPeriodos(a){if(semIntercalar())return [];const c=a.calendario;const P=c?c.periodos.map(p=>p.n):periodos();const x=a.intercalar&&a.intercalar.periodos;return x?x.filter(n=>P.includes(n)):P}
 function intercalarDe(a,per){return (a.datasAval||[]).find(d=>d.tipo==='intercalar'&&!d.turma&&d.per===per)}
-function cartaoIntercalar(a,c){
+const semIntercalar=()=>{try{return tipoEscola(EC())==='profissional'}catch(_){return false}};
+function cartaoIntercalar(a,c){if(semIntercalar())return cartaoFormProf(a,c);
   const P=c.periodos;const W=P.length===2?'Semestre':'Período';const at=intercalarPeriodos(a);const n=at.length;
   const opc=[[0,'Nenhuma'],...(P.length===3?[[2,'Dois Períodos'],[3,'Três Períodos']]:[[1,'Um Semestre'],[2,'Dois Semestres']])];
   return `<div class="card wide ed" id="ai-card"><div class="row" style="margin-bottom:10px;gap:10px"><h2 style="margin:0"><span class="mta" style="--pc:${AVAL_T.intercalar.cor};margin-right:8px">AI</span>Avaliação Intercalar</h2></div>
@@ -90,7 +91,7 @@ function vTestes(){
       ${semHor?`<div class="alert w">${ic('alert',15)} Esta turma ainda não tem aulas no horário: importe o horário da turma ou o seu horário (PDF) para ver os tempos letivos em cada dia.</div>`:''}
       <p class="hint" style="margin-top:0">Dias de semana com as suas aulas (hora de início e tempos) e <b>Σ</b> = soma dos tempos dados até esse dia, incluindo-o. Toque num dia para marcar um teste ou outra avaliação; arraste uma marcação para outro dia.</p>
       <div class="mtmeses" style="--cz:${zoomCal()}">${meses.map(mes).join('')}</div>
-      <div class="mtleg">${['Teste de Avaliação','Questão-aula','Ficha de Trabalho','Apresentação Oral','Trabalho'].map(x=>`<span><span class="mtp" style="--pc:${TIPO_COR(x)}">${TIPO_AB(x)}</span>${x}</span>`).join('')}<span><span class="mta" style="--pc:${AVAL_T.intercalar.cor}">AI</span>Avaliação Intercalar</span><span><span class="mta" style="--pc:${AVAL_T.reuniao.cor}">RA</span>Reunião de Avaliação</span><span><span class="mtf">F</span>Falta do professor</span></div>
+      <div class="mtleg">${['Teste de Avaliação','Questão-aula','Ficha de Trabalho','Apresentação Oral','Trabalho'].map(x=>`<span><span class="mtp" style="--pc:${TIPO_COR(x)}">${TIPO_AB(x)}</span>${x}</span>`).join('')}${semIntercalar()?'':`<span><span class="mta" style="--pc:${AVAL_T.intercalar.cor}">AI</span>Avaliação Intercalar</span>`}<span><span class="mta" style="--pc:${AVAL_T.reuniao.cor}">RA</span>Reunião de Avaliação</span><span><span class="mtf">F</span>Falta do professor</span></div>
     </div>
     <div class="mtside">${c.periodos.map(p=>painelPeriodo(t,a,p,oc,insts,DA,W)).join('')}</div>
   </div>`;
@@ -118,7 +119,7 @@ function painelPeriodo(t,a,p,oc,insts,DA,W){
     <div class="mtlist">${L.length?L.map(i=>{const o=Object.entries(oc).filter(([d])=>d<=i.data).pop();const cum=o?o[1].cumP:0;const desde=ant!=null?cum-ant:null;ant=cum;
       return `<button class="mti ${i.data<hj?'pas':''}" data-insx="${i.id}"><span class="mtp" style="--pc:${TIPO_COR(i.tipo)}">${esc(TIPO_AB(i.tipo))}</span><span class="mtin"><b>${esc(i.nome)}</b><span class="mut">${esc(fmtIsoL(i.data))} · ${i.data<hj?'realizado':contagem(i.data)}</span></span><span class="mtic"><b>Σ${cum}</b><span class="mut">${desde!=null?'+'+desde+' desde o anterior':'tempos dados'}</span></span></button>`}).join('')
       :'<p class="mut" style="margin:0 0 6px">Sem avaliações marcadas.</p>'}</div>
-    <div class="avbox">${(()=>{if(!intercalarPeriodos(a).includes(p.n))return `<div class="avr ro"><span class="mta" style="--pc:${AVAL_T.intercalar.cor}">AI</span><span class="mut">Sem avaliação intercalar</span></div>`;const d=intercalarDe(a,p.n);
+    <div class="avbox">${(()=>{if(semIntercalar())return '';if(!intercalarPeriodos(a).includes(p.n))return `<div class="avr ro"><span class="mta" style="--pc:${AVAL_T.intercalar.cor}">AI</span><span class="mut">Sem avaliação intercalar</span></div>`;const d=intercalarDe(a,p.n);
       return `<div class="avr ro"><span class="mta" style="--pc:${AVAL_T.intercalar.cor}">AI</span><span><b>Avaliação Intercalar</b><br><span class="mut">${d?esc(fmtIsoL(d.data))+(d.fim&&d.fim!==d.data?' a '+esc(fmtIsoL(d.fim)):''):'data por definir'} · todas as turmas</span></span><a href="#" class="lnk" data-go-cal>${d?'Alterar':'Definir'}</a></div>`})()}${linha('reuniao')}
       ${DA.filter(d=>d.tipo==='outra'&&d.per===p.n).map(d=>`<div class="avr"><span class="mta" style="--pc:${AVAL_T.outra.cor}">•</span><input class="avt" data-avt="${d.id}" value="${esc(d.titulo||'')}" placeholder="Descrição"><input type="date" data-avd="${d.id}" value="${d.data||''}"><button class="btn sm ico dng" data-avx="${d.id}" aria-label="Apagar">${ic('trash',14)}</button></div>`).join('')}
       <button class="btn sm" data-avn="${p.n}">${ic('plus',14)} Outra Data</button></div>

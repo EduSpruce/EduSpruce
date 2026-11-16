@@ -14,6 +14,7 @@ if _m and max(_m)>os.path.getmtime(p)+1:subprocess.run(['python3',PARTIR,'juntar
 s=open(p).read()
 old=re.search(r"const VERSAO='([0-9.]+)';",s).group(1)
 s=s.replace(f"const VERSAO='{old}';",f"const VERSAO='{V}';",1)
+import zoneinfo;s=re.sub(r"const VERSAO_DATA='\d*';","const VERSAO_DATA='"+datetime.datetime.now(zoneinfo.ZoneInfo('Atlantic/Azores')).strftime('%Y%m%d%H%M')+"';",s,count=1)
 s=s.replace('<details class="nvver" open><summary><b>Versão '+old+'</b><span class="mut"> · ','<details class="nvver"><summary><b>Versão '+old+'</b><span class="mut"> · ',1)
 s=re.sub(r'(<details class="nvver"><summary><b>Versão '+re.escape(old)+r'</b><span class="mut"> · [^<]*</span>)<span class="tag ok">atual</span>',r'\1',s,count=1)
 i=s.find('<details class="nvver"><summary><b>Versão '+old+'</b>')
