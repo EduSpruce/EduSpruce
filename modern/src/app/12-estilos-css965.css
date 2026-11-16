@@ -25,6 +25,7 @@ html body .mned .mn-in>.mnrow{outline:2px dashed var(--acc);outline-offset:2px}
 html body .mned .mnpick{display:flex;flex-wrap:wrap;gap:4px;padding:8px;margin:2px 0 6px 30px;border:1px solid color-mix(in srgb,currentColor 14%,transparent);border-radius:10px}
 html body .mned .mnoff{display:flex;flex-wrap:wrap;gap:6px}
 html body .mned .mnvz{padding:6px 10px;font-size:13px}
+html body .mned .mnr-s>.mnrow{background:color-mix(in srgb,currentColor 5%,transparent);font-weight:700}html body .mned .mnfix{flex:1 1 150px;opacity:.8;font-size:14px}
 @media (max-width:700px){html body .mned .mnt{display:none}html body .mned .mnsub{margin-left:12px}}
 html body .mcw{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;align-items:start}
 @media (max-width:1000px){html body .mcw{grid-template-columns:1fr}}

@@ -36,29 +36,25 @@ try{Object.assign(ICONS,{
   mvDesbloq:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 7.5-2"/><path d="M12 14v3"/>',
   mvMover:'<circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/>'
 })}catch(_){}
-const MN_NOME={inicio:'Início',turmas:'Ano Letivo e Turmas',calendario:'Calendário Escolar',meuhorario:'O Meu Horário','@turmas':'Turmas',direcao:'Direção de Turma',tarefas:'As Minhas Tarefas',meucal:'O Meu Calendário',reunioes:'Reuniões',arena:'Arena',pulso:'Pulso',forms:'Forms',jornal:'Jornal da Escola',snjornal:'JornalNote',cprofij:'Coordenação PROFIJ',sprucenote:'SpruceNote',recursos:'Biblioteca',documentos:'Documentos',contactos:'Contactos',escola:'Escola','@prof':'Professor',definicoes:'Definições',ajuda:'Ajuda','@bloq':'Bloquear Dados','@sep':'Separador'};
-const MN_IC={inicio:'mvInicio',turmas:'mvAnoTurmas',calendario:'mvCalEsc',meuhorario:'nvhoras','@turmas':'mvTurmas',direcao:'mvDT',tarefas:'mvTarefas',meucal:'mvMeuCal',reunioes:'mvReun',arena:'mvArena',pulso:'mvPulso',forms:'mvForms',jornal:'mvJornal',snjornal:'nvjn',cprofij:'mvProfij',sprucenote:'nvsn',recursos:'mvBib',documentos:'mvDocs',contactos:'mvCont',escola:'mvEscola','@prof':'mvProf',definicoes:'mvDef',ajuda:'mvAjuda','@bloq':'mvDesbloq'};
+const MN_NOME={inicio:'Início',turmas:'Ano Letivo e Turmas',calendario:'Calendário Escolar',meuhorario:'O Meu Horário','@turmas':'Turmas',direcao:'Direção de Turma',tarefas:'Minhas Tarefas',meucal:'O Meu Calendário',reunioes:'Reuniões',arena:'Arena',pulso:'Pulso',forms:'Forms',jornal:'Jornal Escolar',snjornal:'JornalNote',cprofij:'Coord. PROFIJ',sprucenote:'SpruceNote',recursos:'Biblioteca',documentos:'Documentos',contactos:'Contactos',escola:'Escola','@prof':'Professor',definicoes:'Definições',ajuda:'Ajuda','@bloq':'Bloquear Dados','@sep':'Separador','@ofsel':'Filtro Todas / Regular / PROFIJ'};
+const MN_IC={'@prof':'mvProf',meucal:'mvMeuCal'};
 const MN_ESC_IC=['mgEscola','mgAgenda','mgSpark','mgConsulta','mgConfig','mgPasta','mgEstrela','mgCoracao','mgRaio','mgFoguete','mgPaleta','mgGlobo','mvInicio','mvAnoTurmas','mvCalEsc','mvMeuCal','nvhoras','mvTurmas','mvDT','mvTarefas','mvReun','mvArena','mvPulso','mvForms','mvJornal','nvjn','mvProfij','nvsn','mvBib','mvDocs','mvCont','mvEscola','mvProf','mvDef','mvAjuda','mvBloq','book','chart','target','shield','mail','grid','clipboard','layers','sparkle','users','school','calendar','file','pen','award','flag'];
-const MENU_DEF=()=>[{v:'inicio'},
-  {id:'g-escola',nome:'Escola',ic:'mgEscola',f:[{v:'turmas'},{v:'calendario'},{v:'meuhorario'}]},
-  {v:'@turmas'},{v:'direcao'},
-  {id:'g-agenda',nome:'Agenda',ic:'mgAgenda',f:[{v:'tarefas'},{v:'meucal'},{v:'reunioes'}]},
-  {id:'g-spark',nome:'Spark',ic:'mgSpark',f:[{v:'arena'},{v:'pulso'},{v:'forms'}]},
-  {v:'jornal',f:[{v:'snjornal'}]},{v:'cprofij'},{v:'sprucenote'},
-  {id:'g-consulta',nome:'Consulta',ic:'mgConsulta',f:[{v:'recursos'},{v:'documentos'},{v:'contactos'}]},
-  {v:'@sep'},
-  {id:'g-config',nome:'Configuração',ic:'mgConfig',f:[{v:'escola'},{v:'@prof'},{v:'definicoes'},{v:'ajuda'}]},
-  {v:'@bloq'}];
+/* menu original (como era até à 1.019): é o ponto de partida do editor */
+const MENU_ORIG=()=>[{id:'s-geral',t:'sec',nome:'Geral',f:['inicio','turmas','meuhorario','calendario','tarefas','reunioes','direcao','recursos','documentos','contactos','arena','pulso','forms','jornal','snjornal','cprofij','sprucenote','@ofsel'].map(v=>({v}))},
+  {v:'@turmas'},{id:'s-config',t:'sec',nome:'Configuração',f:[{v:'escola'},{v:'definicoes'},{v:'ajuda'}]},{v:'@bloq'}];
+let _navIc0=null;const navIc0=()=>_navIc0||(_navIc0=Object.assign({},typeof NAV_IC==='object'?NAV_IC:{}));
 const mnFolhas=M=>M.flatMap(n=>[n.v,...(n.f||[]).map(x=>x.v)]).filter(Boolean);
-/* elementos do menu (os botões já existentes na barra lateral + os novos) */
-function mnEl(v){if(v==='@turmas')return $('#mnTurmas');if(v==='@prof')return $('#mnProf');if(v==='@bloq')return $('#bloqNav');return document.querySelector(`#side .nav[data-v="${v}"]:not(.tnav)`)}
-function mnCatalogo(){const L=[...document.querySelectorAll('#side .nav[data-v]:not(.tnav)')].map(b=>b.dataset.v).filter(v=>MN_NOME[v]||v);['@turmas','@prof','@bloq'].forEach(v=>L.push(v));return [...new Set(L)]}
-function menuCfg(){const c=S.cfg||{};let M;try{M=c.menu?JSON.parse(JSON.stringify(c.menu)):MENU_DEF()}catch(_){M=MENU_DEF()}
-  {const vis=new Set(c.menu?(c.menuVistos||[]):[]);const usa=new Set(mnFolhas(M));mnCatalogo().forEach(v=>{if(!vis.has(v)&&!usa.has(v)){const i=M.findIndex(n=>n.v==='@sep');M.splice(i<0?M.length:i,0,{v})}})}
+function mnEl(v){if(v==='@turmas')return $('#mnTurmas');if(v==='@prof')return $('#mnProf');if(v==='@bloq')return $('#bloqNav');if(v==='@ofsel')return $('#ofsel');return document.querySelector(`#side .nav[data-v="${v}"]:not(.tnav)`)}
+const mnAlvo=v=>v==='@turmas'?$('#navTurmas'):mnEl(v);
+function mnCatalogo(){const L=[...document.querySelectorAll('#side .nav[data-v]:not(.tnav)')].map(b=>b.dataset.v);['@turmas','@prof','@bloq','@ofsel'].forEach(v=>L.push(v));return [...new Set(L)]}
+function menuCfg(){const c=S.cfg||{};let M;try{M=c.menuL?JSON.parse(JSON.stringify(c.menuL)):MENU_ORIG()}catch(_){M=MENU_ORIG()}
+  const vis=new Set(c.menuL?(c.menuVistos||[]):[...mnFolhas(MENU_ORIG()),'@prof','meucal']);const usa=new Set(mnFolhas(M));
+  mnCatalogo().forEach(v=>{if(vis.has(v)||usa.has(v))return;if(!c.menuL&&M[0].f){const i=M[0].f.findIndex(x=>x.v==='@ofsel');M[0].f.splice(i<0?M[0].f.length:i,0,{v})}else{const i=M.findIndex(n=>n.v==='@sep');M.splice(i<0?M.length:i,0,{v})}});
   return M}
-function menuGuardar(M){S.cfg.menu=M;S.cfg.menuVistos=[...new Set([...(S.cfg.menuVistos||[]),...mnCatalogo()])];save();menuRender()}
-const mnNome=n=>(n.nome&&n.nome.trim())||MN_NOME[n.v]||n.v||'Menu';
-const mnIc=n=>n.ic||MN_IC[n.v]||'mgPasta';
+function menuGuardar(M){S.cfg.menuL=M;S.cfg.menuVistos=[...new Set([...(S.cfg.menuVistos||[]),...mnCatalogo()])];save();menuRender()}
+function mnMarca(el){if(!el||el._mn0)return;const l=el.querySelector(':scope>.lbl');const sv=el.querySelector('svg');el._mn0={l:l?l.textContent:'',t:el.title,sv:sv?sv.outerHTML:'',sub:el.classList.contains('navsub')}}
+const mnNome=n=>{if(n.nome&&n.nome.trim())return n.nome.trim();if(!n.v)return n.nome||'';const e=mnAlvo(n.v);const l=e&&e.querySelector(':scope>.lbl');const t=l&&!e.dataset.mnL?(l.innerText||l.textContent||'').trim():'';return t||(e&&e._mn0&&e._mn0.l)||MN_NOME[n.v]||n.v};
+const mnExiste=n=>!n.v||n.v==='@sep'||!!mnEl(n.v);
 const mnVisivel=el=>!!el&&!el.hidden&&el.style.display!=='none'&&getComputedStyle(el).display!=='none';
 function mnPrep(){const sd=$('#side');if(!sd)return null;
   let box=$('#mnav');if(!box){box=document.createElement('div');box.id='mnav';sd.insertBefore(box,sd.querySelector(':scope>.sp'))}
@@ -66,33 +62,41 @@ function mnPrep(){const sd=$('#side');if(!sd)return null;
   sd.querySelectorAll(':scope>.grp:not(#grpT)').forEach(g=>g.classList.add('mn-old'));
   if(!$('#mnTurmas')){const w=document.createElement('div');w.id='mnTurmas';w.className='mnturmas';const ref=$('#grpT')||$('#navTurmas');if(ref)ref.before(w);['#grpT','#navTurmas','#tTree','#tnavHold'].forEach(s=>{const e=$(s);if(e)w.appendChild(e)})}
   const mk=(id,html,f)=>{if($('#'+id))return;const t=document.createElement('template');t.innerHTML=html;const b=t.content.firstElementChild;b.onclick=f;off.appendChild(b)};
-  if(!document.querySelector('#side .nav[data-v="meucal"]')){mk('mnMeuCal','<button class="nav" id="mnMeuCal" data-v="meucal" title="O Meu Calendário"><svg class="ic" width="18" height="18"></svg><span class="lbl">O Meu Calendário</span></button>',()=>go('meucal'))}
+  if(!document.querySelector('#side .nav[data-v="meucal"]'))mk('mnMeuCal','<button class="nav" id="mnMeuCal" data-v="meucal" title="O Meu Calendário"><svg class="ic" width="18" height="18"></svg><span class="lbl">O Meu Calendário</span></button>',()=>go('meucal'));
   mk('mnProf','<button class="nav" id="mnProf" type="button" title="Professor"><svg class="ic" width="18" height="18"></svg><span class="lbl">Professor</span></button>',()=>{UI.defTab='prof';go('definicoes')});
   const df=document.querySelector('#side .nav[data-v="definicoes"]');if(df&&!df._mn){df._mn=1;df.addEventListener('click',()=>{if(UI.defTab==='prof'){UI.defTab='geral';if(VIEW==='definicoes')vDefinicoes()}},true)}
   return {sd,box,off}}
-function mnIcone(el,k){if(!el)return;const sv=el.querySelector('svg');if(!sv||el.dataset.icu===k&&sv.dataset.mn===k)return;const sz=Math.round((+sv.getAttribute('width')||19)/1.2);const t=document.createElement('template');t.innerHTML=ic(k,sz).trim();const n=t.content.firstElementChild;if(n){n.dataset.mn=k;sv.replaceWith(n);el.dataset.icu=k}}
-function mnRotulo(el,txt){if(!el)return;const l=el.querySelector(':scope>.lbl');if(l&&l.textContent!==txt)l.textContent=txt;if(el.title!==txt&&!el.classList.contains('ntt'))el.title=txt}
-function mnOrdem(par,L){L.forEach((e,i)=>{if(par.children[i]!==e)par.insertBefore(e,par.children[i]||null)});[...par.children].slice(L.length).forEach(e=>$('#mnavOff').appendChild(e))}
+function mnIcone(el,k){if(!el)return;const sv=el.querySelector('svg');if(!sv||sv.dataset.mn===k)return;const sz=Math.round((+sv.getAttribute('width')||19)/1.2);const t=document.createElement('template');t.innerHTML=ic(k,sz).trim();const n=t.content.firstElementChild;if(n){n.dataset.mn=k;sv.replaceWith(n);el.dataset.icu=k}}
+function mnIconeOrig(el,v){if(!el)return;const sv=el.querySelector('svg');if(!sv||!sv.dataset.mn)return;if(v&&v[0]!=='@'){const o=navIc0();if(o[v])NAV_IC[v]=o[v];else delete NAV_IC[v]}delete el.dataset.icu;if(el._mn0&&el._mn0.sv){const t=document.createElement('template');t.innerHTML=el._mn0.sv;sv.replaceWith(t.content.firstElementChild)}}
 let _mnObs=null,_mnPend=false;
-function menuRender(){const P=mnPrep();if(!P)return;const {box,off}=P;const M=menuCfg();const fech=S.cfg.menuFech||{};const usados=new Set();const L=[];
+function menuRender(){try{navIc0()}catch(_){return}const P=mnPrep();if(!P)return;const {sd,box,off}=P;const M=menuCfg();const fech=S.cfg.menuFech||{};const usados=new Set();const L=[];
   const reuse=(sel,html)=>{let e=box.querySelector(':scope>'+sel)||off.querySelector(':scope>'+sel);if(!e){const t=document.createElement('template');t.innerHTML=html;e=t.content.firstElementChild}return e};
-  const folha=(n,sub)=>{const el=mnEl(n.v);if(!el)return null;usados.add(el);if(n.v!=='@turmas'){mnRotulo(el,n.v==='@bloq'&&bloqOn()?'Dados Bloqueados':mnNome(n));const k=n.v==='@bloq'?(bloqOn()?'mvBloq':(n.ic||'mvDesbloq')):mnIc(n);if(n.v&&n.v[0]!=='@')NAV_IC[n.v]=k;mnIcone(el,k);el.classList.toggle('navsub',!!sub);el.classList.toggle('mn-sub',!!sub)}else{mnRotulo($('#navTurmas'),mnNome(n));mnIcone($('#navTurmas'),mnIc(n))}
-    if(n.v==='@bloq')el.classList.toggle('bloqon',bloqOn());return el};
-  let si=0;
-  M.forEach(n=>{
+  const folha=(n,sub)=>{const el=mnEl(n.v);if(!el)return null;usados.add(el);if(n.v==='@ofsel')return el;const a=mnAlvo(n.v);mnMarca(a);
+    const l=a.querySelector(':scope>.lbl');const cust=n.nome&&n.nome.trim()&&!(n.v==='@bloq'&&bloqOn());
+    if(cust){if(l&&l.textContent!==n.nome.trim())l.textContent=n.nome.trim();a.dataset.mnL='1'}else if(a.dataset.mnL){if(l&&n.v!=='@bloq')l.textContent=a._mn0.l;if(n.v!=='@bloq')a.title=a._mn0.t;delete a.dataset.mnL}
+    const k=n.ic||MN_IC[n.v];if(k){if(n.v[0]!=='@')NAV_IC[n.v]=k;mnIcone(a,k)}else mnIconeOrig(a,n.v);
+    if(n.v!=='@turmas'){const s=sub?true:!!(el._mn0&&el._mn0.sub);el.classList.toggle('navsub',s);el.classList.toggle('mn-sub',!!sub)}
+    return el};
+  const bloqFundo=M.length&&M[M.length-1].v==='@bloq';let si=0;
+  M.forEach((n,ix)=>{
     if(n.v==='@sep'){L.push(reuse(`.mnsep[data-k="${si}"]`,`<div class="mnsep" role="separator" data-k="${si}"></div>`));si++;return}
-    if(!n.v){const id=n.id||(n.id='g'+uid());const h=reuse(`.mgh[data-g="${id}"]`,`<button type="button" class="nav mgh" data-g="${id}"><svg class="ic" width="18" height="18"></svg><span class="lbl"></span><span class="chev"></span></button>`);
+    if(n.v==='@bloq'&&bloqFundo&&ix===M.length-1){const b=folha(n,false);const ss=sd.querySelector(':scope>.sessao');if(b&&ss&&b.nextElementSibling!==ss)ss.before(b);return}
+    if(!n.v){const id=n.id||(n.id='g'+uid());
+      if(n.t==='sec'){const h=reuse(`.mnsec[data-g="${id}"]`,`<div class="grp mnsec" data-g="${id}"></div>`);const nm=(n.nome||'').trim();if(h.textContent!==nm)h.textContent=nm;const F=(n.f||[]).map(x=>folha(x,false)).filter(Boolean);h.style.display=nm&&F.some(mnVisivel)?'':'none';L.push(h,...F);return}
+      const h=reuse(`.mgh[data-g="${id}"]`,`<button type="button" class="nav mgh" data-g="${id}"><svg class="ic" width="18" height="18"></svg><span class="lbl"></span><span class="chev"></span></button>`);
       const c=reuse(`.msub[data-g="${id}"]`,`<div class="msub" data-g="${id}"></div>`);h.onclick=()=>{S.cfg.menuFech=S.cfg.menuFech||{};S.cfg.menuFech[id]=!S.cfg.menuFech[id];save();menuRender()};
-      mnRotulo(h,mnNome(n));mnIcone(h,mnIc(n));const ch=h.querySelector('.chev');if(ch&&!ch.firstChild)ch.innerHTML=ic('chev',13);
+      const lb=h.querySelector('.lbl');if(lb.textContent!==mnNome(n))lb.textContent=mnNome(n);h.title=mnNome(n);mnIcone(h,n.ic||'mgPasta');const ch=h.querySelector('.chev');if(ch&&!ch.firstChild)ch.innerHTML=ic('chev',13);
       const F=(n.f||[]).map(x=>folha(x,true)).filter(Boolean);mnOrdem(c,F);const ab=!fech[id];h.setAttribute('aria-expanded',String(ab));h.classList.toggle('aberto',ab);c.classList.toggle('fech',!ab);
-      const vis=F.some(mnVisivel);h.style.display=vis?'':'none';h.classList.toggle('tem-on',!ab&&F.some(e=>e.classList.contains('on')));L.push(h,c);return}
+      h.style.display=F.some(mnVisivel)?'':'none';h.classList.toggle('tem-on',!ab&&F.some(e=>e.classList.contains('on')));L.push(h,c);return}
     const el=folha(n,false);if(el)L.push(el);
     if(n.f&&n.f.length){const c=reuse(`.msub[data-p="${n.v}"]`,`<div class="msub msubv" data-p="${n.v}"></div>`);mnOrdem(c,n.f.map(x=>folha(x,true)).filter(Boolean));L.push(c)}});
   mnOrdem(box,L);
-  [...box.querySelectorAll('.nav[data-v],#mnProf,#bloqNav')].forEach(e=>{if(!usados.has(e))off.appendChild(e)});
-  document.querySelectorAll('#side>.nav[data-v]:not(.tnav),#side>.msub').forEach(e=>{if(!usados.has(e)&&e.classList.contains('nav'))off.appendChild(e)});
+  [...box.querySelectorAll('.nav[data-v],#mnProf,#bloqNav,#ofsel')].forEach(e=>{if(!usados.has(e))off.appendChild(e)});
+  sd.querySelectorAll(':scope>.nav[data-v]:not(.tnav),:scope>#ofsel,:scope>#mnProf').forEach(e=>{if(!usados.has(e))off.appendChild(e)});
+  const bq=$('#bloqNav');if(bq&&!usados.has(bq))off.appendChild(bq);
   const pf=$('#mnProf'),df=document.querySelector('#side .nav[data-v="definicoes"]');if(pf){const on=VIEW==='definicoes'&&UI.defTab==='prof';pf.classList.toggle('on',on);if(df&&on)df.classList.remove('on')}
   if(_mnObs)_mnObs.takeRecords()}
+function mnOrdem(par,L){L.forEach((e,i)=>{if(par.children[i]!==e)par.insertBefore(e,par.children[i]||null)});[...par.children].slice(L.length).forEach(e=>$('#mnavOff').appendChild(e))}
 function menuAgendar(){if(_mnPend)return;_mnPend=true;requestAnimationFrame(()=>{_mnPend=false;try{menuRender()}catch(e){console.warn(e)}})}
 {const _gMn=go;go=function(v){if(go._f&&!go._f.meucal)go._f.meucal=vMeuCal;else if(v==='meucal'&&!go._f){_gMn.call(this,'inicio');go._f.meucal=vMeuCal}const r=_gMn.apply(this,arguments);try{if(go._f&&!go._f.meucal)go._f.meucal=vMeuCal;menuRender()}catch(e){console.warn(e)}return r}}
 {const _buMn=bloqUI;bloqUI=function(){const r=_buMn.apply(this,arguments);try{menuAgendar()}catch(_){}return r}}
@@ -127,55 +131,57 @@ function vMeuCal(){const a=A();const hj=isoData(new Date());const m=UI.mcMes||hj
   const add=()=>{const t=$('#mc-nt').value.trim();if(!t)return;tarefas().push({id:uid(),t,prazo:dia,feito:false,criada:Date.now()});save();try{tarBadge()}catch(_){}toast('Tarefa criada');vMeuCal()};
   $('#mc-add').onclick=add;$('#mc-nt').onkeydown=e=>{if(e.key==='Enter')add()}}
 
-/* ---------- Definições › Menu Lateral: reordenar, mudar nome e ícone, criar menus novos ---------- */
+/* ---------- Definições › Menu Lateral: reordenar, mudar nome e ícone, criar menus e secções ---------- */
 const mnGet=(M,p)=>p.length===1?M[p[0]]:M[p[0]].f[p[1]];
 const mnLista=(M,p)=>p.length===1?M:(M[p[0]].f=M[p[0]].f||[]);
-const mnPodeTer=n=>!!n&&n.v!=='@sep'&&n.v!=='@turmas'&&n.v!=='@bloq';
+const mnPodeTer=n=>!!n&&n.v!=='@sep'&&n.v!=='@turmas'&&n.v!=='@bloq'&&n.v!=='@ofsel';
 const mnPodeIr=n=>!!n&&!!n.v&&n.v!=='@sep'&&n.v!=='@turmas'&&!(n.f&&n.f.length);
 function mnTirar(M,p){return mnLista(M,p).splice(p[p.length-1],1)[0]}
+function mnIcHTML(n){if(n.ic)return ic(n.ic,18);if(MN_IC[n.v])return ic(MN_IC[n.v],18);const e=n.v?mnAlvo(n.v):null;const sv=e&&e.querySelector('svg');if(sv){const c=sv.cloneNode(true);c.setAttribute('width','22');c.setAttribute('height','22');return c.outerHTML}return ic('mgPasta',18)}
 function defMenu(){const M=menuCfg();const usa=new Set(mnFolhas(M));const disp=mnCatalogo().filter(v=>!usa.has(v));
-  const linha=(n,p)=>{const sep=n.v==='@sep';const grupo=!n.v;const el=n.v?mnEl(n.v):null;const desl=n.v&&!sep&&n.v[0]!=='@'&&el&&!mnVisivel(el)&&!(el.closest('#mnavOff'));
-    const tipo=sep?'Separador':grupo?'Menu':n.v==='@turmas'?'Turmas e as suas secções':(n.f&&n.f.length?'Menu com página':(p.length>1?'Submenu':'Item'));
-    const k=p.join('.');const sub=p.length>1;
-    return `<li class="mnr ${grupo?'mnr-g':''} ${sep?'mnr-sep':''}" data-p="${k}"><div class="mnrow"><span class="mnh" data-mnh="${k}" title="Arrastar" aria-label="Arrastar">${ic('mvMover',16)}</span>
-      ${sep?'<span class="mnsepv"></span>':`<button type="button" class="btn sm ico mnic" data-mnic="${k}" title="Mudar o ícone" aria-label="Mudar o ícone">${ic(n.v==='@bloq'?(n.ic||'mvDesbloq'):mnIc(n),18)}</button><input class="mnn" data-mnn="${k}" value="${esc(mnNome(n))}" aria-label="Nome" placeholder="${esc(MN_NOME[n.v]||'Nome do menu')}">`}
+  const linha=(n,p)=>{if(!mnExiste(n))return '';const sep=n.v==='@sep',grupo=!n.v,sec=grupo&&n.t==='sec',fixo=n.v==='@ofsel';const el=n.v?mnEl(n.v):null;const desl=n.v&&!sep&&n.v[0]!=='@'&&el&&!mnVisivel(el)&&!el.closest('#mnavOff');
+    const tipo=sep?'Separador':sec?'Secção (título)':grupo?'Menu (abre e fecha)':n.v==='@turmas'?'Turmas e as suas secções':fixo?'Filtro':(n.f&&n.f.length?'Menu com página':(p.length>1&&M[p[0]].t!=='sec'?'Submenu':'Item'));
+    const k=p.join('.'),sub=p.length>1;
+    return `<li class="mnr ${grupo?'mnr-g':''} ${sec?'mnr-s':''} ${sep?'mnr-sep':''}" data-p="${k}"><div class="mnrow"><span class="mnh" data-mnh="${k}" title="Arrastar" aria-label="Arrastar">${ic('mvMover',16)}</span>
+      ${sep?'<span class="mnsepv"></span>':fixo?`<span class="mnn mnfix">${esc(MN_NOME['@ofsel'])}</span>`:`${sec?'':`<button type="button" class="btn sm ico mnic" data-mnic="${k}" title="Mudar o ícone" aria-label="Mudar o ícone">${mnIcHTML(n)}</button>`}<input class="mnn" data-mnn="${k}" value="${esc(mnNome(n))}" aria-label="Nome" placeholder="${sec?'Título da secção':'Nome do menu'}">`}
       <span class="mnt">${tipo}${desl?' · <i>módulo desligado</i>':''}</span>
-      <span class="mnb"><button type="button" class="btn sm ico" data-mnmv="${k}|-1" title="Subir" aria-label="Subir">${ic('chev',13).replace('<svg','<svg style="transform:rotate(-90deg)"')}</button><button type="button" class="btn sm ico" data-mnmv="${k}|1" title="Descer" aria-label="Descer">${ic('chev',13).replace('<svg','<svg style="transform:rotate(90deg)"')}</button>
-      ${sub?`<button type="button" class="btn sm" data-mnout="${k}" title="Tirar do menu e pôr no nível de cima">← Fora</button>`:(mnPodeIr(n)&&p[0]>0&&mnPodeTer(M[p[0]-1])?`<button type="button" class="btn sm" data-mnin="${k}" title="Pôr dentro do menu de cima">Dentro →</button>`:'')}
-      <button type="button" class="btn sm ico" data-mnx="${k}" title="${grupo?'Apagar este menu (os itens ficam no menu lateral)':'Tirar do menu lateral'}" aria-label="Tirar">${ic(grupo||sep?'trash':'x',14)}</button></span></div>
-      ${(grupo||(n.f&&n.f.length))?`<ul class="mnl mnsub">${(n.f||[]).map((x,j)=>linha(x,[p[0],j])).join('')}${grupo&&!(n.f||[]).length?'<li class="mnvz mut">Menu vazio: arraste itens para aqui ou use «Dentro →».</li>':''}</ul>`:''}</li>`};
-  return `<div class="card mned"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('mgPasta',18)} Menu Lateral</h2><span class="sp1"></span><button class="btn sm" id="mn-ng">${ic('plus',14)} Novo Menu</button><button class="btn sm" id="mn-ns">${ic('plus',14)} Separador</button><button class="btn sm" id="mn-rp">${ic('refresh',14)} Repor o Original</button></div>
-    <p class="hint">Arraste pela pega ${ic('mvMover',13)} para mudar a ordem, ou largue em cima de um menu para o pôr lá dentro. Toque no ícone para o mudar e no nome para o reescrever. As alterações aparecem logo no menu e ficam guardadas na sua conta.</p>
+      <span class="mnb">${grupo?`<button type="button" class="btn sm" data-mntp="${k}" title="${sec?'Passar a menu que abre e fecha':'Passar a secção com título (sempre aberta)'}">${sec?'Tornar Menu':'Tornar Secção'}</button>`:''}<button type="button" class="btn sm ico" data-mnmv="${k}|-1" title="Subir" aria-label="Subir">${ic('chev',13).replace('<svg','<svg style="transform:rotate(-90deg)"')}</button><button type="button" class="btn sm ico" data-mnmv="${k}|1" title="Descer" aria-label="Descer">${ic('chev',13).replace('<svg','<svg style="transform:rotate(90deg)"')}</button>
+      ${sub?`<button type="button" class="btn sm" data-mnout="${k}" title="Tirar e pôr no nível de cima">← Fora</button>`:(mnPodeIr(n)&&p[0]>0&&mnPodeTer(M[p[0]-1])?`<button type="button" class="btn sm" data-mnin="${k}" title="Pôr dentro do menu ou da secção de cima">Dentro →</button>`:'')}
+      <button type="button" class="btn sm ico" data-mnx="${k}" title="${grupo?'Apagar (os itens ficam no menu lateral)':'Tirar do menu lateral'}" aria-label="Tirar">${ic(grupo||sep?'trash':'x',14)}</button></span></div>
+      ${(grupo||(n.f&&n.f.length))?`<ul class="mnl mnsub">${(n.f||[]).map((x,j)=>linha(x,[p[0],j])).join('')}${grupo&&!(n.f||[]).length?'<li class="mnvz mut">Vazio: arraste itens para aqui ou use «Dentro →».</li>':''}</ul>`:''}</li>`};
+  return `<div class="card mned"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('mgPasta',18)} Menu Lateral</h2><span class="sp1"></span><button class="btn sm" id="mn-ng">${ic('plus',14)} Novo Menu</button><button class="btn sm" id="mn-nsc">${ic('plus',14)} Nova Secção</button><button class="btn sm" id="mn-ns">${ic('plus',14)} Separador</button><button class="btn sm" id="mn-rp">${ic('refresh',14)} Repor o Original</button></div>
+    <p class="hint">Arraste pela pega ${ic('mvMover',13)} para mudar a ordem, ou largue em cima de um menu ou secção para o pôr lá dentro. Toque no ícone para o mudar e no nome para o reescrever. <b>Secção</b>: título sempre aberto (como «Geral»); <b>Menu</b>: abre e fecha com um toque. As alterações aparecem logo e ficam guardadas na sua conta.</p>
     <ul class="mnl" id="mnl">${M.map((n,i)=>linha(n,[i])).join('')}</ul>
-    ${disp.length?`<h3 style="margin:16px 0 6px">Fora do menu</h3><div class="mnoff">${disp.map(v=>`<button type="button" class="btn sm" data-mnadd="${v}">${ic(MN_IC[v]||'mgPasta',14)} ${esc(MN_NOME[v]||v)} ${ic('plus',12)}</button>`).join('')}</div>`:''}</div>`}
+    ${disp.length?`<h3 style="margin:16px 0 6px">Fora do menu</h3><div class="mnoff">${disp.map(v=>`<button type="button" class="btn sm" data-mnadd="${v}">${esc(mnNome({v}))} ${ic('plus',12)}</button>`).join('')}</div>`:''}</div>`}
 function bindMenu(){const M=menuCfg();const P=k=>k.split('.').map(Number);const ok=()=>{menuGuardar(M);vDefinicoes()};
-  $$('[data-mnn]').forEach(i=>i.onchange=()=>{const n=mnGet(M,P(i.dataset.mnn));const v=i.value.trim();if(!n.v&&!v){i.value=mnNome(n);return}n.nome=v&&v!==MN_NOME[n.v]?v:undefined;if(!n.nome)delete n.nome;menuGuardar(M)});
-  $$('[data-mnmv]').forEach(b=>b.onclick=()=>{const [k,d]=b.dataset.mnmv.split('|');const p=P(k);const L=mnLista(M,p);const i=p[p.length-1],j=i+ +d;if(j<0||j>=L.length)return;[L[i],L[j]]=[L[j],L[i]];ok()});
+  const fimTopo=()=>{const i=M.findIndex(n=>n.v==='@sep'||(n.t==='sec'&&n.id==='s-config'));return i<0?(M.length&&M[M.length-1].v==='@bloq'?M.length-1:M.length):i};
+  $$('[data-mnn]').forEach(i=>i.onchange=()=>{const n=mnGet(M,P(i.dataset.mnn));const v=i.value.trim();if(!n.v){if(!v&&n.t!=='sec'){i.value=mnNome(n);return}n.nome=v}else{const o=mnNome({v:n.v});if(v&&v!==o&&v!==(n.nome||''))n.nome=v;else if(!v||v===o)delete n.nome}menuGuardar(M)});
+  $$('[data-mntp]').forEach(b=>b.onclick=()=>{const n=mnGet(M,P(b.dataset.mntp));if(n.t==='sec'){delete n.t;if(!n.nome)n.nome='Menu';n.ic=n.ic||'mgPasta'}else n.t='sec';ok()});
+  $$('[data-mnmv]').forEach(b=>b.onclick=()=>{const [k,d]=b.dataset.mnmv.split('|');const p=P(k);const L=mnLista(M,p);const i=p[p.length-1];let j=i+ +d;while(j>=0&&j<L.length&&!mnExiste(L[j]))j+= +d;if(j<0||j>=L.length)return;[L[i],L[j]]=[L[j],L[i]];ok()});
   $$('[data-mnin]').forEach(b=>b.onclick=()=>{const p=P(b.dataset.mnin);const n=mnTirar(M,p);const alvo=M[p[0]-1];(alvo.f=alvo.f||[]).push(n);ok()});
   $$('[data-mnout]').forEach(b=>b.onclick=()=>{const p=P(b.dataset.mnout);const n=mnTirar(M,p);M.splice(p[0]+1,0,n);ok()});
-  $$('[data-mnx]').forEach(b=>b.onclick=()=>{const p=P(b.dataset.mnx);const n=mnGet(M,p);if(!n.v){if((n.f||[]).length&&!confirm('Apagar o menu «'+mnNome(n)+'»? Os itens que tem passam para o nível de cima.'))return;mnTirar(M,p);M.splice(p[0],0,...(n.f||[]))}else mnTirar(M,p);ok()});
-  $$('[data-mnadd]').forEach(b=>b.onclick=()=>{const i=M.findIndex(n=>n.v==='@sep');M.splice(i<0?M.length:i,0,{v:b.dataset.mnadd});ok()});
-  $('#mn-ng').onclick=()=>{const nm=(prompt('Nome do novo menu:','Novo Menu')||'').trim();if(!nm)return;const i=M.findIndex(n=>n.v==='@sep');M.splice(i<0?M.length:i,0,{id:'g'+uid(),nome:nm,ic:'mgPasta',f:[]});ok()};
-  $('#mn-ns').onclick=()=>{const i=M.findIndex(n=>n.v==='@sep');M.splice(i<0?M.length:i,0,{v:'@sep'});ok()};
-  $('#mn-rp').onclick=()=>{if(!confirm('Repor o menu lateral original? Perde a ordem, os nomes e os menus que criou.'))return;delete S.cfg.menu;delete S.cfg.menuFech;save();menuRender();vDefinicoes();toast('Menu original reposto')};
+  $$('[data-mnx]').forEach(b=>b.onclick=()=>{const p=P(b.dataset.mnx);const n=mnGet(M,p);if(!n.v){if((n.f||[]).length&&!confirm('Apagar «'+(mnNome(n)||'secção')+'»? Os itens que tem passam para o nível de cima.'))return;mnTirar(M,p);M.splice(p[0],0,...(n.f||[]))}else mnTirar(M,p);ok()});
+  $$('[data-mnadd]').forEach(b=>b.onclick=()=>{M.splice(fimTopo(),0,{v:b.dataset.mnadd});ok()});
+  $('#mn-ng').onclick=()=>{const nm=(prompt('Nome do novo menu:','Novo Menu')||'').trim();if(!nm)return;M.splice(fimTopo(),0,{id:'g'+uid(),nome:nm,ic:'mgPasta',f:[]});ok()};
+  $('#mn-nsc').onclick=()=>{const nm=(prompt('Título da nova secção:','Nova Secção')||'').trim();if(!nm)return;M.splice(fimTopo(),0,{id:'g'+uid(),t:'sec',nome:nm,f:[]});ok()};
+  $('#mn-ns').onclick=()=>{M.splice(fimTopo(),0,{v:'@sep'});ok()};
+  $('#mn-rp').onclick=()=>{if(!confirm('Repor o menu lateral original? Perde a ordem, os nomes, os ícones e os menus que criou.'))return;delete S.cfg.menuL;delete S.cfg.menuFech;save();menuRender();vDefinicoes();toast('Menu original reposto')};
   $$('[data-mnic]').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=b.dataset.mnic;const old=$('.mnpick');if(old){const same=old.dataset.k===k;old.remove();if(same)return}
-    b.closest('.mnrow').insertAdjacentHTML('afterend',`<div class="mnpick" data-k="${k}">${MN_ESC_IC.filter(x=>ICONS[x]).map(x=>`<button type="button" class="btn sm ico" data-mnpk="${x}" title="${x}">${ic(x,18)}</button>`).join('')}</div>`);
-    $$('[data-mnpk]').forEach(q=>q.onclick=()=>{mnGet(M,P(k)).ic=q.dataset.mnpk;ok()})});
+    b.closest('.mnrow').insertAdjacentHTML('afterend',`<div class="mnpick" data-k="${k}"><button type="button" class="btn sm" data-mnpk="">Original</button>${MN_ESC_IC.filter(x=>ICONS[x]).map(x=>`<button type="button" class="btn sm ico" data-mnpk="${x}" title="${x}">${ic(x,18)}</button>`).join('')}</div>`);
+    $$('[data-mnpk]').forEach(q=>q.onclick=()=>{const n=mnGet(M,P(k));if(q.dataset.mnpk)n.ic=q.dataset.mnpk;else delete n.ic;ok()})});
   /* arrastar (rato e toque) */
   $$('[data-mnh]').forEach(h=>h.onpointerdown=e=>{e.preventDefault();const src=P(h.dataset.mnh);const li=h.closest('.mnr');const n0=mnGet(M,src);li.classList.add('mn-arr');let alvo=null,pos=null;try{h.setPointerCapture(e.pointerId)}catch(_){}
     const limpa=()=>$$('.mn-b4,.mn-af,.mn-in').forEach(x=>x.classList.remove('mn-b4','mn-af','mn-in'));
-    const mv=ev=>{limpa();const el=document.elementFromPoint(ev.clientX,ev.clientY);const r=el&&el.closest('.mnr');alvo=null;pos=null;if(!r||r===li||li.contains(r))return;
+    let ult=null;const auto=setInterval(()=>{if(!ult)return;const y=ult.clientY,H=innerHeight;const d=y<90?-16:y>H-70?16:0;if(!d)return;[document.scrollingElement,$('#view'),$('#main')].forEach(x=>{try{if(x&&x.scrollHeight>x.clientHeight+2)x.scrollTop+=d}catch(_){}});mv(ult)},40);
+    const mv=ev=>{ult={clientX:ev.clientX,clientY:ev.clientY};limpa();const el=document.elementFromPoint(ev.clientX,ev.clientY);const r=el&&el.closest('.mnr');alvo=null;pos=null;if(!r||r===li||li.contains(r))return;
       const rw=r.querySelector(':scope>.mnrow').getBoundingClientRect();const tp=P(r.dataset.p);const tn=mnGet(M,tp);const y=(ev.clientY-rw.top)/rw.height;
-      const podeIn=tp.length===1&&mnPodeTer(tn)&&mnPodeIr(n0);
-      if(tp.length===2&&!mnPodeIr(n0))return;
-      pos=podeIn&&y>.28&&y<.72?'in':y<.5?'b4':'af';alvo=tp;r.classList.add('mn-'+pos);
-      const box=$('#view');if(ev.clientY<80)box.scrollBy?.(0,-12);};
-    const up=()=>{h.onpointermove=null;h.onpointerup=h.onpointercancel=null;li.classList.remove('mn-arr');limpa();if(!alvo)return;
-      const tn=mnGet(M,alvo);const n=mnTirar(M,src);
-      let tp=alvo.slice();if(src.length===tp.length&&(src.length===1||src[0]===tp[0])&&src[src.length-1]<tp[tp.length-1])tp[tp.length-1]--;
+      const podeIn=tp.length===1&&mnPodeTer(tn)&&mnPodeIr(n0);if(tp.length===2&&!mnPodeIr(n0))return;
+      pos=podeIn&&y>.28&&y<.72?'in':y<.5?'b4':'af';alvo=tp;r.classList.add('mn-'+pos)};
+    const up=()=>{clearInterval(auto);h.onpointermove=null;h.onpointerup=h.onpointercancel=null;li.classList.remove('mn-arr');limpa();if(!alvo)return;
+      const n=mnTirar(M,src);let tp=alvo.slice();if(src.length===tp.length&&(src.length===1||src[0]===tp[0])&&src[src.length-1]<tp[tp.length-1])tp[tp.length-1]--;
       if(src.length===1&&tp.length===2&&src[0]<tp[0])tp[0]--;
       if(pos==='in'){const t=mnGet(M,[tp[0]]);(t.f=t.f||[]).push(n)}else{const L=mnLista(M,tp);L.splice(tp[tp.length-1]+(pos==='af'?1:0),0,n)}
-      void tn;ok()};
+      ok()};
     h.onpointermove=mv;h.onpointerup=up;h.onpointercancel=()=>{alvo=null;up()}})}
 {const _vdMn=vDefinicoes;vDefinicoes=function(){const quer=UI.defTab==='menu';if(quer)UI.defTab='aparencia';const r=_vdMn.apply(this,arguments);if(quer)UI.defTab='menu';
   try{const tb=$('#view .deftabs');if(tb&&!tb.querySelector('[data-dt2="menu"]')){const ap=tb.querySelector('[data-dt2="aparencia"]');const b=document.createElement('button');b.dataset.dt2='menu';b.innerHTML=ic('mgPasta',15)+' Menu Lateral';(ap?ap.after(b):tb.appendChild(b))}

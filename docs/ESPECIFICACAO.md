@@ -1352,3 +1352,7 @@ Escolas separadas, PAP/FCT, recuperação PROFIJ conforme a lei e correções
 
 ## v1.021
 Escolas separadas, PAP/FCT, recuperação PROFIJ conforme a lei e correções
+
+
+## v1.022
+

@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.022
+- Menu lateral reposto como na 1.019
+- Editor do menu lateral parte do menu original: secções, menus, separadores, ícone Original
+- O Meu Calendário e Professor disponíveis em Fora do menu
+
 ## 1.021
 - Calendário e organização do ano por escola (cópia independente); DT por escola
 - Sem intercalar nas escolas profissionais; Apreciação Global por período/semestre
