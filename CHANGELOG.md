@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.099
+- Apps: em Personalizar pode mudar a ordem — arrastar os mosaicos (também para outro grupo) ou usar as setas; os grupos sobem e descem; botão Repor ordem
+
 ## 1.098
 - Tema escuro: a linha «Média da Turma» das grelhas, as datas em atraso, o dia de hoje no calendário e os nomes das disciplinas no Início passam a ler-se bem
 - Marcação de Testes: o número do dia e as etiquetas dos testes têm a cor certa logo ao abrir, nos dois temas

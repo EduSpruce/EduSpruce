@@ -317,3 +317,44 @@ if(typeof cartaoAvisosDef==='function'){const _ca4=cartaoAvisosDef,_ba4=bindAvis
 {const _g4=go;go=function(v){if(MOD4.some(m=>m.k===v)&&!mod4On(v))v='inicio';const r=_g4.apply(this,[v].concat([].slice.call(arguments,1)));try{mod4Aplica()}catch(_){}return r};if(_g4._f)go._f=_g4._f}
 setTimeout(mod4Aplica,300);
 {const s=document.createElement('style');s.textContent='html body.modoff-reunioes #reunBan,html body.modoff-reunioes #reunBadge{display:none!important}';document.head.appendChild(s)}
+/* 1.098 — Apps: em Personalizar muda-se a ordem — arrastar os mosaicos (também para outro grupo) ou usar as setas;
+   os grupos sobem e descem. Guardado em S.cfg.hub.ord = {g:[grupos], a:[apps], gp:{app:grupo}} */
+let HUB_ORD0=null;
+const hubIdx=(L,id)=>{const i=L.indexOf(id);return i<0?9999:i};
+function hubOrdAplica(){try{if(!HUB_ORD0){HUB_ORD0={g:HUB_GRUPOS.map(x=>x.id),a:HUB_APPS.map(x=>x.id)};HUB_APPS.forEach(a=>{a.gr0=a.gr})}
+  const o=hubCfg().ord||{};HUB_APPS.forEach(a=>{const g=o.gp&&o.gp[a.id];a.gr=(g&&HUB_GRUPOS.some(x=>x.id===g))?g:a.gr0});
+  const G=Array.isArray(o.g)?o.g:HUB_ORD0.g,L=Array.isArray(o.a)?o.a:HUB_ORD0.a;
+  HUB_GRUPOS.sort((x,y)=>hubIdx(G,x.id)-hubIdx(G,y.id));HUB_APPS.sort((x,y)=>hubIdx(L,x.id)-hubIdx(L,y.id))}catch(e){console.warn(e)}}
+function hubOrdGuarda(){try{const h=hubCfg();const S0=[...$$('#view .hub-gr[data-gr]')];const gs=S0.map(s=>s.dataset.gr);const ts=[];const gp={};
+  S0.forEach(s=>s.querySelectorAll('.hbt[data-hub]').forEach(t=>{ts.push(t.dataset.hub);gp[t.dataset.hub]=s.dataset.gr}));
+  h.ord={g:gs.concat(HUB_GRUPOS.map(x=>x.id).filter(x=>!gs.includes(x))),a:ts.concat(HUB_APPS.map(x=>x.id).filter(x=>!ts.includes(x))),gp:Object.assign({},(h.ord||{}).gp||{},gp)};
+  Object.keys(h.ord.gp).forEach(k=>{const a=HUB_APPS.find(x=>x.id===k);if(a&&a.gr0===h.ord.gp[k])delete h.ord.gp[k]});
+  save();vHub()}catch(e){console.warn(e)}}
+if(typeof vHub==='function'){const _vHO=vHub;vHub=function(){hubOrdAplica();const r=_vHO.apply(this,arguments);try{hubOrdUI()}catch(e){console.warn(e)}return r}}
+function hubOrdUI(){const vis=HUB_GRUPOS.filter(g=>HUB_APPS.some(a=>a.gr===g.id&&(!a.on||a.on())));const S0=[...$$('#view .hub-gr')];
+  S0.forEach((s,k)=>{if(vis[k])s.dataset.gr=vis[k].id});if(!UI.hubEd)return;
+  const top=$('#view .hub-bar');if(top&&hubCfg().ord&&!$('#hb-ordx')){top.insertAdjacentHTML('afterbegin',`<button class="btn" id="hb-ordx" title="Voltar à ordem original">${ic('undo',15)} Repor ordem</button>`);$('#hb-ordx').onclick=()=>{delete hubCfg().ord;save();vHub();toast('Ordem original reposta','ok')}}
+  S0.forEach((s,k)=>{const sec=s.querySelector('.hub-sec');if(sec)sec.insertAdjacentHTML('beforeend',`<span class="hbo-g"><button type="button" class="btn sm" data-hbg="-1" ${k?'':'disabled'} title="Subir o grupo">${ic('arrowUp',14)}</button><button type="button" class="btn sm" data-hbg="1" ${k<S0.length-1?'':'disabled'} title="Descer o grupo"><span style="display:inline-flex;transform:rotate(180deg)">${ic('arrowUp',14)}</span></button></span>`);
+    s.querySelectorAll('[data-hbg]').forEach(b=>b.onclick=e=>{e.stopPropagation();const d=+b.dataset.hbg;const o=S0[k+d];if(!o)return;d<0?o.before(s):o.after(s);hubOrdGuarda()})});
+  let arr=null;
+  $$('#view .hbt[data-hub]').forEach(t=>{t.draggable=true;t.insertAdjacentHTML('beforeend',`<span class="hbo-a"><span role="button" tabindex="0" data-hbm="-1" title="Mover para trás">‹</span><span role="button" tabindex="0" data-hbm="1" title="Mover para a frente">›</span></span>`);
+    t.querySelectorAll('[data-hbm]').forEach(b=>{const f=e=>{e.stopPropagation();e.preventDefault();const d=+b.dataset.hbm;
+      const L=[...$$('#view .hbt[data-hub]')];const i=L.indexOf(t),o=L[i+d];if(!o)return;if(o.parentNode!==t.parentNode){d<0?o.after(t):o.before(t)}else{d<0?o.before(t):o.after(t)}hubOrdGuarda()};
+      b.onclick=f;b.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')f(e)}});
+    t.addEventListener('dragstart',e=>{arr=t;t.classList.add('hbo-arr');try{e.dataTransfer.setData('text/plain',t.dataset.hub);e.dataTransfer.effectAllowed='move'}catch(_){}});
+    t.addEventListener('dragend',()=>{t.classList.remove('hbo-arr');arr=null})});
+  $$('#view .hub-grid').forEach(g=>{g.addEventListener('dragover',e=>{if(!arr)return;e.preventDefault();
+      const o=e.target.closest&&e.target.closest('.hbt[data-hub]');if(o&&o!==arr){const r=o.getBoundingClientRect();(e.clientX<r.left+r.width/2)?o.before(arr):o.after(arr)}
+      else if(!o&&arr.parentNode!==g){const il=g.querySelector('.hub-ilu');il?il.before(arr):g.appendChild(arr)}});
+    g.addEventListener('drop',e=>{if(!arr)return;e.preventDefault();hubOrdGuarda()})})}
+{const s=document.createElement('style');s.textContent=`
+html body .hub.edit .hbt[data-hub]{cursor:grab;position:relative}
+html body .hub.edit .hbt.hbo-arr{opacity:.45;outline:2px dashed var(--acc)}
+html body .hub.edit .hub-ilu{display:none}
+html body .hbo-g{margin-left:auto;display:inline-flex;gap:4px}
+html body .hub-sec .hub-tur~.hbo-g{margin-left:8px}
+html body .hbo-a{position:absolute;right:6px;bottom:6px;display:inline-flex;gap:4px}
+html body .hbo-a>span{display:inline-flex;align-items:center;justify-content:center;width:26px;height:24px;border:1px solid var(--line);background:var(--panel);border-radius:6px;font-size:18px;line-height:1;color:var(--mut);cursor:pointer}
+html body .hbo-a>span:hover{color:var(--acc);border-color:var(--acc)}
+html body.est-sge .hbo-a>span{border-radius:0}
+`;document.head.appendChild(s)}
