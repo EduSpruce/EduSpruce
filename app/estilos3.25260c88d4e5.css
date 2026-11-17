@@ -804,3 +804,31 @@ html body #view .jn-pm{align-items:center!important;gap:4px}
 html body #view .jn-pm .tag{height:auto!important;min-height:0!important;padding:2px 7px!important;line-height:1.4!important;align-self:center!important;margin:0!important}
 html body #view .jn-pm .jn-adv{margin-left:auto!important;height:auto!important;min-height:0!important;padding:3px 8px!important;font-size:11px!important;line-height:1.3!important}
 html body #view .jn-kv0{color:var(--mut)!important}
+/* O Meu Calendário — barra lateral e barra de ferramentas coerentes com o resto da app (alturas, pesos, caixas) */
+html body #view .oc .ocsec,html body #view .oc #oc-mini{padding:14px 14px 12px!important}
+html body #view .oc .ocsec>b{font-size:12px!important;font-weight:600!important;letter-spacing:.06em;margin-bottom:8px!important;color:var(--mut)!important}
+html body #view .oc .occk{min-height:30px!important;margin:0!important;gap:10px!important;font-weight:500!important}
+html body #view .oc .occk input[type=checkbox]{width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;margin:0!important;flex:none}
+html body #view .oc .occk i{width:10px!important;height:10px!important}
+html body #view .oc .occk span{font-size:14px!important;font-weight:500!important}
+html body #view .oc .occats{gap:6px 12px!important;font-size:13px!important;font-weight:500}
+html body #view .oc .occat i{width:10px!important;height:10px!important}
+html body #view .oc .ocadd{font-size:13px!important;font-weight:600!important;padding:6px 0 0!important;min-height:0!important;height:auto!important;background:none!important;border:0!important;box-shadow:none!important}
+html body #view .oc #oc-prox,html body #view .oc #oc-prox *{font-weight:500}
+html body #view .oc #oc-prox .mut,html body #view .oc #oc-prox p{font-size:13px!important;margin:0}
+/* mini-calendário: dias sem caixas, só o dia de hoje e a semana em vista realçados */
+html body #view .oc .ocmh b{font-size:14px!important;font-weight:600!important}
+html body #view .oc .ocmh button{background:none!important;border:0!important;box-shadow:none!important;min-height:28px!important;height:28px!important;padding:0!important}
+html body #view .oc .ocmg{gap:2px!important}
+html body #view .oc .ocmg span{font-size:11px!important;font-weight:600}
+html body #view .oc .ocmg button{background:transparent!important;border:0!important;box-shadow:none!important;min-height:28px!important;height:28px!important;padding:0!important;font-size:12.5px!important;font-weight:500!important;color:var(--ink)!important}
+html body #view .oc .ocmg button:hover{background:color-mix(in srgb,var(--acc) 10%,transparent)!important}
+html body #view .oc .ocmg button.in{background:color-mix(in srgb,var(--acc) 8%,transparent)!important}
+html body #view .oc .ocmg button.fo{opacity:.4}
+html body #view .oc .ocmg button.hj{background:var(--acc)!important;color:#fff!important;font-weight:700!important}
+/* barra de ferramentas: tudo com a mesma altura */
+html body #view .oc .octb>.btn,html body #view .oc .octb2 .btn,html body #view .oc .ocvis button{height:36px!important;min-height:36px!important;box-sizing:border-box}
+html body #view .oc .octb2 input{height:36px!important;min-height:36px!important;box-sizing:border-box}
+html body #view .oc .ocvis button{padding:0 12px!important;font-weight:500!important}
+html body #view .oc .ocvis button.on{font-weight:700!important}
+html body #view .oc .ocnovo{min-height:40px!important;height:40px!important}

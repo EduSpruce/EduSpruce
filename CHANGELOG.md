@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.119
+- O Meu Calendário: acerto nas caixas de seleção
+
 ## 1.118
 - Jornal Escolar: botão Apagar PAA (apaga as atividades importadas)
 - Recomeçar do Zero apaga mesmo tudo da base de dados, incluindo os módulos opcionais; os módulos opcionais deixam de aparecer dentro desse cartão
