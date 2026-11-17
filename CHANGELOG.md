@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.116
+- Cópia no Google Drive: a barra de progresso de 0 a 100% volta a aparecer
+
 ## 1.115
 - Frase secreta (opcional) em Definições › Conta e Dados › Privacidade e Conta: fecha a chave dos dados com uma frase só sua — nem quem administra a base de dados a consegue ler. A app pede a frase em cada aparelho novo; guarde a chave de recuperação
 

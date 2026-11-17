@@ -583,10 +583,10 @@ html body td .tnm>div>.tag{margin:0!important;vertical-align:middle;align-self:c
 html body .rcard .rmini{padding:10px 14px 10px 12px!important;gap:14px!important}
 html body .rcard .rmini .rdt{flex:0 0 52px!important;width:52px!important;min-width:0!important;min-height:52px;height:auto!important;padding:6px 0;box-sizing:border-box}
 html body .rcard .rmini .rinf{flex:1 1 auto;min-width:0}
-html body .esprg{min-width:min(440px,86vw);text-align:left;display:flex;flex-direction:column;gap:14px;padding:22px 24px!important}
+html body #ocup .esprg{min-width:min(440px,86vw);text-align:left;display:flex;flex-direction:column;align-items:stretch;justify-items:stretch;gap:14px;padding:22px 24px!important}
 html body .esprg .esph{display:flex;align-items:center;gap:10px;font-size:17px}
-html body .esprg .espb{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
-html body .esprg .espb i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+html body #ocup .esprg .espb{width:100%;align-self:stretch;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+html body #ocup .esprg .espb i{display:block;height:100%;min-width:0;background:var(--acc);transition:width .3s}
 html body .esprg .espn{display:flex;align-items:baseline;gap:12px;font-size:14px;flex-wrap:wrap}
 html body .esprg .espx,html body .esprg .espf{color:var(--mut);font-weight:500}
 html body .esprg .esps{margin:0;font-size:13px;color:var(--mut);font-weight:500}
