@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.090
+- Início: atalho do Web Clipper e barra das apps juntos, com a mesma altura e alinhados (Simples e Geral)
+
 ## 1.089
 - Início (Geral): barra das apps alinhada com as caixas dos filtros
 

@@ -244,10 +244,10 @@ html body .in-side .cdown h2{display:flex;align-items:center;gap:8px;flex-wrap:w
 html body .hub-mini .hbm{margin:0!important;min-height:0!important;line-height:0;vertical-align:middle;align-self:center}
 html body .hub-mini .hbm>svg{display:block}
 /* vista Geral: a barra fica na linha dos filtros, alinhada com as caixas de escolha (38 px) */
-html body .hub-mini:not(.dtop>.hub-mini){margin-left:auto;align-self:flex-end;height:38px;box-sizing:border-box;padding:0 4px;gap:4px;flex-wrap:nowrap;align-items:center}
-html body .hub-mini:not(.dtop>.hub-mini) .hbm{padding:0;height:34px;width:34px}
-html body .hub-mini:not(.dtop>.hub-mini) .hbm .hbic{width:30px!important;height:30px!important}
-html body .hub-mini:not(.dtop>.hub-mini) .hbm-todas{width:34px;height:34px}
+html body .hub-mini:not(.dtop .hub-mini){margin-left:auto;align-self:flex-end;height:38px;border:1px solid var(--line);background:var(--panel);box-sizing:border-box;padding:0 4px;gap:4px;flex-wrap:nowrap;align-items:center}
+html body .hub-mini:not(.dtop .hub-mini) .hbm{padding:0;height:34px;width:34px}
+html body .hub-mini:not(.dtop .hub-mini) .hbm .hbic{width:30px!important;height:30px!important}
+html body .hub-mini:not(.dtop .hub-mini) .hbm-todas{width:34px;height:34px}
 `;document.head.appendChild(s)}
 /* menu lateral: um módulo desligado nunca aparece, seja qual for o menu (original, criado pelo professor ou da escola) nem o tema;
    aparece e desaparece conforme se liga ou desliga o módulo */

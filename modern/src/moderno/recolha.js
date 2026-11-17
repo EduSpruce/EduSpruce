@@ -96,7 +96,7 @@ const snwChipVer=()=>{try{if(typeof snOn==='function'&&!snOn())return false;if(d
 if(typeof dashTopo==='function'){const _dtSnw=dashTopo;dashTopo=function(){const h=_dtSnw.apply(this,arguments);try{if(!snwChipVer())return h;
   const a=(typeof HUB_APPS!=='undefined'&&HUB_APPS.find(x=>x.id==='sprucenote'))||null;const ico=a&&typeof hubIcone==='function'?hubIcone(a,30):ic('nvsn',18);
   const chip=`<div class="snw-chip" role="group" aria-label="SpruceNote Web Clipper"><button type="button" class="snw-chip-b" data-snw="info" title="Guarde imagens, texto, ligações e vídeos de qualquer site nos quadros do SpruceNote">${ico}<span class="snw-chip-t"><b>SpruceNote Web Clipper</b><small>Guardar da web nos seus quadros</small></span><span class="snw-chip-i">${ic('download',14)} Instalar</span></button><button type="button" class="snw-chip-x" data-snw="x" title="Não mostrar mais" aria-label="Não mostrar mais">${ic('x',14)}</button></div>`;
-  const k=h.indexOf('<div class="hub-mini"');if(k>=0)return h.slice(0,k)+chip+h.slice(k);const j=h.lastIndexOf('</div>');return j<0?h+chip:h.slice(0,j)+chip+h.slice(j)}catch(e){console.warn(e);return h}}}
+  const k=h.indexOf('<div class="hub-mini"');if(k>=0){const t=h.indexOf('hbm-todas',k),e=t<0?-1:h.indexOf('</div>',t);if(e>0)return h.slice(0,k)+'<div class="hub-grp">'+chip+h.slice(k,e+6)+'</div>'+h.slice(e+6);return h.slice(0,k)+chip+h.slice(k)}const j=h.lastIndexOf('</div>');return j<0?h+chip:h.slice(0,j)+chip+h.slice(j)}catch(e){console.warn(e);return h}}}
 function snwInstalar(){openDrawer('SpruceNote Web Clipper',`
   <p style="margin-top:0">Extensão do Chrome (e do Edge) para guardar <b>imagens, texto, ligações e vídeos</b> de qualquer site nos seus quadros do SpruceNote, como no Milanote. Os recortes chegam à coluna <b>«Por Arrumar»</b> do quadro escolhido.</p>
   <a class="btn pri" href="${SNW_ZIP}" download>${ic('download',14)} Descarregar a extensão (.zip)</a>
@@ -114,7 +114,7 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 try{new MutationObserver(()=>{if(document.documentElement.hasAttribute('data-sn-clipper'))document.querySelectorAll('.snw-chip').forEach(c=>c.remove())}).observe(document.documentElement,{attributes:true,attributeFilter:['data-sn-clipper']})}catch(_){}
 {const s=document.createElement('style');s.textContent=`
 html body .snw-chip{margin-left:auto;display:flex!important;flex-wrap:nowrap!important;flex:0 1 auto;align-self:center;align-items:stretch;border:1px solid var(--line);background:var(--panel);border-radius:12px;min-width:0;flex:0 1 auto;overflow:hidden}
-html body .snw-chip:not(.dtop>.snw-chip){align-self:flex-end;height:38px;box-sizing:border-box}html body .snw-chip:not(.dtop>.snw-chip) .snw-chip-b{padding:2px 8px 2px 4px}html body .snw-chip:not(.dtop>.snw-chip) .hbic{width:28px!important;height:28px!important}
+html body .snw-chip:not(.dtop .snw-chip){align-self:flex-end;height:38px;box-sizing:border-box}html body .snw-chip:not(.dtop .snw-chip) .snw-chip-b{padding:2px 8px 2px 4px}html body .snw-chip:not(.dtop .snw-chip) .hbic{width:28px!important;height:28px!important}
 html body .snw-chip+.hub-mini{margin-left:10px!important}
 html body .snw-chip>button{margin:0!important;height:auto!important;min-height:0!important;box-shadow:none!important}
 html body .snw-chip-b{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:5px 10px 5px 6px;cursor:pointer;min-width:0;text-align:left;color:inherit;font:inherit}
@@ -126,6 +126,10 @@ html body .snw-chip-t small{font-size:11.5px;color:var(--mut);white-space:nowrap
 html body .snw-chip-i{flex:none;display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--acc);padding:4px 8px;border-radius:8px;background:color-mix(in srgb,var(--acc) 10%,transparent)}
 html body .snw-chip-x{border:0;border-left:1px solid var(--line);background:transparent;color:var(--mut);padding:0 8px;cursor:pointer}
 html body .snw-chip-x:hover{color:var(--ink,inherit);background:color-mix(in srgb,var(--acc) 8%,transparent)}
+html body .hub-grp{display:flex;align-items:stretch;gap:10px;margin-left:auto;flex-wrap:nowrap;min-width:0}
+html body .hub-grp>.snw-chip,html body .hub-grp>.hub-mini{margin-left:0!important;align-self:stretch!important;height:auto}
+html body .hub-grp:not(.dtop .hub-grp){align-self:flex-end}
+@media (max-width:700px){html body .hub-grp{margin-left:0;width:100%}html body .hub-grp>.hub-mini{flex:1 1 auto}}
 html body .snw-passos{margin:0;padding-left:20px;line-height:1.6}
 html body.est-sge .snw-chip,html body.est-sge .snw-wc,html body.est-sge .snw-wc *,html body.est-sge .snw-chip-i{border-radius:0}
 @media (max-width:1100px){html body .snw-chip-t small{display:none}}
