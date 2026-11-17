@@ -12,3 +12,4 @@ hub.js
 eduschedule.js
 eduapps.js
 recolha.js
+modulos.js

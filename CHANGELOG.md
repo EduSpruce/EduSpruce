@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.112
+- Módulos desligados (Jornal Escolar, Contactos, JornalNote, Coord. PROFIJ) deixam mesmo de aparecer nas Apps e no menu
+- Com menos de 7 apps ligadas, o separador Apps desaparece do menu e do Início; volta ao ligar o 7.º módulo
+- Definições: o professor deixa de ver o que é técnico (Conta e Acesso, Auditoria, Ferramentas, cópias de reserva, código de acesso, espaço…); o administrador vê tudo
+- «Os Meus Módulos»: cada utilizador escolhe os seus módulos, que ficam logo disponíveis
+- Administrador: Módulos por Conta — escolher a que módulos cada conta tem acesso (base para vender módulos; precisa do script 0020 no Supabase)
+
 ## 1.111
 - Ajuda: a animação de cada secção deixa de ter um espaço vazio por baixo
 - Corrigido de vez o aviso «Cannot access ILU_C before initialization» no Início

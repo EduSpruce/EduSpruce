@@ -111,3 +111,10 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Onde há espaço, em vez de ícones soltos ou espaço vazio, usar uma pequena ilustração SVG do assunto (cores do tema: var(--panel)/--line/--mut/--acc + paleta SGE; cantos retos no tema SGE via `rect{rx:0}`).
 - Estados vazios: `app/250-ilustracoes.js` acrescenta sozinho a ilustração a `.card.empty` (≥300 px) e `.empty` (≥420 px, fora de tabelas/listas), escolhida pela vista (`ILU_VISTA` → `ILU_SVG`). `data-sem-ilu` num elemento desliga-a.
 - Outros sítios já com ilustração: Apps (espaço livre de cada grupo, `HUB_ILU` em moderno/recolha.js), Provas › Início (`PV_ILUS`), Definições › Ferramentas (Web Clipper, `SNW_ILU`). Ao criar ecrãs novos, seguir o mesmo estilo.
+
+## Módulos por conta e perfis (1.112) — `moderno/modulos.js`
+- Professor: Definições sem Conta e Acesso, Auditoria, Ferramentas; cartões técnicos tirados por título (`MOD_TEC_TIT`). Admin vê tudo.
+- Separador «Os Meus Módulos» (antes Módulos Opcionais): mudanças aplicam-se logo (`hubMenuMods` + `menuAgendar`).
+- Apps: com menos de `HUB_MIN` (7) apps à vista, `body.hub-poucas` esconde «Apps» no menu e a `.hub-mini`; `go('hub')` → início.
+- Licenças: `eduspruce_autorizados.modulos` (text[], null = todos; script 0020), lido por `eduspruce_meus_modulos()` → `MOD_PERM`; `modInc(id)` embrulha `HUB_APPS[].on`. Admin escolhe em «Módulos por Conta».
+- 1.112: `on('jnOn')` em recolha.js usava `window[f]` (as funções são const, não estão em window) → Jornal, Contactos, JornalNote e Coord. PROFIJ apareciam sempre.

@@ -220,7 +220,8 @@ html body .diagcol.fech>h2{margin-bottom:0!important}
    o mesmo logótipo de cor aparece no título de cada módulo */
 {try{Object.assign(HUB_CORES,{sgeRoxo:['#7c3aed','#6d28d9'],sgeRosa:['#db2777','#be185d'],sgeIndigo:['#4f46e5','#4338ca'],sgeLima:['#65a30d','#4d7c0f'],sgeMagenta:['#c026d3','#a21caf'],sgeArdosia:['#475569','#334155']});
   Object.assign(HUB_SGE_DEF,{jornal:'sgeRosa',jornalnote:'sgeRoxo',contactos:'sgeCinza',cprofij:'sgeIndigo',roda:'sgeLima',autoav:'sgeMagenta',digit:'sgeArdosia'});
-  const on=f=>()=>{try{return typeof window[f]!=='function'||window[f]()}catch(_){return true}};
+  /* jnOn, contOn, cpOn e snOn são const do programa (não estão em window): chamar pelo nome */
+  const FN={cpOn:()=>cpOn(),jnOn:()=>jnOn(),contOn:()=>contOn(),snOn:()=>snOn()};const on=f=>()=>{try{return !!FN[f]()}catch(_){return true}};
   if(!HUB_GRUPOS.some(g=>g.id==='escola'))HUB_GRUPOS.splice(2,0,{id:'escola',n:'Escola e Comunicação',g:'mail'});
   const novos=[
    {id:'cprofij',gr:'gestao',n:'Coord. PROFIJ',v:'cprofij',g:['award'],c:'indigo',d:'Coordenação do Programa PROFIJ',on:on('cpOn')},
