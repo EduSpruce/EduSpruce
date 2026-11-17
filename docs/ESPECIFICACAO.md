@@ -1378,3 +1378,7 @@ Definições: o texto de ajuda (.hint) dentro de cada .pref ocupava só a coluna
 ## v1.028
 
 alinharTabsTopo(): o conteúdo de Conta e Dados (.nvpw2) não estava na lista de elementos reconhecidos, por isso os separadores ficavam centrados pela regra CSS; passa a alinhar com o primeiro elemento visível a seguir aos separadores.
+
+## v1.029
+
+anoBadge(): turmas com curso (ou de oferta profissional/PROFIJ) mostram um ícone escolhido pelo nome do curso (CURSO_IC, regex sobre curso + nome CNQ + nome da turma) com o ano num pequeno círculo no canto. Turmas com código (badgeCod) continuam a mostrar o código. Campo opcional t.icone ('' = sem ícone) para forçar outro ícone.

@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.029
+- Ícone do curso no distintivo das turmas profissionais/PROFIJ
+
 ## 1.028
 - Separadores de Conta e Dados alinhados à esquerda como os outros
 
