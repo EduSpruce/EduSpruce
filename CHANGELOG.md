@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.075
+- Tema SGE: o EduSchedule passa ao azul-escuro da Organização, como o SpruceNote (cores das apps coerentes por grupo)
+
 ## 1.074
 - Endereços dos alunos passam a eduspruce.pt/spruceit, eduspruce.pt/pulso, eduspruce.pt/forms e eduspruce.pt/provas
 

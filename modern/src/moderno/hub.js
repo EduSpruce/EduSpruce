@@ -39,7 +39,7 @@ const hubG=(a,o)=>{const c=(o||hubCfg().ic[a.id]||{}).g;if(c&&ICONS[c])return c;
 /* tema SGE (1.059): cores por omissão da paleta SGE (azul SGE, azul-escuro, laranja SGE), por grupo; uma cor escolhida pelo professor mantém-se */
 const HUB_SGE={sgeAzul:['#1b93c6','#1b93c6'],sgeEscuro:['#0e7095','#0e7095'],sgeLaranja:['#f39200','#f39200'],sgeCeu:['#5bb7de','#2a9fd0'],sgeCinza:['#7a8a96','#55656f']};
 Object.assign(HUB_CORES,HUB_SGE);
-const HUB_SGE_DEF={turmas:'sgeAzul',avaliacao:'sgeAzul',sumarios:'sgeAzul',arena:'sgeLaranja',pulso:'sgeLaranja',forms:'sgeLaranja',provas:'sgeLaranja',sprucenote:'sgeEscuro'};
+const HUB_SGE_DEF={turmas:'sgeAzul',avaliacao:'sgeAzul',sumarios:'sgeAzul',arena:'sgeLaranja',pulso:'sgeLaranja',forms:'sgeLaranja',provas:'sgeLaranja',sprucenote:'sgeEscuro',eduschedule:'sgeEscuro'};
 const hubSge=()=>{try{return document.body.classList.contains('est-sge')}catch(_){return false}};
 const hubCorDef=a=>hubSge()?(HUB_SGE_DEF[a.id]||'sgeAzul'):a.c;
 const hubCor=(a,o)=>{const c=((o||hubCfg().ic[a.id]||{}).c)||hubCorDef(a);if(HUB_CORES[c])return HUB_CORES[c];if(/^#[0-9a-f]{6}$/i.test(c))return[c,'color-mix(in srgb,'+c+' 62%,#000)'];return HUB_CORES[a.c]};
