@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.037
+- Manual de Instruções novo (133 páginas, 182 imagens, todos os menus)
+- Ajuda revista e alargada (27 assuntos novos ou reescritos; textos de sincronização antigos corrigidos)
+- Imagens da Ajuda regeneradas nos 7 estilos (46 ecrãs)
+- landing/index.html atualizada para a versão com base de dados
+
 ## 1.036
 - Avisos push com a app fechada (Web Push + Supabase: 0016_avisos_push.sql e Edge Function eduspruce-avisos)
 - Testar com a app fechada e avisos discretos
