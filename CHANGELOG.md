@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.104
+- Corrigido o aviso «Cannot access ILU_C before initialization» ao abrir o Início (as ilustrações novas passam a aparecer)
+
 ## 1.103
 - «EduApps» passa a chamar-se «SpruceApps» em toda a app, também nos menus já guardados
 - Mais ilustrações: sumários, horários, critérios, definições, ajuda e férias; nos Módulos Opcionais e no topo da Ajuda
