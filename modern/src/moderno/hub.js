@@ -15,7 +15,7 @@ const HUB_APPS=[
    info:()=>{const t=T();return t?'Turma '+t.nome+' · '+t.disciplina:'Escolha a turma acima'},turma:1},
   {id:'sumarios',gr:'gestao',n:'Sumários',v:'sumarios',g:['nvaula','pen'],c:'laranja',d:'Aulas, sumários e presenças',
    info:()=>{const t=T();return t?'Turma '+t.nome+' · '+t.disciplina:'Escolha a turma acima'},turma:1},
-  {id:'arena',gr:'recreio',n:'Arena',v:'arena',g:['mvArena','sparkle'],c:'roxo',d:'Jogos de perguntas em tempo real',on:()=>typeof arOn!=='function'||arOn(),
+  {id:'arena',gr:'recreio',n:'Spruce It',v:'arena',g:['mvArena','sparkle'],c:'roxo',d:'Jogos de perguntas em tempo real',on:()=>typeof arOn!=='function'||arOn(),
    info:()=>hubN(((S.arena||{}).conj||[]).length,'conjunto de perguntas','conjuntos de perguntas'),tag:'Nunca conta para a nota'},
   {id:'pulso',gr:'recreio',n:'Pulso',v:'pulso',g:['mvPulso','target'],c:'rosa',d:'Avaliação formativa em tempo real',on:()=>typeof puOn!=='function'||puOn(),
    info:()=>hubN(((S.pulso||{}).quiz||[]).length,'questionário','questionários'),tag:'Formativo · conta se escolher'},

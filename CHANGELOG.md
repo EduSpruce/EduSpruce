@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.060
+- Spruce It (antiga Arena): aspeto novo com 4 temas, ecrã próprio sem menu lateral
+- Lançar jogo em dois passos
+- 6 modos novos com regras no servidor (0017_arena_modos_cume.sql)
+- Tipos de letra alojados em fontes/
+
 ## 1.059
 - Apps: paleta de cores do tema SGE
 
