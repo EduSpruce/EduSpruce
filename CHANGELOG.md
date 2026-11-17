@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.057
+- Abrir sempre no Início por omissão
+- Apps com os ícones do menu lateral
+
 ## 1.056
 - Início: barra das apps alinhada com o cartão de baixo e ícones maiores
 

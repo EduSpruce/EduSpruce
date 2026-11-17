@@ -106,6 +106,6 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 ## Apps (1.052) — página inicial com as apps em mosaicos
 - Código: `modern/src/moderno/hub.js` (juntado no fim pelo `db.mjs`); vista `hub` («Apps»), botão no menu lateral a seguir a Início (`patches.json` mexe no `MENU_ORIG`; `hubMenu()` põe-no nos menus personalizados uma vez, `S.cfg.hubMenu`).
 - Grupos fixos em `HUB_GRUPOS`/`HUB_APPS` (Gestão: turmas, avaliacao, sumarios · Recreio: arena, pulso, forms, provas · Organização: sprucenote). O EduTime ainda não entra (juntar a `HUB_APPS` com `gr:'org'`).
-- `S.cfg.hub = {ini (abrir nas Apps ao entrar, omissão sim), est ('cheio'|'suave'|'linha'), ic:{id:{g,c,e,img,n}}}`; imagem própria reduzida a 128 px (webp). Editor em `hubEditar` (gaveta).
+- `S.cfg.hub = {ini (abrir nas Apps ao entrar, omissão NÃO — o Início é a primeira página; 1.057), est ('cheio'|'suave'|'linha'), ic:{id:{g,c,e,img,n}}}`; imagem própria reduzida a 128 px (webp). Editor em `hubEditar` (gaveta).
 - Ao entrar: `go('inicio')` passa para `hub` até o professor navegar (`go._hubU`). Atenção: a classe `.hbtag` era escondida por uma regra global — usar `.hblig`.
 - 1.053–1.055: tema SGE em `vHub` (painéis `.hub-gr` com título `.hub-sec`, mosaicos planos com faixa de cor, mosaicos alinhados à esquerda); caixa «Turma» (`#hb-tur`, muda `S.turmaAtiva`) no painel Gestão — apps com `turma:1` pedem a turma. Início: `dashTopo` envolvido para pôr a barra `.hub-mini` (ícones pequenos à direita, `data-hubmini`).

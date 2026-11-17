@@ -27,13 +27,16 @@ const HUB_APPS=[
    info:()=>hubN(((S.sn||{}).quadros||[]).length,'quadro','quadros')}
 ];
 const hubCfg=()=>{S.cfg=S.cfg||{};const h=S.cfg.hub=(S.cfg.hub&&typeof S.cfg.hub==='object')?S.cfg.hub:{};if(!h.ic||typeof h.ic!=='object')h.ic={};return h};
-const hubIni=()=>hubCfg().ini!==false;
+const hubIni=()=>hubCfg().ini===true;
 const hubG=(a,o)=>{const c=(o||hubCfg().ic[a.id]||{}).g;if(c&&ICONS[c])return c;return a.g.find(k=>ICONS[k])||'apps'};
 const hubCor=(a,o)=>{const c=((o||hubCfg().ic[a.id]||{}).c)||a.c;if(HUB_CORES[c])return HUB_CORES[c];if(/^#[0-9a-f]{6}$/i.test(c))return[c,'color-mix(in srgb,'+c+' 62%,#000)'];return HUB_CORES[a.c]};
 const hubNome=a=>{const n=(hubCfg().ic[a.id]||{}).n;return n&&n.trim()?n.trim():a.n};
+/* o símbolo de cada app é o mesmo do menu lateral (incluindo ícones mudados em Definições › Menu Lateral) */
+function hubIcMenu(a,px){try{const L=[...document.querySelectorAll('#side [data-v="'+a.v+'"] svg')];const sv=L.find(x=>x.closest('[data-v]').offsetParent)||L[0];if(!sv)return'';
+  const c=sv.cloneNode(true);c.setAttribute('width',px);c.setAttribute('height',px);c.removeAttribute('style');return c.outerHTML}catch(_){return''}}
 function hubIcone(a,sz,o){o=o||hubCfg().ic[a.id]||{};const [c1,c2]=hubCor(a,o);const est=hubCfg().est||'cheio';sz=sz||64;
   const st=`--h1:${c1};--h2:${c2};width:${sz}px;height:${sz}px`;
-  let dentro;if(o.img)dentro=`<img src="${o.img}" alt="">`;else if(o.e&&o.e.trim())dentro=`<span class="hbe" style="font-size:${Math.round(sz*(([...o.e.trim()].length>1)?.36:.5))}px">${esc([...o.e.trim()].slice(0,3).join(''))}</span>`;else dentro=ic(hubG(a,o),Math.round(sz*.4));
+  let dentro;if(o.img)dentro=`<img src="${o.img}" alt="">`;else if(o.e&&o.e.trim())dentro=`<span class="hbe" style="font-size:${Math.round(sz*(([...o.e.trim()].length>1)?.36:.5))}px">${esc([...o.e.trim()].slice(0,3).join(''))}</span>`;else dentro=(!o.g&&hubIcMenu(a,Math.round(sz*.44)))||ic(hubG(a,o),Math.round(sz*.4));
   return `<span class="hbic hb-${o.img?'img':est}" style="${st}">${dentro}</span>`}
 
 TITLES.hub='Apps';
