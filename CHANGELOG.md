@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.053
+- Apps: aspeto do tema SGE (painéis com título, mosaicos planos e retos)
+- Apps: mosaicos centrados
+- Apps: escolha da turma para Avaliação e Sumários
+
 ## 1.052
 - Página Apps (hub) com mosaicos agrupados Gestão/Recreio/Organização
 - Ícones personalizáveis (cor, símbolo, emoji, imagem, nome, estilo)

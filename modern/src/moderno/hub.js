@@ -6,15 +6,15 @@
    ===================================================================== */
 ICONS.apps='<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>';
 const HUB_CORES={azul:['#3b82f6','#1d4ed8'],ceu:['#38bdf8','#0369a1'],ciano:['#22d3ee','#0e7490'],verde:['#34d399','#047857'],pinho:['#4ade80','#166534'],lima:['#a3e635','#4d7c0f'],ambar:['#fbbf24','#b45309'],laranja:['#fb923c','#c2410c'],vermelho:['#f87171','#b91c1c'],rosa:['#f472b6','#be185d'],roxo:['#a78bfa','#6d28d9'],indigo:['#818cf8','#4338ca'],ardosia:['#94a3b8','#334155'],grafite:['#525252','#171717']};
-const HUB_GRUPOS=[{id:'gestao',n:'Gestão'},{id:'recreio',n:'Recreio'},{id:'org',n:'Organização'}];
+const HUB_GRUPOS=[{id:'gestao',n:'Gestão',g:'school'},{id:'recreio',n:'Recreio',g:'sparkle'},{id:'org',n:'Organização',g:'layers'}];
 const hubN=(n,s,p)=>n+' '+(n===1?s:p);
 const HUB_APPS=[
   {id:'turmas',gr:'gestao',n:'Turmas e Alunos',v:'turmas',g:['mvTurmas','users'],c:'azul',d:'Ano letivo, turmas, alunos e fichas',
    info:()=>{const a=A();if(!a)return'Criar o ano letivo';const L=turmasFiltradas(a);const n=L.reduce((s,t)=>s+((t.alunos||[]).length),0);return hubN(L.length,'turma','turmas')+' · '+hubN(n,'aluno','alunos')}},
   {id:'avaliacao',gr:'gestao',n:'Avaliação',v:'avaliacao',g:['grad'],c:'verde',d:'Critérios, instrumentos e classificações',
-   info:()=>{const t=T();return t?'Turma '+t.nome+' · '+t.disciplina:'Escolher uma turma'}},
+   info:()=>{const t=T();return t?'Turma '+t.nome+' · '+t.disciplina:'Escolha a turma acima'},turma:1},
   {id:'sumarios',gr:'gestao',n:'Sumários',v:'sumarios',g:['nvaula','pen'],c:'laranja',d:'Aulas, sumários e presenças',
-   info:()=>{const t=T();return t?'Turma '+t.nome+' · '+t.disciplina:'Escolher uma turma'}},
+   info:()=>{const t=T();return t?'Turma '+t.nome+' · '+t.disciplina:'Escolha a turma acima'},turma:1},
   {id:'arena',gr:'recreio',n:'Arena',v:'arena',g:['mvArena','sparkle'],c:'roxo',d:'Jogos de perguntas em tempo real',on:()=>typeof arOn!=='function'||arOn(),
    info:()=>hubN(((S.arena||{}).conj||[]).length,'conjunto de perguntas','conjuntos de perguntas'),tag:'Nunca conta para a nota'},
   {id:'pulso',gr:'recreio',n:'Pulso',v:'pulso',g:['mvPulso','target'],c:'rosa',d:'Avaliação formativa em tempo real',on:()=>typeof puOn!=='function'||puOn(),
@@ -57,7 +57,13 @@ html body .hub-top .mut{font-size:13.5px}
 html body .hub-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 html body .hub-sec{margin:22px 0 10px;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:10px}
 html body .hub-sec:after{content:"";flex:1;height:1px;background:var(--line)}
-html body .hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+html body .hub-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+html body .hub-grid>.hbt{flex:0 1 calc((100% - 42px)/4);min-width:230px}
+@media (max-width:560px){html body .hub-grid>.hbt{flex-basis:100%}}
+html body .hub-sec .ic{display:none}
+html body .hub-tur{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--ink)}
+html body .hub-tur select{min-width:200px;max-width:280px}
+html body .hub-tur.falta select{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 25%,transparent)}
 html body .hbt{position:relative;display:flex;gap:14px;align-items:center;text-align:left;padding:16px;border:1px solid var(--line);background:var(--panel);border-radius:18px;cursor:pointer;color:var(--ink);font:inherit;
   transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;animation:hbIn .42s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
 html body .hbt:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.10);border-color:color-mix(in srgb,var(--h1,var(--acc)) 45%,var(--line))}
@@ -97,6 +103,29 @@ html body .hbe-cores button.on{outline:3px solid var(--acc);outline-offset:2px}
 html body .hbe-cores input[type=color]{width:40px;height:34px;border:1px solid var(--line);border-radius:10px;padding:2px;background:var(--panel)}
 html body .hbe-lbl{font-weight:600;margin:14px 0 6px;display:block}
 html body .hbe-est{display:flex;gap:8px;flex-wrap:wrap}
+/* tema SGE: painéis brancos com título, mosaicos planos, azul SGE */
+html body.est-sge .hub{max-width:1180px;font-family:"Ubuntu","Segoe UI",Roboto,Arial,sans-serif}
+html body.est-sge .hub-top{background:var(--panel);border:1px solid var(--line);padding:16px 20px;margin:0 0 16px;align-items:center}
+html body.est-sge .hub-top h2{font-weight:400;font-size:24px;color:#0e7095;letter-spacing:0;display:flex;align-items:center;gap:10px}
+html body.est-sge .hub-top h2 .ic{color:#1f9fcf}
+html body.est-sge .hub-gr{background:var(--panel);border:1px solid var(--line);margin:0 0 16px}
+html body.est-sge .hub-sec{margin:0;padding:12px 20px;font-size:17px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink);border-bottom:1px solid var(--line);flex-wrap:wrap}
+html body.est-sge .hub-sec:after{display:none}
+html body.est-sge .hub-sec>.ic{display:inline-block;color:#1f9fcf}
+html body.est-sge .hub-sec .hub-tur{margin-left:auto}
+html body.est-sge .hub-grid{padding:18px 20px 20px;gap:12px}
+html body.est-sge .hub-grid>.hbt{flex-basis:calc((100% - 36px)/4)}
+html body.est-sge .hbt{border-radius:0;box-shadow:none;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--h1);padding:14px 14px 14px 12px;animation:none;transition:background .15s,border-color .15s}
+html body.est-sge .hbt:hover{transform:none;box-shadow:none;background:color-mix(in srgb,#1f9fcf 7%,var(--panel));border-color:color-mix(in srgb,#1f9fcf 55%,var(--line));border-left-color:var(--h1)}
+html body.est-sge .hbt .hbn{font-weight:500;font-size:15.5px;color:#0e7095}
+html body.est-sge.escurox .hbt .hbn{color:var(--ink)}
+html body.est-sge .hbt .hbi{font-weight:500}
+html body.est-sge .hbt .hblig{border-radius:0;background:transparent;border:1px solid color-mix(in srgb,var(--h1) 60%,var(--line));color:color-mix(in srgb,var(--h2) 85%,var(--ink));font-weight:500}
+html body.est-sge .hbic.hb-cheio{background:var(--h2);box-shadow:none}
+html body.est-sge .hbic.hb-cheio:before{display:none}
+html body.est-sge .hbic{border-radius:0}
+html body.est-sge .hub-tur select{border-radius:0}
+html body.est-sge .hub.edit .hbt{animation:none}
 /* tema de cantos retos */
 html body.est-sge .hbt,html body.est-sge .hbic,html body.est-sge .hbt .hblig,html body.est-sge .hbt .hbed,html body.est-sge .hbe-glifos button,html body.est-sge .hbe-cores button,html body.est-sge .hbe-cores input{border-radius:0}
 `;document.head.appendChild(s)}
@@ -107,17 +136,21 @@ function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
       ${hubIcone(a,60)}<span class="hbtx"><span class="hbn">${esc(hubNome(a))}</span><span class="hbd">${esc(a.d)}</span>${on?(inf?`<span class="hbi">${esc(inf)}</span>`:''):'<span class="hbi">Desligada · ativar nas Definições</span>'}${on&&a.tag?`<span class="hblig">${esc(a.tag)}</span>`:''}</span>
       <span class="hbed" data-hbed="${a.id}" title="Personalizar ícone">${ic('pencil',14)}</span></button>`};
   const hoje=new Date().toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'});
+  const a0=A(),TL=a0?turmasFiltradas(a0):[],t0=T();
+  const selT=`<label class="hub-tur${t0?'':' falta'}" onclick="event.stopPropagation()"><span>Turma</span><select id="hb-tur" aria-label="Turma para Avaliação e Sumários">${t0?'':'<option value="">— Escolher a turma —</option>'}${TL.map(t=>`<option value="${esc(t.id)}"${t0&&t.id===t0.id?' selected':''}>${esc(t.nome+' · '+(t.disciplina||''))}</option>`).join('')}</select></label>`;
   $('#view').innerHTML=`<div class="hub${ed?' edit':''}">
-    <div class="hub-top"><div><h2>Apps</h2><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
+    <div class="hub-top"><div><h2>${ic('apps',22)}Apps</h2><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
       <div class="hub-bar"><label class="chk" style="margin:0"><input type="checkbox" id="hb-ini" ${hubIni()?'checked':''}> <span>Abrir aqui ao entrar</span></label>
         <button class="btn${ed?' pri':''}" id="hb-ed">${ic(ed?'check':'pencil',15)} ${ed?'Concluído':'Personalizar'}</button></div></div>
-    ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id);return L.length?`<div class="hub-sec">${esc(g.n)}</div><div class="hub-grid">${L.map(tile).join('')}</div>`:''}).join('')}
+    ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id);return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(g.n)}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
   </div>`;
+  {const st=$('#hb-tur');if(st)st.onchange=e=>{if(!e.target.value)return;S.turmaAtiva=e.target.value;save();go('hub')}}
   $('#hb-ini').onchange=e=>{hubCfg().ini=e.target.checked;save();toast(e.target.checked?'A app abre nas Apps':'A app abre no Início','ok')};
   $('#hb-ed').onclick=()=>{UI.hubEd=!UI.hubEd;vHub()};
   $$('#view .hbt').forEach(b=>b.onclick=e=>{const a=HUB_APPS.find(x=>x.id===b.dataset.hub);if(!a)return;
     if(UI.hubEd||e.target.closest('[data-hbed]')){hubEditar(a);return}
     if(a.on&&!a.on()){UI.defTab='geral';go('definicoes');setTimeout(()=>{try{const m=$('#view #def-mods');if(m)m.scrollIntoView({behavior:'smooth',block:'center'})}catch(_){}},80);return}
+    if(a.turma&&!T()){const st=$('#hb-tur');if(st){st.focus();try{st.showPicker()}catch(_){}}toast('Escolha primeiro a turma','info');return}
     go._hubU=1;go(a.v)})}
 
 function hubEditar(a){const h=hubCfg();const o=Object.assign({},h.ic[a.id]||{});
