@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.066
+- Arrastar e-mails (convocatórias e atividades do Outlook ou de outro e-mail) só funciona no Calendário Escolar e em O Meu Calendário, para não chocar com o arrastar de turmas
+
 ## 1.065
 - EduSchedule em ecrã inteiro, sem a barra da EduSpruce; volta-se à EduSpruce pelo ícone da casa no topo
 
