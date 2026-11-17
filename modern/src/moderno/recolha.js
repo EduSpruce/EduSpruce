@@ -527,3 +527,8 @@ try{const g=MOD_GR.find(x=>x[0]==='Organização');if(g)g[2].push(['mod-snw','sn
   return _mgSw.apply(this,arguments)}}
 setTimeout(snwModAplica,400);{const _gSw=go;go=function(){const r=_gSw.apply(this,arguments);snwModAplica();return r};if(_gSw._f)go._f=_gSw._f}
 {const s=document.createElement('style');s.textContent='html body.modoff-snweb .snw-chip{display:none!important}';document.head.appendChild(s)}
+/* 1.109 — Notas Flutuantes desligadas: o botão do canto desaparece mesmo (o tema SGE forçava-o a aparecer) */
+const nfModAplica=()=>{try{document.body.classList.toggle('modoff-nf',typeof nfOn==='function'&&!nfOn())}catch(_){}};
+setTimeout(nfModAplica,400);setTimeout(nfModAplica,2500);{const _gNf=go;go=function(){const r=_gNf.apply(this,arguments);nfModAplica();return r};if(_gNf._f)go._f=_gNf._f}
+document.addEventListener('change',e=>{if(e.target&&(e.target.id==='mod-nf'||e.target.id==='nf-on'))setTimeout(nfModAplica,0)});
+{const s=document.createElement('style');s.textContent='html body.modoff-nf #nffab:not(#_a):not(#_b),html body.modoff-nf #nflayer,html body #nffab[hidden]:not(#_a):not(#_b),html body #nflayer[hidden]{display:none!important}';document.head.appendChild(s)}

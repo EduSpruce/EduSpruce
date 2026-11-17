@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.109
+- Notas Flutuantes desligadas: o botão do canto deixa de aparecer (no tema SGE continuava visível)
+
 ## 1.108
 - SpruceNote Web Clipper passa a módulo opcional (Definições › Módulos Opcionais › Organização)
 
