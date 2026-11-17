@@ -15,13 +15,20 @@ Responder sempre em português, curto. Versões 0.900–0.999 (nunca 1.0); a atu
 - Fonte da app: `modern/src/app/` (módulos = index.html byte a byte; `modern/scripts/partir.py juntar|partir|conferir`). Na sessão: `/home/claude/edugest/index.html`.
 - Só na versão com base de dados: `modern/src/moderno/` (basedados, autoav, digit, arena-comum + arena, pulso), juntados por `modern/scripts/db.mjs`, que também aplica `modern/src/moderno/patches.json` (agora versionado no Git).
 - Páginas dos alunos: `aluno.html`, `modern/src/arena/arena.html` → `arena.html`, `modern/src/pulso/pulso.html` → `pulso.html`.
-- SQL para correr no Supabase: `modern/supabase/migrations/` (último: `0014_arena_modos.sql`, modos novos da Arena).
+- SQL para correr no Supabase: `modern/supabase/migrations/` (último: `0016_avisos_push.sql`).
 - Espelho para a rede da escola: repositório `EduSpruce/eduspruce.github.io`.
+
+## Página leve (1.041) — ficheiros separados na versão publicada
+- O `db.mjs` (função `separar`) tira do `index.html` publicado: código principal → `app/app.<impressão>.js`, estilos grandes → `app/estilosN.<impressão>.css`, dados (GIF da Ajuda, pdf.js, MRA) → `app/<id>.<impressão>.txt` (carregados só quando precisos, via `data-src`), manifesto → `manifest.webmanifest`. O `index.html` passa de 8,2 MB para ~75 KB.
+- O código-fonte não muda (continua em `modern/src/app`); `arquivo.html` e a exportação offline continuam num ficheiro só.
+- `sw.js`: ficheiros `app/*.<12 hex>.*` servidos da cache (nunca mudam de conteúdo); fica a versão atual e a anterior. `espelho.sh` copia `app/`.
+- Cabeçalho (1.040): na passagem para «Mais», os botões `.pri` são os últimos a sair. Tema SGE: regra de cantos retos no fim de `12-estilos-css965.css`.
 
 ## Convenções
 - Desempenho (1.026): NUNCA `:has()` com `[style…]` lá dentro (nem `:not(:has(...[style]))`) — obriga a recalcular o estilo da página inteira a cada medição do cabeçalho (deixava a app lenta nos PCs antigos). Modo leve: `html.leve` (Definições › Aparência › Desempenho, `localStorage es.leve`).
 - Privacidade no modo de apresentação (1.026): `apresPrep`/`apresAplicar` + observador do documento filtram tudo o que aparece (texto, atributos, valores, listas, canvas). Memória por turma em `S.cfg.apresT[turmaId]` (`auto` = liga ao abrir a turma).
 - Privacidade de cada aluno (1.043): `S.cfg.apres.privAl={id:{n,f}}` (Notas/Foto; «Tudo» = `ocultos`). `apPvPrep`/`apPvAplicar` marcam a linha/cartão do aluno (`apres-pn`, `apres-pf`; células a manter `apnm`, folhas com nota `apgr`) e a ficha (`#dw-b.apres-pnd/pfd`). Botões na janela por `apPvUI` (envolve `apresDlg`). Nunca chamar `apresCfg()` com a janela aberta (substitui `S.cfg.apres`).
+- Menu lateral, turma + disciplina (1.042): espaço entre linhas por regra `#side .tnode .lbl` no fim de `12-estilos-css965.css`.
 - Em teste (1.026): `S.emt[instId]`; entrada `.emtnav` por baixo da turma. Turmas só de coordenação: `CP().y.coordT` (nunca em `a.turmas`). `criarDemo()` cria 3 anos letivos. Forms: tipos `vf`, `lacunas`, `ligar` e `defs.exame`. Código da 1.026 no fim do último módulo JS (antes de `})();`).
 - Código novo antes da âncora `/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */`.
 - CSS novo em `<style id="css965">`, com seletores fortes (`html body …`) por causa do tema SGE.
@@ -36,15 +43,18 @@ git clone https://github.com/EduSpruce/eduspruce.git /home/claude/eduspruce
 git clone https://github.com/EduSpruce/eduspruce.github.io.git /home/claude/eduspruce.github.io
 bash /home/claude/eduspruce/modern/scripts/sessao/preparar.sh
 ```
-Se o envio para o GitHub der 403 («not in this session's authorized repository set»), o repositório tem de ser acrescentado às fontes da sessão.
+Se o envio para o GitHub der 403 («not in this session's authorized repository set»), o repositório tem de ser acrescentado às fontes da sessão (os dois: `eduspruce` e `eduspruce.github.io`, senão o espelho não é enviado).
 
 ## Publicar
 ```
-CLAUDE_SESSION=<link da sessão> /tmp/es/pubm.sh 0.9XX "novidade 1|novidade 2" "changelog" "mensagem do commit"
+CLAUDE_SESSION=<link da sessão> /tmp/es/pubm.sh 1.0XX "novidade 1|novidade 2" "changelog" "mensagem do commit"
 ```
+Antes de publicar: `git fetch` e confirmar que nenhuma outra sessão publicou entretanto. Depois: confirmar com `git ls-remote origin main` nos dois repositórios.
+
 ## Testar sem ecrã (quando pedido)
-- Chrome + Playwright disponíveis; a app corre dentro de uma função fechada: usar `EduGest.ev("código")` (ou injetar `window.__ev=x=>eval(x);` numa cópia); para saltar a entrada, usar o `INIT` de `modern/tests/comum.mjs`.
-- PostgreSQL 16 local: dá para correr os scripts SQL (com um stub de `auth.uid()`) e jogar a Arena de ponta a ponta.
+- Chrome + Playwright disponíveis; a app corre dentro de uma função fechada: usar `EduGest.ev("código")` (ou injetar `window.__ev=x=>eval(x);` numa cópia); para saltar a entrada, usar o `INIT` de `modern/tests/comum.mjs`. Se o Playwright não encontrar o browser: `chromium.launch({executablePath:'/opt/pw-browsers/chromium-1243/chrome-linux64/chrome'})`.
+- Versão com base de dados sem rede: servir a pasta por HTTP, trocar `esm/arranque.mjs` por um fornecedor falso em memória (sessao/autorizado/lerDados/ler/escrever/criar/apagar), semear `localStorage['eduspruce.sb']` e servir um `eduspruce-config.json` com o hash (`'eduspruce:'+email`) da conta de teste.
+- PostgreSQL 16 local: dá para correr os scripts SQL (com stubs de `auth`, `storage`, `cron`, `net`, papéis anon/authenticated) e jogar a Arena de ponta a ponta.
 
 ## Índice: onde está cada parte (modern/src/app)
 Os módulos mais recentes (número maior) reescrevem funções dos anteriores: procurar sempre com `grep -l "texto visível" modern/src/app/*` e editar o último que aparecer.
@@ -67,7 +77,7 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 
 ## Para gastar menos (pedidos)
 - Uma conversa nova por lote de pedidos; nunca duas sessões a publicar ao mesmo tempo.
-- Procurar pelo texto exato do ecrã; não ler módulos inteiros nem o index.html (7 MB).
+- Procurar pelo texto exato do ecrã; não ler módulos inteiros nem o index.html.
 - Testar no browser só mudanças de lógica; «sem testar» = não testar.
 
 ## Para gastar menos (trabalho)
@@ -90,12 +100,3 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 - App: `modern/src/moderno/avisos.js` (juntado no fim pelo `db.mjs`); `sw.js` tem o evento `push`. Cartão «Com a App Fechada» em Definições › Notificações (envolve `defNotif`/`bindNotif`).
 - `psLista()` calcula os avisos dos próximos 21 dias (chaves `a:` aulas, `r:` resumo, `t:` avaliações de amanhã, `m:` reuniões, `av:` avisos) com `ntCfg()` e `ntSilencio`; `S.cfg.notif.pushDisc` = avisos discretos. `psSync()` guarda-a com `eduspruce_avisos_definir` (só se a conta tiver aparelhos). Com push ligado no aparelho (`es.push.on`), `ntAgora` deixa de repetir `a:`/`r:`/`t:` e as reuniões.
 - Supabase: `modern/supabase/migrations/0016_avisos_push.sql` (tabelas, funções, pg_cron de minuto a minuto) + Edge Function `modern/supabase/functions/eduspruce-avisos/index.ts` (Verify JWT desligado; cria as chaves VAPID sozinha). Guia: `docs/guias/AVISOS_COM_A_APP_FECHADA.md`.
-
-## Manual PDF e Ajuda (1.037)
-- Fontes e scripts do manual em `modern/manual/` (ver LEIA-ME). Ajuda revista no bloco `/* v1.034 · Ajuda revista` do módulo 56 (aplica-se depois de `ajudaAtualizar`); imagens da Ajuda por estilo em `ajuda/<estilo>/*.webp`, mapa em `AJ_VISTA` (módulo 58). Ao acrescentar um ecrã novo: acrescentar o assunto à Ajuda, a imagem nos 7 estilos e um capítulo no manual.
-
-## Página leve (1.041) — ficheiros separados na versão publicada
-- O `db.mjs` (função `separar`) tira do `index.html` publicado: código principal → `app/app.<impressão>.js`, estilos grandes → `app/estilosN.<impressão>.css`, dados (GIF da Ajuda, pdf.js, MRA) → `app/<id>.<impressão>.txt` (carregados só quando precisos, via `data-src`), manifesto → `manifest.webmanifest`. O `index.html` passa de 8,2 MB para ~75 KB.
-- O código-fonte não muda (continua em `modern/src/app`); `arquivo.html` e a exportação offline continuam num ficheiro só.
-- `sw.js`: ficheiros `app/*.<12 hex>.*` servidos da cache (nunca mudam de conteúdo); fica a versão atual e a anterior. `espelho.sh` copia `app/`.
-- Em `app/.versao-anterior` fica a lista da versão anterior (não se apaga logo, para janelas antigas ainda abertas).
