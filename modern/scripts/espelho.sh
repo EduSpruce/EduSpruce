@@ -2,7 +2,8 @@
 # Copia a app publicada (eduspruce.pt) para o espelho https://eduspruce.github.io/ (para redes que bloqueiam o domínio).
 # Só ficheiros da app; sem código-fonte, sem dados. Uso: espelho.sh [mensagem]
 set -e
-SRC=/home/claude/eduspruce; DST=/home/claude/eduspruce.github.io
+SRC="$(cd "$(dirname "$0")/../.." && pwd)"; DST="${ES_ESPELHO:-$(dirname "$SRC")/eduspruce.github.io}"
+[ -d "$DST/.git" ] || git clone -q --depth 1 https://github.com/EduSpruce/eduspruce.github.io.git "$DST"
 cd "$DST"; git fetch -q --depth 1 origin main && git reset -q --hard origin/main
 find "$DST" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
 cd "$SRC"
@@ -18,7 +19,7 @@ cd "$DST"; git add -A
 if git diff --cached --quiet; then echo "espelho: sem alterações"; exit 0; fi
 git commit -qm "${1:-Atualizar espelho} ($(cat versao.json))
 
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Co-Authored-By: ${ES_COAUTOR:-Claude Opus 5.5 <noreply@anthropic.com>}
 Claude-Session: ${CLAUDE_SESSION:-https://claude.ai/code}"
 git push -q origin HEAD:main 2>&1 | grep -iv "moved\|location\|\.git$" || true
 echo "espelho: $(git log --oneline -1)"

@@ -1,0 +1,68 @@
+{const _whM=widgetHojeInfo;widgetHojeInfo=function(){let h=_whM.apply(this,arguments);try{if(S.cfg.efemMundo===false)return h;const md=isoHoje().slice(5);const L=EFEM_MUNDO[md];if(!L||!L.length||typeof h!=='string')return h;const ano=new Date().getFullYear();
+  const extra='<li class="whg">Neste dia na história</li>'+L.map(([y,t])=>`<li class="hist">${ic('globo',14)}<span><b>${y}</b> · ${esc(t)} <small class="mut">(há ${ano-y} anos)</small></span></li>`).join('');
+  if(h.includes('<ul class="whl">'))h=h.replace(/<\/ul><\/div>$/,extra+'</ul></div>');else h=h.replace(/<p class="mut"[^>]*>Sem efemérides para hoje\.<\/p>/,'<ul class="whl">'+extra+'</ul>')}catch(_){}return h}}
+
+/* ===================== v0.45: «O Meu Dia» ===================== */
+function meuDiaDados(off){const a=A();const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+off);const iso=isoData(d);const hjIso=isoHoje();const ev=[];
+  if(!a)return {d,iso,ev,aulas:0,dadas:0,semSum:0,a};const TF=turmasFiltradas(a);let aulas=0,dadas=0,semSum=0;
+  TF.forEach(t=>{let L=[];try{L=listaAulas(t,a)}catch(_){}L.filter(x=>x.data===iso).forEach(x=>{aulas++;const sum=!!((x.s&&x.s.texto)||'').trim();const falta=!!x.falta&&!x.falta.subst;if(x.passada&&!falta){dadas++;if(!sum)semSum++}
+    ev.push({tp:'aula',h:x.ini,f:x.fim,t,x,sum,falta,sala:(x.sala||'')})})});
+  try{reunioes(a).filter(r=>reunAtiva(r)&&r.data===iso).forEach(r=>ev.push({tp:'reun',h:r.semHora?-1:(r.ini||0),f:r.fim||(r.ini||0)+60,r}))}catch(_){}
+  TF.forEach(t=>t.instrumentos.filter(i=>i.data===iso).forEach(i=>ev.push({tp:'aval',h:-3,t,i})));
+  try{matrizes(a,TF).filter(m=>!m.enviada&&m.data===iso).forEach(m=>ev.push({tp:'matriz',h:-2,m}))}catch(_){}
+  const Tk=tarefas().filter(x=>!x.feito&&(x.prazo===iso||(off===0&&x.prazo&&x.prazo<hjIso)));Tk.forEach(x=>ev.push({tp:'tar',h:-4,x,atraso:x.prazo<iso}));
+  try{aniversarios(a,0).filter(v=>v.dif===off).forEach(v=>ev.push({tp:'aniv',h:-5,v}))}catch(_){}
+  ev.sort((x,y)=>x.h-y.h);
+  /* furos: intervalos ≥ 30 min entre aulas */
+  const AU=ev.filter(e=>e.tp==='aula').sort((x,y)=>x.h-y.h);for(let k=1;k<AU.length;k++){const g=AU[k].h-AU[k-1].f;if(g>=30)ev.push({tp:'furo',h:AU[k-1].f+0.5,f:AU[k].h,g})}
+  ev.sort((x,y)=>x.h-y.h);return {d,iso,ev,aulas,dadas,semSum,a}}
+function cartaoMeuDia(){if(S.cfg.meuDiaOff)return '';const off=UI.mdOff||0;const D=meuDiaDados(off);const agora=new Date();const mins=agora.getHours()*60+agora.getMinutes();const hoje=off===0;
+  const rot=off===0?'Hoje':off===1?'Amanhã':off===-1?'Ontem':DIAS[D.d.getDay()];
+  const AU=D.ev.filter(e=>e.tp==='aula');const prox=hoje?AU.find(e=>e.f>mins):null;const atual=hoje?AU.find(e=>e.h<=mins&&e.f>mins):null;
+  const ini=AU.length?AU[0].h:null,fim=AU.length?AU[AU.length-1].f:null;const pc=hoje&&ini!=null?Math.max(0,Math.min(100,Math.round((mins-ini)/(fim-ini)*100))):null;
+  const nTar=D.ev.filter(e=>e.tp==='tar').length,nAval=D.ev.filter(e=>e.tp==='aval').length,nReu=D.ev.filter(e=>e.tp==='reun').length;
+  const destaque=atual?`<div class="mdnow">${ic('clock',16)}<span>A decorrer: <b>${esc(atual.t.nome)} · ${esc(atual.t.disciplina)}</b> até às ${fmtHM(atual.f)}${atual.sala?' · Sala '+esc(atual.sala):''}</span><button type="button" class="btn sm pri" data-mdsum="${atual.t.id}|${atual.x.k}">${ic('pen',13)} Sumário</button></div>`
+    :prox?`<div class="mdnext">${ic('clock',16)}<span>Próxima aula daqui a <b>${(()=>{const m=prox.h-mins;return m>=60?Math.floor(m/60)+' h '+(m%60?m%60+' min':''):m+' min'})()}</b>: ${esc(prox.t.nome)} · ${esc(prox.t.disciplina)} às ${fmtHM(prox.h)}${prox.sala?' · Sala '+esc(prox.sala):''}</span></div>`
+    :hoje&&AU.length?`<div class="mdfim">${ic('check',16)}<span>Aulas de hoje terminadas${D.semSum?` — falta${D.semSum>1?'m':''} <b>${D.semSum} sumário${D.semSum>1?'s':''}</b>`:'. Bom trabalho!'}</span></div>`:'';
+  const item=e=>{if(e.tp==='aula'){const st=e.falta?'falta':e.x.passada?(e.sum?'ok':'pend'):'';const cur=hoje&&e.h<=mins&&e.f>mins;
+      return `<li class="mdi aula ${cur?'now':''} ${hoje&&e.f<=mins?'past':''}"><span class="mdh">${fmtHM(e.h)}<small>${fmtHM(e.f)}</small></span><span class="mdd"></span>
+        <div class="mdc"><button type="button" class="mdt" data-mdt="${e.t.id}">${anoBadge(e.t,'sm')}<b>${esc(e.t.nome)}</b><span>${esc(e.t.disciplina)}</span></button>
+        <small class="mut">${[e.x.licao?'Lição '+e.x.licao:'',e.sala?'Sala '+esc(e.sala):'',e.x.bloco?'tempo '+e.x.bloco:''].filter(Boolean).join(' · ')}</small>
+        <span class="mdst">${st==='ok'?`<span class="tag ok">${ic('check',11)} sumário</span>`:st==='pend'?`<span class="tag bad">sem sumário</span>`:st==='falta'?'<span class="tag">falta do professor</span>':''}${cur?'<span class="tag now">agora</span>':''}
+          <button type="button" class="btn sm" data-mdsum="${e.t.id}|${e.x.k}">${ic('pen',12)} ${e.sum?'Ver':'Sumário'}</button><button type="button" class="btn sm ico" data-mdpres="${e.t.id}|${e.x.k}" title="Presenças" aria-label="Presenças">${ic('users',12)}</button></span></div></li>`}
+    if(e.tp==='furo')return `<li class="mdi furo"><span class="mdh">${fmtHM(Math.floor(e.h))}</span><span class="mdd"></span><div class="mdc"><small class="mut">${ic('sun',12)} Intervalo de ${e.g>=60?Math.floor(e.g/60)+' h'+(e.g%60?' '+e.g%60+' min':''):e.g+' min'}</small></div></li>`;
+    if(e.tp==='reun')return `<li class="mdi reun"><span class="mdh">${e.r.semHora?'—':fmtHM(e.r.ini||0)}</span><span class="mdd"></span><div class="mdc"><button type="button" class="mdt" data-mdreun="${e.r.id}">${ic('meet',15)}<b>${esc(e.r.titulo||'Reunião')}</b></button><small class="mut">${esc(e.r.local||'')}</small></div></li>`;
+    if(e.tp==='aval')return `<li class="mdi aval"><span class="mdh">${ic('target',14)}</span><span class="mdd"></span><div class="mdc"><button type="button" class="mdt" data-mdinst="${e.t.id}|${e.i.id}"><b>${esc(e.i.nome)}</b><span>${esc(e.t.nome)} · ${esc(e.t.disciplina)}</span></button><small class="mut">${esc(e.i.tipo||'Avaliação')}</small></div></li>`;
+    if(e.tp==='matriz')return `<li class="mdi matriz"><span class="mdh">${ic('file',14)}</span><span class="mdd"></span><div class="mdc"><b>Enviar a matriz — ${esc(e.m.i.nome)}</b><small class="mut">${esc(e.m.t.nome)} · teste a ${fmtIso(e.m.i.data)}</small><span class="mdst"><button type="button" class="btn sm" data-mdmz="${e.m.t.id}|${e.m.i.id}">${ic('check',12)} Enviada</button></span></div></li>`;
+    if(e.tp==='tar')return `<li class="mdi tar ${e.atraso?'atr':''}"><span class="mdh"><input type="checkbox" data-mdtk="${e.x.id}" aria-label="Concluir ${esc(e.x.t)}"></span><span class="mdd"></span><div class="mdc"><b>${esc(e.x.t)}</b><small class="mut">${e.atraso?'em atraso desde '+fmtIso(e.x.prazo):'tarefa com prazo '+(hoje?'hoje':'neste dia')}</small></div></li>`;
+    if(e.tp==='aniv')return `<li class="mdi aniv"><span class="mdh">🎂</span><span class="mdd"></span><div class="mdc"><b>${esc(e.v.x.nome)}</b><small class="mut">faz anos · ${esc(e.v.turmas.join(', '))}</small></div></li>`;return ''};
+  const topo=D.ev.filter(e=>['tar','aniv','aval','matriz'].includes(e.tp)),linha=D.ev.filter(e=>!['tar','aniv','aval','matriz'].includes(e.tp));
+  return `<div class="card meudia" id="w-meudia"><div class="row mdhd"><h2 style="margin:0">${ic('sun',18)} O Meu Dia</h2><span class="sp1"></span>
+      <div class="mdnav"><button type="button" class="btn sm ico" data-mdoff="-1" aria-label="Dia anterior">‹</button><button type="button" class="btn sm ${hoje?'pri':''}" data-mdoff="0">${esc(rot)}</button><button type="button" class="btn sm ico" data-mdoff="1" aria-label="Dia seguinte">›</button></div></div>
+    <p class="mdsub">${esc(DIAS[D.d.getDay()])}, ${D.d.getDate()} de ${esc(MESES[D.d.getMonth()+1].toLowerCase())} · <b>${D.aulas}</b> tempo${D.aulas!==1?'s':''}${nAval?` · <b>${nAval}</b> avaliaç${nAval>1?'ões':'ão'}`:''}${nReu?` · <b>${nReu}</b> reuni${nReu>1?'ões':'ão'}`:''}${nTar?` · <b>${nTar}</b> tarefa${nTar>1?'s':''}`:''}</p>
+    ${pc!=null?`<div class="mdbar" role="progressbar" aria-valuenow="${pc}" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso do dia"><i style="width:${pc}%"></i><span>${fmtHM(ini)}</span><span>${fmtHM(fim)}</span></div>`:''}
+    ${hoje?destaque:''}
+    ${topo.length?`<ul class="mdl mdtop">${topo.map(item).join('')}</ul>`:''}
+    ${linha.length?`<ol class="mdl">${linha.map(item).join('')}</ol>`:`<p class="mut mdvz">${ic('sun',15)} ${hoje?'Sem aulas nem reuniões hoje.':'Sem aulas nem reuniões neste dia.'}</p>`}
+    <form class="mdadd" id="md-add"><input id="md-t" placeholder="Acrescentar uma tarefa para ${esc(rot.toLowerCase())}…" aria-label="Nova tarefa"><button type="submit" class="btn pri ico" aria-label="Acrescentar">${ic('plus',16)}</button></form></div>`}
+function bindMeuDia(){const c=$('#w-meudia');if(!c)return;const re=()=>{const n=$('#w-meudia');if(!n)return;const sp=n.style.gridColumn;n.outerHTML=cartaoMeuDia();const m=$('#w-meudia');if(m&&sp)m.style.gridColumn=sp;bindMeuDia();try{wgPreparar()}catch(_){}};
+  c.querySelectorAll('[data-mdoff]').forEach(b=>b.onclick=()=>{const v=+b.dataset.mdoff;UI.mdOff=v===0?0:(UI.mdOff||0)+v;re()});
+  c.querySelectorAll('[data-mdt]').forEach(b=>b.onclick=()=>{S.turmaAtiva=b.dataset.mdt;save();go('painel')});
+  c.querySelectorAll('[data-mdsum]').forEach(b=>b.onclick=()=>{const _v=b.dataset.mdsum,_j=_v.indexOf('|'),tid=_v.slice(0,_j),k=_v.slice(_j+1);const t=A().turmas.find(x=>x.id===tid);if(!t)return;S.turmaAtiva=tid;save();try{aulaDlg(t,k,'sum')}catch(_){go('sumarios')}});
+  c.querySelectorAll('[data-mdpres]').forEach(b=>b.onclick=()=>{const _v=b.dataset.mdpres,_j=_v.indexOf('|'),tid=_v.slice(0,_j),k=_v.slice(_j+1);const t=A().turmas.find(x=>x.id===tid);if(!t)return;S.turmaAtiva=tid;save();try{aulaDlg(t,k,'pres')}catch(_){go('sumarios')}});
+  c.querySelectorAll('[data-mdreun]').forEach(b=>b.onclick=()=>{try{reuniaoVer(b.dataset.mdreun)}catch(_){go('reunioes')}});
+  c.querySelectorAll('[data-mdinst]').forEach(b=>b.onclick=()=>{const [tid,iid]=b.dataset.mdinst.split('|');S.turmaAtiva=tid;UI.inst=iid;UI.instTab='notas';save();go('instrumentos')});
+  c.querySelectorAll('[data-mdmz]').forEach(b=>b.onclick=()=>{const [tid,iid]=b.dataset.mdmz.split('|');const t=A().turmas.find(x=>x.id===tid);const i=t&&t.instrumentos.find(x=>x.id===iid);if(i){i.matrizEnviada=true;save();toast('Matriz marcada como enviada','ok');re()}});
+  c.querySelectorAll('[data-mdtk]').forEach(x=>x.onchange=()=>{const tk=tarefas().find(z=>z.id===x.dataset.mdtk);if(!tk)return;tk.feito=true;tk.feitoEm=Date.now();save();x.closest('li').classList.add('feito');toast('Tarefa concluída','ok');setTimeout(re,450)});
+  $('#md-add').onsubmit=e=>{e.preventDefault();const v=$('#md-t').value.trim();if(!v)return;const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+(UI.mdOff||0));tarefas().push({id:uid(),t:v,prazo:isoData(d),prio:'normal',feito:false,criada:Date.now()});save();re();setTimeout(()=>{const i=$('#md-t');if(i)i.focus()},30)};
+  clearInterval(bindMeuDia._t);bindMeuDia._t=setInterval(()=>{if(VIEW!=='inicio'||!$('#w-meudia')){clearInterval(bindMeuDia._t);return}if(!(UI.mdOff||0)&&!c.contains(document.activeElement))re()},60000)}
+{const _vIm=vInicio;vInicio=function(){const r=_vIm.apply(this,arguments);try{if(!$('#w-meudia')&&A()){const h=cartaoMeuDia();const main=$('#view .in-main');const dg=$('#view .dgrps,#view .dgrid');if(h){if(main)main.insertAdjacentHTML('afterbegin',h);else if(dg)dg.insertAdjacentHTML('beforebegin',h);try{iniAplicar()}catch(_){}bindMeuDia();requestAnimationFrame(()=>{try{wgPreparar()}catch(_){}})}}}catch(e){console.warn(e)}return r};if(go._f)go._f.inicio=vInicio}
+{const _vdM=vDefinicoes;vDefinicoes=function(){const r=_vdM.apply(this,arguments);try{const nf=$('#nf-cfg');if(nf&&!$('#md-cfg'))nf.insertAdjacentHTML('afterend',`<div class="card" id="md-cfg"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('sun',18)} O Meu Dia</h2><span class="sp1"></span><label class="tgl"><input type="checkbox" id="md-on" ${S.cfg.meuDiaOff?'':'checked'}> Mostrar no Início</label></div><p class="hint" style="margin:6px 0 0">Linha do tempo do dia: aulas (com estado do sumário e presenças), intervalos, reuniões, avaliações, matrizes, tarefas e aniversários.</p></div>`);const c=$('#md-on');if(c)c.onchange=()=>{S.cfg.meuDiaOff=!c.checked;save()}}catch(_){}return r};if(go._f)go._f.definicoes=vDefinicoes}
+
+/* barra de topo: ações ao lado do título só quando cabem numa linha */
+function barLayout(){const b=$('#bar');if(!b)return;if(!document.body.classList.contains('dev-pc')){b.classList.remove('bar1','icwrap');return}const mid=e=>{const r=e.getBoundingClientRect();return r.top+r.height/2};const x=$('#barx');if(!x||!x.children.length){b.classList.remove('bar1','icwrap');const ic_=b.querySelector(':scope>.barico'),tt=b.querySelector(':scope>.ttlw');if(ic_&&tt&&Math.abs(mid(ic_)-mid(tt))>24)b.classList.add('icwrap');return}
+  b.classList.add('bar1');const kids=[...b.children].filter(e=>getComputedStyle(e).display!=='none'&&e.getBoundingClientRect().height>0);const m0=mid($('#bar>.ttlw')||kids[0]);const multi=kids.some(e=>Math.abs(mid(e)-m0)>24);if(multi||b.scrollWidth>b.clientWidth+2)b.classList.remove('bar1');b.classList.remove('icwrap');const ic_=b.querySelector(':scope>.barico'),tt=b.querySelector(':scope>.ttlw');if(ic_&&tt&&Math.abs(mid(ic_)-mid(tt))>24)b.classList.add('icwrap')}
+{const _gB=go;go=function(v){const r=_gB.apply(this,arguments);try{requestAnimationFrame(barLayout)}catch(_){}return r}}
+{const _bb=barBtns;barBtns=function(){const r=_bb.apply(this,arguments);try{requestAnimationFrame(barLayout)}catch(_){}return r}}
+addEventListener('resize',()=>{clearTimeout(barLayout._t);barLayout._t=setTimeout(barLayout,100)});
+

@@ -1,0 +1,92 @@
+/* ===================== Estilo “Azul Corporativo” (por omissão desde v0.33) ===================== */
+body.estilo-azul{--line:#e3e6ea;font-family:"Lato","Helvetica Neue",Helvetica,Arial,sans-serif}
+:root[data-theme="light"] body.estilo-azul{--bg:#f4f6f9;--panel:#ffffff;--mut:#667085;--ink:#1f2328}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) body.estilo-azul{--bg:#f4f6f9;--panel:#ffffff;--mut:#667085;--ink:#1f2328}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body.estilo-azul{--bg:#0f1115;--panel:#171a20;--line:#2a2f37;--ink:#e8eaed;--mut:#9aa3b2}}
+:root[data-theme="dark"] body.estilo-azul{--bg:#0f1115;--panel:#171a20;--line:#2a2f37;--ink:#e8eaed;--mut:#9aa3b2}
+body.estilo-azul{background:var(--bg)}
+body.estilo-azul #side{background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 82%,#fff 18%) 0%,color-mix(in srgb,var(--acc) 92%,#000 8%) 100%)!important;border-right:0;color:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+body.estilo-azul #side .brand .bt,body.estilo-azul #side .brand small{color:#fff}
+body.estilo-azul #side .brand .logo{background:rgba(255,255,255,.18);box-shadow:none}
+body.estilo-azul #side .grp{color:rgba(255,255,255,.72)}
+body.estilo-azul #side .nav{color:#fff;border-radius:999px;font-size:14px;min-height:40px;padding:8px 14px}
+body.estilo-azul #side .nav .ic{color:#fff;opacity:.95}
+body.estilo-azul #side .nav:hover{background:rgba(255,255,255,.12)}
+body.estilo-azul #side .nav.on{background:rgba(255,255,255,.22);color:#fff;box-shadow:none;font-weight:700}
+body.estilo-azul #side .nav:disabled{opacity:.45}
+body.estilo-azul #side .ver{color:rgba(255,255,255,.72)}
+body.estilo-azul #side .tema{background:rgba(255,255,255,.14);border-color:transparent}body.estilo-azul #side .tema button{color:#fff}body.estilo-azul #side .tema button.on{background:#fff;color:var(--acc)}
+body.estilo-azul #side .sessao{background:rgba(255,255,255,.12);border-color:transparent}body.estilo-azul #side .snm b,body.estilo-azul #side .snm span{color:#fff}
+body.estilo-azul #side .sessao .btn{background:rgba(255,255,255,.18);border-color:transparent;color:#fff}
+body.estilo-azul #side .seg.mini{background:rgba(255,255,255,.14);border-color:transparent}body.estilo-azul #side .seg.mini button{color:#fff}body.estilo-azul #side .seg.mini button.on{background:#fff;color:var(--acc)}
+body.estilo-azul #side .nbadge{background:#fff;color:var(--acc)}
+body.estilo-azul #side #grpT .anob{background:rgba(255,255,255,.2);color:#fff;border-color:transparent}
+body.estilo-azul #bar{background:var(--panel);border-bottom:1px solid var(--line);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+body.estilo-azul #ttl{font-size:22px;font-weight:800;letter-spacing:-.01em}
+/* conteúdo: cartões leves (meio-termo com a versão anterior) */
+body.estilo-azul .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+body.estilo-azul .card h2{font-size:16.5px;font-weight:800}
+body.estilo-azul .kpi{border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(16,24,40,.04);background:var(--panel)}
+body.estilo-azul .btn{border-radius:999px;border:1px solid color-mix(in srgb,var(--ink) 22%,transparent);background:var(--panel);color:var(--ink);font-weight:700;font-size:13.5px;min-height:38px;box-shadow:none}
+body.estilo-azul .btn:hover{background:color-mix(in srgb,var(--ink) 5%,var(--panel));transform:none}
+body.estilo-azul .btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}body.estilo-azul .btn.pri:hover{background:color-mix(in srgb,var(--acc) 88%,#000)}
+body.estilo-azul .btn.dng{color:#c62828;border-color:#ecc3c3}
+body.estilo-azul #view .tabs,body.estilo-azul #view .seg:not(.mini):not(.zoomseg){background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0;gap:20px;box-shadow:none}
+body.estilo-azul #view .tabs button,body.estilo-azul #view .seg:not(.mini):not(.zoomseg) button{background:transparent!important;border-radius:0;box-shadow:none!important;color:var(--mut);padding:10px 2px;border-bottom:2px solid transparent;font-weight:700;font-size:13.5px;min-height:0}
+body.estilo-azul #view .tabs button.on,body.estilo-azul #view .seg:not(.mini):not(.zoomseg) button.on{color:var(--ink);border-bottom-color:var(--acc)}
+body.estilo-azul #view table:not(.mx):not(.grid) th{text-transform:uppercase;font-size:11px!important;letter-spacing:.06em;color:var(--mut);font-weight:700;border-bottom:1px solid var(--line)}
+body.estilo-azul table.lst td{border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+body.estilo-azul table.lst tbody tr:hover td{background:color-mix(in srgb,var(--acc) 4%,transparent)}
+body.estilo-azul input:not([type=checkbox]):not([type=radio]),body.estilo-azul select,body.estilo-azul textarea{border:1px solid color-mix(in srgb,var(--ink) 20%,transparent);border-radius:10px;background:var(--panel);box-shadow:none}
+body.estilo-azul .tag{border-radius:6px;font-weight:700}
+body.estilo-azul .chip{border-radius:999px}
+body.estilo-azul .alert{border-radius:10px}
+body.estilo-azul #drawer{box-shadow:-12px 0 40px -20px rgba(0,0,0,.35)}
+/* lista de alunos, fotografias e MSAI: cartões e fotografias com moldura */
+body.estilo-azul .alst td.c-ft img{border-radius:10px;box-shadow:0 0 0 1px var(--line)}
+body.estilo-azul .alst .nmw>textarea{border-color:transparent;background:transparent;font-weight:600}
+body.estilo-azul .alst .nmw>textarea:hover,body.estilo-azul .alst .nmw>textarea:focus{border-color:color-mix(in srgb,var(--ink) 20%,transparent);background:var(--panel)}
+body.estilo-azul .alst td input:not([type=checkbox]),body.estilo-azul .alst td select{background:transparent;border-color:transparent}
+body.estilo-azul .alst td input:not([type=checkbox]):hover,body.estilo-azul .alst td select:hover,body.estilo-azul .alst td input:focus,body.estilo-azul .alst td select:focus{border-color:color-mix(in srgb,var(--ink) 20%,transparent);background:var(--panel)}
+body.estilo-azul .fcard{border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(16,24,40,.05);background:var(--panel);overflow:hidden;transition:transform .2s var(--ease),box-shadow .25s}
+@media (hover:hover){body.estilo-azul .fcard:hover{transform:translateY(-2px);box-shadow:0 10px 24px -14px rgba(16,24,40,.35)}}
+body.estilo-azul .fcard img{border-radius:12px}
+body.estilo-azul .mscard{border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(16,24,40,.05);background:var(--panel)}
+body.estilo-azul .mx{border-radius:12px;overflow:hidden}
+body.estilo-azul .mx th{background:color-mix(in srgb,var(--acc) 6%,var(--panel))}
+body.estilo-azul .tcard,body.estilo-azul .dimp,body.estilo-azul .rlin,body.estilo-azul .escc,body.estilo-azul .rmini{border-radius:12px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+body.estilo-azul #login .lgb{border-radius:18px}
+
+/* escola: nome completo no seletor */
+#bar .escsw{position:relative;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:6px 36px 6px 8px;border:1px solid color-mix(in srgb,var(--acc) 35%,var(--line));border-radius:16px;background:color-mix(in srgb,var(--acc) 7%,var(--panel));max-width:none;cursor:pointer}
+#bar .escsw #escLogo{position:static;transform:none;width:36px;height:36px;flex-shrink:0}
+#bar .escsw #escNome{font-size:15px;font-weight:750;color:var(--ink);line-height:1.2;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:420px;text-align:left}
+#bar .escsw .escchev{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--mut)}
+#bar .escsw select{position:absolute;inset:0;width:100%!important;height:100%;opacity:0;cursor:pointer;max-width:none!important;padding:0!important;min-height:0}
+#bar .escsw:focus-within{box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 30%,transparent)}
+@media (min-width:1001px) and (max-width:1439px){#bar .escsw #escNome{max-width:260px}}
+@media (max-width:1000px){#bar .escsw{width:100%}#bar .escsw #escNome{max-width:none}}
+body.multiesc #selEsc{max-width:none!important}
+/* ano letivo: só indicação */
+#bar .anoind{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:color-mix(in srgb,var(--ink) 5%,var(--panel));border:1px solid var(--line);font-weight:700;font-size:14px;color:var(--ink);white-space:nowrap}
+#bar .anoind .ic{color:var(--acc)}
+@media (min-width:701px) and (max-width:1439px){#bar #ctxAno .anoind{font-size:14px}}
+/* nome da escola na barra lateral, completo */
+#side .brand small#brandEsc{white-space:normal;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}
+#login select{width:100%;min-height:46px;font-size:16px}
+#selAno[hidden]{display:none!important}
+#bar #ctxEsc{flex-shrink:0}#bar .escsw{min-width:250px}
+@media (min-width:1001px) and (max-width:1439px){#bar .escsw #escNome{max-width:230px}#bar .ttlw{min-width:120px!important}}
+table.alst [data-k="repetente"],table.alst [data-k="ase"]{min-width:66px!important;width:66px}
+
+/* v0.34 — identidade EduSpruce e correções */
+#side .brand .bnm em,.lgh b em{font-style:normal;color:var(--acc)}
+body.estilo-azul #side .brand .bnm em{color:#cfe0ff}
+.lgh .lgi{background:linear-gradient(135deg,#3b82f6,#1d4ed8)!important;border-radius:16px}
+#bar .anoind{background:none!important;border:0!important;padding:0 6px!important;min-height:0!important;font-weight:500!important;color:var(--mut)!important;gap:6px}
+#bar .anoind b{color:var(--ink);font-weight:700}#bar .anoind .ic{color:var(--acc)}
+#bar .anoind .anol{color:var(--mut);font-weight:500}
+@media (min-width:701px) and (max-width:1100px){#bar .anoind .anol{display:none}}
+#bar select.vazio{font-style:italic;color:var(--mut)}
+.anotxt{display:flex;align-items:center;gap:8px;min-height:46px;font-size:15px}.anotxt .ic{color:var(--acc)}
+table.alst th.c-nm,table.alst td.tdnome{width:100%}

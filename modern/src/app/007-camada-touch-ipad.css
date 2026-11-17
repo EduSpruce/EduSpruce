@@ -1,0 +1,77 @@
+/* =================== camada TOUCH (iPad) =================== */
+html{-webkit-text-size-adjust:100%}
+body{font-size:15px;-webkit-tap-highlight-color:transparent}
+button,select,input,label,a,.tcard,.fcard{touch-action:manipulation}
+#side{width:240px;padding:20px 12px 14px;gap:4px}
+#side .brand{font-size:19px;margin-bottom:6px}
+#side button.nav{min-height:46px;padding:10px 12px;border-radius:12px;font-size:15px;gap:12px}
+#side button.nav:active{transform:scale(.98)}
+#bar{min-height:66px;padding:12px 18px;gap:10px}
+#bar h1{font-size:17px}
+#bar select{min-height:42px;border-radius:12px;padding:6px 12px;font-size:14px}
+.btn{min-height:44px;padding:9px 16px;border-radius:12px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .08s,background .15s}
+.btn.sm{min-height:36px;padding:6px 12px;border-radius:10px;font-size:13px}
+.btn:active{transform:scale(.97)}
+.btn .ic{margin:0}
+#view{padding:20px;-webkit-overflow-scrolling:touch}
+.card{border-radius:18px;padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.card h2{font-size:17px}
+.kpi,.tcard{border-radius:16px}
+.tcard{padding:18px;min-height:120px}
+.tcard:active,.fcard:active{transform:scale(.98)}
+/* controlos segmentados (separadores, organização) */
+.tabs,.seg{display:inline-flex;gap:3px;padding:3px;background:var(--side);border-radius:13px;flex-wrap:wrap;border:1px solid var(--line)}
+.tabs button,.seg button{min-height:38px;border:0;border-radius:10px;padding:6px 14px;background:transparent;color:var(--ink);font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.tabs button.on,.seg button.on{background:var(--acc);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.tabs{margin-bottom:12px}
+/* campos */
+.ed input:not([type=checkbox]):not([type=radio]),.ed select,.ed textarea,.fld{min-height:46px;border-radius:12px;padding:9px 12px;font-size:15px}
+.ed textarea{min-height:120px}
+.ed label{font-size:13px}
+input[type=checkbox],input[type=radio]{width:22px;height:22px;accent-color:var(--acc);flex:none;margin:0}
+.chk{min-height:42px;align-items:center;gap:10px;font-size:14px}
+table.lst th,table.lst td{padding:10px 8px}
+table.lst input:not([type=checkbox]),table.lst select{min-height:40px;border-radius:9px;font-size:15px}
+/* grelha de classificações: células maiores para o dedo */
+table.grid{font-size:14px}
+table.grid th,table.grid td{padding:4px 6px}
+table.grid thead th{height:34px;box-sizing:border-box}
+table.grid thead tr:nth-child(2) th{top:34px}
+table.grid thead tr:nth-child(3) th{top:68px}
+table.grid input{width:58px;height:40px;font-size:16px;border-radius:8px;border:1px solid var(--line)!important;background:var(--bg)!important}
+table.grid input:focus{border-color:var(--acc)!important;background:var(--field)!important;box-shadow:0 0 0 3px var(--acc2)}
+table.grid input.over{background:var(--bad)!important;color:#fff}
+table.grid input.txtin{background:transparent!important}
+table.grid input.txtin{height:38px}
+/* gaveta lateral como "sheet" */
+#drawer{width:min(780px,100vw);border-radius:20px 0 0 20px}
+#drawer .dwh{min-height:64px;padding:12px 18px}
+#drawer .dwb{padding:16px 20px 40px}
+.drop{border-radius:18px;padding:30px;font-size:15px}
+.pill{padding:2px 10px;font-size:12px}
+/* dica (tooltip que também funciona com toque) */
+.dica{position:relative;display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;color:var(--acc);cursor:pointer;outline:none}
+.dica:hover,.dica:focus{background:var(--acc2)}
+.dica-t{display:none;position:absolute;top:calc(100% + 6px);right:-8px;z-index:50;width:330px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:12px 14px;font-size:13px;line-height:1.7;text-align:left;font-weight:400}
+.dica:hover .dica-t,.dica:focus .dica-t,.dica:focus-within .dica-t{display:block}
+.cam{display:inline-block;background:var(--acc2);color:var(--acc);border-radius:7px;padding:0 7px;font-weight:600;white-space:nowrap}
+.cam-l{display:inline-block;margin-top:8px;font-size:13px;line-height:1.9}
+.ed input[type=checkbox],.ed input[type=radio],table.lst input[type=checkbox]{width:22px;height:22px;padding:0;min-height:0}
+.ed label.chk{display:flex;font-size:14px;color:var(--ink);margin:2px 0}
+#drawer h3{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin:18px 0 8px;font-weight:600}
+/* iPad em vertical / ecrãs estreitos: barra lateral só com ícones */
+@media (max-width:1100px){
+  #side{width:74px;padding:16px 10px;align-items:center}
+  #side .brand small,#side .grp,#side .ver,#side .lbl{display:none}
+  #side .brand{font-size:0;margin:0 0 8px}
+  #side .brand::before{content:'EG';font-size:17px;font-weight:800;color:var(--acc)}
+  #side button.nav{justify-content:center;width:52px;padding:0}
+  #side button.nav .ic{width:22px;height:22px}
+  #bar h1{flex-basis:100%;order:-1}
+  .bars .b{grid-template-columns:120px 1fr 54px}
+}
+@media (pointer:coarse){
+  table.lst input:not([type=checkbox]),table.lst select{border-color:var(--line)}
+  .dica-t{width:300px}
+}
+

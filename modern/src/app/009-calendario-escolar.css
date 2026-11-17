@@ -1,0 +1,82 @@
+/* ---------- calendário escolar ---------- */
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;border:1px solid rgba(0,0,0,.12);flex:none}
+.sw.nao{background:var(--panel)}
+.cal-res{display:grid;gap:6px;font-size:14px;margin-top:12px}
+.cleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--mut)}
+.cleg>span{display:inline-flex;align-items:center}
+.cper{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:12px}
+.cp{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--panel)}
+.cp.on{border-color:var(--ok);box-shadow:inset 4px 0 0 var(--ok)}
+.cp.done{opacity:.75}
+.cpd{font-size:14px;margin:6px 0 8px}
+.pbar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:8px 0 6px}
+.pbar>span{display:block;height:100%;background:var(--acc);border-radius:99px}
+.cmeses{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:16px}
+.cmes{border:1px solid var(--line);border-radius:14px;padding:10px}
+.cmh{font-weight:700;margin:0 0 8px 2px}
+.cgr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cw{font-size:11px;color:var(--mut);text-align:center;padding-bottom:2px}
+.cd{position:relative;aspect-ratio:1/1;min-height:30px;border:0;border-radius:8px;background:transparent;color:var(--ink);font-size:13px;font-weight:600;padding:0;cursor:default;display:flex;align-items:center;justify-content:center}
+.cd.vz{visibility:hidden}
+.cd.t-nao{color:var(--mut);font-weight:400}
+.cd.t-nao.fds{background:rgba(128,128,128,.12)}
+.cd.hj{outline:3px solid var(--ink);outline-offset:-1px;z-index:1}
+.cd.pas{opacity:.55}
+.cd i{position:absolute;top:1px;right:3px;font-size:9px;font-style:normal;font-weight:800}
+.cmeses.ed .cd:not(.vz){cursor:pointer}
+.cmeses.ed .cd:active{transform:scale(.92)}
+.cpin{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 12px;padding:10px;border-radius:12px;background:var(--acc2)}
+.cpin button{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:99px;padding:6px 12px;min-height:38px;font-size:13px}
+.cpin button.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.lin.cev .hh{min-width:200px}
+.lin.cev.pas{opacity:.5}
+button.card.ccal{display:block;width:100%;text-align:left;color:var(--ink);font:inherit;cursor:pointer}
+@media print{.cmeses{grid-template-columns:repeat(4,1fr);gap:8px}.cd{min-height:20px;font-size:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sw{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+/* ---------- aulas previstas, detalhe do dia, horários importados ---------- */
+.tblw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.lst th.num,table.lst td.num{text-align:center;white-space:nowrap}
+table.prev td{vertical-align:middle;height:52px}
+table.prev td .sub{font-size:11.5px;color:var(--mut);font-weight:400;margin-top:2px}
+table.prev tr.clk{cursor:pointer}
+table.prev td.act{min-width:0;width:36px}
+table.prev td:first-child b{white-space:nowrap}
+table.prev tr.clk:active td{background:var(--acc2)}
+table.prev tfoot td{border-top:2px solid var(--line);padding-top:10px}
+.chev{display:inline-flex;transform:rotate(180deg);color:var(--mut)}
+.pvn{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(130px,100%),1fr));gap:10px}
+.pvn>div{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
+.pvn>div.on{border-color:var(--ok);box-shadow:inset 3px 0 0 var(--ok)}
+.pvn b{font-size:24px;line-height:1.1}
+.pvn span{font-size:12.5px}
+.pvp{border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 0 12px}
+.pvp.on{border-color:var(--ok)}
+.pvp .pvn{margin:10px 0}
+.pvd{display:flex;flex-wrap:wrap;gap:6px}
+.pvd .chip{min-height:30px;display:inline-flex;align-items:center}
+.pvl{margin-top:10px;font-size:13.5px}
+.pvx{display:grid;grid-template-columns:20px 130px 1fr auto;align-items:center;gap:6px;padding:5px 0;border-top:1px solid var(--line)}
+.diah{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.sw.lg{width:34px;height:34px;border-radius:10px;margin:0}
+.lin.off{opacity:.55}
+.lin.off b{text-decoration:line-through}
+.cpin.dd{background:none;padding:0;position:static;box-shadow:none}
+.hcards{grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:12px}
+.hcard{gap:8px;padding:12px 12px 12px 16px;justify-content:flex-start}
+.hch{display:flex;align-items:center;gap:8px;min-height:36px}
+.hch b{font-size:17px}
+.hcard .btn.ico{margin:0;align-self:center;width:40px;height:40px;min-height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.hcl{display:flex;flex-direction:column;gap:5px;font-size:13.5px;color:var(--mut)}
+.hcl span{display:flex;align-items:flex-start;gap:7px;line-height:1.35}
+.hcl .ic{flex:none;margin-top:2px}
+.cmeses.ed{touch-action:none;-webkit-user-select:none;user-select:none}
+.cmeses.ed .cd.pint{transform:scale(.9);box-shadow:0 0 0 2px var(--acc)}
+.cpin{position:sticky;top:-20px;z-index:6;box-shadow:0 4px 12px rgba(0,0,0,.08);flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.cpin::-webkit-scrollbar{display:none}
+.cpin button{flex:none;white-space:nowrap}
+.cpin.dd{flex-wrap:wrap;overflow:visible}
+.cd{width:100%;min-height:0;-webkit-tap-highlight-color:transparent}
+.cgr{gap:4px}
+.cmes{padding:12px;min-width:0}
+@media screen and (max-width:900px){.sheetwrap{overflow-x:auto;align-items:flex-start;-webkit-overflow-scrolling:touch}}
+

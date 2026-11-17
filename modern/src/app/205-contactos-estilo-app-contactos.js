@@ -1,0 +1,118 @@
+/* ===================== v0.989 · Contactos ao estilo da app Contactos do macOS: listas, cartão, edição no próprio cartão, vCard, duplicados ===================== */
+const CT_ROT=['telemóvel','trabalho','casa','escola','outro'];
+const ctListas=()=>{if(!Array.isArray(S.cfg.contListas))S.cfg.contListas=[];return S.cfg.contListas};
+const ctIni=n=>{const p=String(n||'').trim().split(/\s+/);return ((p[0]||'?')[0]+(p.length>1?p[p.length-1][0]:'')).toUpperCase()};
+const ctCor=n=>{let h=0;for(const ch of String(n||''))h=(h*31+ch.charCodeAt(0))%360;return `hsl(${h} 42% 46%)`};
+const ctApelido=n=>{const p=String(n||'').trim().split(/\s+/);return p.length>1?p[p.length-1]:(p[0]||'')};
+const ctOrd=()=>S.cfg.contOrd==='apelido'?'apelido':'nome';
+const ctChave=c=>ctOrd()==='apelido'?ctApelido(c.nome)+' '+c.nome:String(c.nome||'');
+const ctAv=(c,s)=>c.foto?`<img class="cmav" src="${c.foto}" alt="" style="width:${s}px;height:${s}px">`:`<span class="cmav" style="width:${s}px;height:${s}px;font-size:${Math.round(s*.38)}px;background:${ctCor(c.nome)}" aria-hidden="true">${esc(ctIni(c.nome))}</span>`;
+const ctTels=c=>[...(c.tel?[{r:c.telR||'telemóvel',v:c.tel}]:[]),...(c.tels||[])];
+const ctMails=c=>[...(c.email?[{r:c.emailR||'trabalho',v:c.email}]:[]),...(c.emails||[])];
+const ctNaLista=(c,k)=>k==='todos'||(k==='dt'&&contDTs(c.nome).length>0)||(k.startsWith('a:')&&c.ano===k.slice(2))||(k.startsWith('g:')&&(c.grupo||'')===k.slice(2))||(k.startsWith('l:')&&(c.listas||[]).includes(k.slice(2)));
+function ctFiltra(){const k=UI.ctLst||'todos',q=contNorm(UI.ctQ||''),qd=String(UI.ctQ||'').replace(/\D/g,'');
+  return contL().filter(c=>ctNaLista(c,k)&&((!q&&!qd)||(q&&contNorm([c.nome,c.grupo,c.org,c.cargo,c.notas,...ctMails(c).map(m=>m.v)].join(' ')).includes(q))||(qd.length>2&&ctTels(c).some(m=>String(m.v).replace(/\D/g,'').includes(qd))))).sort((x,y)=>ctChave(x).localeCompare(ctChave(y),'pt'))}
+/* junta b em a: preenche o que falta e acrescenta telefones, e-mails e listas que a ainda não tem */
+function ctFundir(a,b){['email','emailR','tel','telR','org','grupo','cargo','morada','aniv','foto','ano'].forEach(k=>{if(!a[k]&&b[k])a[k]=b[k]});if(b.notas&&b.notas!==a.notas)a.notas=[a.notas,b.notas].filter(Boolean).join('\n');
+  const jm=new Set(ctMails(a).map(m=>m.v));a.emails=a.emails||[];ctMails(b).forEach(m=>{if(!jm.has(m.v)){jm.add(m.v);a.emails.push({r:m.r,v:m.v})}});
+  const tn=v=>String(v).replace(/\D/g,'');const jt=new Set(ctTels(a).map(m=>tn(m.v)));a.tels=a.tels||[];ctTels(b).forEach(m=>{if(!jt.has(tn(m.v))){jt.add(tn(m.v));a.tels.push({r:m.r,v:m.v})}});
+  a.listas=[...new Set([...(a.listas||[]),...(b.listas||[])])];return a}
+function ctDuplicados(){const L=contL();const igual=(z,c)=>(z.ano||'')===(c.ano||'')&&(contNorm(z.nome)===contNorm(c.nome)||(!!c.email&&z.email===c.email));
+  const vis=[],dup=[];L.forEach(c=>{const e=vis.find(z=>igual(z,c));if(e)dup.push([e,c]);else vis.push(c)});
+  if(!dup.length)return toast('Não há contactos duplicados','ok');
+  if(!confirm(dup.length+' contacto'+(dup.length>1?'s duplicados':' duplicado')+' (mesmo nome ou mesmo e-mail, no mesmo ano letivo).\nJuntar num só cartão, mantendo todos os telefones, e-mails e notas?'))return;
+  const fora=new Set();dup.forEach(([e,c])=>{ctFundir(e,c);fora.add(c)});S.contactos=L.filter(c=>!fora.has(c));save();audit('Contactos','Duplicados juntos',dup.length+' cartões');toast(dup.length+' duplicado'+(dup.length>1?'s juntos':' junto'),'ok');vContactos()}
+/* vCard 3.0 — o formato que a app Contactos do macOS, do iPhone e o Outlook exportam e importam */
+function ctVcf(L){const e=s=>String(s||'').replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/([,;])/g,'\\$1');
+  return L.map(c=>{const p=String(c.nome||'').trim().split(/\s+/);const ap=p.length>1?p.pop():'';return ['BEGIN:VCARD','VERSION:3.0','FN:'+e(c.nome),'N:'+e(ap)+';'+e(p.join(' '))+';;;',...((c.org||c.grupo)?['ORG:'+e(c.org||'')+(c.grupo?';'+e(c.grupo):'')]:[]),...(c.cargo?['TITLE:'+e(c.cargo)]:[]),
+    ...ctMails(c).map(m=>'EMAIL;TYPE=INTERNET,'+(m.r==='casa'?'HOME':'WORK')+':'+e(m.v)),...ctTels(c).map(m=>'TEL;TYPE='+(m.r==='telemóvel'?'CELL':m.r==='casa'?'HOME':'WORK')+':'+e(m.v)),
+    ...(c.morada?['ADR;TYPE=WORK:;;'+e(c.morada)+';;;;']:[]),...(c.aniv?['BDAY:'+c.aniv]:[]),...(c.notas?['NOTE:'+e(c.notas)]:[]),'END:VCARD'].join('\r\n')}).join('\r\n')+'\r\n'}
+async function ctImportarVcf(f){let tx='';try{tx=await f.text()}catch(_){return toast('Não foi possível ler o ficheiro','erro')}
+  tx=tx.replace(/\r\n?/g,'\n').replace(/\n[ \t]/g,'');const u=s=>String(s||'').replace(/\\n/gi,'\n').replace(/\\([,;\\])/g,'$1').trim();const L=contL();let n=0,a=0;
+  tx.split(/BEGIN:VCARD/i).slice(1).forEach(b=>{const o={tels:[],emails:[]};b.split('\n').forEach(l=>{const i=l.indexOf(':');if(i<0)return;const k=l.slice(0,i).toUpperCase(),v=l.slice(i+1);const nm=k.split(';')[0].replace(/^ITEM\d+\./,'');const rot=/CELL|IPHONE/.test(k)?'telemóvel':/HOME/.test(k)?'casa':/WORK/.test(k)?'trabalho':'outro';
+      if(nm==='FN')o.nome=u(v);else if(nm==='N'&&!o.nome){const p=v.split(';').map(u);o.nome=[p[1],p[2],p[0]].filter(Boolean).join(' ')}
+      else if(nm==='EMAIL'){const e=u(v).toLowerCase();if(e)o.emails.push({r:rot==='telemóvel'?'outro':rot,v:e})}else if(nm==='TEL'){if(u(v))o.tels.push({r:rot,v:u(v)})}
+      else if(nm==='ORG'){const p=v.split(';').map(u);o.org=p[0]||'';if(p[1])o.grupo=p[1]}else if(nm==='TITLE')o.cargo=u(v);else if(nm==='ADR')o.morada=v.split(';').map(u).filter(Boolean).join(', ');
+      else if(nm==='BDAY'){const m=u(v).match(/(\d{4})-?(\d{2})-?(\d{2})/);if(m)o.aniv=m[1]+'-'+m[2]+'-'+m[3]}else if(nm==='NOTE')o.notas=u(v)});
+    if(!o.nome)return;const m0=o.emails.shift(),t0=o.tels.shift();const x={nome:o.nome.replace(/\s+/g,' '),email:m0?m0.v:'',emailR:m0?m0.r:'',tel:t0?t0.v:'',telR:t0?t0.r:'',emails:o.emails,tels:o.tels,org:o.org||'',grupo:o.grupo||'',cargo:o.cargo||'',morada:o.morada||'',aniv:o.aniv||'',notas:o.notas||'',ano:''};
+    const e=(x.email&&L.find(c=>c.email===x.email))||L.find(c=>contNorm(c.nome)===contNorm(x.nome));if(e){ctFundir(e,x);a++}else{L.push({id:uid(),...x});n++}});
+  if(!n&&!a)return toast('Não encontrei contactos neste ficheiro vCard','erro');
+  L.sort((x,y)=>x.nome.localeCompare(y.nome,'pt'));save();audit('Contactos','Importação de vCard',f.name+' · '+n+' novos, '+a+' atualizados');toast(n+' contacto'+(n!==1?'s':'')+' novo'+(n!==1?'s':'')+(a?' · '+a+' atualizado'+(a!==1?'s':''):''),'ok');if(VIEW==='contactos')vContactos()}
+function contEditar(c){if(c){UI.ctSel=c.id;UI.ctEd=true;if(!ctFiltra().includes(c)){UI.ctLst='todos';UI.ctQ=''}}else UI.ctEd='novo';UI.ctPane='cartao';if(VIEW!=='contactos')go('contactos');else vContactos()}
+function vContactos(){if(!contOn())return go('inicio');const L=contL(),LS=ctListas();if(UI.ctLst==null)UI.ctLst='todos';if(UI.ctLst.startsWith('l:')&&!LS.some(l=>'l:'+l.id===UI.ctLst))UI.ctLst='todos';
+  const anos=[...new Set(L.map(c=>c.ano).filter(Boolean))].sort().reverse(),grs=[...new Set(L.map(c=>c.grupo).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt'));
+  const V=ctFiltra();const novo=UI.ctEd==='novo';let sel=novo?null:(V.find(c=>c.id===UI.ctSel)||null);if(!sel&&!novo){UI.ctEd=false;sel=V[0]||null;UI.ctSel=sel?sel.id:null}
+  const ed=novo||!!(UI.ctEd&&sel);const k0=UI.ctLst;const c=novo?{nome:'',email:'',tel:'',ano:k0.startsWith('a:')?k0.slice(2):((A()||{}).nome||''),grupo:k0.startsWith('g:')?k0.slice(2):'',listas:k0.startsWith('l:')?[k0.slice(2)]:[]}:sel;
+  const st=($('#cm-list')||{}).scrollTop||0;let fotoTmp=c?c.foto||'':'';
+  const copia=(tx,msg)=>{try{navigator.clipboard.writeText(tx);toast(msg,'ok')}catch(_){toast('Não foi possível copiar','erro')}};
+  barBtns([{id:'ct-imp',t:ic('upload',15)+' Importar…',f:()=>$('#ct-f').click()},{id:'ct-exp',t:ic('download',15)+' Exportar vCard',f:()=>{if(!V.length)return toast('Sem contactos nesta lista','aviso');download('Contactos.vcf',ctVcf(V),'text/vcard');toast(V.length+' contacto'+(V.length>1?'s exportados':' exportado'),'ok')}},
+    {id:'ct-cp',t:ic('paste',15)+' Copiar E-mails',f:()=>{const E=[...new Set(V.map(x=>x.email).filter(Boolean))];if(!E.length)return toast('Sem e-mails','aviso');copia(E.join('; '),E.length+' e-mails copiados (separados por «;», prontos para o Outlook)')}},{id:'ct-dup',t:ic('merge',15)+' Duplicados',f:ctDuplicados}]);
+  const it=(k,i,n)=>`<button type="button" class="cmli${k0===k?' on':''}" data-cml="${esc(k)}">${ic(i,15)}<span>${esc(n)}</span><i>${L.filter(x=>ctNaLista(x,k)).length}</i></button>`;
+  const nomeH=x=>{const p=esc(x.nome||'Sem nome').split(' ');return p.length>1?p.slice(0,-1).join(' ')+' <b>'+p[p.length-1]+'</b>':'<b>'+p[0]+'</b>'};
+  const grupos={};V.forEach(x=>{const l=(normT(ctChave(x))[0]||'#').toUpperCase();(grupos[/[A-Z]/.test(l)?l:'#']=grupos[/[A-Z]/.test(l)?l:'#']||[]).push(x)});
+  const lin=(t,m)=>`<div class="cmer" data-t="${t}"><select aria-label="Etiqueta">${CT_ROT.map(r=>`<option ${r===m.r?'selected':''}>${r}</option>`).join('')}</select><input ${t==='tel'?'inputmode="tel" placeholder="Telefone"':'type="email" placeholder="E-mail"'} value="${esc(m.v||'')}" autocomplete="off"><button type="button" class="cmrm" title="Remover" aria-label="Remover">${ic('x',13)}</button></div>`;
+  const tl=v=>String(v).replace(/[^\d+]/g,'');const act=(i,l,h)=>h?`<a class="cmact" href="${esc(h)}"><span>${ic(i,17)}</span>${l}</a>`:`<span class="cmact off" aria-disabled="true"><span>${ic(i,17)}</span>${l}</span>`;
+  const cp=v=>`<button type="button" class="cmcp" data-cmcp="${esc(v)}" title="Copiar" aria-label="Copiar ${esc(v)}">${ic('paste',13)}</button>`;
+  let cartao='';
+  if(!c)cartao=`<div class="cmvz">${ic('users',34)}<p><b>${L.length?'Nenhum contacto corresponde':'Ainda sem contactos'}</b><br><span class="mut">${L.length?'Mude a pesquisa ou escolha outra lista.':'Importe o Excel da escola (colunas <b>Nome</b> e <b>Email</b>) ou um ficheiro vCard, ou crie um cartão novo.'}</span></p>${L.length?'':`<div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn pri" id="cm-imp2">${ic('upload',15)} Importar…</button><button class="btn" id="cm-add2">${ic('plus',15)} Novo Contacto</button></div>`}</div>`;
+  else if(ed)cartao=`<div class="cmhd ed"><label class="cmfoto" title="Escolher fotografia"><span id="ce-av">${ctAv({nome:c.nome||'?',foto:fotoTmp},104)}</span><em>${ic('camera',13)} Foto</em><input type="file" id="ce-foto" accept="image/*" hidden></label>${fotoTmp?`<button type="button" class="btn sm" id="ce-fx">Remover Foto</button>`:''}
+      <input id="ce-n" class="cmnome" placeholder="Nome completo" value="${esc(c.nome||'')}" autocomplete="off"><div class="cmer2"><input id="ce-c" placeholder="Cargo" value="${esc(c.cargo||'')}"><input id="ce-o" placeholder="Escola ou entidade" value="${esc(c.org||'')}"></div></div>
+    <div class="cmfe"><h4>Telefone</h4><div id="ce-tels">${ctTels(c).map(m=>lin('tel',m)).join('')}</div><button type="button" class="cmmais" data-cmadd="tel">${ic('plus',13)} adicionar telefone</button>
+      <h4>E-mail</h4><div id="ce-mails">${ctMails(c).map(m=>lin('mail',m)).join('')}</div><button type="button" class="cmmais" data-cmadd="mail">${ic('plus',13)} adicionar e-mail</button>
+      <h4>Escola</h4><div class="cmer2"><input id="ce-g" placeholder="Grupo / Departamento" value="${esc(c.grupo||'')}" list="ce-gl"><datalist id="ce-gl">${grs.map(g=>`<option value="${esc(g)}">`).join('')}</datalist><input id="ce-a" placeholder="Ano letivo" value="${esc(c.ano||'')}"></div>
+      <h4>Morada</h4><input id="ce-m" placeholder="Rua, código postal, localidade" value="${esc(c.morada||'')}"><h4>Aniversário</h4><input id="ce-b" type="date" value="${esc(c.aniv||'')}" style="max-width:200px">
+      <h4>Notas</h4><textarea id="ce-nt" rows="3" placeholder="Notas">${esc(c.notas||'')}</textarea>
+      ${LS.length?`<h4>Listas</h4><div class="cmchk">${LS.map(l=>`<label class="chk" style="margin:0"><input type="checkbox" data-cel="${l.id}" ${(c.listas||[]).includes(l.id)?'checked':''}> ${esc(l.nome)}</label>`).join('')}</div>`:''}</div>
+    <footer class="cmcf">${novo?'':`<button class="btn dng" id="ce-x">${ic('trash',14)} Apagar</button>`}<span class="sp1"></span><button class="btn" id="ce-c0">Cancelar</button><button class="btn pri" id="ce-ok">${ic('check',14)} OK</button></footer>`;
+  else{const dts=contDTs(c.nome),T_=ctTels(c),M_=ctMails(c),sub=[c.cargo,c.org,c.grupo].filter(Boolean).join(' · ');const ls=LS.filter(l=>(c.listas||[]).includes(l.id));const F=[];
+    T_.forEach(m=>F.push([m.r,`<a href="tel:${esc(tl(m.v))}">${esc(m.v)}</a>${cp(m.v)}`]));M_.forEach(m=>F.push([m.r,`<a href="mailto:${esc(m.v)}">${esc(m.v)}</a>${cp(m.v)}`]));
+    if(dts.length)F.push(['direção de turma',dts.map(n=>`<span class="tag dt">${ic('crown',11)} DT ${esc(n)}</span>`).join(' ')]);if(c.grupo)F.push(['departamento',esc(c.grupo)]);if(c.ano)F.push(['ano letivo',esc(c.ano)]);
+    if(c.morada)F.push(['morada',`<a href="https://maps.apple.com/?q=${encodeURIComponent(c.morada)}" target="_blank" rel="noopener">${esc(c.morada)}</a>`]);if(c.aniv)F.push(['aniversário',esc(fmtIso(c.aniv))]);if(c.notas)F.push(['notas',`<span class="cmnt">${esc(c.notas)}</span>`]);if(ls.length)F.push(['listas',ls.map(l=>`<span class="tag">${esc(l.nome)}</span>`).join(' ')]);
+    cartao=`<div class="cmhd">${ctAv(c,104)}<h2>${esc(c.nome)}</h2>${sub?`<p>${esc(sub)}</p>`:''}<div class="cmacts">${act('chat','mensagem',T_[0]?'sms:'+tl(T_[0].v):'')}${act('phone','ligar',T_[0]?'tel:'+tl(T_[0].v):'')}${act('mail','e-mail',M_[0]?'mailto:'+M_[0].v:'')}</div></div>
+    ${F.length?`<dl class="cmfl">${F.map(([r,h])=>`<dt>${esc(r)}</dt><dd>${h}</dd>`).join('')}</dl>`:`<p class="mut" style="text-align:center;margin:18px 0">Cartão sem informação. Toque em «Editar».</p>`}
+    <footer class="cmcf"><button class="btn cmbk" id="cm-bk">${ic('back',14)} Contactos</button><span class="sp1"></span><button class="btn" id="cm-sh" title="Guardar este cartão como vCard">${ic('download',14)} Partilhar</button><button class="btn pri" id="cm-ed">${ic('pencil',14)} Editar</button></footer>`}
+  const lstAt=k0.startsWith('l:')?LS.find(l=>'l:'+l.id===k0):null;
+  $('#view').innerHTML=`<input type="file" id="ct-f" accept=".xlsx,.vcf,.vcard,text/vcard" hidden>
+  <div class="cmw${UI.ctPane==='cartao'||ed?' pc':''}" id="cm-w">
+    <nav class="cmsb" aria-label="Listas de contactos">${it('todos','users','Todos os Contactos')}
+      ${(anos.length>1||L.some(x=>contDTs(x.nome).length))?`<h4>Listas Inteligentes</h4>${L.some(x=>contDTs(x.nome).length)?it('dt','crown','Diretores de Turma'):''}${anos.length>1?anos.map(a=>it('a:'+a,'calendar',a)).join(''):''}`:''}
+      ${grs.length?`<h4>Departamentos</h4>${grs.map(g=>it('g:'+g,'building',g)).join('')}`:''}
+      <h4>Listas<button type="button" id="cm-nl" title="Nova lista" aria-label="Nova lista">${ic('plus',13)}</button></h4>${LS.map(l=>it('l:'+l.id,'list',l.nome)).join('')||'<p class="cmsbv">Crie listas e arraste contactos para elas.</p>'}
+      ${lstAt?`<div class="cmlops"><button type="button" class="btn sm" id="cm-lr">${ic('pencil',12)} Mudar Nome</button><button type="button" class="btn sm dng" id="cm-lx">${ic('trash',12)} Apagar Lista</button></div>`:''}</nav>
+    <section class="cmls" aria-label="Contactos"><div class="cmsr"><input id="ct-q" type="search" placeholder="Procurar" value="${esc(UI.ctQ||'')}" aria-label="Procurar contactos"></div>
+      <div class="cmlist" id="cm-list" role="listbox" tabindex="0" aria-label="Lista de contactos">${V.length?Object.keys(grupos).sort((x,y)=>x==='#'?1:y==='#'?-1:x.localeCompare(y,'pt')).map(l=>`<h5>${l}</h5>${grupos[l].map(x=>`<button type="button" role="option" draggable="true" class="cmrow${sel&&x.id===sel.id&&!novo?' on':''}" aria-selected="${!!(sel&&x.id===sel.id&&!novo)}" data-cmc="${x.id}">${ctAv(x,28)}<span>${nomeH(x)}</span>${contDTs(x.nome).length?ic('crown',12):''}</button>`).join('')}`).join(''):'<p class="cmsbv" style="padding:18px">Sem contactos.</p>'}</div>
+      <footer class="cmft"><button type="button" id="cm-add" title="Novo contacto" aria-label="Novo contacto">${ic('plus',16)}</button><span>${V.length} contacto${V.length===1?'':'s'}</span><select id="cm-ord" aria-label="Ordenar por" title="Ordenar por"><option value="nome" ${ctOrd()==='nome'?'selected':''}>Nome</option><option value="apelido" ${ctOrd()==='apelido'?'selected':''}>Apelido</option></select></footer></section>
+    <section class="cmcard" id="cm-card" aria-label="Cartão do contacto">${cartao}</section></div>`;
+  const W=$('#cm-w');try{W.style.setProperty('--cmh','max(460px,calc(100dvh - '+(Math.round(W.getBoundingClientRect().top+(window.scrollY||0))+20)+'px))')}catch(_){}
+  const lst=$('#cm-list');lst.scrollTop=st;const ron=lst.querySelector('.cmrow.on');if(ron&&vContactos._ver){vContactos._ver=false;try{ron.scrollIntoView({block:'nearest'})}catch(_){}}
+  $('#ct-f').onchange=e=>{const f=e.target.files[0];if(f)(/\.(vcf|vcard)$/i.test(f.name)?ctImportarVcf:contImportar)(f);e.target.value=''};
+  const novoC=()=>{UI.ctEd='novo';UI.ctPane='cartao';vContactos();const n=$('#ce-n');if(n)n.focus()};$('#cm-add').onclick=novoC;const a2=$('#cm-add2');if(a2)a2.onclick=novoC;const i2=$('#cm-imp2');if(i2)i2.onclick=()=>$('#ct-f').click();
+  const qi=$('#ct-q');qi.oninput=()=>{UI.ctQ=qi.value;clearTimeout(vContactos._t);vContactos._t=setTimeout(()=>{UI.ctEd=false;UI.ctPane='lista';vContactos();const z=$('#ct-q');if(z){z.focus();try{z.setSelectionRange(z.value.length,z.value.length)}catch(_){}}},220)};
+  $('#cm-ord').onchange=e=>{S.cfg.contOrd=e.target.value;save();vContactos()};
+  const escolhe=(id,foco)=>{UI.ctSel=id;UI.ctEd=false;vContactos._ver=true;vContactos();if(foco){const z=$('#cm-list');if(z)z.focus()}};
+  $$('#cm-w [data-cml]').forEach(b=>{b.onclick=()=>{UI.ctLst=b.dataset.cml;UI.ctEd=false;UI.ctPane='lista';vContactos()};
+    if(b.dataset.cml.startsWith('l:')){b.ondragover=e=>{e.preventDefault();b.classList.add('drop')};b.ondragleave=()=>b.classList.remove('drop');b.ondrop=e=>{e.preventDefault();const x=contL().find(z=>z.id===e.dataTransfer.getData('text/plain'));const id=b.dataset.cml.slice(2);if(!x)return;x.listas=x.listas||[];if(x.listas.includes(id))return toast('Já está nesta lista','aviso');x.listas.push(id);save();toast('Adicionado à lista','ok');vContactos()}}});
+  $$('#cm-w [data-cmc]').forEach(b=>{b.onclick=()=>{UI.ctPane='cartao';escolhe(b.dataset.cmc)};b.ondragstart=e=>{try{e.dataTransfer.setData('text/plain',b.dataset.cmc);e.dataTransfer.effectAllowed='copy'}catch(_){}}});
+  lst.onkeydown=e=>{if(e.key!=='ArrowDown'&&e.key!=='ArrowUp')return;e.preventDefault();if(!V.length)return;const i=V.findIndex(x=>sel&&x.id===sel.id);const j=Math.max(0,Math.min(V.length-1,i+(e.key==='ArrowDown'?1:-1)));if(j!==i)escolhe(V[j].id,true)};
+  $('#cm-nl').onclick=()=>{const n=(prompt('Nome da nova lista')||'').trim();if(!n)return;const l={id:uid(),nome:n};LS.push(l);save();UI.ctLst='l:'+l.id;UI.ctEd=false;vContactos()};
+  const lr=$('#cm-lr');if(lr)lr.onclick=()=>{const n=(prompt('Nome da lista',lstAt.nome)||'').trim();if(!n)return;lstAt.nome=n;save();vContactos()};
+  const lx=$('#cm-lx');if(lx)lx.onclick=()=>{if(!confirm('Apagar a lista «'+lstAt.nome+'»?\nOs contactos não são apagados.'))return;S.cfg.contListas=LS.filter(l=>l!==lstAt);contL().forEach(x=>{if(x.listas)x.listas=x.listas.filter(i=>i!==lstAt.id)});save();UI.ctLst='todos';vContactos()};
+  $$('#cm-card [data-cmcp]').forEach(b=>b.onclick=()=>copia(b.dataset.cmcp,'Copiado'));
+  const bk=$('#cm-bk');if(bk)bk.onclick=()=>{UI.ctPane='lista';vContactos()};const eb=$('#cm-ed');if(eb)eb.onclick=()=>{UI.ctEd=true;vContactos();const n=$('#ce-n');if(n)n.focus()};
+  const sh=$('#cm-sh');if(sh)sh.onclick=()=>download((c.nome||'Contacto')+'.vcf',ctVcf([c]),'text/vcard');
+  if(ed){const K=$('#cm-card');const ligaRm=()=>K.querySelectorAll('.cmrm').forEach(b=>b.onclick=()=>b.parentElement.remove());ligaRm();
+    K.querySelectorAll('[data-cmadd]').forEach(b=>b.onclick=()=>{const t=b.dataset.cmadd;const h=$(t==='tel'?'#ce-tels':'#ce-mails');h.insertAdjacentHTML('beforeend',lin(t,{r:t==='tel'?'telemóvel':'trabalho',v:''}));ligaRm();h.lastElementChild.querySelector('input').focus()});
+    $('#ce-foto').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{fotoTmp=await fotoDeFicheiro(f);$('#ce-av').innerHTML=ctAv({nome:$('#ce-n').value||'?',foto:fotoTmp},104)}catch(er){toast('Não foi possível ler a imagem','erro')}};
+    const fx=$('#ce-fx');if(fx)fx.onclick=()=>{fotoTmp='';$('#ce-av').innerHTML=ctAv({nome:$('#ce-n').value||'?'},104);fx.remove()};
+    $('#ce-c0').onclick=()=>{UI.ctEd=false;if(novo)UI.ctPane='lista';vContactos()};
+    const ex=$('#ce-x');if(ex)ex.onclick=()=>{if(!confirm('Apagar o cartão de '+c.nome+'?'))return;S.contactos=contL().filter(z=>z!==c);save();audit('Contactos','Contacto apagado',c.nome);UI.ctEd=false;UI.ctSel=null;UI.ctPane='lista';vContactos();toast('Contacto apagado','ok')};
+    const guarda=()=>{const nome=$('#ce-n').value.trim().replace(/\s+/g,' ');if(!nome)return toast('Falta o nome','erro');const le=t=>[...K.querySelectorAll('.cmer[data-t="'+t+'"]')].map(r=>({r:r.querySelector('select').value,v:r.querySelector('input').value.trim()})).filter(m=>m.v);
+      const TT=le('tel'),MM=le('mail').map(m=>({r:m.r,v:m.v.toLowerCase()}));const mau=MM.find(m=>!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m.v));if(mau)return toast('E-mail inválido: '+mau.v,'erro');
+      const o=novo?{id:uid()}:c;Object.assign(o,{nome,cargo:$('#ce-c').value.trim(),org:$('#ce-o').value.trim(),grupo:$('#ce-g').value.trim(),ano:$('#ce-a').value.trim(),morada:$('#ce-m').value.trim(),aniv:$('#ce-b').value||'',notas:$('#ce-nt').value.trim(),foto:fotoTmp||'',
+        tel:TT[0]?TT[0].v:'',telR:TT[0]?TT[0].r:'',tels:TT.slice(1),email:MM[0]?MM[0].v:'',emailR:MM[0]?MM[0].r:'',emails:MM.slice(1)});
+      if(LS.length)o.listas=[...K.querySelectorAll('[data-cel]')].filter(x=>x.checked).map(x=>x.dataset.cel);else if(novo)o.listas=c.listas||[];
+      if(novo)contL().push(o);contL().sort((x,y)=>x.nome.localeCompare(y.nome,'pt'));save();audit('Contactos',novo?'Contacto criado':'Contacto editado',nome);UI.ctEd=false;UI.ctSel=o.id;if(!ctFiltra().includes(o)){UI.ctLst='todos';UI.ctQ=''}vContactos._ver=true;vContactos();toast('Contacto guardado','ok')};
+    $('#ce-ok').onclick=guarda;K.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();$('#ce-c0').click()}else if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();guarda()}}}}
+{const _gCt=go;go=function(v){if(v==='contactos'&&!contOn())v='inicio';if(go._f&&go._f.contactos!==vContactos)go._f.contactos=vContactos;const r=_gCt.call(this,v);try{$$('[data-v="contactos"].nav').forEach(b=>{b.hidden=!contOn();const ic_=b.querySelector('[data-ico]');if(ic_&&!ic_.innerHTML.trim())ic_.innerHTML=ic('mail',18);b.onclick=b.onclick||(()=>go('contactos'))})}catch(_){}return r};go._f=_gCt._f;if(go._f)go._f.contactos=vContactos}
+{const _caC=cartaoAvisosDef,_baC=bindAvisosDef;cartaoAvisosDef=function(){let h=_caC.apply(this,arguments);return h.replace(/(<div class="card ed" id="def-mods">[\s\S]*?id="mod-sn"[\s\S]*?<\/label>)()/,`$1<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-cont" ${contOn()?'checked':''}> ${ic('mail',15)} <span><b>Contactos</b><br><span class="mut">Lista dos e-mails dos colegas (importada do Excel da escola), com o e-mail do Diretor de Turma por baixo do nome em cada turma.</span></span></label>$2`)};
+  bindAvisosDef=function(){_baC.apply(this,arguments);const m=$('#mod-cont');if(m)m.onchange=()=>{S.cfg.contOn=m.checked;save();toast(m.checked?'Contactos ligados':'Contactos desligados','ok');try{go(VIEW)}catch(_){}}}}

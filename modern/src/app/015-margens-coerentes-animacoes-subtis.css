@@ -1,0 +1,129 @@
+/* ===================== v0.24 — margens coerentes e animações subtis ===================== */
+/* escala de espaçamento */
+:root{--g1:4px;--g2:8px;--g3:12px;--g4:16px;--g5:20px;--g6:24px}
+#view{padding:var(--g6)}
+#bar{padding:12px var(--g6);row-gap:10px;column-gap:10px}
+.brk{flex-basis:100%;height:0;order:3}
+.ttlw{order:1;flex:1 1 auto}.barico{order:2}
+#bar .ctx{order:4}#barx{order:5;margin-left:auto}
+@media (max-width:700px){#view{padding:var(--g3)}#bar{padding:10px var(--g3)}#barx{margin-left:0}}
+.card{margin:0 auto var(--g4);padding:var(--g5) var(--g6)}
+.kpis{gap:var(--g3);margin:0 auto var(--g4)}
+.card h2{margin:0 0 var(--g3)}
+.card h3{margin:var(--g5) 0 var(--g2)}
+.card>.row:first-child h2,.card>.row h2[style*="margin:0"]{margin:0}
+.card>.row+.tblw,.card>.row+table,.card>.row+.gwrap,.card>.row+.mxw,.card>.row+.cmeses,.card>.row+.mtmeses,.card>.row+.pvn,.card>.row+.nlg{margin-top:var(--g3)}
+.card>.hint:first-of-type{margin-top:0}
+.card>p:last-child,.card>.hint:last-child{margin-bottom:0}
+.ed label{margin-bottom:6px}
+.ed .g2{gap:var(--g3) var(--g4)}
+.tabs,.seg{vertical-align:middle}
+.deftabs,#view>.tabs{display:flex;width:fit-content;max-width:100%;margin:0 auto var(--g4) 0}
+@container vw (min-width:1248px){.deftabs,#view>.tabs{margin-left:calc((100% - 1200px)/2)}}
+.mtside .card{padding:var(--g4) var(--g5)}
+.mtp-card .row{margin-bottom:var(--g1)}
+.lin{margin:var(--g2) 0}
+.lin:first-child{margin-top:0}
+.tcards{gap:var(--g4)}
+.dimg{gap:var(--g3)}
+.cal-res{margin-top:var(--g4)}
+.alert{margin:var(--g3) 0}
+.card>.alert:first-child{margin-top:0}
+@media (max-width:700px){.card{padding:var(--g4)}.kpis{gap:var(--g2)}}
+body.compacto .card{padding:var(--g3) var(--g4);margin-bottom:var(--g3)}body.compacto #view{padding:var(--g4)}
+/* ---------- animações ---------- */
+:root{--ease:cubic-bezier(.2,.75,.2,1);--spring:cubic-bezier(.2,.9,.25,1.06)}
+/* entrada em cascata dos elementos de grelhas e listas */
+@keyframes egUp{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+.kpis>*,.tcards>*,.dimg>*,.cper>*,.pvn>*,.nlg>*,.hcards>*,.mscards>*,.aigrid>*,.mtside>*,.prefs>*{animation:egUp .42s var(--ease) both}
+:is(.kpis,.tcards,.dimg,.cper,.pvn,.nlg,.hcards,.mscards,.aigrid,.mtside,.prefs)>*:nth-child(2){animation-delay:.04s}
+:is(.kpis,.tcards,.dimg,.cper,.pvn,.nlg,.hcards,.mscards,.aigrid,.mtside,.prefs)>*:nth-child(3){animation-delay:.08s}
+:is(.kpis,.tcards,.dimg,.cper,.pvn,.nlg,.hcards,.mscards,.aigrid,.mtside,.prefs)>*:nth-child(4){animation-delay:.12s}
+:is(.kpis,.tcards,.dimg,.cper,.pvn,.nlg,.hcards,.mscards,.aigrid,.mtside,.prefs)>*:nth-child(5){animation-delay:.16s}
+:is(.kpis,.tcards,.dimg,.cper,.pvn,.nlg,.hcards,.mscards,.aigrid,.mtside,.prefs)>*:nth-child(n+6){animation-delay:.2s}
+.mtmeses>.mtm,.cmeses>.cmes{animation:egUp .4s var(--ease) both}
+.mtmeses>.mtm:nth-child(2),.cmeses>.cmes:nth-child(2){animation-delay:.03s}.mtmeses>.mtm:nth-child(3),.cmeses>.cmes:nth-child(3){animation-delay:.06s}.mtmeses>.mtm:nth-child(n+4),.cmeses>.cmes:nth-child(n+4){animation-delay:.09s}
+/* anel e barras de progresso desenham-se */
+@keyframes anel{from{stroke-dashoffset:var(--c)}}
+.ring .rv{animation:anel 1.1s var(--ease) .1s both}
+@keyframes barra{from{width:0}}
+.pbar>span{animation:barra .9s var(--ease) .15s both}
+/* gaveta com véu e mola */
+#dwscrim{position:fixed;inset:0;z-index:39;background:rgba(8,10,14,.32);opacity:0;pointer-events:none;transition:opacity .25s var(--ease);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+body.dw-on #dwscrim{opacity:1;pointer-events:auto}
+#drawer{transition:transform .38s var(--spring),box-shadow .3s}
+#drawer.on .dwb>*{animation:egUp .35s var(--ease) both}#drawer.on .dwb>*:nth-child(2){animation-delay:.04s}#drawer.on .dwb>*:nth-child(n+3){animation-delay:.08s}
+/* botões, separadores e navegação */
+.btn{transition:transform .12s var(--ease),background-color .2s,border-color .2s,box-shadow .25s,color .2s}
+.btn:active{transform:scale(.96)}
+.btn.pri:hover{box-shadow:0 8px 20px -8px color-mix(in srgb,var(--acc) 80%,transparent);transform:translateY(-1px)}
+.tabs button,.seg button,.chip,.tema button{transition:background-color .22s var(--ease),color .22s,box-shadow .25s,transform .12s}
+.tabs button:active,.seg button:active,.chip:active{transform:scale(.96)}
+#side button.nav .ic{transition:transform .2s var(--ease)}
+@media (hover:hover){#side button.nav:hover .ic{transform:translateX(2px)}}
+#side button.nav.on .ic{animation:navpop .35s var(--spring)}
+@keyframes navpop{40%{transform:scale(1.18)}}
+/* estado "Guardado": pequeno salto do visto */
+.savest.ok .ic{animation:navpop .4s var(--spring)}
+/* hoje: pulsação suave, uma vez */
+@keyframes pulso{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 55%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+.cd.hj,.mtc.hj,table.hor td.agora{animation:pulso 1.6s ease-out .5s 2}
+.dimp.perto .dimd{animation:pulso 1.8s ease-out .6s 2}
+/* calendário: dias reagem ao toque e ao pintar */
+.cd,.mtc{transition:transform .15s var(--ease),background-color .25s,box-shadow .2s}
+@media (hover:hover){.cmeses.ed .cd:hover,.mtc:hover{transform:scale(1.05);z-index:1}}
+.cd.pint{animation:navpop .3s var(--spring)}
+/* cartões tocáveis e linhas */
+.tcard,.dimp,.mti,.hcard,.cp,.nlr,.pqi,.lin{transition:transform .2s var(--ease),box-shadow .25s,border-color .2s,background-color .2s}
+.tcard:active,.mti:active,button.lin:active,.nlr.clk:active{transform:scale(.985)}
+/* realce ao entrar em foco nas células da grelha */
+table.grid input{transition:background-color .15s,box-shadow .2s,border-color .15s}
+/* aviso de "a guardar" com respiração */
+.savest.pend{animation:respira 1s ease-in-out infinite}@keyframes respira{50%{opacity:.5}}
+/* menu de contexto e dicas com escala */
+#cmenu{transition:opacity .16s var(--ease),transform .2s var(--spring)}
+/* detalhes que abrem */
+details[open]>*:not(summary){animation:egUp .3s var(--ease) both}
+.card>:not(.hint):not(.row)+.hint,.hobs+.hint,.logo-zona+.hint{margin-top:var(--g3)}
+.mtp-card .row+.mut{margin-top:6px}
+.row+.mut{margin-top:6px}
+/* barra numa só linha: título · ano letivo · turma · ações da secção · ícones à direita */
+#bar .brk{display:none}
+#bar{flex-wrap:wrap;align-items:center}
+.ttlw{order:1;flex:0 1 auto;min-width:0;margin-right:var(--g3)}
+#bar .ctx{order:2}
+#barx{order:3;margin-left:0}
+.barico{order:4;margin-left:auto}
+@media (max-width:700px){.ttlw{flex:1 1 auto}.barico{order:2}#bar .ctx{order:3}#barx{order:4}}
+@media (min-width:701px){#bar{flex-wrap:nowrap;column-gap:8px}.ttlw{flex:0 1 auto;min-width:90px;overflow:hidden}.ttlw #ttl,.ttlw #crumb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #bar .ctx,#barx,.barico{flex-shrink:0}#barx{flex-wrap:nowrap}.barico{column-gap:6px}}
+@media (min-width:701px){#bar .ctx select{max-width:230px}.ttlw{min-width:150px}
+ #bar.bar2{flex-wrap:wrap;row-gap:10px}#bar.bar2 #barx{order:5;flex-basis:100%;flex-wrap:wrap;justify-content:flex-start}}
+@media (min-width:701px) and (max-width:1439px){#bar .ctx{font-size:0;gap:0}#bar .ctx select{font-size:14px}
+ #bar .savest{font-size:0;gap:0}#bar .savest .ic{font-size:14px}#bar .ctx select{max-width:210px}}
+@media (min-width:701px){#bar .ctx{flex:0 1 auto}}
+@media (min-width:701px) and (max-width:1439px){.ttlw{max-width:270px}}
+@media (min-width:1440px){.ttlw{max-width:420px}}
+@media (min-width:701px){#bar.bar2{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;align-items:center;column-gap:8px;row-gap:10px}
+ #bar.bar2>#menuBtn,#bar.bar2>.brk{display:none}#bar.bar2 .ttlw{max-width:none}#bar.bar2 #barx{grid-column:1/-1;margin:0}
+ .ttlw #crumb{white-space:nowrap;overflow:hidden;flex-wrap:nowrap}}
+td[data-fi]{min-width:76px}
+/* seletor de tema cabe sempre na barra lateral */
+#side .tema{box-sizing:border-box;flex-shrink:0;width:auto;max-width:calc(100% - 8px)}
+#side .tema button span{overflow:hidden;text-overflow:ellipsis;min-width:0}
+#side .tema button{min-width:0;padding:0 6px;font-size:12.5px;gap:4px;white-space:nowrap}
+#side .tema button .ic{width:16px;height:16px;flex-shrink:0}
+/* ano letivo e turma encostados aos ícones da direita */
+@media (min-width:701px){#barx{order:2}#bar .ctx{order:3}#bar .ctx:first-of-type,#bar .brk+.ctx{margin-left:auto}.barico{order:4;margin-left:0}
+ #bar.bar2 .ctx:first-of-type,#bar.bar2 .brk+.ctx{margin-left:0}#bar.bar2 #barx{order:5}}
+@media (min-width:1101px),(max-width:700px){#side .tema button{flex:1 1 0}#side .tema button.on{flex:2 1 0}#side .tema button:not(.on) span{display:none}}
+/* escola na barra superior */
+.baresc{order:2;display:inline-flex;align-items:center;gap:10px;min-width:0;flex:0 1 auto;margin-left:var(--g3);padding:4px 14px 4px 4px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);font-size:13.5px;font-weight:600;min-height:42px;cursor:pointer;transition:box-shadow .25s,transform .12s}
+.baresc[hidden]{display:none}
+.baresc img,.baresc .besi{width:34px;height:34px;border-radius:50%;object-fit:contain;background:#fff;flex-shrink:0;border:1px solid var(--line)}
+.baresc .besi{display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 12%,var(--panel));color:var(--acc)}
+.baresc .besn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media (hover:hover){.baresc:hover{box-shadow:var(--sh1)}}.baresc:active{transform:scale(.97)}
+#bar.bar2 .baresc,body.apres .baresc{display:none}
+@media (max-width:700px){.baresc{display:none}}
+

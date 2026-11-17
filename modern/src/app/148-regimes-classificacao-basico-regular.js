@@ -1,0 +1,24 @@
+/* ===================== v0.40: regimes de classificação — Básico Regular vs Secundário / PROFIJ / Profissional ===================== */
+const REGIMES={basico:{nome:'Ensino Básico Regular',esc:'Percentagem nos testes · níveis 1 a 5 no final',men:'Com menções qualitativas',ic:'school'},sec20:{nome:'Secundário · PROFIJ · Profissional',esc:'0 a 20 valores nos testes e no final',men:'Sem menções qualitativas',ic:'award'}};
+const regimeDe=t=>isSec(t)?'sec20':'basico';
+const temMencoes=t=>!!t&&!isSec(t);
+const BANDAS20=['0–9','10–13','14–17','18–20'];
+/* nas escalas 0–20 não há menções: mantém-se só a banda numérica (para cores e distribuições) */
+{const _mc=mencao;mencao=function(t,f){if(!t||temMencoes(t))return _mc.apply(this,arguments);const p=pctCanon(t,f);if(p==null)return null;const i=p<50?0:p<70?1:p<90?2:3;return {i,nome:'',bandaNome:BANDAS20[i],banda:true}}}
+function classesDe(t){return temMencoes(t)?(t.mencoes||[]).map(m=>m.nome):BANDAS20.map(b=>b+' val.')}
+function blocoRegime(t,compacto){const r=regimeDe(t);return `<div class="rgw ${compacto?'cmp':''}" role="group" aria-label="Regime de classificação">${Object.entries(REGIMES).map(([k,R])=>`<div class="rg ${k===r?'on':''}" aria-current="${k===r}">${ic(R.ic,18)}<div><b>${R.nome}</b><small>${R.esc}</small><small class="rgm">${k==='basico'?ic('check',11):ic('x',11)} ${R.men}</small></div>${k===r?'<span class="rgk">'+ic('check',14)+'</span>':''}</div>`).join('')}</div>`}
+/* menções: esconder pills e colunas quando o regime não tem menções */
+{const _vcR=vCriterios;vCriterios=function(){const r=_vcR.apply(this,arguments);try{const t=T();if(!t)return r;const ec=$('#esc-card');if(ec&&!ec.querySelector('.rgw'))ec.querySelector('.hint').insertAdjacentHTML('afterend',blocoRegime(t));
+  const mc=[...$$('#view .card')].find(c=>/Menções qualitativas/.test((c.querySelector('h2')||{}).textContent||''));if(mc&&!temMencoes(t)){mc.innerHTML=`<h2>Menções qualitativas</h2><p class="mut" style="margin:6px 0 0">${ic('info',14)} No <b>${REGIMES.sec20.nome}</b> a classificação é de <b>0 a 20 valores</b>, sem menções qualitativas. As menções só se aplicam ao Ensino Básico Regular.</p>`}}catch(e){console.warn(e)}return r};if(go._f)go._f.criterios=vCriterios}
+function esconderColMencao(){const t=T();if(!t||temMencoes(t))return;$$('#view table, #dw-b table').forEach(tb=>{const heads=[...tb.querySelectorAll('thead th')].filter(th=>/^Menç(ão|ões)$/.test(th.textContent.trim()));if(!heads.length)return;
+  const rows=[...tb.rows];const grid=[];rows.forEach((tr,ri)=>{grid[ri]=grid[ri]||[];let c=0;[...tr.cells].forEach(cell=>{while(grid[ri][c])c++;const cs=cell.colSpan||1,rs=cell.rowSpan||1;for(let y=0;y<rs;y++){grid[ri+y]=grid[ri+y]||[];for(let x=0;x<cs;x++)grid[ri+y][c+x]=cell}cell.dataset.cx=c;c+=cs})});
+  heads.forEach(th=>{const cx=+th.dataset.cx;rows.forEach((tr,ri)=>{const cell=grid[ri]&&grid[ri][cx];if(cell&&(cell.colSpan||1)===1)cell.classList.add('semmen')})})})}
+{let _em=0;new MutationObserver(()=>{cancelAnimationFrame(_em);_em=requestAnimationFrame(()=>{try{esconderColMencao()}catch(_){}})}).observe(document.body,{childList:true,subtree:true})}
+/* nova turma: indicador do regime em direto */
+{const _nt=novaTurmaDlg;novaTurmaDlg=function(){const r=_nt.apply(this,arguments);try{const upd=()=>{const of=($('#nt-of .on')||{}).dataset;const an=$('#nt-ano')&&$('#nt-ano').value;if(!an)return;const dk=$('#nt-disc')&&$('#nt-disc').value;const dc=dk&&dk!=='__outra'?discCic(dk):'';const fake={ciclo:dc==='sec'?'sec':cicloDoAno(an),oferta:dc==='profij'?'profij':(of&&of.of||'regular')};let box=$('#nt-rg');const w=$('#nt-ofw');if(!w)return;if(!box){w.insertAdjacentHTML('afterend','<div id="nt-rg"></div>');box=$('#nt-rg')}box.innerHTML=`<label style="margin-top:10px">Regime de classificação (definido pelo ano e pela oferta)</label>`+blocoRegime(fake,true)};
+  upd();const d=$('#nt-ano'),ds=$('#nt-disc');
+  if(ds)ds.addEventListener('change',()=>{const c=ds.value!=='__outra'&&discCic(ds.value);if(c&&ANOS_ESC[c]&&d&&cicloDoAno(d.value)!==c){d.value=ANOS_ESC[c][0];d.dispatchEvent(new Event('change',{bubbles:true}));toast('Ano de escolaridade ajustado a '+ANOS_ESC[c][0]+' ('+(CICLOS[c]||c)+')','ok')}upd()});
+  if(d)d.addEventListener('change',()=>{const c=cicloDoAno(d.value);if(ds&&ds.value!=='__outra'&&discCic(ds.value)&&discCic(ds.value)!==c&&discCic(ds.value)!=='profij'){const op=[...ds.options].find(o=>o.value!=='__outra'&&discCic(o.value)===c&&discNome(o.value)===discNome(ds.value))||[...ds.options].find(o=>o.value!=='__outra'&&discCic(o.value)===c);if(op)ds.value=op.value}upd()});document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#nt-of'))setTimeout(upd,0)},true)}catch(e){console.warn(e)}return r}}
+/* barra da turma: etiqueta do regime */
+{const _ab=fillCtx;fillCtx=function(){const r=_ab.apply(this,arguments);try{const t=T();document.body.classList.toggle('rg-sec20',!!t&&!temMencoes(t))}catch(_){}return r}}
+

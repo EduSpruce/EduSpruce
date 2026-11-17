@@ -1,0 +1,132 @@
+/* ===== v0.935 · telemóvel e iPad (vertical e horizontal): UX, acessibilidade, ecrãs ===== */
+html .an-row,html .cpm-cal tbody tr{animation:none!important}
+/* barra de ações em baixo: rola na horizontal, nada fica fora de alcance */
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) #bar #barx{justify-content:flex-start!important;overflow-x:auto!important;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) #bar #barx::-webkit-scrollbar{display:none}
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) #bar #barx>*{flex:0 0 auto;scroll-snap-align:start}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar #barx{left:0!important;right:0!important;gap:8px!important;padding:8px 12px!important;background:color-mix(in srgb,var(--panel) 92%,transparent)!important;-webkit-backdrop-filter:saturate(180%) blur(16px)!important;backdrop-filter:saturate(180%) blur(16px)!important;border-top:1px solid var(--line)!important;box-shadow:0 -6px 18px -12px rgba(0,0,0,.25)}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar #barx .btn{box-shadow:none!important;min-height:40px!important;border-radius:999px!important;padding:0 14px!important;font-size:14px!important;white-space:nowrap}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar #barx .btn:not(.pri){background:var(--panel)!important;color:var(--ink)!important;border:1px solid var(--line)!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar #barx .dica{width:40px;height:40px;min-width:40px}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar #barx:empty{display:none!important}
+/* cabeçalho do telemóvel: mais leve e compacto */
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar{padding:calc(6px + env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left))!important;column-gap:8px!important;row-gap:6px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar .barico{gap:4px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar .barico .btn.ico,html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #menuBtn{width:44px!important;height:44px!important;min-height:44px!important;border-color:transparent!important;background:rgba(255,255,255,.1)!important;border-radius:12px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #bar .barico .btn.ico:active,html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #menuBtn:active{background:rgba(255,255,255,.22)!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #selTurma{min-height:44px!important;border-radius:12px!important}
+/* telemóvel: botão de notas rápidas acima da barra de ações */
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #nffab{width:48px!important;height:48px!important;right:max(12px,env(safe-area-inset-right))!important;bottom:calc(128px + env(safe-area-inset-bottom))!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm:not(:has(#bar #barx>*)) #nffab{bottom:calc(82px + env(safe-area-inset-bottom))!important}
+/* separadores em baixo: áreas seguras e indicação clara */
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #tabbar{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #tabbar button{min-height:52px;font-size:11.5px;font-weight:600}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #tabbar button.on{color:var(--acc)}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #tabbar button.on svg{transform:none}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm #tabbar button:focus-visible{outline:2px solid var(--acc);outline-offset:-4px;border-radius:12px}
+/* telemóvel na horizontal: a barra lateral compacta já navega — sem separadores em baixo e cabeçalho numa só linha */
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #tabbar{display:none!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar #barx{bottom:0!important;left:var(--railw,74px)!important;width:auto!important;right:0!important;padding-bottom:calc(8px + env(safe-area-inset-bottom))!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #view{padding:10px max(12px,env(safe-area-inset-right)) calc(76px + env(safe-area-inset-bottom)) 12px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #nffab{bottom:calc(70px + env(safe-area-inset-bottom))!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l:not(:has(#bar #barx>*)) #nffab{bottom:calc(14px + env(safe-area-inset-bottom))!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;padding-top:calc(4px + env(safe-area-inset-top))!important;padding-bottom:4px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar .ttlw{order:1;flex:1 1 auto!important;min-width:min(34%,220px)!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar #ttl{max-width:none!important;font-size:17px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar .ctx{order:2;flex:0 1 200px!important;min-width:120px}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar .barico{order:3;flex:0 0 auto}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar .barico .btn.ico{width:40px!important;height:40px!important;min-height:40px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #selTurma{min-height:40px!important;width:100%}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #menuBtn{display:none!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #side{overflow-y:auto;overscroll-behavior:contain;padding-bottom:env(safe-area-inset-bottom)}
+/* telemóvel: lista de alunos em cartões (sem colunas espremidas) */
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst,html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody{display:block!important;width:100%}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead tr{display:flex!important;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;margin-bottom:10px}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th{display:none!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th.c-fq{display:block!important;position:static!important;background:transparent!important;padding:0!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th.c-fq label{display:flex;align-items:center;gap:10px;color:#fff;font-weight:600}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th.c-fq label span{font-size:14px}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th.c-fq label span::after{content:" · assinalar todos"}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody tr{display:flex!important;flex-wrap:wrap;align-items:center;gap:10px 10px;padding:12px;margin:0 0 10px;border:1px solid var(--line);border-radius:16px;background:var(--panel)!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody tr.off{opacity:.7}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td{display:flex!important;align-items:center;gap:6px;padding:0!important;border:0!important;position:static!important;box-shadow:none!important;background:transparent!important;min-width:0;width:auto!important;height:auto}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.c-fq{order:0}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.c-ft{order:1}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.c-n{order:2;width:70px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.c-n input{width:100%;text-align:center}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.act{order:3;margin-left:auto}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.tdnome{order:4;flex:1 1 100%}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.tdnome .nmcell,html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.tdnome .nmw,html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.tdnome textarea{width:100%}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td.tdnome textarea{font-size:17px!important;font-weight:700;min-height:44px}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td[data-l]:not(.c-fq):not(.c-ft):not(.c-n):not(.tdnome):not(.act){order:5;flex:1 1 calc(50% - 5px);flex-direction:column;align-items:stretch;gap:4px}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td[data-l]:not(.c-fq):not(.c-ft):not(.c-n):not(.tdnome):not(.act)::before{content:attr(data-l);font-size:12px;font-weight:600;color:var(--mut)}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td:is(select,input){width:100%}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td select,html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst tbody td input:not([type=checkbox]){width:100%!important;max-width:none!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst .acts .lb{display:inline!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst .acts .btn{height:44px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst .acts .btn.ico{width:44px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm .card.wide:has(>div>table.alst)>div[style*="overflow"]{overflow:visible!important}
+/* iPad: alvos de toque confortáveis nas listas */
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad table.alst .acts .btn{height:44px!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad table.alst .acts .btn.ico{width:44px!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad table.alst td.c-fq input[type=checkbox]{width:26px!important;height:26px!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad table.alst td.c-fq{padding:0 8px!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar .barico .btn.ico{min-width:44px!important;min-height:44px!important}
+body:is(.dev-ipad,.dev-tlm) .seg button,body:is(.dev-ipad,.dev-tlm) .tabs button{min-height:44px}
+body:is(.dev-ipad,.dev-tlm) .chip{min-height:40px}
+/* iPad horizontal: aproveitar a largura (cartões do Início em duas colunas equilibradas) */
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad.ori-l #view{padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right))}
+/* texto mínimo legível e contraste em ecrãs tácteis */
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) :is(.hint,small,.mut){font-size:max(12.5px,1em)}
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) .mtc .mtrv,html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) .mtc .mtp{font-size:11.5px}
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) :focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 70%,#fff);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){body *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) input[type=checkbox]:not(.sw):not([role=switch]),html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) input[type=radio]{width:24px!important;height:24px!important;min-width:24px}
+html body:is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad):is(.dev-tlm,.dev-ipad) :is(#main,#drawer,dialog) :is(.tabs,.seg,.dseg) button:not(.xa):not(.xb):not(.xc):not(.xd):not(.xe){min-height:44px!important;height:auto!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead tr{background:var(--acc)}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th.c-fq label{min-height:40px}
+
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th.c-fq label{width:100%;padding:0 4px}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead th.c-fq label span{display:inline!important;color:#fff!important;position:static!important;width:auto!important;height:auto!important;clip:auto!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm table.alst thead tr{display:block!important;padding:6px 10px!important}
+html body.dev-tlm.dev-tlm.dev-tlm.dev-tlm.ori-l #bar #pqBtn~#undoBtn{display:none!important}
+
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad :is(#drawer,dialog,.ed,#bar,.pnal,.card>.row) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),select,textarea){font-size:16px!important}
+
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad table.alst td.act,html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad table.alst thead th:last-child{position:static!important;box-shadow:none!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad .card.wide:has(>div>table.alst)>div[style*="overflow"]{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+html body table.alst td.act{width:1%!important;min-width:max-content!important;white-space:nowrap!important}
+html body table.alst td.act .acts{flex-wrap:nowrap!important;width:max-content}
+
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx[style*=fixed],html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx{max-width:none!important;box-sizing:border-box!important}
+@media (pointer:coarse){html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx{width:auto!important;right:0!important}}
+
+/* v0.936 · iPad: barra de ações clara, igual à do telemóvel */
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx{gap:8px!important;padding:8px 14px calc(8px + env(safe-area-inset-bottom))!important;background:color-mix(in srgb,var(--panel) 92%,transparent)!important;-webkit-backdrop-filter:saturate(180%) blur(16px)!important;backdrop-filter:saturate(180%) blur(16px)!important;border-top:1px solid var(--line)!important;box-shadow:0 -6px 18px -12px rgba(0,0,0,.25)!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx .btn{box-shadow:none!important;min-height:44px!important;border-radius:999px!important;padding:0 16px!important;font-size:15px!important;white-space:nowrap;border-right-width:1px!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx .btn:not(.pri){background:var(--panel)!important;color:var(--ink)!important;border:1px solid var(--line)!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx .btn:not(.pri) svg{color:var(--acc)}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx .btn:not(.pri):active{background:color-mix(in srgb,var(--acc) 10%,var(--panel))!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx .dica{width:44px;height:44px;min-width:44px;border-radius:50%!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx:empty{display:none!important}
+
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad:has(#barx>*) #nffab{bottom:calc(84px + env(safe-area-inset-bottom))!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx{padding-right:max(14px,env(safe-area-inset-right))!important}
+
+html body:is(.dev-ipad,.dev-tlm):is(.dev-ipad,.dev-tlm):is(.dev-ipad,.dev-tlm):is(.dev-ipad,.dev-tlm) #bar #barx{margin:0!important}
+html body.dev-ipad.dev-ipad.dev-ipad.dev-ipad #bar #barx{height:auto!important;min-height:0!important;max-height:none!important;align-items:center!important;bottom:0!important}
+
+/* v0.937 · sem animação de «desenhar» os ícones; boas-vindas legíveis no telemóvel */
+html .an-draw{animation:none!important;stroke-dasharray:none!important;stroke-dashoffset:0!important}
+@media (max-width:560px){dialog.ppm{padding:18px 16px;border-radius:18px;width:calc(100vw - 20px);max-width:none}
+  .ppmh h2{font-size:20px}.ppml{width:46px;height:46px}
+  .ppms li{flex-wrap:wrap;align-items:flex-start;gap:10px;padding:12px}.ppms li .ppmt{flex:1 1 calc(100% - 44px)}
+  .ppms li>.btn,.ppms li>.tag{margin-left:40px}.ppms li>.btn{min-height:44px;flex:1 1 auto;justify-content:center}}
+
+/* v0.937 · etiqueta «Bloqueado» */
+html body .hbtag{display:inline-flex!important;align-items:center;gap:5px;vertical-align:middle;margin-left:10px;padding:4px 10px 4px 8px!important;border-radius:999px!important;font-size:12px!important;font-weight:700;line-height:1;letter-spacing:.01em;text-transform:none;background:color-mix(in srgb,#f5b700 18%,var(--panel))!important;color:#7a5600!important;border:1px solid color-mix(in srgb,#c58f00 38%,transparent)!important}
+html body .hbtag svg{width:13px;height:13px;flex:none;color:inherit}
+html.dark body .hbtag,html[data-theme=dark] body .hbtag{color:#f3c64a!important}
+

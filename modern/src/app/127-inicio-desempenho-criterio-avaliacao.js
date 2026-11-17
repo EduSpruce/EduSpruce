@@ -1,0 +1,34 @@
+/* ===================== Início: desempenho por critério de avaliação ===================== */
+function estCriterios(t,per){const AL=alunosAval(t);const D=t.dominios||[];const lin=D.map(d=>({d,v:[],ant:[]}));const fin=[];
+  AL.forEach(al=>{const P=pctsFinal(t,al.id,per);lin.forEach(l=>{const x=P[l.d.id];if(x!=null)l.v.push({x,al})});const f=ponderada(t,P);if(f!=null)fin.push({f,al});
+    if(per>1){const Q=pctsPer(t,al.id,per-1);lin.forEach(l=>{const x=Q[l.d.id];if(x!=null)l.ant.push(x)})}});
+  const med=a=>a.length?a.reduce((s,b)=>s+b,0)/a.length:null;
+  lin.forEach(l=>{const xs=l.v.map(o=>o.x);l.m=med(xs);l.min=xs.length?Math.min(...xs):null;l.max=xs.length?Math.max(...xs):null;l.neg=xs.filter(x=>x<.495).length;l.top=xs.filter(x=>x>=.895).length;l.n=xs.length;l.ma=med(l.ant);
+    l.dp=xs.length>1?Math.sqrt(xs.reduce((s,x)=>s+(x-l.m)**2,0)/xs.length):0;l.fracos=l.v.filter(o=>o.x<.495).sort((a,b)=>a.x-b.x).map(o=>o.al)});
+  return {lin,fin,AL,mf:med(fin.map(o=>o.f)),pos:fin.filter(o=>o.f>=.495).length}}
+function widgetCriterios(){const a=A();if(!a)return '';const TF=turmasFiltradas(a).filter(t=>(t.dominios||[]).length&&t.instrumentos.some(i=>alunosAval(t).some(al=>instAvaliado(i,al.id))));if(!TF.length)return '';
+  UI.estC=UI.estC||{};let t=TF.find(x=>x.id===UI.estC.t)||TF.find(x=>x.id===S.turmaAtiva)||TF[0];const pmax=Math.max(1,...t.instrumentos.map(i=>+i.periodo||1));let per=Math.min(UI.estC.p||perAtual(t),pmax);
+  const sec=isSec(t);const V=f=>f==null?'—':sec?(f*20).toFixed(1).replace('.',','):Math.round(f*100)+'%';const cor=f=>f==null?'var(--mut)':f<.495?'#dc2626':f<.695?'#d97706':f<.895?'#2563eb':'#16a34a';
+  const E=estCriterios(t,per);const ok=E.lin.filter(l=>l.m!=null);if(!ok.length)return '';
+  const forte=ok.slice().sort((x,y)=>y.m-x.m)[0],fraco=ok.slice().sort((x,y)=>x.m-y.m)[0];const W=CAL()&&periodos().length===2?'S':'P';
+  const bins=sec?[[0,.245,'0–4'],[.245,.495,'5–9'],[.495,.695,'10–13'],[.695,.895,'14–17'],[.895,1.01,'18–20']]:[[0,.495,'<50'],[.495,.695,'50–69'],[.695,.895,'70–89'],[.895,1.01,'90+']];
+  const H=bins.map(([lo,hi,n])=>({n,c:E.fin.filter(o=>o.f>=lo&&o.f<hi).length,lo}));const hm=Math.max(1,...H.map(h=>h.c));
+  const pctP=E.fin.length?Math.round(E.pos/E.fin.length*100):0;
+  return `<div class="card estc" id="estc"><div class="row" style="gap:8px;margin-bottom:10px"><h2 style="margin:0;font-size:15px">${ic('chart',17)} Desempenho por Critério</h2><span class="sp1"></span>
+    <div class="estps" role="group" aria-label="Período">${Array.from({length:pmax},(_,i)=>`<button type="button" class="${i+1===per?'on':''}" data-estp="${i+1}" aria-pressed="${i+1===per}">${i+1}.º ${W}</button>`).join('')}</div></div>
+    ${TF.length>1?(()=>{const dup=n=>TF.filter(y=>y.nome===n).length>1;const lb=x=>esc(x.nome)+(dup(x.nome)?' · '+esc(discAbrev(x.disciplina)):'');return TF.length>3?`<div class="estsel">${anoBadge(t,'sm')}<select aria-label="Turma" data-estsel>${TF.map(x=>`<option value="${x.id}" ${x.id===t.id?'selected':''}>${esc(x.nome)} · ${esc(x.disciplina)}</option>`).join('')}</select></div><div hidden>${TF.map(x=>`<button type="button" data-estt="${x.id}"></button>`).join('')}</div>`:`<div class="estts" role="group" aria-label="Turma">${TF.map(x=>`<button type="button" class="${x.id===t.id?'on':''}" data-estt="${x.id}" aria-pressed="${x.id===t.id}">${anoBadge(x,'sm')}<span>${lb(x)}</span></button>`).join('')}</div>`})():''}
+    <div class="estk"><div class="estring" style="--p:${(E.mf||0)*100};--c:${cor(E.mf)}"><b>${V(E.mf)}</b><span>média</span></div>
+      <div class="estkk"><div><b>${E.pos}<small>/${E.fin.length}</small></b><span>positivas · ${pctP}%</span></div><div><b style="color:${domCor(t,forte.d)}">${esc(forte.d.ab||forte.d.nome)}</b><span>ponto forte</span></div><div><b style="color:${domCor(t,fraco.d)}">${esc(fraco.d.ab||fraco.d.nome)}</b><span>a reforçar</span></div></div></div>
+    <ul class="estl">${E.lin.map(l=>{const tr=l.ma!=null&&l.m!=null?l.m-l.ma:null;return `<li style="--dc:${domCor(t,l.d)}"><div class="estn"><span class="dcic">${icDom(l.d,14)}</span><span title="${esc(l.d.nome)}">${esc(l.d.nome)}</span><small>${+l.d.peso||0}%</small><span class="sp1"></span>${tr!=null&&Math.abs(tr)>=.01?`<em class="${tr>0?'up':'dn'}" title="Em relação ao ${per-1}.º ${W==='S'?'semestre':'período'}">${tr>0?'▲':'▼'} ${sec?Math.abs(tr*20).toFixed(1).replace('.',','):Math.round(Math.abs(tr)*100)}</em>`:''}<b class="estv" style="--vc:${cor(l.m)}">${V(l.m)}</b></div>
+      <div class="estb" title="Mínimo ${V(l.min)} · Máximo ${V(l.max)}"><i class="rg" style="left:${(l.min||0)*100}%;width:${((l.max||0)-(l.min||0))*100}%"></i><i class="mv" style="width:${(l.m||0)*100}%;background:${domCor(t,l.d)}"></i><i class="lim"></i></div>
+      <div class="estm"><span>${l.n} aval.</span>${l.neg?`<span class="neg" title="${esc(l.fracos.map(x=>x.nome).join(', '))}">${l.neg} negativa${l.neg>1?'s':''}</span>`:'<span class="okk">sem negativas</span>'}${l.top?`<span>${l.top} excelente${l.top>1?'s':''}</span>`:''}<span>dispersão ${sec?(l.dp*20).toFixed(1).replace('.',','):Math.round(l.dp*100)}</span></div></li>`}).join('')}</ul>
+    <div class="esth" aria-label="Distribuição das classificações">${H.map(h=>`<div title="${h.c} aluno(s) com ${h.n}"><i style="height:${Math.max(4,h.c/hm*100)}%;background:${cor(h.lo+.01)}"></i><b>${h.c}</b><span>${h.n}</span></div>`).join('')}</div>
+    ${fraco.neg?`<p class="estdica">${ic('sparkle',13)}<span><b>${esc(fraco.d.nome)}</b> é o critério mais fraco${fraco.neg?` — ${fraco.neg} aluno${fraco.neg>1?'s':''} abaixo de ${sec?'10':'50%'}`:''}. Vale a pena um instrumento ou uma atividade de recuperação focada aqui.</span></p>`:''}
+    <div class="row" style="gap:8px;margin-top:10px"><button class="btn sm" type="button" data-estgo="avaliacao">${ic('grad',14)} Avaliação</button><button class="btn sm" type="button" data-estgo="instrumentos">${ic('file',14)} Instrumentos</button></div></div>`}
+function bindCriterios(){const c=$('#estc');if(!c)return;const re=()=>{const d=document.createElement('div');d.innerHTML=widgetCriterios();const n=d.firstElementChild;if(n){$('#estc').replaceWith(n);bindCriterios()}};
+  c.querySelectorAll('[data-estp]').forEach(b=>b.onclick=()=>{UI.estC={...(UI.estC||{}),p:+b.dataset.estp};re()});
+  c.querySelectorAll('[data-estt]').forEach(b=>b.onclick=()=>{UI.estC={t:b.dataset.estt};re()});
+  c.querySelectorAll('[data-estgo]').forEach(b=>b.onclick=()=>{const tt=(UI.estC||{}).t;if(tt&&tt!==S.turmaAtiva){S.turmaAtiva=tt;save()}go(b.dataset.estgo)})}
+{const _piE=posInicio;posInicio=function(){const r=_piE.apply(this,arguments);try{const cd=$('#view .cdown');const side=cd?cd.closest('.in-side')||cd.parentElement:$('.in-side');if(side&&!$('#estc')){const h=widgetCriterios();if(h){if(cd&&cd.parentElement===side)cd.insertAdjacentHTML('afterend',h);else side.insertAdjacentHTML('beforeend',h);bindCriterios()}}}catch(e){console.warn(e)}return r}}
+
+

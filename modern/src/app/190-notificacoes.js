@@ -1,0 +1,82 @@
+/* ---------- 4. Notificações ---------- */
+const NT_DEF={aulas:true,ante:5,sumario:true,resumo:true,resumoH:'07:45',testes:true,testesH:'18:00',urgentes:true,badge:true,silDe:'22:00',silAte:'07:30',fds:true};
+const ntCfg=()=>{S.cfg.notif=Object.assign({},NT_DEF,S.cfg.notif||{});return S.cfg.notif};
+let _ntSW=null;
+function ntRegistarSW(){if(_ntSW||!('serviceWorker' in navigator)||!/^https:/.test(location.protocol))return _ntSW;_ntSW=navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(e=>{console.warn('sw',e);return null});return _ntSW}
+ntRegistarSW();
+try{navigator.serviceWorker&&navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{};if(d.es==='ir'&&d.v)ntIr(d.v,d.t)})}catch(_){}
+function ntIr(v,tid){try{if(tid&&A()&&A().turmas.some(x=>x.id===tid)){S.turmaAtiva=tid;save()}go(v)}catch(_){}}
+{const q=new URLSearchParams(location.search);if(q.get('ir')){const v=q.get('ir'),t=q.get('t');history.replaceState(null,'',location.pathname);setTimeout(()=>{if(SESSAO)ntIr(v,t)},2500)}}
+const ntSuporta=()=>'Notification' in window;
+function ntEstado(){if(!/^https:/.test(location.protocol))return 'local';if(!ntSuporta())return nvIOS()&&!nvStandalone()?'instalar':'nao';return Notification.permission}
+async function ntMostrar(titulo,corpo,o){o=o||{};if(!ntSuporta()||Notification.permission!=='granted')return false;
+  const opt={body:corpo||'',tag:o.tag||('es-'+Date.now()),icon:'icons/icon-192.png',badge:'icons/icon-192.png',data:{v:o.v||'inicio',t:o.t||''},renotify:!!o.tag};
+  try{const r=await Promise.race([(ntRegistarSW()||Promise.resolve(null)),new Promise(ok=>setTimeout(()=>ok(null),4000))]);const reg=r&&(await Promise.race([navigator.serviceWorker.ready,new Promise(ok=>setTimeout(()=>ok(null),4000))]));if(reg&&reg.showNotification){await reg.showNotification(titulo,opt);return true}}catch(e){console.warn(e)}
+  try{const n=new Notification(titulo,opt);n.onclick=()=>{window.focus();ntIr(opt.data.v,opt.data.t);n.close()};return true}catch(_){return false}}
+/* os avisos que já existiam (reuniões, avisos urgentes) passam a usar o serviço de notificações (necessário no iPhone/iPad) */
+window.__ntNotif=function(t,o){o=o||{};if(!ntCfg().urgentes)return;ntMostrar(t,o.body,{tag:o.tag,v:/Reuni/.test(t)?'reunioes':'inicio'})};
+const ntMin=s=>{const [h,m]=String(s||'0:0').split(':').map(Number);return h*60+(m||0)};
+function ntSilencio(d){const c=ntCfg();const m=d.getHours()*60+d.getMinutes();const a=ntMin(c.silDe),b=ntMin(c.silAte);const sil=a>b?(m>=a||m<b):(m>=a&&m<b);return sil||(c.fds&&(d.getDay()===0||d.getDay()===6))}
+const ntEnv=()=>{try{return JSON.parse(localStorage.getItem('es.nt.env')||'{}')}catch(_){return {}}};
+function ntMarca(k){const E=ntEnv();E[k]=Date.now();const lim=Date.now()-4*864e5;Object.keys(E).forEach(x=>{if(E[x]<lim)delete E[x]});try{localStorage.setItem('es.nt.env',JSON.stringify(E))}catch(_){}}
+/* o que deve ser notificado agora (aulas, sumários em falta, resumo do dia, testes de amanhã) */
+function ntAgora(){const c=ntCfg();const a=A();if(!a)return [];const agora=new Date();const mins=agora.getHours()*60+agora.getMinutes();const hj=isoData(agora);const L=[];
+  let D=null;try{D=meuDiaDados(0)}catch(_){}
+  if(D){const AU=D.ev.filter(e=>e.tp==='aula'&&!e.falta);
+    if(c.aulas)AU.forEach(e=>{const ant=+c.ante||5;if(mins>=e.h-ant&&mins<e.h+2)L.push({k:'a:'+hj+':'+e.t.id+':'+e.h,t:(mins>=e.h?'A começar: ':'Daqui a '+(e.h-mins)+' min: ')+e.t.nome+' · '+e.t.disciplina,b:[fmtHM(e.h)+'–'+fmtHM(e.f),e.sala?'Sala '+e.sala:'',e.x.licao?'Lição '+e.x.licao:''].filter(Boolean).join(' · '),v:'sumarios',tid:e.t.id})});
+    if(c.sumario)AU.forEach(e=>{if(!e.sum&&mins>=e.f+2&&mins<e.f+90)L.push({k:'s:'+hj+':'+e.t.id+':'+e.h,t:'Sumário por escrever · '+e.t.nome,b:e.t.disciplina+' · aula das '+fmtHM(e.h)+(e.x.licao?' · Lição '+e.x.licao:''),v:'sumarios',tid:e.t.id})});
+    if(c.resumo&&mins>=ntMin(c.resumoH)&&mins<ntMin(c.resumoH)+120){const nA=AU.length,nR=D.ev.filter(e=>e.tp==='reun').length,nT=D.ev.filter(e=>e.tp==='tar').length,nV=D.ev.filter(e=>e.tp==='aval').length;
+      if(nA+nR+nT+nV){const pr=AU[0];L.push({k:'r:'+hj,t:'Hoje: '+[nA?nA+' aula'+(nA>1?'s':''):'',nR?nR+' reunião'+(nR>1?'ões':''):'',nV?nV+' avaliação'+(nV>1?'ões':''):'',nT?nT+' tarefa'+(nT>1?'s':''):''].filter(Boolean).join(' · '),b:pr?'Primeira aula às '+fmtHM(pr.h)+': '+pr.t.nome+' · '+pr.t.disciplina:'Bom dia!',v:'inicio'})}}}
+  if(c.testes&&mins>=ntMin(c.testesH)&&mins<ntMin(c.testesH)+180){const am=isoData(new Date(agora.getTime()+864e5));const T_=[];try{turmasFiltradas(a).forEach(t=>t.instrumentos.forEach(i=>{if(i.data===am)T_.push(i.nome+' · '+t.nome)}))}catch(_){}
+    if(T_.length)L.push({k:'t:'+am,t:'Amanhã: '+T_.length+' avaliação'+(T_.length>1?'ões':''),b:T_.slice(0,4).join('\n'),v:'testes'})}
+  return L}
+function ntBadge(){if(!ntCfg().badge||!navigator.setAppBadge)return;try{let n=0;try{n=avisosUrgentes().length}catch(_){}n?navigator.setAppBadge(n):navigator.clearAppBadge()}catch(_){}}
+function ntTick(){if(!SESSAO||document.body.classList.contains('login-on'))return;ntBadge();if(ntEstado()!=='granted')return;const agora=new Date();if(ntSilencio(agora))return;const E=ntEnv();
+  ntAgora().forEach(x=>{if(E[x.k])return;ntMarca(x.k);if(document.visibilityState==='visible'){toast(x.t,'ok');return}ntMostrar('EduSpruce — '+x.t,x.b,{tag:x.k,v:x.v,t:x.tid})})}
+setInterval(ntTick,30000);document.addEventListener('visibilitychange',()=>setTimeout(ntTick,800));setTimeout(ntTick,6000);
+/* lembretes para o Calendário (funcionam com a app fechada) */
+function ntICS(dias){dias=dias||45;const a=A();if(!a)return '';const hj=isoData(new Date());const lim=isoData(new Date(Date.now()+dias*864e5));const ev=[];const dt=(iso,hm)=>{const d=dataDeIso(iso);d.setHours(Math.floor(hm/60),hm%60,0,0);return d};
+  const add=(uid,ini,fim,t,desc,alarmes,loc)=>ev.push(['BEGIN:VEVENT','UID:'+uid+'@eduspruce.app','DTSTAMP:'+icsData(new Date()),'DTSTART:'+icsData(ini),'DTEND:'+icsData(fim),'SUMMARY:'+icsEsc(t),desc?'DESCRIPTION:'+icsEsc(desc):'',loc?'LOCATION:'+icsEsc(loc):'',...alarmes.map(m=>['BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc(t),'TRIGGER:-PT'+m+'M','END:VALARM'].join('\r\n')),'END:VEVENT'].filter(Boolean).join('\r\n'));
+  try{reunioes(a).filter(r=>reunAtiva(r)&&r.data>=hj&&r.data<=lim).forEach(r=>{const i=r.semHora?dt(r.data,540):dt(r.data,r.ini||540);const f=r.semHora?dt(r.data,600):dt(r.data,r.fim||(r.ini||540)+60);add('reun-'+r.id,i,f,reunTitulo(r,a),Array.isArray(r.ordem)?r.ordem.map((x,k)=>(k+1)+'. '+(typeof x==='string'?x:(x.t||x.texto||''))).join('\n'):'',(r.lembretes&&r.lembretes.length?r.lembretes:[60]).slice(0,3),r.local||r.link||'')})}catch(e){console.warn(e)}
+  try{turmasFiltradas(a).forEach(t=>t.instrumentos.filter(i=>i.data&&i.data>=hj&&i.data<=lim).forEach(i=>{const d=dt(i.data,480);add('inst-'+t.id+'-'+i.id,d,dt(i.data,490),i.nome+' · '+t.nome+' · '+t.disciplina,'Avaliação marcada na EduSpruce',[14*60],'')}))}catch(e){console.warn(e)}
+  try{tarefas().filter(x=>!x.feito&&x.prazo&&x.prazo>=hj&&x.prazo<=lim).forEach(x=>add('tar-'+x.id,dt(x.prazo,540),dt(x.prazo,555),'Tarefa: '+x.t,x.notas||'',[0],''))}catch(_){}
+  try{avisosM().filter(x=>!x.feito&&x.quando&&x.quando>=hj).forEach(x=>{const d=new Date(x.quando);add('avi-'+x.id,d,new Date(d.getTime()+6e5),'Aviso: '+x.t,x.txt||'',[0],'')})}catch(_){}
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//EduSpruce//Lembretes//PT','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:EduSpruce',...ev,'END:VCALENDAR'].join('\r\n')}
+function ntICSdl(){const t=ntICS(45);const n=(t.match(/BEGIN:VEVENT/g)||[]).length;if(!n)return toast('Não há reuniões, avaliações, tarefas ou avisos nos próximos 45 dias','aviso');download('EduSpruce-lembretes.ics',t,'text/calendar');toast(n+' lembrete(s) exportado(s) — abra o ficheiro para os juntar ao Calendário','ok')}
+async function ntAtivar(){if(!ntSuporta()){toast('Instale primeiro a app no ecrã principal','aviso');return}const p=await Notification.requestPermission();if(p==='granted'){ntRegistarSW();await ntMostrar('EduSpruce','As notificações estão ativas neste aparelho.',{tag:'es-ok'});toast('Notificações ativadas','ok')}else toast('As notificações não foram autorizadas','aviso');if(VIEW==='definicoes')vDefinicoes();if(VIEW==='inicio')go('inicio')}
+function ntPassos(){const e=ntEstado();const ios=nvIOS();
+  if(e==='granted')return `<div class="ntok">${ic('check',16)} <b>Ativas neste aparelho.</b> <span class="mut">Recebe avisos com a app aberta ou em segundo plano.</span></div>`;
+  if(e==='local')return `<div class="alert w">${ic('alert',14)} As notificações só funcionam com a app no seu endereço https (eduspruce.pt).</div>`;
+  if(e==='instalar')return `<ol class="ntst"><li>No Safari, toque em <b>Partilhar</b> (o quadrado com a seta) › <b>Adicionar ao ecrã principal</b>.</li><li>Abra a EduSpruce a partir do <b>ícone</b> no ecrã principal.</li><li>Volte aqui (Definições › Notificações) e toque em <b>Ativar Notificações</b>.</li></ol><p class="hint">No iPhone e no iPad, a Apple só permite notificações de apps web adicionadas ao ecrã principal (iOS 16.4 ou mais recente).</p>`;
+  if(e==='denied')return `<div class="alert w">${ic('alert',14)} As notificações estão bloqueadas. ${ios?'Abra <b>Ajustes › Notificações › EduSpruce</b> e ative «Permitir notificações».':'Nas definições do navegador, permita notificações para eduspruce.pt.'}</div>`;
+  if(e==='nao')return `<div class="alert w">${ic('alert',14)} Este navegador não suporta notificações. Use o Calendário (abaixo).</div>`;
+  return `<button class="btn pri" id="nt-on">${ic('bell',16)} Ativar Notificações</button>`}
+/* ícone de cada disciplina (bandeiras desenhadas para as línguas; símbolo para as restantes) */
+function discIc(n){const x=String(n||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');const fl=(inner)=>`<svg class="discfl" viewBox="0 0 30 20" width="24" height="16" aria-hidden="true">${inner}</svg>`;
+  if(/ingl/.test(x))return fl('<rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" stroke-width="1.6"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6.6"/><path d="M15 0v20M0 10h30" stroke="#C8102E" stroke-width="4"/>');
+  if(/franc/.test(x))return fl('<rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/>');
+  if(/espanh|castelh/.test(x))return fl('<rect width="30" height="20" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/>');
+  if(/alem/.test(x))return fl('<rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.33" width="30" height="6.67" fill="#FFCE00"/>');
+  if(/portugu|plnm/.test(x))return fl('<rect width="12" height="20" fill="#046A38"/><rect x="12" width="18" height="20" fill="#DA291C"/><circle cx="12" cy="10" r="3.6" fill="#FFE900"/>');
+  const M=[[/matem|macs/,'📐'],[/fisic|quimic|fq/,'⚗️'],[/biolog|geolog|ciencias nat|^cn/,'🧬'],[/cienc/,'🔬'],[/geograf/,'🌍'],[/histor|hgp/,'🏛️'],[/visual|desenh|arte|\bev\b/,'🎨'],[/music/,'🎵'],[/educacao fis|desport|\bef\b/,'⚽'],[/tic|inform|program|aplicac/,'💻'],[/filosof|psicol/,'🧠'],[/econom|gest|contab/,'💼'],[/cidadan|formacao civ/,'🤝'],[/moral|relig|emr/,'🕊️'],[/tecnol|\bet\b/,'🛠️'],[/teatro|drama|expressao/,'🎭']];
+  const m=M.find(([r])=>r.test(x));return `<span class="discem" aria-hidden="true">${m?m[1]:'📘'}</span>`}
+function defNotif(){const c=ntCfg();const tg=(k,l,s)=>`<label class="nvsw"><input type="checkbox" data-ntk="${k}" ${c[k]?'checked':''}><span class="nvswk" aria-hidden="true"></span><span><b>${l}</b><small>${s}</small></span></label>`;
+  return `<div class="card"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('bell',18)} Notificações Neste Aparelho</h2><span class="sp1"></span>${ntEstado()==='granted'?`<button class="btn sm" id="nt-test">${ic('bell',13)} Testar</button>`:''}</div><div style="margin-top:12px">${ntPassos()}</div></div>
+  <div class="card"><h2>${ic('sliders',18)} O Que Notificar</h2><div class="ntlist">
+    <div class="ntrow">${tg('aulas','Aula a começar','Antes de cada aula do seu horário')}<label class="ntsel">Antecedência <select id="nt-ante">${[0,5,10,15].map(m=>`<option value="${m}" ${+c.ante===m?'selected':''}>${m?m+' min':'à hora'}</option>`).join('')}</select></label></div>
+    <div class="ntrow">${tg('sumario','Sumário por escrever','Logo a seguir a uma aula sem sumário')}</div>
+    <div class="ntrow">${tg('resumo','Resumo do dia','Aulas, reuniões, avaliações e tarefas de hoje')}<label class="ntsel">Hora <input type="time" id="nt-rh" value="${esc(c.resumoH)}"></label></div>
+    <div class="ntrow">${tg('testes','Avaliações de amanhã','Testes, questões-aula e trabalhos marcados')}<label class="ntsel">Hora <input type="time" id="nt-th" value="${esc(c.testesH)}"></label></div>
+    <div class="ntrow">${tg('urgentes','Avisos urgentes e reuniões','Os lembretes de cada reunião e os avisos urgentes')}</div>
+    <div class="ntrow">${tg('badge','Número no ícone da app','Quantos avisos urgentes há por tratar')}</div></div></div>
+  <div class="card"><h2>${ic('moon',18)} Silêncio</h2><div class="row" style="gap:12px;flex-wrap:wrap"><label class="ntsel">Das <input type="time" id="nt-sd" value="${esc(c.silDe)}"></label><label class="ntsel">às <input type="time" id="nt-sa" value="${esc(c.silAte)}"></label>${tg('fds','Fins de semana em silêncio','Sábado e domingo sem notificações')}</div></div>
+  <div class="card"><h2>${ic('calendar',18)} Com a App Fechada</h2><p class="hint" style="margin:0 0 10px">O iPhone e o iPad suspendem as apps web quando são fechadas — e a EduSpruce não tem servidores com os seus dados para enviar avisos. Para não perder nada, junte os lembretes ao <b>Calendário</b>: reuniões (com os alarmes de cada uma), avaliações (na véspera às 18:00), tarefas e avisos dos próximos 45 dias. Volte a exportar quando marcar coisas novas.</p><button class="btn pri" id="nt-ics">${ic('calendar',15)} Juntar ao Calendário (.ics)</button></div>`}
+function bindNotif(){const c=ntCfg();const on=$('#nt-on');if(on)on.onclick=ntAtivar;const ts=$('#nt-test');if(ts)ts.onclick=()=>{toast('A enviar a notificação de teste…','ok');ntMostrar('EduSpruce — teste','Assim aparece uma notificação.',{tag:'es-teste-'+Date.now()}).then(ok=>{if(!ok){toast('O navegador não deixou mostrar a notificação. Verifique as autorizações de notificações deste site.','erro');return}const mac=/Mac/.test(navigator.platform||navigator.userAgent)&&!nvIOS(),win=/Win/.test(navigator.platform||'');toast('Notificação enviada. Não apareceu? '+(mac?'Veja em Definições do Sistema › Notificações › '+(/Edg\//.test(navigator.userAgent)?'Microsoft Edge':/Chrome\//.test(navigator.userAgent)?'Google Chrome':'Safari')+' (Permitir notificações) e se o modo Foco/Não incomodar está ligado.':win?'Veja em Definições do Windows › Sistema › Notificações (o navegador tem de estar autorizado) e se o «Não incomodar» está ligado.':'Veja as definições de notificações do aparelho e do navegador.'),'aviso')})};
+  $$('[data-ntk]').forEach(x=>x.onchange=()=>{c[x.dataset.ntk]=x.checked;save();if(x.dataset.ntk==='badge'&&!x.checked)try{navigator.clearAppBadge&&navigator.clearAppBadge()}catch(_){}});
+  [['nt-ante','ante'],['nt-rh','resumoH'],['nt-th','testesH'],['nt-sd','silDe'],['nt-sa','silAte']].forEach(([id,k])=>{const e=$('#'+id);if(e)e.onchange=()=>{c[k]=k==='ante'?+e.value:e.value;save()}});
+  const ic_=$('#nt-ics');if(ic_)ic_.onclick=ntICSdl}
+/* separador «Notificações» nas Definições */
+{const _vd=vDefinicoes;vDefinicoes=function(){const t=UI.defTab;let r;if(t==='notif'){UI.defTab='auditoria';r=_vd.apply(this,arguments);UI.defTab='notif';const tabs=$('#view .deftabs');$('#view').innerHTML='';if(tabs)$('#view').appendChild(tabs);$('#view').insertAdjacentHTML('beforeend',defNotif());bindNotif()}else r=_vd.apply(this,arguments);
+  try{const tb=$('#view .deftabs');if(tb&&!tb.querySelector('[data-dtn]')){const ref=tb.querySelector('[data-dt2="sync"]');const b=document.createElement('button');b.dataset.dtn='1';b.innerHTML=ic('bell',15)+' Notificações';ref?ref.after(b):tb.appendChild(b);b.onclick=()=>{UI.defTab='notif';vDefinicoes()}}
+    if(t==='notif'&&tb){tb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',!!x.dataset.dtn))}}catch(_){}return r};if(go._f)go._f.definicoes=vDefinicoes}
+
