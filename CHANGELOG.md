@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.043
+- Modo de apresentação: na janela, cada aluno tem os botões Notas, Foto e Tudo. Notas esconde as classificações, percentagens, níveis e gráficos desse aluno (linhas, cartões e ficha) mantendo o nome visível; Foto esconde só a fotografia; Tudo oculta o aluno. Guardado por aluno.
+
 ## 1.042
 - Menu lateral: o nome da disciplina (ex.: Inglês) deixa de ficar colado ao nome da turma.
 

@@ -21,6 +21,7 @@ Responder sempre em português, curto. Versões 0.900–0.999 (nunca 1.0); a atu
 ## Convenções
 - Desempenho (1.026): NUNCA `:has()` com `[style…]` lá dentro (nem `:not(:has(...[style]))`) — obriga a recalcular o estilo da página inteira a cada medição do cabeçalho (deixava a app lenta nos PCs antigos). Modo leve: `html.leve` (Definições › Aparência › Desempenho, `localStorage es.leve`).
 - Privacidade no modo de apresentação (1.026): `apresPrep`/`apresAplicar` + observador do documento filtram tudo o que aparece (texto, atributos, valores, listas, canvas). Memória por turma em `S.cfg.apresT[turmaId]` (`auto` = liga ao abrir a turma).
+- Privacidade de cada aluno (1.043): `S.cfg.apres.privAl={id:{n,f}}` (Notas/Foto; «Tudo» = `ocultos`). `apPvPrep`/`apPvAplicar` marcam a linha/cartão do aluno (`apres-pn`, `apres-pf`; células a manter `apnm`, folhas com nota `apgr`) e a ficha (`#dw-b.apres-pnd/pfd`). Botões na janela por `apPvUI` (envolve `apresDlg`). Nunca chamar `apresCfg()` com a janela aberta (substitui `S.cfg.apres`).
 - Em teste (1.026): `S.emt[instId]`; entrada `.emtnav` por baixo da turma. Turmas só de coordenação: `CP().y.coordT` (nunca em `a.turmas`). `criarDemo()` cria 3 anos letivos. Forms: tipos `vf`, `lacunas`, `ligar` e `defs.exame`. Código da 1.026 no fim do último módulo JS (antes de `})();`).
 - Código novo antes da âncora `/* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */`.
 - CSS novo em `<style id="css965">`, com seletores fortes (`html body …`) por causa do tema SGE.

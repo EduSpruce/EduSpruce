@@ -58,5 +58,5 @@
 58-msai-catalogo-como-no-sge-data.js
 59-pautas-oficiais-profij-fpct-e-classificacao.js
 60-v1-026-privacidade-no-modo-de.js
-61-v1-026-ajuda-privacidade-em-teste.js
+61-v1-026-coordenacao-docencia-coord-profij.js
 62-fecho.html

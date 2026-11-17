@@ -93,6 +93,65 @@ apresDlg=function(){const on=apOn();const t=T();const c=apC();const g=apresCfg()
 /* memória por turma: ao entrar numa turma com «ligar sempre», o modo liga-se ANTES de a página ser desenhada; nunca se desliga sozinho */
 {let _apT;const _gAp=go;go=function(v){try{const id=S.turmaAtiva||null;if(id!==_apT){_apT=id;const m=id&&apTM()[id];if(m&&m.auto&&!apOn()){apresPrep();apresClasses(true);setTimeout(()=>toast('Modo de apresentação ligado — esta turma tem alunos ocultos','ok'),60)}else if(apOn()){apresPrep();apresClasses(true)}}}catch(e){console.warn(e)}
   return _gAp.apply(this,arguments)};if(_gAp._f)go._f=_gAp._f}
+/* ===================== v1.043 · Privacidade de cada aluno no Modo de Apresentação =====================
+   Tudo fica à mostra, mas para cada aluno o professor pode esconder só as NOTAS (classificações, percentagens, níveis, gráficos
+   da sua linha, cartão ou ficha), só a FOTOGRAFIA, ou TUDO (= alunos ocultos da 1.026). Guardado por aluno em S.cfg.apres.privAl
+   ({id:{n:1,f:1}}), vale em todas as turmas onde o aluno aparece (mesmo nome). O nome continua visível nos modos «notas» e «foto». */
+const apPV=()=>{const g=S.cfg.apres||(S.cfg.apres=apresCfg());const p=g.privAl;return g.privAl=(p&&typeof p==='object'&&!Array.isArray(p))?p:{}};
+let APV={rx:null,map:new Map(),ids:{}};
+const AP_GR=/^\s*(?:[<>≥≤]?\s*\d{1,3}(?:[.,]\d+)?\s*%?|\d{1,2}(?:[.,]\d+)?\s*(?:val(?:ores)?\.?|v)|n[ií]vel\s*\d|muito\s+bom|bom|suficiente|insuficiente|muito\s+insuficiente|excelente|fraco|satisfaz(?:\s+(?:bem|plenamente|pouco))?|n[aã]o\s+satisfaz|mb|mi|ns|sb|sp)\s*$/i;
+const AP_GR2=/\d{1,3}(?:[.,]\d+)?\s*%|classifica|n[ií]vel\s*\d|\bnotas?\b|m[eé]dia|\bvalores\b|men[cç][aã]o/i;
+function apPvPrep(){const P=apPV();const a=A();const M=new Map();APV={rx:null,map:M,ids:{},nums:new Set()};if(!a)return;
+  const oc=new Set(apresCfg().ocultos||[]);const all=[];(a.turmas.__real||a.turmas).forEach(t=>(t.alunos||[]).forEach(x=>{if(x.nome&&x.nome.trim().length>2)all.push(x)}));
+  const byK={};all.forEach(x=>{const p=P[x.id]||(x.origemId&&P[x.origemId]);if(!p||!(p.n||p.f)||oc.has(x.id))return;const k=apKey(x.nome);const o=byK[k]||(byK[k]={n:false,f:false,nums:new Set()});o.n=o.n||!!p.n;o.f=o.f||!!p.f});
+  all.forEach(x=>{const o=byK[apKey(x.nome)];if(o){APV.ids[x.id]=o;if(x.num!=null&&x.num!==''){o.nums.add(String(x.num));APV.nums.add(String(x.num))}}});
+  const byF={};all.forEach(x=>{const f=apKey(x.nome.trim().split(/\s+/)[0]);(byF[f]=byF[f]||new Set()).add(apKey(x.nome))});
+  Object.keys(byK).forEach(k=>{const o=byK[k];const p=k.split(' ');M.set(k,o);if(p.length>2)M.set(p[0]+' '+p[p.length-1],o);if(p.length>1)M.set(p[0]+' '+p[p.length-1][0]+'.',o);if(p[0].length>2&&byF[p[0]]&&byF[p[0]].size===1)M.set(p[0],o)});
+  const ks=[...M.keys()].sort((x,y)=>y.length-x.length).map(apEsc);
+  try{APV.rx=ks.length?new RegExp('(?<![\\p{L}\\p{N}])(?:'+ks.join('|')+')(?![\\p{L}\\p{N}])','giu'):null}catch(_){APV.rx=ks.length?new RegExp('(?:'+ks.join('|')+')','gi'):null}}
+function apPvFolhas(box,o){o=o||{nums:APV.nums||new Set()};box.querySelectorAll('*').forEach(e=>{if(e.children.length||/^(SCRIPT|STYLE|SVG|svg|path)$/.test(e.tagName))return;const tx=(e.textContent||'').trim();if(!tx||tx.length>90||o&&o.nums.has(tx))return;if(tx.length<=24&&AP_GR.test(tx)||AP_GR2.test(tx))e.classList.add('apgr')});
+  box.querySelectorAll('input:not([type=checkbox]):not([type=radio]),select').forEach(e=>{const v=String(e.value||'').trim();if(v&&AP_GR.test(v)&&!(o&&o.nums.has(v))&&e.dataset.k!=='num')e.classList.add('apgr')})}
+function apPvLinha(tr,o){[...tr.children].forEach(td=>{const tx=(td.textContent||'').trim();if(td.matches('.nm,.stk,.stk0,.stc0,.stc1,.tdnome,.n,.c-n,.c-ft,.pnnm')||td.querySelector('img,.ava,textarea[data-k="nome"],input[data-k="num"],.pnnm')||o.nums.has(tx))td.classList.add('apnm')})}
+function apPvBox(el,o){if(el.closest('#dw-t')){const b=document.getElementById('dw-b');if(b){if(o.n){b.classList.add('apres-pnd');apPvFolhas(b,o)}if(o.f)b.classList.add('apres-pfd')}return}
+  const box=el.closest('tr,.fgc,.fcard,.mscard,.pls,.pnai,.intr,.avit,.tcard,.cvcard,.lin,.sti,.mac,.aniv,li,.kv,.chip,.rmini,.dimp,.pq-i,[data-mq]');if(!box||box.closest('[data-apno]'))return;
+  if(o.n)box.classList.add('apres-pn');if(o.f)box.classList.add('apres-pf');
+  if(box.tagName==='TR'){const td=el.closest('td,th');if(td)td.classList.add('apnm');if(o.n)apPvLinha(box,o)}else if(o.n)apPvFolhas(box,o)}
+function apPvTexto(n){if(!APV.rx)return;const v=n.nodeValue;if(!v||v.length<3)return;const p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.tagName)||p.closest('[data-apno],#emteste'))return;
+  APV.rx.lastIndex=0;const m=v.match(APV.rx);if(!m)return;for(const s of m){const o=APV.map.get(apKey(s));if(o){apPvBox(p,o);return}}}
+function apPvAplicar(root){if(!APV.rx||!root||root.nodeType!==1)return;if(root.closest&&root.closest('[data-apno],#emteste'))return;
+  Object.keys(APV.ids).forEach(id=>{const o=APV.ids[id];const q=CSS.escape(id);const s=`tr[data-a="${q}"],tr[data-pna="${q}"],tr[data-fi="${q}"],.fgc[data-fi="${q}"],.fcard[data-fi="${q}"],.mscard[data-fi="${q}"],[data-pla="${q}"]`;
+    const L=[...(root.matches(s)?[root]:[]),...root.querySelectorAll(s)];L.forEach(e=>{if(o.n)e.classList.add('apres-pn');if(o.f)e.classList.add('apres-pf');if(e.tagName==='TR'){if(o.n)apPvLinha(e,o)}else if(o.n)apPvFolhas(e,o)})});
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const L=[];let n;while(n=w.nextNode()){const v=n.nodeValue;if(v&&v.length>2){APV.rx.lastIndex=0;if(APV.rx.test(v))L.push(n)}}L.forEach(apPvTexto);
+  const dw=root.closest&&root.closest('#dw-b.apres-pnd');if(dw)apPvFolhas(root,null);else if(root.id==='dw-b'&&root.classList.contains('apres-pnd'))apPvFolhas(root,null)}
+{const _pp=apresPrep;apresPrep=function(){const r=_pp.apply(this,arguments);try{apPvPrep()}catch(e){console.warn(e)}return r}}
+{const _pa=apresAplicar;apresAplicar=function(root){if(apOn()){try{apPvAplicar(root&&root.nodeType===1?root:document.body)}catch(e){console.warn(e)}}return _pa.apply(this,arguments)}}
+{const _pt=apTexto;apTexto=function(n){if(apOn()){try{apPvTexto(n)}catch(_){}}return _pt.apply(this,arguments)}}
+{const _pc=apresClasses;apresClasses=function(on){if(!on){document.querySelectorAll('.apres-pn,.apres-pf,.apnm,.apgr,.apres-pnd,.apres-pfd').forEach(e=>e.classList.remove('apres-pn','apres-pf','apnm','apgr','apres-pnd','apres-pfd'));APV={rx:null,map:new Map(),ids:{}}}return _pc.apply(this,arguments)}}
+{const _pd=openDrawer;openDrawer=function(){try{const d=document.getElementById('dw-b');if(d)d.classList.remove('apres-pnd','apres-pfd')}catch(_){}return _pd.apply(this,arguments)}}
+/* janela do modo de apresentação: cada aluno com Notas · Fotografia · Tudo */
+function apPvUI(){const box=document.querySelector('#dw-b .apdlg');if(!box)return;const L=[...box.querySelectorAll('input[data-apo]')];if(!L.length)return;const P=apPV();const t=T();
+  const lista=L[0].closest('.apal');
+  [...box.querySelectorAll('h3')].forEach(h=>h.childNodes.forEach(c=>{if(c.nodeType===3&&/Alunos a ocultar/.test(c.nodeValue))c.nodeValue=' Privacidade de Cada Aluno '}));
+  const hp=lista.previousElementSibling&&lista.previousElementSibling.previousElementSibling;if(hp&&hp.matches('p.hint'))hp.innerHTML='Por omissão, <b>tudo fica à mostra</b>. Para o aluno que não quer que a turma veja a sua informação, escolha o que esconder: <b>Notas</b> (classificações, percentagens, níveis e gráficos da linha, do cartão e da ficha desse aluno — o nome continua visível), <b>Foto</b> (só a fotografia) ou <b>Tudo</b> (o aluno fica totalmente oculto em todos os menus). Vale em todas as turmas onde o aluno aparece.';
+  const rowB=box.querySelector('#ap-nen')&&box.querySelector('#ap-nen').parentElement;
+  if(rowB&&!rowB.querySelector('#ap-pvn')){rowB.insertAdjacentHTML('beforeend',`<button type="button" class="btn sm" id="ap-pvn">${ic('eye',13)} Notas de Todos</button>`)}
+  lista.classList.add('appv');
+  L.forEach(inp=>{const lb=inp.closest('label');if(!lb||lb.dataset.pv)return;lb.dataset.pv=1;const id=inp.dataset.apo;const p=P[id]||{};
+    const nm=lb.querySelector('span');const div=document.createElement('div');div.className='appv-r';div.dataset.pvid=id;
+    div.innerHTML=`<span class="appv-n">${nm?nm.innerHTML:''}</span><span class="appv-b" role="group" aria-label="O que esconder"><button type="button" data-pvk="n" aria-pressed="${!!p.n}">Notas</button><button type="button" data-pvk="f" aria-pressed="${!!p.f}">Foto</button><button type="button" data-pvk="t" aria-pressed="${inp.checked}">Tudo</button></span>`;
+    lb.replaceWith(div);inp.hidden=true;inp.style.display='none';div.appendChild(inp);div.classList.toggle('tudo',inp.checked);div.classList.toggle('algum',inp.checked||!!p.n||!!p.f)});
+  const marca=div=>{const inp=div.querySelector('input[data-apo]');div.querySelector('[data-pvk="t"]').setAttribute('aria-pressed',String(inp.checked));div.classList.toggle('tudo',inp.checked);
+    div.classList.toggle('algum',inp.checked||[...div.querySelectorAll('[data-pvk="n"],[data-pvk="f"]')].some(b=>b.getAttribute('aria-pressed')==='true'))};
+  const sugAuto=()=>{const au=document.getElementById('ap-auto');if(au&&t&&apTM()[t.id]==null&&[...lista.querySelectorAll('.appv-r.algum')].length)au.checked=true};
+  lista.addEventListener('click',e=>{const b=e.target.closest('[data-pvk]');if(!b)return;const div=b.closest('.appv-r');const inp=div.querySelector('input[data-apo]');
+    if(b.dataset.pvk==='t'){inp.checked=!inp.checked;inp.dispatchEvent(new Event('change',{bubbles:true}))}else b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));marca(div);sugAuto()});
+  lista.addEventListener('change',e=>{const div=e.target.closest('.appv-r');if(div)marca(div)});
+  const nen=document.getElementById('ap-nen');if(nen)nen.addEventListener('click',()=>{lista.querySelectorAll('[data-pvk="n"],[data-pvk="f"]').forEach(b=>b.setAttribute('aria-pressed','false'));lista.querySelectorAll('.appv-r').forEach(marca)});
+  const tod=document.getElementById('ap-tod');if(tod)tod.addEventListener('click',()=>lista.querySelectorAll('.appv-r').forEach(marca));
+  const pvn=document.getElementById('ap-pvn');if(pvn)pvn.onclick=()=>{const bs=[...lista.querySelectorAll('[data-pvk="n"]')];const v=!bs.every(b=>b.getAttribute('aria-pressed')==='true');bs.forEach(b=>b.setAttribute('aria-pressed',String(v)));lista.querySelectorAll('.appv-r').forEach(marca);sugAuto()};
+  const ok=document.getElementById('ap-ok');if(ok)ok.addEventListener('click',()=>{lista.querySelectorAll('.appv-r').forEach(div=>{const id=div.dataset.pvid;const n=div.querySelector('[data-pvk="n"]').getAttribute('aria-pressed')==='true',f=div.querySelector('[data-pvk="f"]').getAttribute('aria-pressed')==='true';if(n||f)P[id]={n:n?1:0,f:f?1:0};else delete P[id]})},true)}
+{const _pdl=apresDlg;apresDlg=function(){const r=_pdl.apply(this,arguments);try{apPvUI()}catch(e){console.warn(e)}return r}}
+try{const h=AJUDA.find(x=>x.id==='apresentacao');if(h)h.txt+=`<p><b>Privacidade de cada aluno:</b> na janela do modo de apresentação, cada aluno tem três botões — <b>Notas</b> esconde só as classificações, percentagens, níveis e gráficos desse aluno (o nome continua visível, para projetar as notas da turma sem expor quem não quer); <b>Foto</b> esconde só a fotografia; <b>Tudo</b> oculta o aluno por completo. Pode combinar Notas e Foto, e usar <b>Notas de Todos</b> para esconder as notas da turma inteira. A escolha fica guardada para esse aluno.</p>`}catch(_){}
 
 /* ===================== v1.026 · Modo «Em teste»: abaixo da turma, só quando há teste — relógio, temporizador e nome do teste =====================
    Aparece no menu, por baixo da turma, no dia de um teste (instrumento do tipo teste, prova escrita ou questão-aula com a data de hoje)
@@ -212,86 +271,4 @@ function ufcdFundir(){const a=A();if(!a)return 0;const L=a.turmas.__real||a.turm
       const j=L.indexOf(t);if(j>=0)L.splice(j,1);if(S.turmaAtiva===t.id)S.turmaAtiva=base.id;n++})});
   if(n){save();setTimeout(()=>toast('As UFCD novas juntaram-se à pauta «Componente Tecnológica» que a turma já tinha','ok'),80)}return n}
 {const _gU=go;go=function(v){try{if(v==='turmas'||v==='painel'||v==='modulos'||v==='inicio')ufcdFundir()}catch(e){console.warn(e)}return _gU.apply(this,arguments)};if(_gU._f)go._f=_gU._f}
-
-/* ===================== v1.026 · Coordenação ≠ docência (Coord. PROFIJ) =====================
-   As turmas que o professor só coordena (sem lecionar) ficam na Coordenação — não aparecem nas suas turmas, horário, sumários,
-   avaliação nem no Início. As turmas onde leciona continuam a ser a sua docência; na Coordenação mostram de onde vêm. */
-const cpCoordT=()=>{const {y}=CP();return y.coordT=Array.isArray(y.coordT)?y.coordT:[]};
-{const _cpCl=cpClasses;cpClasses=function(a){const R=_cpCl.apply(this,arguments);try{const L=cpCoordT();R.forEach(c=>{c.doc=true});
-    L.forEach(ct=>{const ex=R.find(c=>normTurma(c.nome)===normTurma(ct.nome));if(ex){ex.coordT=ct.id;return}const al={};(ct.alunos||[]).forEach(x=>{const k=cpAlKey(x);al[k]={k,nome:x.nome,num:x.num,ref:x,t:null}});
-      R.push({nome:ct.nome,disc:[],al,curso:ct.curso||'',anoEsc:ct.anoEsc||'',formandos:Object.values(al).sort((p,q)=>(+p.num||0)-(+q.num||0)||p.nome.localeCompare(q.nome,'pt')),soCoord:true,coordT:ct.id})});
-    R.sort((p,q)=>p.nome.localeCompare(q.nome,'pt',{numeric:true}))}catch(e){console.warn(e)}return R}}
-function cpCoordDlg(id){const L=cpCoordT();const ct=L.find(x=>x.id===id)||{id:'',nome:'',curso:'',anoEsc:'',alunos:[]};const novo=!ct.id;
-  openDrawer(novo?'Turma Só de Coordenação':'Editar Turma de Coordenação',`<div class="ed">
-    <p class="hint" style="margin-top:0">${ic('info',13)} Para turmas que <b>coordena mas onde não leciona</b>. Ficam só na Coordenação PROFIJ — não entram nas suas turmas, horário, sumários, avaliação nem no Início. As médias das disciplinas dos colegas escrevem-se nas células da tabela (Turmas e Formandos).</p>
-    <div class="row" style="gap:10px"><div style="flex:1"><label>Turma</label><input id="cc-n" value="${esc(ct.nome)}" placeholder="ex.: PROFIJ II B"></div><div style="flex:1"><label>Ano de escolaridade</label><input id="cc-a" value="${esc(ct.anoEsc||'')}" placeholder="ex.: 9.º"></div></div>
-    <label>Curso</label><input id="cc-c" value="${esc(ct.curso||'')}" placeholder="ex.: Técnico de Informática">
-    <label>Formandos <span class="mut">(um por linha: n.º ; nome ; n.º de processo — ou cole do Excel)</span></label>
-    <textarea id="cc-f" rows="9" placeholder="1 ; Nome do formando ; 1234">${esc((ct.alunos||[]).map(x=>[x.num||'',x.nome,x.processo||''].join(' ; ')).join('\n'))}</textarea>
-    <div class="row" style="margin-top:12px">${novo?'':`<button class="btn" id="cc-del">${ic('trash',14)} Apagar</button>`}<span class="sp1"></span><button class="btn pri" id="cc-ok">${ic('check',15)} Guardar</button></div></div>`);
-  $('#cc-ok').onclick=()=>{const nome=$('#cc-n').value.trim();if(!nome)return toast('Indique o nome da turma','erro');
-    const al=$('#cc-f').value.split('\n').map(l=>l.trim()).filter(Boolean).map((l,k)=>{const p=l.split(/\t|;/).map(x=>x.trim());let num='',nm='',pr='';if(p.length>=2){num=/^\d+$/.test(p[0])?p[0]:'';nm=num?p[1]:p[0];pr=(num?p[2]:p[1])||''}else{const m=l.match(/^(\d+)\s+(.+)$/);num=m?m[1]:String(k+1);nm=m?m[2]:l}
-      const ex=(ct.alunos||[]).find(x=>normT(x.nome)===normT(nm));return {id:ex?ex.id:uid()+k,num:num||String(k+1),nome:nm,processo:pr}}).filter(x=>x.nome);
-    Object.assign(ct,{nome,curso:$('#cc-c').value.trim(),anoEsc:$('#cc-a').value.trim(),alunos:al});if(novo){ct.id=uid();L.push(ct)}save();try{audit('Coord. PROFIJ',novo?'Turma de coordenação criada':'Turma de coordenação editada',nome)}catch(_){}closeDrawer();vCProfij();toast('Guardado · '+al.length+' formando(s)','ok')};
-  const d=$('#cc-del');if(d)d.onclick=()=>{if(!confirm('Apagar a turma de coordenação «'+ct.nome+'»? (não mexe nas suas turmas de docência)'))return;L.splice(L.indexOf(ct),1);save();closeDrawer();vCProfij()}}
-{const _vcp=vCProfij;vCProfij=function(){const r=_vcp.apply(this,arguments);try{if((UI.cpTab||'painel')==='turmas'){const v=$('#view');const alvo=v&&v.querySelector('p.hint');const C=cpClasses(A());const L=cpCoordT();
-      const box=`<section class="card cpsep"><div class="row" style="gap:10px;flex-wrap:wrap"><h3 style="margin:0">${ic('layers',16)} Docência e coordenação, separadas</h3><span class="sp1"></span><button class="btn sm" id="cc-add">${ic('plus',14)} Turma Só de Coordenação</button></div>
-        <div class="cpsepg"><div><b>${ic('book',14)} Turmas onde leciona</b><p class="mut">${C.filter(c=>c.doc).map(c=>esc(c.nome)+' <span class="tag">'+c.disc.map(t=>esc(ehComp(t.disciplina)?'UFCD':t.disciplina)).join(', ')+'</span>').join(' · ')||'nenhuma'}</p><small class="mut">Vêm das suas turmas (Ano letivo e turmas). As médias das suas disciplinas entram sozinhas.</small></div>
-        <div><b>${ic('crown',14)} Turmas que só coordena</b><p class="mut">${L.map(ct=>`<button type="button" class="linkb" data-cced="${ct.id}">${esc(ct.nome)}</button> <span class="tag">${(ct.alunos||[]).length} formandos</span>`).join(' · ')||'nenhuma'}</p><small class="mut">Não aparecem nas suas turmas, horário, sumários nem avaliação.</small></div></div></section>`;
-      if(alvo)alvo.insertAdjacentHTML('afterend',box);else{const c=v&&v.querySelector('.cpgs');if(c)c.insertAdjacentHTML('afterend',box)}
-      const ad=$('#cc-add');if(ad)ad.onclick=()=>cpCoordDlg('');$$('[data-cced]').forEach(b=>b.onclick=()=>cpCoordDlg(b.dataset.cced));
-      v.querySelectorAll('.card h3, .card .cph, .card b').forEach(h=>{const tx=h.textContent.trim();const c=C.find(x=>x.soCoord&&tx===x.nome);if(c&&!h.querySelector('.tag.cpso'))h.insertAdjacentHTML('beforeend',' <span class="tag cpso">só coordenação</span>')})}}catch(e){console.warn(e)}return r}}
-
-/* ===================== v1.026 · Dados de demonstração: tudo o que há na app, em 3 anos letivos =====================
-   Além do ano atual (com todas as turmas, PROFIJ, escola profissional, jornal, reuniões…), cria os dois anos letivos anteriores com os
-   mesmos alunos um ano mais novos (turmas do ano anterior), os três períodos completos com classificações e sumários, e ainda
-   exemplos na Biblioteca, Contactos e SpruceNote. Tudo inventado — nenhum dado real. */
-function demoAnoAnterior(a0,k){const DIA=864e5,SH=364*k;
-  const desl=iso=>{const d=new Date(iso+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-SH);return d.toISOString().slice(0,10)};
-  let j=JSON.stringify(a0);
-  /* ids novos (ano a ano não se misturam) */
-  const ids=new Set();(function walk(o){if(Array.isArray(o))o.forEach(walk);else if(o&&typeof o==='object')Object.entries(o).forEach(([kk,v])=>{if((kk==='id'||kk==='cid')&&typeof v==='string'&&v.length>=8)ids.add(v);walk(v)})})(JSON.parse(j));
-  [...ids].sort((x,y)=>y.length-x.length).forEach(id=>{if(id.startsWith('doc:'))return;j=j.split(id).join(uid()+Math.random().toString(36).slice(2,5))});
-  j=j.replace(/\b(20\d\d)-(\d\d)-(\d\d)\b/g,m=>desl(m)).replace(/\b(20\d\d)\/(20\d\d)\b/g,(m,x,y)=>(+x-k)+'/'+(+y-k)).replace(/\b1[6-9]\d{11}\b/g,m=>String(+m-SH*DIA));
-  /* turmas do ano anterior: os mesmos alunos, um ano mais novos */
-  const REN=k===1?[['11.º B/C','10.º B/C'],['11.º B','10.º B'],['11.º C','10.º C'],['10.º A','9.º A'],['9.º B','8.º B'],['7.º A','6.º A'],['TT 2','TT 1']]:[['11.º B/C','9.º B/C'],['11.º B','9.º B'],['11.º C','9.º C'],['10.º A','8.º A'],['9.º B','7.º B'],['7.º A','5.º A']];
-  REN.forEach(([x],q)=>{j=j.split(x).join('\u0001'+q+'\u0001')});REN.forEach(([,y],q)=>{j=j.split('\u0001'+q+'\u0001').join(y)});
-  const b=JSON.parse(j);
-  /* chaves com o nome normalizado da turma (horário: «7a|ing», n.º de projeto…) */
-  const RN=REN.map(([o,n])=>[normTurma(o),normTurma(n)]);const rk=kk=>{const p=String(kk).split('|');const e=RN.find(([o])=>o===p[0]);return e?[e[1],...p.slice(1)].join('|'):kk};
-  (function walk(o){if(Array.isArray(o))o.forEach(walk);else if(o&&typeof o==='object')Object.keys(o).forEach(kk=>{const v=o[kk];const n2=rk(kk);if(n2!==kk){o[n2]=v;delete o[kk]}walk(v)})})(b);
-  b.id=uid();b.demo=true;b.passado=true;const y0=new Date().getMonth()>=8?new Date().getFullYear():new Date().getFullYear()-1;b.nome='Demonstração '+(y0-k)+'/'+(y0-k+1);
-  const anoDe=n=>{const m=String(n).match(/^(\d+)\.º/);return m?+m[1]:null};
-  b.turmas=(b.turmas||[]).filter(t=>!(k===2&&(t.oferta==='profij'||t.oferta==='profissional')));
-  b.turmas.forEach(t=>{const n=anoDe(t.nome);if(n){t.anoEsc=n+'.º';t.ciclo=n<=4?'1c':n<=6?'2c':n<=9?'3c':'sec'}if(t.oferta==='profij'){t.anoEsc=(+String(t.anoEsc).replace(/\D/g,'')-k)+'.º'}if(t.nome==='TT 1'){t.anoForm='1.º';t.anoEsc='10.º'}
-    (t.alunos||[]).forEach(x=>{delete x.movs;if(x.nasc)x.nasc=x.nasc})});
-  b.dt=(b.dt||[]).map(()=>normTurma(k===1?'6.º A':'5.º A'));
-  return b}
-function demoCompletarAno(b){const rnd=(()=>{let x=20241109+b.turmas.length;return ()=>{x=(x*1103515245+12345)%2147483648;return x/2147483648}})();
-  const add=(iso,d)=>{const z=new Date(iso+'T12:00:00Z');z.setUTCDate(z.getUTCDate()+d);return z.toISOString().slice(0,10)};
-  const per=(()=>{try{const pe=b.porEscola&&b.porEscola.principal;return (pe&&pe.calendario&&pe.calendario.periodos)||[]}catch(_){return []}})();
-  b.turmas.forEach(t=>{if(Array.isArray(t.modulos)&&t.modulos.length&&t.oferta==='profissional')return;const AL=(t.alunos||[]).filter(x=>x.frequenta!==false);
-    const base={};AL.forEach(x=>{let s=0,m=0;(t.instrumentos||[]).forEach(i=>{const n=i.notas&&i.notas[x.id];if(!n)return;i.itens.forEach(it=>{const v=parseFloat(n[it.id]);if(!isNaN(v)){s+=v;m+=+it.cot||0}})});base[x.id]=m?s/m:.45+rnd()*.45});
-    const notas=(i,dif)=>{const N={};AL.forEach((x,q)=>{const o={};i.itens.forEach(it=>{const v=Math.max(0,Math.min(1,base[x.id]+(dif||0)+(rnd()-.5)*.22));o[it.id]=Math.round(v*(+it.cot||0)*2)/2});N[x.id]=o});return N};
-    (t.instrumentos||[]).forEach(i=>{delete i.naoReal;if(!i.notas||!Object.keys(i.notas).length)i.notas=notas(i,0)});
-    const P1=(t.instrumentos||[]).filter(i=>(i.periodo||1)===1&&!/diagn/i.test(i.tipo||''));
-    [2,3].forEach(p=>{P1.forEach(i=>{const c=JSON.parse(JSON.stringify(i));c.id=uid()+p;const mp={};c.itens.forEach(it=>{const nid=uid()+Math.random().toString(36).slice(2,5);mp[it.id]=nid;it.id=nid});
-      c.periodo=p;c.data=add(i.data||((per[0]||{}).ini)||'2025-10-15',91*(p-1));c.nome=String(i.nome).replace(/(\d+)\s*$/,(m,n)=>String(+n+2*(p-1)));if(c.nome===i.nome)c.nome=i.nome+' ('+p+'.º P)';delete c.anexos;delete c.modulo;
-      c.notas=notas(c,(p===2?.02:.04));t.instrumentos.push(c)})});
-    /* sumários e chamadas dos 2.º e 3.º períodos (as mesmas aulas da semana) */
-    try{const SM=(b.sumarios||{})[t.id];if(SM){const fimP=p=>(per[p-1]||{}).fim||'9999';Object.entries({...SM}).forEach(([kk,s])=>{const m=kk.match(/^(\d{4}-\d{2}-\d{2})(.*)$/);if(!m)return;[2,3].forEach(p=>{const d=add(m[1],91*(p-1));if(d>fimP(p))return;if(!SM[d+m[2]])SM[d+m[2]]={...s,texto:s.texto||'Atividades de consolidação.'}})})}}catch(_){}});
-  return b}
-function demoExtras(a){try{const R=recursos();if(!R.length){const pr=profNome(S.cfg.professor)||'';const doc=t=>guardarDoc('data:text/plain;base64,'+btoa(unescape(encodeURIComponent(t))));
-      const fic=(titulo,tipo,txt,et)=>({id:uid(),titulo,tipo,disciplina:'Inglês',anoEsc:'7.º',etiquetas:et,colecao:'Pessoal',acesso:'privado',anoLetivo:a.nome,autor:pr,criado:Date.now(),atual:Date.now(),versoes:[{v:1,doc:doc(txt),nome:titulo+'.txt',mime:'text/plain',tam:txt.length,q:Date.now(),nota:'Demonstração'}]});
-      R.push(fic('Ficha — vocabulário da escola','ficha','Ficha de trabalho (demonstração)\n\n1. Liga as palavras às imagens.\n2. Completa as frases.','vocabulário|7.º ano'.split('|')),
-        fic('Teste 1 — matriz','teste','Matriz do Teste 1 (demonstração)\n\nGrupo I — Compreensão (40 %)\nGrupo II — Gramática (30 %)\nGrupo III — Escrita (30 %)',['matriz','teste']),
-        {...fic('Modelo — grelha de observação da oralidade','modelo','Grelha de observação (demonstração)\n\nFluência · Correção · Vocabulário · Interação',['oralidade']),colecao:'Modelos'},
-        {id:uid(),titulo:'Aprendizagens Essenciais',tipo:'link',link:'https://www.dge.mec.pt/',disciplina:'Inglês',anoEsc:'',etiquetas:['currículo'],colecao:'Pessoal',acesso:'privado',anoLetivo:a.nome,autor:pr,criado:Date.now(),atual:Date.now(),versoes:[]})}}catch(e){console.warn('demo biblioteca',e)}
-  try{const L=contL();if(!L.length){[['Helena Costa','Diretora','Direção'],['Rui Medeiros','Coordenador de Departamento','Línguas'],['Sónia Furtado','Professora de Português','Línguas'],['Paulo Rocha','Professor de Matemática','Ciências Exatas'],['Inês Tavares','Psicóloga','SPO'],['Marco Pacheco','Coordenador PROFIJ','Coordenação']].forEach(([n,c,g],q)=>{const e=normT(n).replace(/\s+/g,'.')+'@escola-exemplo.pt';L.push({id:uid()+q,nome:n,cargo:c,org:'Escola (demonstração)',grupo:g,ano:a.nome,morada:'',aniv:'',notas:'Contacto de demonstração',foto:'',tel:'29'+String(1000000+q*12345).slice(0,7),telR:'Escola',tels:[],email:e,emailR:'Institucional',emails:[],listas:[]})});L.sort((x,y)=>x.nome.localeCompare(y.nome,'pt'))}}catch(e){console.warn('demo contactos',e)}
-  try{const ctx0=UI.mqCtx;UI.mqCtx='sn';try{MQ()}catch(_){}UI.mqCtx=ctx0;const q=(S.sn&&S.sn.quadros||[]).find(x=>x.id==='raiz');if(q&&!q.itens.length){const N=(t,x,y,o)=>q.itens.push({id:uid()+Math.random().toString(36).slice(2,4),t,x,y,w:{nota:220,tarefa:240,titulo:320}[t]||220,cor:'',pai:null,...o});
-      N('titulo',40,30,{txt:'Planeamento do período (demonstração)'});N('nota',40,110,{txt:'Rever os critérios de avaliação com as turmas do 7.º ano.'});N('nota',290,110,{txt:'Ideia: projeto «A minha escola» com apresentação oral em grupo.',cor:'#fde68a'});
-      N('tarefa',540,110,{tit:'Para esta semana',l:[{t:'Corrigir as fichas do 7.º A',f:true},{t:'Preparar o Teste 2',f:false},{t:'Atualizar sumários',f:false}]})}}catch(e){console.warn('demo spruce',e)}}
-{const _cD3=criarDemo;criarDemo=function(){const n0=S.anos.length;const r=_cD3.apply(this,arguments);try{if(S.anos.length>n0){const a0=S.anos.find(x=>x.id===S.anoAtivo)||S.anos[S.anos.length-1];
-      const b1=demoCompletarAno(demoAnoAnterior(a0,1)),b2=demoCompletarAno(demoAnoAnterior(a0,2));const i=S.anos.indexOf(a0);S.anos.splice(i,0,b2,b1);demoExtras(a0);saveNow();
-      setTimeout(()=>toast('Demonstração criada: 3 anos letivos ('+b2.nome.replace('Demonstração ','')+', '+b1.nome.replace('Demonstração ','')+' e o atual) com exemplos de tudo','ok'),400)}}catch(e){console.warn('demo 3 anos',e)}return r}}
 
