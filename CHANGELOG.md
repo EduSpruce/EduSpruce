@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.106
+- Início: cartão «Ano letivo terminado» com ilustração animada (sol, palmeira e mar), texto centrado e espaçamento corrigido
+
 ## 1.105
 - Ajuda: índice por baixo da pesquisa numa lista limpa (já não fica cortado em colunas); secções abre/fecha mais claras e compactas; ilustração no topo deixa de tapar o índice
 - Modo de Apresentação passa a módulo opcional

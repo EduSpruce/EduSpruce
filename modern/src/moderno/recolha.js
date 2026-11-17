@@ -434,7 +434,14 @@ html body .ajh .ilu-cab .ilu{width:180px;max-width:100%;height:auto}
 html body #def-mods .mdg-l>.hub-ilu{min-height:90px}
 `;document.head.appendChild(s)}
 /* Início: «Ano letivo terminado» com uma ilustração de férias */
-{let t=0;const f=()=>{try{$$('#view .cdown').forEach(c=>{if(c.querySelector('.ilu')||!/Boas férias/.test(c.textContent))return;c.insertAdjacentHTML('beforeend',`<span class="ilu-w" style="margin:10px auto 0">${iluSvg('ferias',200)}</span>`)})}catch(_){}};
+{let t=0;const f=()=>{try{$$('#view .cdown').forEach(c=>{if(c.dataset.fer||!/Boas férias/.test(c.textContent))return;c.dataset.fer=1;const p=[...c.querySelectorAll('p')].find(x=>/Boas férias/.test(x.textContent));if(p)p.remove();
+  const sol=[0,45,90,135,180,225,270,315].map(a=>`<path d="M0-30v-8" transform="rotate(${a})"/>`).join('');
+  c.insertAdjacentHTML('beforeend',`<div class="fer-w"><svg class="fer-svg" viewBox="0 0 240 120" aria-hidden="true">
+   <g class="fer-sol" transform="translate(70 46)"><g class="fer-raios" stroke="#f59e0b" stroke-width="3" stroke-linecap="round">${sol}</g><circle r="21" fill="#f59e0b"/></g>
+   <g class="fer-nuv" fill="var(--panel)" stroke="var(--line)"><path d="M200 22a8 8 0 0 1 15-3 7 7 0 0 1 12 6h-27z"/></g>
+   <g class="fer-palm"><path d="M164 104q10-46 0-70" stroke="#92400e" stroke-width="4" fill="none"/><path d="M164 36q-26-6-40 10M164 36q24-10 40 4M164 36q-6 20-24 28M164 36q14 6 20 26" stroke="#16a34a" stroke-width="7" fill="none" stroke-linecap="round"/></g>
+   <g class="fer-mar"><path d="M-240 104q30-12 60 0t60 0 60 0 60 0 60 0 60 0 60 0 60 0v20h-480z" fill="#1b93c6" opacity=".3"/><path class="fer-mar2" d="M-240 110q30-10 60 0t60 0 60 0 60 0 60 0 60 0 60 0 60 0v14h-480z" fill="#1b93c6" opacity=".45"/></g>
+  </svg><div class="fer-t">Boas férias!</div><div class="fer-s">O ano letivo terminou. Descanse — está tudo guardado para o próximo ano.</div></div>`)})}catch(_){}};
   try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(f,80)}).observe(document.body,{childList:true,subtree:true})}catch(_){}}
 /* 1.105 — Ajuda: índice por baixo da pesquisa numa lista limpa (deixa de partir em colunas cortadas), secções abre/fecha mais claras */
 {const s=document.createElement('style');s.textContent=`
@@ -481,4 +488,25 @@ html body .card.ajs.ajfech{padding-top:12px!important;padding-bottom:12px!import
 html body .ajh .ajidx{box-sizing:border-box;max-width:100%}
 html body .ajh .ajidx .chip{box-sizing:border-box;max-width:100%;flex:none}
 html body .ajh .ajidx .chip>svg+*,html body .ajh .ajidx .chip{text-overflow:ellipsis}
+`;document.head.appendChild(s)}
+{const s=document.createElement('style');s.textContent=`
+html body .cdown[data-fer]{display:flex;flex-direction:column}
+html body .fer-w{display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px 8px 4px;gap:4px}
+html body .fer-svg{width:min(240px,100%);height:auto;overflow:hidden;border-radius:10px;background:color-mix(in srgb,#1b93c6 7%,transparent);margin-bottom:8px}
+html body.est-sge .fer-svg{border-radius:0}
+html body .fer-t{font-size:22px;font-weight:800;color:var(--acc);letter-spacing:-.01em;animation:ferEnt .7s ease-out both}
+html body .fer-s{font-size:13px;color:var(--mut);max-width:30ch;line-height:1.4;animation:ferEnt .7s .15s ease-out both}
+html body .fer-raios{animation:ferRoda 14s linear infinite;transform-box:fill-box;transform-origin:center}
+html body .fer-sol{animation:ferPulsa 3.5s ease-in-out infinite}
+html body .fer-palm{transform-box:fill-box;transform-origin:50% 100%;animation:ferBal 4s ease-in-out infinite}
+html body .fer-mar{animation:ferMar 6s linear infinite}
+html body .fer-mar2{animation:ferMar 9s linear infinite reverse}
+html body .fer-nuv{animation:ferNuv 12s ease-in-out infinite alternate}
+@keyframes ferRoda{to{transform:rotate(360deg)}}
+@keyframes ferPulsa{0%,100%{opacity:1}50%{opacity:.85}}
+@keyframes ferBal{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes ferMar{to{transform:translateX(120px)}}
+@keyframes ferNuv{to{transform:translateX(-18px)}}
+@keyframes ferEnt{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){html body .fer-w *{animation:none!important}}
 `;document.head.appendChild(s)}
