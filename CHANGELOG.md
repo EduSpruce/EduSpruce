@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.101
+- Definições › Módulos Opcionais: passam a aparecer Reuniões, Direção de Turma, Biblioteca e Documentos
+
 ## 1.100
 - Apps › Personalizar: as setas para subir e descer os grupos passam a ver-se
 

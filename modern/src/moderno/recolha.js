@@ -360,3 +360,8 @@ html body .hbo-a>span{display:inline-flex;align-items:center;justify-content:cen
 html body .hbo-a>span:hover{color:var(--acc);border-color:var(--acc)}
 html body.est-sge .hbo-a>span{border-radius:0}
 `;document.head.appendChild(s)}
+/* 1.101 — os quatro módulos entram no #def-mods pelo DOM (o cartão já não termina no </div> esperado) */
+{const _mgM4=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-reun')){
+  M.insertAdjacentHTML('beforeend',MOD4.map(m=>`<label class="chk" style="margin-top:8px"><input type="checkbox" id="${m.inp}" ${mod4On(m.k)?'checked':''}> ${ic(m.g,15)} <span><b>${m.n}</b><br><span class="mut">${m.d}${m.k==='direcao'?' (só aparece a quem é DT)':''}</span></span></label>`).join(''));
+  MOD4.forEach(m=>{const c=M.querySelector('#'+m.inp);if(c)c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos[m.k];else S.cfg.modulos[m.k]=false;save();mod4Aplica();toast('Módulo '+m.n+(c.checked?' ativado':' desativado'),'ok')}})}}catch(e){console.warn(e)}
+  return _mgM4.apply(this,arguments)}}
