@@ -29,7 +29,9 @@ const HUB_APPS=[
   {id:'provas',gr:'recreio',n:'Provas',v:'provas',g:['award'],c:'ambar',d:'Avaliações digitais corrigidas',on:()=>typeof pvOn!=='function'||pvOn(),
    info:()=>{const p=S.pv||{};return hubN((p.ex||[]).length,'prova','provas')+' · '+hubN((p.av||[]).length,'avaliação','avaliações')},tag:'Liga à Avaliação'},
   {id:'sprucenote',gr:'org',n:'SpruceNote',v:'sprucenote',g:['nvsn','grid'],c:'pinho',d:'Quadros de notas e ideias',on:()=>typeof snOn!=='function'||snOn(),
-   info:()=>hubN(((S.sn||{}).quadros||[]).length,'quadro','quadros')}
+   info:()=>hubN(((S.sn||{}).quadros||[]).length,'quadro','quadros')},
+  {id:'eduschedule',gr:'org',n:'EduSchedule',v:'eduschedule',g:['calendar'],c:'azul',d:'Horários da escola, gestão diária e pleon',on:()=>typeof esOn!=='function'||esOn(),
+   info:()=>(S.esched&&S.esched.estado)?'Horário guardado na conta':'Criar o horário da escola'}
 ];
 const hubCfg=()=>{S.cfg=S.cfg||{};const h=S.cfg.hub=(S.cfg.hub&&typeof S.cfg.hub==='object')?S.cfg.hub:{};if(!h.ic||typeof h.ic!=='object')h.ic={};return h};
 const hubIni=()=>hubCfg().ini===true;

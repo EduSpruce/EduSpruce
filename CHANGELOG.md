@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.064
+- EduSchedule (antigo EduTime): horários da escola dentro da EduSpruce — motor de horários, substituições, reuniões, vigilâncias, exames, gestão diária, alunos e cursos, impressão, calendários e exportação para o DBG pleon; abre em Apps › Organização
+- O horário fica guardado na sua conta (nunca no aparelho); pode ser desligado em Definições › Módulos Opcionais
+- Partilhar o horário com colegas (por e-mail, com papéis) e publicar horários e calendários .ics para consulta sem conta (precisa do script 0018_eduschedule.sql no Supabase)
+
 ## 1.063
 - Nomes iguais em toda a app: Spruce It (antiga Arena), Formulários e Provas — nos Módulos Opcionais, Ajuda, Banco e registos
 

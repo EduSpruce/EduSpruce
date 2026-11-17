@@ -9,3 +9,4 @@ provas.js
 banco.js
 avisos.js
 hub.js
+eduschedule.js

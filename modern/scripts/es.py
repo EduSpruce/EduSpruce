@@ -20,7 +20,7 @@ from decimal import Decimal
 R=os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)),'..','..'))
 SRC=os.path.join(R,'modern','src');APP=os.path.join(SRC,'app');T='/tmp/es';os.makedirs(T,exist_ok=True)
 PARTIR=os.path.join(R,'modern','scripts','partir.py');DB=os.path.join(R,'modern','scripts','db.mjs')
-GERADOS=['index.html','arquivo.html','spruceit.html','arena.html','pulso.html','versao.json','app','esm','supabase-config.json']
+GERADOS=['index.html','arquivo.html','eduschedule.html','horarios.html','spruceit.html','arena.html','pulso.html','versao.json','app','esm','supabase-config.json']
 
 def sh(*a,cwd=R,ok=True):
     r=subprocess.run(a,cwd=cwd,capture_output=True,text=True)
@@ -166,6 +166,8 @@ def construir(saida):
     p=junta();sintaxe(principal(p))
     r=subprocess.run(['node',DB,p,saida],capture_output=True,text=True)
     if r.returncode:sys.exit('ERRO a construir a versão com base de dados:\n'+(r.stderr or r.stdout).strip()[-900:])
+    r=subprocess.run(['node',os.path.join(SRC,'eduschedule','build.js'),os.path.dirname(saida)],capture_output=True,text=True)
+    if r.returncode:sys.exit('ERRO a construir o EduSchedule:\n'+(r.stderr or r.stdout).strip()[-900:])
     return p
 def testa(a):
     semb=opt(a,'--sem-browser',flag=True);d=os.path.join(T,'build');shutil.rmtree(d,ignore_errors=True);os.makedirs(d)
