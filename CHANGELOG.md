@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.054
+- Início: barra com as apps em ícones pequenos, à direita
+
 ## 1.053
 - Apps: aspeto do tema SGE (painéis com título, mosaicos planos e retos)
 - Apps: mosaicos centrados

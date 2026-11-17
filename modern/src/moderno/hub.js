@@ -180,3 +180,24 @@ function hubEditar(a){const h=hubCfg();const o=Object.assign({},h.ic[a.id]||{});
   {const x=$('#hbe-imgx');if(x)x.onclick=()=>{delete o.img;x.remove();prev()}}
   $('#hbe-rep').onclick=()=>{delete h.ic[a.id];save();closeDrawer();vHub();toast('Ícone original reposto','ok')};
   $('#hbe-ok').onclick=()=>{const L={};['g','c','e','img','n'].forEach(k=>{if(o[k]&&String(o[k]).trim())L[k]=k==='n'||k==='e'?String(o[k]).trim():o[k]});if(Object.keys(L).length)h.ic[a.id]=L;else delete h.ic[a.id];save();closeDrawer();vHub();toast('Ícone guardado','ok')}}
+/* 1.054 — Início: barra de ferramentas com as apps em ícones pequenos, alinhada à direita (por cima do cartão do ano letivo) */
+if(typeof dashTopo==='function'){const _dtHb=dashTopo;dashTopo=function(){const h=_dtHb.apply(this,arguments);try{hubCss();
+  const L=HUB_APPS.filter(a=>!a.on||a.on());if(!L.length)return h;
+  const bar=`<div class="hub-mini" role="toolbar" aria-label="Apps">${L.map(a=>`<button type="button" class="hbm" data-hubmini="${a.id}" title="${esc(hubNome(a))} — ${esc(a.d)}" aria-label="${esc(hubNome(a))}">${hubIcone(a,30)}</button>`).join('')}<span class="hbm-sep"></span><button type="button" class="hbm hbm-todas" data-hubmini="@hub" title="Todas as apps" aria-label="Todas as apps">${ic('apps',18)}</button></div>`;
+  const k=h.lastIndexOf('</div>');return k<0?h+bar:h.slice(0,k)+bar+h.slice(k)}catch(e){console.warn(e);return h}}}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-hubmini]');if(!b)return;e.preventDefault();const id=b.dataset.hubmini;go._hubU=1;
+  if(id==='@hub'){go('hub');return}const a=HUB_APPS.find(x=>x.id===id);if(a)go(a.v)});
+{const s=document.createElement('style');s.textContent=`
+html body .dtop .hub-mini{margin-left:auto;display:flex;align-items:center;gap:4px;padding:3px;border:1px solid var(--line);background:var(--panel);border-radius:12px;flex-wrap:wrap}
+html body .dtop:has(.hub-mini) .dhint{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .hub-mini .hbm{border:0;background:transparent;padding:3px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,transform .15s}
+html body .hub-mini .hbm:hover{background:color-mix(in srgb,var(--acc) 10%,transparent);transform:translateY(-1px)}
+html body .hub-mini .hbm:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+html body .hub-mini .hbm .hbic{box-shadow:none}
+html body .hub-mini .hbm-todas{width:32px;height:32px;color:var(--mut)}
+html body .hub-mini .hbm-sep{width:1px;height:22px;background:var(--line);margin:0 2px}
+html body.est-sge .dtop .hub-mini,html body.est-sge .hub-mini .hbm{border-radius:0}
+html body.est-sge .hub-mini .hbm:hover{background:color-mix(in srgb,#1f9fcf 12%,transparent);transform:none}
+html body.est-sge .hub-mini .hbm-todas{color:#0e7095}
+@media (max-width:700px){html body .dtop .hub-mini{margin-left:0}}
+`;document.head.appendChild(s)}
