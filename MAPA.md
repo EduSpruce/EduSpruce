@@ -98,3 +98,8 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - `ef-f-snidx.bin` (cifrada): `{v,rec:[{c,id}],sn:{quadros},snj:{quadros},q}` — quadros ligados à raiz e os 12 abertos mais recentemente (`mqAbrir`/`mqVista`); a extensão mostra 10. `#sn=sn:<id>` / `#sn=snj:<id>` abre o quadro («Abrir» na extensão).
 
 - 1.087: atalho «Instalar» no Início (`moderno/recolha.js`, `snwChipVer`/`snwInstalar`, antes da `.hub-mini` na `.dtop`); some com `S.snWeb.dicaX` ou quando a extensão marca `<html data-sn-clipper>` (content.js, só nos domínios da EduSpruce). Ajuda `webclipper`; manual: adenda nas 2 últimas páginas (texto também em `modern/manual/m4.txt`).
+
+## Imagens ilustrativas (filosofia em toda a app, 1.096)
+- Onde há espaço, em vez de ícones soltos ou espaço vazio, usar uma pequena ilustração SVG do assunto (cores do tema: var(--panel)/--line/--mut/--acc + paleta SGE; cantos retos no tema SGE via `rect{rx:0}`).
+- Estados vazios: `app/250-ilustracoes.js` acrescenta sozinho a ilustração a `.card.empty` (≥300 px) e `.empty` (≥420 px, fora de tabelas/listas), escolhida pela vista (`ILU_VISTA` → `ILU_SVG`). `data-sem-ilu` num elemento desliga-a.
+- Outros sítios já com ilustração: Apps (espaço livre de cada grupo, `HUB_ILU` em moderno/recolha.js), Provas › Início (`PV_ILUS`), Definições › Ferramentas (Web Clipper, `SNW_ILU`). Ao criar ecrãs novos, seguir o mesmo estilo.

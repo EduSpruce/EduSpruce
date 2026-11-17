@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.096
+- Imagens ilustrativas em toda a app: os ecrãs vazios mostram uma ilustração do assunto (turmas, calendário, avaliação, tarefas, reuniões, documentos, biblioteca, contactos, jornal)
+
 ## 1.095
 - Dicas ao passar o rato: deixam de ficar presas no ecrã e não repetem o que já está escrito no menu lateral
 
