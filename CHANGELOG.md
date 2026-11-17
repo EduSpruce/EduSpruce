@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.069
+- A barra das EduApps já não fica por cima das janelas laterais (ex.: Lançar Jogo)
+
 ## 1.068
 - Barra das EduApps no tema SGE: botões no azul do cabeçalho (contorno branco, cantos retos) e o botão principal em branco
 

@@ -18,7 +18,7 @@ function eaAplicar(){
 {const _gEa=go;go=function(v){const r=_gEa.apply(this,arguments);try{eaAplicar()}catch(e){console.warn(e)}return r};Object.assign(go,_gEa);go._f=_gEa._f}
 {const st=document.createElement('style');st.textContent=`html body.eduapp #side,html body.eduapp #railTgl,html body.eduapp #bar,html body.eduapp #tabbar,html body.eduapp .spvolta{display:none!important}
 html body.eduapp #main{margin-left:0!important;width:100%!important;max-width:none!important;padding-top:0!important}
-html body #eabar{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:8px 12px;background:var(--panel,#fff);border-bottom:1px solid var(--line,#ddd)}
+html body #eabar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:8px 12px;background:var(--panel,#fff);border-bottom:1px solid var(--line,#ddd)}
 html body #eabar .eanome{display:flex;align-items:center;gap:6px;font-weight:700;font-size:16px}
 html body #eabar .easp{flex:1}
 html body #eabar #barx{display:flex;flex-wrap:wrap;gap:6px;margin:0}
