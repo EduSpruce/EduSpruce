@@ -1371,3 +1371,6 @@ Tema SGE: a seta (▾) do seletor de escola no cabeçalho deixava de ter espaço
 
 ## v1.026
 
+## v1.027
+
+Definições: o texto de ajuda (.hint) dentro de cada .pref ocupava só a coluna das etiquetas (220px) e partia-se em várias linhas; passa a ocupar a linha toda (grid-column:1/-1).

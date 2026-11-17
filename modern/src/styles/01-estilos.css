@@ -985,7 +985,7 @@ tr.swp .swdel{height:100%}
 .tbox small{color:var(--mut)}.tbox b{font-size:16px}.tbox p{margin:0 0 6px;color:var(--ink);font-size:14px;line-height:1.4}
 /* Definições */
 .deftabs{margin:0 auto 14px;max-width:1200px;display:flex}
-.prefs{display:grid;gap:14px}.pref{display:grid;grid-template-columns:220px 1fr;align-items:center;gap:12px}
+.prefs{display:grid;gap:14px}.pref{display:grid;grid-template-columns:220px 1fr;align-items:center;gap:12px}.pref>.hint{grid-column:1/-1}
 @container vw (max-width:700px){.pref{grid-template-columns:1fr}}
 .acs{display:flex;gap:10px;flex-wrap:wrap}
 .acb{width:40px;height:40px;border-radius:50%;border:3px solid var(--panel);background:linear-gradient(135deg,var(--c1) 50%,var(--c2) 50%);box-shadow:0 0 0 1px var(--line)}

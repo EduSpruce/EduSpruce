@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.027
+- Explicações das Definições numa só linha, a toda a largura
+
 ## 1.026
 - Desempenho (PCs antigos) e modo leve; modo «Em teste»; modo de apresentação com memória por turma e privacidade instantânea; disciplinas/UFCD; coordenação ≠ docência; demonstração com 3 anos; Forms com V/F, espaços, ligar e modo exame
 
