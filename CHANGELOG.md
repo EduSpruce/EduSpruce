@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.121
+- Turmas PROFIJ: já não pede a «Disciplina que leciona nesta turma» — basta assinalar as disciplinas e UFCD do referencial
+- Corrigido o erro «startsWith» ao usar o teclado na vista Turmas (e noutras vistas)
+- Provas, Pulso, Formulários e Spruce It: o nome da app já não aparece repetido no topo e o botão da casa fica alinhado com o conteúdo
+- Início: cartão do Jornal da Escola mais claro, com botão direto para importar o PAA
+
 ## 1.120
 - PROFIJ: «Ano do curso» em vez do ano de escolaridade; disciplinas do referencial de dupla certificação e UFCD do curso ao criar a turma
 - N.º de projeto, dados MRA, FCT e PAP só nas escolas profissionais

@@ -146,7 +146,7 @@ function planoAcertar(l,r,wks){
     if(e.key==='Escape'){ui.sel=null;render();}
     else if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();moveCard(id,null,null);}
     else if(e.key==='f'||e.key==='F'){if(c.day!=null){mutate(()=>{c.locked=!c.locked;});again();}}
-    else if(c.day!=null&&e.key.startsWith('Arrow')){e.preventDefault();const d=c.day+(e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0),p=c.period+(e.key==='ArrowDown'?1:e.key==='ArrowUp'?-1:0);if(d<0||d>=S.days.length||p<0||p+c.len>S.periods.length)return;moveCard(id,d,p);again();}
+    else if(c.day!=null&&String(e.key||'').startsWith('Arrow')){e.preventDefault();const d=c.day+(e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0),p=c.period+(e.key==='ArrowDown'?1:e.key==='ArrowUp'?-1:0);if(d<0||d>=S.days.length||p<0||p+c.len>S.periods.length)return;moveCard(id,d,p);again();}
   });
 })();
 

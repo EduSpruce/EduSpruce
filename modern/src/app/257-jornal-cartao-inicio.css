@@ -1,0 +1,10 @@
+/* 1.121 — cartão do Jornal no Início: cabeçalho numa linha e estado vazio com ação direta */
+html body .jn-w0 .jw-cab{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;margin-bottom:10px}
+html body .jn-w0 .jw-cab h2{display:flex;align-items:center;gap:8px;min-width:0;flex:1 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .jn-w0 .jw-cab #jw-go{flex:0 0 auto}
+html body .jn-w0 .jw-vazio{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px dashed var(--line,#d5dbe3);border-radius:var(--r,10px);background:color-mix(in srgb,var(--pri,#0f6f94) 5%,transparent)}
+html body .jn-w0 .jw-vi{flex:0 0 40px;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r,10px);background:color-mix(in srgb,var(--pri,#0f6f94) 14%,transparent);color:var(--pri,#0f6f94)}
+html body .jn-w0 .jw-vazio b{display:block;font-size:14px;margin-bottom:2px}
+html body .jn-w0 .jw-vazio span:not(.jw-vi){display:block;font-size:13px;line-height:1.45;color:var(--mut,#5b6573)}
+html body .jn-w0 .jw-imp{margin-top:10px}
+html body.est-sge .jn-w0 .jw-vazio,html body.est-sge .jn-w0 .jw-vi{border-radius:0}

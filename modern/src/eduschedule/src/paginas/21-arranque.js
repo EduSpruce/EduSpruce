@@ -30,7 +30,7 @@ function start(){
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'&&ui.sel&&!$('#dlg').open){ui.sel=null;render();return;}
     if(!(e.ctrlKey||e.metaKey)||/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||busy)return;
-    const k=e.key.toLowerCase();if(k==='z'&&!e.shiftKey){e.preventDefault();desfazer();}else if(k==='y'||(k==='z'&&e.shiftKey)){e.preventDefault();step(redo,undo);}
+    const k=String(e.key||'').toLowerCase();if(k==='z'&&!e.shiftKey){e.preventDefault();desfazer();}else if(k==='y'||(k==='z'&&e.shiftKey)){e.preventDefault();step(redo,undo);}
   });
   window.addEventListener('beforeunload',()=>{if(saveState==='pend')try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}});
   window.addEventListener('hashchange',route);route();

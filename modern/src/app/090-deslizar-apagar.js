@@ -27,8 +27,8 @@ function paleta(){const a=A();const itens=[];
   desenha();setTimeout(()=>q.focus(),60)}
 /* ---------- atalhos de teclado ---------- */
 document.addEventListener('keydown',e=>{const tag=(e.target.tagName||'').toLowerCase();const emCampo=['input','textarea','select'].includes(tag)||e.target.isContentEditable;
-  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();paleta();return}
-  if((e.metaKey||e.ctrlKey)&&!e.shiftKey&&e.key.toLowerCase()==='z'&&!emCampo){e.preventDefault();desfazer();return}
+  if((e.metaKey||e.ctrlKey)&&String(e.key||'').toLowerCase()==='k'){e.preventDefault();paleta();return}
+  if((e.metaKey||e.ctrlKey)&&!e.shiftKey&&String(e.key||'').toLowerCase()==='z'&&!emCampo){e.preventDefault();desfazer();return}
   if(e.key==='?'&&!emCampo){e.preventDefault();ajudaContexto();return}
   if(e.key==='Escape')fecharMenu();
   if(e.key==='Tab'&&$('#drawer').classList.contains('on')){const f=[...$('#drawer').querySelectorAll('button,input,select,textarea,a[href],[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&x.offsetParent);if(!f.length)return;const i=f.indexOf(document.activeElement);
