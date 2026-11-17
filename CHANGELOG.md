@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.097
+- Reuniões, Direção de Turma, Biblioteca e Documentos passam a módulos opcionais, com ícone e cor próprios nas Apps
+- Início: em vez da fila de apps, fica só o ícone que abre o painel Apps
+
 ## 1.096
 - Imagens ilustrativas em toda a app: os ecrãs vazios mostram uma ilustração do assunto (turmas, calendário, avaliação, tarefas, reuniões, documentos, biblioteca, contactos, jornal)
 

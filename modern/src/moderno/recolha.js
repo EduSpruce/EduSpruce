@@ -296,3 +296,24 @@ function mqLogo(){try{const bc=$('#mq-bc');if(!bc||bc.previousElementSibling&&bc
   bc.insertAdjacentHTML('beforebegin',`<span class="mq-logo" aria-hidden="true">${hubIcone(a,26)}</span>`)}catch(_){}}
 if(typeof mqVista==='function'){const _mqVL=mqVista;mqVista=function(){const r=_mqVL.apply(this,arguments);mqLogo();return r}}
 {const s=document.createElement('style');s.textContent='html body .mq-logo{display:inline-flex;margin-right:10px;flex:none}html body .mq-logo .hbic{box-shadow:none}html body.est-sge .mq-logo .hbic{border-radius:0}';document.head.appendChild(s)}
+/* 1.096 — Reuniões, Direção de Turma, Biblioteca e Documentos passam a módulos opcionais (ligados por omissão),
+   cada um com o seu ícone e cor nas Apps, no título e em Definições › Módulos Opcionais */
+const MOD4=[{k:'reunioes',inp:'mod-reun',n:'Reuniões',g:'meet',d:'Convocatórias, atas e reuniões',gr:'escola',c:'ciano',sge:'sgePetroleo'},
+  {k:'direcao',inp:'mod-dt',n:'Direção de Turma',g:'crown',d:'Direção de turma: alunos, EE e documentos',gr:'gestao',c:'ambar',sge:'sgeOuro'},
+  {k:'recursos',inp:'mod-bib',n:'Biblioteca',g:'bookopen',d:'Biblioteca de recursos',gr:'org',c:'laranja',sge:'sgeCastanho'},
+  {k:'documentos',inp:'mod-doc',n:'Documentos',g:'file',d:'Gerador de documentos',gr:'gestao',c:'vermelho',sge:'sgeGrena'}];
+const mod4On=k=>{try{const m=S.cfg&&S.cfg.modulos;return !(m&&m[k]===false)}catch(_){return true}};
+{try{Object.assign(HUB_CORES,{sgePetroleo:['#0e7490','#155e75'],sgeOuro:['#ca8a04','#a16207'],sgeCastanho:['#92400e','#78350f'],sgeGrena:['#9f1239','#881337']});
+  MOD4.forEach(m=>{HUB_SGE_DEF[m.k]=m.sge;if(HUB_APPS.some(x=>x.id===m.k))return;
+    const a={id:m.k,gr:m.gr,n:m.n,v:m.k,g:[m.g],c:m.c,d:m.d,on:m.k==='direcao'?()=>mod4On('direcao')&&(()=>{try{return !!(A()&&minhasDT(A()).length)}catch(_){return false}})():()=>mod4On(m.k)};
+    const i=HUB_APPS.map(x=>x.gr).lastIndexOf(a.gr);HUB_APPS.splice(i<0?HUB_APPS.length:i+1,0,a)});
+  const gr=n=>MOD_GR.find(x=>x[0]===n);
+  gr('Gestão e sala de aula')[2].push(['mod-dt','direcao'],['mod-doc','documentos']);gr('Escola e Comunicação')[2].unshift(['mod-reun','reunioes']);gr('Organização')[2].push(['mod-bib','recursos']);
+}catch(e){console.warn(e)}}
+function mod4Aplica(){try{MOD4.forEach(m=>document.body.classList.toggle('modoff-'+m.k,!mod4On(m.k)));hubMenuMods();if(typeof menuAgendar==='function')menuAgendar()}catch(e){console.warn(e)}}
+if(typeof cartaoAvisosDef==='function'){const _ca4=cartaoAvisosDef,_ba4=bindAvisosDef;
+  cartaoAvisosDef=function(){const h=_ca4.apply(this,arguments);return h.replace(/(<div class="card ed" id="def-mods">[\s\S]*?)(<\/div>)$/,'$1'+MOD4.map(m=>`<label class="chk" style="margin-top:8px"><input type="checkbox" id="${m.inp}" ${mod4On(m.k)?'checked':''}> ${ic(m.g,15)} <span><b>${m.n}</b><br><span class="mut">${m.d}${m.k==='direcao'?' (só aparece a quem é DT)':''}</span></span></label>`).join('')+'$2')};
+  bindAvisosDef=function(){const r=_ba4.apply(this,arguments);MOD4.forEach(m=>{const c=$('#'+m.inp);if(c)c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos[m.k];else S.cfg.modulos[m.k]=false;save();mod4Aplica();toast('Módulo '+m.n+(c.checked?' ativado':' desativado'),'ok')}});return r}}
+{const _g4=go;go=function(v){if(MOD4.some(m=>m.k===v)&&!mod4On(v))v='inicio';const r=_g4.apply(this,[v].concat([].slice.call(arguments,1)));try{mod4Aplica()}catch(_){}return r};if(_g4._f)go._f=_g4._f}
+setTimeout(mod4Aplica,300);
+{const s=document.createElement('style');s.textContent='html body.modoff-reunioes #reunBan,html body.modoff-reunioes #reunBadge{display:none!important}';document.head.appendChild(s)}

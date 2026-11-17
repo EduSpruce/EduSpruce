@@ -199,12 +199,12 @@ function hubEditar(a){const h=hubCfg();const o=Object.assign({},h.ic[a.id]||{});
   $('#hbe-ok').onclick=()=>{const L={};['g','c','e','img','n'].forEach(k=>{if(o[k]&&String(o[k]).trim())L[k]=k==='n'||k==='e'?String(o[k]).trim():o[k]});if(Object.keys(L).length)h.ic[a.id]=L;else delete h.ic[a.id];save();closeDrawer();vHub();toast('Ícone guardado','ok')}}
 /* 1.054 — Início: barra de ferramentas com as apps em ícones pequenos, alinhada à direita (por cima do cartão do ano letivo) */
 if(typeof dashTopo==='function'){const _dtHb=dashTopo;dashTopo=function(){const h=_dtHb.apply(this,arguments);try{hubCss();
-  const L=HUB_APPS.filter(a=>!a.on||a.on());if(!L.length)return h;
-  const bar=`<div class="hub-mini" role="toolbar" aria-label="Apps">${L.map(a=>`<button type="button" class="hbm" data-hubmini="${a.id}" title="${esc(hubNome(a))} — ${esc(a.d)}" aria-label="${esc(hubNome(a))}">${hubIcone(a,34)}</button>`).join('')}<span class="hbm-sep"></span><button type="button" class="hbm hbm-todas" data-hubmini="@hub" title="Todas as apps" aria-label="Todas as apps">${ic('apps',22)}</button></div>`;
+  /* 1.096: são muitas apps — no Início fica só o ícone que abre o painel Apps */
+  const bar=`<div class="hub-mini hub-so" role="toolbar" aria-label="Apps"><button type="button" class="hbm hbm-todas" data-hubmini="@hub" title="Todas as apps" aria-label="Todas as apps">${ic('apps',22)}</button></div>`;
   requestAnimationFrame(hubMiniAjusta);setTimeout(hubMiniAjusta,350);
   const k=h.lastIndexOf('</div>');return k<0?h+bar:h.slice(0,k)+bar+h.slice(k)}catch(e){console.warn(e);return h}}}
 /* a barra fica com a largura e as margens do cartão da coluna da direita (ex.: Ano Letivo / contagem) */
-function hubMiniAjusta(){try{const bar=document.querySelector('#view .hub-mini');if(!bar)return;const top=bar.closest('.dtop');
+function hubMiniAjusta(){try{const bar=document.querySelector('#view .hub-mini');if(!bar)return;if(bar.classList.contains('hub-so')){bar.classList.remove('larg','apert','mob');bar.style.width='';return}const top=bar.closest('.dtop');
   const n=bar.querySelectorAll('.hbm').length;
   const tam=()=>{const w=bar.clientWidth-14-9;const t=Math.floor((w-(n-1)*4)/n)-4;bar.style.setProperty('--hbs',Math.max(26,Math.min(46,t))+'px');bar.classList.toggle('apert',t<26)};
   const limpa=()=>{bar.classList.remove('larg','apert','mob');bar.style.width='';bar.style.removeProperty('--hbs')};
