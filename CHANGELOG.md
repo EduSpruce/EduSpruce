@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.049
+- Escola: o cartão do logotipo foi reorganizado — pré-visualização de uma página com os três logótipos no sítio certo, três caixas alinhadas com descrição e botões Escolher/Substituir/Remover, arrastar imagem para cada caixa.
+
 ## 1.048
 - Planta da Sala reformulada: modo Desenhar a Sala com modelos e pincel (secretária do professor, porta, janela, corredores), ajuste automático do tamanho para caberem todos os alunos; distribuição por número, alfabética, aleatória, dificuldades à frente, turma mista e necessidades à frente; lugares fixos; PDF com secretária/porta/janela. Corrige o lugar desalinhado (conflito com o estilo do calendário).
 
