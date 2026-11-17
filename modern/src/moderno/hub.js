@@ -11,7 +11,7 @@ function hubNomeGr(g){try{let M=null;try{M=menuCfg()}catch(_){}if(!Array.isArray
   const vs=new Set(HUB_APPS.filter(a=>a.gr===g.id).map(a=>a.v));let melhor=null,n=0;
   const vis=G=>(G||[]).forEach(x=>{if(!x||typeof x!=='object')return;if(Array.isArray(x.f)){const k=x.f.filter(i=>i&&vs.has(i.v)).length;const outras=x.f.some(i=>i&&!vs.has(i.v)&&HUB_APPS.some(z=>z.v===i.v));if(x.nome&&k>n&&!outras){n=k;melhor=x.nome}vis(x.f)}});vis(M);
   return melhor&&n>=2?String(melhor).replace(/^./,c=>c.toUpperCase()):g.n}catch(_){return g.n}}
-const HUB_GRUPOS=[{id:'gestao',n:'Gestão',g:'school'},{id:'recreio',n:'EduApps',g:'sparkle'},{id:'org',n:'Organização',g:'layers'}];
+const HUB_GRUPOS=[{id:'gestao',n:'Gestão',g:'school'},{id:'recreio',n:'SpruceApps',g:'sparkle'},{id:'org',n:'Organização',g:'layers'}];
 const hubN=(n,s,p)=>n+' '+(n===1?s:p);
 const HUB_APPS=[
   {id:'turmas',gr:'gestao',n:'Turmas e Alunos',v:'turmas',g:['mvTurmas','users'],c:'azul',d:'Ano letivo, turmas, alunos e fichas',

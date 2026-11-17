@@ -259,7 +259,7 @@ html body.est-sge .hub-ilu,html body.est-sge .hub-ilu rect{border-radius:0;rx:0}
 
 /* 1.093 — Definições › Módulos Opcionais: todos, agrupados, com o ícone de cor de cada módulo */
 const MOD_GR=[['Gestão e sala de aula','school',[['mod-cp','cprofij'],['mod-roda','roda','target'],['aa-on','autoav','users'],['dg-on','digit','camera']]],
-  ['EduApps','sparkle',[['ar-on','arena'],['pu-on','pulso'],['fm-on','forms'],['pv-on','provas']]],
+  ['SpruceApps','sparkle',[['ar-on','arena'],['pu-on','pulso'],['fm-on','forms'],['pv-on','provas']]],
   ['Escola e Comunicação','mail',[['mod-jn','jornal'],['mod-cont','contactos']]],
   ['Organização','layers',[['mod-sn','sprucenote'],['esch-on','eduschedule']]]];
 function modsAgrupar(){try{const M=$('#view #def-mods');if(!M||M.dataset.grp)return;const L=[...M.querySelectorAll(':scope>label.chk')];if(!L.length)return;M.dataset.grp='1';
@@ -397,3 +397,43 @@ html body #ttl .vlogo .hbic>svg{width:15px;height:15px}
 /* menu lateral: só o item atual e o que está debaixo do rato ficam realçados */
 html body #side#side .nav:not(.on):not(.hov):not(:focus-visible){background:transparent!important}
 `;document.head.appendChild(s)}
+/* 1.103 — «EduApps» passa a chamar-se «SpruceApps» em toda a app (também nos menus já guardados) */
+function spruceAppsNome(){try{if(!S.cfg)return;let mud=0;const vis=G=>(G||[]).forEach(x=>{if(!x||typeof x!=='object')return;if(typeof x.nome==='string'&&/^\s*edu\s*apps\s*$/i.test(x.nome)){x.nome='SpruceApps';mud=1}if(Array.isArray(x.f))vis(x.f)});
+  if(Array.isArray(S.cfg.menuL))vis(S.cfg.menuL);(Array.isArray(S.cfg.menus)?S.cfg.menus:[]).forEach(m=>{if(m&&Array.isArray(m.M))vis(m.M)});
+  if(mud){save();try{menuRender()}catch(_){}}}catch(e){console.warn(e)}}
+setTimeout(spruceAppsNome,900);setTimeout(spruceAppsNome,4000);
+/* menu lateral: um só item realçado — o da vista atual (ou o último tocado) */
+{let ult='';document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#side [data-v]');if(b)ult=b.dataset.v},true);
+  const um=()=>{try{const L=[...document.querySelectorAll('#side .nav.on,#side [data-v].on')];if(L.length<2)return;const k=L.find(b=>b.dataset.v===VIEW)||L.find(b=>b.dataset.v===ult)||L[L.length-1];L.forEach(b=>{if(b!==k)b.classList.remove('on')})}catch(_){}};
+  const lig=()=>{const s=document.getElementById('side');if(!s||s.dataset.um)return;s.dataset.um=1;new MutationObserver(um).observe(s,{subtree:true,attributes:true,attributeFilter:['class']});
+    s.addEventListener('pointerleave',()=>s.querySelectorAll('.hov').forEach(x=>x.classList.remove('hov')))};
+  try{lig();addEventListener('load',lig);setTimeout(lig,1500)}catch(_){}}
+/* mais ilustrações (no estilo das Apps): novos desenhos para os ecrãs vazios, nos Módulos Opcionais e no topo da Ajuda */
+{try{const C=ILU_C;Object.assign(ILU_SVG,{
+sumario:`<rect x="34" y="14" width="112" height="92" rx="6" fill="var(--panel)" stroke="var(--line)"/><rect x="34" y="14" width="10" height="92" fill="${C.az}" opacity=".85"/><g fill="var(--mut)" opacity=".35"><rect x="54" y="28" width="70" height="5"/><rect x="54" y="42" width="80" height="4"/><rect x="54" y="52" width="74" height="4"/><rect x="54" y="62" width="60" height="4"/><rect x="54" y="76" width="78" height="4"/><rect x="54" y="86" width="50" height="4"/></g><g transform="rotate(35 186 60)"><rect x="178" y="18" width="14" height="74" fill="${C.lj}"/><path d="M178 92h14l-7 14z" fill="#f5d0a9"/><rect x="178" y="18" width="14" height="8" fill="${C.vm}"/></g>`,
+horario:`<rect x="30" y="12" width="180" height="96" rx="6" fill="var(--panel)" stroke="var(--line)"/><rect x="30" y="12" width="180" height="16" fill="${C.es}"/><g fill="var(--line)">${[0,1,2,3].map(r=>[0,1,2,3,4].map(c=>`<rect x="${42+c*33}" y="${38+r*17}" width="26" height="11"/>`).join('')).join('')}</g><rect x="75" y="38" width="26" height="11" fill="${C.az}"/><rect x="141" y="55" width="26" height="11" fill="${C.vd}"/><rect x="42" y="72" width="26" height="11" fill="${C.lj}"/><rect x="108" y="89" width="26" height="11" fill="${C.rx}" opacity=".8"/>`,
+criterios:`<rect x="20" y="16" width="110" height="88" rx="6" fill="var(--panel)" stroke="var(--line)"/><circle cx="75" cy="60" r="30" fill="${C.az}"/><path d="M75 60V30a30 30 0 0 1 28 40z" fill="${C.lj}"/><path d="M75 60l28 10a30 30 0 0 1-38 18z" fill="${C.vd}"/><rect x="146" y="20" width="76" height="80" rx="6" fill="var(--panel)" stroke="var(--line)"/><g><rect x="158" y="36" width="52" height="4" fill="var(--line)"/><circle cx="180" cy="38" r="6" fill="${C.az}"/><rect x="158" y="58" width="52" height="4" fill="var(--line)"/><circle cx="198" cy="60" r="6" fill="${C.lj}"/><rect x="158" y="80" width="52" height="4" fill="var(--line)"/><circle cx="168" cy="82" r="6" fill="${C.vd}"/></g>`,
+definicoes:`<rect x="24" y="18" width="120" height="84" rx="6" fill="var(--panel)" stroke="var(--line)"/><g>${[0,1,2].map(i=>`<rect x="36" y="${32+i*22}" width="56" height="5" fill="var(--mut)" opacity=".35"/><rect x="104" y="${28+i*22}" width="28" height="14" rx="7" class="r" fill="${i===1?'var(--line)':C.az}"/><circle cx="${i===1?111:125}" cy="${35+i*22}" r="5" fill="#fff"/>`).join('')}</g><g transform="translate(186 60)" fill="${C.lj}"><circle r="20"/>${[0,45,90,135,180,225,270,315].map(a=>`<rect x="-5" y="-27" width="10" height="10" transform="rotate(${a})"/>`).join('')}<circle r="8" fill="var(--panel)"/></g>`,
+ajuda:`<rect x="30" y="20" width="120" height="84" rx="4" fill="var(--panel)" stroke="var(--line)"/><path d="M90 20v84" stroke="var(--line)"/><g fill="var(--mut)" opacity=".35"><rect x="42" y="34" width="38" height="4"/><rect x="42" y="44" width="34" height="4"/><rect x="42" y="54" width="38" height="4"/><rect x="100" y="34" width="38" height="4"/><rect x="100" y="44" width="30" height="4"/></g><rect x="100" y="56" width="38" height="28" fill="${C.az}" opacity=".25"/><g transform="translate(186 52)"><circle r="22" fill="${C.am}"/><rect x="-9" y="20" width="18" height="12" fill="var(--mut)" opacity=".6"/><path d="M-6 4l6-10 6 10" stroke="#fff" stroke-width="3" fill="none"/></g>`,
+ferias:`<circle cx="70" cy="44" r="22" fill="${C.am}"/><g stroke="${C.am}" stroke-width="3">${[0,45,90,135,180,225,270,315].map(a=>`<path d="M70 44m0-30v-8" transform="rotate(${a} 70 44)"/>`).join('')}</g><path d="M0 104q60-22 120 0t120 0v16H0z" fill="${C.az}" opacity=".35"/><path d="M150 100q10-50 0-70" stroke="#92400e" stroke-width="4" fill="none"/><path d="M150 32q-26-6-40 10M150 32q24-10 40 4M150 32q-6 20-24 28" stroke="${C.vd}" stroke-width="7" fill="none" stroke-linecap="round"/>`});
+  Object.assign(ILU_VISTA,{sumarios:'sumario',aula:'sumario',meuhorario:'horario',horario:'horario',criterios:'criterios',dominios:'criterios',definicoes:'definicoes',ajuda:'ajuda',escola:'definicoes'})}catch(e){console.warn(e)}}
+/* Ajuda: ilustração no cabeçalho */
+if(typeof vAjuda==='function'){const _vAjI=vAjuda;vAjuda=function(){const r=_vAjI.apply(this,arguments);try{const h=$('#view .ajh');if(h&&!h.querySelector('.ilu-cab')&&innerWidth>800)h.insertAdjacentHTML('beforeend',`<span class="ilu-cab" aria-hidden="true">${iluSvg('ajuda',200)}</span>`)}catch(_){}return r}}
+/* Módulos Opcionais: o espaço livre no fim de cada grupo recebe a ilustração do grupo (como nas Apps) */
+const MOD_ILU={'Gestão e sala de aula':'gestao',SpruceApps:'recreio','Escola e Comunicação':'escola','Organização':'org'};
+function modsIlus(){try{if(VIEW!=='definicoes')return;$$('#view #def-mods .mdg').forEach(sc=>{const l=sc.querySelector('.mdg-l');if(!l)return;const o=l.querySelector('.hub-ilu');if(o)o.remove();
+  const n=(sc.querySelector('.mdg-h')||{}).textContent||'';const svg=HUB_ILU[MOD_ILU[n.trim()]];if(!svg)return;
+  const cols=getComputedStyle(l).gridTemplateColumns.split(' ').filter(Boolean).length;const k=l.children.length;const rem=cols-(k%cols||cols);if(cols<2||rem<1)return;
+  l.insertAdjacentHTML('beforeend',`<div class="hub-ilu" aria-hidden="true" style="grid-column:span ${rem}">${svg}</div>`)})}catch(e){console.warn(e)}}
+if(typeof vDefinicoes==='function'){const _vDI=vDefinicoes;vDefinicoes=function(){const r=_vDI.apply(this,arguments);requestAnimationFrame(modsIlus);setTimeout(modsIlus,80);return r}}
+addEventListener('resize',()=>{clearTimeout(modsIlus._t);modsIlus._t=setTimeout(modsIlus,150)});
+{const s=document.createElement('style');s.textContent=`
+html body .ajh{position:relative}
+html body .ajh .ilu-cab{position:absolute;right:18px;top:50%;transform:translateY(-50%);line-height:0;pointer-events:none;opacity:.95}
+html body .ajh .ilu-cab .ilu{width:200px;height:auto}
+html body .ajh .ajhd{padding-right:230px}
+html body #def-mods .mdg-l>.hub-ilu{min-height:90px}
+`;document.head.appendChild(s)}
+/* Início: «Ano letivo terminado» com uma ilustração de férias */
+{let t=0;const f=()=>{try{$$('#view .cdown').forEach(c=>{if(c.querySelector('.ilu')||!/Boas férias/.test(c.textContent))return;c.insertAdjacentHTML('beforeend',`<span class="ilu-w" style="margin:10px auto 0">${iluSvg('ferias',200)}</span>`)})}catch(_){}};
+  try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(f,80)}).observe(document.body,{childList:true,subtree:true})}catch(_){}}
