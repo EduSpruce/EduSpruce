@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.041
+- página publicada leve: código, estilos e dados em app/ com impressão digital no nome (cache pelo service worker)
+- GIF da Ajuda, pdf.js e MRA carregados a pedido
+- manifesto da app como ficheiro
+
 ## 1.040
 - «ontem» em vez de «há 1 dias»
 - cabeçalho: botões principais ficam visíveis mais tempo

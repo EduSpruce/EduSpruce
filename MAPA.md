@@ -92,3 +92,9 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 
 ## Manual PDF e Ajuda (1.037)
 - Fontes e scripts do manual em `modern/manual/` (ver LEIA-ME). Ajuda revista no bloco `/* v1.034 · Ajuda revista` do módulo 56 (aplica-se depois de `ajudaAtualizar`); imagens da Ajuda por estilo em `ajuda/<estilo>/*.webp`, mapa em `AJ_VISTA` (módulo 58). Ao acrescentar um ecrã novo: acrescentar o assunto à Ajuda, a imagem nos 7 estilos e um capítulo no manual.
+
+## Página leve (1.041) — ficheiros separados na versão publicada
+- O `db.mjs` (função `separar`) tira do `index.html` publicado: código principal → `app/app.<impressão>.js`, estilos grandes → `app/estilosN.<impressão>.css`, dados (GIF da Ajuda, pdf.js, MRA) → `app/<id>.<impressão>.txt` (carregados só quando precisos, via `data-src`), manifesto → `manifest.webmanifest`. O `index.html` passa de 8,2 MB para ~75 KB.
+- O código-fonte não muda (continua em `modern/src/app`); `arquivo.html` e a exportação offline continuam num ficheiro só.
+- `sw.js`: ficheiros `app/*.<12 hex>.*` servidos da cache (nunca mudam de conteúdo); fica a versão atual e a anterior. `espelho.sh` copia `app/`.
+- Em `app/.versao-anterior` fica a lista da versão anterior (não se apaga logo, para janelas antigas ainda abertas).
