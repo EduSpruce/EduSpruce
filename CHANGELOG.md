@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.105
+- Ajuda: índice por baixo da pesquisa numa lista limpa (já não fica cortado em colunas); secções abre/fecha mais claras e compactas; ilustração no topo deixa de tapar o índice
+- Modo de Apresentação passa a módulo opcional
+- Ficha do aluno: separadores numa grelha arrumada
+
 ## 1.104
 - Corrigido o aviso «Cannot access ILU_C before initialization» ao abrir o Início (as ilustrações novas passam a aparecer)
 

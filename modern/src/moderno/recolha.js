@@ -418,7 +418,7 @@ ajuda:`<rect x="30" y="20" width="120" height="84" rx="4" fill="var(--panel)" st
 ferias:`<circle cx="70" cy="44" r="22" fill="${C.am}"/><g stroke="${C.am}" stroke-width="3">${[0,45,90,135,180,225,270,315].map(a=>`<path d="M70 44m0-30v-8" transform="rotate(${a} 70 44)"/>`).join('')}</g><path d="M0 104q60-22 120 0t120 0v16H0z" fill="${C.az}" opacity=".35"/><path d="M150 100q10-50 0-70" stroke="#92400e" stroke-width="4" fill="none"/><path d="M150 32q-26-6-40 10M150 32q24-10 40 4M150 32q-6 20-24 28" stroke="${C.vd}" stroke-width="7" fill="none" stroke-linecap="round"/>`});
   Object.assign(ILU_VISTA,{sumarios:'sumario',aula:'sumario',meuhorario:'horario',horario:'horario',criterios:'criterios',dominios:'criterios',definicoes:'definicoes',ajuda:'ajuda',escola:'definicoes'})}catch(e){console.warn(e)}},0);
 /* Ajuda: ilustração no cabeçalho */
-if(typeof vAjuda==='function'){const _vAjI=vAjuda;vAjuda=function(){const r=_vAjI.apply(this,arguments);try{const h=$('#view .ajh');if(h&&!h.querySelector('.ilu-cab')&&innerWidth>800)h.insertAdjacentHTML('beforeend',`<span class="ilu-cab" aria-hidden="true">${iluSvg('ajuda',200)}</span>`)}catch(_){}return r}}
+if(typeof vAjuda==='function'){const _vAjI=vAjuda;vAjuda=function(){const r=_vAjI.apply(this,arguments);try{const h=$('#view .ajh .ajhd');if(h&&!h.querySelector('.ilu-cab'))h.insertAdjacentHTML('afterbegin',`<span class="ilu-cab" aria-hidden="true">${iluSvg('ajuda',200)}</span>`)}catch(_){}return r}}
 /* Módulos Opcionais: o espaço livre no fim de cada grupo recebe a ilustração do grupo (como nas Apps) */
 const MOD_ILU={'Gestão e sala de aula':'gestao',SpruceApps:'recreio','Escola e Comunicação':'escola','Organização':'org'};
 function modsIlus(){try{if(VIEW!=='definicoes')return;$$('#view #def-mods .mdg').forEach(sc=>{const l=sc.querySelector('.mdg-l');if(!l)return;const o=l.querySelector('.hub-ilu');if(o)o.remove();
@@ -429,11 +429,56 @@ if(typeof vDefinicoes==='function'){const _vDI=vDefinicoes;vDefinicoes=function(
 addEventListener('resize',()=>{clearTimeout(modsIlus._t);modsIlus._t=setTimeout(modsIlus,150)});
 {const s=document.createElement('style');s.textContent=`
 html body .ajh{position:relative}
-html body .ajh .ilu-cab{position:absolute;right:18px;top:50%;transform:translateY(-50%);line-height:0;pointer-events:none;opacity:.95}
-html body .ajh .ilu-cab .ilu{width:200px;height:auto}
-html body .ajh .ajhd{padding-right:230px}
+html body .ajh .ilu-cab{display:block;line-height:0;margin:0 0 10px;pointer-events:none}
+html body .ajh .ilu-cab .ilu{width:180px;max-width:100%;height:auto}
 html body #def-mods .mdg-l>.hub-ilu{min-height:90px}
 `;document.head.appendChild(s)}
 /* Início: «Ano letivo terminado» com uma ilustração de férias */
 {let t=0;const f=()=>{try{$$('#view .cdown').forEach(c=>{if(c.querySelector('.ilu')||!/Boas férias/.test(c.textContent))return;c.insertAdjacentHTML('beforeend',`<span class="ilu-w" style="margin:10px auto 0">${iluSvg('ferias',200)}</span>`)})}catch(_){}};
   try{new MutationObserver(()=>{clearTimeout(t);t=setTimeout(f,80)}).observe(document.body,{childList:true,subtree:true})}catch(_){}}
+/* 1.105 — Ajuda: índice por baixo da pesquisa numa lista limpa (deixa de partir em colunas cortadas), secções abre/fecha mais claras */
+{const s=document.createElement('style');s.textContent=`
+html body .ajh{overflow:hidden}
+html body .ajh .ajidx{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;gap:0!important;margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow-x:hidden}
+html body:not(:has(.vside)) .ajh .ajidx{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));border:0;background:transparent;gap:6px!important}
+html body .ajh .ajidx .chip{display:flex!important;align-items:center;gap:10px;width:auto;min-width:0;margin:0!important;padding:9px 12px!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:none!important}
+html body:not(:has(.vside)) .ajh .ajidx .chip{border:1px solid var(--line)!important;border-radius:8px!important;background:var(--panel)!important}
+html body .ajh .ajidx .chip:last-child{border-bottom:0!important}
+html body .ajh .ajidx .chip>svg{flex:none;color:var(--acc)}
+html body .ajh .ajidx .chip:hover{background:color-mix(in srgb,var(--acc) 8%,transparent)!important;color:var(--acc)}
+html body .ajh .ajidx .chip.aj-at{background:color-mix(in srgb,var(--acc) 12%,transparent)!important;color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)!important}
+html body .ajh .ajman2 .ajtx small{white-space:normal}
+html body .ajh #aj-q{width:100%;box-sizing:border-box;margin-top:12px}
+html body .ajh #ajcol-b .btn{flex:1;justify-content:center}
+html body.est-sge .ajh .ajidx,html body.est-sge .ajh .ajidx .chip{border-radius:0!important}
+html body .ajs>h2.ajcol-h{margin:-6px -8px 0;padding:6px 8px;border-radius:8px;font-weight:700}
+html body .ajs>h2.ajcol-h:hover{background:color-mix(in srgb,var(--acc) 6%,transparent)}
+html body .ajs:not(.ajfech)>h2.ajcol-h{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line);border-radius:8px 8px 0 0}
+html body .ajcol-s{flex:none;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-size:20px!important;color:var(--acc)!important;transform:rotate(-90deg)!important}
+html body .ajs.ajfech .ajcol-s{transform:rotate(90deg)!important}
+html body.est-sge .ajcol-s,html body.est-sge .ajs>h2.ajcol-h{border-radius:0}
+`;document.head.appendChild(s)}
+/* ao abrir uma secção pelo índice: fica marcada no índice */
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('#view .ajidx [data-aj]');if(!a)return;$$('#view .ajidx .aj-at').forEach(x=>x.classList.remove('aj-at'));a.classList.add('aj-at')});
+/* Modo de Apresentação passa a módulo opcional (ligado por omissão) */
+const apresModOn=()=>{try{return !(S.cfg&&S.cfg.modulos&&S.cfg.modulos.apres===false)}catch(_){return true}};
+function apresModAplica(){try{const b=document.getElementById('apresBtn');if(b){const sp=b.closest('.barico');(sp&&sp.children.length===1?sp:b).style.display=apresModOn()?'':'none'}
+  if(!apresModOn()&&document.body.classList.contains('apres')&&typeof apresClasses==='function'){apresClasses(false);go(VIEW)}}catch(e){console.warn(e)}}
+try{const g=MOD_GR.find(x=>x[0]==='Gestão e sala de aula');if(g)g[2].push(['mod-apres','apres','eye']);Object.assign(HUB_SGE_DEF,{apres:'sgeCinza'})}catch(_){}
+{const _mgAp=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-apres')){
+  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-apres" ${apresModOn()?'checked':''}> ${ic('eye',15)} <span><b>Modo de Apresentação</b><br><span class="mut">Botão do olho no topo: esconde nomes, fotografias e dados sensíveis ao projetar o ecrã</span></span></label>`);
+  const c=M.querySelector('#mod-apres');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.apres;else S.cfg.modulos.apres=false;save();apresModAplica();toast('Modo de Apresentação '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
+  return _mgAp.apply(this,arguments)}}
+setTimeout(apresModAplica,400);{const _gAp=go;go=function(){const r=_gAp.apply(this,arguments);try{apresModAplica()}catch(_){}return r};if(_gAp._f)go._f=_gAp._f}
+/* Ficha do aluno: separadores numa grelha arrumada (colunas iguais, alinhados), em vez de três filas desencontradas */
+{const s=document.createElement('style');s.textContent=`
+html body #dw-b .tabs.fichatabs{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px!important;padding:4px!important;overflow:visible!important}
+html body #dw-b .tabs.fichatabs>button{margin:0!important;justify-content:flex-start!important;text-align:left;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:8px 10px!important}
+html body.est-sge.est-sge.est-sge #dw-b .tabs.fichatabs>button{margin:0!important}
+`;document.head.appendChild(s)}
+{const s=document.createElement('style');s.textContent=`
+html body .card.ajs.ajfech{padding-top:12px!important;padding-bottom:12px!important}
+html body .ajh .ajidx{box-sizing:border-box;max-width:100%}
+html body .ajh .ajidx .chip{box-sizing:border-box;max-width:100%;flex:none}
+html body .ajh .ajidx .chip>svg+*,html body .ajh .ajidx .chip{text-overflow:ellipsis}
+`;document.head.appendChild(s)}
