@@ -131,11 +131,12 @@ function ajustarTitulo(minFs){minFs=minFs||15;const t=$('#ttl');if(!t)return;t.s
   const base=parseFloat(getComputedStyle(t).fontSize)||22;let fs=base;const cabe=()=>t.scrollWidth<=t.clientWidth+1;
   if(!t.clientWidth)return;while(!cabe()&&fs>minFs){fs-=1;t.style.fontSize=fs+'px'}if(!cabe())t.classList.add('ttl2')}
 /* barra superior: tudo numa linha sempre que couber (título encolhe até 17 px); só passa a duas linhas se não couber */
-ajustarBarra=function(){const b=document.getElementById('bar');if(!b)return;b.classList.remove('bar2');const t=$('#ttl');ajustarTitulo(17);if(innerWidth<=1000){ajustarTitulo();return}
+ajustarBarra=function(){const b=document.getElementById('bar');if(!b)return;b.classList.remove('bar2');const t=$('#ttl');/* no telemóvel só conta o 2.º ajuste (o 1.º era logo desfeito e custava um recálculo da página) */if(innerWidth<=1000){ajustarTitulo();return}ajustarTitulo(17);
   if(b.scrollWidth>b.clientWidth+1||(t&&t.classList.contains('ttl2'))){b.classList.add('bar2');ajustarTitulo()}};
-{const _g2=go;go=function(){const r=_g2.apply(this,arguments);requestAnimationFrame(()=>ajustarBarra());return r}}
+/* um só ajuste por imagem: a navegação e a mudança do título pediam cada uma o seu */let _abPend=false;function ajustarBarraAg(){if(_abPend)return;_abPend=true;requestAnimationFrame(()=>{_abPend=false;ajustarBarra()})}
+{const _g2=go;go=function(){const r=_g2.apply(this,arguments);ajustarBarraAg();return r}}
 {const t=$('#ttl');if(t&&window.ResizeObserver){let w=0;new ResizeObserver(en=>{const nw=Math.round(en[0].contentRect.width);if(nw!==w){w=nw;requestAnimationFrame(()=>{if($('#bar.bar2')||innerWidth<=1000)ajustarTitulo();else ajustarBarra()})}}).observe(t.parentElement)}
-  if(t)new MutationObserver(()=>requestAnimationFrame(()=>ajustarBarra())).observe(t,{childList:true,characterData:true,subtree:true})}
+  if(t)new MutationObserver(()=>ajustarBarraAg()).observe(t,{childList:true,characterData:true,subtree:true})}
 
 /* Imprimir = documento próprio (o mesmo do “Exportar PDF”), não a página da app */
 let _imprimirPdf=false;

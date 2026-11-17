@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.114
+- Mais rápida, sobretudo no telemóvel: abrir cada vista demora cerca de metade (Alunos, Avaliação e Relatórios eram as mais lentas)
+- Cada versão nova descarrega menos um quarto: os ícones dos logótipos saíram do programa principal
+
 ## 1.113
 - Definições › Segurança: Código de Acesso, Espaço Utilizado e Caixote do Lixo com ilustração no espaço livre à direita (ecrãs largos)
 - Corrigido o aviso «Cannot access 'ILU_C' before initialization» ao abrir o Início

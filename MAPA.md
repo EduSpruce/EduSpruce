@@ -33,6 +33,19 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - **Base de dados**: `0019_seguranca_rgpd.sql` — limite de tentativas falhadas por rede (`eduspruce_ritmo`; `arena_entrar`/`pulso_entrar` passam a embrulhar `…_base`), limites de espaço, limpeza diária (`eduspruce_limpeza`), `eduspruce_apagar_conta`, `eduspruce_admin_uso`, `eduspruce_bd_versao()`. Na app: `sbRpc`, `SB_BD_MIN` (versão mínima dos scripts; o administrador é avisado se faltar), «Privacidade e Conta» em Definições › Conta e Dados.
 - **OCR**: o leitor e o trabalhador do tesseract.js estão em `esm/tesseract-*.js` (só o motor e o idioma vêm do jsDelivr).
 
+## Rapidez (versão publicada): sem `:has()` nas folhas de estilos, logótipos fora do programa
+- **Escrever `:has()` nas peças continua a ser normal.** Ao publicar, `modern/scripts/semhas.mjs` (chamado no `separar` do `db.mjs`) troca cada `A:has(B)` das folhas de estilos (e dos estilos que o código junta à página) por `A:where(.eh-N):not(falso)` — mesma especificidade — e põe no cabeçalho um programa pequeno que mantém as classes `eh-N` (uma consulta por regra quando a página muda; observa filhos, `class`, `open`, `hidden` e os atributos usados nas condições).
+- Porquê: uma regra `:has()` ancorada no topo (`#view`, `body`, `.card`…) obrigava a recalcular o estilo de toda a vista a cada mexida; num telemóvel modesto abrir os Alunos gastava ~0,9 s só nisso. Medido antes/depois: Alunos 1,3 s → 0,7 s, Avaliação 0,6 s → 0,35 s (CPU ÷4).
+- Ficam com `:has()` verdadeiro: condições com estados (`:checked`, `:hover`, `:focus`…) e as ancoradas em `#bar`/`#ttl` (o `cabecalho()` muda classes e mede no mesmo instante). **Código que mude classes e meça logo a seguir, dependendo de uma regra `:has()` fora do cabeçalho, vê o estilo antigo até ao fim da tarefa** — nesse caso chamar `window.__ehS()` antes de medir.
+- `tests/semhas.mjs` (no `./es testa`): em todas as vistas, classes = condição verdadeira.
+- Ícones dos logótipos (`fav`/`ios` de `EF_LOGOS`, ~600 KB em texto): o `separar` passa-os a `app/logo-*.png`; o programa desce de 1,69 MB para 1,23 MB comprimido.
+- Cabeçalho: `ajustarBarraAg()` junta os ajustes pedidos na mesma imagem; no telemóvel o título é ajustado uma vez (eram duas).
+- Medir: estilos/disposição/código por navegação com `Performance.getMetrics` (CDP) e `Emulation.setCPUThrottlingRate` 4.
+
+## Testes das funções da base de dados (`modern/tests/sql/`, no `./es testa`)
+- `correr.sh`: PostgreSQL local (se não houver, avisa e segue), base nova com `stubs.sql` (imitações de auth/storage/cron/net), todos os scripts de `supabase/migrations` e cada `*.teste.sql` numa cópia limpa. `certo(condição, texto)` pára com erro.
+- `spruceit.teste.sql` (22 verificações) e `pulso.teste.sql` (15): professor cria, alunos entram sem conta e respondem, correção, classificação, resultados, terminar, apagar; e o que NÃO pode acontecer (aluno a ler tabelas ou a chave, token de outra pessoa, outro professor a mandar na sala, responder depois de terminado).
+
 ## Contraste e tema escuro (1.098)
 - Tema escuro = `body.escurox` (e `html[data-theme=dark]`). Regras do tema SGE com cores fixas precisam de `:not(.escurox)` ou de um par para o escuro; as correções estão em `app/251-legibilidade-tema-escuro-testes.css`.
 - A app corrige o contraste sozinha (`a11yContraste`, `app/115-…`: escurece/aclara a letra ou o fundo com estilos em linha), mas só nos momentos livres (1–2 s nas vistas grandes) e não percorre as grelhas: a folha de estilos tem de estar certa por si.

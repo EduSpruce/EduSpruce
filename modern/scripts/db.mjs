@@ -1,6 +1,6 @@
 // EduSpruce · transforma o index.html normal na versão com base de dados («vX.XXXDB»)
 //   node modern/scripts/db.mjs <entrada.html> <saida.html>   → também copia esm/ e supabase-config.json para a pasta de saída
-import {readFileSync,writeFileSync,cpSync,mkdirSync} from 'node:fs';import {dirname,join,resolve} from 'node:path';import {fileURLToPath} from 'node:url';
+import {readFileSync,writeFileSync,cpSync,mkdirSync} from 'node:fs';import {semHas} from './semhas.mjs';import {dirname,join,resolve} from 'node:path';import {fileURLToPath} from 'node:url';
 const raiz=join(dirname(fileURLToPath(import.meta.url)),'..');
 export function aplicarDB(html){let s=html;
   for(const [a,b] of JSON.parse(readFileSync(join(raiz,'src/moderno/patches.json'),'utf8'))){const n=s.split(a).length-1;if(n!==1)throw new Error('Alteração não aplicável ('+n+'×): '+a.slice(0,70));s=s.replace(a,()=>b)}
@@ -20,7 +20,7 @@ export function aplicarDB(html){let s=html;
 import {createHash} from 'node:crypto';import {existsSync,readdirSync,unlinkSync} from 'node:fs';
 export function separar(html,destDir){const dir=join(destDir,'app');mkdirSync(dir,{recursive:true});const usados=[];
   const guarda=(nome,ext,txt)=>{const h=createHash('sha256').update(txt).digest('hex').slice(0,12);const f=`${nome}.${h}.${ext}`;writeFileSync(join(dir,f),txt);usados.push(f);return 'app/'+f};
-  let s=html;
+  let s=semHas(html);
   const troca=(a,b)=>{const n=s.split(a).length-1;if(n!==1)throw new Error('separar: alteração não aplicável ('+n+'×): '+a.slice(0,60));s=s.replace(a,()=>b)};
   /* o manifesto da app (instalar no ecrã principal) passa a ser o ficheiro publicado, em vez de 167 KB embutidos na página */
   if(existsSync(join(raiz,'..','manifest.webmanifest'))){const r=/<link rel="manifest" href="data:[^"]*">/;if(r.test(s))s=s.replace(r,'<link rel="manifest" href="manifest.webmanifest">')}
@@ -32,6 +32,9 @@ export function separar(html,destDir){const dir=join(destDir,'app');mkdirSync(di
   for(const [id,tipo] of [['gifs-json','application/json'],['pdfgz-lib','application/octet-stream'],['mragz','application/octet-stream'],['pdfgz-wk','application/octet-stream']]){
     const a=`<script type="${tipo}" id="${id}">`;const i=s.indexOf(a);if(i<0||s.indexOf(a,i+1)>=0)throw new Error('separar: bloco '+id);const j=s.indexOf('</script>',i);
     const txt=s.slice(i+a.length,j);s=s.slice(0,i)+`<script type="${tipo}" id="${id}" data-src="${guarda(id,'txt',txt)}"></script>`+s.slice(j+9)}
+  /* ícones dos logótipos (separador e ecrã principal do iPhone): eram ~600 KB de imagens em texto dentro do programa, descarregados
+     por toda a gente a cada versão; passam a ficheiros .png, e o navegador só vai buscar os do logótipo em uso */
+  {let n=0;s=s.replace(/"(fav|ios)": "data:image\/png;base64,([A-Za-z0-9+\/=]+)"/g,(m,k,b64)=>{n++;return `"${k}": "${guarda('logo-'+k,'png',Buffer.from(b64,'base64'))}"`});if(n<10)throw new Error('separar: logótipos não encontrados ('+n+')')}
   /* estilos grandes (fora dos scripts) → ficheiros .css, pela mesma ordem */
   const fimHead=s.indexOf('</head>');let k=0;
   s=s.slice(0,fimHead).replace(/<style([^>]*)>([\s\S]*?)<\/style>/g,(m,at,css)=>css.length<20000?m:`<link rel="stylesheet" href="${guarda('estilos'+(++k),'css',css)}"${/id="([^"]+)"/.test(at)?' data-id="'+at.match(/id="([^"]+)"/)[1]+'"':''}>`)+s.slice(fimHead);

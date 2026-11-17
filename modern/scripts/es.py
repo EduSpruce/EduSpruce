@@ -197,6 +197,13 @@ def testa(a):
     r=subprocess.run(['node',os.path.join(R,'modern','tests','percurso.mjs'),d],capture_output=True,text=True)
     print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
     if r.returncode:sys.exit(1)
+    r=subprocess.run(['node',os.path.join(R,'modern','tests','semhas.mjs'),d],capture_output=True,text=True)
+    print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
+    if r.returncode:sys.exit(1)
+    # funções da base de dados (Spruce It, Pulso) num PostgreSQL local; se não houver PostgreSQL instalado, avisa e segue
+    r=subprocess.run(['sh',os.path.join(R,'modern','tests','sql','correr.sh')],capture_output=True,text=True)
+    print((r.stdout or '').strip()[-1500:] or (r.stderr or '').strip()[-800:])
+    if r.returncode:sys.exit(1)
 
 
 # ---------------------------------------------------------------- publicar
