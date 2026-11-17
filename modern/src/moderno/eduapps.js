@@ -13,7 +13,9 @@ function eaAplicar(){
 {const st=document.createElement('style');st.textContent=`html body.eduapp #side,html body.eduapp #railTgl,html body.eduapp #tabbar,html body.eduapp .spvolta,html body.eduapp #menuBtn,html body.eduapp #bar #crumb,html body.eduapp #bar #ctxTurma{display:none!important}
 html body.eduapp #main{margin-left:0!important;width:100%!important;max-width:none!important}
 html body.eduapp #bar{padding-left:14px!important}
-html body.eduapp #bar .ttlw{display:flex!important;align-items:center;gap:10px}
+html body.eduapp #bar .ttlw,html body.eduapp.dev-pc #bar.hgrid>.ttlw,html body.eduapp.est-sge #bar .ttlw{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:10px!important}
+html body.eduapp #bar .ttlw #ttl{margin:0!important;white-space:nowrap}
+html body.eduapp #bar #eacasa{width:40px;height:40px;min-height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 html body #bar #eacasa{flex:0 0 auto}
 html body.eduapp.dev-pc #bar.hgrid{grid-template-areas:"t e x a u i"!important}
 html body.eduapp #bar #barx{grid-area:x!important;justify-content:flex-end!important;flex-wrap:nowrap!important;margin:0!important}

@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.071
+- EduApps: ícone da casa e nome da app lado a lado, tudo numa linha
+
 ## 1.070
 - EduApps (Spruce It, Pulso, Formulários, Provas) com uma só linha em cima: casa, nome da app, escola, ano letivo, ações e ícones
 
