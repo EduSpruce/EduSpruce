@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.082
+- Menu lateral: um módulo desligado nunca aparece, em nenhum menu (incluindo os criados por si); liga e desliga com o módulo
+
 ## 1.081
 - Apps: os módulos desligados deixam de aparecer; um grupo sem módulos ligados desaparece até se ligar um
 - Menu lateral: o SpruceNote desligado já não volta a aparecer

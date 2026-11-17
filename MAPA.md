@@ -64,6 +64,7 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - `S.cfg.hub = {ini (abrir nas Apps ao entrar, omissão NÃO — o Início é a primeira página; 1.057), est ('cheio'|'suave'|'linha'), ic:{id:{g,c,e,img,n}}}`; imagem própria reduzida a 128 px (webp). Editor em `hubEditar` (gaveta).
 - Ao entrar: `go('inicio')` passa para `hub` até o professor navegar (`go._hubU`). Atenção: a classe `.hbtag` era escondida por uma regra global — usar `.hblig`.
 - Módulos desligados (`a.on()` falso) não aparecem em `vHub` nem na barra `.hub-mini`; um grupo sem nenhum módulo ligado não é desenhado (volta ao ligar um em Definições › Módulos Opcionais). Os de Gestão não têm `on`: aparecem sempre.
+- Menu lateral: `hubMenuMods()` (corre antes de cada `menuRender` e depois do `aplicarPrefs`) põe `hidden` nas entradas dos módulos desligados em qualquer menu; a regra `#side .nav[hidden]{display:none!important}` garante que nenhum tema as mostra.
 - 1.053–1.055: tema SGE em `vHub` (painéis `.hub-gr` com título `.hub-sec`, mosaicos planos com faixa de cor, mosaicos alinhados à esquerda); caixa «Turma» (`#hb-tur`, muda `S.turmaAtiva`) no painel Gestão — apps com `turma:1` pedem a turma. Início: `dashTopo` envolvido para pôr a barra `.hub-mini` (ícones pequenos à direita, `data-hubmini`).
 
 ## Spruce It (1.060) — antiga Arena, com o aspeto do design «EduSpruce Arena»

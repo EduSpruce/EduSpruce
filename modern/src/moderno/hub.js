@@ -229,3 +229,9 @@ html body.est-sge .hub-mini .hbm:hover{background:color-mix(in srgb,#1f9fcf 12%,
 html body.est-sge .hub-mini .hbm-todas{color:#0e7095}
 @media (max-width:700px){html body .dtop .hub-mini{margin-left:0}}
 `;document.head.appendChild(s)}
+/* menu lateral: um módulo desligado nunca aparece, seja qual for o menu (original, criado pelo professor ou da escola) nem o tema;
+   aparece e desaparece conforme se liga ou desliga o módulo */
+function hubMenuMods(){try{HUB_APPS.forEach(a=>{if(!a.on)return;const on=!!a.on();document.querySelectorAll('#side [data-v="'+a.v+'"],#tnavHold [data-v="'+a.v+'"]').forEach(b=>{if(b.hidden===on)b.hidden=!on})})}catch(e){console.warn(e)}}
+if(typeof menuRender==='function'){const _mrHb=menuRender;menuRender=function(){hubMenuMods();return _mrHb.apply(this,arguments)}}
+if(typeof aplicarPrefs==='function'){const _apHb=aplicarPrefs;aplicarPrefs=function(){const r=_apHb.apply(this,arguments);try{hubMenuMods();menuAgendar()}catch(_){}return r}}
+{const s=document.createElement('style');s.textContent='html body #side .nav[hidden],html body #tnavHold .nav[hidden]{display:none!important}';document.head.appendChild(s)}
