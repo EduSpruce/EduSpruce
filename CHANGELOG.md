@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.050
+- Provas: Início com as colunas alinhadas em baixo. Módulos renomeados: Formulários, Pulso e Arena (menu, cabeçalhos, definições, modelos CSV e páginas dos alunos).
+
 ## 1.049
 - Escola: o cartão do logotipo foi reorganizado — pré-visualização de uma página com os três logótipos no sítio certo, três caixas alinhadas com descrição e botões Escolher/Substituir/Remover, arrastar imagem para cada caixa.
 

@@ -1,4 +1,4 @@
-/* ===================== EduSpruce Arena · código comum (app do professor e página do aluno) =====================
+/* ===================== Arena · código comum (app do professor e página do aluno) =====================
    Pinhas (personagens originais em SVG), modos de jogo, sons sintetizados, filtro de alcunhas e cifra da lista da turma.
    Tudo original: nomes, desenhos, textos e sons. */
 (function(){
