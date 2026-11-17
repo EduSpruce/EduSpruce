@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.118
+- Jornal Escolar: botão Apagar PAA (apaga as atividades importadas)
+- Recomeçar do Zero apaga mesmo tudo da base de dados, incluindo os módulos opcionais; os módulos opcionais deixam de aparecer dentro desse cartão
+- O Meu Calendário: barra lateral e barra de ferramentas mais coerentes
+
 ## 1.117
 - Jornal Escolar: quadro das peças com colunas claras e etiquetas e botões compactos
 

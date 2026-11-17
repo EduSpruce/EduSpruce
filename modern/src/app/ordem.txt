@@ -41,6 +41,7 @@ dados/004-manifesto.html
 249-telemovel-botoes-linha-alvos-toque.css
 251-legibilidade-tema-escuro-testes.css
 252-jornal-kanban.css
+253-meu-calendario-coerente.css
 040-corpo.html
 dados/041-hash-wasm.html
 042-corpo-2.html

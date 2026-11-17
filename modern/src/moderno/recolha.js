@@ -313,7 +313,9 @@ const mod4On=k=>{try{const m=S.cfg&&S.cfg.modulos;return !(m&&m[k]===false)}catc
 }catch(e){console.warn(e)}}
 function mod4Aplica(){try{MOD4.forEach(m=>document.body.classList.toggle('modoff-'+m.k,!mod4On(m.k)));hubMenuMods();if(typeof menuAgendar==='function')menuAgendar()}catch(e){console.warn(e)}}
 if(typeof cartaoAvisosDef==='function'){const _ca4=cartaoAvisosDef,_ba4=bindAvisosDef;
-  cartaoAvisosDef=function(){const h=_ca4.apply(this,arguments);return h.replace(/(<div class="card ed" id="def-mods">[\s\S]*?)(<\/div>)$/,'$1'+MOD4.map(m=>`<label class="chk" style="margin-top:8px"><input type="checkbox" id="${m.inp}" ${mod4On(m.k)?'checked':''}> ${ic(m.g,15)} <span><b>${m.n}</b><br><span class="mut">${m.d}${m.k==='direcao'?' (só aparece a quem é DT)':''}</span></span></label>`).join('')+'$2')};
+  cartaoAvisosDef=function(){let h=_ca4.apply(this,arguments);const kz=h.indexOf('<div class="card ed" id="def-zero">');let z='';if(kz>=0){z=h.slice(kz);h=h.slice(0,kz)}
+    z=z.replace(/<p class="hint" style="margin-top:0">[\s\S]*?<\/p>/,'<p class="hint" style="margin-top:0">Apaga definitivamente <b>todos</b> os seus dados da EduSpruce na base de dados — incluindo os dos módulos opcionais (Spruce It, Pulso, Formulários, Provas, SpruceNote, EduSchedule, Reuniões, Biblioteca, Documentos…), salas, resultados e preferências. Depois, ao entrar de novo com Google, começa com a app vazia. Não há forma de desfazer.</p>');
+    return h.replace(/(<div class="card ed" id="def-mods">[\s\S]*?)(<\/div>)$/,'$1'+MOD4.map(m=>`<label class="chk" style="margin-top:8px"><input type="checkbox" id="${m.inp}" ${mod4On(m.k)?'checked':''}> ${ic(m.g,15)} <span><b>${m.n}</b><br><span class="mut">${m.d}${m.k==='direcao'?' (só aparece a quem é DT)':''}</span></span></label>`).join('')+'$2')+z};
   bindAvisosDef=function(){const r=_ba4.apply(this,arguments);MOD4.forEach(m=>{const c=$('#'+m.inp);if(c)c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos[m.k];else S.cfg.modulos[m.k]=false;save();mod4Aplica();toast('Módulo '+m.n+(c.checked?' ativado':' desativado'),'ok')}});return r}}
 {const _g4=go;go=function(v){if(MOD4.some(m=>m.k===v)&&!mod4On(v))v='inicio';const r=_g4.apply(this,[v].concat([].slice.call(arguments,1)));try{mod4Aplica()}catch(_){}return r};if(_g4._f)go._f=_g4._f}
 setTimeout(mod4Aplica,300);
@@ -545,3 +547,13 @@ try{const a=HUB_APPS.find(x=>x.id==='jornalnote');if(a){const o=a.on;a.on=()=>jn
 setTimeout(()=>{try{hubMenuMods()}catch(_){}},1800);
 /* Ajuda: a animação deixa de esticar até à altura do texto (ficava um espaço vazio por baixo) */
 {const s=document.createElement('style');s.textContent='html body .ajg{align-items:start!important}html body .ajg>figure.ajf{align-self:start!important;height:auto!important}html body figure.ajf>img,html body figure.ajf>canvas{display:block}';document.head.appendChild(s)}
+
+/* Recomeçar do Zero (versão com base de dados): apaga mesmo tudo — todas as tabelas da conta, incluindo os módulos opcionais */
+nvApagarTudo=async function(){const r=await avisoModal('Apagar tudo e recomeçar?',['Vão ser apagados definitivamente todos os seus dados da EduSpruce na base de dados: turmas, alunos, avaliações, sumários e também tudo dos módulos opcionais (Spruce It, Pulso, Formulários, Provas, SpruceNote, EduSchedule, Reuniões, Biblioteca, Documentos…), salas, resultados e preferências.','Depois, ao entrar de novo com Google, começa com a app vazia. A autorização do seu e-mail não muda.','Sugestão: antes, descarregue uma cópia em Definições › Segurança.'],[{t:'Cancelar',v:null,c:'pri'},{t:'Continuar',c:'dng',v:'sim'}]);if(r!=='sim')return;
+  const w=(prompt('Para confirmar, escreva APAGAR')||'').trim();if(w!=='APAGAR'){toast('Nada foi apagado.');return}
+  ocupado('A apagar todos os dados…');try{await sbRpc('eduspruce_apagar_conta',{p_confirmar:'APAGAR'})}catch(e){livre();return toast('Não foi possível apagar: '+(e.message||e),'erro')}
+  window.__esSair=true;window.__efApagar=true;try{save=function(){};saveNow=function(){}}catch(_){}
+  try{const p=await sbObter();await Promise.race([p.sair(),new Promise(ok=>setTimeout(ok,2500))])}catch(_){}
+  try{sbEsquecer()}catch(_){}try{localStorage.clear();sessionStorage.clear()}catch(_){}
+  try{const D=indexedDB.databases?await indexedDB.databases():[];await Promise.all(D.map(d=>d.name).filter(Boolean).map(n=>new Promise(ok=>{const q=indexedDB.deleteDatabase(n);q.onsuccess=q.onerror=q.onblocked=()=>ok()})))}catch(_){}
+  try{sessionStorage.setItem('es.lgmsg','Todos os dados foram apagados. Entre de novo para recomeçar do zero.')}catch(_){}location.replace(location.origin+location.pathname)};
