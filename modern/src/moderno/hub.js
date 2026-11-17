@@ -257,7 +257,7 @@ if(typeof aplicarPrefs==='function'){const _apHb=aplicarPrefs;aplicarPrefs=funct
 {const s=document.createElement('style');s.textContent='html body #side .nav[hidden],html body #tnavHold .nav[hidden]{display:none!important}';document.head.appendChild(s)}
 /* 1.092 — Apps com a largura toda, como as outras vistas (o cabeçalho alinha-se pelo conteúdo e ficava mais estreito) */
 {const s=document.createElement('style');s.textContent=`
-html body .hub,html body.est-sge .hub{max-width:none;margin:0;padding:0 0 40px}
-html body .hub-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
-html body .hub-grid>.hbt{min-width:0;max-width:none;flex:none}
+html body .hub.hub,html body.est-sge .hub.hub{max-width:none;margin:0;padding:0 0 40px}
+html body .hub-grid.hub-grid,html body.est-sge .hub-grid.hub-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+html body .hub-grid.hub-grid>.hbt{min-width:0;max-width:none;flex:none}
 `;document.head.appendChild(s)}

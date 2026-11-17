@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.093
+- Apps: todos os módulos (Jornal Escolar, JornalNote, Contactos, Coord. PROFIJ), novo grupo Escola e Comunicação, cada um com a sua cor; imagens ilustrativas no espaço livre
+- Definições › Módulos Opcionais: agrupados, com o ícone de cor de cada módulo
+- Logótipo de cor no título de cada módulo e no cabeçalho do SpruceNote/JornalNote
+- Provas: quatro cartões com imagens ilustrativas no Início
+- Definições › Ferramentas: Diagnóstico dos Dados colapsável, com o número de problemas
+
 ## 1.092
 - Apps: ocupa a largura toda, com o cabeçalho alinhado como nas outras vistas
 

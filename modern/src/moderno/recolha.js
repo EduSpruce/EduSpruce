@@ -195,3 +195,104 @@ html body .snw-est{display:flex;align-items:center;gap:6px;font-size:13px;font-w
 html body .snw-est.ok{background:color-mix(in srgb,#1a8f4e 12%,transparent);color:#1a7a43}
 html body .snw-wc-b{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 `;document.head.appendChild(s)}
+/* 1.093 — Definições › Ferramentas: «Diagnóstico dos Dados» colapsável (o estado fica guardado na conta) */
+function diagColapsavel(){try{const d=$('#diag');const c=d&&d.closest('.card');if(!c||c.dataset.col)return;c.dataset.col='1';c.classList.add('diagcol');
+  const h=c.querySelector('h2');if(!h)return;h.setAttribute('role','button');h.tabIndex=0;h.classList.add('diagcol-h');
+  h.insertAdjacentHTML('beforeend',`<span class="diagcol-n" hidden></span><span class="diagcol-s">${ic('chev',16)}</span>`);
+  const n=h.querySelector('.diagcol-n');
+  const conta=()=>{const k=[...d.children].filter(x=>x.offsetParent!==null||x.querySelector('button')).filter(x=>x.querySelector('button,.btn')).length;n.hidden=!k;n.textContent=k?k+(k===1?' problema':' problemas'):''};
+  const aplica=()=>{const f=!!(S.cfg&&S.cfg.diagFech);c.classList.toggle('fech',f);h.setAttribute('aria-expanded',String(!f))};
+  const alt=()=>{S.cfg=S.cfg||{};S.cfg.diagFech=!S.cfg.diagFech;save();aplica()};
+  h.onclick=e=>{if(e.target.closest('a,input,select'))return;alt()};h.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();alt()}};
+  aplica();conta();try{new MutationObserver(conta).observe(d,{childList:true})}catch(_){}}catch(e){console.warn(e)}}
+if(typeof bindFerramentas==='function'){const _bfD=bindFerramentas;bindFerramentas=function(){const r=_bfD.apply(this,arguments);diagColapsavel();setTimeout(diagColapsavel,300);return r}}
+{const s=document.createElement('style');s.textContent=`
+html body .diagcol-h{cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none}
+html body .diagcol-h:focus-visible{outline:2px solid var(--acc);outline-offset:4px}
+html body .diagcol-s{margin-left:auto;display:inline-flex;color:var(--mut);transition:transform .2s;transform:rotate(90deg)}
+html body .diagcol.fech .diagcol-s{transform:none}
+html body .diagcol-n{font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;background:color-mix(in srgb,#e08a00 16%,transparent);color:#a35f00}
+html body.est-sge .diagcol-n{border-radius:0}
+html body .diagcol.fech>:not(h2){display:none!important}
+html body .diagcol.fech>h2{margin-bottom:0!important}
+`;document.head.appendChild(s)}
+/* 1.093 — todos os módulos nas Apps (Jornal Escolar, JornalNote, Contactos, Coord. PROFIJ), agrupados, cada um com a sua cor da paleta;
+   o mesmo logótipo de cor aparece no título de cada módulo */
+{try{Object.assign(HUB_CORES,{sgeRoxo:['#7c3aed','#6d28d9'],sgeRosa:['#db2777','#be185d'],sgeIndigo:['#4f46e5','#4338ca'],sgeLima:['#65a30d','#4d7c0f'],sgeMagenta:['#c026d3','#a21caf'],sgeArdosia:['#475569','#334155']});
+  Object.assign(HUB_SGE_DEF,{jornal:'sgeRosa',jornalnote:'sgeRoxo',contactos:'sgeCinza',cprofij:'sgeIndigo',roda:'sgeLima',autoav:'sgeMagenta',digit:'sgeArdosia'});
+  const on=f=>()=>{try{return typeof window[f]!=='function'||window[f]()}catch(_){return true}};
+  if(!HUB_GRUPOS.some(g=>g.id==='escola'))HUB_GRUPOS.splice(2,0,{id:'escola',n:'Escola e Comunicação',g:'mail'});
+  const novos=[
+   {id:'cprofij',gr:'gestao',n:'Coord. PROFIJ',v:'cprofij',g:['award'],c:'indigo',d:'Coordenação do Programa PROFIJ',on:on('cpOn')},
+   {id:'jornal',gr:'escola',n:'Jornal Escolar',v:'jornal',g:['file'],c:'vermelho',d:'Plano Anual de Atividades, peças e edições',on:on('jnOn')},
+   {id:'contactos',gr:'escola',n:'Contactos',v:'contactos',g:['mail'],c:'ardosia',d:'E-mails dos colegas e dos diretores de turma',on:on('contOn')},
+   {id:'jornalnote',gr:'org',n:'JornalNote',v:'snjornal',g:['pen'],c:'indigo',d:'Quadros de ideias do Jornal Escolar',on:()=>on('jnOn')()&&on('snOn')()}];
+  novos.forEach(a=>{if(!HUB_APPS.some(x=>x.id===a.id)){const i=HUB_APPS.map(x=>x.gr).lastIndexOf(a.gr);HUB_APPS.splice(i<0?HUB_APPS.length:i+1,0,a)}})}catch(e){console.warn(e)}}
+function vLogo(){try{const t=$('#ttl');if(!t)return;const q=t.querySelector('.vlogo');
+  const a=(typeof HUB_APPS!=='undefined'&&!document.body.classList.contains('eduapp'))?HUB_APPS.find(x=>x.v===VIEW&&(!x.on||x.on())):null;
+  if(!a||typeof hubIcone!=='function'){if(q)q.remove();return}if(q&&q.dataset.v===VIEW)return;if(q)q.remove();
+  t.insertAdjacentHTML('afterbegin',`<span class="vlogo" data-v="${VIEW}" aria-hidden="true">${hubIcone(a,30)}</span>`)}catch(e){console.warn(e)}}
+if(typeof go==='function'){const _goVL=go;go=function(){const r=_goVL.apply(this,arguments);try{vLogo();requestAnimationFrame(vLogo)}catch(_){}return r}}
+{const s=document.createElement('style');s.textContent=`
+html body #ttl .vlogo{display:inline-flex;vertical-align:middle;margin:-4px 10px 0 0}
+html body #ttl .vlogo .hbic{box-shadow:none;border:1.5px solid rgba(255,255,255,.55)}
+html body.est-sge #ttl .vlogo .hbic{border-radius:0}
+`;document.head.appendChild(s)}
+
+/* 1.093 — Apps: imagem ilustrativa no espaço livre do fim de cada grupo (só quando cabe pelo menos um mosaico) */
+const HUB_ILU={
+escola:`<svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet"><rect x="16" y="12" width="132" height="96" rx="8" fill="var(--panel)" stroke="var(--line)"/><rect x="28" y="24" width="108" height="10" rx="2" fill="#db2777"/><rect x="28" y="42" width="50" height="40" rx="3" fill="#fbcfe8"/><g fill="var(--mut)" opacity=".4"><rect x="86" y="44" width="50" height="4" rx="2"/><rect x="86" y="54" width="44" height="4" rx="2"/><rect x="86" y="64" width="50" height="4" rx="2"/><rect x="86" y="74" width="36" height="4" rx="2"/><rect x="28" y="90" width="108" height="4" rx="2"/></g><rect x="166" y="22" width="118" height="76" rx="8" fill="var(--panel)" stroke="var(--line)"/><path d="M166 30l59 38 59-38" fill="none" stroke="#7a8a96" stroke-width="2"/><circle cx="270" cy="26" r="11" fill="#db2777"/><text x="270" y="30" text-anchor="middle" font-size="10" font-weight="800" fill="#fff" font-family="inherit">3</text></svg>`,
+gestao:`<svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet"><rect x="14" y="14" width="128" height="92" rx="8" fill="var(--panel)" stroke="var(--line)"/><g fill="var(--mut)" opacity=".35"><rect x="50" y="30" width="70" height="5" rx="2.5"/><rect x="50" y="52" width="58" height="5" rx="2.5"/><rect x="50" y="74" width="76" height="5" rx="2.5"/></g><g><circle cx="34" cy="33" r="8" fill="#1b93c6" opacity=".8"/><circle cx="34" cy="55" r="8" fill="#16a34a" opacity=".8"/><circle cx="34" cy="77" r="8" fill="#5bb7de"/></g><rect x="50" y="88" width="40" height="10" rx="5" fill="color-mix(in srgb,#16a34a 18%,transparent)"/><rect x="158" y="14" width="128" height="92" rx="8" fill="var(--panel)" stroke="var(--line)"/><path d="M172 92h100" stroke="var(--line)"/><rect x="178" y="62" width="14" height="30" rx="2" fill="#1b93c6" opacity=".5"/><rect x="198" y="46" width="14" height="46" rx="2" fill="#1b93c6" opacity=".75"/><rect x="218" y="32" width="14" height="60" rx="2" fill="#1b93c6"/><rect x="238" y="52" width="14" height="40" rx="2" fill="#16a34a"/><rect x="258" y="70" width="14" height="22" rx="2" fill="#f39200"/><text x="172" y="28" font-size="9" font-weight="700" fill="currentColor" font-family="inherit">Médias</text></svg>`,
+recreio:`<svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet"><rect x="16" y="16" width="150" height="88" rx="10" fill="var(--panel)" stroke="var(--line)"/><rect x="28" y="28" width="96" height="7" rx="3.5" fill="currentColor" opacity=".7"/><rect x="28" y="46" width="62" height="22" rx="5" fill="#dc2626"/><rect x="96" y="46" width="62" height="22" rx="5" fill="#1b93c6"/><rect x="28" y="74" width="62" height="22" rx="5" fill="#f39200"/><rect x="96" y="74" width="62" height="22" rx="5" fill="#16a34a"/><path d="M118 55l4 4 8-8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(184 30)"><rect x="0" y="40" width="30" height="34" rx="3" fill="#5bb7de"/><rect x="34" y="20" width="30" height="54" rx="3" fill="#f39200"/><rect x="68" y="52" width="30" height="22" rx="3" fill="#c2410c" opacity=".8"/><text x="49" y="40" text-anchor="middle" font-size="13" font-weight="800" fill="#fff" font-family="inherit">1</text><path d="M41 4l8-6 8 6-3 10H44z" fill="#f59e0b"/></g></svg>`,
+org:`<svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet"><rect x="12" y="12" width="168" height="96" rx="10" fill="var(--panel)" stroke="var(--line)" stroke-dasharray="3 4"/><rect x="24" y="24" width="56" height="40" rx="4" fill="#fde68a" transform="rotate(-3 52 44)"/><rect x="88" y="22" width="60" height="30" rx="4" fill="#bae6fd"/><rect x="40" y="70" width="70" height="28" rx="4" fill="#bbf7d0" transform="rotate(2 75 84)"/><rect x="120" y="60" width="48" height="38" rx="4" fill="#f59e0b" opacity=".85"/><path d="M80 44C96 44 100 58 116 66" stroke="var(--mut)" stroke-width="1.5" fill="none" marker-end=""/><g fill="var(--mut)" opacity=".5"><rect x="32" y="34" width="36" height="4" rx="2"/><rect x="32" y="44" width="28" height="4" rx="2"/><rect x="96" y="32" width="40" height="4" rx="2"/><rect x="50" y="80" width="46" height="4" rx="2"/></g><rect x="196" y="18" width="92" height="84" rx="8" fill="var(--panel)" stroke="var(--line)"/><rect x="196" y="18" width="92" height="18" rx="8" fill="#0e7095"/><g fill="var(--line)"><rect x="204" y="44" width="16" height="12" rx="2"/><rect x="224" y="44" width="16" height="12" rx="2"/><rect x="264" y="44" width="16" height="12" rx="2"/><rect x="204" y="62" width="16" height="12" rx="2"/><rect x="244" y="62" width="16" height="12" rx="2"/><rect x="264" y="62" width="16" height="12" rx="2"/><rect x="224" y="80" width="16" height="12" rx="2"/><rect x="244" y="80" width="16" height="12" rx="2"/></g><rect x="244" y="44" width="16" height="12" rx="2" fill="#0e7095"/><rect x="224" y="62" width="16" height="12" rx="2" fill="#5bb7de"/><rect x="204" y="80" width="16" height="12" rx="2" fill="#f59e0b"/></svg>`};
+function hubIlus(){try{if(VIEW!=='hub')return;$$('#view .hub-gr').forEach(sec=>{const g=sec.querySelector('.hub-grid');if(!g)return;const old=g.querySelector('.hub-ilu');if(old)old.remove();
+  if(UI.hubEd)return;const t=g.querySelector('.hbt[data-hub]');const a=t&&HUB_APPS.find(x=>x.id===t.dataset.hub);const svg=a&&HUB_ILU[a.gr];if(!svg)return;
+  const cols=getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length;const n=g.querySelectorAll('.hbt').length;const rem=cols-(n%cols||cols);
+  if(cols<2||rem<1)return;g.insertAdjacentHTML('beforeend',`<div class="hub-ilu" aria-hidden="true" style="grid-column:span ${rem}">${svg}</div>`)})}catch(e){console.warn(e)}}
+if(typeof vHub==='function'){const _vHI=vHub;vHub=function(){const r=_vHI.apply(this,arguments);try{requestAnimationFrame(hubIlus)}catch(_){}return r}}
+addEventListener('resize',()=>{clearTimeout(hubIlus._t);hubIlus._t=setTimeout(hubIlus,150)});
+{const s=document.createElement('style');s.textContent=`
+html body .hub-ilu{display:flex;align-items:center;justify-content:center;min-height:100%;border:1px dashed var(--line);border-radius:12px;background:color-mix(in srgb,var(--acc) 4%,transparent);padding:8px;box-sizing:border-box;overflow:hidden;color:var(--ink,#1f2937)}
+html body .hub-ilu svg{display:block;width:100%;height:100%;max-height:120px;max-width:340px}
+html body.est-sge .hub-ilu,html body.est-sge .hub-ilu rect{border-radius:0;rx:0}
+`;document.head.appendChild(s)}
+
+/* 1.093 — Definições › Módulos Opcionais: todos, agrupados, com o ícone de cor de cada módulo */
+const MOD_GR=[['Gestão e sala de aula','school',[['mod-cp','cprofij'],['mod-roda','roda','target'],['aa-on','autoav','users'],['dg-on','digit','camera']]],
+  ['EduApps','sparkle',[['ar-on','arena'],['pu-on','pulso'],['fm-on','forms'],['pv-on','provas']]],
+  ['Escola e Comunicação','mail',[['mod-jn','jornal'],['mod-cont','contactos']]],
+  ['Organização','layers',[['mod-sn','sprucenote'],['esch-on','eduschedule']]]];
+function modsAgrupar(){try{const M=$('#view #def-mods');if(!M||M.dataset.grp)return;const L=[...M.querySelectorAll(':scope>label.chk')];if(!L.length)return;M.dataset.grp='1';
+  const lab=id=>{const i=M.querySelector('#'+id);return i&&i.closest('label.chk')};const usados=new Set();
+  const tile=(lb,id,g)=>{const a=(HUB_APPS.find(x=>x.id===id))||{id,c:'azul',g:[g||'grid']};const [c1,c2]=hubCor(a,{});const sv=[...lb.children].find(x=>x.tagName==='svg');
+    const t=document.createElement('span');t.className='hbic hb-cheio mdg-ic';t.style.cssText=`--h1:${c1};--h2:${c2};width:34px;height:34px`;
+    if(sv){t.appendChild(sv);sv.setAttribute('width','17');sv.setAttribute('height','17')}else t.innerHTML=ic(g||'grid',14);const inp=lb.querySelector('input');(inp?inp.nextSibling:lb.firstChild)?lb.insertBefore(t,inp?inp.nextSibling:lb.firstChild):lb.appendChild(t)};
+  let html='';MOD_GR.forEach(([n,g])=>{html+=`<section class="mdg"><h3 class="mdg-h">${ic(g,15)} ${esc(n)}</h3><div class="mdg-l"></div></section>`});
+  M.insertAdjacentHTML('beforeend',html+`<section class="mdg" data-outros><h3 class="mdg-h">${ic('grid',15)} Outros</h3><div class="mdg-l"></div></section>`);
+  const G=[...M.querySelectorAll('.mdg-l')];
+  MOD_GR.forEach(([,,itens],k)=>itens.forEach(([inp,id,gl])=>{const lb=lab(inp);if(!lb)return;usados.add(lb);lb.style.margin='';tile(lb,id,gl);G[k].appendChild(lb);
+    if(inp==='ar-on'){const sub=M.querySelector('#ar-mdef');if(sub){usados.add(sub);const w=document.createElement('div');w.className='mdg-par';G[k].insertBefore(w,lb);w.appendChild(lb);w.appendChild(sub)}}}));
+  L.filter(lb=>!usados.has(lb)).forEach(lb=>{lb.style.margin='';G[G.length-1].appendChild(lb)});
+  M.querySelectorAll('.mdg').forEach(sc=>{if(!sc.querySelector('label'))sc.remove()})}catch(e){console.warn(e)}}
+if(typeof vDefinicoes==='function'){const _vDM=vDefinicoes;vDefinicoes=function(){const r=_vDM.apply(this,arguments);try{modsAgrupar();setTimeout(modsAgrupar,0)}catch(_){}return r}}
+{const s=document.createElement('style');s.textContent=`
+html body #def-mods .mdg{margin-top:18px}
+html body #def-mods .mdg-h{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding-bottom:6px;border-bottom:1px solid var(--line)}
+html body #def-mods .mdg-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:8px 18px}
+html body #def-mods .mdg-l>label.chk{display:flex;align-items:center;gap:12px;margin:0!important;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+html body #def-mods .mdg-l>label.chk>span{min-width:0}
+html body #def-mods .mdg-par{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+html body #def-mods .mdg-par>label.chk{display:flex;align-items:center;gap:12px;margin:0!important;padding:10px 12px}
+html body #def-mods .mdg-par>#ar-mdef{padding:8px 12px 10px 58px;border-top:1px dashed var(--line);font-size:13px}
+html body.est-sge #def-mods .mdg-par{border-radius:0}
+html body #def-mods .mdg-ic{flex:none;box-shadow:none!important}
+html body.est-sge #def-mods .mdg-l>label.chk,html body.est-sge #def-mods .mdg-ic{border-radius:0}
+@media (max-width:700px){html body #def-mods .mdg-l{grid-template-columns:1fr}}
+`;document.head.appendChild(s)}
+/* o título pode ser reescrito depois (ex.: nome da turma): o logótipo volta */
+{const liga=()=>{const t=$('#ttl');if(!t||t.dataset.vlo)return;t.dataset.vlo='1';new MutationObserver(()=>{if(!t.querySelector('.vlogo'))vLogo()}).observe(t,{childList:true})};try{liga();addEventListener('load',liga)}catch(_){}}
+/* logótipo de cor também no cabeçalho do quadro (SpruceNote / JornalNote) */
+function mqLogo(){try{const bc=$('#mq-bc');if(!bc||bc.previousElementSibling&&bc.previousElementSibling.classList.contains('mq-logo'))return;const a=HUB_APPS.find(x=>x.v===VIEW);if(!a)return;
+  bc.insertAdjacentHTML('beforebegin',`<span class="mq-logo" aria-hidden="true">${hubIcone(a,26)}</span>`)}catch(_){}}
+if(typeof mqVista==='function'){const _mqVL=mqVista;mqVista=function(){const r=_mqVL.apply(this,arguments);mqLogo();return r}}
+{const s=document.createElement('style');s.textContent='html body .mq-logo{display:inline-flex;margin-right:10px;flex:none}html body .mq-logo .hbic{box-shadow:none}html body.est-sge .mq-logo .hbic{border-radius:0}';document.head.appendChild(s)}
