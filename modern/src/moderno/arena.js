@@ -7,7 +7,7 @@ const arOn=()=>S.cfg.arenaOn!==false;
 const arD=()=>{S.arena=S.arena||{};const d=S.arena;d.conj=d.conj||[];d.jogos=d.jogos||[];return d};
 const arMoedasOn=()=>S.cfg.arenaMoedas!==false;
 async function arRpc(fn,args){const p=await sbObter();const c=p.cliente;if(!c||!c.rpc)throw new Error('A base de dados não está disponível.');const {data,error}=await c.rpc(fn,args||{});
-  if(error){const m=String(error.message||error.code||error);if(/function .* does not exist|PGRST202|Could not find the function/i.test(m)){const e=new Error('A Arena ainda não está instalada na base de dados: falta correr o ficheiro 0012_arena.sql no Supabase.');e.semSql=true;throw e}throw new Error(m)}return data}
+  if(error){const m=String(error.message||error.code||error);if(/function .* does not exist|PGRST202|Could not find the function/i.test(m)){const e=new Error('O Spruce It ainda não está instalado na base de dados: falta correr o ficheiro 0012_arena.sql no Supabase.');e.semSql=true;throw e}throw new Error(m)}return data}
 const arUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'spruceit.html#'+AR.limpaCod(c);
 const arTempos=[5,10,15,20,30,45,60,90,120];
 const arCores=['#e2453c','#1f7fd0','#e9a400','#2f9e44'];
@@ -23,11 +23,11 @@ function arExemplo(){return {id:uid(),nome:'Exemplo · Present Simple',disc:'Ing
   {id:uid(),tp:'vf',t:'We use the Present Simple for habits and routines.',o:['Verdadeiro','Falso'],c:0,s:15}]}}
 
 /* ---------- navegação ---------- */
-TITLES.arena='Arena';
+TITLES.arena='Spruce It';
 {const h=document.querySelector('#side [data-v="contactos"]')||document.querySelector('#side [data-v="recursos"]');if(h&&!document.querySelector('#side [data-v="arena"]')){h.insertAdjacentHTML('afterend',`<button class="nav" data-v="arena" title="Spruce It · jogos de perguntas"><span data-ico="sparkle"></span><span class="lbl">Spruce It</span></button>`);const b=document.querySelector('#side [data-v="arena"]');b.querySelector('[data-ico]').innerHTML=ic('sparkle',18);b.onclick=()=>go('arena')}}
 {const _gAr=go;go=function(v){if(v==='arena'&&!arOn())v='inicio';if(go._f&&go._f.arena!==vArena)go._f.arena=vArena;const r=_gAr.call(this,v);try{$$('#side [data-v="arena"]').forEach(b=>{b.hidden=!arOn();b.classList.toggle('on',VIEW==='arena')})}catch(_){}return r};go._f=_gAr._f;if(go._f)go._f.arena=vArena}
-{const _vDa=vDefinicoes;vDefinicoes=function(){const r=_vDa.apply(this,arguments);try{const mods=$('#view #def-mods');if(mods&&!$('#ar-on')){mods.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="ar-on" ${arOn()?'checked':''}> ${ic('sparkle',15)} <span><b>Arena</b><br><span class="mut">Jogos de perguntas em tempo real para a turma: os alunos entram pelo telemóvel com um código, sem contas. Também serve para trabalho de casa.</span></span></label>
-      <label class="chk" style="margin:4px 0 0 30px" ${arOn()?'':'hidden'} id="ar-mdef"><input type="checkbox" id="ar-moe" ${arMoedasOn()?'checked':''}> <span>Moedas e coleção de Pinhas na Arena</span></label>`);
+{const _vDa=vDefinicoes;vDefinicoes=function(){const r=_vDa.apply(this,arguments);try{const mods=$('#view #def-mods');if(mods&&!$('#ar-on')){mods.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="ar-on" ${arOn()?'checked':''}> ${ic('sparkle',15)} <span><b>Spruce It</b><br><span class="mut">Jogos de perguntas em tempo real para a turma: os alunos entram pelo telemóvel com um código, sem contas. Também serve para trabalho de casa.</span></span></label>
+      <label class="chk" style="margin:4px 0 0 30px" ${arOn()?'':'hidden'} id="ar-mdef"><input type="checkbox" id="ar-moe" ${arMoedasOn()?'checked':''}> <span>Moedas e coleção de Pinhas no Spruce It</span></label>`);
       $('#ar-on').onchange=e=>{S.cfg.arenaOn=e.target.checked;save();toast(e.target.checked?'Arena ligada':'Arena desligada','ok');$('#ar-mdef').hidden=!e.target.checked;try{$$('#side [data-v="arena"]').forEach(b=>b.hidden=!arOn())}catch(_){}};
       $('#ar-moe').onchange=e=>{S.cfg.arenaMoedas=e.target.checked;save();toast(e.target.checked?'Moedas e Pinhas ligadas':'Moedas e Pinhas desligadas','ok')}}}catch(e){console.warn(e)}return r};if(go._f)go._f.definicoes=vDefinicoes}
 
@@ -118,9 +118,9 @@ function arImportarDlg(alvo){openDrawer('Importar perguntas',`<div class="ed"><p
   $('#ari-f').onclick=()=>$('#ari-i').click();
   $('#ari-i').onchange=async e=>{const f=e.target.files[0];if(!f)return;let L=[];try{if(/\.xlsx$/i.test(f.name)){const F=await lerXlsxCru(f);const C=Object.values(F)[0]||{};const R={};Object.entries(C).forEach(([ref,v])=>{const m=ref.match(/^([A-Z]+)(\d+)$/);if(!m)return;const col=m[1].split('').reduce((s,ch)=>s*26+ch.charCodeAt(0)-64,0)-1;(R[m[2]]=R[m[2]]||[])[col]=v});L=Object.keys(R).sort((a,b)=>a-b).map(k=>Array.from(R[k],x=>x==null?'':x))}else L=arCsvLinhas(await f.text())}catch(err){return toast('Não foi possível ler o ficheiro: '+err.message,'erro')}
     const P=arDeLinhas(L);if(!P.length)return toast('Não encontrei perguntas no ficheiro. Veja o modelo.','aviso');
-    const d=arD();let c=alvo;if(!c){c={id:uid(),nome:f.name.replace(/\.[^.]+$/,''),disc:(T()||{}).disciplina||'',turma:'',tema:'',pasta:'',criado:Date.now(),mod:Date.now(),perg:[]};d.conj.unshift(c)}c.perg.push(...P);c.mod=Date.now();save();audit('Arena','Importação de perguntas',c.nome+' · '+P.length);closeDrawer();toast(P.length+' pergunta'+(P.length>1?'s':'')+' importada'+(P.length>1?'s':''),'ok');UI.arEd=c.id;vArena()}}
+    const d=arD();let c=alvo;if(!c){c={id:uid(),nome:f.name.replace(/\.[^.]+$/,''),disc:(T()||{}).disciplina||'',turma:'',tema:'',pasta:'',criado:Date.now(),mod:Date.now(),perg:[]};d.conj.unshift(c)}c.perg.push(...P);c.mod=Date.now();save();audit('Spruce It','Importação de perguntas',c.nome+' · '+P.length);closeDrawer();toast(P.length+' pergunta'+(P.length>1?'s':'')+' importada'+(P.length>1?'s':''),'ok');UI.arEd=c.id;vArena()}}
 function arExportar(c){const L=[AR_CAB,...c.perg.map(p=>[p.t,p.tp==='vf'?'VF':'EM',...(p.tp==='vf'?['','','','']:[0,1,2,3].map(k=>p.o[k]||'')),p.tp==='vf'?(p.c===0?'V':'F'):String(p.c+1),String(p.s||20)])];
-  download(c.nome+'.csv','﻿'+L.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Arena','Exportação de perguntas',c.nome)}
+  download(c.nome+'.csv','﻿'+L.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Spruce It','Exportação de perguntas',c.nome)}
 
 /* ---------- lançar um jogo ---------- */
 /* v1.054 · lançar jogo em dois passos (como no design): 1) escolher o modo, 2) definições da sala */
@@ -188,7 +188,7 @@ async function arCriar(c,P,L){const code=AR.codigo();const id=await AR.salaId(co
   if(L.tipo==='tpc'&&new Date(limite)<=new Date())throw new Error('A data-limite tem de ser no futuro.');
   await arRpc('arena_criar',{p_id:id,p_tipo:L.tipo,p_modo:L.modo,p_cfg:cfg,p_perguntas:perguntas,p_certas:certas,p_limite:limite});
   const j={id,codigo:code,conj:c.id,nome:c.nome,modo:L.modo,tipo:L.tipo,tema:cfg.tema,turma:L.nomes==='lista'?L.turma:'',refs,criado:Date.now(),limite,perg:P.map(p=>({t:p.t,o:p.tp==='vf'?['Verdadeiro','Falso']:p.o.slice(),c:p.c}))};
-  arD().jogos.unshift(j);if(arD().jogos.length>200)arD().jogos.length=200;save();audit('Arena','Jogo lançado',c.nome+' · '+M.nome+' · '+(L.tipo==='tpc'?'trabalho de casa':'ao vivo'));
+  arD().jogos.unshift(j);if(arD().jogos.length>200)arD().jogos.length=200;save();audit('Spruce It','Jogo lançado',c.nome+' · '+M.nome+' · '+(L.tipo==='tpc'?'trabalho de casa':'ao vivo'));
   closeDrawer();arAnfitriao(j)}
 
 /* v1.054 · ecrã projetado dos modos novos */
@@ -218,7 +218,7 @@ function arCanalAbrir(id){arCanalFechar();sbObter().then(p=>{try{const c=p.clien
 function arCanalFechar(){try{if(arCanal){arCanal.unsubscribe&&arCanal.unsubscribe()}}catch(_){}arCanal=null}
 function arAvisar(ev){try{arCanal&&arCanal.send({type:'broadcast',event:'s',payload:{e:ev||'sync',t:Date.now()}})}catch(_){}}
 async function arAnfitriao(j){arFecharHost();await aaQrLib().catch(()=>{});arFontes();
-  const o=document.createElement('div');o.id='arhost';o.className='arhost v2';o.style.cssText=AR.temaCss(j.tema);o.setAttribute('role','dialog');o.setAttribute('aria-label','Arena · '+j.nome);document.body.appendChild(o);document.body.classList.add('arh-on');
+  const o=document.createElement('div');o.id='arhost';o.className='arhost v2';o.style.cssText=AR.temaCss(j.tema);o.setAttribute('role','dialog');o.setAttribute('aria-label','Spruce It · '+j.nome);document.body.appendChild(o);document.body.classList.add('arh-on');
   arH={j,o,d:null,vivo:true,ultV:-1,fase:'',rev:-1,ultAv:0,topAnt:{}};arCanalAbrir(j.id);
   o.innerHTML=`<header class="arhh"><span class="arhlogo">Spruce <em>It</em></span><div class="arht"><b>${esc(j.nome)}</b><span>${AR.MODOS[j.modo].ic} ${AR.MODOS[j.modo].nome} · ${j.tipo==='tpc'?'Trabalho de casa':'Ao vivo'}</span></div><span class="sp1"></span>
     <span class="arhcod" title="Código da sala">${AR.fmt(j.codigo)}</span><button type="button" class="arhb" id="arh-som" aria-label="Som">${AR.som?'🔔':'🔕'}</button><button type="button" class="arhb" id="arh-pau" hidden>${ic('clock',16)} Pausar</button><button type="button" class="arhb dng" id="arh-fim" hidden>Terminar</button><button type="button" class="arhb" id="arh-x" aria-label="Fechar">${ic('x',18)}</button></header>
@@ -317,12 +317,12 @@ function arRelatorio(j){const R=j.res;if(!R){toast('Ainda sem resultados','aviso
   $$('#view [data-arlg]').forEach(s=>s.onchange=()=>{j.liga=j.liga||{};j.liga[s.dataset.arlg]=s.value;const x=R.jog.find(z=>z.id===s.dataset.arlg);if(x)x.al=s.value;save();const y=window.scrollY,v=$('#view').scrollTop;arRelatorio(j);window.scrollTo(0,y);$('#view').scrollTop=v});
   $('#arr-as').onclick=()=>arAssociar(j,porA,tSel)}
 function arRelCsv(j,porA,porP){const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';const L=[['Jogador','Certas','Erradas','Acerto (%)',j.modo==='floresta'?'Árvores':j.modo==='pesca'?'Quilos':j.modo==='corrida'?'Casas':j.modo==='cume'?'Metros':j.modo==='expedicao'?'Etapas':'Pontos'],...porA.map(x=>[x.a,x.ok,x.n-x.ok,x.taxa==null?'':Math.round(x.taxa*100),j.modo==='floresta'?AR.arvores(x.arv).inteiras:j.modo==='pesca'?Math.round(x.pts)/10:x.pts]),[],['Pergunta','Resposta certa','Respostas','Acerto (%)'],...porP.map(x=>[x.p.t,(x.p.o||[])[x.p.c]||'',x.n,x.taxa==null?'':Math.round(x.taxa*100)])];
-  download('Arena - '+j.nome+'.csv','﻿'+L.map(r=>r.map(q).join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Arena','Exportação de relatório',j.nome)}
+  download('Arena - '+j.nome+'.csv','﻿'+L.map(r=>r.map(q).join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Spruce It','Exportação de relatório',j.nome)}
 function arAssociar(j,porA,t){if(!t)return toast('Escolha a turma','aviso');const lig=porA.filter(x=>x.al&&x.taxa!=null&&t.alunos.some(a=>a.id===x.al));if(!lig.length)return toast(j.turma?'Nenhum aluno da lista jogou.':'Ligue pelo menos uma alcunha a um aluno.','aviso');
   let i=j.assoc&&t.instrumentos.find(z=>z.id===j.assoc.inst);const hoje=new Date(j.criado).toISOString().slice(0,10);
-  if(!i){i={id:uid(),nome:'Arena · '+j.nome,tipo:'Jogo Arena (formativo)',periodo:perAtual(t),data:hoje,itens:[{id:uid(),rot:'Acerto (%)',dom:'',cot:100}],notas:{},arena:j.id};t.instrumentos.push(i)}
+  if(!i){i={id:uid(),nome:'Spruce It · '+j.nome,tipo:'Jogo Spruce It (formativo)',periodo:perAtual(t),data:hoje,itens:[{id:uid(),rot:'Acerto (%)',dom:'',cot:100}],notas:{},arena:j.id};t.instrumentos.push(i)}
   const it=i.itens[0].id;lig.forEach(x=>{i.notas[x.al]={[it]:Math.round(x.taxa*100)}});
-  j.assoc={inst:i.id,turma:t.id,txt:t.nome+' · '+t.disciplina+' · '+lig.length+' alunos'};save();audit('Arena','Resultados associados à turma',j.nome+' · '+t.nome);toast('Resultados guardados em '+t.nome+' como instrumento formativo','ok');arRelatorio(j)}
+  j.assoc={inst:i.id,turma:t.id,txt:t.nome+' · '+t.disciplina+' · '+lig.length+' alunos'};save();audit('Spruce It','Resultados associados à turma',j.nome+' · '+t.nome);toast('Resultados guardados em '+t.nome+' como instrumento formativo','ok');arRelatorio(j)}
 /* os instrumentos formativos da Arena não têm domínio: não contam para a classificação, mas aparecem na Ficha Integral */
 
 /* ---------- estilos ---------- */
