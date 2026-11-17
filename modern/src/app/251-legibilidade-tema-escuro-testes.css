@@ -1,0 +1,21 @@
+/* ===================== legibilidade: tema escuro e Marcação de Testes ===================== */
+/* 1.097 · tema escuro: texto que ficava ilegível (medido nas 43 vistas; no tema claro não havia falhas) */
+/* rodapé das grelhas («Média da Turma»): o tema SGE punha o fundo claro também no escuro, com a letra clara por cima */
+html body.est-sge.est-sge.est-sge.escurox #view :is(table.grid,.grid) tfoot td{background:#262a31!important}
+/* Marcação de Testes (nos dois temas): uma regra geral dos horários (.aula span) acinzentava o número do dia e tirava o branco às
+   etiquetas dos testes nos dias com aula; a app só corrigia isso um instante depois de abrir. O fundo destes dias é sempre azul-claro,
+   por isso a letra é sempre escura e as etiquetas voltam a ter letra branca… */
+html body #view .mtc.aula .mtd,html body #view .mtc.aula .mth em{color:#0b3a52}
+html body #view .mtc :is(.mtp,.mta,.mtz){color:#fff}
+/* …menos, no tema escuro, nos dias de falta, que têm fundo escuro às riscas */
+html body.escurox #view .mtc.aula.falta,html body.escurox #view .mtc.aula.falta :is(.mtd,.mth,.mth em,b){color:var(--ink)}
+/* datas e tarefas em atraso e contagem de negativas: o vermelho do tema escuro em vez do vermelho-escuro fixo */
+html body.escurox :is(.xtrt .atr,.mdi.tar.atr b,.estm .neg){color:var(--bad)}
+/* Início: o nome da disciplina usa a cor da turma, aclarada para se ler sobre o fundo escuro */
+html body.escurox .tcard[style*="--tc"] .tch .d{color:color-mix(in srgb,var(--tc) 55%,#fff)!important}
+/* tema SGE escuro: o azul de destaque é mais claro, por isso os botões ativos com letra branca usam o azul do tema claro */
+html body.est-sge.escurox :is(.estps,.estts) button.on{background:var(--accL,#127fa6)!important;border-color:var(--accL,#127fa6)!important}
+html body.est-sge.escurox .spv .sph-tabs button[aria-current="page"]{background:var(--accL,#127fa6)}
+html body.est-sge.escurox :is(.ocmg button.hj,.ocdc.hj .ocdn,.ocgd.hj b,.ocagd.hj .ocagh b){background:var(--accL,#127fa6)}
+/* Instrumentos: etiqueta «Produção Oral» (verde-azulado escuro fixo) aclarada */
+html body.escurox #view .inoral{color:color-mix(in srgb,#0f8b8d 45%,#fff)}

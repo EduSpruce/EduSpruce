@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.098
+- Tema escuro: a linha «Média da Turma» das grelhas, as datas em atraso, o dia de hoje no calendário e os nomes das disciplinas no Início passam a ler-se bem
+- Marcação de Testes: o número do dia e as etiquetas dos testes têm a cor certa logo ao abrir, nos dois temas
+- Demonstração: num aparelho novo abre o ano letivo atual e não o do ano passado
+
 ## 1.097
 - Reuniões, Direção de Turma, Biblioteca e Documentos passam a módulos opcionais, com ícone e cor próprios nas Apps
 - Início: em vez da fila de apps, fica só o ícone que abre o painel Apps
