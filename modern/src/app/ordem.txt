@@ -243,5 +243,6 @@ dados/199-logotipos-novos.js
 242-coordenacao-docencia-coord-profij.js
 243-dados-demonstracao-tudo-ha.js
 244-ajuda-privacidade-teste-desempenho.js
+248-erros-tecnicos-definicoes-ferramentas.js
 245-fim-do-programa.js
 246-fecho.html

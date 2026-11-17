@@ -25,10 +25,10 @@ function go(v){
 $$('#side .nav').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function barEscola(){const b=document.getElementById('barEsc');if(!b)return;const c=EC()||{};const n=(c.escola||'').trim();
   if(!n&&!c.logo){b.hidden=true;return}b.hidden=false;
-  b.innerHTML=(c.logo?`<img src="${c.logo}" alt="">`:`<span class="besi">${ic('school',16)}</span>`)+`<span class="besn">${esc(n||'Escola')}</span>`;b.title=n||'Escola'}
+  b.innerHTML=(c.logo?`<img src="${esc(c.logo)}" alt="">`:`<span class="besi">${ic('school',16)}</span>`)+`<span class="besn">${esc(n||'Escola')}</span>`;b.title=n||'Escola'}
 function fillCtx(){{const be=$('#brandEsc');if(be){const e=EC();be.textContent=e&&e.escola?e.escola:'Plataforma Integrada de Gestão Educativa';be.title=be.textContent}}
   {const ES=todasEscolas();const se=$('#selEsc'),ce=$('#ctxEsc');const multi=ES.length>1;const temE=!!((EC()||{}).escola||(EC()||{}).logo);if(ce){ce.style.display=multi||temE?'':'none';ce.classList.toggle('unica',!multi)}if(se)se.disabled=!multi;document.body.classList.toggle('multiesc',multi);document.body.classList.toggle('escunica',!multi&&temE);
-   {const en=$('#escNome');if(en)en.textContent=nomeEscola(EC());const lg=$('#escLogo');if(lg){const e=EC();lg.innerHTML=e.logo?`<img src="${e.logo}" alt="">`:ic(TIPOS_ESCOLA[tipoEscola(e)].ic,16)}}
+   {const en=$('#escNome');if(en)en.textContent=nomeEscola(EC());const lg=$('#escLogo');if(lg){const e=EC();lg.innerHTML=e.logo?`<img src="${esc(e.logo)}" alt="">`:ic(TIPOS_ESCOLA[tipoEscola(e)].ic,16)}}
    if(se&&multi){se.innerHTML=ES.map(e=>`<option value="${escId(e)}" ${escId(e)===escAtiva()?'selected':''}>${esc(nomeEscola(e))}</option>`).join('');
      se.onchange=()=>{S.escolaAtiva=se.value;const TF=turmasFiltradas(A());S.turmaAtiva=TF[0]?TF[0].id:null;UI.inst=null;save();toast(nomeEscola(EC())+' · '+TIPOS_ESCOLA[tipoEscola(EC())].n,'ok');go(NEEDS_T.includes(VIEW)&&!T()?'inicio':VIEW)}}}
   barEscola();

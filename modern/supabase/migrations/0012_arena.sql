@@ -1,6 +1,8 @@
 -- =====================================================================================
 -- EduSpruce · ARENA — jogos de perguntas em tempo real para a turma
 -- Colar TUDO no «SQL Editor» do Supabase e carregar em «Run». Pode correr-se mais do que uma vez.
+-- NOTA (1.084): o ficheiro 0019_seguranca_rgpd.sql redefine arena_info e arena_entrar (limite de tentativas falhadas).
+--              Depois de correr ESTE ficheiro, corra outra vez o 0019.
 --
 -- Como funciona (sem contas para os alunos):
 --   · o professor lança um jogo; a app gera um código de sala (ex.: K7Q-F2M). A base de dados só guarda o «hash» do código.

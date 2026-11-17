@@ -66,13 +66,13 @@ function regAutoav(t,a,perAte){const c={...S.cfg,...escolaDe(t)};const P=periodo
       ${Array.from({length:linhas},(_,k)=>`<tr>${C.map(x=>`<td>${x[k]?`<span class="rgn">${esc(x[k].n)}</span><b>${x[k].v||'—'}</b>`:'&nbsp;'}</td>`).join('')}</tr>`).join('')}
       <tr class="rgav">${D.map(d=>{const z=feito&&lab((AV.dom||{})[d.id]);return `<td>${z?`<i style="background:${z[2]}"></i>${esc(z[1])}`:'<span class="rgvz">Autoavaliação: —</span>'}</td>`}).join('')}</tr></tbody></table>
       <div class="rgf"><div class="rgnota"><span>${perNome(p)} · Avaliação final</span><b>Nota: ${nota?esc(nota):'_______'}</b>${np?`<small>Classificação do professor: ${np}</small>`:''}</div>
-        <div class="rgass"><span>Ass. Prof.</span><span class="rgl">${feito&&S.cfg.assinaturaImg?`<img src="${S.cfg.assinaturaImg}" class="assinrel" alt="">`:''}</span></div>
+        <div class="rgass"><span>Ass. Prof.</span><span class="rgl">${feito&&S.cfg.assinaturaImg?`<img src="${esc(S.cfg.assinaturaImg)}" class="assinrel" alt="">`:''}</span></div>
         <div class="rgass"><span>Ass. Aluno</span><span class="rgl">${dt?'<em>respondido na app</em>':''}</span></div>
         <div class="rgass rgd"><span>Data</span><span class="rgl">${dt}</span></div></div>
       <div class="rgc"><b>Comentário / Reflexão:</b> ${refl||''}</div></div>`};
   const ns=P.map(p=>p<=perAte?parseFloat(String(nAv(p)).replace(',','.')):NaN);const ok=ns.filter(x=>!isNaN(x));const fin=ok.length===P.length&&P.every(p=>p<=perAte)?Math.round(ok.reduce((s,x)=>s+x,0)/ok.length*10)/10:null;
   return `<section class="sheet rgsheet">
-    <div class="hdr"><span class="hl">${c.logo?`<img src="${c.logo}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>${esc(S.cfg.departamento||(S.cfg.grupo?'Grupo '+S.cfg.grupo:''))}</span></span><span style="text-align:right">${c.logoDir?`<img src="${c.logoDir}" alt="" style="max-height:34px;max-width:120px;display:block;margin-left:auto;object-fit:contain">`:''}Ano letivo ${esc((A()||{}).nome||'')}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
+    <div class="hdr"><span class="hl">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>${esc(S.cfg.departamento||(S.cfg.grupo?'Grupo '+S.cfg.grupo:''))}</span></span><span style="text-align:right">${c.logoDir?`<img src="${esc(c.logoDir)}" alt="" style="max-height:34px;max-width:120px;display:block;margin-left:auto;object-fit:contain">`:''}Ano letivo ${esc((A()||{}).nome||'')}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
     <h1>Registo de Autoavaliação – ${esc(t.disciplina||'')}</h1><div class="sub">Critérios: ${crit}</div>
     <div class="rgal"><span><small>Aluno</small><b>${esc(a.nome)}</b></span><span><small>N.º</small><b>${esc(numAl(a))}</b></span><span><small>Turma</small><b>${esc(a.origem||t.nome)}</b></span></div>
     ${P.map(bloco).join('')}
@@ -82,10 +82,10 @@ function relatorio(t,a,per){
   const meds=Object.entries(MEDIDAS).filter(([k])=>k!=='rec').map(([k,g])=>(a.medidas&&a.medidas[k]||[]).map(i=>g.l[i])).flat();
   const sint=(a.sintese&&a.sintese[per])||sintese(t,a,per);const nfin=ponderada(t,pctsFinal(t,a.id,per));
   return `<section class="sheet">
-    <div class="hdr"><span class="hl">${c.logo?`<img src="${c.logo}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>Ano letivo ${esc((A()||{}).nome||'')}</span></span><span style="text-align:right">${esc(t.disciplina)} · Turma ${esc(a.origem||t.nome)}${a.origem?' <span style="color:#666">(aulas em '+esc(t.nome)+')</span>':''}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
+    <div class="hdr"><span class="hl">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>Ano letivo ${esc((A()||{}).nome||'')}</span></span><span style="text-align:right">${esc(t.disciplina)} · Turma ${esc(a.origem||t.nome)}${a.origem?' <span style="color:#666">(aulas em '+esc(t.nome)+')</span>':''}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
     <h1>Relatório Individual ${a.genero==='F'?'da Aluna':'do Aluno'}</h1><div class="sub">${perNome(per)}</div>
     <div class="sec">Dados ${a.genero==='F'?'da aluna':'do aluno'}</div>
-    <div style="display:flex;gap:14px;align-items:flex-start">${fotoSrc(a)?`<img class="foto-al" src="${fotoSrc(a)}" alt="" style="width:39mm;height:48.75mm;object-fit:cover;border:1px solid #999;border-radius:3px">`:''}<div style="flex:1;min-width:0"><div class="kv"><b>Nome</b><span>${esc(a.nome)}</span><b>N.º</b><span>${esc(numAl(a))}${a.processo?' · <span class="sens">proc. '+esc(a.processo)+'</span>':''}</span>
+    <div style="display:flex;gap:14px;align-items:flex-start">${fotoSrc(a)?`<img class="foto-al" src="${esc(fotoSrc(a))}" alt="" style="width:39mm;height:48.75mm;object-fit:cover;border:1px solid #999;border-radius:3px">`:''}<div style="flex:1;min-width:0"><div class="kv"><b>Nome</b><span>${esc(a.nome)}</span><b>N.º</b><span>${esc(numAl(a))}${a.processo?' · <span class="sens">proc. '+esc(a.processo)+'</span>':''}</span>
       <b>Data de nascimento</b><span class="sens">${fmtD(a.nasc)||'—'} ${a.nasc?'('+idade(a.nasc)+' anos)':''}</span><b>ASE</b><span class="sens">${esc(a.ase)||'Não se aplica'}</span>
       <b>Encarregado de educação</b><span class="sens">${esc(a.eeNome)||'—'}</span><b>Contacto</b><span class="sens">${esc(a.eeContacto)||'—'}</span>
       <b>DL 54/2018</b><span class="sens" style="grid-column:span 3">${meds.length?esc(meds.join('; ')):'Não se aplica'}</span></div>${relAuto(t,a,per)}</div></div>
@@ -97,6 +97,6 @@ function relatorio(t,a,per){
     ${grafico(t,a,P)}
     <div class="sec">Síntese descritiva</div><div class="txt" contenteditable="true" data-sint="${a.id}">${esc(sint)}</div>
     ${(a.obsPer||{})[per]?`<div class="sec">Observações</div><div class="txt sens">${esc(a.obsPer[per])}</div>`:''}
-    <div class="sign"><div style="position:relative">${S.cfg.assinaturaImg?`<img src="${S.cfg.assinaturaImg}" alt="Assinatura" class="assinrel" style="position:absolute;left:50%;bottom:100%;transform:translate(-50%,32%);height:13mm;max-width:78%;object-fit:contain;pointer-events:none">`:''}${esc(profRotulo()+(c.professor?' — '+profNome(c.professor):''))}</div><div>O(A) Encarregado(a) de Educação</div></div></section>`;
+    <div class="sign"><div style="position:relative">${S.cfg.assinaturaImg?`<img src="${esc(S.cfg.assinaturaImg)}" alt="Assinatura" class="assinrel" style="position:absolute;left:50%;bottom:100%;transform:translate(-50%,32%);height:13mm;max-width:78%;object-fit:contain;pointer-events:none">`:''}${esc(profRotulo()+(c.professor?' — '+profNome(c.professor):''))}</div><div>O(A) Encarregado(a) de Educação</div></div></section>`;
 }
 

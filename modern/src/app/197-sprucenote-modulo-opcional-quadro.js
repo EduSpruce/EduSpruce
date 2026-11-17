@@ -74,7 +74,7 @@ setTimeout(()=>{try{lgaAplicar()}catch(_){}},200);
 /* ecrã do código: painel com hora e data ao lado do teclado (ecrãs largos) */
 function pinLado(){const L=document.querySelector('#login.pinmode');if(!L||L.querySelector('.pinside'))return;const esc_=S&&S.escolas?null:null;
   const e=(()=>{try{return escolaPorId(escAtiva())}catch(_){return null}})();const nome=(()=>{try{return nomeEscola(e)}catch(_){return ''}})();
-  L.insertAdjacentHTML('afterbegin',`<div class="pinside" aria-hidden="true"><div class="pshr" id="ps-h"></div><div class="psd" id="ps-d"></div>${nome?`<div class="pse">${e&&e.logo?`<img src="${e.logo}" alt="">`:''}<span>${esc(nome)}</span></div>`:''}</div>`);
+  L.insertAdjacentHTML('afterbegin',`<div class="pinside" aria-hidden="true"><div class="pshr" id="ps-h"></div><div class="psd" id="ps-d"></div>${nome?`<div class="pse">${e&&e.logo?`<img src="${esc(e.logo)}" alt="">`:''}<span>${esc(nome)}</span></div>`:''}</div>`);
   const tk=()=>{const h=document.getElementById('ps-h');if(!h){clearInterval(L._pt);return}const d=new Date();h.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');document.getElementById('ps-d').textContent=d.toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'})};tk();L._pt=setInterval(tk,5000)}
 new MutationObserver(()=>{if(document.querySelector('#login.pinmode'))pinLado()}).observe(document.body,{childList:true,subtree:false,attributes:true,attributeFilter:['class']});
 setInterval(()=>{if(document.querySelector('#login.pinmode:not(:has(.pinside))'))pinLado()},700);

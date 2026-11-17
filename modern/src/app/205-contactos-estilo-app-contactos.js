@@ -6,7 +6,7 @@ const ctCor=n=>{let h=0;for(const ch of String(n||''))h=(h*31+ch.charCodeAt(0))%
 const ctApelido=n=>{const p=String(n||'').trim().split(/\s+/);return p.length>1?p[p.length-1]:(p[0]||'')};
 const ctOrd=()=>S.cfg.contOrd==='apelido'?'apelido':'nome';
 const ctChave=c=>ctOrd()==='apelido'?ctApelido(c.nome)+' '+c.nome:String(c.nome||'');
-const ctAv=(c,s)=>c.foto?`<img class="cmav" src="${c.foto}" alt="" style="width:${s}px;height:${s}px">`:`<span class="cmav" style="width:${s}px;height:${s}px;font-size:${Math.round(s*.38)}px;background:${ctCor(c.nome)}" aria-hidden="true">${esc(ctIni(c.nome))}</span>`;
+const ctAv=(c,s)=>c.foto?`<img class="cmav" src="${esc(c.foto)}" alt="" style="width:${s}px;height:${s}px">`:`<span class="cmav" style="width:${s}px;height:${s}px;font-size:${Math.round(s*.38)}px;background:${ctCor(c.nome)}" aria-hidden="true">${esc(ctIni(c.nome))}</span>`;
 const ctTels=c=>[...(c.tel?[{r:c.telR||'telemóvel',v:c.tel}]:[]),...(c.tels||[])];
 const ctMails=c=>[...(c.email?[{r:c.emailR||'trabalho',v:c.email}]:[]),...(c.emails||[])];
 const ctNaLista=(c,k)=>k==='todos'||(k==='dt'&&contDTs(c.nome).length>0)||(k.startsWith('a:')&&c.ano===k.slice(2))||(k.startsWith('g:')&&(c.grupo||'')===k.slice(2))||(k.startsWith('l:')&&(c.listas||[]).includes(k.slice(2)));

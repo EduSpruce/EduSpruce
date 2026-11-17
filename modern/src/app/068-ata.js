@@ -1,7 +1,7 @@
 /* ---------- ata ---------- */
 function ataHTML(r){const a=A();const t=reunTurma(r,a);const c={...S.cfg,...escolaDe(t)};
   return `<html><head><meta charset="utf-8"><title>Ata</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.5;max-width:720px;margin:24px auto}h1{font-size:15pt;text-align:center;margin:4px 0 2px}h2{font-size:12pt;margin:16px 0 4px}.c{text-align:center;color:#444}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:4px 6px;text-align:left;font-size:10pt}</style></head><body>
-  ${c.logo?`<p class="c"><img src="${c.logo}" style="height:60px"></p>`:''}<p class="c"><b>${esc(c.escola||'')}</b>${c.agrupamento?'<br>'+esc(c.agrupamento):''}</p>
+  ${c.logo?`<p class="c"><img src="${esc(c.logo)}" style="height:60px"></p>`:''}<p class="c"><b>${esc(c.escola||'')}</b>${c.agrupamento?'<br>'+esc(c.agrupamento):''}</p>
   <h1>Ata — ${esc(reunTitulo(r,a))}</h1><p class="c">${esc(DIAS[dataDeIso(r.data).getDay()])}, ${esc(r.data.split('-').reverse().join('/'))} · ${fmtHM(r.ini)}${r.fim!=null?'–'+fmtHM(r.fim):''}${r.local?' · '+esc(r.local):''}</p>
   ${r.participantes?`<h2>Presentes</h2><p>${esc(r.participantes)}</p>`:''}${reunTurmas(r,a).length?`<p><b>${reunTurmas(r,a).length>1?'Turmas':'Turma'}:</b> ${reunTurmas(r,a).map(x=>esc(x.nome)+' · '+esc(x.disciplina)).join('; ')}</p>`:''}
   ${(r.ordem||[]).length?`<h2>Ordem de Trabalhos</h2><ol>${r.ordem.map(o=>`<li>${esc(o.t)}</li>`).join('')}</ol>`:''}

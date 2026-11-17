@@ -12,5 +12,5 @@ function logoDeFicheiro(file){return new Promise((ok,ko)=>{
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);ok(c.toDataURL('image/png'))};
     img.onerror=()=>ko(new Error('Imagem inválida.'));img.src=url};
   fr.readAsDataURL(file)})}
-const logoHtml=(cls,e)=>{e=e||EC();return e.logo?`<span class="logo-esc ${cls||''} ${e.logoFundo===false?'sf':''}"><img src="${e.logo}" alt="Logotipo"></span>`:''};
+const logoHtml=(cls,e)=>{e=e||EC();return e.logo?`<span class="logo-esc ${cls||''} ${e.logoFundo===false?'sf':''}"><img src="${esc(e.logo)}" alt="Logotipo"></span>`:''};
 function moradaEscola(e){const c=e||S.cfg;return [c.morada,c.localidade].filter(Boolean).join(' · ')}

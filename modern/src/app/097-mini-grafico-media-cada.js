@@ -32,7 +32,7 @@ function criarTurmasEmFalta(r,mapa){const a=A();let n=0;const dist={};r.aulas.fo
     mapa[k]=t.id});saveNow();return n}
 /* ---------- critérios: exportar / importar ---------- */
 function exportarCriterios(t){download('Critérios '+t.disciplina+' '+t.anoEsc+'.json',JSON.stringify({app:'EduGest',criterios:{disciplina:t.disciplina,anoEsc:t.anoEsc,dominios:t.dominios.map(({ab,nome,peso})=>({ab,nome,peso})),mencoes:t.mencoes,regra:t.regra}},null,1),'application/json')}
-function importarCriterios(t){const f=document.createElement('input');f.type='file';f.accept='.json,application/json';f.onchange=async()=>{try{const o=JSON.parse(await f.files[0].text());const c=o.criterios||o;if(!Array.isArray(c.dominios))throw new Error('não tem domínios');
+function importarCriterios(t){const f=document.createElement('input');f.type='file';f.accept='.json,application/json';f.onchange=async()=>{try{const o=esPartilhaOk(JSON.parse(await f.files[0].text()))||{};const c=o.criterios||o;if(!Array.isArray(c.dominios))throw new Error('não tem domínios');
     if(t.instrumentos.length&&!confirm('A turma já tem instrumentos. Os domínios atuais serão substituídos e os itens perdem a ligação ao domínio. Continuar?'))return;
     t.dominios=c.dominios.map((d,k)=>({id:uid()+k,ab:d.ab,nome:d.nome,peso:+d.peso||0}));if(Array.isArray(c.mencoes))t.mencoes=c.mencoes;if(c.regra)t.regra=c.regra;saveNow();regista('Critérios',f.files[0].name,t.dominios.length+' domínios');toast('Critérios importados','ok');go('criterios')}
   catch(e){alert('Ficheiro de critérios inválido: '+e.message)}};f.click()}

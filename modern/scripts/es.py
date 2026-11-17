@@ -7,7 +7,7 @@
   ./es fn NOME [-m 3000]                            definição de uma função/constante e de todas as redefinições
   ./es troca FICHEIRO <<'X' … X                     trocas exatas, em blocos  <<<< antigo ==== novo >>>>
   ./es novo NOME [--css] [--depois PEÇA]            nova peça: JS no fim do programa, --css no fim dos estilos
-  ./es testa [--sem-browser]                        construir, verificar a sintaxe e abrir todas as vistas sem ecrã
+  ./es testa [--sem-browser]                        construir, verificar a sintaxe e abrir todas as vistas sem ecrã (sem e com base de dados)
   ./es pub "novidade 1|novidade 2" [-m MENSAGEM] [--cl "linha|linha"] [--sem-espelho]
                                                     publicar a versão seguinte (eduspruce.pt + espelho)
   ./es mapa                                         vista → título → função → peças (a última peça é a que vale)
@@ -169,6 +169,8 @@ def construir(saida):
     if r.returncode:sys.exit('ERRO a construir a versão com base de dados:\n'+(r.stderr or r.stdout).strip()[-900:])
     r=subprocess.run(['node',os.path.join(SRC,'eduschedule','build.js'),os.path.dirname(saida)],capture_output=True,text=True)
     if r.returncode:sys.exit('ERRO a construir o EduSchedule:\n'+(r.stderr or r.stdout).strip()[-900:])
+    r=subprocess.run(['node',os.path.join(R,'modern','scripts','csp.mjs'),os.path.dirname(saida)],capture_output=True,text=True)
+    if r.returncode:sys.exit('ERRO na política de conteúdo (CSP):\n'+(r.stderr or r.stdout).strip()[-900:])
     return p
 def testa(a):
     semb=opt(a,'--sem-browser',flag=True);d=os.path.join(T,'build');shutil.rmtree(d,ignore_errors=True);os.makedirs(d)
@@ -177,6 +179,22 @@ def testa(a):
     print('construção e sintaxe: ok')
     if semb:return
     r=subprocess.run(['node',os.path.join(R,'modern','tests','vistas.mjs'),p],capture_output=True,text=True)
+    print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
+    if r.returncode:sys.exit(1)
+    # as classificações: casos das fórmulas + valores de referência dos dados de demonstração (tests/notas.mjs)
+    r=subprocess.run(['node',os.path.join(R,'modern','tests','notas.mjs'),p],capture_output=True,text=True)
+    print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
+    if r.returncode:sys.exit(1)
+    # a versão com base de dados, servida por HTTP com a política de conteúdo ativa e uma base de dados falsa (tests/bd.mjs)
+    r=subprocess.run(['node',os.path.join(R,'modern','tests','bd.mjs'),d],capture_output=True,text=True)
+    print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
+    if r.returncode:sys.exit(1)
+    # respostas dos alunos feitas para atacar (Provas, Formulários, autoavaliação): não correm, não estragam, e as normais chegam inteiras
+    r=subprocess.run(['node',os.path.join(R,'modern','tests','respostas.mjs'),d],capture_output=True,text=True)
+    print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
+    if r.returncode:sys.exit(1)
+    # percurso completo de uma prova e de um formulário: professor abre → aluno responde na página dele → professor importa
+    r=subprocess.run(['node',os.path.join(R,'modern','tests','percurso.mjs'),d],capture_output=True,text=True)
     print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
     if r.returncode:sys.exit(1)
 

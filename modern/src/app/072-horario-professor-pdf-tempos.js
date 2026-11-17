@@ -88,7 +88,7 @@ function importarHorProfDlg(r){
     <table class="lst"><thead><tr><th>No Horário</th><th class="num">Tempos</th><th>Turma na App</th></tr></thead><tbody>
     ${dist.map(d=>`<tr><td><b>${esc(d.turma)}</b> · ${esc(d.sig)}</td><td class="num">${d.n}</td><td><select data-hm="${esc(d.k)}"><option value="">— não associar —</option>${a.turmas.map(t=>`<option value="${t.id}" ${mapa[d.k]===t.id?'selected':''}>${esc(t.nome)} · ${esc(t.disciplina)}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table>
     ${r.obs.length?`<h3>Observações do Horário</h3><div class="hint">${r.obs.map(esc).join('<br>')}</div>`:''}
-    ${r.preview?`<details class="pdfprev"><summary>${ic('file',14)} Ver o PDF lido${r.paginas>1?' ('+r.paginas+' páginas)':''}</summary><img src="${r.preview}" alt="Pré-visualização do PDF do horário"></details>`:''}
+    ${r.preview?`<details class="pdfprev"><summary>${ic('file',14)} Ver o PDF lido${r.paginas>1?' ('+r.paginas+' páginas)':''}</summary><img src="${esc(r.preview)}" alt="Pré-visualização do PDF do horário"></details>`:''}
     <div class="row" style="margin-top:16px"><button class="btn pri" id="hp-ok">${ic('check',15)} Guardar o Meu Horário</button></div></div>`);
   const hc=$('#hp-cria');if(hc)hc.onclick=()=>{$$('[data-hm]').forEach(s=>mapa[s.dataset.hm]=s.value);const n=criarTurmasEmFalta(r,mapa);a.horProf=Object.assign(a.horProf||{},{mapa});toast(n+' turma'+(n!==1?'s':'')+' criada'+(n!==1?'s':''),'ok');importarHorProfDlg(r)};
   $('#hp-ok').onclick=()=>{

@@ -54,7 +54,7 @@ terminarSessao=function(){try{if(window.__esPronto&&Object.keys(nvL().mod||{}).l
 
 /* ecrã de entrada: um só botão */
 function sbEcraEntrar(){document.body.classList.add('login-on');let o=$('#login');if(o)o.remove();o=document.createElement('div');o.id='login';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Iniciar sessão');
-  o.innerHTML=`<form class="lgb lgbd" onsubmit="return false"><div class="lgh"><span class="lgi">${ic('flow',30)}</span><div><b>Edu<em>Spruce</em></b><span>Menos papelada. Mais tempo para ensinar.</span></div></div>
+  o.innerHTML=`<form class="lgb lgbd" data-nosub><div class="lgh"><span class="lgi">${ic('flow',30)}</span><div><b>Edu<em>Spruce</em></b><span>Menos papelada. Mais tempo para ensinar.</span></div></div>
     <h1>Iniciar Sessão</h1>
     <button type="button" class="btn mslg lggd" id="lg-gg"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg> <span class="lggt">Entrar com Google</span></button>
     <div class="lgerr" id="lg-err" role="alert"></div>
@@ -343,7 +343,7 @@ async function recDrive(){if(!window.__esPronto)return toast('Os dados ainda est
     catch(e){livre();toast('Não foi possível repor: '+((e&&e.message)||e),'erro')}})}
 /* palavra-passe de reserva: segunda forma de entrar na mesma conta, sem depender do Google */
 function sbSenhaDlg(){$$('dialog.nvmc.sbpw').forEach(x=>x.remove());const d=document.createElement('dialog');d.className='nvmc sbpw';
-  d.innerHTML=`<form class="nvmcf" onsubmit="return false"><h2>${ic('cadeado',18)} Palavra-passe de reserva</h2><p class="hint">Serve para entrar na <b>mesma conta</b> (${esc((SESSAO&&SESSAO.u)||'')}) com e-mail e palavra-passe, em «Outra forma de entrar», quando não puder usar o Google. Mínimo de 10 caracteres. Não fica guardada na app.</p>
+  d.innerHTML=`<form class="nvmcf" data-nosub><h2>${ic('cadeado',18)} Palavra-passe de reserva</h2><p class="hint">Serve para entrar na <b>mesma conta</b> (${esc((SESSAO&&SESSAO.u)||'')}) com e-mail e palavra-passe, em «Outra forma de entrar», quando não puder usar o Google. Mínimo de 10 caracteres. Não fica guardada na app.</p>
     <label for="sbpw-1">Nova palavra-passe</label><input type="password" id="sbpw-1" autocomplete="new-password" minlength="10"><label for="sbpw-2">Repetir</label><input type="password" id="sbpw-2" autocomplete="new-password" minlength="10">
     <p class="nverr" role="alert" id="sbpw-e"></p><div class="row" style="gap:8px;justify-content:flex-end"><button type="button" class="btn" id="sbpw-c">Cancelar</button><button type="submit" class="btn pri" id="sbpw-ok">Guardar</button></div></form>`;
   document.body.appendChild(d);d.showModal();const fim=()=>{try{d.close()}catch(_){}d.remove()};d.addEventListener('cancel',e=>{e.preventDefault();fim()});d.querySelector('#sbpw-c').onclick=fim;
@@ -463,7 +463,7 @@ function sbChaveRecDlg(){const t=sbChaveRecTxt();if(!t)return toast('A chave ain
   const txt=`EduSpruce — chave de recuperação\nConta: ${em}\nCriada em: ${new Date().toLocaleString('pt-PT')}\n\n${t}\n\nComo usar: entre na EduSpruce com a conta Google; se a app pedir o código de encriptação, cole esta chave.\nGuarde num sítio seguro e não partilhe.`;
   $('#ckr-c').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(t);toast('Chave copiada','ok');S.cfg.chaveRecGuardada=Date.now();save()};
   $('#ckr-d').onclick=()=>{download('EduSpruce-chave-de-recuperacao.txt',txt,'text/plain');S.cfg.chaveRecGuardada=Date.now();save()};
-  $('#ckr-p').onclick=()=>{const w=window.open('','_blank');if(!w)return;w.document.write(`<!doctype html><meta charset="utf-8"><title>Chave de recuperação</title><body style="font:14px system-ui;margin:20mm"><h1 style="font-size:20px">EduSpruce — chave de recuperação</h1><p>Conta: <b>${esc(em)}</b> · ${new Date().toLocaleString('pt-PT')}</p><p style="font:15px ui-monospace,Menlo,monospace;word-break:break-all;border:2px solid #111;padding:14px">${esc(t)}</p><p>Como usar: entre na EduSpruce com a conta Google; se a app pedir o código de encriptação, escreva ou cole esta chave.</p><p><b>Guarde num sítio seguro e não partilhe.</b></p><script>setTimeout(()=>print(),300)<\/script>`);w.document.close();S.cfg.chaveRecGuardada=Date.now();save()}}
+  $('#ckr-p').onclick=()=>{const w=window.open('','_blank');if(!w)return;w.document.write(`<!doctype html><meta charset="utf-8"><title>Chave de recuperação</title><body style="font:14px system-ui;margin:20mm"><h1 style="font-size:20px">EduSpruce — chave de recuperação</h1><p>Conta: <b>${esc(em)}</b> · ${new Date().toLocaleString('pt-PT')}</p><p style="font:15px ui-monospace,Menlo,monospace;word-break:break-all;border:2px solid #111;padding:14px">${esc(t)}</p><p>Como usar: entre na EduSpruce com a conta Google; se a app pedir o código de encriptação, escreva ou cole esta chave.</p><p><b>Guarde num sítio seguro e não partilhe.</b></p>`);w.document.close();setTimeout(()=>{try{w.focus();w.print()}catch(_){}},300);S.cfg.chaveRecGuardada=Date.now();save()}}
 function sbCopiaFicheiro(){try{exportarCopia({});S.cfg.copiaFich=Date.now();save();toast('Cópia completa descarregada. Guarde-a numa pen ou no disco.','ok');try{bindNvPainel()}catch(_){}}catch(e){toast(e.message||'Não foi possível exportar.','erro')}}
 {const _bK=bindNvPainel;bindNvPainel=function(){const r=_bK.apply(this,arguments);try{const c=$('#nv-card');if(c&&nvL().prov==='supabase'){let s=c.querySelector('#nv-seg');if(!s){s=document.createElement('section');s.className='nvs';s.id='nv-seg';const pw=c.querySelector('#nv-pw');const card=c.querySelector('.card:not(.nvhero)')||c;if(pw)card.insertBefore(s,pw);else{const foot=c.querySelector('.nvfoot');if(foot)card.insertBefore(s,foot);else card.appendChild(s)}}
     const cf=S.cfg.copiaFich,kr=S.cfg.chaveRecGuardada;const dias=cf?Math.floor((Date.now()-cf)/864e5):null;
@@ -477,3 +477,64 @@ setTimeout(function sbVigiar(){if(!window.__esPronto){return setTimeout(sbVigiar
     const hj=isoHoje();if(S.cfg.segAviso===hj)return;const cf=S.cfg.copiaFich||0,kr=S.cfg.chaveRecGuardada||0;
     if(!kr||Date.now()-cf>30*864e5){S.cfg.segAviso=hj;save();const m=!kr?'Guarde a sua chave de recuperação':'Já passou mais de um mês desde a última cópia em ficheiro';
       setTimeout(()=>{try{toast(m+' — Definições › Conta e Dados.','aviso')}catch(_){}},4000)}}catch(e){console.warn('[EduSpruce] vigiar chave:',e.message)}})()},8000);
+
+/* ===== 1.084: privacidade e conta — eliminar a conta (direito ao apagamento, RGPD art.º 17.º), versão dos scripts da base de dados
+   e espaço ocupado por conta (administrador). As funções vêm do script 0019_seguranca_rgpd.sql; sem ele, a app explica o que falta. ===== */
+const SB_BD_MIN=19;
+async function sbRpc(fn,args){const p=await sbObter();const c=p.cliente;if(!c||!c.rpc)throw new Error('A base de dados não está disponível.');const {data,error}=await c.rpc(fn,args||{});
+  if(error){const falta=/PGRST202|42883|Could not find the function|does not exist/i.test((error.code||'')+' '+(error.message||''));
+    const e=new Error(falta?'A base de dados ainda não tem esta função: o administrador tem de correr o ficheiro 0019_seguranca_rgpd.sql no Supabase.':(error.message||'Erro na base de dados.'));e.falta=falta;throw e}return data}
+let _sbBdV;async function sbBdVersao(){if(_sbBdV!==undefined)return _sbBdV;try{const v=await sbRpc('eduspruce_bd_versao');_sbBdV=typeof v==='number'?v:0}catch(e){if(e.falta)_sbBdV=0;else return null}return _sbBdV}
+async function sbEliminarConta(){const em=sbEmailApp()||nvL().kDe||'esta conta';
+  const r=await avisoModal('Eliminar a conta e todos os dados?',['A conta '+em+' e tudo o que lhe pertence são apagados da base de dados de uma vez, sem cópia: turmas, alunos, avaliações, sumários, testes digitalizados, formulários, provas, salas e resultados.','Não é possível desfazer. Para guardar os dados, cancele e use primeiro «Descarregar Cópia Completa».','A autorização para este e-mail entrar na EduSpruce é gerida pelo administrador e não muda.'],[{t:'Cancelar',v:null,c:'pri'},{t:'Continuar',c:'dng',v:'sim'}]);if(r!=='sim')return;
+  const t=prompt('Para confirmar, escreva APAGAR (em maiúsculas).');if(t==null)return;if(t.trim()!=='APAGAR')return toast('Não escreveu APAGAR: nada foi eliminado.','aviso');
+  try{await sbRpc('eduspruce_apagar_conta',{p_confirmar:'APAGAR'})}catch(e){return toast(e.message,'erro')}
+  /* a conta já não existe: este aparelho esquece tudo e volta ao ecrã de entrada */
+  window.__esSair=true;try{const p=await sbObter();await Promise.race([p.sair(),new Promise(ok=>setTimeout(ok,2500))])}catch(_){}
+  try{sbEsquecer()}catch(_){}try{localStorage.clear();sessionStorage.clear()}catch(_){}
+  try{sessionStorage.setItem('es.lgmsg','A conta e todos os dados foram eliminados.')}catch(_){}location.replace(location.origin+location.pathname)}
+async function sbUsoDlg(){openDrawer('Espaço na base de dados',`<div class="ed"><p class="mut">A carregar…</p></div>`);let u;try{u=await sbRpc('eduspruce_admin_uso')}catch(e){const el=$('#dw-b .ed');if(el)el.innerHTML=`<div class="alert">${esc(e.message)}</div>`;return}
+  const mb=b=>nf((+b||0)/1048576,1)+' MB';const L=u&&Array.isArray(u.por_conta)?u.por_conta:[];const el=$('#dw-b .ed');if(!el)return;
+  el.innerHTML=`<p class="hint" style="margin-top:0">Base de dados inteira: <b>${mb(u.bd_bytes)}</b> · ${+u.contas||0} conta(s). O plano gratuito do Supabase tem 500 MB; as fotografias e os testes digitalizados são o que mais ocupa.</p>
+    <div style="overflow:auto"><table class="lst"><thead><tr><th>Conta</th><th>Partes</th><th>Espaço</th><th>Última alteração</th></tr></thead><tbody>${L.map(x=>`<tr><td>${esc(x.email||'—')}</td><td>${+x.partes||0}</td><td>${mb(x.bytes)}</td><td>${x.ultima?esc(new Date(x.ultima).toLocaleDateString('pt-PT')):'—'}</td></tr>`).join('')||'<tr><td colspan="4" class="mut">Sem dados.</td></tr>'}</tbody></table></div>`}
+{const _bR=bindNvPainel;bindNvPainel=function(){const r=_bR.apply(this,arguments);try{const c=$('#nv-card');if(c&&nvL().prov==='supabase'){let s=c.querySelector('#nv-rgpd');
+    if(!s){s=document.createElement('section');s.className='nvs';s.id='nv-rgpd';const seg=c.querySelector('#nv-seg');if(seg&&seg.parentNode)seg.parentNode.insertBefore(s,seg.nextSibling);else (c.querySelector('.card:not(.nvhero)')||c).appendChild(s)}
+    const adm=!!(SESSAO&&SESSAO.papel==='admin');
+    s.innerHTML=`<div class="nvsh"><h3>Privacidade e Conta</h3><p>Os dados são seus: pode levá-los consigo (cópia completa, acima) e pode eliminar a conta com tudo o que lhe pertence. <a href="${LEGAL_P}" target="_blank" rel="noopener">Política de privacidade</a></p></div>
+      <div class="nvsb"><div class="row" style="gap:8px;flex-wrap:wrap">${adm?`<button type="button" class="btn" id="nv-uso">${ic('chart',15)} Espaço na Base de Dados</button>`:''}<button type="button" class="btn dng" id="nv-elim">${ic('trash',15)} Eliminar a Minha Conta</button></div><p class="mut peq" id="nv-bdv" style="margin:8px 0 0"></p></div>`;
+    s.querySelector('#nv-elim').onclick=sbEliminarConta;const bu=s.querySelector('#nv-uso');if(bu)bu.onclick=sbUsoDlg;
+    sbBdVersao().then(v=>{const el=$('#nv-bdv');if(!el||v==null)return;el.innerHTML=v>=SB_BD_MIN?'Proteções da base de dados em dia (scripts v'+v+').':'<b style="color:var(--bad)">A base de dados precisa de ser atualizada</b>'+(adm?': corra o ficheiro <b>0019_seguranca_rgpd.sql</b> no Supabase (SQL Editor). Sem ele não há limite de tentativas nos códigos das salas, limpeza diária do que expirou nem eliminação de conta.':' — avise o administrador.')}).catch(()=>{})}}catch(e){console.warn(e)}return r}}
+/* o administrador é avisado (uma vez por dia) se a base de dados ainda não tiver as proteções do script 0019 */
+setTimeout(function sbVigiarBd(){if(!window.__esPronto)return setTimeout(sbVigiarBd,5000);(async()=>{try{if(nvL().prov!=='supabase'||!(SESSAO&&SESSAO.papel==='admin'))return;const v=await sbBdVersao();if(v==null||v>=SB_BD_MIN)return;const hj=isoHoje();if(S.cfg.bdAviso===hj)return;S.cfg.bdAviso=hj;save();
+    toast('A base de dados precisa de ser atualizada (ficheiro 0019) — Definições › Conta e Dados.','aviso')}catch(_){}})()},15000);
+
+/* ===== 1.084: «Guardado» só quando está mesmo guardado na base de dados =====
+   Antes, o indicador do cabeçalho dizia «Guardado» logo que a alteração ficava em memória; se a base de dados recusasse a gravação
+   (ou a ligação falhasse sem o navegador dar por isso), nada avisava — e nesta versão não fica cópia no aparelho.
+   Agora o indicador segue as partes que ainda estão por enviar: «A guardar…» → «Guardado»; se falhar, «Por guardar» a vermelho,
+   nova tentativa de 15 em 15 segundos e, ao fim de 20 segundos, uma faixa com o motivo, «Tentar Agora» e «Descarregar Cópia». */
+const sbPend=()=>{try{return Object.keys(nvL().mod||{}).length}catch(_){return 0}};
+const sbGrav={desde:0,faixa:false,ult:0,reg:''};
+function sbEstadoReal(){if(!window.__esPronto||nvL().prov!=='supabase')return null;const n=sbPend();if(!n)return 'ok';if(!navigator.onLine)return 'off';return nvL().erro&&Date.now()-sbGrav.desde>4000?'erro':'pend'}
+{const _eg=estadoGuardar;estadoGuardar=function(k){const r=sbEstadoReal();if(r==null||k==='erro')return _eg.apply(this,arguments);const el=document.getElementById('saveSt');if(!el)return;
+    if(r==='ok'){_eg.call(this,'ok');el.title='Tudo guardado na base de dados';return}
+    if(r==='pend'){_eg.call(this,'pend');el.title='A enviar as alterações para a base de dados';return}
+    el.className='savest erro';el.innerHTML=ic('alert',13)+(r==='off'?' Sem internet':' Por guardar');el.title=r==='off'?'Sem internet: as alterações são guardadas quando a ligação voltar. Não feche a app.':'As últimas alterações ainda não estão na base de dados. Não feche a app.'}}
+function sbFaixaGravar(mostrar){let f=document.getElementById('es-porguardar');if(!mostrar){if(f)f.remove();return}
+  const off=!navigator.onLine;const motivo=off?'Sem ligação à internet.':String(nvL().erro||'A base de dados não respondeu.').slice(0,220);
+  const h=`<span class="epg-t"><b>${off?'Sem internet: há alterações por guardar.':'As últimas alterações ainda não estão guardadas.'}</b> Não feche a app. <span class="epg-m">${esc(motivo)}</span></span><span class="epg-b"><button type="button" class="btn sm" id="epg-ja">Tentar Agora</button><button type="button" class="btn sm" id="epg-cp">Descarregar Cópia</button></span>`;
+  if(!f){f=document.createElement('div');f.id='es-porguardar';f.setAttribute('role','alert');document.body.appendChild(f)}
+  if(f.dataset.h!==h){f.dataset.h=h;f.innerHTML=h;
+    f.querySelector('#epg-ja').onclick=async()=>{const b=f.querySelector('#epg-ja');b.disabled=true;b.textContent='A tentar…';try{await nvSincronizar(true)}catch(_){}sbGravTick();const b2=document.getElementById('epg-ja');if(b2){b2.disabled=false;b2.textContent='Tentar Agora'}};
+    f.querySelector('#epg-cp').onclick=()=>{try{sbCopiaFicheiro()}catch(e){toast(e.message,'erro')}}}}
+function sbGravTick(){const r=sbEstadoReal();if(r==null)return;try{estadoGuardar(r==='ok'?'ok':'pend')}catch(_){}
+  if(r==='ok'){if(sbGrav.faixa){sbFaixaGravar(false);sbGrav.faixa=false;try{toast('Tudo guardado.','ok')}catch(_){}}sbGrav.desde=0;sbGrav.reg='';return}
+  if(!sbGrav.desde)sbGrav.desde=Date.now();const ha=Date.now()-sbGrav.desde;
+  if(ha>20000){sbFaixaGravar(true);sbGrav.faixa=true;const m=navigator.onLine?String(nvL().erro||'sem resposta'):'sem internet';if(sbGrav.reg!==m){sbGrav.reg=m;try{esErro('gravação','Alterações por guardar há mais de 20 s: '+m,'')}catch(_){}}}
+  /* nova tentativa de 15 em 15 segundos enquanto houver alterações por guardar e houver rede */
+  if(navigator.onLine&&ha>6000&&Date.now()-sbGrav.ult>15000){sbGrav.ult=Date.now();try{nvSincronizar(false).then(()=>sbGravTick()).catch(()=>{})}catch(_){}}}
+setInterval(sbGravTick,1500);addEventListener('online',()=>setTimeout(sbGravTick,900));addEventListener('offline',()=>setTimeout(sbGravTick,300));
+{const st=document.createElement('style');st.textContent=`html body #es-porguardar{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:99990;display:flex;align-items:center;gap:12px;flex-wrap:wrap;max-width:min(760px,calc(100vw - 24px));padding:10px 14px;background:#7f1d1d;color:#fff;font-size:13.5px;line-height:1.35;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+html body #es-porguardar .epg-t{flex:1 1 280px}html body #es-porguardar .epg-m{opacity:.85;display:block;font-size:12.5px}html body #es-porguardar .epg-b{display:flex;gap:8px;flex-wrap:wrap}
+html body #es-porguardar .btn{background:#fff;color:#7f1d1d;border-color:#fff}html body.est-sge #es-porguardar,html body.est-sge #es-porguardar .btn{border-radius:0}
+@media print{html body #es-porguardar{display:none}}`;document.head.appendChild(st)}

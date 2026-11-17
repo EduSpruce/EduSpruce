@@ -46,7 +46,7 @@ function migalhas(v){const el=$('#crumb');if(!el)return;const a=A(),t=T();const 
   el.innerHTML=parts.join('<i>›</i>');el.querySelectorAll('[data-cr]').forEach(x=>x.onclick=e=>{e.preventDefault();go(x.dataset.cr)})}
 /* ---------- cabeçalho de impressão uniforme ---------- */
 function cabecalhoImpressao(v){let h=$('#printHdr');if(!h){h=document.createElement('div');h.id='printHdr';$('#main').prepend(h)}const a=A(),t=T(),c={...S.cfg,...escolaDe(t)};
-  h.innerHTML=`${c.logo?`<img src="${c.logo}" alt="">`:''}<div><b>${esc(c.escola||'EduSpruce')}</b><span>${esc(TITLES[v]||'')}${t&&NEEDS_T.includes(v)?' — '+esc(t.nome+' · '+t.disciplina):''}${a?' · Ano letivo '+esc(a.nome):''}</span></div><span class="pd">${esc(profNome(c.professor))}<br>${new Date().toLocaleDateString('pt-PT')}</span>`}
+  h.innerHTML=`${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<div><b>${esc(c.escola||'EduSpruce')}</b><span>${esc(TITLES[v]||'')}${t&&NEEDS_T.includes(v)?' — '+esc(t.nome+' · '+t.disciplina):''}${a?' · Ano letivo '+esc(a.nome):''}</span></div><span class="pd">${esc(profNome(c.professor))}<br>${new Date().toLocaleDateString('pt-PT')}</span>`}
 /* ---------- dicas por toque longo / passar o rato (substituem title) ---------- */
 (function(){let tm=null,bx=null,src=null;
   const mostra=(el,x,y)=>{const tx=el.getAttribute('data-tip')||el.getAttribute('title');if(!tx)return;if(el.hasAttribute('title')){el.setAttribute('data-tip',tx);el.removeAttribute('title')}

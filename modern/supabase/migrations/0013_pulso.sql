@@ -1,6 +1,8 @@
 -- =====================================================================================
 -- EduSpruce · PULSO — avaliação em tempo real na sala de aula (quizzes, corrida de equipas, bilhete de saída, pergunta rápida)
 -- Colar TUDO no «SQL Editor» do Supabase e carregar em «Run». Pode correr-se mais do que uma vez.
+-- NOTA (1.084): o ficheiro 0019_seguranca_rgpd.sql redefine pulso_sala_info e pulso_entrar (limite de tentativas falhadas).
+--              Depois de correr ESTE ficheiro, corra outra vez o 0019.
 --
 -- Como funciona (sem contas para os alunos):
 --   · o professor tem até 20 salas fixas, cada uma com um código (ex.: PRF-7KQ); a base de dados só guarda o «hash» do código

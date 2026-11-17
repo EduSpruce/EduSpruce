@@ -7,7 +7,14 @@ ICONS.chev='<path d="M9 6l6 6-6 6"/>';ICONS.arrowUp='<path d="M12 19V5"/><path d
 function navDT(){const b=document.querySelector('#side [data-v="direcao"]');if(!b)return;const on=!!(A()&&minhasDT(A()).length);b.style.display=on?'':'none'}
 Object.assign(AJ_VIEW,{tarefas:'inicio2',planta:'planta',sumarios:'sumarios',recursos:'recursos',direcao:'direcao',documentos:'documentos'});
 APRES_BLOQ.push('direcao','documentos');
-if(/^(file:|http:\/\/(localhost|127\.0\.0\.1))/.test(location.href)||(()=>{try{return localStorage.getItem('edugest.debug')==='1'}catch(_){return false}})())window.EduGest.ev=function(s){return eval(s)};
+if(/^(file:|http:\/\/(localhost|127\.0\.0\.1))/.test(location.href)||(()=>{try{return localStorage.getItem('edugest.debug')==='1'}catch(_){return false}})()){window.EduGest.ev=function(s){return eval(s)};
+  /* 1.084 · para os testes com a política de conteúdo ativa (onde o eval não corre): acessos com nome, sem eval */
+  window.EduGest.t={go:v=>go(v),vista:()=>VIEW,vistas:()=>Object.keys(TITLES),demo:()=>criarDemo(),S:()=>S,A:()=>A(),T:()=>T(),save:()=>save(),saveNow:()=>saveNow(),prefs:()=>aplicarPrefs(),
+    calc:()=>({periodos,ponderada,pctsPer,pctsFinal,instTotal}),auto:()=>autoTestes(),
+    f:n=>({mraAbrir:()=>mraAbrir,mraM:()=>mraM,getPdfLib:()=>getPdfLib,ocrImagem:()=>ocrImagem,verFicheiro:()=>verFicheiro,imprimirBytes:()=>imprimirBytes,FOTOS:()=>FOTOS,toast:()=>toast,audit:()=>audit,UI:()=>UI,
+      pvAvNova:()=>pvAvNova,pvExNovo:()=>pvExNovo,pvParaItem:()=>pvParaItem,pvAbrir:()=>pvAbrir,pvCh:()=>pvCh,pvImportar:()=>pvImportar,pvRespostas:()=>pvRespostas,pvUma:()=>pvUma,pvPerg:()=>pvPerg,pvReceber:()=>pvReceber,PV:()=>PV,
+      fmNovo:()=>fmNovo,fmQ:()=>fmQ,fmAbrir:()=>fmAbrir,fmCh:()=>fmCh,fmImportar:()=>fmImportar,fmRespostas:()=>fmRespostas,fmUma:()=>fmUma,fmPerg:()=>fmPerg,FMS:()=>FMS,
+      aaAbrir:()=>aaAbrir,aaCh:()=>aaCh,aaCifrar:()=>aaCifrar,aaImportar:()=>aaImportar,aaPainel:()=>aaPainel,aaSess:()=>aaSess,aaTurmaCod:()=>aaTurmaCod})[n]()}}
 /* ---------- Início: widgets e favoritos ---------- */
 function vInicio(){vInicio0();try{posInicio()}catch(e){console.error(e)}}
 function widgetProxTarefas(){const hj=isoData(new Date());const a=A();const TT=a?a.turmas:[];

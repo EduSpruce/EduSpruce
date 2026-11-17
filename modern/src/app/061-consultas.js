@@ -56,7 +56,7 @@ function importarCalendarioDlg(c){
       <div><span class="sw" style="background:${TIPOS_DIA.interrupcao.cor}"></span>Interrupções: ${ev.filter(e=>e.t==='interrupcao').map(e=>`<b>${esc(fmtIso(e.ini))}${e.fim!==e.ini?'–'+esc(fmtIso(e.fim)):''}</b>${e.nota?' ('+esc(e.nota)+')':''}`).join(' · ')||'—'}</div>
       <div><span class="sw" style="background:${TIPOS_DIA.feriadoN.cor}"></span>Feriados nacionais: ${n('feriadoN')} · <span class="sw" style="background:${TIPOS_DIA.feriadoR.cor}"></span>regionais: ${n('feriadoR')}</div>
     </div>
-    ${c.preview?`<details class="pdfprev" open><summary>${ic('file',14)} O PDF lido (para comparar)</summary><img src="${c.preview}" alt="Pré-visualização do calendário em PDF"></details>`:''}
+    ${c.preview?`<details class="pdfprev" open><summary>${ic('file',14)} O PDF lido (para comparar)</summary><img src="${esc(c.preview)}" alt="Pré-visualização do calendário em PDF"></details>`:''}
     <p class="hint">Confira com o PDF. Depois de guardar, pode corrigir qualquer dia em Calendário Escolar → “Editar Dias”.</p>
     <div class="row" style="margin-top:14px"><button class="btn pri" id="cal-ok">${ic('check',15)} Guardar Calendário</button></div></div>`);
   $('#cal-ok').onclick=()=>{delete c.preview;regista('Calendário escolar (PDF)',c.ficheiro,c.periodos.map(p=>p.n+'.º '+p.dias+' dias').join(', '));guardarCalendario(c);closeDrawer();go('calendario');toast('Calendário guardado · '+c.periodos.map(p=>p.n+'.º '+p.dias+' dias').join(' · '))};

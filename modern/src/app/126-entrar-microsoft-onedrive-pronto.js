@@ -57,7 +57,7 @@ pedirPin=function(){return new Promise(ok=>{const p=(()=>{try{return perfil()}ca
   const o=document.createElement('div');o.id='login';o.className='pinmode';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','pl-t');
   const teclas=['1','2','3','4','5','6','7','8','9','x','0','b'];
   o.innerHTML=`<div class="lgb pinc"><div class="lgh"><span class="lgi">${ic('flow',30)}</span><div><b>Edu<em>Spruce</em></b><span>${esc(S.cfg.escola||'Menos papelada. Mais tempo para ensinar.')}</span></div></div>
-    <div class="plav">${foto?`<img src="${foto}" alt="">`:`<span>${esc(inic)}</span>`}<i>${ic('cadeado',14)}</i></div>
+    <div class="plav">${foto?`<img src="${esc(foto)}" alt="">`:`<span>${esc(inic)}</span>`}<i>${ic('cadeado',14)}</i></div>
     <h1 id="pl-t">${sd}${pn?', '+esc(pn):''}</h1><p class="mut plsub">Introduza o seu código para continuar</p>
     <div class="pdots" role="status" aria-live="polite" aria-label="0 de 4 algarismos"><i></i><i></i><i></i><i></i></div><p class="pderr" role="alert"></p>
     <div class="pdk">${teclas.map(k=>k==='x'?`<button type="button" class="pdc" data-pk="x">Sair</button>`:k==='b'?`<button type="button" class="pdb" data-pk="b" aria-label="Apagar">${ic('arrowL',22)}</button>`:`<button type="button" data-pk="${k}">${k}</button>`).join('')}</div>

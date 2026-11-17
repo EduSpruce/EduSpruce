@@ -172,7 +172,7 @@ let _pinTent=0;
 async function pinRecuperar(alvo){if(!(alvo instanceof Element))alvo=null;const L=(()=>{try{return nvL()}catch(_){return {}}})();const s=SESSAO||{};const conta=((S.cfg.auth||{}).contas||[]).find(c=>c.u===s.u);
   const modo=L.k&&L.salt?'nuvem':conta?'conta':null;
   if(!modo){alert('Não há outra forma de confirmar a sua identidade neste aparelho.\n\nToque em «Sair», entre de novo com a sua conta e defina um código novo em Definições › Segurança.');return}
-  const d=document.createElement('dialog');d.className='nvmc';d.innerHTML=`<form class="nvmcf" onsubmit="return false" autocomplete="on"><input type="text" name="username" autocomplete="username" value="${esc(gsCfg&&gsCfg().email||s.u||'')}" hidden readonly><h2>${ic('cadeadoAb',18)} Esqueci-me do Código</h2>
+  const d=document.createElement('dialog');d.className='nvmc';d.innerHTML=`<form class="nvmcf" data-nosub autocomplete="on"><input type="text" name="username" autocomplete="username" value="${esc(gsCfg&&gsCfg().email||s.u||'')}" hidden readonly><h2>${ic('cadeadoAb',18)} Esqueci-me do Código</h2>
     <p class="hint">${modo==='nuvem'?'Para confirmar que é você, escreva o <b>código de encriptação da sincronização</b> (o que usa para os dados na nuvem, com pelo menos 8 algarismos).':'Para confirmar que é você, escreva a <b>palavra-passe da sua conta</b> ('+esc(s.u)+').'}</p>
     <label for="rp-0">${modo==='nuvem'?'Código de encriptação':'Palavra-passe'}</label><input type="password" id="${modo==='nuvem'?'rp-0':'rp-0p'}" autocomplete="current-password" ${modo==='nuvem'?'inputmode="numeric"':''}>
     <label for="rp-1">Novo código de acesso (4 algarismos)</label><input type="password" id="rp-1" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off">

@@ -10,7 +10,8 @@ async function aaChaves(code){const te=new TextEncoder();const id=aaHex(await cr
   const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:te.encode('es-aa-k:'+id),iterations:150000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);return {id,k}}
 const _aaK=new Map();async function aaCh(code){if(!_aaK.has(code))_aaK.set(code,aaChaves(code));return _aaK.get(code)}
 async function aaCifrar(o,k){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},k,new TextEncoder().encode(JSON.stringify(o)));return 'A1.'+b64(iv)+'.'+b64(ct)}
-async function aaDecifrar(s,k){const p=String(s).split('.');const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(p[1])},k,unb64(p[2]));return JSON.parse(new TextDecoder().decode(pt))}
+/* 1.084 · tudo o que os alunos enviam passa pelo esLimpo (app/051-utilitarios.js) antes de ser usado */
+async function aaDecifrar(s,k){const p=String(s).split('.');const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(p[1])},k,unb64(p[2]));return esLimpo(JSON.parse(new TextDecoder().decode(pt)))}
 function aaCodigo(n){n=n||8;const o=[];while(o.length<n){const b=crypto.getRandomValues(new Uint8Array(16));for(const x of b){if(x<248&&o.length<n)o.push(AA_ALF[x%31])}}return o.join('')}
 /* v0.942 · papel para o ano todo: cada turma tem um código fixo e cada aluno o seu código pessoal (vão no QR code do papel de cada aluno) */
 const aaAtivos=t=>t.alunos.filter(a=>a.frequenta!==false).sort((a,b)=>(+a.num||0)-(+b.num||0));
@@ -39,7 +40,7 @@ async function aaAbrir(t,p,q,min,pes){pes=pes===undefined?(t.autoavModo!=='geral
 /* trazer as respostas para o Perfil de Aprendizagem */
 async function aaImportar(t,s){const {id,k}=await aaCh(s.code);const sb=await aaSb();const r=await sb.from('eduspruce_autoav_resp').select('id,conteudo').eq('sessao',id).order('id');
   if(r.error)throw new Error(aaErro(r.error));const ult={},V={},rej=[];s.esc=s.esc||{};
-  for(const x of r.data||[]){try{const o=await aaDecifrar(x.conteudo,k);if(!o||!o.aid)continue;
+  for(const x of r.data||[]){try{const o=await aaDecifrar(x.conteudo,k);if(!o||Array.isArray(o))continue;o.aid=esIdOk(o.aid);o.q=esNumOk(o.q);o.n=esTxtOk(o.n,12);o.k=esTxtOk(o.k,60);if(!o.aid)continue;
     if(s.pes&&(!o.k||o.k!==((t.autoavCh||{})[o.aid]))){rej.push({aid:o.aid,n:o.n,q:o.q});continue}
     (V[o.aid]=V[o.aid]||[]).push(o)}catch(_){}}
   Object.keys(V).forEach(aid=>{const L=V[aid].sort((a,b)=>a.q-b.q);const esc=s.esc[aid];ult[aid]=(esc&&L.find(o=>o.q===esc))||L[L.length-1]});
@@ -84,7 +85,7 @@ async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma t
   d.addEventListener('cancel',e=>{e.preventDefault();fim()});
   const ativos=aaAtivos(t);
   const formulario=(msg)=>{clearInterval(tm);const np=periodos().length||3,pa=perAtual(t);const imp=new Set(t.autoavImp||[]);const novos=t.autoavCod?ativos.filter(a=>!imp.has(a.id)).length:ativos.length;
-    d.innerHTML=`<form class="aaw" onsubmit="return false"><header class="aah"><h2 id="aa-t">${ic('users',18)} Autoavaliação pelo Telemóvel</h2><button type="button" class="btn ico" id="aa-x" aria-label="Fechar">${ic('x',16)}</button></header>
+    d.innerHTML=`<form class="aaw" data-nosub><header class="aah"><h2 id="aa-t">${ic('users',18)} Autoavaliação pelo Telemóvel</h2><button type="button" class="btn ico" id="aa-x" aria-label="Fechar">${ic('x',16)}</button></header>
       <p class="mut">${esc(t.nome)} · ${esc(t.disciplina)} · ${ativos.length} alunos. Cada aluno tem um <b>papel com o seu QR code</b>, para o ano todo. Quando abrir a autoavaliação, os alunos apontam a câmara ao seu papel e respondem; só cada aluno consegue responder por si. As respostas aparecem no <b>Perfil de Aprendizagem</b>.</p>
       <section class="aabox"><h3>${ic('printer',15)} 1. Papéis dos alunos (imprimir uma vez)</h3>
         <p class="mut" style="margin:0 0 8px">${t.autoavCod?`Código da turma <b>${esc(aaFmt(t.autoavCod))}</b> · criado a ${esc(new Date(t.autoavCodQ||Date.now()).toLocaleDateString('pt-PT'))}${novos?` · <b>${novos}</b> aluno${novos>1?'s':''} ainda sem papel impresso`:' · todos os alunos têm papel'}`:'Ainda não foram criados os papéis desta turma.'}</p>
@@ -128,7 +129,7 @@ async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma t
       const V=_aaVers.get(s.code)||{};const nm=aid=>{const a=t.alunos.find(z=>z.id===aid);return a?'N.º '+(a.num||'')+' · '+aaCurto(a.nome):'?'};let h='';
       if((s.rej||[]).length){const g={};s.rej.forEach(x=>{g[x.n]=(g[x.n]||0)+1});h+=`<div class="alert aarej">${ic('alert',15)} <span><b>${s.rej.length} resposta${s.rej.length>1?'s':''} recusada${s.rej.length>1?'s':''}</b> — código pessoal errado (alguém tentou responder por outro aluno?): ${Object.entries(g).map(([n,c])=>'n.º '+esc(n)+(c>1?' ('+c+'×)':'')).join(', ')}. Não foram guardadas.</span></div>`}
       (s.dup||[]).forEach(aid=>{const L=(V[aid]||[]).slice().sort((a,b)=>a.q-b.q);if(L.length<2)return;const usa=(s.esc||{})[aid]||L[L.length-1].q;
-        h+=`<div class="aadup"><b>${esc(nm(aid))}</b> respondeu ${L.length} vezes — escolha a que fica: ${L.map(o=>`<button type="button" class="btn sm ${o.q===usa?'pri':''}" data-aadup="${esc(aid)}" data-q="${o.q}">${new Date(o.q).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}${o.nota?' · nota '+esc(o.nota):''}${o.q===usa?' ✓':''}</button>`).join(' ')}</div>`});
+        h+=`<div class="aadup"><b>${esc(nm(aid))}</b> respondeu ${L.length} vezes — escolha a que fica: ${L.map(o=>`<button type="button" class="btn sm ${o.q===usa?'pri':''}" data-aadup="${esc(aid)}" data-q="${+o.q||0}">${new Date(o.q).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}${o.nota?' · nota '+esc(o.nota):''}${o.q===usa?' ✓':''}</button>`).join(' ')}</div>`});
       const av=d.querySelector('#aa-av');av.innerHTML=h;av.querySelectorAll('[data-aadup]').forEach(b=>b.onclick=async()=>{s.esc=s.esc||{};s.esc[b.dataset.aadup]=+b.dataset.q;save();try{await aaImportar(t,s)}catch(_){}atual();toast('Ficou a resposta das '+b.textContent.replace(' ✓','').split(' · ')[0],'ok')});
       const sg=d.querySelector('#aa-sug');if(sg){sg.innerHTML=aaSugHtml(t,s.p);const n2=(t.autoavSug||[]).filter(x=>x.p===s.p).length;d.querySelector('#aa-sugn').textContent='('+n2+')'}};
     const puxar=async()=>{try{const k=await aaImportar(t,s);atual();if(k)toast(k===1?'Chegou 1 autoavaliação':'Chegaram '+k+' autoavaliações','ok')}catch(e){console.warn(e)}if(Date.now()>s.expira){clearInterval(tm);atual()}};

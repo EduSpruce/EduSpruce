@@ -50,7 +50,7 @@ function hubIcMenu(a,px){try{const L=[...document.querySelectorAll('#side [data-
   const c=sv.cloneNode(true);c.setAttribute('width',px);c.setAttribute('height',px);c.removeAttribute('style');return c.outerHTML}catch(_){return''}}
 function hubIcone(a,sz,o){o=o||hubCfg().ic[a.id]||{};const [c1,c2]=hubCor(a,o);const est=hubCfg().est||'cheio';sz=sz||64;
   const st=`--h1:${c1};--h2:${c2};width:${sz}px;height:${sz}px`;
-  let dentro;if(o.img)dentro=`<img src="${o.img}" alt="">`;else if(o.e&&o.e.trim())dentro=`<span class="hbe" style="font-size:${Math.round(sz*(([...o.e.trim()].length>1)?.36:.5))}px">${esc([...o.e.trim()].slice(0,3).join(''))}</span>`;else dentro=(!o.g&&hubIcMenu(a,Math.round(sz*.44)))||ic(hubG(a,o),Math.round(sz*.4));
+  let dentro;if(o.img)dentro=`<img src="${esc(o.img)}" alt="">`;else if(o.e&&o.e.trim())dentro=`<span class="hbe" style="font-size:${Math.round(sz*(([...o.e.trim()].length>1)?.36:.5))}px">${esc([...o.e.trim()].slice(0,3).join(''))}</span>`;else dentro=(!o.g&&hubIcMenu(a,Math.round(sz*.44)))||ic(hubG(a,o),Math.round(sz*.4));
   return `<span class="hbic hb-${o.img?'img':est}" style="${st}">${dentro}</span>`}
 
 TITLES.hub='Apps';
@@ -154,14 +154,14 @@ function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
       <span class="hbed" data-hbed="${a.id}" title="Personalizar ícone">${ic('pencil',14)}</span></button>`};
   const hoje=new Date().toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'});
   const a0=A(),TL=a0?turmasFiltradas(a0):[],t0=T();
-  const selT=`<label class="hub-tur${t0?'':' falta'}" onclick="event.stopPropagation()"><span>Turma</span><select id="hb-tur" aria-label="Turma para Avaliação e Sumários">${t0?'':'<option value="">— Escolher a turma —</option>'}${TL.map(t=>`<option value="${esc(t.id)}"${t0&&t.id===t0.id?' selected':''}>${esc(t.nome+' · '+(t.disciplina||''))}</option>`).join('')}</select></label>`;
+  const selT=`<label class="hub-tur${t0?'':' falta'}" data-semprop><span>Turma</span><select id="hb-tur" aria-label="Turma para Avaliação e Sumários">${t0?'':'<option value="">— Escolher a turma —</option>'}${TL.map(t=>`<option value="${esc(t.id)}"${t0&&t.id===t0.id?' selected':''}>${esc(t.nome+' · '+(t.disciplina||''))}</option>`).join('')}</select></label>`;
   $('#view').innerHTML=`<div class="hub${ed?' edit':''}">
     <div class="hub-top"><div><h2>${ic('apps',22)}Apps</h2><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
       <div class="hub-bar"><label class="chk" style="margin:0"><input type="checkbox" id="hb-ini" ${hubIni()?'checked':''}> <span>Abrir aqui ao entrar</span></label>
         <button class="btn${ed?' pri':''}" id="hb-ed">${ic(ed?'check':'pencil',15)} ${ed?'Concluído':'Personalizar'}</button></div></div>
     ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id&&(!a.on||a.on()));return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(hubNomeGr(g))}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
   </div>`;
-  {const st=$('#hb-tur');if(st)st.onchange=e=>{if(!e.target.value)return;S.turmaAtiva=e.target.value;save();go('hub')}}
+  $$('#view [data-semprop]').forEach(l=>l.addEventListener('click',e=>e.stopPropagation()));{const st=$('#hb-tur');if(st)st.onchange=e=>{if(!e.target.value)return;S.turmaAtiva=e.target.value;save();go('hub')}}
   $('#hb-ini').onchange=e=>{hubCfg().ini=e.target.checked;save();toast(e.target.checked?'A app abre nas Apps':'A app abre no Início','ok')};
   $('#hb-ed').onclick=()=>{UI.hubEd=!UI.hubEd;vHub()};
   $$('#view .hbt').forEach(b=>b.onclick=e=>{const a=HUB_APPS.find(x=>x.id===b.dataset.hub);if(!a)return;

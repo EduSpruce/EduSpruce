@@ -53,7 +53,7 @@ function vMeuHorario(){
 
 /* ---------- pré-visualização ---------- */
 let PREV=[],PREVT='';
-function avatar(a,sz){sz=sz||34;const src=fotoSrc(a);return src?`<img class="foto-al" src="${src}" alt="" style="width:${sz}px;height:${Math.round(sz*1.25)}px;object-fit:cover;object-position:50% 0;border-radius:6px;display:block;max-width:none;flex-shrink:0">`:`<span class="ava" style="width:${sz}px;min-width:${sz}px;height:${Math.round(sz*1.25)}px;font-size:${Math.round(sz*.38)}px">${esc((a.nome||'?').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase())}</span>`}
+function avatar(a,sz){sz=sz||34;const src=fotoSrc(a);return src?`<img class="foto-al" src="${esc(src)}" alt="" style="width:${sz}px;height:${Math.round(sz*1.25)}px;object-fit:cover;object-position:50% 0;border-radius:6px;display:block;max-width:none;flex-shrink:0">`:`<span class="ava" style="width:${sz}px;min-width:${sz}px;height:${Math.round(sz*1.25)}px;font-size:${Math.round(sz*.38)}px">${esc((a.nome||'?').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase())}</span>`}
 function infoLeitura(r){
   if(!r||!r.ficheiro)return '';
   if(r.falhou)return `<div class="alert w">Não consegui identificar alunos neste ficheiro. Confirme que é o Excel exportado em <b>${esc(CAMINHO_EXCEL)}</b>.</div>`;

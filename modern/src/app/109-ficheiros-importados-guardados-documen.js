@@ -22,8 +22,12 @@ function cartaoImportados(){const L=importados().slice().sort((x,y)=>y.q-x.q);co
 
 /* ---------- Importar reuniões (PDF com texto, PDF digitalizado ou imagem → OCR) ---------- */
 let _tess=null;
-async function ocrTesseract(){if(window.Tesseract)return window.Tesseract;await new Promise((ok,ko)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';s.onload=ok;s.onerror=()=>ko(new Error('Não foi possível carregar o reconhecimento de texto (OCR). É preciso ligação à internet para documentos digitalizados.'));document.head.appendChild(s)});return window.Tesseract}
-async function ocrImagem(src,prog){const T_=await ocrTesseract();if(!_tess)_tess=await T_.createWorker('por',1,{logger:m=>{if(prog&&m.status==='recognizing text')prog(Math.round(m.progress*100))}});
+async function ocrTesseract(){if(window.Tesseract)return window.Tesseract;const erro='Não foi possível carregar o reconhecimento de texto (OCR). É preciso ligação à internet para documentos digitalizados.';
+  const carrega=src=>new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{s.remove();ko(new Error(erro))};document.head.appendChild(s)});
+  /* 1.084: o leitor (tesseract.js 5.1.1, Apache-2.0) vem da própria app; só o motor e o idioma vêm de fora. Numa cópia offline aberta do disco não há pasta esm/: aí usa-se o endereço público */
+  try{await carrega('esm/tesseract-5.1.1.min.js');window.__tessLocal=1}catch(e){if(location.protocol!=='file:')throw e;await carrega('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js')}
+  return window.Tesseract}
+async function ocrImagem(src,prog){const T_=await ocrTesseract();if(!_tess)_tess=await T_.createWorker('por',1,{...(window.__tessLocal?{workerPath:new URL('esm/tesseract-worker-5.1.1.min.js',document.baseURI).href,workerBlobURL:false,corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1'}:{}),logger:m=>{if(prog&&m.status==='recognizing text')prog(Math.round(m.progress*100))}});
   const {data}=await _tess.recognize(src);const it=[];(data.words||[]).forEach(w=>{if(w.text&&w.text.trim())it.push({s:w.text.trim(),x:w.bbox.x0,y:w.bbox.y0,w:w.bbox.x1-w.bbox.x0,h:w.bbox.y1-w.bbox.y0})});return {items:it,texto:data.text||''}}
 /* agrupa os pedaços de texto em linhas (y crescente = para baixo) e junta palavras próximas em células */
 function linhasDeItens(items){const I=items.slice().sort((a,b)=>a.y-b.y||a.x-b.x);const L=[];

@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.084
+- Segurança reforçada: a app só corre o seu próprio código e trata como simples texto tudo o que os alunos escrevem nas respostas
+- «Guardado» só aparece quando as alterações estão mesmo na base de dados; se a gravação falhar, a app avisa, volta a tentar sozinha e deixa descarregar uma cópia
+- Definições › Conta e Dados › Privacidade e Conta: eliminar a conta com todos os dados (RGPD) e, para o administrador, o espaço ocupado na base de dados
+- Definições › Ferramentas › Erros Técnicos: o que correr mal fica registado só neste aparelho, para copiar e enviar a quem dá apoio
+- A página pública dos horários e os ficheiros guardados abrem sem poder correr código; o reconhecimento de texto (OCR) passa a vir da própria app
+- Administrador: é preciso correr uma vez o ficheiro 0019_seguranca_rgpd.sql no Supabase (limite de tentativas nos códigos das salas, limpeza diária, eliminação de conta)
+
 ## 1.083
 - SpruceNote Web Clipper: extensão do Chrome (como a do Milanote) para guardar imagens, texto, ligações e vídeos de qualquer site no SpruceNote — descarregar
 - Os recortes chegam ao quadro escolhido numa coluna «Por Arrumar»; «Abrir» na extensão leva diretamente ao quadro
