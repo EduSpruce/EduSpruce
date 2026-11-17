@@ -152,6 +152,24 @@ function apPvUI(){const box=document.querySelector('#dw-b .apdlg');if(!box)retur
   const ok=document.getElementById('ap-ok');if(ok)ok.addEventListener('click',()=>{lista.querySelectorAll('.appv-r').forEach(div=>{const id=div.dataset.pvid;const n=div.querySelector('[data-pvk="n"]').getAttribute('aria-pressed')==='true',f=div.querySelector('[data-pvk="f"]').getAttribute('aria-pressed')==='true';if(n||f)P[id]={n:n?1:0,f:f?1:0};else delete P[id]})},true)}
 {const _pdl=apresDlg;apresDlg=function(){const r=_pdl.apply(this,arguments);try{apPvUI()}catch(e){console.warn(e)}return r}}
 try{const h=AJUDA.find(x=>x.id==='apresentacao');if(h)h.txt+=`<p><b>Privacidade de cada aluno:</b> na janela do modo de apresentação, cada aluno tem três botões — <b>Notas</b> esconde só as classificações, percentagens, níveis e gráficos desse aluno (o nome continua visível, para projetar as notas da turma sem expor quem não quer); <b>Foto</b> esconde só a fotografia; <b>Tudo</b> oculta o aluno por completo. Pode combinar Notas e Foto, e usar <b>Notas de Todos</b> para esconder as notas da turma inteira. A escolha fica guardada para esse aluno.</p>`}catch(_){}
+/* ===================== v1.044 · Perfis de Aprendizagem: «Evolução por Período» ao lado do Perfil por Domínio =====================
+   Linhas por domínio (cor do domínio), classificação do período (linha grossa) e média da turma (tracejada, se a comparação estiver visível). */
+function perfilEvol(X,show){const t=T();if(!t||!X||!X.P||!X.P.length)return '';const P=X.P,sec=isSec(t);const al=alunosAval(t);
+  const tur=P.map(q=>_avg(al.map(x=>ponderada(t,pctsPer(t,x.id,q))).filter(v=>v!=null)));
+  const D=X.dom.filter(o=>o.porP.some(v=>v!=null));if(!D.length&&!X.fin.some(v=>v!=null))return '';
+  const W=420,H=300,L=44,R=24,Tp=22,B=40;const sx=i=>P.length<2?(L+W-R)/2:L+i*((W-L-R)/(P.length-1)),sy=v=>Tp+(1-Math.max(0,Math.min(1,v)))*(H-Tp-B);
+  const V=v=>sec?(v*20).toFixed(1).replace('.',','):Math.round(v*100)+'%';const Wp=perW();
+  const linha=(vals,cls,sty)=>{let d='',ab=false;vals.forEach((v,i)=>{if(v==null){ab=false;return}d+=(ab?'L':'M')+sx(i).toFixed(1)+' '+sy(v).toFixed(1)+' ';ab=true});return d?`<path d="${d}" class="${cls}" style="${sty||''}"/>`:''};
+  const grid=[0,.25,.5,.75,1].map(g=>`<line x1="${L}" x2="${W-R}" y1="${sy(g)}" y2="${sy(g)}" class="${g===.5?'pe50':'peg'}"/><text x="${L-8}" y="${sy(g)}" text-anchor="end" dominant-baseline="middle" class="pey">${sec?Math.round(g*20):Math.round(g*100)+'%'}</text>`).join('');
+  const xl=P.map((q,i)=>`<text x="${sx(i)}" y="${H-B+20}" text-anchor="middle" class="pex">${q}.º ${esc(Wp.slice(0,3))}.</text>`).join('');
+  const doms=D.map(o=>{const c=domCor(t,o.d);return linha(o.porP,'ped',`stroke:${c}`)+o.porP.map((v,i)=>v==null?'':`<circle cx="${sx(i)}" cy="${sy(v)}" r="3.5" style="fill:${c}"><title>${esc(o.d.nome)} · ${q2(i)}: ${V(v)}</title></circle>`).join('')}).join('');
+  function q2(i){return P[i]+'.º '+Wp.toLowerCase()}
+  const tm=show.comparar?linha(tur,'pet')+tur.map((v,i)=>v==null?'':`<circle cx="${sx(i)}" cy="${sy(v)}" r="3.5" class="petc"><title>Média da turma · ${q2(i)}: ${V(v)}</title></circle>`).join(''):'';
+  const fin=linha(X.fin,'pef')+X.fin.map((v,i)=>v==null?'':`<circle cx="${sx(i)}" cy="${sy(v)}" r="6" class="pefc"><title>Classificação · ${q2(i)}: ${V(v)}</title></circle><text x="${sx(i)}" y="${sy(v)-12}" text-anchor="middle" class="pev">${V(v)}</text>`).join('');
+  const leg=`<div class="pleg"><span><i class="pefl"></i>Classificação</span>${D.map(o=>`<span><i style="background:${domCor(t,o.d)}"></i>${esc(o.d.ab||o.d.nome.slice(0,14))}</span>`).join('')}${show.comparar?'<span><i class="rt"></i>Média da turma</span>':''}</div>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="pevo" role="img" aria-label="Evolução por ${esc(Wp.toLowerCase())}">${grid}${xl}${tm}${doms}${fin}</svg>${leg}`}
+{const _pR=perfilRadar;perfilRadar=function(X,show){const r=_pR.apply(this,arguments);let e='';try{e=perfilEvol(X,show)}catch(err){console.warn(err)}
+  if(!e)return r;return (r||'<p class="mut">São precisos pelo menos 3 domínios avaliados.</p>')+`</section><section class="pc pevs"><h2>${ic('chart',16)} Evolução por ${esc(perW())}</h2>${e}`}}
 
 /* ===================== v1.026 · Modo «Em teste»: abaixo da turma, só quando há teste — relógio, temporizador e nome do teste =====================
    Aparece no menu, por baixo da turma, no dia de um teste (instrumento do tipo teste, prova escrita ou questão-aula com a data de hoje)
@@ -242,33 +260,4 @@ function cartaoLeve(){const v=leveCfg();const o=(k,n,d)=>`<button type="button" 
   return `<div class="card" id="lv-cfg"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('sliders',18)} Desempenho</h2><span class="sp1"></span><span class="mut" style="font-size:13px">Só neste dispositivo${v==='auto'?' · agora: '+(LEVE_AUTO?'leve':'normal'):''}</span></div>
   <div class="angrid" role="radiogroup" aria-label="Desempenho">${o('auto','Automático','Liga o modo leve sozinho em computadores mais antigos ou lentos.')}${o('on','Leve','Sem desfoques de vidro, sombras nem animações — mais rápido em PCs antigos e quadros interativos.')}${o('off','Normal','Aspeto completo, com todos os efeitos.')}</div></div>`}
 {const _vdL=vDefinicoes;vDefinicoes=function(){const r=_vdL.apply(this,arguments);try{if((UI.defTab||'geral')==='aparencia'&&!$('#lv-cfg')){const c=$('#an-cfg')||$('#view .card');if(c){c.insertAdjacentHTML($('#an-cfg')?'afterend':'beforebegin',cartaoLeve());$$('#lv-cfg [data-lv]').forEach(b=>b.onclick=()=>{try{localStorage.setItem(LEVE_K,b.dataset.lv);if(b.dataset.lv!=='auto')localStorage.removeItem('es.leveAuto')}catch(_){}if(b.dataset.lv==='auto'){LEVE_AUTO=false;try{const c2=navigator.hardwareConcurrency||8,m2=navigator.deviceMemory||8;if(c2<=2||m2<=2)LEVE_AUTO=true}catch(_){}}try{animAplicar()}catch(_){leveAplicar()}go('definicoes');toast('Desempenho: '+({auto:'automático',on:'leve',off:'normal'})[b.dataset.lv],'ok')})}}}catch(e){console.warn(e)}return r}}
-
-/* ===================== v1.026 · Disciplinas e UFCD (PROFIJ): explicação clara, várias por turma, sem pautas repetidas =====================
-   Num curso PROFIJ o professor pode lecionar, na mesma turma e no mesmo ano, várias disciplinas (sociocultural/científica) e várias
-   UFCD (componente tecnológica). Cada disciplina tem a sua pauta; as UFCD ficam todas numa única pauta «Componente Tecnológica (UFCD)»,
-   uma unidade por UFCD (horas, datas e classificação próprias). Se acrescentar mais UFCD a uma turma que já tem essa pauta, juntam-se
-   à pauta existente em vez de criar outra igual. No menu, a pauta das UFCD mostra os códigos das UFCD. */
-const UFCD_EXPL=`<details class="ntexp" open><summary>${ic('info',14)} <b>Disciplinas e UFCD — como funciona</b></summary>
-  <ul><li><b>Disciplina</b> (componentes sociocultural e científica, ex.: Comunicar em Inglês, Matemática Aplicada): cada uma tem a <b>sua pauta</b>, com critérios e instrumentos próprios.</li>
-  <li><b>UFCD</b> (Unidade de Formação de Curta Duração, componente tecnológica): todas as UFCD que leciona nesta turma ficam numa <b>única pauta</b> «Componente Tecnológica (UFCD)», <b>uma unidade por UFCD</b> — cada uma com horas, datas, instrumentos e classificação (0–20) próprios.</li>
-  <li>Pode lecionar <b>várias disciplinas e várias UFCD na mesma turma e no mesmo ano</b>: assinale todas abaixo (ou acrescente depois com «+ Disciplina»). Os alunos são copiados para cada pauta.</li>
-  <li>Se a turma <b>já tiver</b> a pauta das UFCD, as novas UFCD juntam-se a ela — nunca fica com duas pautas iguais.</li>
-  <li>As turmas que <b>só coordena</b> (Coord. PROFIJ) não se criam aqui: ficam na Coordenação, separadas da sua docência.</li></ul></details>`;
-{const _ntU=novaTurmaDlg;novaTurmaDlg=function(r){const res=_ntU.apply(this,arguments);try{const w=$('#nt-maisw');if(w&&!$('#nt-expl')){w.insertAdjacentHTML('beforebegin',`<div id="nt-expl">${UFCD_EXPL}</div>`);
-      const ver=()=>{const b=$('#nt-ofw [data-of].on');const of=b?b.dataset.of:'regular';const e=$('#nt-expl');if(e)e.hidden=of!=='profij'&&of!=='profissional'};ver();
-      const ow=$('#nt-ofw');if(ow)ow.addEventListener('click',()=>setTimeout(ver,0))}}catch(e){console.warn(e)}return res}}
-/* rótulo da pauta das UFCD no menu: os códigos das UFCD (em vez do nome comprido da componente) */
-function ufcdRotulos(){const a=A();if(!a)return;const tree=$('#tTree');if(!tree)return;
-  tree.querySelectorAll('[data-tt]').forEach(b=>{const t=(a.turmas||[]).find(x=>x.id===b.dataset.tt);if(!t||!ehComp(t.disciplina))return;const M=(t.modulos||[]).filter(m=>m&&(m.cod||m.nome));if(!M.length)return;
-    const cods=M.map(m=>String(m.cod||'').replace(/^UFCD\s*/i,'').trim()||m.nome.slice(0,14));const txt=(t.disciplina===UC_N?'UC ':'UFCD ')+cods.slice(0,3).join(', ')+(cods.length>3?' +'+(cods.length-3):'');
-    const el=b.querySelector('.tdisc')||(b.classList.contains('tdsb')?b.querySelector('.lbl'):null);if(el){el.textContent=txt;b.title=t.nome+' · '+t.disciplina+' — '+M.map(m=>(m.cod?m.cod+' ':'')+m.nome).join('; ')}})}
-/* pautas das UFCD repetidas na mesma turma (criadas de novo com «+ Disciplina»): as UFCD juntam-se à pauta que já existia */
-function ufcdFundir(){const a=A();if(!a)return 0;const L=a.turmas.__real||a.turmas;let n=0;const G={};
-  L.forEach(t=>{if(!ehComp(t.disciplina))return;const k=normTurma(t.nome)+'|'+escId(escolaDe(t))+'|'+t.disciplina;(G[k]=G[k]||[]).push(t)});
-  Object.values(G).forEach(g=>{if(g.length<2)return;const base=g[0];g.slice(1).forEach(t=>{const comNotas=(t.instrumentos||[]).some(i=>i.notas&&Object.keys(i.notas).length);if(comNotas)return;
-      base.modulos=base.modulos||[];(t.modulos||[]).forEach(m=>{const ja=base.modulos.some(x=>(m.cod&&x.cod&&String(x.cod).replace(/\D/g,'')===String(m.cod).replace(/\D/g,''))||normT(x.nome)===normT(m.nome));if(!ja)base.modulos.push(m)});
-      try{const H=a.horProf;if(H&&H.mapa)Object.keys(H.mapa).forEach(k=>{if(H.mapa[k]===t.id)H.mapa[k]=base.id})}catch(_){}
-      const j=L.indexOf(t);if(j>=0)L.splice(j,1);if(S.turmaAtiva===t.id)S.turmaAtiva=base.id;n++})});
-  if(n){save();setTimeout(()=>toast('As UFCD novas juntaram-se à pauta «Componente Tecnológica» que a turma já tinha','ok'),80)}return n}
-{const _gU=go;go=function(v){try{if(v==='turmas'||v==='painel'||v==='modulos'||v==='inicio')ufcdFundir()}catch(e){console.warn(e)}return _gU.apply(this,arguments)};if(_gU._f)go._f=_gU._f}
 

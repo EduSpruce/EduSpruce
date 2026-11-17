@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.044
+- Perfis de Aprendizagem: ao lado do radar, gráfico de linhas com a classificação de cada período, a evolução de cada domínio (nas cores dos domínios) e a média da turma (quando a comparação está visível).
+
 ## 1.043
 - Modo de apresentação: na janela, cada aluno tem os botões Notas, Foto e Tudo. Notas esconde as classificações, percentagens, níveis e gráficos desse aluno (linhas, cartões e ficha) mantendo o nome visível; Foto esconde só a fotografia; Tudo oculta o aluno. Guardado por aluno.
 
