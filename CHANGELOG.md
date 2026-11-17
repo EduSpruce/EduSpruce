@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.070
+- EduApps (Spruce It, Pulso, Formulários, Provas) com uma só linha em cima: casa, nome da app, escola, ano letivo, ações e ícones
+
 ## 1.069
 - A barra das EduApps já não fica por cima das janelas laterais (ex.: Lançar Jogo)
 
