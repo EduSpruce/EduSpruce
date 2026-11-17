@@ -77,7 +77,7 @@ aj34('pulso','mvPulso','Pulso (avaliação em tempo real)',`<p>Verificação rá
 <li><b>Relatórios</b>: Excel da turma (folhas Alunos e Perguntas), PDF por aluno e por pergunta; associar à pauta só se quiser.</li></ul>`);
 aj34('digit','camera','Digitalizar os Testes Escritos',`<p>Em cada instrumento escrito pode guardar a folha de teste de cada aluno: no telemóvel digitaliza a página 1, 2, 3… (a app deteta a folha, endireita e limpa) e no fim envia tudo. Depois de guardado, o documento fica <b>selado</b> (não se altera nem substitui; em caso de engano pode ser apagado, e fica na auditoria). Vê-se em «livro». As páginas vão cifradas.</p>`,'instrumentos');
 aj34('definicoes','gear','Definições (todos os separadores)',`<ul>
-<li><b>Geral</b>: escola e professor, acessibilidade (movimento e animações, ligações sublinhadas), disciplinas que leciona, tipos de instrumento (arrastar para ordenar), tipos de tempo não letivo, textos da síntese descritiva por menção (com variáveis {nome}, {aluno}…), avisos automáticos (envio da matriz n dias antes do teste, aniversários) e <b>Módulos Opcionais</b> (Jornal Escolar, Coord. PROFIJ, SpruceNote, Contactos, Sorteio, Autoavaliação pelo telemóvel, Forms, Arena, Pulso, Provas…).</li>
+<li><b>Geral</b>: escola e professor, acessibilidade (movimento e animações, ligações sublinhadas), disciplinas que leciona, tipos de instrumento (arrastar para ordenar), tipos de tempo não letivo, textos da síntese descritiva por menção (com variáveis {nome}, {aluno}…), avisos automáticos (envio da matriz n dias antes do teste, aniversários).</li><li><b>Módulos Opcionais</b> (separador próprio): ligar ou desligar Jornal Escolar, Coord. PROFIJ, SpruceNote, Contactos, Sorteio, Autoavaliação pelo telemóvel, Forms, Arena, Pulso e Provas. Desligar esconde o módulo da barra lateral, do Início e dos avisos; os dados ficam guardados.</li>
 <li><b>Professor</b>: fotografia, dados pessoais, dados profissionais por escola (e-mail institucional, n.º, horário de atendimento, grupo, departamento, situação), disciplinas, cargos e funções, assinatura digitalizada e notas.</li>
 <li><b>Domínios e Ponderações</b>: modelos por disciplina, com domínios e percentagens; editar e duplicar.</li>
 <li><b>Conta e Acesso</b>: quem pode entrar com Google (lista do administrador), sessão e <b>Perfis e Permissões</b> (Administrador, Professor, Direção e perfis novos).</li>
@@ -94,7 +94,7 @@ aj34('faq','help','Perguntas Frequentes',`<ul>
 <li><b>Faltei a uma aula.</b> Em Aulas e Sumários toque em «Faltei» nessa lição: não conta como dada e fica por repor.</li>
 <li><b>Quero apagar um horário importado.</b> Turma › Horário › Apagar Horário, ou O Meu Horário › Apagar Horário.</li>
 <li><b>Apaguei uma turma sem querer.</b> Definições › Segurança › Caixote do Lixo (30 dias), ou Anular (Ctrl+Z) logo a seguir.</li>
-<li><b>A Arena/Pulso/Forms/Provas não abrem para os alunos.</b> Confirme que o módulo está ligado em Definições › Geral › Módulos Opcionais e que os alunos abrem o endereço certo (arena.html, pulso.html, forms.html ou provas.html) com o código atual.</li>
+<li><b>A Arena/Pulso/Forms/Provas não abrem para os alunos.</b> Confirme que o módulo está ligado em Definições › Módulos Opcionais e que os alunos abrem o endereço certo (arena.html, pulso.html, forms.html ou provas.html) com o código atual.</li>
 <li><b>Na rede da escola a app não abre.</b> Use o espelho eduspruce.github.io (mesmos dados).</li>
 <li><b>Os alunos veem a minha informação quando projeto.</b> Ligue o Modo de Apresentação (olho) antes de projetar; no limite, o escudo tapa tudo.</li></ul>`);
 aj34('manual','file','Manual de Instruções (PDF)',`<p>O manual completo, com mais de 180 imagens, explica a app de ponta a ponta e menu a menu: entrar, interface, escolas e calendário, turmas e alunos, horários, aulas, avaliação, Forms, Provas, Arena e Pulso, ensino profissional e PROFIJ, direção de turma, reuniões, tarefas, documentos, jornal escolar, SpruceNote, O Meu Calendário, todas as Definições, telemóvel e iPad, perguntas frequentes e glossário — com exemplos de cada funcionalidade.</p><p><a class="btn pri" href="${MANUAL_URL}" target="_blank" rel="noopener" download>${ic('download',16)} Descarregar o Manual (PDF)</a></p>`);
@@ -117,6 +117,18 @@ const _aa34=ajudaAtualizar;ajudaAtualizar=function(){try{_aa34.apply(this,argume
 Object.assign(AJ_VIEW,{meucal:'meucal',painel:'painel',aula:'aula',criterios:'criterios',instrumentos:'instrumentos',dominios:'dominios',analise:'analise',intercalar:'intercalar',avaliacao:'avaliacao',relatorios:'relatorios',modulos:'modulosv',mra:'mra',precup:'precup',sprucenote:'sprucenote',snjornal:'sprucenote',jornal:'jornal',cprofij:'cprofij',arena:'arena',pulso:'pulso',forms:'forms',provas:'provas',contactos:'contactos',sorteio:'sorteio',oral:'oral',escola:'escolas',definicoes:'definicoes',meuhorario:'horarios'});
 }catch(e){console.warn('ajuda 1.034',e)}
 
+/* ---------- Definições › Módulos Opcionais (1.058): separador próprio ----------
+   O cartão #def-mods (criado pelo cartaoAvisosDef no Geral) passa para o separador «mods»; no Geral deixa de aparecer.
+   Os módulos da versão com base de dados (Arena, Pulso, Provas, Digitalização, Autoavaliação) acrescentam-se sozinhos ao #def-mods. */
+{const _vdMo=vDefinicoes;vDefinicoes=function(){const quer=UI.defTab==='mods';if(quer)UI.defTab='geral';let r;try{r=_vdMo.apply(this,arguments)}finally{if(quer)UI.defTab='mods'}
+  try{const v=$('#view');const tb=v&&v.querySelector('.deftabs');
+    if(tb&&!tb.querySelector('[data-dt2="mods"]')){const ref=tb.querySelector('[data-dt2="geral"]');const b=document.createElement('button');b.dataset.dt2='mods';b.innerHTML=ic('layers',15)+' Módulos Opcionais';ref?ref.after(b):tb.appendChild(b)}
+    if(tb){tb.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',UI.defTab==='notif'?!!b.dataset.dtn:b.dataset.dt2===UI.defTab);if(b.dataset.dt2)b.onclick=()=>{UI.defTab=b.dataset.dt2;vDefinicoes()};else if(b.dataset.dtn)b.onclick=()=>{UI.defTab='notif';vDefinicoes()}})}
+    const m=v&&v.querySelector('#def-mods');
+    if(quer){if(v){v.innerHTML='';if(tb)v.appendChild(tb);if(m){m.querySelector('h2')&&m.querySelector('h2').remove();m.classList.add('defmods-tab');v.appendChild(m)}else v.insertAdjacentHTML('beforeend',`<div class="card empty">${ic('layers',30)}<br><b>Sem módulos opcionais</b></div>`);try{alinharTabsTopo()}catch(_){}}}
+    else if(m)m.remove()}catch(e){console.warn(e)}return r}
+  if(go._f)go._f.definicoes=vDefinicoes}
+{const _gMo=go;go=function(v){if(go._f&&go._f.definicoes!==vDefinicoes)go._f.definicoes=vDefinicoes;return _gMo.apply(this,arguments)}}
 /* SpruceNote e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
 /* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */

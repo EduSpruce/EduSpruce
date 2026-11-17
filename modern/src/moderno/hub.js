@@ -152,7 +152,7 @@ function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
   $('#hb-ed').onclick=()=>{UI.hubEd=!UI.hubEd;vHub()};
   $$('#view .hbt').forEach(b=>b.onclick=e=>{const a=HUB_APPS.find(x=>x.id===b.dataset.hub);if(!a)return;
     if(UI.hubEd||e.target.closest('[data-hbed]')){hubEditar(a);return}
-    if(a.on&&!a.on()){UI.defTab='geral';go('definicoes');setTimeout(()=>{try{const m=$('#view #def-mods');if(m)m.scrollIntoView({behavior:'smooth',block:'center'})}catch(_){}},80);return}
+    if(a.on&&!a.on()){UI.defTab='mods';go('definicoes');setTimeout(()=>{try{const m=$('#view #def-mods');if(m)m.scrollIntoView({behavior:'smooth',block:'center'})}catch(_){}},80);return}
     if(a.turma&&!T()){const st=$('#hb-tur');if(st){st.focus();try{st.showPicker()}catch(_){}}toast('Escolha primeiro a turma','info');return}
     go._hubU=1;go(a.v)})}
 

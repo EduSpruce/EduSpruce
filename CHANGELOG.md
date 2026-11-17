@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.058
+- Definições › Módulos Opcionais em separador próprio
+
 ## 1.057
 - Abrir sempre no Início por omissão
 - Apps com os ícones do menu lateral

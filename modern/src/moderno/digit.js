@@ -194,7 +194,7 @@ function dgLivro(t,i,a){const m=dgTem(t,i.id,a.id);if(!m)return;$$('dialog.dglv'
   K.addEventListener('dblclick',()=>zb.click());d.addEventListener('contextmenu',e=>{if(e.target.tagName==='IMG')e.preventDefault()});
   try{d.showModal()}catch(_){d.setAttribute('open','')}pinta()}
 
-/* módulo opcional: Definições › Geral › Módulos Opcionais */
+/* módulo opcional: Definições › Módulos Opcionais */
 function dgLigado(){return S.cfg.dgOn!==false}
 {const _vDg=vDefinicoes;vDefinicoes=function(){const r=_vDg.apply(this,arguments);try{const mods=$('#view #def-mods');if(mods&&!$('#dg-on')){mods.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="dg-on" ${dgLigado()?'checked':''}> ${ic('camera',15)} <span><b>Digitalização de Testes</b><br><span class="mut">Guardar a folha de teste de cada aluno com a câmara do telemóvel (deteta a folha, endireita e limpa) e vê-la em livro. Desligado, o botão «Digitalizar» deixa de aparecer nos instrumentos.</span></span></label>`);
   $('#dg-on').onchange=e=>{S.cfg.dgOn=e.target.checked;save();toast(e.target.checked?'Digitalização de testes ligada':'Digitalização de testes desligada','ok')}}}catch(e){console.warn(e)}return r};if(go._f)Object.keys(go._f).forEach(k=>{if(go._f[k]===_vDg)go._f[k]=vDefinicoes})}
