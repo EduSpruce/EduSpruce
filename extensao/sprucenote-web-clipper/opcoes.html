@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpruceNote Web Clipper · Opções</title>
+<link rel="icon" href="icons/icon32.png">
+<style>
+:root{--acc:#0a5aa8;--acc-h:#084a8b;--acc2:#e8f1fb;--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--mut:#6e6e73;--sep:rgba(60,60,67,.16);--fill:rgba(118,118,128,.12);--ok:#1a7f37;--bad:#c0392b;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--acc:#4da3ff;--acc-h:#7ab9ff;--acc2:#1f3550;--bg:#000;--card:#1c1c1e;--ink:#f2f2f7;--mut:#98989f;--sep:rgba(84,84,88,.6);--fill:rgba(118,118,128,.24);--ok:#4cd964;--bad:#ff6b5e;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:640px;margin:0 auto;padding:40px 20px 60px}
+header{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+header img{width:52px;height:52px;border-radius:13px;box-shadow:0 6px 18px -8px rgba(10,90,168,.6)}
+h1{font-size:24px;font-weight:700;margin:0;letter-spacing:-.01em}
+header p{margin:2px 0 0;color:var(--mut);font-size:14px}
+h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin:28px 16px 8px}
+.g{background:var(--card);border-radius:14px;overflow:hidden}
+.l{display:flex;align-items:center;gap:12px;padding:12px 16px;min-height:50px}
+.l+.l{border-top:.5px solid var(--sep)}
+.l .n{flex:1;min-width:0}
+.l .n small{display:block;color:var(--mut);font-size:13px;margin-top:1px}
+.av{width:44px;height:44px;border-radius:50%;background:var(--acc2);color:var(--acc);display:grid;place-items:center;font-weight:700;overflow:hidden;flex:none}
+.av img{width:100%;height:100%;object-fit:cover}
+button,.bt{appearance:none;border:0;cursor:pointer;font:inherit;border-radius:10px;padding:9px 16px;font-weight:600;background:var(--fill);color:var(--ink)}
+button:hover{filter:brightness(.97)}
+button.pri{background:var(--acc);color:#fff}
+button.pri:hover{background:var(--acc-h)}
+button.lnk{background:none;color:var(--acc);padding:6px 0}
+button:disabled{opacity:.55;cursor:default}
+.gg{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1px solid var(--sep);height:46px}
+.sw{position:relative;width:51px;height:31px;flex:none}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw span{position:absolute;inset:0;border-radius:16px;background:var(--fill);transition:background .2s;cursor:pointer}
+.sw span::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.16);transition:transform .2s}
+.sw input:checked+span{background:#34c759}
+.sw input:checked+span::after{transform:translateX(20px)}
+.sw input:focus-visible+span{outline:2px solid var(--acc);outline-offset:2px}
+.rd{display:flex;align-items:center;gap:12px;width:100%;cursor:pointer}
+.rd input{accent-color:var(--acc);width:18px;height:18px;margin:0}
+.form{display:flex;flex-direction:column;gap:10px;padding:4px 16px 16px}
+.form input{height:42px;border-radius:10px;border:1px solid var(--sep);background:var(--bg);color:var(--ink);padding:0 12px;font:inherit;outline:none}
+.form input:focus{border-color:var(--acc)}
+.erro{color:var(--bad);font-size:14px;padding:0 16px 14px;margin:0}
+.ok{color:var(--ok)}
+.passos{margin:0;padding:14px 16px 14px 36px;color:var(--ink);font-size:14px}
+.passos li+li{margin-top:8px}
+.passos b{font-weight:600}
+kbd{font:600 12px ui-monospace,Menlo,Consolas,monospace;background:var(--fill);border-radius:5px;padding:2px 6px}
+code{font:13px ui-monospace,Menlo,Consolas,monospace;background:var(--fill);border-radius:7px;padding:8px 10px;display:block;word-break:break-all;flex:1}
+.cfg{padding:14px 16px;font-size:14px}
+.cfg p{margin:0 0 10px}
+.cfg .lin{display:flex;gap:8px;align-items:center}
+.mut{color:var(--mut)}
+footer{margin:30px 16px 0;color:var(--mut);font-size:12.5px}
+</style>
+</head>
+<body>
+<main>
+  <header><img src="icons/icon128.png" alt=""><div><h1>SpruceNote Web Clipper</h1><p>Guarde imagens, texto, ligações e vídeos de qualquer site nos seus quadros do SpruceNote.</p></div></header>
+
+  <h2>Conta</h2>
+  <div class="g" id="conta"><div class="l"><span class="mut">A verificar…</span></div></div>
+
+  <h2>Na página</h2>
+  <div class="g">
+    <label class="l"><span class="n">Botão «Guardar» nas imagens<small>Aparece no canto superior esquerdo quando passa o rato por cima de uma imagem.</small></span><span class="sw"><input type="checkbox" id="o-imagens"><span></span></span></label>
+    <label class="l"><span class="n">Botão junto ao texto selecionado<small>Ao selecionar texto, aparece o ícone do SpruceNote à esquerda da seleção — sem precisar do botão direito.</small></span><span class="sw"><input type="checkbox" id="o-texto"><span></span></span></label>
+  </div>
+
+  <h2>Abrir os quadros em</h2>
+  <div class="g">
+    <label class="l rd"><input type="radio" name="app" value="pt"><span class="n">eduspruce.pt</span></label>
+    <label class="l rd"><input type="radio" name="app" value="gh"><span class="n">eduspruce.github.io<small>Para a rede da escola, quando o eduspruce.pt não abre.</small></span></label>
+  </div>
+
+  <h2>Como guardar</h2>
+  <div class="g"><ol class="passos">
+    <li><b>Imagens:</b> passe o rato por cima e carregue em «Guardar» (ou botão direito › Guardar no SpruceNote).</li>
+    <li><b>Texto:</b> selecione, botão direito › Guardar no SpruceNote. A nota leva a ligação para a página.</li>
+    <li><b>Páginas e vídeos do YouTube:</b> carregue no ícone do SpruceNote na barra do Chrome (ou <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>).</li>
+    <li>No painel, escolha o quadro na seta ▾ (o principal ou um dos 10 abertos mais recentemente). Os recortes ficam na coluna <b>«Por Arrumar»</b> desse quadro.</li>
+  </ol></div>
+
+  <h2>Configuração (uma vez)</h2>
+  <div class="g"><div class="cfg">
+    <p>Para «Entrar com Google» funcionar, o endereço desta extensão tem de estar autorizado na base de dados: <b>Supabase › Authentication › URL Configuration › Redirect URLs › Add URL</b>.</p>
+    <div class="lin"><code id="redir">…</code><button type="button" id="copiar">Copiar</button></div>
+  </div></div>
+
+  <footer>Os recortes vão cifrados com a chave da sua conta, tal como os restantes dados da EduSpruce. A extensão só guarda neste computador a sessão da conta.</footer>
+</main>
+<script src="opcoes.js"></script>
+</body>
+</html>

@@ -11,3 +11,4 @@ avisos.js
 hub.js
 eduschedule.js
 eduapps.js
+recolha.js

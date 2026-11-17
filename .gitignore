@@ -23,6 +23,7 @@ exportacoes/
 !manual/*.pdf
 !supabase-config.json
 !versao.json
+!extensao/**/manifest.json
 
 # alterações da versão com base de dados (sem dados de alunos)
 !modern/src/moderno/patches.json

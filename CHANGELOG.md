@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.083
+- SpruceNote Web Clipper: extensão do Chrome (como a do Milanote) para guardar imagens, texto, ligações e vídeos de qualquer site no SpruceNote — descarregar
+- Os recortes chegam ao quadro escolhido numa coluna «Por Arrumar»; «Abrir» na extensão leva diretamente ao quadro
+
 ## 1.082
 - Menu lateral: um módulo desligado nunca aparece, em nenhum menu (incluindo os criados por si); liga e desliga com o módulo
 
