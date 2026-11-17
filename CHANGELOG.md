@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.062
+- Spruce It: biblioteca com o aspeto novo (cabeçalho, título grande, linhas de conjuntos) nas cores do tema
+- Apps: o grupo usa o título que der à secção no menu lateral (ex.: EduApps)
+- Menu lateral: Arena passa a Spruce It
+
 ## 1.061
 - Página dos alunos passa a spruceit.html (arena.html reencaminha)
 - Espelho inclui fontes/ e spruceit.html

@@ -6,7 +6,12 @@
    ===================================================================== */
 ICONS.apps='<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>';
 const HUB_CORES={azul:['#3b82f6','#1d4ed8'],ceu:['#38bdf8','#0369a1'],ciano:['#22d3ee','#0e7490'],verde:['#34d399','#047857'],pinho:['#4ade80','#166534'],lima:['#a3e635','#4d7c0f'],ambar:['#fbbf24','#b45309'],laranja:['#fb923c','#c2410c'],vermelho:['#f87171','#b91c1c'],rosa:['#f472b6','#be185d'],roxo:['#a78bfa','#6d28d9'],indigo:['#818cf8','#4338ca'],ardosia:['#94a3b8','#334155'],grafite:['#525252','#171717']};
-const HUB_GRUPOS=[{id:'gestao',n:'Gestão',g:'school'},{id:'recreio',n:'Recreio',g:'sparkle'},{id:'org',n:'Organização',g:'layers'}];
+/* nome do grupo igual ao do menu lateral (quando o professor tem um grupo com estas apps, ex.: «EduApps») */
+function hubNomeGr(g){try{let M=null;try{M=menuCfg()}catch(_){}if(!Array.isArray(M))return g.n;
+  const vs=new Set(HUB_APPS.filter(a=>a.gr===g.id).map(a=>a.v));let melhor=null,n=0;
+  const vis=G=>(G||[]).forEach(x=>{if(!x||typeof x!=='object')return;if(Array.isArray(x.f)){const k=x.f.filter(i=>i&&vs.has(i.v)).length;const outras=x.f.some(i=>i&&!vs.has(i.v)&&HUB_APPS.some(z=>z.v===i.v));if(x.nome&&k>n&&!outras){n=k;melhor=x.nome}vis(x.f)}});vis(M);
+  return melhor&&n>=2?String(melhor).replace(/^./,c=>c.toUpperCase()):g.n}catch(_){return g.n}}
+const HUB_GRUPOS=[{id:'gestao',n:'Gestão',g:'school'},{id:'recreio',n:'EduApps',g:'sparkle'},{id:'org',n:'Organização',g:'layers'}];
 const hubN=(n,s,p)=>n+' '+(n===1?s:p);
 const HUB_APPS=[
   {id:'turmas',gr:'gestao',n:'Turmas e Alunos',v:'turmas',g:['mvTurmas','users'],c:'azul',d:'Ano letivo, turmas, alunos e fichas',
@@ -151,7 +156,7 @@ function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
     <div class="hub-top"><div><h2>${ic('apps',22)}Apps</h2><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
       <div class="hub-bar"><label class="chk" style="margin:0"><input type="checkbox" id="hb-ini" ${hubIni()?'checked':''}> <span>Abrir aqui ao entrar</span></label>
         <button class="btn${ed?' pri':''}" id="hb-ed">${ic(ed?'check':'pencil',15)} ${ed?'Concluído':'Personalizar'}</button></div></div>
-    ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id);return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(g.n)}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
+    ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id);return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(hubNomeGr(g))}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
   </div>`;
   {const st=$('#hb-tur');if(st)st.onchange=e=>{if(!e.target.value)return;S.turmaAtiva=e.target.value;save();go('hub')}}
   $('#hb-ini').onchange=e=>{hubCfg().ini=e.target.checked;save();toast(e.target.checked?'A app abre nas Apps':'A app abre no Início','ok')};
