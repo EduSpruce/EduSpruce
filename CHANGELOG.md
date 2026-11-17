@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.035
+- Menus guardados, associáveis a escolas
+- Versão só no rodapé do menu lateral
+- Primeiros passos escondido na demonstração
+
 ## 1.034
 - rede.js: navigator.onLine confirmado com pedido real
 - Chave de recuperação, cópia em ficheiro e verificação da chave na conta

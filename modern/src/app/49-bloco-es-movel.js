@@ -451,7 +451,7 @@ function bloqIrDef(){toast('Para desbloquear: Definições › Segurança','avis
 }catch(e){console.warn(e)}return r}}
 
 /* 0.992 · versão discreta junto ao logótipo na barra lateral */
-function verSide(){const n=$('#side .brand .bt')||$('#side .brand');if(!n)return;let v=$('#side .bver');if(v&&v.parentElement!==n){v.remove();v=null}if(!v){v=document.createElement('span');v.className='bver';v.title='Versão da app — toque para ver as novidades';n.appendChild(v);v.onclick=e=>{e.stopPropagation();try{UI.defTab='geral';go('ajuda')}catch(_){}}}const h='v'+VERSAO+'<small class="bverd" title="Data da versão (ano, mês, dia, hora)">'+VERSAO_DATA+'</small>';if(v.innerHTML!==h)v.innerHTML=h}
+function verSide(){$$('#side .bver').forEach(x=>x.remove())}
 verSide();setInterval(verSide,3000);
 
 /* 0.994 · sincronização discreta: só o ícone a rodar; o código escreve-se uma vez por aparelho */

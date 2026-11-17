@@ -248,7 +248,7 @@ function vInicio0(){
     {ok:!!(a&&a.turmas.length),t:'Criar as turmas (importando o Excel com as fotos)',v:'turmas'},
     {ok:!!(a&&a.turmas.some(t=>t.alunos.length)),t:'Assinalar os alunos que frequentam a sua disciplina',v:'alunos'}
   ];
-  const tudo=passos.every(p=>p.ok);
+  const tudo=passos.every(p=>p.ok)||!!(a&&a.demo);
   $('#view').innerHTML=`<div class="inlay"><div class="in-hero">${heroEscola(a)}</div>${ladoInicio(a)}<div class="in-main">
   ${lembreteCopia()}${cartaoMatrizes(a)}${cartoesInicioAval(a)}
   ${!tudo?`<div class="card"><h2>Primeiros passos</h2><ol class="steps">${passos.map((p,i)=>`<li class="${p.ok?'done':''}"><span class="sp1">${esc(p.t)}</span>${p.ok?'':`<button class="btn sm ${passos.findIndex(x=>!x.ok)===i?'pri':''}" data-go="${p.v}">Abrir</button>`}</li>`).join('')}</ol></div>`:''}

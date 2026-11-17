@@ -47,11 +47,13 @@ const mnFolhas=M=>M.flatMap(n=>[n.v,...(n.f||[]).map(x=>x.v)]).filter(Boolean);
 function mnEl(v){if(v==='@turmas')return $('#mnTurmas');if(v==='@prof')return $('#mnProf');if(v==='@bloq')return $('#bloqNav');if(v==='@ofsel')return $('#ofsel');return document.querySelector(`#side .nav[data-v="${v}"]:not(.tnav)`)}
 const mnAlvo=v=>v==='@turmas'?$('#navTurmas'):mnEl(v);
 function mnCatalogo(){const L=[...document.querySelectorAll('#side .nav[data-v]:not(.tnav)')].map(b=>b.dataset.v);['@turmas','@prof','@bloq','@ofsel'].forEach(v=>L.push(v));return [...new Set(L)]}
-function menuCfg(){const c=S.cfg||{};let M;try{M=c.menuL?JSON.parse(JSON.stringify(c.menuL)):MENU_ORIG()}catch(_){M=MENU_ORIG()}
-  const vis=new Set(c.menuL?(c.menuVistos||[]):[...mnFolhas(MENU_ORIG()),'@prof','meucal']);const usa=new Set(mnFolhas(M));
-  mnCatalogo().forEach(v=>{if(vis.has(v)||usa.has(v))return;if(!c.menuL&&M[0].f){const i=M[0].f.findIndex(x=>x.v==='@ofsel');M[0].f.splice(i<0?M[0].f.length:i,0,{v})}else{const i=M.findIndex(n=>n.v==='@sep');M.splice(i<0?M.length:i,0,{v})}});
+function mnGuardados(){return S.cfg.menus=Array.isArray(S.cfg.menus)?S.cfg.menus:[]}
+function mnDaEscola(){let e;try{e=escAtiva()}catch(_){e='principal'}return mnGuardados().find(m=>(m.escolas||[]).includes(e))||null}
+function menuCfg(){const c=S.cfg||{};const G=mnDaEscola();const src=G?G.M:c.menuL;let M;try{M=src?JSON.parse(JSON.stringify(src)):MENU_ORIG()}catch(_){M=MENU_ORIG()}
+  const vis=new Set(src?(c.menuVistos||[]):[...mnFolhas(MENU_ORIG()),'@prof','meucal']);const usa=new Set(mnFolhas(M));
+  mnCatalogo().forEach(v=>{if(vis.has(v)||usa.has(v))return;if(!src&&M[0].f){const i=M[0].f.findIndex(x=>x.v==='@ofsel');M[0].f.splice(i<0?M[0].f.length:i,0,{v})}else{const i=M.findIndex(n=>n.v==='@sep');M.splice(i<0?M.length:i,0,{v})}});
   return M}
-function menuGuardar(M){S.cfg.menuL=M;S.cfg.menuVistos=[...new Set([...(S.cfg.menuVistos||[]),...mnCatalogo()])];save();menuRender()}
+function menuGuardar(M){const G=mnDaEscola();if(G)G.M=M;else S.cfg.menuL=M;S.cfg.menuVistos=[...new Set([...(S.cfg.menuVistos||[]),...mnCatalogo()])];save();menuRender()}
 function mnMarca(el){if(!el||el._mn0)return;const l=el.querySelector(':scope>.lbl');const sv=el.querySelector('svg');el._mn0={l:l?l.textContent:'',t:el.title,sv:sv?sv.outerHTML:'',sub:el.classList.contains('navsub')}}
 const mnNome=n=>{if(n.nome&&n.nome.trim())return n.nome.trim();if(!n.v)return n.nome||'';const e=mnAlvo(n.v);const l=e&&e.querySelector(':scope>.lbl');const t=l&&!e.dataset.mnL?(l.innerText||l.textContent||'').trim():'';return t||(e&&e._mn0&&e._mn0.l)||MN_NOME[n.v]||n.v};
 const mnExiste=n=>!n.v||n.v==='@sep'||!!mnEl(n.v);
@@ -152,7 +154,22 @@ function defMenu(){const M=menuCfg();const usa=new Set(mnFolhas(M));const disp=m
   return `<div class="card mned"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('mgPasta',18)} Menu Lateral</h2><span class="sp1"></span><button class="btn sm" id="mn-ng">${ic('plus',14)} Novo Menu</button><button class="btn sm" id="mn-nsc">${ic('plus',14)} Nova Secção</button><button class="btn sm" id="mn-ns">${ic('plus',14)} Separador</button><button class="btn sm" id="mn-rp">${ic('refresh',14)} Repor o Original</button></div>
     <p class="hint">Arraste pela pega ${ic('mvMover',13)} para mudar a ordem, ou largue em cima de um menu ou secção para o pôr lá dentro. Toque no ícone para o mudar e no nome para o reescrever. <b>Secção</b>: título sempre aberto (como «Geral»); <b>Menu</b>: abre e fecha com um toque. As alterações aparecem logo e ficam guardadas na sua conta.</p>
     <ul class="mnl" id="mnl">${M.map((n,i)=>linha(n,[i])).join('')}</ul>
-    ${disp.length?`<h3 style="margin:16px 0 6px">Fora do menu</h3><div class="mnoff">${disp.map(v=>`<button type="button" class="btn sm" data-mnadd="${v}">${esc(mnNome({v}))} ${ic('plus',12)}</button>`).join('')}</div>`:''}</div>`}
+    ${disp.length?`<h3 style="margin:16px 0 6px">Fora do menu</h3><div class="mnoff">${disp.map(v=>`<button type="button" class="btn sm" data-mnadd="${v}">${esc(mnNome({v}))} ${ic('plus',12)}</button>`).join('')}</div>`:''}</div>${defMenusG()}`}
+function defMenusG(){const G=mnGuardados(),at=mnDaEscola(),ES=todasEscolas();const eA=escAtiva();
+  return `<div class="card mned mng"><div class="row" style="gap:8px;flex-wrap:wrap"><h2 style="margin:0">${ic('star',18)} Menus Guardados</h2><span class="sp1"></span><button class="btn sm pri" id="mng-novo">${ic('plus',14)} Guardar o Menu Atual</button></div>
+    <p class="hint">Guarde várias versões do menu lateral e associe cada uma a escolas: ao mudar de escola no topo, o menu muda sozinho. Escolas sem menu associado usam o menu habitual. ${at?`Agora está a editar <b>«${esc(at.nome)}»</b> (associado a ${esc(nomeEscola(EC()))}).`:'Agora está a editar o <b>menu habitual</b>.'}</p>
+    ${G.length?`<ul class="mngl">${G.map((m,i)=>`<li class="mngi ${m===at?'on':''}"><div class="row" style="gap:8px;flex-wrap:wrap;align-items:center"><input class="mnn" data-mgn="${i}" value="${esc(m.nome)}" aria-label="Nome do menu guardado">${m===at?'<span class="tag ok">em uso nesta escola</span>':''}<span class="sp1"></span>
+      ${m===at?'':`<button type="button" class="btn sm" data-mgld="${i}" title="Copiar este menu para o menu que está a editar">Usar Agora</button><button type="button" class="btn sm" data-mgup="${i}" title="Substituir pelo menu que está a editar">Atualizar</button>`}<button type="button" class="btn sm ico" data-mgx="${i}" title="Apagar" aria-label="Apagar">${ic('trash',14)}</button></div>
+      <div class="mnges"><span class="mut">Escolas:</span>${ES.map(e=>{const id=escId(e);const on=(m.escolas||[]).includes(id);return `<label class="chk"><input type="checkbox" data-mges="${i}|${id}" ${on?'checked':''}> ${esc(nomeEscola(e))}${id===eA?' <small class="mut">(atual)</small>':''}</label>`}).join('')}</div></li>`).join('')}</ul>`:'<p class="mut">Ainda não guardou nenhum menu.</p>'}</div>`}
+function bindMenusG(){const G=mnGuardados();const re=()=>{save();menuRender();vDefinicoes()};
+  const nv=$('#mng-novo');if(nv)nv.onclick=()=>{const nm=(prompt('Nome para este menu:','Menu '+(G.length+1))||'').trim();if(!nm)return;G.push({id:'m'+uid(),nome:nm,M:menuCfg(),escolas:[]});re();toast('Menu guardado')};
+  $$('[data-mgn]').forEach(i=>i.onchange=()=>{const v=i.value.trim();if(v){G[+i.dataset.mgn].nome=v;save()}else i.value=G[+i.dataset.mgn].nome});
+  $$('[data-mgld]').forEach(b=>b.onclick=()=>{const m=G[+b.dataset.mgld];if(!confirm('Substituir o menu que está a editar por «'+m.nome+'»?'))return;menuGuardar(JSON.parse(JSON.stringify(m.M)));vDefinicoes();toast('Menu aplicado')});
+  $$('[data-mgup]').forEach(b=>b.onclick=()=>{const m=G[+b.dataset.mgup];if(!confirm('Substituir «'+m.nome+'» pelo menu que está a editar?'))return;m.M=menuCfg();save();toast('«'+m.nome+'» atualizado')});
+  $$('[data-mgx]').forEach(b=>b.onclick=()=>{const m=G[+b.dataset.mgx];if(!confirm('Apagar o menu guardado «'+m.nome+'»?'+((m.escolas||[]).length?'\n\nAs escolas associadas voltam ao menu habitual.':'')))return;G.splice(+b.dataset.mgx,1);re()});
+  $$('[data-mges]').forEach(c=>c.onchange=()=>{const [i,id]=c.dataset.mges.split('|');if(c.checked)G.forEach(m=>m.escolas=(m.escolas||[]).filter(x=>x!==id));const m=G[+i];m.escolas=(m.escolas||[]).filter(x=>x!==id);if(c.checked)m.escolas.push(id);re()})}
+/* ao mudar de escola, o menu lateral muda para o que lhe está associado */
+{let _mnK=null;setInterval(()=>{try{const G=mnDaEscola();const k=G?G.id:'';if(_mnK!==null&&k!==_mnK){menuRender();if(VIEW==='definicoes'&&UI.defTab==='menu')vDefinicoes()}_mnK=k}catch(_){}},700)}
 function bindMenu(){const M=menuCfg();const P=k=>k.split('.').map(Number);const ok=()=>{menuGuardar(M);vDefinicoes()};
   const fimTopo=()=>{const i=M.findIndex(n=>n.v==='@sep'||(n.t==='sec'&&n.id==='s-config'));return i<0?(M.length&&M[M.length-1].v==='@bloq'?M.length-1:M.length):i};
   $$('[data-mnn]').forEach(i=>i.onchange=()=>{const n=mnGet(M,P(i.dataset.mnn));const v=i.value.trim();if(!n.v){if(!v&&n.t!=='sec'){i.value=mnNome(n);return}n.nome=v}else{const o=mnNome({v:n.v});if(v&&v!==o&&v!==(n.nome||''))n.nome=v;else if(!v||v===o)delete n.nome}menuGuardar(M)});
@@ -165,7 +182,7 @@ function bindMenu(){const M=menuCfg();const P=k=>k.split('.').map(Number);const 
   $('#mn-ng').onclick=()=>{const nm=(prompt('Nome do novo menu:','Novo Menu')||'').trim();if(!nm)return;M.splice(fimTopo(),0,{id:'g'+uid(),nome:nm,ic:'mgPasta',f:[]});ok()};
   $('#mn-nsc').onclick=()=>{const nm=(prompt('Título da nova secção:','Nova Secção')||'').trim();if(!nm)return;M.splice(fimTopo(),0,{id:'g'+uid(),t:'sec',nome:nm,f:[]});ok()};
   $('#mn-ns').onclick=()=>{M.splice(fimTopo(),0,{v:'@sep'});ok()};
-  $('#mn-rp').onclick=()=>{if(!confirm('Repor o menu lateral original? Perde a ordem, os nomes, os ícones e os menus que criou.'))return;delete S.cfg.menuL;delete S.cfg.menuFech;save();menuRender();vDefinicoes();toast('Menu original reposto')};
+  $('#mn-rp').onclick=()=>{if(!confirm('Repor o menu lateral original? Perde a ordem, os nomes, os ícones e os menus que criou.'))return;{const G=mnDaEscola();if(G)G.M=MENU_ORIG();else delete S.cfg.menuL}delete S.cfg.menuFech;save();menuRender();vDefinicoes();toast('Menu original reposto')};
   $$('[data-mnic]').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=b.dataset.mnic;const old=$('.mnpick');if(old){const same=old.dataset.k===k;old.remove();if(same)return}
     b.closest('.mnrow').insertAdjacentHTML('afterend',`<div class="mnpick" data-k="${k}"><button type="button" class="btn sm" data-mnpk="">Original</button>${MN_ESC_IC.filter(x=>ICONS[x]).map(x=>`<button type="button" class="btn sm ico" data-mnpk="${x}" title="${x}">${ic(x,18)}</button>`).join('')}</div>`);
     $$('[data-mnpk]').forEach(q=>q.onclick=()=>{const n=mnGet(M,P(k));if(q.dataset.mnpk)n.ic=q.dataset.mnpk;else delete n.ic;ok()})});
@@ -186,7 +203,7 @@ function bindMenu(){const M=menuCfg();const P=k=>k.split('.').map(Number);const 
 {const _vdMn=vDefinicoes;vDefinicoes=function(){const quer=UI.defTab==='menu';if(quer)UI.defTab='aparencia';const r=_vdMn.apply(this,arguments);if(quer)UI.defTab='menu';
   try{const tb=$('#view .deftabs');if(tb&&!tb.querySelector('[data-dt2="menu"]')){const ap=tb.querySelector('[data-dt2="aparencia"]');const b=document.createElement('button');b.dataset.dt2='menu';b.innerHTML=ic('mgPasta',15)+' Menu Lateral';(ap?ap.after(b):tb.appendChild(b))}
     if(tb){tb.querySelectorAll('[data-dt2]').forEach(b=>{b.classList.toggle('on',b.dataset.dt2===UI.defTab);b.onclick=()=>{UI.defTab=b.dataset.dt2;vDefinicoes()}})}
-    if(quer){const v=$('#view');const keep=tb?tb.outerHTML:'';v.innerHTML=keep+defMenu();v.querySelectorAll('[data-dt2]').forEach(b=>b.onclick=()=>{UI.defTab=b.dataset.dt2;vDefinicoes()});bindMenu()}
+    if(quer){const v=$('#view');const keep=tb?tb.outerHTML:'';v.innerHTML=keep+defMenu();v.querySelectorAll('[data-dt2]').forEach(b=>b.onclick=()=>{UI.defTab=b.dataset.dt2;vDefinicoes()});bindMenu();bindMenusG()}
     menuRender()}catch(e){console.warn(e)}return r}
   if(go._f)go._f.definicoes=vDefinicoes}
 {const _gMn2=go;go=function(v){if(go._f&&go._f.definicoes!==vDefinicoes)go._f.definicoes=vDefinicoes;return _gMn2.apply(this,arguments)}}
