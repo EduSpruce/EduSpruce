@@ -162,7 +162,7 @@ export async function sair() {
 function erroRest(st, j, t) {
   const c = j && j.code, m = String((j && j.message) || t || '');
   if (c === '42501' || /row-level security|permission denied/i.test(m))
-    return erro('A base de dados recusou a gravação. Confirme que entrou com a conta da EduSpruce.', 'recusa');
+    return erro('A base de dados recusou a gravação: a sessão não lhe chegou (um bloqueador como o AdGuard pode estar a tirá-la dos pedidos) ou a conta não é a da EduSpruce.', 'recusa');
   if (c === 'PGRST205' || /does not exist|schema cache/i.test(m))
     return erro('A base de dados da EduSpruce ainda não está preparada.', 'bd');
   if (st === 401 || c === 'PGRST301' || /JWT/i.test(m)) return Object.assign(semSessao(), {status: 401});
@@ -192,8 +192,16 @@ async function rest(caminho, {metodo = 'GET', corpo, prefer} = {}, repetida) {
   return j;
 }
 
+/* O AdGuard («Bloquear o cabeçalho Authorization de terceiros», na proteção contra rastreamento) e outros bloqueadores
+   tiram a sessão dos pedidos a outros sites: a base de dados recebe-os sem conta e responde «não autorizado». */
+export const BLOQUEADOR = 'A sessão não está a chegar à base de dados: um bloqueador neste computador (por exemplo o AdGuard, com «Bloquear o cabeçalho Authorization de terceiros») tira-a dos pedidos. No AdGuard, acrescente supabase.co às exclusões da filtragem HTTPS (ou desligue essa opção) e entre de novo.';
 export async function autorizado() {
-  return (await rest('rpc/eduspruce_autorizado', {metodo: 'POST', corpo: {}})) === true;
+  if ((await rest('rpc/eduspruce_autorizado', {metodo: 'POST', corpo: {}})) === true) return true;
+  /* a base de dados viu a sessão? Sem e-mail nenhum, foi tirada pelo caminho */
+  let visto = null;
+  try { visto = await rest('rpc/eduspruce_email_atual', {metodo: 'POST', corpo: {}}); } catch (_) {}
+  if (visto === '') throw erro(BLOQUEADOR, 'bloqueador');
+  return false;
 }
 
 export async function ler(nome) {
