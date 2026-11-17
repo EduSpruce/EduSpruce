@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.059
+- Apps: paleta de cores do tema SGE
+
 ## 1.058
 - Definições › Módulos Opcionais em separador próprio
 

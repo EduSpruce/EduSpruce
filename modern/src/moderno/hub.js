@@ -29,7 +29,13 @@ const HUB_APPS=[
 const hubCfg=()=>{S.cfg=S.cfg||{};const h=S.cfg.hub=(S.cfg.hub&&typeof S.cfg.hub==='object')?S.cfg.hub:{};if(!h.ic||typeof h.ic!=='object')h.ic={};return h};
 const hubIni=()=>hubCfg().ini===true;
 const hubG=(a,o)=>{const c=(o||hubCfg().ic[a.id]||{}).g;if(c&&ICONS[c])return c;return a.g.find(k=>ICONS[k])||'apps'};
-const hubCor=(a,o)=>{const c=((o||hubCfg().ic[a.id]||{}).c)||a.c;if(HUB_CORES[c])return HUB_CORES[c];if(/^#[0-9a-f]{6}$/i.test(c))return[c,'color-mix(in srgb,'+c+' 62%,#000)'];return HUB_CORES[a.c]};
+/* tema SGE (1.059): cores por omissão da paleta SGE (azul SGE, azul-escuro, laranja SGE), por grupo; uma cor escolhida pelo professor mantém-se */
+const HUB_SGE={sgeAzul:['#1b93c6','#1b93c6'],sgeEscuro:['#0e7095','#0e7095'],sgeLaranja:['#f39200','#f39200'],sgeCeu:['#5bb7de','#2a9fd0'],sgeCinza:['#7a8a96','#55656f']};
+Object.assign(HUB_CORES,HUB_SGE);
+const HUB_SGE_DEF={turmas:'sgeAzul',avaliacao:'sgeAzul',sumarios:'sgeAzul',arena:'sgeLaranja',pulso:'sgeLaranja',forms:'sgeLaranja',provas:'sgeLaranja',sprucenote:'sgeEscuro'};
+const hubSge=()=>{try{return document.body.classList.contains('est-sge')}catch(_){return false}};
+const hubCorDef=a=>hubSge()?(HUB_SGE_DEF[a.id]||'sgeAzul'):a.c;
+const hubCor=(a,o)=>{const c=((o||hubCfg().ic[a.id]||{}).c)||hubCorDef(a);if(HUB_CORES[c])return HUB_CORES[c];if(/^#[0-9a-f]{6}$/i.test(c))return[c,'color-mix(in srgb,'+c+' 62%,#000)'];return HUB_CORES[a.c]};
 const hubNome=a=>{const n=(hubCfg().ic[a.id]||{}).n;return n&&n.trim()?n.trim():a.n};
 /* o símbolo de cada app é o mesmo do menu lateral (incluindo ícones mudados em Definições › Menu Lateral) */
 function hubIcMenu(a,px){try{const L=[...document.querySelectorAll('#side [data-v="'+a.v+'"] svg')];const sv=L.find(x=>x.closest('[data-v]').offsetParent)||L[0];if(!sv)return'';
@@ -160,11 +166,11 @@ function hubEditar(a){const h=hubCfg();const o=Object.assign({},h.ic[a.id]||{});
   const EXC=new Set(['chev','arrowUp','arrowL','arrow','setaE','x','back','check','checks','grip','dots','undo','plus','line','lines','pause','play','mvMover','mvDesbloq','refresh','paste','copy','trash','merge','upload','download','apps']);
   const GL=Object.keys(ICONS).filter(k=>!EXC.has(k));
   const prev=()=>{const p=$('#hbe-p');if(p)p.innerHTML=hubIcone(a,84,o)+`<div><b style="font-size:16px">${esc((o.n||'').trim()||a.n)}</b><div class="mut">${esc(a.d)}</div></div>`};
-  const corSel=o.c||a.c;
+  const corSel=o.c||hubCorDef(a);
   openDrawer('Personalizar · '+a.n,`
     <div class="hbe-prev" id="hbe-p"></div>
     <label class="hbe-lbl" for="hbe-n">Nome</label><input id="hbe-n" style="width:100%" maxlength="28" placeholder="${esc(a.n)}" value="${esc(o.n||'')}">
-    <span class="hbe-lbl">Cor</span><div class="hbe-cores">${Object.entries(HUB_CORES).map(([k,[c1,c2]])=>`<button type="button" data-c="${k}" title="${k}" class="${corSel===k?'on':''}" style="background:linear-gradient(145deg,${c1},${c2})"></button>`).join('')}
+    <span class="hbe-lbl">Cor</span><div class="hbe-cores">${Object.entries(HUB_CORES).filter(([k])=>hubSge()||!HUB_SGE[k]).sort(([x],[y])=>hubSge()?(!!HUB_SGE[y])-(!!HUB_SGE[x]):0).map(([k,[c1,c2]])=>`<button type="button" data-c="${k}" title="${k}" class="${corSel===k?'on':''}" style="background:linear-gradient(145deg,${c1},${c2})"></button>`).join('')}
       <input type="color" id="hbe-cc" title="Cor própria" value="${/^#/.test(corSel)?corSel:'#0a5aa8'}"></div>
     <span class="hbe-lbl">Estilo (todos os ícones)</span><div class="hbe-est">${[['cheio','Preenchido'],['suave','Suave'],['linha','Contorno']].map(([k,n])=>`<button type="button" class="btn sm${(h.est||'cheio')===k?' pri':''}" data-est="${k}">${n}</button>`).join('')}</div>
     <span class="hbe-lbl">Símbolo</span><div class="hbe-glifos">${GL.map(k=>`<button type="button" data-g="${k}" title="${k}" class="${hubG(a,o)===k&&!o.e&&!o.img?'on':''}">${ic(k,18)}</button>`).join('')}</div>
