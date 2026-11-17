@@ -1,0 +1,178 @@
+@parte III | A turma | Painel, alunos, planta, horário, aulas, sumários e sorteio
+
+# Painel da Turma
+Abra uma turma no menu lateral e toque em **Painel da Turma**. É o resumo de tudo o que se passa na turma.
+!painel | Painel da Turma, separador «A Minha Disciplina».
+## Separador «A Minha Disciplina»
+- Cabeçalho da turma (oferta, ano, ano letivo, n.º de alunos ativos), última alteração e botão **Autoavaliação**; escolha do período (**1.º Per.**, **2.º Per.**, **3.º Per.**, **Ano**).
+- Contadores: **Alunos**, **Assiduidade** (aulas confirmadas e por confirmar, limite de faltas), **Abaixo do Limiar**, **Avaliações Pendentes**, **A Acompanhar** e **Próximos 7 Dias**.
+- **Precisa da Sua Atenção** — cada linha tem o botão que resolve (Reuniões, Classificar, Lançar, Marcar Enviada, Escrever) e ✓ para dar por feita.
+- **Próximos 14 Dias** — testes, matrizes a enviar e reuniões; botão **Calendário**.
+- **Alunos** (mais abaixo) — pesquisa, filtros **Todos / A Acompanhar / Abaixo do Limiar / Faltas / Pendências**, botão **Colunas**, e por aluno: assiduidade, faltas, média, evolução por domínio, próxima ação.
+!painel-baixo | Mais abaixo: alunos a acompanhar e a tabela de todos os alunos com evolução e próxima ação.
+## Separador «A Turma Completa»
+!painel-completa | A Turma Completa: o que mudou desde o último conselho de turma e a preparação do próximo.
+Útil sobretudo para o Diretor de Turma: novas negativas, recuperações concluídas, subidas, descidas, mais faltas e deliberações ainda por executar; à direita, a lista de preparação do próximo conselho com o botão **Resolver** em cada ponto.
+## Barra de ações
+**Sumário / Faltas**, **Lançar Avaliação**, **Marcar Teste**, **Documento** e **Exportar Vista**.
+!painel-profij | Numa turma PROFIJ o painel mostra a visão completa da turma com as classificações por componente.
+> Exemplo: antes de uma reunião intercalar, abra o Painel, escolha «A Turma Completa» e percorra a coluna «Preparação». Toque em **Resolver** nas classificações em falta e, no fim, use **Exportar Vista** para levar o resumo à reunião.
+
+# Alunos
+Na turma, menu **Alunos**. A lista da turma com os dados de cada aluno.
+!alunos | Alunos, separador Lista.
+## O que há no ecrã
+- Separadores **Lista**, **Fotografias** e **Quadro MSAI**; − / + muda o tamanho das linhas.
+- Próxima aula, Diretor(a) de Turma, Delegado(a) e Subdelegado(a).
+- Tabela: **Freq.** (frequenta a disciplina — só os assinalados entram nos instrumentos, na avaliação e nos relatórios), fotografia, N.º, Processo, Nome, Sexo, Nascimento, Idade, Repet., ASE, MSAI e ações (**Ficha** e apagar).
+- Barra e **Mais**: **Editar Turma**, **Importar Excel**, **+ Aluno**, **Exportar CSV**, **Exportar PDF** e **Grupos**.
+!alunos-mais | O menu Mais da lista de alunos.
+## A ficha do aluno
+!alunos-ficha | Ficha do aluno: fotografia, separadores (Identificação, Ficha Integral, Turma, Disciplinas, Medidas de Apoio, Classificações, Assiduidade, Trabalhos e Instrumentos, Observações, Participação, Contactos, Documentos, Intervenções, Exportar) e botões Perfis de Aprendizagem e Transferência de Escola.
+Na ficha preenche o nome, os números, o e-mail, a data de nascimento, o sexo, se frequenta a disciplina, o cargo na turma (delegado/subdelegado) e o encarregado de educação. **Transferência de Escola** regista a saída ou mudança de escola do aluno.
+## Fotografias
+!alunos-fotos | Fotografias: arraste as fotografias para aqui ou toque para escolher; cada ficheiro é associado ao aluno pelo número ou pelo nome.
+## Quadro MSAI
+!alunos-msai | Quadro MSAI (DL 54/2018): alunos × medidas universais, seletivas e adicionais, com as acomodações curriculares.
+Modo **Quadro** ou **Por Aluno**; «Só alunos com medidas» e «Só medidas em uso» tornam o quadro compacto. As medidas assinalam-se na ficha do aluno, separador Medidas de Apoio.
+> Exemplo: um aluno deixa de ter a sua disciplina. Na Lista, desmarque **Freq.** desse aluno: deixa de aparecer nos instrumentos, na pauta e nos relatórios, mas os dados ficam guardados.
+
+# Planta da Sala
+Menu **Planta**. Defina a disposição da sala e o lugar de cada aluno.
+!planta | Planta da Sala: filas, colunas, ordem e os lugares (livre) por baixo do quadro do professor.
+1. Indique o número de **Filas** e de **Colunas** e a ordem (Por número ou por nome).
+2. Arraste cada aluno para um lugar (ou toque no aluno e depois no lugar).
+3. Toque duas vezes num lugar vazio para o marcar como corredor.
+4. Em **Mais** pode imprimir ou exportar em PDF.
+
+# Horário da Turma
+Menu **Horário**. A grelha semanal da turma com as suas aulas destacadas.
+!horario | Horário da turma: as suas aulas na grelha, a próxima aula, os tempos semanais e as aulas previstas por período.
+- **Próxima Aula** e **Tempos Semanais** da disciplina.
+- **Aulas Previstas** por período e total; **Detalhe** abre o cálculo.
+- **Próximas Aulas** com dia, hora e sala.
+- Em **Mais**: apagar horário, importar horário da turma e escolher a sigla da disciplina nesta turma.
+
+# Modo Aula
+Menu **Modo Aula**. Tudo o que precisa durante a aula num só ecrã.
+!aula | Modo Aula: chamada com os cartões dos alunos, sumário, atividade prevista e sorteio.
+## Fazer a chamada
+1. Ao entrar, todos aparecem presentes (✓ verde).
+2. Toque num aluno para alternar **Presente → Falta → Disciplinar**.
+3. ★ regista uma observação rápida sobre o aluno.
+4. Toque em **Confirmar Chamada**. («Todos Presentes» repõe tudo.)
+## Sumário e sorteio
+- **Sumário n.º** — escreva o sumário; por baixo, a atividade prevista/notas e a próxima aula.
+- **Sorteio** — **1 Aluno**, **Pares** ou **Grupos de** n, só entre os presentes.
+- ‹ › muda de aula; **Fechar Aula** termina; **Planta** e **Sumários** na barra.
+!aula-baixo | O resto da turma e o sorteio.
+> Exemplo: no início da aula abra o Modo Aula, toque nos dois alunos que faltaram (ficam a vermelho), **Confirmar Chamada**, escreva «Correção da ficha de trabalho. Leitura do texto da p. 45.» e, a meio, use **1 Aluno** para escolher quem lê.
+
+# Aulas e Sumários
+Menu **Sumários**. Todas as lições da turma, com o sumário de cada uma.
+!sumarios | Aulas e Sumários: contadores e a lista das lições com sumário e botões.
+## O que há no ecrã
+- Contadores: **Lições Dadas** (incluem reposições e substituições), **Sem Sumário**, **Reposições** e **Substituições**.
+- Filtro **1.º P / 2.º P / 3.º P / Todas**.
+- Cada lição: número, dia, hora, duração, tempo do bloco e faltas; caixa do sumário; botões **Faltei**, **Substituição**, **Presenças** e **Abrir Aula**.
+## Registar uma falta do professor
+!sumarios-faltei | Registar Falta do Professor: dia, tempos em falta, motivo e observações.
+Motivos: Doença, Formação, Serviço oficial, Visita de estudo, Greve, Assistência à família, Conta férias e Outro. A aula deixa de contar como dada e fica por repor.
+? **Substituição** marca a aula como dada por um colega (conta como dada). As reposições juntam-se às aulas dadas e avançam a numeração das lições.
+
+# Sorteio
+Menu **Sorteio**. Escolhe ao acaso alunos, pares ou grupos, com animação, em ecrã inteiro para projetar.
+!sorteio | Sorteio: 1 Aluno, Pares ou Grupos de n; estilo Roda ou Cartas; som; não repetir; quem entra no sorteio.
+- **Estilo**: Roda ou Cartas. **Som** liga ou desliga o som.
+- **Não repetir o mesmo aluno** — só volta a sair quando todos tiverem saído.
+- **Quem Entra no Sorteio** — toque num aluno para o tirar ou voltar a pôr; **Todos** ou **Como na Chamada** (deixa de fora quem faltou).
+
+@parte IV | Avaliação | Critérios, testes, instrumentos, domínios, análise, intercalar, pauta e relatórios
+
+# Critérios de Avaliação
+Menu **Critérios**. Define como se calcula a nota da turma.
+!criterios | Critérios: escala de classificação, conversão em níveis, arredondamento e dados da turma.
+## Escala e conversão
+- **Escala de Classificação**: **Ensino Básico Regular** (percentagem nos testes, níveis 1 a 5 no final, menções qualitativas) ou **Secundário · PROFIJ · Profissional** (0 a 20 valores).
+- Modo: **Automática (0–100% / 1–5)**, **0 a 20 Valores** ou **0–100% e Níveis 1–5**.
+- **Conversão da percentagem em nível** — limites de cada nível; **Usar em Todas as Turmas** ou **Repor Oficial** (0–19 · 20–49 · 50–69 · 70–89 · 90–100).
+- **Arredondamento** — casas decimais (Unidades, Décimas, Centésimas) e regra (Normal, Sempre para cima, Sempre para baixo). Experimente no campo «Experimentar».
+## Domínios e ponderações
+!criterios-baixo | Domínios e Ponderações: sigla, designação e % de cada domínio; classificação final por período.
+- Cada domínio tem cor, sigla, designação e ponderação (o total tem de dar 100%).
+- **Aplicar Modelo** (da disciplina), **+ Domínio**, **Exportar Critérios**, **Importar Critérios (Do Departamento)** e **Copiar Critérios de Outra Turma**.
+- **Classificação Final por Período** — como se calcula o 2.º e o 3.º período (ex.: média dos períodos 1.º e 2.º por domínio).
+!criterios-baixo2 | Menções Qualitativas: limites de Insuficiente, Suficiente, Bom e Muito Bom.
+> Exemplo: Inglês com quatro domínios iguais — PO Produção Oral 25%, CO Compreensão Oral 25%, CE Compreensão Escrita 25%, PE Produção Escrita 25%. Um aluno com 60%, 70%, 80% e 50% tem nota = 0,25 × (60 + 70 + 80 + 50) = 65% → nível 3 (50–69).
+
+# Marcação de Testes
+Menu **Marcação de Testes**. Calendário do ano só com os dias de semana, para marcar avaliações.
+!testes | Marcação de Testes: próximo teste, avaliações marcadas, tempos dados, aulas até ao teste, o calendário e o painel dos períodos.
+- Cada dia de aula mostra a hora, os tempos e **Σ** (soma dos tempos dados até esse dia — o número da lição).
+- **Marcar**: toque num dia → escolha Teste, Questão-aula, Ficha, Apresentação Oral, Prova Oral ou Trabalho → é criado o instrumento com a data e o período certos.
+- **Mudar a data**: arraste a marcação para outro dia.
+- Vistas **Ano / 1.º P / 2.º P / 3.º P**, zoom − / + e **Σ Ano / Σ Período**.
+- Painel à direita: avaliações de cada período com Σ e «+n desde o anterior», avaliação intercalar e reunião de avaliação.
+!testes-baixo | Os meses seguintes e as avaliações já marcadas no painel.
+? A app avisa se ultrapassar o limite de testes por semana definido em [[Definições › Aparência › Avaliação e Marcações]].
+
+# Instrumentos de Avaliação
+Menu **Instrumentos**. A lista dos instrumentos por período e a grelha de classificações de cada um.
+!instrumentos | Instrumentos do 1.º período: tipo, data, itens/cotação, domínios, estado, avaliados, média e as ações Abrir, Duplicar e Apagar.
+Os estados possíveis são **Classificado**, **Classificação incompleta**, **Classificação parcial**, **Não realizado**, **Por classificar** e **Agendado**.
+## Classificar um instrumento
+!instrumentos-abrir | Instrumento aberto: designação, tipo, período, data, enunciado, critérios de correção e a grelha.
+1. Toque em **Abrir** no instrumento.
+2. Confira os **Itens e Cotações** (cada item com o seu domínio).
+3. Na grelha **Classificações**, escreva as cotações de cada aluno: Enter desce, Tab avança, setas navegam.
+4. As colunas Total, Nota, Menção e % por domínio calculam-se sozinhas.
+5. Escolha como contam as células em branco (Por classificar ou Contam como zero) e assinale **Não realizado** se for o caso.
+!instrumentos-abrir-baixo | A grelha com as classificações por item, o total, a nota, a menção e a percentagem por domínio.
+- Separadores: **Classificações**, **Itens e Cotações**, **Produção Oral**, **Análise** e **Vista Ampla**.
+- **Enunciado** e **Critérios de correção**: carregue o PDF, Word ou imagem.
+- **Ligar Teste do Forms** (ou das Provas) para as classificações entrarem sozinhas.
+- Digitalização: no telemóvel guarde a folha de teste de cada aluno (fica selada e cifrada).
+> Exemplo: um teste de 100 pontos com 8 itens. O item 1 (20 pts) é de CE e o item 8 (30 pts) é de PE. Um aluno com 15 no item 1 tem 75% nesse item; a % de CE é a soma dos pontos de CE a dividir pela cotação de CE.
+
+# Produção Oral
+Menu **Produção Oral**. Momentos de avaliação oral com grelha de registo própria.
+!oral | Momentos de Produção Oral do 1.º período, com itens de oralidade, avaliados e cotação.
+!oral-novo | Novo Momento: designação, data, período, cotação e ligação a um elemento escrito (ou momento autónomo).
+- Cada momento pode ser **autónomo** (conta como instrumento próprio) ou **ligado a um elemento escrito** (a pontuação conta para esse teste).
+- Individual, a pares ou em grupo (a avaliação é sempre individual). Pares e grupos à mão, ao acaso ou equilibrados pelas notas anteriores; guião A ou B.
+
+# Domínios por Período
+Menu **Domínios**. A análise de cada domínio da turma.
+!dominios | Domínios: separador por domínio, média, positivas, dispersão, instrumentos, evolução, distribuição e comparação.
+!dominios-baixo | Mais abaixo: maior progressão e maior descida, alunos abaixo do limiar e a tabela por aluno.
+
+# Análise de Resultados
+Menu **Análise de Resultados**. Estatística da turma em cinco separadores; escolha o período no canto.
+!analise-Por_Domínio | Por Domínio: média global, alunos avaliados, domínio mais forte e a reforçar, abaixo de 50%, distribuição e evolução.
+!!analise-Por_Instrumento,analise-Por_Turma | Por Instrumento (média de cada instrumento e instrumentos × domínios) e Por Turma (comparação entre as suas turmas).
+!!analise-Por_Aluno,analise-Dificuldades | Por Aluno (evolução e domínios face à turma) e Dificuldades (persistentes, com limiar ajustável).
+> Exemplo: no fim do 1.º período abra «Dificuldades», escolha o limiar «abaixo de 50%» e veja que a Produção Escrita concentra mais alunos com dificuldades. Use a lista de alunos sinalizados para preparar os planos de recuperação.
+
+# Avaliação Intercalar
+Menu **Avaliação Intercalar**. Menção e observação de cada aluno a meio do período.
+!intercalar | Intercalar: menção, observação e faltas (P, D, A, FJ, FI) de cada aluno.
+!intercalar-editar | Editar Todos: para cada aluno, «Sugerir» propõe a menção a partir das classificações; escreva a observação e **Submeter**.
+? As datas da intercalar definem-se no Calendário Escolar (vale para todas as turmas). As escolas profissionais não têm intercalar.
+
+# Avaliação Final
+Menu **Avaliação Final**. A pauta da turma por período.
+!avaliacao | Avaliação Final do 1.º período: intercalar, % por domínio, nota, nota final, nível, atribuída, menção, autoavaliação e observações.
+- Separadores por período; **Bloquear o 1.º Período** depois da reunião (as classificações deixam de poder ser alteradas).
+- **Atribuída** — o nível dado em conselho (a vermelho quando difere do proposto).
+- **Autoavaliação** — abre a sessão de autoavaliação dos alunos pelo telemóvel.
+- Barra: **Vista Conselho de Turma**, **Exportar Pauta (CSV)**, **Imprimir**, **Exportar PDF** e **Simulador**.
+!avaliacao-direita | À direita: autoavaliação e observações.
+!avaliacao-prof | Numa turma de 0 a 20 valores (profissional/secundário).
+
+# Relatórios Individuais
+Menu **Relatórios**. Relatório de cada aluno pronto a imprimir.
+!relatorios | Relatório Individual: dados do aluno, avaliação por domínios, gráfico e síntese descritiva.
+1. Escolha o **Aluno** (ou Todos), **Até ao** período e o **Documento**.
+2. Reveja a pré-visualização; a síntese descritiva edita-se diretamente na folha.
+3. Use **Imprimir** ou **Exportar PDF** (um só PDF com todos os alunos).
+? Os textos da síntese por menção configuram-se em [[Definições › Geral › Textos da Síntese Descritiva]].

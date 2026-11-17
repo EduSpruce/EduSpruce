@@ -1,0 +1,62 @@
+@page{size:A4;margin:16mm 15mm 17mm 15mm}
+.capa{page:capa}
+@page capa{margin:0}
+:root{--az:#0f6c96;--az2:#0b4f70;--cl:#e8f3f8;--tx:#1f2937;--mu:#5b6574;--am:#f5b301}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:Inter,'Inter Display',system-ui,sans-serif;font-size:10.2pt;line-height:1.5;color:var(--tx)}
+p{margin:0 0 2.2mm}
+b{font-weight:650}
+.mn{font-weight:600;color:var(--az2);background:var(--cl);padding:0 1.4mm;border-radius:1mm;white-space:nowrap}
+/* capa */
+.capa{height:297mm;width:210mm;margin:0;position:relative;overflow:hidden;page-break-after:always;color:#fff}
+.cbg{position:absolute;inset:0;background:linear-gradient(160deg,#0b4f70 0%,#0f6c96 45%,#1b8fbf 100%)}
+.cin{position:relative;padding:26mm 20mm 0}
+.clogo{width:26mm;height:26mm;border-radius:6mm;box-shadow:0 3mm 8mm rgba(0,0,0,.25)}
+.cmarca{font-size:15pt;font-weight:600;letter-spacing:.3mm;margin-top:7mm;opacity:.9}
+.capa h1{font-size:38pt;line-height:1.05;margin:2mm 0 5mm;font-weight:750}
+.csub{font-size:13pt;line-height:1.45;max-width:160mm;opacity:.95}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin:12mm 0 10mm}
+.cgrid img{width:100%;border-radius:2mm;box-shadow:0 2mm 6mm rgba(0,0,0,.3);border:.6mm solid rgba(255,255,255,.5)}
+.cver{font-size:11pt;opacity:.9}
+/* índice */
+.indice{page-break-after:always}
+.ih{font-size:22pt;color:var(--az2);margin:0 0 5mm}
+.icols{column-count:2;column-gap:9mm}
+.tp{font-weight:700;color:#fff;background:var(--az);padding:1.2mm 2.5mm;margin:3mm 0 1.2mm;border-radius:1mm;break-inside:avoid;break-after:avoid;font-size:9.5pt}
+.tc{display:flex;align-items:baseline;gap:1.6mm;text-decoration:none;color:var(--tx);font-size:9.6pt;padding:.55mm 0;break-inside:avoid}
+.tn{min-width:6mm;font-weight:650;color:var(--az)}
+.dots{flex:1;border-bottom:.25mm dotted #a9b2bd;transform:translateY(-1mm)}
+.tpg{min-width:6mm;text-align:right;font-variant-numeric:tabular-nums}
+/* partes e capítulos */
+.parte{page-break-before:always;page-break-after:always;height:250mm;display:flex;flex-direction:column;justify-content:center;padding:0 10mm;background:linear-gradient(160deg,var(--cl),#fff 70%);border-left:3mm solid var(--az)}
+.pnum{font-size:14pt;font-weight:650;color:var(--az);letter-spacing:.5mm;text-transform:uppercase}
+.ptit{font-size:34pt;color:var(--az2);margin:2mm 0 4mm;line-height:1.1}
+.psub{font-size:13pt;color:var(--mu)}
+h1.cap{page-break-before:always;font-size:20pt;color:var(--az2);margin:0 0 4mm;padding-bottom:2.5mm;border-bottom:.6mm solid var(--az);display:flex;align-items:center;gap:3mm;line-height:1.15}
+.parte+h1.cap{page-break-before:avoid}
+.cn{display:inline-flex;align-items:center;justify-content:center;min-width:10mm;height:10mm;padding:0 2mm;background:var(--az);color:#fff;border-radius:2mm;font-size:13pt}
+h2{font-size:12.5pt;color:var(--az);margin:4.5mm 0 1.8mm;break-after:avoid}
+ul,ol{margin:0 0 2.5mm;padding-left:6mm}
+li{margin:.5mm 0}
+ol li::marker{font-weight:700;color:var(--az)}
+figure{margin:2.5mm 0 4mm;break-inside:avoid}
+figure img{display:block;width:100%;border:.3mm solid #c9d3dc;border-radius:1.5mm}
+.f1 img{width:90%;margin:0 auto}
+.f1 figcaption{margin-left:5%;margin-right:5%}
+img.tel{width:auto!important;max-height:105mm;margin:0 auto}
+.fn .row>div{text-align:center}
+.fn .row{display:flex;gap:3mm;align-items:flex-start}
+.fn .row>div{flex:1}
+.f3 .row>div{flex:0 0 auto;width:52mm}
+.f3 .row{justify-content:center;gap:6mm}
+figcaption{font-size:8.6pt;color:var(--mu);margin-top:1.3mm;padding-left:2.5mm;border-left:.6mm solid var(--am)}
+.ex,.dica{break-inside:avoid;margin:2.5mm 0 3.5mm;padding:2.6mm 3.4mm;border-radius:1.5mm;font-size:9.8pt}
+.ex{background:#eef7ee;border-left:1.2mm solid #2f9e44}
+.dica{background:#fff6dc;border-left:1.2mm solid var(--am)}
+.tag{display:inline-block;font-weight:700;font-size:8pt;text-transform:uppercase;letter-spacing:.3mm;margin-right:2mm;padding:.2mm 1.5mm;border-radius:.8mm;color:#fff}
+.ex .tag{background:#2f9e44}.dica .tag{background:#c88a00}
+.tb{width:100%;border-collapse:collapse;font-size:8.8pt;margin:2mm 0 4mm}
+.tb th{background:var(--az);color:#fff;text-align:left;padding:1.2mm 2mm}
+.tb td{border-bottom:.25mm solid #dde3e9;padding:1.1mm 2mm;vertical-align:top}
+.tb tr{break-inside:avoid}

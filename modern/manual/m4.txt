@@ -1,0 +1,250 @@
+@parte VII | Escola e comunicação | Tarefas, reuniões, direção de turma, documentos, biblioteca, contactos, jornal e SpruceNote
+
+# As Minhas Tarefas
+Menu **As Minhas Tarefas**. Listas de tarefas ao estilo do Microsoft To Do.
+!tarefas | O Meu Dia: adicionar uma tarefa (com data e estrela) e as sugestões para hoje.
+## As listas
+- **O Meu Dia** — recomeça vazio todos os dias; «Sugestões para hoje» propõe as que vencem.
+- **Importante** — as que têm estrela. **Planeado** — as que têm data.
+- **Das Reuniões** — decisões e tarefas registadas nas atas, com o botão **Reunião**.
+- **Tarefas** — todas. **Avisos Urgentes** — os seus avisos programados.
+- **+ Nova lista** cria listas suas (ex.: «Clube de Ciências»).
+!!tarefas-planeado,tarefas-reunioes | Planeado e Das Reuniões.
+> Exemplo: escreva «Preparar a matriz do Teste 2 (10.º A)», escolha a data de segunda-feira e carregue em **Adicionar**. A tarefa aparece em Planeado, no Início e no O Meu Calendário; na segunda aparece nas sugestões de O Meu Dia.
+
+# Reuniões
+Menu **Reuniões**. O mapa de todas as reuniões do ano, com atas, decisões e tarefas.
+!reunioes-Próximas | Reuniões: próxima reunião, desta semana, tarefas pendentes, atas por fazer, avisos e as próximas reuniões.
+## Separadores
+- **Próximas** — as próximas semanas e mais tarde, com a contagem de dias.
+- **Mapa Mensal** — calendário do mês com todas as reuniões.
+- **Tarefas** — decisões e tarefas das reuniões, com responsável e prazo.
+- **Histórico e Atas** — reuniões realizadas, com o estado da ata.
+!!reunioes-Mapa_Mensal,reunioes-Tarefas | Mapa Mensal e Tarefas.
+!reunioes-Histórico_e_Atas | Histórico e Atas.
+## Marcar uma reunião
+!reunioes-nova | Nova Reunião: tipo, título, data, início e fim, local, ligação online, turmas associadas, convocada por, participantes e lembretes.
+1. Toque em **Nova Reunião** e escolha o tipo (Conselho de Turma, Departamento, Grupo Disciplinar, Conselho Pedagógico, Diretores de Turma, Encarregados de Educação, Reunião Geral, Equipa/Projeto, Formação, Atividade/Evento, Reunião de Avaliação, Outra). A ordem de trabalhos é sugerida.
+2. Indique a data, a hora, o local (ou ligação Teams/Zoom) e as turmas.
+3. A app avisa logo se a hora coincide com uma aula, um tempo não letivo ou outra reunião.
+4. Escolha os lembretes e guarde.
+## A ficha da reunião
+Toque numa reunião: lista de preparação, ordem de trabalhos, notas, decisões e tarefas (responsável e prazo); marcar como realizada, adiar ou cancelar; descarregar ou copiar a **ata**.
+? Pode importar o calendário de reuniões de um PDF (**Mais › Importar PDF**) e colar uma convocatória de e-mail (arraste o e-mail para a app): a data, a hora, o local e a ordem de trabalhos são reconhecidos.
+
+# Direção de Turma
+Menu **Direção de Turma** (aparece quando é Diretor(a) de Turma de alguma turma). Reúne os alunos de todas as disciplinas da turma.
+!direcao-Painel | Painel do DT: alunos, faltas injustificadas, com negativas, classificações em falta, alunos a acompanhar, próximas reuniões e últimas diligências.
+## Os separadores
+- **Painel** — o resumo da turma.
+- **Processos** — a ficha completa de cada aluno.
+- **Enc. Educação** — encarregados de educação e contactos.
+- **Contactos** — registo de contactos (telefone, presencial, reunião, e-mail), com filtros e «Sem contactos nos últimos 60 dias».
+- **Atendimentos** — presenciais e telefónicos.
+- **Convocatórias** — convocatórias e comunicações feitas no Gerador de Documentos.
+- **Assiduidade** — faltas por aluno (injustificadas, justificadas, atrasos, material, disciplinares) com limite de alerta.
+- **Avaliações** — monitorização das classificações em todas as disciplinas e instrumentos por realizar.
+- **Ocorrências**, **Conselhos** (lista de preparação e síntese automática), **Apreciação Global** (por período, para os encarregados de educação), **Planos** (de acompanhamento), **Diligências** (histórico) e **Arquivo**.
+!!direcao-Processos,direcao-Contactos | Processos individuais e Registo de Contactos.
+!!direcao-Assiduidade,direcao-Avaliações | Assiduidade e Avaliações.
+!!direcao-Conselhos,direcao-Apreciação_Global | Conselhos de Turma (com a preparação) e Apreciação Global por período.
+!!direcao-Atendimentos,direcao-Diligências | Atendimentos e Histórico de Diligências.
+> Exemplo: um aluno chega a 4 faltas injustificadas. Em **Assiduidade** a linha fica em destaque; toque em **Gerar Documento** e escolha «Comunicação de assiduidade»: o documento sai preenchido com o nome, o encarregado de educação e as faltas, e fica no Arquivo e nas Diligências.
+
+# Documentos
+Menu **Documentos**. Gerador de documentos com modelos preenchidos com os dados já registados.
+!documentos-Novo | Novo: escolha o modelo por área (Direção de Turma, Comunicação, Avaliação, Gestão de Aulas, Reuniões, Pedagógico, Declarações, Departamento).
+## Criar um documento
+1. Em **Novo**, escolha o modelo (ex.: Convocatória para encarregado de educação). Os modelos «por aluno» geram uma página por aluno.
+2. Escolha a turma, os alunos e o título.
+3. O texto tem campos variáveis entre chavetas, como {{aluno}}, {{ee}} ou {{faltas_injustificadas}}, preenchidos sozinhos; veja a pré-visualização à direita.
+4. Gere o PDF: o documento recebe número, cabeçalho com o logotipo e a sua assinatura, e fica no **Arquivo**.
+!documentos-convocatoria | Convocatória para Encarregado de Educação: turma, alunos (um documento por aluno), título, texto com variáveis e pré-visualização.
+!!documentos-Modelos,documentos-Arquivo | Modelos (editar os modelos base ou criar novos) e Arquivo.
+!documentos-Ficheiros_Importados | Ficheiros Importados: os PDF e Excel originais que importou (turmas, horários, calendário, reuniões, critérios).
+
+# Biblioteca
+Menu **Biblioteca**. Os seus recursos (fichas, testes, apresentações, imagens, áudio, ligações).
+!recursos | Biblioteca: recursos, partilhados, modelos, ligações, filtros e etiquetas.
+- Pesquisa por título, tema ou etiqueta; filtros por disciplina, ano, tipo, coleção e ano letivo; ordem (mais recentes…).
+- **Pastas** — Todos os Recursos, Sem Pasta, pastas suas (**+ Nova Pasta**) e uma pasta por turma criada automaticamente.
+- **Carregar Ficheiros** ou arrastar (PDF, Word, Excel, PowerPoint, imagens, áudio — até 15 MB cada).
+!recursos-baixo | As pastas das turmas e a zona para arrastar ficheiros.
+
+# Contactos
+Menu **Contactos**. Os contactos da escola ao estilo dos Contactos do Mac.
+!contactos | Contactos: listas (todos, departamentos), procura, lista alfabética e o cartão do contacto com mensagem, ligar e e-mail.
+- Listas à esquerda: Todos os Contactos, departamentos e as suas listas (arraste contactos para lá).
+- Cartão: escola, e-mail institucional, departamento, ano letivo e notas; **Partilhar** e **Editar**.
+- **Importar** (Excel ou vCard) e exportar vCard; deteção de duplicados.
+
+# Jornal Escolar
+Menu **Jornal Escolar** (só para o responsável pelo jornal; liga-se em Módulos Opcionais). Ajuda a não perder nenhuma atividade da escola.
+!jornal-Painel | Painel do Jornal: avisos, próximos 14 dias, peças em curso, próximo fecho e o que não pode esquecer.
+## Separadores
+- **Painel** — avisos, entregas próximas e atividades a decidir (**Cobrir** ou ✕).
+- **Atividades do PAA** — o Plano Anual de Atividades importado de Word (**Importar PAA…**), com filtros.
+- **Calendário** — atividades e entregas no mês.
+- **Peças** — quadro por estado (ideia, atribuída, em escrita, em revisão, pronta, publicada); arraste os cartões.
+- **Edições** — data de fecho e publicação, lista de verificação.
+- **Redação** — alunos e professores da equipa, com função e turma.
+!!jornal-Atividades_do_PAA,jornal-Calendário | Atividades do PAA e Calendário.
+!!jornal-Peças,jornal-Redação | Peças (quadro por estado) e Redação.
+
+# SpruceNote e JornalNote
+Menu **SpruceNote**. Quadros livres para planear e organizar ideias.
+!sprucenote | SpruceNote: a barra de elementos à esquerda e o quadro com título, notas, uma ideia e uma lista de pendências.
+## Elementos (arraste da barra para o quadro)
+**Anotação**, **Link**, **Pendências** (lista de tarefas), **Linha** (seta entre elementos), **Quadro** (sub-quadro), **Coluna**, **Comentário**, **Áudio**, **Título**, **Vídeo**, **Mapa**, **Imagem**, **Enviar** (ficheiro), **Desenho** e **Lixeira**.
+- Duplo toque abre ou edita; arraste para mover; zoom − / + e ajustar ao ecrã; anular e refazer; **Aumentar** para ecrã inteiro.
+!snjornal | JornalNote: igual ao SpruceNote, só com os quadros do Jornal Escolar.
+
+@parte VIII | Definições e ajuda | Todos os separadores das Definições, ajuda, perguntas frequentes e glossário
+
+# Definições
+Menu **Definições**, com onze separadores: Geral, Professor, Domínios e Ponderações, Conta e Acesso, Aparência, Menu Lateral, Segurança, Conta e Dados, Notificações, Auditoria e Ferramentas.
+## Geral
+!def-Geral | Geral: Escola e Professor, Acessibilidade, Disciplinas que Leciono e Tipos de Instrumento.
+- **Escola e Professor** — nome da escola, nome do professor, ano letivo e e-mail institucional.
+- **Acessibilidade** — movimento e animações (Como o Sistema, Reduzir, Normal) e ligações (Como no Desenho, Sempre Sublinhadas).
+- **Disciplinas que Leciono** e **Tipos de Instrumento** (arraste para ordenar; **Repor Predefinidos**).
+!def-Geral-2 | Tipos de Tempo Não Letivo e Textos da Síntese Descritiva por menção.
+!def-Geral-3 | Avisos Automáticos (matriz antes do teste, aniversários) e Módulos Opcionais.
+**Módulos Opcionais**: Jornal Escolar, Coord. PROFIJ, SpruceNote, Contactos, Sorteio, Autoavaliação pelo Telemóvel, Forms, Arena, Pulso, Provas… Desligue o que não usa para simplificar o menu.
+## Professor
+!def-Professor | Professor: fotografia, dados pessoais e dados profissionais por escola.
+!def-Professor-2 | Cargos e funções em cada escola, assinatura digitalizada e notas.
+Assinale os cargos (Diretor(a) de turma, Coordenador(a) de departamento, Delegado(a) de grupo, Coordenador(a) do PROFIJ…): os módulos correspondentes aparecem no menu. A assinatura entra nos documentos e pautas (o fundo branco é retirado sozinho).
+## Domínios e Ponderações
+!def-Domínios_e_Ponderações | Modelos de domínios e ponderações por disciplina; Editar e Duplicar.
+## Conta e Acesso
+!def-Conta_e_Acesso | Quem Pode Entrar com Google, Sessão e Perfis e Permissões.
+!def-Conta_e_Acesso-2 | Perfis e Permissões: o que cada perfil (Administrador, Professor, Direção) pode fazer; **Novo Perfil**.
+## Aparência
+!def-Aparência | Aparência: tema, cor de destaque, logotipo da app e estilo da interface.
+- **Tema** — Automático, Claro, Escuro. **Cor de destaque**. **Logotipo da app**.
+- **Estilo da interface** — EduSpruce, Azul Corporativo, **SGE (predefinido)**, Coral, Social, Gradiente, Institucional, Académico e iOS 27.
+- **Interface por dispositivo** (Automático, Computador, iPad, Telemóvel), **temas sazonais**, **densidade**, **tamanho do texto**, **alto contraste** e **cores para daltonismo**.
+!def-Aparência-2 | Estilo, interface por dispositivo, temas sazonais, densidade, texto, contraste, Notas Flutuantes e O Meu Dia.
+!def-Aparência-3 | Barra Lateral, Fotografias dos Alunos, Avaliação e Marcações e Logotipo Animado.
+? Em computadores antigos escolha **Desempenho › Leve** (sem desfoques, sombras nem animações) — a escolha vale só para esse computador.
+## Menu Lateral
+!def-Menu_Lateral | Menu Lateral: reordenar com as setas, mudar ícone e nome, «Fora» do menu, Novo Menu, Nova Secção, Separador e Repor o Original.
+!def-Menu_Lateral-3 | Menus Guardados: guarde várias versões do menu e associe cada uma a escolas — ao mudar de escola no topo, o menu muda sozinho.
+- **Guardar o Menu Atual** cria um menu guardado; em cada um: **Usar Agora**, copiar para o menu que está a editar, apagar e as **Escolas** a que fica associado (as escolas sem menu associado usam o menu habitual).
+> Exemplo: quer as ferramentas digitais juntas. Toque em **Nova Secção**, chame-lhe «Alunos online» e mova para lá a Arena, o Pulso, o Forms e as Provas com as setas.
+## Segurança
+!def-Segurança | Segurança: espaço utilizado, caixote do lixo (30 dias), registo de importações, privacidade (RGPD) e conta e dados.
+## Conta e Dados
+!def-Conta_e_Dados | Conta e Dados: a base de dados, como funciona, sessão iniciada e Terminar Sessão.
+- **Chave de Recuperação** — guarde-a (copiar ou descarregar em .txt): abre os seus dados se algum dia a app pedir um código. **Descarregar Cópia Completa** — um ficheiro com todos os seus dados, para guardar numa pen ou no disco. São duas proteções que não dependem de nenhum aparelho.
+## Notificações
+!def-Notificações | Notificações neste aparelho: o que notificar, silêncio e com a app fechada.
+Aula a começar (com antecedência), sumário por escrever, resumo do dia e avaliações de amanhã (com hora), avisos urgentes e reuniões, número no ícone; horário de silêncio e fins de semana em silêncio.
+!def-Notificações-2 | Silêncio e Com a App Fechada: avisos enviados pela base de dados mesmo com a app fechada ou o aparelho bloqueado.
+- **Com a App Fechada** — toque em **Ativar Avisos com a App Fechada** em cada aparelho onde os quer receber (no iPhone/iPad, com a app adicionada ao ecrã principal). A EduSpruce envia à hora certa os avisos de aulas, resumo do dia, avaliações de amanhã, reuniões e avisos urgentes, respeitando o silêncio. **Avisos discretos** mostra só «Tem um aviso», sem títulos. **Desligar Neste Aparelho** para parar.
+- Se o navegador não suportar avisos com a app fechada, use **Juntar ao Calendário (.ics)**.
+## Auditoria
+!def-Auditoria | Auditoria e Registos: data e hora, utilizador, área, ação e detalhe; filtros e Exportar CSV/PDF.
+## Ferramentas
+!def-Ferramentas | Ferramentas: Integridade dos Dados (Verificar Agora), Avisos em Pop-Up e Diagnóstico dos Dados com Corrigir.
+!def-Ferramentas-2 | Verificar os Cálculos, Dados de Demonstração e Ajuda e Novidades (Visita Guiada, Novidades Desta Versão, Enviar Sugestão ou Problema).
+
+# Ajuda
+Menu **Ajuda** (ou o botão ? da barra de cima, que abre a ajuda já no assunto do ecrã).
+!ajuda | Ajuda: o Manual de Instruções em PDF, o Guia com pesquisa e a lista de todos os assuntos.
+- Pesquise por palavra (ex.: faltas, MSAI, calendário).
+- Cada assunto tem a explicação e uma imagem do ecrã no tema que está a usar.
+- **Descarregar** o Manual de Instruções (este documento).
+
+# Perguntas frequentes
+## A app não reconhece as minhas aulas no horário da turma.
+Confirme o seu nome em [[Definições › Professor]] e a disciplina por ciclo; em Turma › Horário assinale a sigla certa, ou importe o seu horário em PDF.
+## O 3.º período tem menos dias para a minha turma.
+O termo das aulas depende do ano de escolaridade (9.º, 11.º e 12.º terminam mais cedo) — vem do calendário escolar.
+## Faltei a uma aula. Como registo?
+Em Aulas e Sumários toque em **Faltei** nessa lição: não conta como dada e fica por repor.
+## Apaguei uma turma sem querer.
+Use **Anular** (Ctrl+Z) logo a seguir, ou recupere em [[Definições › Segurança › Caixote do Lixo]] (30 dias).
+## Os alunos não conseguem entrar na Arena, no Pulso, no Forms ou nas Provas.
+Confirme que o módulo está ligado em Módulos Opcionais, que a sessão/sala está aberta e que os alunos usam o endereço certo (arena.html, pulso.html, forms.html, provas.html) com o código atual.
+## Na rede da escola a app não abre.
+Use o espelho **eduspruce.github.io** (mesmos dados) ou outra rede.
+## Não quero que a turma veja dados pessoais quando projeto.
+Ligue o **Modo de Apresentação** (olho) antes de projetar; em caso de urgência, o **escudo** tapa tudo.
+## A app está lenta num computador antigo.
+Em [[Definições › Aparência › Desempenho]] escolha **Leve**.
+
+# Atalhos e glossário
+## Atalhos
+| Atalho | O que faz |
+| Ctrl+K / ⌘K | Pesquisar em toda a app |
+| Ctrl+Z / ⌘Z | Anular a última alteração |
+| Ctrl+Shift+L | Modo de privacidade (tapar tudo) |
+| ? | Ajuda da secção onde está |
+| Esc | Fechar janelas e menus |
+| Enter / Tab / setas | Navegar na grelha de classificações |
+| Toque longo | Menu de ações (mover, duplicar, mudar de período…) |
+| Deslizar para a esquerda | Apagar um instrumento ou tempo não letivo |
+| Arrastar | Tempos do horário, marcações de testes, dias do calendário, ficheiros e e-mails |
+## Glossário
+| Termo | Significado |
+| Σ | Soma dos tempos letivos dados até um dia (numeração das lições) |
+| AI | Avaliação intercalar |
+| RA | Reunião de avaliação (conselho de turma) |
+| DT | Diretor(a) de Turma / Direção de Turma |
+| MSAI | Medidas de suporte à aprendizagem e à inclusão (DL 54/2018) |
+| RTP · PEI · PIT | Relatório técnico-pedagógico · Programa educativo individual · Plano individual de transição |
+| PO · CO · CE · PE | Produção oral · Compreensão oral · Compreensão escrita · Produção escrita |
+| PROFIJ | Programa formativo de inserção de jovens (Açores) |
+| UFCD · UC | Unidade de formação de curta duração · Unidade de competência |
+| FPCT | Formação prática em contexto de trabalho |
+| PAF · PEA | Prova de avaliação final · Prova especial de avaliação |
+| CFA | Classificação final anual (PROFIJ) |
+| MRA | Mecanismo de recuperação (ensino profissional) |
+| PAA | Plano anual de atividades |
+| Instrumento rápido | Registo de uma % por domínio, sem itens |
+
+# Mapa de todos os menus
+Tabela de consulta rápida: cada entrada do menu, o que faz e o capítulo onde está explicada.
+| Menu | Para que serve | Capítulo |
+| Início | Painel do dia: contagem, tarefas, aulas de hoje, desempenho | Início |
+| Ano Letivo e Turmas | Anos letivos, disciplinas, turmas e importação do Excel | Ano Letivo e Turmas |
+| O Meu Horário | Horário semanal e tempos não letivos | O Meu Horário |
+| Calendário Escolar | Períodos, interrupções, feriados, aulas previstas, intercalar | Calendário Escolar |
+| As Minhas Tarefas | Listas de tarefas | As Minhas Tarefas |
+| Reuniões | Mapa, atas, decisões e tarefas | Reuniões |
+| Direção de Turma | Processos, EE, contactos, assiduidade, conselhos | Direção de Turma |
+| Biblioteca | Recursos e pastas | Biblioteca |
+| Documentos | Gerador de documentos e arquivo | Documentos |
+| Contactos | Contactos dos colegas | Contactos |
+| Arena | Jogos de perguntas (nunca contam para a nota) | Arena |
+| Pulso | Avaliação em tempo real (formativa) | Pulso |
+| Forms | Formulários e testes online | Forms |
+| Provas | Avaliações digitais completas | Provas |
+| Jornal Escolar / JornalNote | PAA, peças, edições, redação | Jornal Escolar |
+| Coord. PROFIJ | Coordenação do programa PROFIJ | Coordenação do PROFIJ |
+| SpruceNote | Quadros de ideias | SpruceNote e JornalNote |
+| O Meu Calendário | Agenda pessoal ao estilo do Outlook | O Meu Calendário |
+| Turma › Painel da Turma | Resumo da turma | Painel da Turma |
+| Turma › Alunos | Lista, fotografias, MSAI, ficha | Alunos |
+| Turma › Planta | Lugares na sala | Planta da Sala |
+| Turma › Horário | Horário da turma e aulas previstas | Horário da Turma |
+| Turma › Modo Aula | Chamada, sumário e sorteio | Modo Aula |
+| Turma › Sumários | Lições, faltas, substituições | Aulas e Sumários |
+| Turma › Sorteio | Aluno, pares ou grupos ao acaso | Sorteio |
+| Turma › Critérios | Escala, domínios e ponderações | Critérios de Avaliação |
+| Turma › Marcação de Testes | Calendário de avaliações | Marcação de Testes |
+| Turma › Instrumentos | Testes e grelhas de classificação | Instrumentos de Avaliação |
+| Turma › Produção Oral | Momentos de oralidade | Produção Oral |
+| Turma › Domínios | Análise por domínio | Domínios por Período |
+| Turma › Análise de Resultados | Estatística da turma | Análise de Resultados |
+| Turma › Avaliação Intercalar | Menções a meio do período | Avaliação Intercalar |
+| Turma › Avaliação Final | Pauta por período | Avaliação Final |
+| Turma › Relatórios | Relatórios individuais | Relatórios Individuais |
+| Turma › Módulos | Avaliação por módulo (profissional) | Módulos |
+| Turma › Recuperação (MRA) | Faltas por módulo e fichas | Recuperação (MRA) |
+| Turma › Planos de Recuperação | Assiduidade e aprendizagens (PROFIJ) | Planos de Recuperação |
+| Escola | Escolas, logotipo e tipologia | Escolas |
+| Definições | Onze separadores de configuração | Definições |
+| Ajuda | Guia pesquisável e manual | Ajuda |

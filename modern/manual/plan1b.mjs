@@ -1,0 +1,14 @@
+import {shot,fim} from './cap.mjs';
+const G=v=>`(UI.arEd=null,UI.pvEd=null,go('${v}'),document.getElementById('view').scrollTo(0,0),1)`;
+await shot('inicio-geral-baixo',[G('inicio'),'@Geral',900,'S:850']);
+await shot('inicio-simples-baixo',[G('inicio'),'@Simples','S:850']);
+await shot('turmas-baixo',[G('turmas'),'S:700']);
+await shot('turmas-excel',[G('turmas'),'@Onde obter o Excel',700]);
+await shot('escola-baixo',[G('escola'),'S:800']);
+await shot('calendario-baixo',[G('calendario'),'@Calendário','S:800']);
+await shot('calendario-editar',[G('calendario'),'@Calendário','@Editar Dias',700]);
+await shot('meuhorario-baixo',[G('meuhorario'),'S:700']);
+await shot('recursos-baixo',[G('recursos'),'S:650']);
+await shot('documentos-ata',[G('documentos'),'?@Outro Modelo','@Novo','@Ata de reunião',900]);
+await shot('turmas-disciplinas',[G('turmas'),'@Alterar',700]);
+await fim();

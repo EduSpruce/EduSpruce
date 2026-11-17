@@ -89,3 +89,6 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 - App: `modern/src/moderno/avisos.js` (juntado no fim pelo `db.mjs`); `sw.js` tem o evento `push`. Cartão «Com a App Fechada» em Definições › Notificações (envolve `defNotif`/`bindNotif`).
 - `psLista()` calcula os avisos dos próximos 21 dias (chaves `a:` aulas, `r:` resumo, `t:` avaliações de amanhã, `m:` reuniões, `av:` avisos) com `ntCfg()` e `ntSilencio`; `S.cfg.notif.pushDisc` = avisos discretos. `psSync()` guarda-a com `eduspruce_avisos_definir` (só se a conta tiver aparelhos). Com push ligado no aparelho (`es.push.on`), `ntAgora` deixa de repetir `a:`/`r:`/`t:` e as reuniões.
 - Supabase: `modern/supabase/migrations/0016_avisos_push.sql` (tabelas, funções, pg_cron de minuto a minuto) + Edge Function `modern/supabase/functions/eduspruce-avisos/index.ts` (Verify JWT desligado; cria as chaves VAPID sozinha). Guia: `docs/guias/AVISOS_COM_A_APP_FECHADA.md`.
+
+## Manual PDF e Ajuda (1.037)
+- Fontes e scripts do manual em `modern/manual/` (ver LEIA-ME). Ajuda revista no bloco `/* v1.034 · Ajuda revista` do módulo 56 (aplica-se depois de `ajudaAtualizar`); imagens da Ajuda por estilo em `ajuda/<estilo>/*.webp`, mapa em `AJ_VISTA` (módulo 58). Ao acrescentar um ecrã novo: acrescentar o assunto à Ajuda, a imagem nos 7 estilos e um capítulo no manual.

@@ -1,0 +1,228 @@
+@parte I | Começar | Entrar, conhecer o ecrã e configurar a app pela primeira vez
+
+# Bem-vindo à EduSpruce
+A **EduSpruce** é a plataforma de gestão do trabalho do professor: turmas e alunos, horários, calendário, aulas e sumários, avaliação, direção de turma, reuniões, documentos, ensino profissional e PROFIJ, testes digitais (Forms e Provas), jogos de perguntas (Arena), avaliação em tempo real (Pulso), jornal escolar e muito mais — tudo num só sítio, no computador, no tablet e no telemóvel.
+Este manual percorre **todos os menus, um a um**, pela mesma ordem em que aparecem na app. Cada capítulo diz para que serve o ecrã, o que significa cada botão e separador, como se faz passo a passo e dá **exemplos concretos**. As imagens foram tiradas com os **dados de demonstração** da própria app (escolas, alunos e professores fictícios) e com o tema **SGE**, o predefinido.
+## Como a app está organizada
+A EduSpruce organiza tudo em três níveis: **Escola → Ano letivo → Turmas**. Cada escola tem o seu calendário, a sua organização do ano (3 períodos ou 2 semestres) e os seus cargos. Um professor pode dar aulas em duas escolas ao mesmo tempo sem nunca misturar dados. Dentro de cada ano letivo estão as turmas e, dentro de cada turma, os alunos, o horário, os sumários, os critérios, os instrumentos e a avaliação.
+## Onde se usa
+- **eduspruce.pt** — a app (entra-se com a conta Google autorizada).
+- **eduspruce.github.io** — espelho da app, para redes que bloqueiam o endereço principal (os dados são os mesmos).
+- **Páginas dos alunos** (sem conta, só com um código): forms.html, provas.html, arena.html, pulso.html e aluno.html (autoavaliação).
+## Como ler este manual
+- Os caminhos de menu aparecem assim: [[Definições › Aparência]].
+- Os nomes de botões aparecem a **negrito**, tal como estão no ecrã.
+> Os quadros «Exemplo» mostram um caso real de utilização, do princípio ao fim.
+? Os quadros «Dica» mostram atalhos e cuidados a ter.
+## Sem dados no aparelho
+A EduSpruce é um site ligado a uma base de dados. Não há nada para instalar nem sincronizar: entra-se com Google e os dados aparecem em qualquer aparelho. Tudo vai **cifrado**; no aparelho não fica nada guardado. O que muda num aparelho aparece nos outros abertos em cerca de um segundo.
+
+# Entrar na app
+!login | O ecrã de entrada no computador: «Entrar com Google» e, à direita, o resumo do que a app faz.
+## Passo a passo
+1. Abra **eduspruce.pt** no navegador (Chrome, Edge, Safari ou Firefox).
+2. Toque em **Entrar com Google** e escolha a sua conta (da escola ou pessoal).
+3. No computador abre-se uma pequena janela da Google; no iPhone, iPad e Safari do Mac a Google abre na própria página e regressa sozinha à app.
+4. Pronto: aparece o Início com os seus dados. Na primeira vez aparece uma visita guiada curta (só uma vez).
+## Quem pode entrar
+Não basta ter uma conta Google: só entram as contas **autorizadas pelo administrador** em [[Definições › Conta e Acesso › Quem Pode Entrar com Google]]. Se aparecer «conta não autorizada», peça ao administrador para acrescentar o seu e-mail.
+**Outra forma de entrar** é uma entrada de emergência reservada ao administrador.
+!!login-tel,tel-inicio | No telemóvel: ecrã de entrada e o Início depois de entrar.
+## Instalar como app
+- **iPhone / iPad (Safari)**: Partilhar › Adicionar ao ecrã principal. Abre em ecrã inteiro, com o logotipo.
+- **Mac (Safari)**: Ficheiro › Adicionar à Dock.
+- **Chrome / Edge**: ícone de instalar na barra de endereço, ou menu › Instalar EduSpruce.
+? Se a entrada não avançar ou disser «conta não autorizada» mesmo estando autorizado, desligue o bloqueador de publicidade (por exemplo, AdGuard) para eduspruce.pt. Na rede da escola, se o endereço não abrir, use **eduspruce.github.io**.
+## Terminar a sessão
+Em [[Definições › Conta e Dados]] toque em **Terminar Sessão**. Como nada fica no aparelho, pode entrar e sair em computadores partilhados com segurança.
+
+# O ecrã da app
+O ecrã tem três zonas: a **barra de cima** (azul), o **menu lateral** (à esquerda) e a **área de trabalho** (ao centro). No canto inferior direito está o botão amarelo das **Notas Flutuantes**.
+!inicio-simples | O Início: barra de cima, menu lateral só com ícones e área de trabalho com cartões.
+## A barra de cima, botão a botão
+- **Caminho e título** — onde está (ex.: Demonstração › 7.º A · Inglês › Alunos). Toque num elemento do caminho para voltar atrás.
+- **Escola** (com o ícone da escola) — escolhe a escola ativa: muda o calendário, os cargos e as turmas mostradas.
+- **Ano Letivo** — mostra e troca o ano letivo aberto (incluindo o ano «Demonstração»).
+- **Pesquisar** (lupa, Ctrl+K / ⌘K) — procura em toda a app.
+- **Anular** (seta curva, Ctrl+Z) — desfaz a última alteração.
+- **Modo de Apresentação** (olho) — para projetar sem dados pessoais.
+- **Favorito** (estrela) — junta o ecrã atual aos favoritos do Início (só nos ecrãs que o permitem).
+- **Modo de privacidade** (escudo, Ctrl+Shift+L) — tapa tudo de imediato.
+- **Bloquear dados de base** (cadeado) — protege turmas, alunos, critérios, horários e calendário.
+- **Ajuda desta secção** (?) — abre a Ajuda já no assunto do ecrã.
+- **Guardado** — confirma que tudo foi gravado.
+- Em muitos ecrãs aparecem também botões próprios (ex.: **Nova Reunião**, **Gerar Documento**) e o botão **Mais** (⋯) com as restantes ações.
+## Pesquisar
+!pesquisa | Pesquisa global: ao escrever «teste» aparecem a Marcação de Testes e todos os instrumentos com esse nome.
+> Exemplo: escreva o número de processo ou parte do nome de um aluno e carregue em Enter para abrir logo a sua ficha. Escreva «calendário» para saltar para o Calendário Escolar.
+## Modo de Apresentação
+!apresentacao | Modo de Apresentação: escolha como aparecem os nomes, as fotografias e o que fica escondido.
+Antes de projetar na aula toque no olho e escolha:
+- **Nomes dos alunos**: primeiro nome, iniciais, só o número ou completos.
+- **Fotografias**: mostrar ou desfocar.
+- **Ocultar dados sensíveis** dos alunos (processo, nascimento, repetência, ASE, medidas, encarregado de educação, contactos, observações).
+- **Proteger a informação do professor** (reuniões, lembretes, horário, definições, pesquisa).
+- **Ligar sempre ao abrir esta turma** — memória por turma.
+- **Alunos a ocultar** — o nome passa a «Aluno(a) oculto(a)».
+## Modo de privacidade
+!privacidade | Com o escudo, a app tapa tudo de imediato (por exemplo, quando alguém se aproxima do ecrã).
+## Bloquear dados de base
+!bloquear | O cadeado protege os dados que raramente mudam; a dica mostra o estado atual.
+Depois de importar as turmas, os alunos e os horários, ligue o bloqueio: assim não se apaga nem altera nada por engano. Para mudar algo, toque de novo no cadeado.
+## O botão Mais
+!mais | O menu Mais em Alunos: Editar Turma, Importar Excel, Aluno, Exportar CSV, Exportar PDF e Grupos.
+## Notas Flutuantes (botão amarelo)
+!acoes-rapidas | O botão amarelo abre uma nota que fica por cima de qualquer ecrã.
+Escreva lembretes rápidos («ligar ao EE do n.º 5», «levar o projetor»). Pode mudar a cor, fixar e fechar. A nota continua lá quando muda de ecrã. Desliga-se em [[Definições › Aparência › Notas Flutuantes]].
+
+# O menu lateral
+!!menu-icones,menu-nomes | À esquerda, o menu só com ícones (predefinido); à direita, aberto com os nomes.
+Por omissão o menu mostra só os ícones (passe o rato por cima para ver o nome). O primeiro botão abre o menu com os nomes; em baixo, «Mostrar sempre o menu com os nomes neste computador» deixa-o sempre aberto.
+## Parte geral
+- **Início** — o painel do dia.
+- **Ano Letivo e Turmas** — anos letivos, disciplinas e turmas.
+- **O Meu Horário** — o seu horário semanal e tempos não letivos.
+- **Calendário Escolar** — períodos, interrupções, feriados e aulas previstas.
+- **As Minhas Tarefas** — listas de tarefas (com contador).
+- **Reuniões** — mapa das reuniões, atas e decisões.
+- **Direção de Turma** — só se for DT de alguma turma.
+- **Biblioteca** — os seus recursos.
+- **Documentos** — gerador de documentos com modelos.
+- **Contactos** — contactos dos colegas.
+- **Arena**, **Pulso**, **Forms**, **Provas** — ferramentas digitais para os alunos.
+- **Jornal Escolar** e **JornalNote** — só para o responsável pelo jornal.
+- **Coord. PROFIJ** — só para quem coordena o PROFIJ.
+- **SpruceNote** — quadros de ideias.
+- **O Meu Calendário** — agenda pessoal ao estilo do Outlook.
+Os módulos opcionais ligam-se e desligam-se em [[Definições › Geral › Módulos Opcionais]].
+## Turmas
+Por baixo fica o filtro **Todas / Regular / PROFIJ** e a lista das turmas. Toque numa turma para abrir as suas secções: Painel da Turma, Alunos, Planta, Horário, Modo Aula, Sumários, Sorteio, Critérios, Marcação de Testes, Instrumentos, Produção Oral, Domínios, Análise de Resultados, Avaliação Intercalar, Avaliação Final e Relatórios. Nas turmas de cursos profissionais aparecem também **Módulos** e **Recuperação (MRA)**; nas turmas PROFIJ, **Planos de Recuperação**.
+No dia de um teste aparece, por baixo da turma, a entrada **Em teste**: um ecrã para projetar com a hora, o nome do teste e um temporizador.
+## Configuração
+**Escola**, **Definições**, **Ajuda** e **Bloquear Dados**. No fundo: tema (automático, claro, escuro), Privacidade, Termos e o seu perfil de professor.
+? Em [[Definições › Menu Lateral]] pode mudar a ordem, esconder itens e criar menus próprios (capítulo «Definições»).
+
+# Telemóvel e iPad
+A app adapta-se a qualquer ecrã. No **iPad** o menu lateral fica estreito (só ícones) e os cartões grandes para o dedo. No **telemóvel** o Início é próprio (aula a decorrer com **Sumário** e **Presenças**, avisos e atalhos) e há uma barra de separadores em baixo: **Início, Turma, Sumários, Avaliação, Mais**.
+!!!tel-inicio,tel-aula,tel-alunos | No telemóvel: Início, Modo Aula (chamada com o dedo) e lista de alunos.
+!ipad-aula | No iPad: Modo Aula com os cartões dos alunos para a chamada.
+!ipad-meuhorario | No iPad: O Meu Horário.
+? Tabelas largas deslizam para o lado mantendo o nome do aluno à vista. Os botões têm pelo menos 44 × 44 pontos.
+
+# Início
+O Início é o painel do dia. Tem duas vistas: **Simples** (cartões grandes) e **Geral** (tudo numa coluna, com filtros).
+!inicio-simples | Início, vista Simples.
+## Os cartões
+- **A Sua Escola** — logotipo e nome; **Ver Avisos** (com o número de avisos), **Personalizar** e **Configurar Escola**.
+- **Contagem decrescente** — dias letivos que faltam até ao fim do período, com relógio (dias, horas, minutos, segundos), % do período concluído e a próxima interrupção.
+- **Próximas Tarefas** — escreva uma tarefa e carregue em Enter (com data opcional); marque como feita com um toque; «Ver Todas».
+- **O Meu Dia** — as aulas de hoje, por ordem, com barra de progresso; a aula a decorrer tem o botão **Sumário**; ‹ Hoje › muda de dia.
+- **Desempenho por Critério** — média da turma escolhida, positivas e domínios forte e a reforçar.
+- E ainda (conforme personalizar): Matrizes a Enviar, Favoritos, Datas Importantes, Próximos Testes, As Minhas Turmas, Reuniões, Aniversários e Jornal Escolar.
+!inicio-simples-baixo | Mais abaixo: O Meu Dia com a aula a decorrer e as aulas seguintes.
+## Vista Geral
+!inicio-geral | Vista Geral: pesquisa, botões rápidos (Criar Teste, Registar Sumário, Agendar Reunião, Tarefa) e filtros por ano letivo, período, turma, disciplina e modalidade.
+!inicio-geral-baixo | Vista Geral mais abaixo.
+## Personalizar
+!inicio-personalizar | Personalizar o Início: ligue ou desligue cada cartão e mude a ordem com as setas.
+Também pode arrastar os cartões pelo título ou pela pega (no iPad, toque longo no cartão) e puxar o canto de um cartão para mudar a largura.
+## Avisos
+!inicio-avisos | Ver Avisos: o que precisa de atenção (tarefas em atraso, matrizes por enviar, reuniões próximas…).
+Em cada aviso pode **Abrir**, adiar 1 hora ou marcar como **Visto**. Os avisos urgentes também aparecem em janela própria ao abrir a app.
+> Exemplo de manhã: abra o Início, veja em «O Meu Dia» que tem o 10.º A às 10:00, toque em **Sumário** quando a aula começar e, no fim, marque a tarefa «Corrigir a ficha do 7.º A» como feita.
+
+@parte II | Organização | Escolas, ano letivo, turmas, calendário e horários
+
+# Escolas
+Menu [[Configuração › Escola]]. Aqui ficam as escolas onde dá aulas, cada uma com nome, logotipo e tipologia.
+!escola | As Minhas Escolas: escolas do ano letivo, logotipo e tipologia da escola.
+## O que há no ecrã
+- **As Minhas Escolas** — uma escola principal e as outras; toque para escolher a escola a editar. **Adicionar Escola** cria outra.
+- **Nome da Escola** e **Logotipo** — toque para escolher a imagem (PNG com fundo transparente, JPG ou SVG) ou arraste-a. Opcionalmente, imagens para o canto superior direito e centrada em baixo dos documentos.
+- **Tipologia da Escola** — **Ensino Regular** (básico e secundário: disciplinas, períodos ou semestres, níveis 1–5 / 0–20, turmas PROFIJ com UFCD) ou **Escola Profissional** (cursos organizados por módulos, 0–20, aprovação ≥ 10, anos de formação).
+!escola-adicionar | Nova Escola: escolha a tipologia e procure a escola na lista das escolas públicas dos Açores (ou escreva o nome).
+!escola-baixo | Mais abaixo: imagens opcionais para os documentos.
+? Cada escola tem o seu calendário e os seus cargos (por exemplo, Diretor(a) de Turma). Os relatórios e atas usam sempre o logotipo e o nome da escola da turma.
+
+# Ano Letivo e Turmas
+Menu **Ano Letivo e Turmas**. É aqui que se cria o ano letivo, se escolhem as disciplinas que leciona e se criam as turmas.
+!turmas | Ano Letivo e Turmas: organização do ano, disciplinas que leciona e a lista das turmas.
+## O que há no ecrã
+- Aviso **«Já inseriu as turmas e os alunos? Bloqueie os dados de base»** com o botão **Bloquear**.
+- **Ano Letivo** — organização do ano (**3 Períodos** ou **2 Semestres**) e **Apagar Ano Letivo**. O botão **Ano Letivo** (na barra de cima) cria um ano novo.
+- **Disciplinas que Leciono** — as disciplinas deste ano (por ciclo: Inglês do 3.º ciclo e Inglês do secundário são diferentes); **Alterar** para escolher.
+- **Turmas** — tabela com a turma (o número do ano no ícone), disciplina, alunos, instrumentos e horário. Em cada linha: **Abrir**, editar (lápis), **+ Disciplina** (mesma turma noutra disciplina) e apagar.
+- Botões: **Turma a Partir do Excel**, (i) **Onde obter o Excel**, **Turma Vazia**, **Juntar Turmas** e **Importar Horários**.
+## Criar uma turma a partir do Excel (recomendado)
+1. No programa de gestão da escola siga Área do docente › Turma › Fotos › Gerar Relatório › Exportação Excel e guarde o ficheiro .xlsx.
+2. Em **Ano Letivo e Turmas** toque em **Turma a Partir do Excel** e escolha o ficheiro.
+3. A app lê o número, o processo, o nome, a fotografia, a turma e o ano letivo e mostra uma pré-visualização. Confirme a escola, a oferta formativa, a disciplina e o ano de escolaridade.
+4. Toque em **Criar Turma**. Os alunos ficam logo com as fotografias.
+!turmas-excel | O botão (i) explica onde obter o ficheiro Excel no programa da escola.
+## Criar uma turma vazia
+!turmas-vazia | Nova Turma: escola, oferta formativa (Ensino Regular ou PROFIJ), regime de classificação, nome, código interno, ano de escolaridade, disciplina e outras disciplinas que leciona nesta turma.
+> Exemplo: para criar o 10.º A de Inglês, escolha «Escola principal · Ensino Regular», regime «Secundário (0 a 20 valores)», turma «10.º A», ano «10.º», disciplina «Inglês — Ensino Secundário» e toque em **Criar Turma**. Se também der Português a essa turma, assinale «Português»: é criada uma segunda pauta com os mesmos alunos.
+## Juntar turmas
+Para turmas com aulas juntas numa disciplina (ex.: 11.º B + 11.º C → 11.º B/C). Cada aluno mantém o seu número e a turma de origem.
+!turmas-baixo | A lista de turmas com as de Ensino Regular e as do PROFIJ separadas.
+? Depois de tudo importado, ligue o **Bloquear**: os dados de base deixam de poder ser apagados por engano.
+
+# Calendário Escolar
+Menu **Calendário Escolar**. A app fica a saber quando há aulas: períodos, interrupções, feriados e o termo das aulas de cada ano de escolaridade.
+!calendario | Calendário Escolar: organização do ano, resumo do período atual, períodos letivos e o calendário mês a mês.
+## O que há no ecrã
+- Separadores **Calendário** e **Aulas Previstas**.
+- **Organização do Ano Letivo** — 3 Períodos ou 2 Semestres (vale para calendário, contagens, aulas previstas, testes, intercalar, instrumentos, avaliação, relatórios e reuniões).
+- Resumo: **Período Atual**, **Dias Letivos Restantes**, **Próximo Marco** e **Total de Dias Letivos**.
+- **Períodos Letivos** — datas e dias letivos de cada período, com barra de progresso.
+- **Calendário** mês a mês com a legenda (dia letivo, início do ano letivo, interrupção, sem atividades letivas) e zoom − / +.
+- **Interrupções, Feriados e Marcos** — lista à direita.
+- **Avaliação Intercalar** (à direita) — Nenhuma, dois ou três períodos e as datas «De/Até», para todas as turmas.
+- Na barra: **Editar Dias** e **Mais** (Importar PDF, criar à mão, exportar).
+## Importar o calendário em PDF
+1. Toque em **Mais › Importar PDF** e escolha o calendário escolar oficial.
+2. A app lê a legenda de cores e cada dia, e calcula os períodos e os dias letivos.
+3. Confirme. O feriado municipal e o Dia dos Açores são marcados conforme o concelho da escola.
+!calendario-baixo | Mais abaixo: os meses do ano e a lista de interrupções e feriados.
+## Editar dias
+!calendario-editar | Editar Dias: escolha o tipo na faixa de cima e toque (ou arraste o dedo) pelos dias.
+Toque num dia (fora do modo de edição) para ver a ficha do dia: tipo, período, nota e as suas aulas nesse dia.
+## Aulas Previstas
+!calendario-previstas | Aulas Previstas: por turma, tempos por semana, previstos em cada período, total e dados.
+A app cruza o horário de cada turma com o calendário. **Exportar CSV** está na barra. Toque numa turma para ver o detalhe e registar faltas do professor.
+
+# O Meu Horário
+Menu **O Meu Horário**. O seu horário semanal com todas as turmas e os tempos não letivos.
+!meuhorario | O Meu Horário: hoje, contadores (tempos letivos, não letivos, total semanal), a grelha semanal colorida e os tempos não letivos.
+## O que há no ecrã
+- **Hoje** — as aulas de hoje e a que está a decorrer.
+- **Tempos Letivos**, **Tempos Não Letivos** e **Total Semanal**.
+- **O Meu Horário Semanal** — grelha com uma cor por turma/disciplina; os não letivos a tracejado. Toque numa aula para abrir o sumário dessa semana; arraste qualquer tempo para outro dia ou hora.
+- **Apagar Horário** e, em **Mais**, Importar o Meu Horário (PDF ou Excel) e Editar Horário.
+- **Tempos Não Letivos** — lista com a contagem semanal; **Acrescentar** e **Tipos**.
+## Importar o horário
+1. **Mais › Importar o Meu Horário** e escolha o PDF (ou Excel) do horário.
+2. A app lê a grelha, as salas e as observações e separa tempos letivos e não letivos.
+3. Associe cada linha (ex.: «10.º A · ING») a uma turma da app e confirme.
+!meuhorario-naoletivo | Novo Tempo Não Letivo: tipo (DT, DT-AP, Biblioteca, Apoio…), sigla, designação, dia, tempos, frequência, data e observações.
+> Exemplo: tem «Apoio a alunos» à sexta das 11:45 às 12:30. Toque em **Acrescentar**, escolha o tipo «Apoio», o dia «Sex», toque no tempo 11:45–12:30 e em **Guardar**.
+!meuhorario-baixo | A grelha semanal completa.
+
+# O Meu Calendário
+Menu **O Meu Calendário**. Uma agenda pessoal ao estilo do Outlook que junta as suas aulas, reuniões, testes, tarefas, Provas agendadas e o calendário escolar com os seus próprios eventos.
+!meucal-Mês | Vista Mês: calendário pequeno, os seus calendários e as camadas da EduSpruce à esquerda.
+## Vistas
+**Dia**, **3 dias**, **Semana de trabalho**, **Semana**, **Mês**, **Agenda** e **Ano letivo**. Use **Hoje**, ‹ › e o calendário pequeno para mudar de data.
+!meucal-Semana_de_trabalho | Semana de trabalho com as aulas, testes e tarefas.
+!!meucal-Dia,meucal-Agenda | Vista Dia e vista Agenda (lista).
+!meucal-Ano_letivo | Vista Ano letivo: todos os meses, com feriados, interrupções e testes.
+## Criar um evento
+!meucal-novo | Novo Evento: título, calendário, categoria, dia inteiro, início, fim, repetição, local, reunião online, lembretes, mostrar como, escola, privado e descrição.
+1. Toque em **Novo Evento** (ou num espaço vazio da grelha).
+2. Escreva o título, escolha o calendário (Pessoal, Trabalho, Família…) e as horas.
+3. Se se repetir, escolha a repetição (ex.: semanal, até ao fim do ano).
+4. Escolha os lembretes e toque em **Guardar**.
+> Exemplo de adição rápida: escreva na caixa «Adicionar rapidamente» o texto «Reunião de pais amanhã às 18h30» e carregue em +. O evento fica criado amanhã das 18:30 às 19:30.
+## Camadas
+Em **Os Meus Calendários** e **Da EduSpruce** ligue ou desligue: Aulas (horário), Reuniões, Testes e avaliações, Tarefas, Provas agendadas e Calendário escolar. **Adicionar calendário** cria um novo com cor própria.
+? Os eventos marcados como **Privado** aparecem só como «Ocupado» no modo de apresentação. Use **.ics** para importar ou exportar para o Outlook, Google Calendar ou Calendário da Apple, e a impressora para imprimir a vista.

@@ -1,0 +1,16 @@
+import {shot,fim,E,pg} from './cap.mjs';
+const R0=`UI.arEd=null;UI.pvEd=null;UI.puEd=null;UI.puVivo=null;UI.puRel=null;UI.fmId=null;UI.fmTab=null;`;
+const G=v=>`(()=>{${R0}go('${v}');document.getElementById('view').scrollTo(0,0);return 1})()`;
+const tab=(sel,t)=>`(()=>{const b=[...document.querySelectorAll('${sel}')].find(x=>x.innerText.trim().replace(/\\s+/g,' ').startsWith(${JSON.stringify(t)}));if(!b)throw new Error('tab '+${JSON.stringify(t)});b.click();return 1})()`;
+await shot('arena-importar',[G('arena'),'@Importar',700]);
+await shot('pulso-relatorios',[G('pulso'),tab('#main .putabs button','Relatórios'),800]);
+await shot('pulso-nova-sala',[G('pulso'),'@Nova Sala',800]);
+await shot('pulso-lancar',[G('pulso'),tab('#main .putabs button','Quizzes'),'@Lançar',900]);
+await shot('forms-editor',[`(()=>{${R0}UI.fmId=FMS().find(f=>/Inquérito/.test(f.titulo)).id;go('forms');return 1})()`,1000]);
+await shot('forms-editor-2',['S:700'],{keep:true});
+await shot('forms-quiz',[`(()=>{${R0}UI.fmId=FMS().find(f=>/Mini-teste/.test(f.titulo)).id;go('forms');return 1})()`,1000]);
+const tabsF=JSON.parse(await E(`JSON.stringify([...document.querySelectorAll('#main .seg button,#main .tabs button,#main [role=tab]')].filter(b=>b.getClientRects().length).map(b=>b.innerText.trim()))`));console.log('forms tabs',tabsF);
+for(const t of tabsF.slice(0,6))await shot('forms-quiz-'+t.replace(/[^A-Za-zÀ-ú]+/g,'_'),[`(()=>{${R0}UI.fmId=FMS().find(f=>/Mini-teste/.test(f.titulo)).id;go('forms');return 1})()`,700,tab('#main .seg button,#main .tabs button,#main [role=tab]',t),800]);
+await shot('forms-recolher',[G('forms'),'@Recolher',900]);
+await shot('arena-novo-jogo-ar',[G('arena'),'@Jogar',900]);
+await fim();
