@@ -510,3 +510,10 @@ html body .fer-nuv{animation:ferNuv 12s ease-in-out infinite alternate}
 @keyframes ferEnt{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){html body .fer-w *{animation:none!important}}
 `;document.head.appendChild(s)}
+/* 1.107 — Notas Flutuantes passam a módulo opcional (em Definições › Módulos Opcionais; sai da Aparência) */
+try{const g=MOD_GR.find(x=>x[0]==='Organização');if(g)g[2].push(['mod-nf','notasf','pencil']);Object.assign(HUB_SGE_DEF,{notasf:'sgeAmbar'})}catch(_){}
+{const _mgNf=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-nf')&&typeof nfOn==='function'){
+  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-nf" ${nfOn()?'checked':''}> ${ic('pencil',15)} <span><b>Notas Flutuantes</b><br><span class="mut">Post-its por cima de qualquer página (botão no canto e atalho Alt+N); cada nota em todas as páginas ou só numa</span></span></label>`);
+  const c=M.querySelector('#mod-nf');c.onchange=()=>{S.cfg.notasOn=c.checked;save();try{nfRender(true)}catch(_){}toast('Notas Flutuantes '+(c.checked?'ativadas':'desativadas'),'ok')}}}catch(e){console.warn(e)}
+  return _mgNf.apply(this,arguments)}}
+if(typeof vDefinicoes==='function'){const _vdNf=vDefinicoes;vDefinicoes=function(){const r=_vdNf.apply(this,arguments);try{const c=$('#view #nf-cfg');if(c)c.remove()}catch(_){}return r}}

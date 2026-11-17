@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.107
+- Notas Flutuantes passam a módulo opcional (Definições › Módulos Opcionais › Organização)
+
 ## 1.106
 - Início: cartão «Ano letivo terminado» com ilustração animada (sol, palmeira e mar), texto centrado e espaçamento corrigido
 
