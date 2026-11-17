@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.068
+- Barra das EduApps no tema SGE: botões no azul do cabeçalho (contorno branco, cantos retos) e o botão principal em branco
+
 ## 1.067
 - Spruce It, Pulso, Formulários e Provas abrem em ecrã inteiro como o EduSchedule: sem o menu nem a barra da EduSpruce, com o ícone da casa para voltar
 

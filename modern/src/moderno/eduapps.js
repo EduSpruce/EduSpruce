@@ -23,4 +23,10 @@ html body #eabar .eanome{display:flex;align-items:center;gap:6px;font-weight:700
 html body #eabar .easp{flex:1}
 html body #eabar #barx{display:flex;flex-wrap:wrap;gap:6px;margin:0}
 html body.est-sge #eabar{background:#11729a;color:#fff;border:0}
-html body.est-sge #eabar .eacasa{background:transparent;color:#fff;border-color:rgba(255,255,255,.6);border-radius:0}`;document.head.appendChild(st)}
+html body #eabar #barx .btn,html body #eabar .eacasa{min-height:38px;padding:0 14px;display:inline-flex;align-items:center;gap:7px;font-weight:600;border-radius:10px;box-shadow:none}
+html body #eabar .eacasa{padding:0;width:38px;justify-content:center}
+html body.est-sge #eabar #barx .btn,html body.est-sge #eabar .eacasa{background:transparent!important;color:#fff!important;border:1px solid rgba(255,255,255,.55)!important;border-radius:0!important}
+html body.est-sge #eabar #barx .btn:hover,html body.est-sge #eabar .eacasa:hover{background:rgba(255,255,255,.14)!important;border-color:#fff!important}
+html body.est-sge #eabar #barx .btn.pri,html body.est-sge #eabar #barx .btn.primary{background:#fff!important;color:#11729a!important;border-color:#fff!important}
+html body.est-sge #eabar #barx .btn.pri:hover,html body.est-sge #eabar #barx .btn.primary:hover{background:#e6f3f8!important}
+html body.est-sge #eabar #barx .btn svg,html body.est-sge #eabar .eacasa svg{stroke:currentColor}`;document.head.appendChild(st)}
