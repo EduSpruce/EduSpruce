@@ -532,3 +532,13 @@ const nfModAplica=()=>{try{document.body.classList.toggle('modoff-nf',typeof nfO
 setTimeout(nfModAplica,400);setTimeout(nfModAplica,2500);{const _gNf=go;go=function(){const r=_gNf.apply(this,arguments);nfModAplica();return r};if(_gNf._f)go._f=_gNf._f}
 document.addEventListener('change',e=>{if(e.target&&(e.target.id==='mod-nf'||e.target.id==='nf-on'))setTimeout(nfModAplica,0)});
 {const s=document.createElement('style');s.textContent='html body.modoff-nf #nffab:not(#_a):not(#_b),html body.modoff-nf #nflayer,html body #nffab[hidden]:not(#_a):not(#_b),html body #nflayer[hidden]{display:none!important}';document.head.appendChild(s)}
+/* 1.110 — JornalNote passa a módulo opcional próprio: desligado, não aparece mesmo com o cargo do Jornal (o Jornal Escolar já tinha o seu) */
+const jnnModOn=()=>{try{return !(S.cfg&&S.cfg.modulos&&S.cfg.modulos.jornalnote===false)}catch(_){return true}};
+try{const a=HUB_APPS.find(x=>x.id==='jornalnote');if(a){const o=a.on;a.on=()=>jnnModOn()&&(!o||o())}
+  const g=MOD_GR.find(x=>x[0]==='Escola e Comunicação');if(g){const i=g[2].findIndex(x=>x[1]==='jornal');g[2].splice(i<0?g[2].length:i+1,0,['mod-jnn','jornalnote'])}}catch(e){console.warn(e)}
+{const _mgJn=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-jnn')){
+  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-jnn" ${jnnModOn()?'checked':''}> ${ic('pen',15)} <span><b>JornalNote</b><br><span class="mut">Quadros de ideias do Jornal Escolar (precisa do Jornal Escolar e do SpruceNote ligados)</span></span></label>`);
+  const c=M.querySelector('#mod-jnn');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.jornalnote;else S.cfg.modulos.jornalnote=false;save();try{hubMenuMods();menuAgendar()}catch(_){}toast('JornalNote '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
+  return _mgJn.apply(this,arguments)}}
+{const _gJn=go;go=function(v){if(v==='snjornal'&&!jnnModOn())v='inicio';const r=_gJn.apply(this,[v].concat([].slice.call(arguments,1)));try{hubMenuMods()}catch(_){}return r};if(_gJn._f)go._f=_gJn._f}
+setTimeout(()=>{try{hubMenuMods()}catch(_){}},1800);
