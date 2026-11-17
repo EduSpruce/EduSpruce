@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.030
+- Módulo Provas (provas.js + provas.html), independente do Forms
+- Migração 0015_provas.sql
+- Forms: tipos de avaliação digital passam para as Provas
+
 ## 1.029
 - Ícone do curso no distintivo das turmas profissionais/PROFIJ
 
