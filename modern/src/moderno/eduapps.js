@@ -22,11 +22,12 @@ html body.eduapp #bar #barx{grid-area:x!important;justify-content:flex-end!impor
 html body #bar #eacasa[hidden]{display:none!important}
 html body.est-sge #bar #eacasa{border-radius:0}`;document.head.appendChild(st)}
 
-/* 1.077: a cor de cada app (a mesma das Apps) também no ícone do menu lateral e no topo de cada app */
+/* a cor de cada app (a mesma das Apps) no ícone do cabeçalho de cada app; o menu lateral fica com os ícones brancos */
 function eaCores(){try{if(typeof HUB_APPS==='undefined')return;let st=document.getElementById('eacores');if(!st){st=document.createElement('style');st.id='eacores';document.head.appendChild(st)}
-  st.textContent=HUB_APPS.map(a=>{const c=hubCor(a)[0];return `html body #side [data-v="${a.v}"]:not(.on) svg,html body #side [data-v="${a.v}"]:not(.on) [data-ico]{color:${c}!important}`}).join('\n')
+  st.textContent=HUB_APPS.map(a=>{const [c,c2]=hubCor(a);return `html body[data-eaapp="${a.v}"] #view :is(.pulogo,.pqlogo,.fmlogo){background:linear-gradient(145deg,${c},${c2})!important;color:#fff!important}html body[data-eaapp="${a.v}"] #view .sph-logo em{background:${c}!important;color:#fff!important}`}).join('\n')
+   +`\nhtml body.est-sge #view :is(.pulogo,.pqlogo,.fmlogo){border-radius:0!important}`
    +`\nhtml body #bar #eaic{flex:0 0 auto;display:inline-flex}html body #bar #eaic[hidden]{display:none!important}html body #bar #eaic .hbic{box-shadow:none}html body.est-sge #bar #eaic .hbic{border-radius:0}`;
-  const t=document.querySelector('#bar .ttlw');if(!t)return;const a=HUB_APPS.find(x=>x.v===VIEW);let s=document.getElementById('eaic');
-  if(EDUAPPS[VIEW]&&a){try{hubCss()}catch(_){}if(!s){s=document.createElement('span');s.id='eaic';const c=document.getElementById('eacasa');t.insertBefore(s,c?c.nextSibling:t.firstChild)}s.innerHTML=hubIcone(a,32);s.hidden=false}else if(s)s.hidden=true}catch(e){console.warn(e)}}
+  const a=HUB_APPS.find(x=>x.v===VIEW);if(a)document.body.dataset.eaapp=a.v;else delete document.body.dataset.eaapp;const t=document.querySelector('#bar .ttlw');if(!t)return;let s=document.getElementById('eaic');
+  if(s)s.remove()}catch(e){console.warn(e)}}
 {const _gEc=go;go=function(v){const r=_gEc.apply(this,arguments);eaCores();return r};Object.assign(go,_gEc);go._f=_gEc._f}
 setTimeout(eaCores,0);

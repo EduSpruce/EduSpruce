@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.079
+- O ícone no cabeçalho de cada app (Pulso, Formulários, Provas, Spruce It) usa a cor da app, igual às Apps
+- Menu lateral volta aos ícones brancos; sai o ícone repetido no topo
+
 ## 1.078
 - Cada app usa a sua cor também no ícone do menu lateral e no topo da app
 
