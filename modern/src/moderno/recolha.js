@@ -517,3 +517,13 @@ try{const g=MOD_GR.find(x=>x[0]==='Organização');if(g)g[2].push(['mod-nf','not
   const c=M.querySelector('#mod-nf');c.onchange=()=>{S.cfg.notasOn=c.checked;save();try{nfRender(true)}catch(_){}toast('Notas Flutuantes '+(c.checked?'ativadas':'desativadas'),'ok')}}}catch(e){console.warn(e)}
   return _mgNf.apply(this,arguments)}}
 if(typeof vDefinicoes==='function'){const _vdNf=vDefinicoes;vDefinicoes=function(){const r=_vdNf.apply(this,arguments);try{const c=$('#view #nf-cfg');if(c)c.remove()}catch(_){}return r}}
+/* 1.108 — SpruceNote Web Clipper passa a módulo opcional (desligado: o atalho do Início desaparece) */
+const snwModOn=()=>{try{return !(S.cfg&&S.cfg.modulos&&S.cfg.modulos.snweb===false)}catch(_){return true}};
+const snwModAplica=()=>{try{document.body.classList.toggle('modoff-snweb',!snwModOn())}catch(_){}};
+try{const g=MOD_GR.find(x=>x[0]==='Organização');if(g)g[2].push(['mod-snw','snweb','download']);Object.assign(HUB_SGE_DEF,{snweb:'sgeTerra'})}catch(_){}
+{const _mgSw=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-snw')){
+  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-snw" ${snwModOn()?'checked':''}> ${ic('download',15)} <span><b>SpruceNote Web Clipper</b><br><span class="mut">Extensão do Chrome para guardar imagens, texto, ligações e vídeos da web nos quadros do SpruceNote (atalho no Início)</span></span></label>`);
+  const c=M.querySelector('#mod-snw');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.snweb;else S.cfg.modulos.snweb=false;save();snwModAplica();toast('SpruceNote Web Clipper '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
+  return _mgSw.apply(this,arguments)}}
+setTimeout(snwModAplica,400);{const _gSw=go;go=function(){const r=_gSw.apply(this,arguments);snwModAplica();return r};if(_gSw._f)go._f=_gSw._f}
+{const s=document.createElement('style');s.textContent='html body.modoff-snweb .snw-chip{display:none!important}';document.head.appendChild(s)}
