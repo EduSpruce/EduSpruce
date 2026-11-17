@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.122
+- Início: cartão Próximas Tarefas com estado vazio maior e mais claro («Tudo em dia»)
+
 ## 1.121
 - Turmas PROFIJ: já não pede a «Disciplina que leciona nesta turma» — basta assinalar as disciplinas e UFCD do referencial
 - Corrigido o erro «startsWith» ao usar o teclado na vista Turmas (e noutras vistas)

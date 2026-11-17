@@ -8,3 +8,9 @@ html body .jn-w0 .jw-vazio b{display:block;font-size:14px;margin-bottom:2px}
 html body .jn-w0 .jw-vazio span:not(.jw-vi){display:block;font-size:13px;line-height:1.45;color:var(--mut,#5b6573)}
 html body .jn-w0 .jw-imp{margin-top:10px}
 html body.est-sge .jn-w0 .jw-vazio,html body.est-sge .jn-w0 .jw-vi{border-radius:0}
+/* 1.122 — cartão Próximas Tarefas: estado vazio maior e mais claro */
+html body .td-vazio{display:flex;gap:14px;align-items:center;margin-top:12px;padding:16px 18px;border:1px dashed var(--line,#d5dbe3);border-radius:var(--r,10px);background:color-mix(in srgb,#2e9d5b 6%,transparent)}
+html body .td-vi{flex:0 0 48px;width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r,10px);background:color-mix(in srgb,#2e9d5b 16%,transparent);color:#2e9d5b}
+html body .td-vazio b{display:block;font-size:16px;margin-bottom:3px}
+html body .td-vazio span:not(.td-vi){display:block;font-size:14px;line-height:1.45;color:var(--mut,#5b6573)}
+html body.est-sge .td-vazio,html body.est-sge .td-vi{border-radius:0}
