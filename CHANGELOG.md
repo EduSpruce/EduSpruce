@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.055
+- Apps: mosaicos alinhados à esquerda
+
 ## 1.054
 - Início: barra com as apps em ícones pequenos, à direita
 
