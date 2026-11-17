@@ -49,7 +49,7 @@ function perfilAluno(aid,opt){opt=opt||{};const t=T();if(!t)return;const a=t.alu
     const melh=ok.filter(x=>!fortesIds.has(x.d.id)&&(x.v<.695||x.v<media-.05)).sort((x,y)=>x.v-y.v).slice(0,2);if(!melh.length&&ok.length>1){const lo=ok.slice().sort((x,y)=>x.v-y.v)[0];if(!fortesIds.has(lo.d.id))melh.push(lo)}
     const autoMed=_avg(Object.values(AV.dom||{}).map(Number).filter(Boolean).map(v=>(v-.5)/4));
     const gap=autoMed!=null&&media!=null?autoMed-media:null;const F=a.faltasAl||[];const tf=k=>F.filter(f=>f.tipo===k).reduce((s,f)=>s+(+f.tempos||1),0);
-    const md=a.medidas||{};const mlist=[...(md.univ||[]),...(md.selet||[]),...(md.adic||[])];
+    const md=a.medidas||{};const mlist=['univ','selet','adic'].flatMap(k=>(md[k]||[]).map(i=>typeof i==='number'?((MEDIDAS[k]||{}).l||[])[i]:i)).filter(Boolean);
     const nomeAl=proj&&S.cfg.perfilAnon?inic:a.nome;
     o.innerHTML=`<div class="pah"><button class="btn" type="button" id="pa-x">${ic('arrowL',16)} Fechar</button><div class="pat"><b>Perfis de Aprendizagem</b><span>${esc(t.nome)} · ${esc(t.disciplina)}</span></div><span class="sp1"></span>
       <div class="estps" role="group" aria-label="${W}">${X.P.map(q=>`<button type="button" class="${q===p?'on':''}" data-pap="${q}" aria-pressed="${q===p}">${q}.º ${W.slice(0,3)}.</button>`).join('')}</div>
@@ -83,7 +83,7 @@ function perfilAluno(aid,opt){opt=opt||{};const t=T();if(!t)return;const a=t.alu
         <div><label for="pa-estr">Como vou lá chegar</label><textarea id="pa-estr" rows="2" placeholder="${esc(melh[0]?(PED[melh[0].cat]||PED.cn).e[0]:'ex.: rever a matéria todas as semanas')}">${esc(AV.plano.estr||'')}</textarea></div>
         <div><label for="pa-apoio">O que preciso do professor</label><textarea id="pa-apoio" rows="2" placeholder="ex.: feedback nos textos escritos">${esc(AV.plano.apoio||'')}</textarea></div></div></section>`:''}
       ${show.atitudes?`<section class="pc"><h2>${ic('calendar',16)} Assiduidade e Atitudes</h2><div class="dchs sm">${[['injust','Injustificadas','#dc2626'],['just','Justificadas','#64748b'],['atraso','Atrasos','#d97706'],['material','Sem material','#7a4fd0'],['disc','Disciplinares','#b91c1c']].map(([k,l,c])=>`<div class="dch" style="--ac:${c}"><b>${tf(k)}</b><span>${l}</span></div>`).join('')}</div></section>`:''}
-      ${show.apoio&&(mlist.length||(a.acomod||[]).length)?`<section class="pc"><h2>${ic('shield',16)} Medidas de Apoio</h2><ul class="pmed">${mlist.map(x=>`<li>${esc(typeof x==='string'?x:(x.nome||x.t||''))}</li>`).join('')}${(a.acomod||[]).map(x=>`<li class="mut">${esc(typeof x==='string'?x:(x.nome||x.t||''))}</li>`).join('')}</ul></section>`:''}
+      ${show.apoio&&(mlist.length||(a.acomod||[]).length)?`<section class="pc"><h2>${ic('shield',16)} Medidas de Apoio</h2><ul class="pmed">${mlist.map(x=>`<li>${esc(typeof x==='string'?x:(x.nome||x.t||''))}</li>`).join('')}${(a.acomod||[]).map(x=>`<li class="mut">${esc(typeof x==='object'&&x?(x.nome||x.t||''):acT(x))}</li>`).join('')}</ul></section>`:''}
       </div></div>`;
     o.querySelector('#pa-x').onclick=fechar;o.querySelectorAll('[data-pap]').forEach(b=>b.onclick=()=>{p=+b.dataset.pap;desenha()});
     o.querySelector('#pa-proj').onclick=()=>{proj=!proj;try{if(proj&&o.requestFullscreen)o.requestFullscreen().catch(()=>{});else if(!proj&&document.fullscreenElement)document.exitFullscreen()}catch(_){}desenha()};

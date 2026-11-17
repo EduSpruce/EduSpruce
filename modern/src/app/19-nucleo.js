@@ -109,6 +109,9 @@ const MEDIDAS={
 };
 const DOCS=['Relatório Técnico-Pedagógico (RTP)','Programa Educativo Individual (PEI)','Plano Individual de Transição (PIT)'];
 const ACOMOD=['Localização do aluno na sala de aula','Informação multimédia / gráficos / esquemas','Verificação da compreensão das instruções','Apresentação/simulação de exemplos','Registo de anotações','Segmentação de conteúdos/processos executivos','Abordagem através da manipulação','Facultar tempo para questões','Ensino de vocabulário específico','Tempo suplementar na realização de provas','Recorrer às tecnologias digitais','Recurso a apontamentos pessoais','Itens de resposta fechada / seleção'];
+/* acomodações: índice do catálogo ACOMOD ou texto livre (dados antigos/importados) — nunca «texto»+1 */
+function acIdx(i){if(typeof i==='number')return i;const k=normT(String(i||''));if(!k)return -1;let j=ACOMOD.findIndex(x=>normT(x)===k);if(j<0&&/tempo/.test(k)&&/(teste|prova|ficha)/.test(k))j=9;return j}
+const acT=i=>{const j=acIdx(i);return j>=0?ACOMOD[j]:String(i||'')};const acN=i=>{const j=acIdx(i);return j>=0?String(j+1):String(i||'')};const acL=i=>{const j=acIdx(i);return j>=0?(j+1)+'. '+ACOMOD[j]:String(i||'')};
 const SINTESE_DEF={
   'Insuficiente':'Em {dom}, {oa} {aluno} revela dificuldades significativas, não tendo ainda atingido as aprendizagens essenciais. Precisa de reforçar o trabalho regular e de recorrer aos apoios disponíveis.',
   'Suficiente':'Em {dom}, {oa} {aluno} atinge as aprendizagens essenciais de forma satisfatória, embora com algumas lacunas que deve continuar a trabalhar.',

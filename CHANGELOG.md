@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.045
+- Correções: acomodações escritas como texto deixam de aparecer com um número colado; nos Perfis de Aprendizagem, as medidas de apoio aparecem pelo nome em vez de pontos vazios.
+
 ## 1.044
 - Perfis de Aprendizagem: ao lado do radar, gráfico de linhas com a classificação de cada período, a evolução de cada domínio (nas cores dos domínios) e a média da turma (quando a comparação está visível).
 

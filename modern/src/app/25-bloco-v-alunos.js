@@ -115,7 +115,7 @@ async function exportarMsaiPdf(t,alunos,opts){opts=opts||{};const a=A();const c=
     L.forEach((al,ri)=>{const m=al.medidas||{},ob=al.medObs||{};
       const cel={n:[String(al.num||'')],nome:pdfWrap(al.nome+(al.origem&&t.origens?' ('+al.origem+')':''),118-2*PAD,FS+.4,true)};
       grupos.forEach(k=>{const g=MEDIDAS[k];let it=(m[k]||[]).slice().sort((p,q)=>p-q).map(i=>'• '+g.l[i]);
-        if(k==='univ'&&(al.acomod||[]).length)it.push('Acomodações: '+al.acomod.slice().sort((p,q)=>p-q).map(i=>ACOMOD[i]).join('; '));
+        if(k==='univ'&&(al.acomod||[]).length)it.push('Acomodações: '+al.acomod.slice().sort((p,q)=>acIdx(p)-acIdx(q)).map(acT).join('; '));
         if(k==='rec'){DOCS.forEach((d,i)=>{if(al.docs&&al.docs[i]&&al.docs[i].on)it.push('› '+d)})}
         const o=ob[k]&&Object.values(ob[k]).filter(Boolean).join('; ');if(o)it.push('Obs.: '+o);
         const cw=cols.find(c=>c.k===k).w-2*PAD;cel[k]=it.length?it.flatMap(s=>pdfWrap(s,cw,FS).map((l,i)=>s.startsWith('Obs.:')&&i?'\u200b'+l:l)):['—']});
@@ -152,13 +152,13 @@ function vMsai(t,al){
       <tr>${G.map(({g,cols})=>cols.map(c=>`<th class="v" style="--gc:${g.cor}"><div><b>${String.fromCharCode(97+c.i)})</b> ${esc(c.x)}</div></th>`).join('')).join('')}</tr></thead><tbody>
       ${L.map(a=>`<tr data-fi="${a.id}"><td class="stc0">${numA(a)}</td><td class="nm stc1">${esc(a.nome)}${cargoTag(a)}</td>
         ${G.map(({k,g,cols})=>cols.map(c=>{const on=has(a,k,c.i);return `<td class="${on?'x':''}" style="${on?'background:'+g.cor:''}">${on?'✓':''}</td>`}).join('')).join('')}
-        ${usaAc?`<td class="ac">${esc((a.acomod||[]).map(i=>i+1).join(', '))}</td>`:''}${DC.map(d=>`<td>${a.docs&&a.docs[d.i]&&a.docs[d.i].on?'✓':''}</td>`).join('')}</tr>`).join('')}
+        ${usaAc?`<td class="ac">${esc((a.acomod||[]).map(acN).join(', '))}</td>`:''}${DC.map(d=>`<td>${a.docs&&a.docs[d.i]&&a.docs[d.i].on?'✓':''}</td>`).join('')}</tr>`).join('')}
     </tbody></table></div>`;
   const cartoes=()=>`<div class="mscards">${L.map(a=>{const sec=Object.entries(MEDIDAS).map(([k,g])=>({g,l:g.l.map((x,i)=>({x,i})).filter(c=>has(a,k,c.i))})).filter(s=>s.l.length);
       const docs=DOCS.filter((d,i)=>a.docs&&a.docs[i]&&a.docs[i].on).map(d=>(d.match(/\((\w+)\)/)||[])[1]||d);
       return `<button class="mscard" data-fi="${a.id}"><div class="msh"><span class="n">${numA(a)}</span><b>${esc(a.nome)}</b>${cargoTag(a)}<span class="sp1"></span>${docs.map(d=>`<span class="tag">${esc(d)}</span>`).join(' ')}</div>
         ${sec.map(s=>`<div class="mss" style="--gc:${s.g.cor}"><div class="mst">${esc(tcap(s.g.t))} <span>${esc(s.g.art.replace(/^art/,'Art'))}</span></div><ul>${s.l.map(c=>`<li><b>${String.fromCharCode(97+c.i)})</b> ${esc(c.x)}</li>`).join('')}</ul></div>`).join('')}
-        ${(a.acomod||[]).length?`<div class="mss" style="--gc:#5b6b7f"><div class="mst">Acomodações Curriculares</div><ul>${a.acomod.map(i=>`<li><b>${i+1}.</b> ${esc(ACOMOD[i])}</li>`).join('')}</ul></div>`:''}
+        ${(a.acomod||[]).length?`<div class="mss" style="--gc:#5b6b7f"><div class="mst">Acomodações Curriculares</div><ul>${a.acomod.map(i=>acIdx(i)>=0?`<li><b>${acIdx(i)+1}.</b> ${esc(acT(i))}</li>`:`<li>${esc(acT(i))}</li>`).join('')}</ul></div>`:''}
         ${!sec.length&&!(a.acomod||[]).length&&!docs.length?'<div class="mut">Sem medidas assinaladas.</div>':''}</button>`}).join('')}</div>`;
   $('#view').innerHTML=`<div class="card wide">
     <div class="row" style="margin-bottom:10px"><h2 style="margin:0">${ic('access')} Quadro MSAI — ${esc(t.nome)}</h2><span class="mut">${nCom} aluno${nCom===1?'':'s'} com medidas</span><span class="sp1"></span>${alTabs('msai')}</div>
@@ -176,7 +176,7 @@ function vMsai(t,al){
 }
 function medidasTxt(a){const m=a.medidas||{};return Object.entries(MEDIDAS).filter(([k])=>(m[k]||[]).length).map(([k,g])=>g.ab+'('+m[k].length+')').join(' ')}
 function msaiBadges(a){const m=a.medidas||{};const b=Object.entries(MEDIDAS).filter(([k])=>(m[k]||[]).length).map(([k,g])=>`<span class="mb" style="background:${g.cor}" title="${esc(g.t)}: ${esc(m[k].map(i=>String.fromCharCode(97+i)+') '+g.l[i]).join('; '))}">${g.ab} ${m[k].map(i=>String.fromCharCode(97+i)).join('')}</span>`);
-  if((a.acomod||[]).length)b.push(`<span class="mb" style="background:#5b6b7f" title="Acomodações: ${esc(a.acomod.map(i=>(i+1)+'. '+ACOMOD[i]).join('; '))}">Ac ${a.acomod.length}</span>`);
+  if((a.acomod||[]).length)b.push(`<span class="mb" style="background:#5b6b7f" title="Acomodações: ${esc(a.acomod.map(acL).join('; '))}">Ac ${a.acomod.length}</span>`);
   return b.join(' ')}
 function importDlg(r){
   const t=T();
