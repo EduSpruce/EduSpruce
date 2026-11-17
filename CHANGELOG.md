@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.061
+- Página dos alunos passa a spruceit.html (arena.html reencaminha)
+- Espelho inclui fontes/ e spruceit.html
+
 ## 1.060
 - Spruce It (antiga Arena): aspeto novo com 4 temas, ecrã próprio sem menu lateral
 - Lançar jogo em dois passos

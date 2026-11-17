@@ -14,7 +14,7 @@ Responder sempre em português, curto. Versões 0.900–0.999 (nunca 1.0); a atu
 ## Onde está cada coisa
 - Fonte da app: `modern/src/app/` (módulos = index.html byte a byte; `modern/scripts/partir.py juntar|partir|conferir`). Na sessão: `/home/claude/edugest/index.html`.
 - Só na versão com base de dados: `modern/src/moderno/` (basedados, autoav, digit, arena-comum + arena, pulso), juntados por `modern/scripts/db.mjs`, que também aplica `modern/src/moderno/patches.json` (agora versionado no Git).
-- Páginas dos alunos: `aluno.html`, `modern/src/arena/arena.html` → `arena.html`, `modern/src/pulso/pulso.html` → `pulso.html`.
+- Páginas dos alunos: `aluno.html`, `modern/src/arena/arena.html` → `spruceit.html` (1.061; `arena.html` só reencaminha), `modern/src/pulso/pulso.html` → `pulso.html`.
 - SQL para correr no Supabase: `modern/supabase/migrations/` (último: `0016_avisos_push.sql`).
 - Espelho para a rede da escola: repositório `EduSpruce/eduspruce.github.io`.
 

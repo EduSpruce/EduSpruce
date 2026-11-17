@@ -8,7 +8,7 @@ const arD=()=>{S.arena=S.arena||{};const d=S.arena;d.conj=d.conj||[];d.jogos=d.j
 const arMoedasOn=()=>S.cfg.arenaMoedas!==false;
 async function arRpc(fn,args){const p=await sbObter();const c=p.cliente;if(!c||!c.rpc)throw new Error('A base de dados não está disponível.');const {data,error}=await c.rpc(fn,args||{});
   if(error){const m=String(error.message||error.code||error);if(/function .* does not exist|PGRST202|Could not find the function/i.test(m)){const e=new Error('A Arena ainda não está instalada na base de dados: falta correr o ficheiro 0012_arena.sql no Supabase.');e.semSql=true;throw e}throw new Error(m)}return data}
-const arUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'arena.html#'+AR.limpaCod(c);
+const arUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'spruceit.html#'+AR.limpaCod(c);
 const arTempos=[5,10,15,20,30,45,60,90,120];
 const arCores=['#e2453c','#1f7fd0','#e9a400','#2f9e44'];
 const arFormas=['▲','◆','●','■'];
@@ -39,7 +39,7 @@ function vArena(){if(!arOn())return go('inicio');const d=arD();if(!d.conj.length
   if(UI.arEd){const c=d.conj.find(x=>x.id===UI.arEd);if(c)return arEditor(c);UI.arEd=null}
   const tab=UI.arTab||'conj';
   barBtns(tab==='conj'?[{id:'ar-imp',t:ic('upload',15)+' Importar CSV/Excel',f:()=>arImportarDlg()},{id:'ar-novo',t:ic('plus',15)+' Novo Conjunto',c:'pri',f:()=>{const c={id:uid(),nome:'Novo conjunto',disc:(T()||{}).disciplina||'',turma:'',tema:'',pasta:'',criado:Date.now(),mod:Date.now(),perg:[{id:uid(),tp:'mc',t:'',o:['','','',''],c:0,s:20}]};d.conj.unshift(c);save();UI.arEd=c.id;vArena()}}]:[{id:'ar-atu',t:ic('refresh',15)+' Atualizar',f:()=>vArena()}]);
-  const head=`<div class="card arhead"><div class="row" style="gap:12px;flex-wrap:wrap"><span class="arlogo">${AR.svg('p11',46)}</span><div style="flex:1;min-width:200px"><h2 style="margin:0">Spruce It</h2><span class="mut">Jogos de perguntas em tempo real para a turma. Os alunos entram em <b>arena.html</b> com o código da sala, sem contas.</span></div></div>
+  const head=`<div class="card arhead"><div class="row" style="gap:12px;flex-wrap:wrap"><span class="arlogo">${AR.svg('p11',46)}</span><div style="flex:1;min-width:200px"><h2 style="margin:0">Spruce It</h2><span class="mut">Jogos de perguntas em tempo real para a turma. Os alunos entram em <b>spruceit.html</b> com o código da sala, sem contas.</span></div></div>
     <div class="tabs artabs"><button data-artab="conj" class="${tab==='conj'?'on':''}">${ic('layers',14)} Conjuntos de Perguntas</button><button data-artab="jogos" class="${tab==='jogos'?'on':''}">${ic('chart',14)} Jogos e Relatórios</button></div></div>`;
   let body='';
   if(tab==='conj'){const F=UI.arF=UI.arF||{disc:'',turma:'',q:''};const q=normT(F.q||'');
