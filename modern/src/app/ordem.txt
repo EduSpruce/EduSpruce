@@ -54,8 +54,8 @@
 54-profij-ensino-profissional.js
 55-v1-011-ajuda-atualizada-todos-os.js
 56-v1-020-menu-lateral-organizado-por.js
-57-msai-catalogo-como-no-sge-data.js
-58-pautas-oficiais-profij-fpct-e-classificacao.js
-59-v1-026-privacidade-no-modo-de.js
-60-v1-026-ajuda-privacidade-em-teste.js
+57-sprucenote-e-jornalnote-todos-os-elementos.js
+58-perfil-onde-estou-e-como-avancar.js
+59-bloco-pin-ok.js
+60-v1-026-desempenho-em-computadores-mais.js
 61-fecho.html

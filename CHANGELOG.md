@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.031
+- O Meu Calendário (clone do Outlook)
+- Provas: Word/PDF, Explorar, áudio, fórmulas, acompanhamento ao vivo, relatórios
+- Tema SGE coerente; PROFIJ sem número no ícone
+
 ## 1.030
 - Módulo Provas (provas.js + provas.html), independente do Forms
 - Migração 0015_provas.sql

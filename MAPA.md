@@ -80,3 +80,7 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 - Tipos: escolha, vf, texto (curta/longa, contar, mat, rub), lacunas (modo arrastar/escolher/escrever, extraP), ordem (parc), ligar, tabela (cols, lins, marc, porLinha), legendar (img, marcas), segmentos (img, zonas); `dico` = dicotómica; `just`, `extra`, `resol`.
 - SQL: `modern/supabase/migrations/0015_provas.sql` (sessões até 4 MB e 62 dias, respostas até 200 000 caracteres, partilha `eduspruce_provas_partilha` + `provas_partilhar/importar/grupo/despartilhar`).
 - O Forms deixou de oferecer V/F, preencher e ligar e o modo exame (só aparecem em formulários antigos).
+
+## O Meu Calendário (1.031) — clone do Outlook
+- Código no fim de `56-…menu-lateral…js` (antes da âncora SpruceNote): `OCAL()` = `S.cal {ev, cals, cat, src, cfg}`; eventos `{d0,d1,h0,h1 (minutos),dia,rep{f,int,dias,ate,n},exc,ov,lemb,est,priv,cat,esc}`; `ocColetar(A,B)` junta aulas, reuniões, testes, tarefas, Provas e calendário escolar.
+- Tema SGE (`body.est-sge`): cantos retos nas Provas, no calendário e em `provas.html` (`D.quad`). Nunca usar o nome `A_` (é a configuração de autenticação).
