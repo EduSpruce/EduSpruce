@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.100
+- Apps › Personalizar: as setas para subir e descer os grupos passam a ver-se
+
 ## 1.099
 - Apps: em Personalizar pode mudar a ordem — arrastar os mosaicos (também para outro grupo) ou usar as setas; os grupos sobem e descem; botão Repor ordem
 

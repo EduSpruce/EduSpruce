@@ -334,7 +334,7 @@ if(typeof vHub==='function'){const _vHO=vHub;vHub=function(){hubOrdAplica();cons
 function hubOrdUI(){const vis=HUB_GRUPOS.filter(g=>HUB_APPS.some(a=>a.gr===g.id&&(!a.on||a.on())));const S0=[...$$('#view .hub-gr')];
   S0.forEach((s,k)=>{if(vis[k])s.dataset.gr=vis[k].id});if(!UI.hubEd)return;
   const top=$('#view .hub-bar');if(top&&hubCfg().ord&&!$('#hb-ordx')){top.insertAdjacentHTML('afterbegin',`<button class="btn" id="hb-ordx" title="Voltar à ordem original">${ic('undo',15)} Repor ordem</button>`);$('#hb-ordx').onclick=()=>{delete hubCfg().ord;save();vHub();toast('Ordem original reposta','ok')}}
-  S0.forEach((s,k)=>{const sec=s.querySelector('.hub-sec');if(sec)sec.insertAdjacentHTML('beforeend',`<span class="hbo-g"><button type="button" class="btn sm" data-hbg="-1" ${k?'':'disabled'} title="Subir o grupo">${ic('arrowUp',14)}</button><button type="button" class="btn sm" data-hbg="1" ${k<S0.length-1?'':'disabled'} title="Descer o grupo"><span style="display:inline-flex;transform:rotate(180deg)">${ic('arrowUp',14)}</span></button></span>`);
+  S0.forEach((s,k)=>{const sec=s.querySelector('.hub-sec');if(sec)sec.insertAdjacentHTML('beforeend',`<span class="hbo-g"><button type="button" class="btn sm" data-hbg="-1" ${k?'':'disabled'} title="Subir o grupo">↑</button><button type="button" class="btn sm" data-hbg="1" ${k<S0.length-1?'':'disabled'} title="Descer o grupo">↓</button></span>`);
     s.querySelectorAll('[data-hbg]').forEach(b=>b.onclick=e=>{e.stopPropagation();const d=+b.dataset.hbg;const o=S0[k+d];if(!o)return;d<0?o.before(s):o.after(s);hubOrdGuarda()})});
   let arr=null;
   $$('#view .hbt[data-hub]').forEach(t=>{t.draggable=true;t.insertAdjacentHTML('beforeend',`<span class="hbo-a"><span role="button" tabindex="0" data-hbm="-1" title="Mover para trás">‹</span><span role="button" tabindex="0" data-hbm="1" title="Mover para a frente">›</span></span>`);
@@ -352,6 +352,8 @@ html body .hub.edit .hbt[data-hub]{cursor:grab;position:relative}
 html body .hub.edit .hbt.hbo-arr{opacity:.45;outline:2px dashed var(--acc)}
 html body .hub.edit .hub-ilu{display:none}
 html body .hbo-g{margin-left:auto;display:inline-flex;gap:4px}
+html body .hbo-g>.btn{min-width:30px;font-size:16px;font-weight:700;line-height:1;justify-content:center}
+html body .hub.edit .hbt[data-hub] .hbtx{padding-right:64px}
 html body .hub-sec .hub-tur~.hbo-g{margin-left:8px}
 html body .hbo-a{position:absolute;right:6px;bottom:6px;display:inline-flex;gap:4px}
 html body .hbo-a>span{display:inline-flex;align-items:center;justify-content:center;width:26px;height:24px;border:1px solid var(--line);background:var(--panel);border-radius:6px;font-size:18px;line-height:1;color:var(--mut);cursor:pointer}
