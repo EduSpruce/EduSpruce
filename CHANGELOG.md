@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.086
+- Privacidade e Termos: explicam agora as páginas dos alunos (Formulários, Provas, Spruce It e Pulso), os avisos, o EduSchedule, os prazos de apagamento e como eliminar a conta
+- Textos da app: já não dizem «neste dispositivo» — os dados ficam guardados na sua conta
+- Páginas dos alunos: ligação para a Privacidade; no Spruce It já se pode ampliar a página
+- Telemóvel: os botões de cada instrumento já não se sobrepõem, as Apps ocupam a largura do ecrã e os dias de O Meu Calendário são mais fáceis de tocar
+- Alunos: «assinalar todos» pergunta antes de desfazer a escolha feita aluno a aluno
+
 ## 1.085
 - Início: barra das apps responsiva — os ícones ajustam o tamanho à largura do cartão e ocupam a largura toda no telemóvel
 

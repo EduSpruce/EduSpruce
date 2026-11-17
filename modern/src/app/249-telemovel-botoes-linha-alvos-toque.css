@@ -1,0 +1,6 @@
+/* ===================== telemóvel: botões de linha e alvos de toque ===================== */
+/* 1.086 · telemóvel: os botões de cada linha das tabelas em cartões (Digitalizar, Abrir, Duplicar, Apagar…) nunca se sobrepõem:
+   cada um tem pelo menos a largura do seu texto e passa para a linha de baixo se não couber */
+@media (max-width:700px){html body #view td.act{flex-wrap:wrap!important}html body #view td.act>.btn{flex:0 1 auto!important;min-width:max-content!important}}
+/* O Meu Calendário (mês): o número do dia é um botão — no telemóvel e em ecrãs de toque tem pelo menos 26 px de altura (alvo mínimo de toque) */
+@media (max-width:700px),(pointer:coarse){html body .ocdn{min-height:26px;min-width:28px}}

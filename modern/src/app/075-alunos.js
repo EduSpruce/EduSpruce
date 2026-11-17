@@ -25,7 +25,7 @@ function vAlunos(){
   const dr=$('#al-drop');if(dr){dr.onclick=()=>pickPdf(r=>importDlg(r));dropZone(dr,r=>importDlg(r))}
   const bo=$('#b-orig');if(bo)bo.onclick=()=>atualizarDeOrigens(t);
   bindAlTabs();
-  const fa=$('#f-allcb');if(fa){fa.indeterminate=al.some(a=>a.frequenta)&&!al.every(a=>a.frequenta);fa.onchange=()=>{t.alunos.forEach(a=>a.frequenta=fa.checked);save();vAlunos()}}
+  const fa=$('#f-allcb');if(fa){fa.indeterminate=al.some(a=>a.frequenta)&&!al.every(a=>a.frequenta);fa.onchange=async()=>{const v=fa.checked,N=t.alunos.length,n=t.alunos.filter(a=>a.frequenta).length;/* 1.086: com alunos assinalados um a um, um toque nesta barra (grande no telemóvel, onde não há o botão Anular) apagava essa escolha sem perguntar */if(n&&n<N){const r=await avisoModal(v?'Assinalar todos os alunos?':'Desmarcar todos os alunos?',[`Há ${n} aluno(s) assinalado(s) e ${N-n} por assinalar.`,'Ao continuar, ficam todos iguais e perde-se a escolha feita aluno a aluno.'],[{t:v?'Assinalar Todos':'Desmarcar Todos',c:'pri',v:1},{t:'Cancelar',v:0}]);if(!r){vAlunos();return}}t.alunos.forEach(a=>a.frequenta=v);save();vAlunos()}}
   $$('#view tr[data-a] [data-k]').forEach(el=>el.addEventListener('change',()=>{
     const a=t.alunos.find(x=>x.id===el.closest('tr').dataset.a);const k=el.dataset.k;
     if(k==='genero'){if(el.value==='auto'){a.generoManual=false;a.genero=guessGen(a.nome)}else{a.generoManual=true;a.genero=el.value}}

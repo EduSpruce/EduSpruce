@@ -131,6 +131,7 @@ html body.est-sge .hub-sec>.ic{display:inline-block;color:#1f9fcf}
 html body.est-sge .hub-sec .hub-tur{margin-left:auto}
 html body.est-sge .hub-grid{padding:18px 20px 20px;gap:12px}
 html body.est-sge .hub-grid>.hbt{flex-basis:calc((100% - 36px)/4)}
+@media (max-width:560px){html body.est-sge .hub-grid>.hbt{flex-basis:100%}} /* 1.086: no telemóvel, um mosaico por linha também no tema SGE */
 html body.est-sge .hbt{border-radius:0;box-shadow:none;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--h1);padding:14px 14px 14px 12px;animation:none;transition:background .15s,border-color .15s}
 html body.est-sge .hbt:hover{transform:none;box-shadow:none;background:color-mix(in srgb,#1f9fcf 7%,var(--panel));border-color:color-mix(in srgb,#1f9fcf 55%,var(--line));border-left-color:var(--h1)}
 html body.est-sge .hbt .hbn{font-weight:500;font-size:15.5px;color:#0e7095}
