@@ -87,10 +87,23 @@
     }
     return null;
   }
+  /* a parte da imagem que se vê: sites como o Facebook cortam imagens maiores do que a caixa onde estão */
+  function parteVisivel(img) {
+    const r = img.getBoundingClientRect();
+    let t = Math.max(r.top, 0), l = Math.max(r.left, 0), b = Math.min(r.bottom, innerHeight), d = Math.min(r.right, innerWidth);
+    for (let e = img.parentElement, n = 0; e && e !== document.body && n < 25; e = e.parentElement, n++) {
+      const cs = getComputedStyle(e);
+      if (/(hidden|clip|auto|scroll)/.test(cs.overflow + cs.overflowX + cs.overflowY)) {
+        const c = e.getBoundingClientRect();
+        t = Math.max(t, c.top); l = Math.max(l, c.left); b = Math.min(b, c.bottom); d = Math.min(d, c.right);
+      }
+    }
+    return b - t > 30 && d - l > 60 ? {top: t, left: l, bottom: b, right: d} : null;
+  }
   function posBotao() {
     if (!alvoImg || !alvoImg.isConnected) return esconderImg();
-    const r = alvoImg.getBoundingClientRect();
-    if (r.bottom < 40 || r.top > innerHeight - 20) return esconderImg();
+    const r = parteVisivel(alvoImg);
+    if (!r || r.bottom < 40 || r.top > innerHeight - 20) return esconderImg();
     painel().botaoImagem(Math.max(6, r.left + 8), Math.max(6, r.top + 8), () => recortarImagem(alvoImg));
   }
   function esconderImg() { alvoImg = null; if (P) P.esconderBotaoImagem(); }
