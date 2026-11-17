@@ -139,10 +139,33 @@ html body.est-sge .snw-chip,html body.est-sge .snw-wc,html body.est-sge .snw-wc 
 `;document.head.appendChild(s)}
 
 /* 1.088 — Definições › Ferramentas: cartão que explica o SpruceNote Web Clipper (por baixo dos Avisos em Pop-up) */
+/* ilustração do cartão: página da web → recortes → quadro do SpruceNote (coluna «Por Arrumar») */
+const SNW_ILU=`<svg viewBox="0 0 520 300" width="100%" role="img">
+<defs><marker id="snwSeta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c25e12"/></marker></defs>
+<g class="snw-jan"><rect x="8" y="22" width="250" height="250" rx="12" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/>
+<path d="M8 34a12 12 0 0 1 12-12h226a12 12 0 0 1 12 12v16H8z" fill="color-mix(in srgb,var(--line) 55%,var(--panel))"/>
+<circle cx="24" cy="36" r="4" fill="#e5675a"/><circle cx="37" cy="36" r="4" fill="#f2b84b"/><circle cx="50" cy="36" r="4" fill="#5bb974"/>
+<rect x="64" y="29" width="180" height="14" rx="7" fill="var(--panel)"/><rect x="72" y="34" width="70" height="4" rx="2" fill="var(--mut)" opacity=".5"/>
+<rect x="22" y="64" width="130" height="86" rx="6" fill="#d9ecf7"/><circle cx="125" cy="84" r="9" fill="#f2b84b"/><path d="M22 150l38-44 26 28 18-18 48 34z" fill="#5a9fcf"/><path d="M60 106l26 28-14 16H22z" fill="#3f7fae" opacity=".55"/>
+<rect x="28" y="70" width="52" height="18" rx="9" fill="#c25e12"/><text x="54" y="83" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="inherit">Guardar</text>
+<rect x="164" y="66" width="80" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="78" width="72" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="90" width="78" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="102" width="56" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/>
+<rect x="18" y="166" width="226" height="40" rx="3" fill="color-mix(in srgb,#c25e12 16%,transparent)"/><rect x="24" y="172" width="210" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/><rect x="24" y="184" width="196" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/><rect x="24" y="196" width="120" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/>
+<rect x="120" y="198" width="132" height="44" rx="6" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/><rect x="128" y="206" width="10" height="10" rx="2" fill="#c25e12"/><text x="144" y="215" font-size="9.5" font-weight="700" fill="currentColor" font-family="inherit">Guardar no SpruceNote</text><rect x="128" y="226" width="90" height="5" rx="2.5" fill="var(--mut)" opacity=".3"/>
+<rect x="22" y="222" width="86" height="40" rx="5" fill="#2b2f36"/><path d="M58 234v16l13-8z" fill="#fff"/></g>
+<path d="M266 120C300 96 316 96 338 110" fill="none" stroke="#c25e12" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#snwSeta)"/>
+<path d="M266 190C300 210 318 200 338 186" fill="none" stroke="#c25e12" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#snwSeta)"/>
+<g class="snw-qd"><rect x="346" y="22" width="166" height="250" rx="12" fill="color-mix(in srgb,#c25e12 7%,var(--panel))" stroke="var(--line)" stroke-width="1.5"/>
+<rect x="358" y="34" width="22" height="22" rx="5" fill="#c25e12"/><path d="M364 40h5v5h-5zM371 44h5v5h-5zM365 47h5v5h-5z" fill="none" stroke="#fff" stroke-width="1.4"/>
+<text x="388" y="44" font-size="11" font-weight="700" fill="currentColor" font-family="inherit">SpruceNote</text><text x="388" y="56" font-size="9" fill="var(--mut)" font-family="inherit">Quadro de ideias</text>
+<rect x="358" y="68" width="142" height="194" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="368" y="85" font-size="9.5" font-weight="700" fill="#c25e12" font-family="inherit">POR ARRUMAR</text>
+<rect x="366" y="94" width="126" height="54" rx="5" fill="#d9ecf7"/><circle cx="470" cy="106" r="6" fill="#f2b84b"/><path d="M366 148l26-30 18 19 12-12 70 23z" fill="#5a9fcf"/>
+<rect x="366" y="156" width="126" height="42" rx="5" fill="var(--panel)" stroke="var(--line)"/><rect x="374" y="165" width="104" height="4" rx="2" fill="var(--mut)" opacity=".5"/><rect x="374" y="175" width="96" height="4" rx="2" fill="var(--mut)" opacity=".5"/><rect x="374" y="185" width="60" height="4" rx="2" fill="var(--mut)" opacity=".5"/>
+<rect x="366" y="206" width="126" height="46" rx="5" fill="#2b2f36"/><path d="M424 219v20l16-10z" fill="#fff"/></g>
+</svg>`;
 function cartaoWebClipper(){const inst=document.documentElement.getAttribute('data-sn-clipper');const u=navigator.userAgent;const pc=/Chrome\//.test(u)&&!/Mobile|Android|CriOS|iPad|iPhone/.test(u);
   const a=(typeof HUB_APPS!=='undefined'&&HUB_APPS.find(x=>x.id==='sprucenote'))||null;const ico=a&&typeof hubIcone==='function'?hubIcone(a,40):ic('nvsn',20);
   const est=inst?`<div class="snw-est ok">${ic('check',14)} Extensão instalada neste navegador (versão ${esc(inst)})</div>`:pc?`<div class="snw-est">${ic('download',14)} Ainda não está instalada neste navegador</div>`:`<div class="snw-est">${ic('alert',14)} Só funciona no Chrome ou no Edge de computador</div>`;
-  return `<div class="card snw-wc"><div class="snw-wc-h">${ico}<div><h2 style="margin:0">SpruceNote Web Clipper</h2><p class="hint" style="margin:2px 0 0">Extensão do Chrome para o SpruceNote</p></div></div>
+  return `<div class="card snw-wc"><div class="snw-wc-tx"><div class="snw-wc-h">${ico}<div><h2 style="margin:0">SpruceNote Web Clipper</h2><p class="hint" style="margin:2px 0 0">Extensão do Chrome para o SpruceNote</p></div></div>
   <p style="margin:12px 0 8px">Enquanto navega na internet, guarde o que encontrar diretamente nos seus <b>quadros do SpruceNote</b>, sem copiar e colar nem descarregar ficheiros — como o «Web Clipper» do Milanote.</p>
   <ul class="snw-lista">
    <li>${ic('image',14)}<span><b>Imagens</b> — passe o rato por cima e carregue em «Guardar».</span></li>
@@ -153,10 +176,16 @@ function cartaoWebClipper(){const inst=document.documentElement.getAttribute('da
   </ul>
   <p class="hint" style="margin:8px 0 10px">Ideal para recolher imagens para uma ficha, citações para um teste ou vídeos para uma aula.</p>
   ${est}
-  <div class="snw-wc-b">${inst?'':`<a class="btn pri" href="${SNW_ZIP}" download>${ic('download',14)} Descarregar</a>`}<button type="button" class="btn" data-snw="info">${ic('list',14)} Como instalar</button><button type="button" class="btn ghost" data-snw="ajuda">${ic('help',14)} Ajuda</button></div></div>`}
+  <div class="snw-wc-b">${inst?'':`<a class="btn pri" href="${SNW_ZIP}" download>${ic('download',14)} Descarregar</a>`}<button type="button" class="btn" data-snw="info">${ic('list',14)} Como instalar</button><button type="button" class="btn ghost" data-snw="ajuda">${ic('help',14)} Ajuda</button></div></div><div class="snw-ilu" aria-hidden="true">${SNW_ILU}</div></div>`}
 if(typeof defFerramentas==='function'){const _dfW=defFerramentas;defFerramentas=function(){const h=_dfW.apply(this,arguments);try{if(typeof snOn==='function'&&!snOn())return h;const c=cartaoWebClipper();
   const p=typeof cartaoTestePopups==='function'?cartaoTestePopups():'';if(p&&h.startsWith(p))return p+c+h.slice(p.length);return c+h}catch(e){console.warn(e);return h}}}
 {const s=document.createElement('style');s.textContent=`
+html body .card.snw-wc{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,34%);gap:28px;align-items:center}
+html body .snw-ilu{display:flex;align-items:center;justify-content:center;color:var(--ink,#1f2937);padding:6px}
+html body .snw-ilu svg{max-width:520px;height:auto;display:block}
+@container (max-width:780px){html body .card.snw-wc{grid-template-columns:1fr}html body .snw-ilu{order:-1;max-width:420px}}
+@media (max-width:900px){html body .card.snw-wc{grid-template-columns:1fr}html body .snw-ilu{order:-1;max-width:420px;margin:0 auto}}
+html body.est-sge .snw-ilu rect{rx:0}
 html body .snw-wc-h{display:flex;align-items:center;gap:12px}
 html body .snw-wc-h .hbic{flex:none;box-shadow:none}
 html body .snw-lista{list-style:none;margin:0;padding:0;display:grid;gap:7px}
