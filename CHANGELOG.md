@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.102
+- Ajuda: cada secção abre e fecha, com Abrir tudo / Fechar tudo
+- Início: o ícone das Apps alinhado com o cartão ao lado
+- Título das vistas: logótipo centrado e com espaço
+- Menu lateral: deixa de ficar mais de um item realçado
+
 ## 1.101
 - Definições › Módulos Opcionais: passam a aparecer Reuniões, Direção de Turma, Biblioteca e Documentos
 

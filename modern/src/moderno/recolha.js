@@ -365,3 +365,35 @@ html body.est-sge .hbo-a>span{border-radius:0}
   M.insertAdjacentHTML('beforeend',MOD4.map(m=>`<label class="chk" style="margin-top:8px"><input type="checkbox" id="${m.inp}" ${mod4On(m.k)?'checked':''}> ${ic(m.g,15)} <span><b>${m.n}</b><br><span class="mut">${m.d}${m.k==='direcao'?' (só aparece a quem é DT)':''}</span></span></label>`).join(''));
   MOD4.forEach(m=>{const c=M.querySelector('#'+m.inp);if(c)c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos[m.k];else S.cfg.modulos[m.k]=false;save();mod4Aplica();toast('Módulo '+m.n+(c.checked?' ativado':' desativado'),'ok')}})}}catch(e){console.warn(e)}
   return _mgM4.apply(this,arguments)}}
+/* 1.102 — Ajuda: cada secção abre e fecha (fechadas por omissão; o índice e a pesquisa abrem a secção) */
+if(typeof vAjuda==='function'){const _vAjC=vAjuda;vAjuda=function(){const r=_vAjC.apply(this,arguments);try{
+  const C=[...$$('#view .ajs')];if(!C.length)return r;const q=(UI.ajQ||'').trim();UI.ajAb=UI.ajAb||{};
+  C.forEach(c=>{const h=c.querySelector(':scope>h2');if(!h||h.dataset.col)return;h.dataset.col=1;h.classList.add('ajcol-h');h.tabIndex=0;h.setAttribute('role','button');
+    h.insertAdjacentHTML('beforeend','<span class="ajcol-s" aria-hidden="true">›</span>');
+    const ab=q?true:!!UI.ajAb[c.id];c.classList.toggle('ajfech',!ab);h.setAttribute('aria-expanded',ab);
+    const alt=()=>{const f=c.classList.toggle('ajfech');h.setAttribute('aria-expanded',!f);UI.ajAb[c.id]=!f};
+    h.onclick=alt;h.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();alt()}}});
+  const hd=$('#view .ajhd');if(hd&&!$('#ajcol-b'))hd.insertAdjacentHTML('beforeend',`<div id="ajcol-b" style="display:flex;gap:8px;margin-top:10px"><button class="btn sm" data-ajc="1">Abrir tudo</button><button class="btn sm" data-ajc="0">Fechar tudo</button></div>`);
+  $$('#view [data-ajc]').forEach(b=>b.onclick=()=>{const ab=b.dataset.ajc==='1';C.forEach(c=>{c.classList.toggle('ajfech',!ab);UI.ajAb[c.id]=ab;const h=c.querySelector('.ajcol-h');if(h)h.setAttribute('aria-expanded',ab)})});
+  $$('#view [data-aj]').forEach(a=>a.addEventListener('click',()=>{const c=$('#aj-'+a.dataset.aj);if(c){c.classList.remove('ajfech');UI.ajAb[c.id]=true}},true));
+}catch(e){console.warn(e)}return r}}
+{const s=document.createElement('style');s.textContent=`
+html body .ajs>h2.ajcol-h{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
+html body .ajcol-s{margin-left:auto;font-size:22px;line-height:1;color:var(--mut);transition:transform .2s;transform:rotate(90deg)}
+html body .ajs.ajfech .ajcol-s{transform:none}
+html body .ajs.ajfech>:not(h2){display:none!important}
+html body .ajs.ajfech>h2{margin-bottom:0!important}
+html body .ajs>h2.ajcol-h:focus-visible{outline:2px solid var(--acc);outline-offset:4px}
+/* Início: o ícone das Apps com a altura do cartão ao lado */
+html body .hub-mini.hub-so{padding:0!important;align-self:stretch!important;display:flex;align-items:stretch;flex:none}
+html body .hub-mini.hub-so .hbm-todas{width:auto!important;height:auto!important;aspect-ratio:1;min-width:38px;padding:0 8px!important;align-self:stretch}
+html body .hub-mini.hub-so .hbm-todas>svg{width:22px!important;height:22px!important}
+html body .dtop .hub-mini.hub-so:not(.hub-grp .hub-mini){height:auto}
+/* título: logótipo centrado com o texto e com folga */
+html body #ttl:has(.vlogo){display:flex;align-items:center}
+html body #ttl .vlogo{margin:0 12px 0 0!important}
+html body #ttl .vlogo .hbic{width:28px!important;height:28px!important}
+html body #ttl .vlogo .hbic>svg{width:15px;height:15px}
+/* menu lateral: só o item atual e o que está debaixo do rato ficam realçados */
+html body #side#side .nav:not(.on):not(.hov):not(:focus-visible){background:transparent!important}
+`;document.head.appendChild(s)}
