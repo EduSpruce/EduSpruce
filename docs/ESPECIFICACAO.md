@@ -1374,3 +1374,7 @@ Tema SGE: a seta (▾) do seletor de escola no cabeçalho deixava de ter espaço
 ## v1.027
 
 Definições: o texto de ajuda (.hint) dentro de cada .pref ocupava só a coluna das etiquetas (220px) e partia-se em várias linhas; passa a ocupar a linha toda (grid-column:1/-1).
+
+## v1.028
+
+alinharTabsTopo(): o conteúdo de Conta e Dados (.nvpw2) não estava na lista de elementos reconhecidos, por isso os separadores ficavam centrados pela regra CSS; passa a alinhar com o primeiro elemento visível a seguir aos separadores.
