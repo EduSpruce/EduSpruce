@@ -538,3 +538,99 @@ setInterval(sbGravTick,1500);addEventListener('online',()=>setTimeout(sbGravTick
 html body #es-porguardar .epg-t{flex:1 1 280px}html body #es-porguardar .epg-m{opacity:.85;display:block;font-size:12.5px}html body #es-porguardar .epg-b{display:flex;gap:8px;flex-wrap:wrap}
 html body #es-porguardar .btn{background:#fff;color:#7f1d1d;border-color:#fff}html body.est-sge #es-porguardar,html body.est-sge #es-porguardar .btn{border-radius:0}
 @media print{html body #es-porguardar{display:none}}`;document.head.appendChild(st)}
+
+/* ===== Frase secreta (opcional): a chave dos dados deixa de ficar legível na base de dados =====
+   Por omissão, a chave fica na conta (linha «conta-chave») para os dados abrirem em qualquer aparelho só com a entrada Google — quem
+   administra a base de dados consegue lê-la. Com a frase secreta, a linha passa a guardar a chave EMBRULHADA: cifrada (AES-256-GCM)
+   com uma chave tirada da frase (PBKDF2-SHA-256, 600 000 voltas). A frase nunca sai do aparelho. Em cada aparelho novo (ou depois de
+   terminar a sessão) pede-se a frase ou a chave de recuperação. Quem perder as duas perde os dados: ninguém os consegue recuperar.
+   Linha: {v:2, w:{s,i,iv,c}, h, salt, q} — sem «k». «h» = princípio do SHA-256 da chave, para saber se o embrulho é o da chave atual.
+   A cópia do embrulho fica também nas definições cifradas (S.cfg.fraseW/fraseH): se um aparelho com uma versão antiga da app voltar a
+   gravar a chave em claro, o primeiro aparelho atualizado repõe o embrulho sozinho. */
+const SB_FR_VOLTAS=600000;
+async function sbFraseKek(frase,s,i){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(String(frase).normalize('NFKC')),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt:unb64(s),iterations:i,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function sbFraseH(k){const d=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('eduspruce-chave:'+k)));return [...d.slice(0,8)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function sbFraseEmbrulhar(frase,k){const s=b64(crypto.getRandomValues(new Uint8Array(16))),iv=crypto.getRandomValues(new Uint8Array(12));const kek=await sbFraseKek(frase,s,SB_FR_VOLTAS);
+  const c=await crypto.subtle.encrypt({name:'AES-GCM',iv},kek,new TextEncoder().encode(k));return {s,i:SB_FR_VOLTAS,iv:b64(iv),c:b64(c)}}
+async function sbFraseAbrir(frase,w){const kek=await sbFraseKek(frase,w.s,Math.min(Math.max(+w.i||SB_FR_VOLTAS,100000),5000000));
+  try{return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(w.iv)},kek,unb64(w.c)))}catch(_){return null}}
+const sbFraseLinha=j=>!!(j&&j.w&&j.w.c&&!j.k);
+async function sbLinhaChave(p,D){try{const t=D&&Object.prototype.hasOwnProperty.call(D,SB_CH)?D[SB_CH]:await p.ler(SB_CH);return t?JSON.parse(t):null}catch(_){return null}}
+/* a chave abre mesmo os dados desta conta? (confirma com a marca do manifesto) */
+async function sbChaveAbre(p,k,D){if(!k)return false;let man=null;try{const n=NV_PREF+'manifest.json';const t=D&&Object.prototype.hasOwnProperty.call(D,n)?D[n]:await p.ler(n);man=t?JSON.parse(t):null}catch(_){}
+  if(!man||!man.chk)return true;try{const ck=await crypto.subtle.importKey('raw',unb64(k),'AES-GCM',false,['decrypt']);return await nvDecifrar(man.chk,ck)==='eduflow'}catch(_){return false}}
+const sbFraseReg=(w,h,salt)=>JSON.stringify({v:2,w,h,salt:salt||'',q:Date.now()});
+async function sbFraseLimparHist(){try{await sbRpc('eduspruce_chave_hist_limpar');return true}catch(_){return false}}
+/* ligar: embrulha, grava, relê e confirma que a frase abre — só depois dá por feito; se algo falhar, a linha volta ao que era */
+async function sbFraseAtivar(frase){const L=nvL();if(L.prov!=='supabase'||!L.k)throw new Error('A chave ainda não está disponível neste aparelho.');const p=await sbObter();
+  if(!(await sbChaveAbre(p,L.k)))throw new Error('A chave deste aparelho não abre os dados da conta. Recarregue a página e tente de novo.');
+  const antes=await p.ler(SB_CH);const w=await sbFraseEmbrulhar(frase,L.k),h=await sbFraseH(L.k);
+  try{if(antes!=null)await p.escrever(SB_CH,sbFraseReg(w,h,L.salt));else await p.criar(SB_CH,sbFraseReg(w,h,L.salt));
+    const j=await sbLinhaChave(p);if(!sbFraseLinha(j)||(await sbFraseAbrir(frase,j.w))!==L.k)throw new Error('A verificação depois de gravar falhou.')}
+  catch(e){try{await p.escrever(SB_CH,antes||JSON.stringify({v:1,k:L.k,salt:L.salt||'',q:Date.now()}))}catch(_){}throw new Error('Não foi possível ligar a frase secreta ('+(e.message||'erro')+'). Nada mudou.')}
+  S.cfg.fraseW=w;S.cfg.fraseH=h;S.cfg.fraseEm=Date.now();save();const limpo=await sbFraseLimparHist();try{audit('Segurança','Frase secreta ligada','A chave dos dados deixou de ficar legível na base de dados')}catch(_){}return {limpo}}
+async function sbFraseDesligar(){const L=nvL();if(L.prov!=='supabase'||!L.k)throw new Error('A chave ainda não está disponível neste aparelho.');const p=await sbObter();
+  await p.escrever(SB_CH,JSON.stringify({v:1,k:L.k,salt:L.salt||'',q:Date.now()}));delete S.cfg.fraseW;delete S.cfg.fraseH;delete S.cfg.fraseEm;save();nvSet({kConta:1});try{audit('Segurança','Frase secreta desligada','A chave voltou a ficar guardada na conta')}catch(_){}}
+/* nenhum caminho automático volta a gravar a chave em claro enquanto a frase estiver ligada */
+{const _gc=sbGuardarChaveNaConta;sbGuardarChaveNaConta=async function(){const L=nvL();if(L.prov!=='supabase'||!L.k)return;const p=await sbObter();const j=await sbLinhaChave(p);const h=await sbFraseH(L.k);
+    if(sbFraseLinha(j)){/* a linha já está embrulhada: fica como está (e este aparelho fica a saber) */if(j.h===h&&window.__esPronto&&S.cfg&&!S.cfg.fraseW){S.cfg.fraseW=j.w;S.cfg.fraseH=h;save()}nvSet({kConta:1,kDe:sbEmailApp()||L.kDe||''});return}
+    if(window.__esPronto&&S.cfg&&S.cfg.fraseW){if(S.cfg.fraseH===h){/* um aparelho com uma versão antiga repôs a chave em claro: volta o embrulho */await p.escrever(SB_CH,sbFraseReg(S.cfg.fraseW,h,L.salt));nvSet({kConta:1,kDe:sbEmailApp()||L.kDe||''});await sbFraseLimparHist();try{audit('Segurança','Frase secreta reposta na conta','Outro aparelho tinha voltado a gravar a chave')}catch(_){}return}
+      /* a chave mudou e o embrulho já não lhe corresponde: sem a frase não se refaz — desliga-se, para os dados nunca ficarem fechados */delete S.cfg.fraseW;delete S.cfg.fraseH;save();try{toast('A frase secreta foi desligada porque a chave dos dados mudou. Ligue-a de novo em Definições › Conta e Dados.','aviso')}catch(_){}}
+    return _gc.apply(this,arguments)}}
+{const _ur=sbUsarChaveRec;sbUsarChaveRec=async function(p,pf,k,salt){const j=await sbLinhaChave(p);if(!sbFraseLinha(j))return _ur.apply(this,arguments);
+    if(!(await sbChaveAbre(p,k)))return false;try{_nvK=null}catch(_){}nvSet({k,salt:salt||j.salt||'',kDe:pf.email,kConta:1,base:null,mod:{}});return true}}
+{const _ca=sbChaveAuto;sbChaveAuto=async function(p,pf,D){const j=await sbLinhaChave(p,D);if(!sbFraseLinha(j))return _ca.apply(this,arguments);
+    const L0=nvL();if(L0.k&&L0.kDe&&L0.kDe!==pf.email){try{_nvK=null}catch(_){}nvSet({k:null,salt:null,kDe:'',kConta:0,base:null,mod:{}})}
+    const L=nvL();if(L.k&&await sbChaveAbre(p,L.k,D)){nvSet({kDe:pf.email,kConta:1});return}
+    const e=new Error('Esta conta está protegida com frase secreta.');e.semChave=true;throw e}}
+/* aparelho novo (ou sessão terminada): pede a frase ou a chave de recuperação */
+function sbPedirFrase(p,pf){return new Promise(res=>{const d=document.createElement('dialog');d.className='nvmc sbcod';d.setAttribute('aria-labelledby','sbf-t');
+  d.innerHTML=`<form class="nvmcf" autocomplete="off" data-nosub><h2 id="sbf-t">${ic('cadeado',18)} Frase secreta</h2>
+    <p class="hint">Esta conta está protegida com uma <b>frase secreta</b>. Escreva-a para abrir os seus dados neste aparelho.</p>
+    <label for="sbf-1">Frase secreta ou chave de recuperação</label><input type="password" id="sbf-1" autocomplete="current-password" autocapitalize="none" spellcheck="false">
+    <div class="nverr" id="sbf-e" role="alert"></div>
+    <div class="row" style="gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap"><button type="button" class="btn" id="sbf-s">Terminar Sessão</button><button type="submit" class="btn pri" id="sbf-ok">${ic('check',15)} Abrir os Meus Dados</button></div>
+    <p class="hint sbcalt">${ic('info',14)}<span><b>Não se lembra da frase?</b> Cole aqui a chave de recuperação (o texto que começa por EDUSPRUCE-CHAVE), ou desligue a frase num aparelho onde a app ainda esteja aberta. Sem a frase e sem a chave de recuperação, ninguém consegue abrir os dados.</span></p></form>`;
+  document.body.appendChild(d);d.addEventListener('cancel',e=>e.preventDefault());d.addEventListener('keydown',e=>e.stopPropagation());try{d.showModal()}catch(_){d.setAttribute('open','')}
+  const er=d.querySelector('#sbf-e'),inp=d.querySelector('#sbf-1'),okb=d.querySelector('#sbf-ok');setTimeout(()=>inp.focus(),60);let fechado=false,falhas=0;
+  const fim=v=>{if(fechado)return;fechado=true;clearInterval(t);try{d.close()}catch(_){}d.remove();res(v)};
+  /* se, entretanto, a frase for desligada noutro aparelho, continua sozinho */
+  const t=setInterval(async()=>{try{const j=await sbLinhaChave(p);if(j&&j.k){await sbChaveAuto(p,pf);fim(true)}}catch(_){}},5000);
+  d.querySelector('#sbf-s').onclick=()=>{fim(false);sbTerminar()};
+  d.querySelector('form').addEventListener('submit',async e=>{e.preventDefault();er.textContent='';const c=inp.value;if(!c){er.textContent='Escreva a frase secreta.';return}okb.disabled=true;
+    try{const rk=c.replace(/\s+/g,'').match(/^EDUSPRUCE-CHAVE\.([A-Za-z0-9+/=]+)\.([A-Za-z0-9+/=]*)$/i);
+      if(rk){if(await sbUsarChaveRec(p,pf,rk[1],rk[2])){try{audit('Conta','Dados abertos com a chave de recuperação','')}catch(_){}return fim(true)}er.textContent='Esta chave de recuperação não abre os dados desta conta.';okb.disabled=false;return}
+      const j=await sbLinhaChave(p);if(!sbFraseLinha(j)){await sbChaveAuto(p,pf);return fim(true)}
+      const k=await sbFraseAbrir(c,j.w);if(k&&await sbChaveAbre(p,k)){try{_nvK=null}catch(_){}nvSet({k,salt:j.salt||'',kDe:pf.email,kConta:1,base:null,mod:{}});return fim(true)}
+      falhas++;/* cada tentativa errada espera mais um pouco */await new Promise(r=>setTimeout(r,Math.min(8000,500*falhas)));er.textContent='Frase errada. Tente de novo.';okb.disabled=false;inp.select()}
+    catch(e2){okb.disabled=false;er.textContent=e2.message||'Não foi possível abrir.'}})})}
+{const _pc=sbPedirCodigoAntigo;sbPedirCodigoAntigo=async function(p,pf){const j=await sbLinhaChave(p);if(sbFraseLinha(j))return sbPedirFrase(p,pf);return _pc.apply(this,arguments)}}
+/* Definições › Conta e Dados › Privacidade e Conta */
+function sbFraseDlg(){const L=nvL();if(!L.k)return toast('A chave ainda não está disponível neste aparelho.','erro');const d=document.createElement('dialog');d.className='nvmc';d.setAttribute('aria-labelledby','sfd-t');
+  d.innerHTML=`<form class="nvmcf" autocomplete="off" data-nosub><h2 id="sfd-t">${ic('cadeado',18)} Frase secreta</h2>
+    <p class="hint">Hoje a chave dos seus dados fica guardada na conta, para tudo abrir só com a entrada Google. Com uma frase secreta, a chave fica na base de dados <b>fechada com a sua frase</b>: nem quem administra a base de dados a consegue ler.</p>
+    <p class="hint"><b>O que muda:</b> em cada aparelho novo, e sempre que terminar a sessão, a app pede a frase. <b>Se perder a frase e a chave de recuperação, ninguém consegue recuperar os dados.</b></p>
+    <label for="sfd-1">Frase secreta (12 caracteres ou mais — várias palavras é o ideal)</label><input type="password" id="sfd-1" autocomplete="new-password" autocapitalize="none" spellcheck="false">
+    <label for="sfd-2">Repita a frase</label><input type="password" id="sfd-2" autocomplete="new-password" autocapitalize="none" spellcheck="false">
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:6px"><button type="button" class="btn" id="sfd-k">${ic('download',15)} Descarregar a Chave de Recuperação</button></div>
+    <label style="display:flex;gap:8px;align-items:flex-start;margin-top:6px"><input type="checkbox" id="sfd-c" style="margin-top:3px"><span>Guardei a chave de recuperação num sítio seguro e sei que, sem a frase e sem essa chave, os dados não se recuperam.</span></label>
+    <div class="nverr" id="sfd-e" role="alert"></div>
+    <div class="row" style="gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap"><button type="button" class="btn" id="sfd-x">Cancelar</button><button type="submit" class="btn pri" id="sfd-ok" disabled>${ic('check',15)} Ligar a Frase Secreta</button></div></form>`;
+  document.body.appendChild(d);try{d.showModal()}catch(_){d.setAttribute('open','')}const q=s=>d.querySelector(s);const er=q('#sfd-e'),ok=q('#sfd-ok');let desc=false;
+  const fecha=()=>{try{d.close()}catch(_){}d.remove()};d.addEventListener('cancel',e=>{e.preventDefault();fecha()});d.addEventListener('keydown',e=>e.stopPropagation());
+  const ve=()=>{ok.disabled=!(desc&&q('#sfd-c').checked)};q('#sfd-c').onchange=ve;q('#sfd-x').onclick=fecha;
+  q('#sfd-k').onclick=()=>{const t=sbChaveRecTxt();const em=sbEmailApp()||nvL().kDe||'';download('EduSpruce-chave-de-recuperacao.txt',`EduSpruce — chave de recuperação\nConta: ${em}\nCriada em: ${new Date().toLocaleString('pt-PT')}\n\n${t}\n\nComo usar: entre na EduSpruce com a conta Google; quando a app pedir a frase secreta, cole esta chave.\nGuarde num sítio seguro e não partilhe.`,'text/plain');S.cfg.chaveRecGuardada=Date.now();save();desc=true;ve()};
+  q('form').addEventListener('submit',async e=>{e.preventDefault();er.textContent='';const a=q('#sfd-1').value,b=q('#sfd-2').value;
+    if(a.length<12){er.textContent='A frase tem de ter pelo menos 12 caracteres.';return}if(a!==b){er.textContent='As duas frases não são iguais.';return}if(/^EDUSPRUCE-CHAVE\./i.test(a.trim())){er.textContent='A frase não pode ser a chave de recuperação.';return}
+    ok.disabled=true;ok.textContent='A ligar…';try{const r=await sbFraseAtivar(a);fecha();try{bindNvPainel()}catch(_){}
+      avisoModal('Frase secreta ligada',['A chave dos seus dados deixou de ficar legível na base de dados.','Neste aparelho continua tudo aberto; nos outros, a app pede a frase na próxima vez que entrar.',r.limpo?'A cópia antiga da chave foi apagada do histórico.':'A cópia antiga da chave sai do histórico da base de dados dentro de 30 dias, no máximo.'],[{t:ic('check',15)+' Entendido',c:'pri',v:1}])}
+    catch(e2){ok.disabled=false;ok.innerHTML=ic('check',15)+' Ligar a Frase Secreta';er.textContent=e2.message||'Não foi possível ligar.'}})}
+async function sbFraseDesligarDlg(){const v=await avisoModal('Desligar a frase secreta?',['A chave dos dados volta a ficar guardada na conta: os dados abrem em qualquer aparelho só com a entrada Google.','Quem administra a base de dados volta a conseguir ler a chave.'],[{t:'Desligar',c:'dng',v:1},{t:'Cancelar',c:'pri',v:0}]);if(!v)return;
+  try{await sbFraseDesligar();toast('Frase secreta desligada','ok');try{bindNvPainel()}catch(_){}}catch(e){toast(e.message||'Não foi possível desligar.','erro')}}
+{const _bF=bindNvPainel;bindNvPainel=function(){const r=_bF.apply(this,arguments);try{const s=$('#nv-rgpd');if(s&&nvL().prov==='supabase'){let b=s.querySelector('#nv-frase-l');if(b)b.remove();const on=!!(S.cfg&&S.cfg.fraseW);
+    const div=document.createElement('div');div.id='nv-frase-l';div.className='nvsb';div.innerHTML=`<div class="row" style="gap:8px;flex-wrap:wrap;align-items:center"><button type="button" class="btn" id="nv-frase">${ic('cadeado',15)} ${on?'Desligar a Frase Secreta':'Frase Secreta…'}</button><span class="mut peq">${on?'<b>Frase secreta ligada</b>'+(S.cfg.fraseEm?' desde '+new Date(S.cfg.fraseEm).toLocaleDateString('pt-PT'):'')+': a chave dos dados não fica legível na base de dados.':'Opcional: fecha a chave dos dados com uma frase só sua. Sem ela, a chave fica guardada na conta.'}</span></div>`;
+    const ref=s.querySelector('.nvsb');if(ref)s.insertBefore(div,ref);else s.appendChild(div);div.querySelector('#nv-frase').onclick=on?sbFraseDesligarDlg:sbFraseDlg}}catch(e){console.warn(e)}return r}}
+/* ao abrir: confirma que a linha da conta condiz com a escolha (repõe o embrulho se um aparelho antigo o desfez) */
+setTimeout(function sbFraseVigiar(){if(!window.__esPronto)return setTimeout(sbFraseVigiar,5000);(async()=>{try{const L=nvL();if(L.prov!=='supabase'||!L.k)return;const p=await sbObter();const j=await sbLinhaChave(p);
+    if(sbFraseLinha(j)||(S.cfg&&S.cfg.fraseW))await sbGuardarChaveNaConta()}catch(e){console.warn('[EduSpruce] frase secreta:',e.message)}})()},9000);

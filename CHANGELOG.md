@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.115
+- Frase secreta (opcional) em Definições › Conta e Dados › Privacidade e Conta: fecha a chave dos dados com uma frase só sua — nem quem administra a base de dados a consegue ler. A app pede a frase em cada aparelho novo; guarde a chave de recuperação
+
 ## 1.114
 - Mais rápida, sobretudo no telemóvel: abrir cada vista demora cerca de metade (Alunos, Avaliação e Relatórios eram as mais lentas)
 - Cada versão nova descarrega menos um quarto: os ícones dos logótipos saíram do programa principal

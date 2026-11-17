@@ -46,6 +46,14 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - `correr.sh`: PostgreSQL local (se não houver, avisa e segue), base nova com `stubs.sql` (imitações de auth/storage/cron/net), todos os scripts de `supabase/migrations` e cada `*.teste.sql` numa cópia limpa. `certo(condição, texto)` pára com erro.
 - `spruceit.teste.sql` (22 verificações) e `pulso.teste.sql` (15): professor cria, alunos entram sem conta e respondem, correção, classificação, resultados, terminar, apagar; e o que NÃO pode acontecer (aluno a ler tabelas ou a chave, token de outra pessoa, outro professor a mandar na sala, responder depois de terminado).
 
+## Frase secreta (opcional) — a chave dos dados fora do alcance de quem administra a base de dados
+- Fim de `moderno/basedados.js`. Por omissão a linha `conta-chave` é `{v:1,k,salt}` (chave legível). Com a frase: `{v:2,w:{s,i,iv,c},h,salt}` — chave cifrada (AES-GCM) com PBKDF2-SHA-256 da frase (600 000 voltas); sem `k`.
+- **Regra de ouro: nenhum caminho automático grava a chave em claro com a frase ligada.** `sbGuardarChaveNaConta`, `sbChaveAuto` e `sbUsarChaveRec` estão envolvidos para isso; quem acrescentar código que escreva `SB_CH` tem de respeitar `sbFraseLinha(j)`.
+- A cópia do embrulho fica em `S.cfg.fraseW/fraseH` (cifrada com os dados): se uma versão antiga da app noutro aparelho repuser a chave em claro, o primeiro aparelho atualizado repõe o embrulho (`sbFraseVigiar`, 9 s depois de abrir).
+- Aparelho novo ou sessão terminada: `sbPedirFrase` (frase ou chave de recuperação `EDUSPRUCE-CHAVE.…`). Ligar exige descarregar antes a chave de recuperação.
+- `0020_frase_secreta.sql` (opcional): `eduspruce_chave_hist_limpar()` apaga do histórico as versões antigas da linha da chave; sem ele saem ao fim de 30 dias.
+- Testes: `tests/frase.mjs` (ligar → chave em lado nenhum da base de dados → aparelho novo com frase / chave de recuperação → reposição → desligar) e `tests/sql/frase.teste.sql`.
+
 ## Contraste e tema escuro (1.098)
 - Tema escuro = `body.escurox` (e `html[data-theme=dark]`). Regras do tema SGE com cores fixas precisam de `:not(.escurox)` ou de um par para o escuro; as correções estão em `app/251-legibilidade-tema-escuro-testes.css`.
 - A app corrige o contraste sozinha (`a11yContraste`, `app/115-…`: escurece/aclara a letra ou o fundo com estilos em linha), mas só nos momentos livres (1–2 s nas vistas grandes) e não percorre as grelhas: a folha de estilos tem de estar certa por si.
