@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.052
+- Página Apps (hub) com mosaicos agrupados Gestão/Recreio/Organização
+- Ícones personalizáveis (cor, símbolo, emoji, imagem, nome, estilo)
+- Abrir nas Apps ao entrar (opcional); botão Apps no menu lateral
+
 ## 1.051
 - Botão Mais opções dos cartões da Arena, Pulso e Formulários com ícone de três pontos.
 

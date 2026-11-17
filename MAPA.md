@@ -102,3 +102,9 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 - App: `modern/src/moderno/avisos.js` (juntado no fim pelo `db.mjs`); `sw.js` tem o evento `push`. Cartão «Com a App Fechada» em Definições › Notificações (envolve `defNotif`/`bindNotif`).
 - `psLista()` calcula os avisos dos próximos 21 dias (chaves `a:` aulas, `r:` resumo, `t:` avaliações de amanhã, `m:` reuniões, `av:` avisos) com `ntCfg()` e `ntSilencio`; `S.cfg.notif.pushDisc` = avisos discretos. `psSync()` guarda-a com `eduspruce_avisos_definir` (só se a conta tiver aparelhos). Com push ligado no aparelho (`es.push.on`), `ntAgora` deixa de repetir `a:`/`r:`/`t:` e as reuniões.
 - Supabase: `modern/supabase/migrations/0016_avisos_push.sql` (tabelas, funções, pg_cron de minuto a minuto) + Edge Function `modern/supabase/functions/eduspruce-avisos/index.ts` (Verify JWT desligado; cria as chaves VAPID sozinha). Guia: `docs/guias/AVISOS_COM_A_APP_FECHADA.md`.
+
+## Apps (1.052) — página inicial com as apps em mosaicos
+- Código: `modern/src/moderno/hub.js` (juntado no fim pelo `db.mjs`); vista `hub` («Apps»), botão no menu lateral a seguir a Início (`patches.json` mexe no `MENU_ORIG`; `hubMenu()` põe-no nos menus personalizados uma vez, `S.cfg.hubMenu`).
+- Grupos fixos em `HUB_GRUPOS`/`HUB_APPS` (Gestão: turmas, avaliacao, sumarios · Recreio: arena, pulso, forms, provas · Organização: sprucenote). O EduTime ainda não entra (juntar a `HUB_APPS` com `gr:'org'`).
+- `S.cfg.hub = {ini (abrir nas Apps ao entrar, omissão sim), est ('cheio'|'suave'|'linha'), ic:{id:{g,c,e,img,n}}}`; imagem própria reduzida a 128 px (webp). Editor em `hubEditar` (gaveta).
+- Ao entrar: `go('inicio')` passa para `hub` até o professor navegar (`go._hubU`). Atenção: a classe `.hbtag` era escondida por uma regra global — usar `.hblig`.
