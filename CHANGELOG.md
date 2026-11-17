@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.036
+- Avisos push com a app fechada (Web Push + Supabase: 0016_avisos_push.sql e Edge Function eduspruce-avisos)
+- Testar com a app fechada e avisos discretos
+- Sem avisos repetidos no aparelho com push ligado
+
 ## 1.035
 - Menus guardados, associáveis a escolas
 - Versão só no rodapé do menu lateral
