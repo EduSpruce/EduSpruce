@@ -677,3 +677,6 @@ html body .cpsep .cpsepg p{margin:6px 0}
 html body .cpsep .linkb{background:none;border:0;padding:0;color:var(--acc);font:inherit;font-weight:700;cursor:pointer;text-decoration:underline}
 html body .tag.cpso{background:color-mix(in srgb,#7c3aed 14%,transparent);color:#6d28d9}
 html body #side .nav.emtnav .lbl{flex-wrap:wrap;row-gap:0;align-content:center}html body #side .nav.emtnav .lbl .tdisc{flex-basis:100%;width:100%}
+
+/* 1.034: sem sombra na coluna fixa «Ficha» da lista de alunos */
+html body table.alst td.act,html body table.alst th.act{box-shadow:none!important}

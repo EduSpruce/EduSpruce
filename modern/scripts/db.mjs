@@ -10,6 +10,7 @@ export function aplicarDB(html){let s=html;
   /* a configuração (endereço e chave publicável) vai embutida na página: a app não espera por mais nenhum pedido para ligar à base de dados */
   const cfg=JSON.parse(readFileSync(join(raiz,'supabase-config.json'),'utf8'));const emb=JSON.stringify({ativo:!!cfg.ativo,url:cfg.url,anonKey:cfg.anonKey}).replace(/</g,'\\u003c');
   const ver=(s.match(/const VERSAO='([0-9.]+DB)';/)||[])[1]||'';
+  {const ih=s.indexOf('<head>');if(ih<0)throw new Error('<head> em falta');s=s.slice(0,ih+6)+'\n<script>'+readFileSync(join(raiz,'src/moderno/rede.js'),'utf8')+'</script>'+s.slice(ih+6)}
   const ib=s.lastIndexOf('</body>');return s.slice(0,ib)+'<script>window.__ES_SB='+emb+'</script>\n<script type="module" src="esm/arranque.mjs?v='+ver+'"></script>\n'+s.slice(ib)}
 /* página do aluno da Arena (sem conta): o código comum vai embutido e a configuração pública também */
 export function arenaHtml(f){const cfg=JSON.parse(readFileSync(join(raiz,'supabase-config.json'),'utf8'));const emb=JSON.stringify({ativo:!!cfg.ativo,url:cfg.url,anonKey:cfg.anonKey}).replace(/</g,'\\u003c');

@@ -132,7 +132,7 @@ async function sbGuardarChaveNaConta(){const L=nvL();if(L.prov!=='supabase'||!L.
 function sbPedirCodigoAntigo(p,pf){return new Promise(res=>{const d=document.createElement('dialog');d.className='nvmc sbcod';d.setAttribute('aria-labelledby','sbc-t');
   d.innerHTML=`<form class="nvmcf" autocomplete="off"><h2 id="sbc-t">${ic('cadeadoAb',18)} Só mais esta vez</h2>
     <p class="hint">Os seus dados foram guardados com o <b>código de encriptação antigo</b>. Escreva-o aqui uma última vez: a partir de agora basta entrar com a conta Google, em qualquer aparelho.</p>
-    <label for="sbc-1">Código de encriptação antigo</label><input type="password" id="sbc-1" autocomplete="off" autocapitalize="none" spellcheck="false">
+    <label for="sbc-1">Código de encriptação antigo ou chave de recuperação</label><input type="password" id="sbc-1" autocomplete="off" autocapitalize="none" spellcheck="false">
     <div class="nverr" id="sbc-e" role="alert"></div>
     <div class="row" style="gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap"><button type="button" class="btn" id="sbc-s">Terminar Sessão</button><button type="submit" class="btn pri" id="sbc-ok">${ic('check',15)} Abrir os Meus Dados</button></div>
     <p class="hint sbcalt">${ic('info',14)}<span><b>Não se lembra do código?</b> Abra a EduSpruce noutro navegador ou aparelho onde já tenha entrado (Safari, Chrome, telemóvel, tablet, PC da escola — em eduspruce.pt ou eduspruce.github.io). A chave passa para a sua conta e este pedido desaparece aqui sozinho, sem escrever nada.</span></p></form>`;
@@ -143,6 +143,7 @@ function sbPedirCodigoAntigo(p,pf){return new Promise(res=>{const d=document.cre
   const t=setInterval(async()=>{try{const x=await p.ler(SB_CH);if(x&&JSON.parse(x).k){await sbChaveAuto(p,pf);fim(true)}}catch(_){}},4000);
   d.querySelector('#sbc-s').onclick=()=>{fim(false);sbTerminar()};
   d.querySelector('form').onsubmit=async e=>{e.preventDefault();er.textContent='';const c=inp.value;if(!c){er.textContent='Escreva o código.';return}okb.disabled=true;
+    const rk=c.replace(/\s+/g,'').match(/^EDUSPRUCE-CHAVE\.([A-Za-z0-9+/=]+)\.([A-Za-z0-9+/=]*)$/i);if(rk){try{if(await sbUsarChaveRec(p,pf,rk[1],rk[2])){try{audit('Conta','Dados abertos com a chave de recuperação','')}catch(_){}fim(true)}else{okb.disabled=false;er.textContent='Esta chave de recuperação não abre os dados desta conta.'}}catch(e3){okb.disabled=false;er.textContent=e3.message||'Não foi possível usar a chave.'}return}
     try{await nvDefinirPalavra(c);await sbGuardarChaveNaConta();try{audit('Conta','Código antigo confirmado pela última vez','')}catch(_){}fim(true)}
     catch(e2){okb.disabled=false;er.textContent=/errad|não corresponde/i.test(e2.message||'')?'Código errado. Tente de novo.':(e2.message||'Não foi possível confirmar.');inp.select()}}})}
 
@@ -448,3 +449,31 @@ try{if(/[?&]_v=/.test(location.search)&&!/[?&]code=/.test(location.search))histo
 
 /* no ecrã de entrada: quando a ligação volta, recarrega para abrir a versão mais recente (e não a cópia guardada pelo navegador) */
 addEventListener('online',()=>{try{if(!window.__esPronto)location.reload()}catch(_){}});
+
+/* ===== 1.034: nunca ficar sem nada — chave de recuperação, cópia completa num ficheiro, chave sempre na conta ===== */
+async function sbUsarChaveRec(p,pf,k,salt){const mt=await p.ler(NV_PREF+'manifest.json');let man=null;try{man=mt?JSON.parse(mt):null}catch(_){}
+  if(man&&man.chk){let ok=false;try{const ck=await crypto.subtle.importKey('raw',unb64(k),'AES-GCM',false,['decrypt']);ok=await nvDecifrar(man.chk,ck)==='eduflow'}catch(_){}if(!ok)return false}
+  try{_nvK=null}catch(_){}nvSet({k,salt:salt||(man&&man.salt)||'',kDe:pf.email,kConta:1,base:null,mod:{}});const reg=JSON.stringify({v:1,k,salt:salt||(man&&man.salt)||'',q:Date.now()});
+  if(await p.ler(SB_CH))await p.escrever(SB_CH,reg);else await p.criar(SB_CH,reg);return true}
+const sbChaveRecTxt=()=>{const L=nvL();return L.k?'EDUSPRUCE-CHAVE.'+L.k+'.'+(L.salt||''):''};
+function sbChaveRecDlg(){const t=sbChaveRecTxt();if(!t)return toast('A chave ainda não está disponível neste aparelho.','erro');const em=sbEmailApp()||nvL().kDe||'';
+  openDrawer('Chave de recuperação',`<div class="ed"><p class="hint" style="margin-top:0">Com esta chave abre os seus dados <b>em qualquer situação</b> — mesmo sem nenhum aparelho com a app aberta. Quando a app pedir o código, cole-a lá. Guarde-a num sítio seguro (impressa numa gaveta, num gestor de palavras-passe). <b>Quem tiver a chave e entrar na sua conta Google consegue ler os dados</b>: não a envie por e-mail nem a partilhe.</p>
+    <textarea readonly rows="4" id="ckr-t" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:13px">${esc(t)}</textarea>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="ckr-c">${ic('copy',14)} Copiar</button><button class="btn" id="ckr-d">${ic('download',14)} Descarregar (.txt)</button><button class="btn pri" id="ckr-p">${ic('printer',14)} Imprimir</button></div></div>`);
+  const txt=`EduSpruce — chave de recuperação\nConta: ${em}\nCriada em: ${new Date().toLocaleString('pt-PT')}\n\n${t}\n\nComo usar: entre na EduSpruce com a conta Google; se a app pedir o código de encriptação, cole esta chave.\nGuarde num sítio seguro e não partilhe.`;
+  $('#ckr-c').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(t);toast('Chave copiada','ok');S.cfg.chaveRecGuardada=Date.now();save()};
+  $('#ckr-d').onclick=()=>{download('EduSpruce-chave-de-recuperacao.txt',txt,'text/plain');S.cfg.chaveRecGuardada=Date.now();save()};
+  $('#ckr-p').onclick=()=>{const w=window.open('','_blank');if(!w)return;w.document.write(`<!doctype html><meta charset="utf-8"><title>Chave de recuperação</title><body style="font:14px system-ui;margin:20mm"><h1 style="font-size:20px">EduSpruce — chave de recuperação</h1><p>Conta: <b>${esc(em)}</b> · ${new Date().toLocaleString('pt-PT')}</p><p style="font:15px ui-monospace,Menlo,monospace;word-break:break-all;border:2px solid #111;padding:14px">${esc(t)}</p><p>Como usar: entre na EduSpruce com a conta Google; se a app pedir o código de encriptação, escreva ou cole esta chave.</p><p><b>Guarde num sítio seguro e não partilhe.</b></p><script>setTimeout(()=>print(),300)<\/script>`);w.document.close();S.cfg.chaveRecGuardada=Date.now();save()}}
+function sbCopiaFicheiro(){try{exportarCopia({});S.cfg.copiaFich=Date.now();save();toast('Cópia completa descarregada. Guarde-a numa pen ou no disco.','ok');try{bindNvPainel()}catch(_){}}catch(e){toast(e.message||'Não foi possível exportar.','erro')}}
+{const _bK=bindNvPainel;bindNvPainel=function(){const r=_bK.apply(this,arguments);try{const c=$('#nv-card');if(c&&nvL().prov==='supabase'){let s=c.querySelector('#nv-seg');if(!s){s=document.createElement('section');s.className='nvs';s.id='nv-seg';const pw=c.querySelector('#nv-pw');const card=c.querySelector('.card:not(.nvhero)')||c;if(pw)card.insertBefore(s,pw);else{const foot=c.querySelector('.nvfoot');if(foot)card.insertBefore(s,foot);else card.appendChild(s)}}
+    const cf=S.cfg.copiaFich,kr=S.cfg.chaveRecGuardada;const dias=cf?Math.floor((Date.now()-cf)/864e5):null;
+    s.innerHTML=`<div class="nvsh"><h3>Nunca ficar sem nada</h3><p>Duas proteções que não dependem de nenhum aparelho: a chave de recuperação (abre os dados se a app pedir um código) e uma cópia completa num ficheiro, para guardar numa pen ou no disco.</p></div>
+      <div class="nvsb"><div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn" id="nv-ckr">${ic('cadeado',15)} Chave de Recuperação</button><button type="button" class="btn" id="nv-cpf">${ic('download',15)} Descarregar Cópia Completa</button></div>
+      <p class="mut peq" style="margin:8px 0 0">${kr?'Chave de recuperação guardada em '+new Date(kr).toLocaleDateString('pt-PT'):'<b style="color:var(--bad)">Ainda não guardou a chave de recuperação.</b>'} · ${cf?'Última cópia em ficheiro: '+new Date(cf).toLocaleDateString('pt-PT')+(dias>30?' <b style="color:var(--bad)">(há '+dias+' dias)</b>':''):'<b style="color:var(--bad)">Ainda não descarregou nenhuma cópia em ficheiro.</b>'}</p></div>`;
+    s.querySelector('#nv-ckr').onclick=sbChaveRecDlg;s.querySelector('#nv-cpf').onclick=sbCopiaFicheiro}}catch(e){console.warn(e)}return r}}
+/* ao abrir: a chave tem de estar na conta (se não estiver, guarda-se logo) e, uma vez por mês, lembra a cópia em ficheiro e a chave */
+setTimeout(function sbVigiar(){if(!window.__esPronto){return setTimeout(sbVigiar,5000)}(async()=>{try{const L=nvL();if(L.prov!=='supabase'||!L.k)return;const p=await sbObter();const x=await p.ler(SB_CH);let j=null;try{j=x?JSON.parse(x):null}catch(_){}
+    if(!j||j.k!==L.k){await sbGuardarChaveNaConta();try{audit('Conta','Chave dos dados guardada na conta (verificação automática)','')}catch(_){}}
+    const hj=isoHoje();if(S.cfg.segAviso===hj)return;const cf=S.cfg.copiaFich||0,kr=S.cfg.chaveRecGuardada||0;
+    if(!kr||Date.now()-cf>30*864e5){S.cfg.segAviso=hj;save();const m=!kr?'Guarde a sua chave de recuperação':'Já passou mais de um mês desde a última cópia em ficheiro';
+      setTimeout(()=>{try{toast(m+' — Definições › Conta e Dados.','aviso')}catch(_){}},4000)}}catch(e){console.warn('[EduSpruce] vigiar chave:',e.message)}})()},8000);
