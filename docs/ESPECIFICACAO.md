@@ -1482,3 +1482,7 @@ anoBadge(): turmas com curso (ou de oferta profissional/PROFIJ) mostram um ícon
 
 ## v1.055
 
+
+
+## v1.056
+

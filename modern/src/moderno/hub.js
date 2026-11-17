@@ -183,8 +183,16 @@ function hubEditar(a){const h=hubCfg();const o=Object.assign({},h.ic[a.id]||{});
 /* 1.054 — Início: barra de ferramentas com as apps em ícones pequenos, alinhada à direita (por cima do cartão do ano letivo) */
 if(typeof dashTopo==='function'){const _dtHb=dashTopo;dashTopo=function(){const h=_dtHb.apply(this,arguments);try{hubCss();
   const L=HUB_APPS.filter(a=>!a.on||a.on());if(!L.length)return h;
-  const bar=`<div class="hub-mini" role="toolbar" aria-label="Apps">${L.map(a=>`<button type="button" class="hbm" data-hubmini="${a.id}" title="${esc(hubNome(a))} — ${esc(a.d)}" aria-label="${esc(hubNome(a))}">${hubIcone(a,30)}</button>`).join('')}<span class="hbm-sep"></span><button type="button" class="hbm hbm-todas" data-hubmini="@hub" title="Todas as apps" aria-label="Todas as apps">${ic('apps',18)}</button></div>`;
+  const bar=`<div class="hub-mini" role="toolbar" aria-label="Apps">${L.map(a=>`<button type="button" class="hbm" data-hubmini="${a.id}" title="${esc(hubNome(a))} — ${esc(a.d)}" aria-label="${esc(hubNome(a))}">${hubIcone(a,34)}</button>`).join('')}<span class="hbm-sep"></span><button type="button" class="hbm hbm-todas" data-hubmini="@hub" title="Todas as apps" aria-label="Todas as apps">${ic('apps',22)}</button></div>`;
+  requestAnimationFrame(hubMiniAjusta);setTimeout(hubMiniAjusta,350);
   const k=h.lastIndexOf('</div>');return k<0?h+bar:h.slice(0,k)+bar+h.slice(k)}catch(e){console.warn(e);return h}}}
+/* a barra fica com a largura e as margens do cartão da coluna da direita (ex.: Ano Letivo / contagem) */
+function hubMiniAjusta(){try{const bar=document.querySelector('#view .hub-mini');if(!bar)return;const top=bar.closest('.dtop');
+  const sd=[...document.querySelectorAll('#view .inlay>.in-side')].find(e=>e.offsetWidth);const tr=top&&top.getBoundingClientRect();
+  if(!sd||!tr||innerWidth<=700){bar.classList.remove('larg');bar.style.width='';return}const r=sd.getBoundingClientRect();
+  if(Math.abs(r.right-tr.right)>4||r.left<tr.left+20){bar.classList.remove('larg');bar.style.width='';return}
+  bar.style.width=Math.round(r.width)+'px';bar.classList.add('larg')}catch(_){}}
+addEventListener('resize',()=>{clearTimeout(hubMiniAjusta._t);hubMiniAjusta._t=setTimeout(hubMiniAjusta,120)});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-hubmini]');if(!b)return;e.preventDefault();const id=b.dataset.hubmini;go._hubU=1;
   if(id==='@hub'){go('hub');return}const a=HUB_APPS.find(x=>x.id===id);if(a)go(a.v)});
 {const s=document.createElement('style');s.textContent=`
@@ -194,7 +202,11 @@ html body .hub-mini .hbm{border:0;background:transparent;padding:3px;border-radi
 html body .hub-mini .hbm:hover{background:color-mix(in srgb,var(--acc) 10%,transparent);transform:translateY(-1px)}
 html body .hub-mini .hbm:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 html body .hub-mini .hbm .hbic{box-shadow:none}
-html body .hub-mini .hbm-todas{width:32px;height:32px;color:var(--mut)}
+html body .hub-mini .hbm-todas{width:40px;height:40px;color:var(--mut)}
+html body .dtop .hub-mini.larg{box-sizing:border-box;justify-content:space-between;flex-wrap:nowrap;padding:4px 6px;gap:2px}
+html body .hub-mini.larg .hbm{padding:2px;flex:0 1 auto;min-width:0}
+html body .hub-mini.larg .hbm-sep{margin:0;flex:none}
+html body .hub-mini.larg .hbm-todas{width:34px}
 html body .hub-mini .hbm-sep{width:1px;height:22px;background:var(--line);margin:0 2px}
 html body.est-sge .dtop .hub-mini,html body.est-sge .hub-mini .hbm{border-radius:0}
 html body.est-sge .hub-mini .hbm:hover{background:color-mix(in srgb,#1f9fcf 12%,transparent);transform:none}
