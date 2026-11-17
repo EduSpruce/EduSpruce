@@ -88,3 +88,45 @@ function snwLigacaoIr(){const l=_snwLig;if(!l)return;_snwLig=null;setTimeout(()=
 snwHash();
 {const _pc=esPosCarga;esPosCarga=async function(){const r=await _pc.apply(this,arguments);try{snwLigacaoIr()}catch(_){}return r}}
 window.addEventListener('hashchange',()=>{if(snwHash()&&window.__esPronto)snwLigacaoIr()});
+/* 1.086 — Início: atalho para instalar o SpruceNote Web Clipper, no espaço livre da barra de cima (à esquerda das apps).
+   Só no Chrome/Edge de computador, com o SpruceNote ligado e a extensão ainda por instalar (a extensão marca a página com data-sn-clipper). */
+const SNW_ZIP='extensao/sprucenote-web-clipper.zip';
+const snwChipVer=()=>{try{if(typeof snOn==='function'&&!snOn())return false;if(document.documentElement.hasAttribute('data-sn-clipper'))return false;if(S.snWeb&&S.snWeb.dicaX)return false;
+  const u=navigator.userAgent;return /Chrome\//.test(u)&&!/Mobile|Android|CriOS|iPad|iPhone/.test(u)&&!(navigator.maxTouchPoints>1&&/Macintosh/.test(u)&&!/Chrome/.test(u))}catch(_){return false}};
+if(typeof dashTopo==='function'){const _dtSnw=dashTopo;dashTopo=function(){const h=_dtSnw.apply(this,arguments);try{if(!snwChipVer())return h;
+  const a=(typeof HUB_APPS!=='undefined'&&HUB_APPS.find(x=>x.id==='sprucenote'))||null;const ico=a&&typeof hubIcone==='function'?hubIcone(a,30):ic('nvsn',18);
+  const chip=`<div class="snw-chip" role="group" aria-label="SpruceNote Web Clipper"><button type="button" class="snw-chip-b" data-snw="info" title="Guarde imagens, texto, ligações e vídeos de qualquer site nos quadros do SpruceNote">${ico}<span class="snw-chip-t"><b>SpruceNote Web Clipper</b><small>Guardar da web nos seus quadros</small></span><span class="snw-chip-i">${ic('download',14)} Instalar</span></button><button type="button" class="snw-chip-x" data-snw="x" title="Não mostrar mais" aria-label="Não mostrar mais">${ic('x',14)}</button></div>`;
+  const k=h.indexOf('<div class="hub-mini"');if(k>=0)return h.slice(0,k)+chip+h.slice(k);const j=h.lastIndexOf('</div>');return j<0?h+chip:h.slice(0,j)+chip+h.slice(j)}catch(e){console.warn(e);return h}}}
+function snwInstalar(){openDrawer('SpruceNote Web Clipper',`
+  <p style="margin-top:0">Extensão do Chrome (e do Edge) para guardar <b>imagens, texto, ligações e vídeos</b> de qualquer site nos seus quadros do SpruceNote, como no Milanote. Os recortes chegam à coluna <b>«Por Arrumar»</b> do quadro escolhido.</p>
+  <a class="btn pri" href="${SNW_ZIP}" download>${ic('download',14)} Descarregar a extensão (.zip)</a>
+  <h3 style="margin:20px 0 6px">Instalar (uma vez)</h3>
+  <ol class="snw-passos"><li>Descompacte o ficheiro <b>sprucenote-web-clipper.zip</b>.</li><li>No Chrome, abra <b>chrome://extensions</b> e ligue o <b>Modo de programador</b> (canto superior direito).</li><li>Carregue em <b>Carregar expandida</b> e escolha a pasta <b>sprucenote-web-clipper</b>.</li><li>Fixe o ícone na barra do Chrome (peça de puzzle › alfinete).</li><li>Nas <b>Opções</b> da extensão, entre com a mesma conta Google da EduSpruce.</li></ol>
+  <h3 style="margin:20px 0 6px">Usar</h3>
+  <ul class="snw-passos"><li><b>Imagens:</b> passe o rato por cima e carregue em «Guardar».</li><li><b>Texto:</b> selecione, botão direito › <b>Guardar no SpruceNote</b>.</li><li><b>Páginas e vídeos</b> (YouTube, Vimeo): ícone na barra do Chrome ou <b>Alt+Shift+S</b>.</li><li>«Guardar em ▾» escolhe o quadro: o principal ou um dos 10 abertos mais recentemente.</li></ul>
+  <p class="mut">Os recortes vão cifrados com a chave da sua conta, como os restantes dados. Não funciona no iPad nem no telemóvel.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button type="button" class="btn" data-snw="ajuda">${ic('help',14)} Ver na Ajuda</button><button type="button" class="btn ghost" data-snw="x">Já instalei · não mostrar mais</button></div>`)}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-snw]');if(!b)return;const k=b.dataset.snw;
+  if(k==='info'){snwInstalar();return}
+  if(k==='ajuda'){try{closeDrawer()}catch(_){}UI.ajQ='Web Clipper';go('ajuda');return}
+  if(k==='x'){S.snWeb=S.snWeb&&typeof S.snWeb==='object'?S.snWeb:{};S.snWeb.dicaX=1;save();try{closeDrawer()}catch(_){}document.querySelectorAll('.snw-chip').forEach(c=>c.remove());try{hubMiniAjusta()}catch(_){}toast('Pode instalar mais tarde em Ajuda › SpruceNote Web Clipper','ok')}});
+/* a extensão marca a página depois de a app arrancar: tira o atalho */
+try{new MutationObserver(()=>{if(document.documentElement.hasAttribute('data-sn-clipper'))document.querySelectorAll('.snw-chip').forEach(c=>c.remove())}).observe(document.documentElement,{attributes:true,attributeFilter:['data-sn-clipper']})}catch(_){}
+{const s=document.createElement('style');s.textContent=`
+html body .dtop .snw-chip{margin-left:auto;display:flex;align-items:stretch;border:1px solid var(--line);background:var(--panel);border-radius:12px;min-width:0;flex:0 1 auto;overflow:hidden}
+html body .dtop .snw-chip+.hub-mini{margin-left:10px}
+html body .snw-chip-b{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:5px 10px 5px 6px;cursor:pointer;min-width:0;text-align:left;color:inherit;font:inherit}
+html body .snw-chip-b:hover{background:color-mix(in srgb,var(--acc) 8%,transparent)}
+html body .snw-chip-b .hbic{flex:none;box-shadow:none}
+html body .snw-chip-t{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+html body .snw-chip-t b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .snw-chip-t small{font-size:11.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .snw-chip-i{flex:none;display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--acc);padding:4px 8px;border-radius:8px;background:color-mix(in srgb,var(--acc) 10%,transparent)}
+html body .snw-chip-x{border:0;border-left:1px solid var(--line);background:transparent;color:var(--mut);padding:0 8px;cursor:pointer}
+html body .snw-chip-x:hover{color:var(--ink,inherit);background:color-mix(in srgb,var(--acc) 8%,transparent)}
+html body .snw-passos{margin:0;padding-left:20px;line-height:1.6}
+html body.est-sge .dtop .snw-chip,html body.est-sge .snw-chip-i{border-radius:0}
+@media (max-width:1100px){html body .snw-chip-t small{display:none}}
+@media (max-width:860px){html body .snw-chip-t{display:none}}
+@media (max-width:700px){html body .dtop .snw-chip{display:none}}
+`;document.head.appendChild(s)}

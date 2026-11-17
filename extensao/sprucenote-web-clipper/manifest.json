@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SpruceNote Web Clipper",
   "short_name": "SpruceNote",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Guarde imagens, texto, ligações e vídeos de qualquer site nos seus quadros do SpruceNote (EduSpruce).",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1J7VK1hL29EOaT0RaUdAC3QBBgirRLzepCq6Kl1vXByjrJTEIsiUg3WYMWAltdZJ4PTquBs5foSBWZhCYroc2NmrHInBsYJVmqVAuZv8okVsxZ+JdeQjQ8ZCuNNJBXqUdz+L/pORmSOBL4otDvssa2fkkpfGs7d1ie5bHUYVFzes+hBQbFeLdnKO8iKefgm1r5/Scb5kNB4ceZNp9Uapxx1106NX4Z7d7FbFmR5ihL4W5CCCa7NgskLZb+trfY/no5HBpgMixEmYsM10a0dRQ0R0a10rgn24jxbwIa2gXJgGdwZhWHznMEcezgT7/ItImJTkiDoK/8yycqTOXf3++QIDAQAB",
   "minimum_chrome_version": "116",

@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.087
+- Início: atalho para instalar o SpruceNote Web Clipper ao lado das apps (só no Chrome/Edge de computador; desaparece com a extensão instalada)
+- Ajuda e Manual: SpruceNote Web Clipper
+- Erros Técnicos: deixam de aparecer bloqueios de código injetado por extensões do navegador
+
 ## 1.086
 - Privacidade e Termos: explicam agora as páginas dos alunos (Formulários, Provas, Spruce It e Pulso), os avisos, o EduSchedule, os prazos de apagamento e como eliminar a conta
 - Textos da app: já não dizem «neste dispositivo» — os dados ficam guardados na sua conta

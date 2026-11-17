@@ -98,6 +98,15 @@ Menu **SpruceNote**. Quadros livres para planear e organizar ideias.
 **Anotação**, **Link**, **Pendências** (lista de tarefas), **Linha** (seta entre elementos), **Quadro** (sub-quadro), **Coluna**, **Comentário**, **Áudio**, **Título**, **Vídeo**, **Mapa**, **Imagem**, **Enviar** (ficheiro), **Desenho** e **Lixeira**.
 - Duplo toque abre ou edita; arraste para mover; zoom − / + e ajustar ao ecrã; anular e refazer; **Aumentar** para ecrã inteiro.
 !snjornal | JornalNote: igual ao SpruceNote, só com os quadros do Jornal Escolar.
+## SpruceNote Web Clipper (extensão do Chrome)
+Guarda **imagens, texto, ligações e vídeos** de qualquer site nos quadros do SpruceNote, como no Milanote. No Início, o atalho **SpruceNote Web Clipper › Instalar** (à esquerda das apps, só no computador) descarrega a extensão e mostra os passos; desaparece quando a extensão está instalada.
+1. Descompacte **sprucenote-web-clipper.zip** (Ajuda › SpruceNote Web Clipper ou atalho do Início).
+2. No Chrome, abra **chrome://extensions** e ligue o **Modo de programador**.
+3. **Carregar expandida** › escolha a pasta **sprucenote-web-clipper**; fixe o ícone na barra (peça de puzzle › alfinete).
+4. Nas **Opções** da extensão, entre com a mesma conta Google da EduSpruce.
+- **Imagens:** passe o rato por cima e carregue em «Guardar». **Texto:** selecione › botão direito › **Guardar no SpruceNote**. **Páginas e vídeos:** ícone na barra do Chrome ou **Alt+Shift+S**.
+- «Guardar em ▾» escolhe o quadro (o principal ou um dos 10 abertos mais recentemente). Os recortes chegam à coluna **«Por Arrumar»**, cifrados com a chave da conta.
+? Não funciona no iPad nem no telemóvel: só no Chrome ou no Edge de computador.
 
 @parte VIII | Definições e ajuda | Todos os separadores das Definições, ajuda, perguntas frequentes e glossário
 

@@ -9,6 +9,7 @@
 
   const {Painel, limparHTML, notaDeTexto, eVideo} = globalThis.SNPainel;
   const NA_APP = /(^|\.)eduspruce\.(pt|app|github\.io)$/i.test(location.hostname);   // na própria EduSpruce não há botões flutuantes
+  if (NA_APP) try { document.documentElement.setAttribute('data-sn-clipper', chrome.runtime.getManifest().version); } catch (_) {}   // a app deixa de sugerir a instalação
   const opc = {imagens: true, texto: false};
   const ouvintes = [];
   const ouvir = (alvo, ev, fn, o) => { alvo.addEventListener(ev, fn, o); ouvintes.push([alvo, ev, fn, o]); };
