@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.081
+- Apps: os módulos desligados deixam de aparecer; um grupo sem módulos ligados desaparece até se ligar um
+- Menu lateral: o SpruceNote desligado já não volta a aparecer
+
 ## 1.080
 - Provas: o ícone do cabeçalho usa a cor da app
 - O nome da app ao lado da casa aparece inteiro em todas as EduApps

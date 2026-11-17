@@ -85,7 +85,6 @@ html body .hbt{position:relative;display:flex;gap:14px;align-items:center;text-a
   transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;animation:hbIn .42s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
 html body .hbt:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.10);border-color:color-mix(in srgb,var(--h1,var(--acc)) 45%,var(--line))}
 html body .hbt:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-html body .hbt.off{opacity:.55}
 html body .hbt .hbtx{min-width:0;display:flex;flex-direction:column;gap:3px}
 html body .hbt .hbn{font-weight:700;font-size:15.5px}
 html body .hbt .hbd{font-size:12.5px;color:var(--mut);line-height:1.3}
@@ -147,10 +146,11 @@ html body.est-sge .hub.edit .hbt{animation:none}
 html body.est-sge .hbt,html body.est-sge .hbic,html body.est-sge .hbt .hblig,html body.est-sge .hbt .hbed,html body.est-sge .hbe-glifos button,html body.est-sge .hbe-cores button,html body.est-sge .hbe-cores input{border-radius:0}
 `;document.head.appendChild(s)}
 
+/* nas Apps, os módulos desligados não aparecem; um grupo sem nenhum módulo ligado desaparece até se ligar um nas Definições */
 function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
-  const tile=a=>{const on=!a.on||a.on();let inf='';try{inf=a.info?a.info():''}catch(_){}const [c1,c2]=hubCor(a);
-    return `<button type="button" class="hbt${on?'':' off'}" data-hub="${a.id}" style="--i:${i++};--h1:${c1};--h2:${c2}" title="${esc(hubNome(a))} — ${esc(a.d)}">
-      ${hubIcone(a,60)}<span class="hbtx"><span class="hbn">${esc(hubNome(a))}</span><span class="hbd">${esc(a.d)}</span>${on?(inf?`<span class="hbi">${esc(inf)}</span>`:''):'<span class="hbi">Desligada · ativar nas Definições</span>'}${on&&a.tag?`<span class="hblig">${esc(a.tag)}</span>`:''}</span>
+  const tile=a=>{let inf='';try{inf=a.info?a.info():''}catch(_){}const [c1,c2]=hubCor(a);
+    return `<button type="button" class="hbt" data-hub="${a.id}" style="--i:${i++};--h1:${c1};--h2:${c2}" title="${esc(hubNome(a))} — ${esc(a.d)}">
+      ${hubIcone(a,60)}<span class="hbtx"><span class="hbn">${esc(hubNome(a))}</span><span class="hbd">${esc(a.d)}</span>${inf?`<span class="hbi">${esc(inf)}</span>`:''}${a.tag?`<span class="hblig">${esc(a.tag)}</span>`:''}</span>
       <span class="hbed" data-hbed="${a.id}" title="Personalizar ícone">${ic('pencil',14)}</span></button>`};
   const hoje=new Date().toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'});
   const a0=A(),TL=a0?turmasFiltradas(a0):[],t0=T();
@@ -159,14 +159,13 @@ function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
     <div class="hub-top"><div><h2>${ic('apps',22)}Apps</h2><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
       <div class="hub-bar"><label class="chk" style="margin:0"><input type="checkbox" id="hb-ini" ${hubIni()?'checked':''}> <span>Abrir aqui ao entrar</span></label>
         <button class="btn${ed?' pri':''}" id="hb-ed">${ic(ed?'check':'pencil',15)} ${ed?'Concluído':'Personalizar'}</button></div></div>
-    ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id);return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(hubNomeGr(g))}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
+    ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id&&(!a.on||a.on()));return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(hubNomeGr(g))}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
   </div>`;
   {const st=$('#hb-tur');if(st)st.onchange=e=>{if(!e.target.value)return;S.turmaAtiva=e.target.value;save();go('hub')}}
   $('#hb-ini').onchange=e=>{hubCfg().ini=e.target.checked;save();toast(e.target.checked?'A app abre nas Apps':'A app abre no Início','ok')};
   $('#hb-ed').onclick=()=>{UI.hubEd=!UI.hubEd;vHub()};
   $$('#view .hbt').forEach(b=>b.onclick=e=>{const a=HUB_APPS.find(x=>x.id===b.dataset.hub);if(!a)return;
     if(UI.hubEd||e.target.closest('[data-hbed]')){hubEditar(a);return}
-    if(a.on&&!a.on()){UI.defTab='mods';go('definicoes');setTimeout(()=>{try{const m=$('#view #def-mods');if(m)m.scrollIntoView({behavior:'smooth',block:'center'})}catch(_){}},80);return}
     if(a.turma&&!T()){const st=$('#hb-tur');if(st){st.focus();try{st.showPicker()}catch(_){}}toast('Escolha primeiro a turma','info');return}
     go._hubU=1;go(a.v)})}
 
