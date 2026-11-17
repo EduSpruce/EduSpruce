@@ -6,7 +6,7 @@ function editarTurmaDlg(t){
     ${escolaSelect('et-esc',escId(escolaDe(t)))}
     <div style="margin-bottom:12px"><label>Oferta Formativa</label><div id="et-ofw">${segOferta('et-of',oferta,tipoEscola(escolaDe(t)))}</div></div>
     <div id="et-prof" class="g2" style="margin-bottom:12px;${oferta==='profissional'?'':'display:none'}"><div><label>Curso profissional</label><input id="et-curso" value="${esc(t.curso||'')}" placeholder="ex.: Técnico de Turismo"></div><div><label>Ano de formação</label><select id="et-af">${['1.º','2.º','3.º'].map(x=>`<option ${t.anoForm===x?'selected':''}>${x}</option>`).join('')}</select></div></div>
-    ${oferta!=='regular'?`<fieldset class="etmra"><legend>${ic('file',14)} Dados da turma para as fichas (MRA) · ${esc((A()||{}).nome||'')}</legend><div class="g2">
+    ${tipoEscola(escolaDe(t))==='profissional'?`<fieldset class="etmra"><legend>${ic('file',14)} Dados da turma para as fichas (MRA) · ${esc((A()||{}).nome||'')}</legend><div class="g2">
       <div style="grid-column:1/-1"><label for="et-proj">N.º do projeto</label><input id="et-proj" value="${esc(projetoDe(t,A()))}" placeholder="ex.: ACORES2030-FSE+-01717300" autocapitalize="characters" spellcheck="false"></div>
       <div style="grid-column:1/-1"><label for="et-cfich">Curso (como aparece na ficha)</label><input id="et-cfich" value="${esc(turmaDado(t,'cursoFicha')||(_mraDef?mraCursoNome(t):''))}" placeholder="ex.: A01 - Mecatrónica Automóvel (24-27)"></div>
       <div><label for="et-ori">Orientador(a) educativo(a)</label><input id="et-ori" value="${esc(turmaDado(t,'orientador'))}" placeholder="Nome"></div>

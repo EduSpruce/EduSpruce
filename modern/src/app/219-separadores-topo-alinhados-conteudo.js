@@ -90,7 +90,7 @@ function abasUmaLinha(){document.querySelectorAll('#view .dttabs,#view .fichatab
 const FP_M=[['fct','Formação em Contexto de Trabalho (FCT)','#2e7d32'],['ante','Anteprojeto da PAP','#7a4fd0'],['m1','1.º momento da PAP','#1e6fd9'],['m2','2.º momento da PAP','#0f8b8d'],['pap','Prova de Aptidão Profissional (PAP)','#c0392b']];
 const fpCfg=(a,nome)=>{const k=normTurma(nome);const o=turmaDM(a)[k]=turmaDM(a)[k]||{};return o.pap=o.pap||{}};
 function fpEventos(a){if(!a)return [];const ea=escAtiva();const vis=new Set();const E=[];
-  a.turmas.filter(t=>ehModular(t)&&escId(escolaDe(t))===ea).forEach(t=>{const k=normTurma(t.nome);if(vis.has(k))return;vis.add(k);const P=((turmaDM(a)[k]||{}).pap)||{};
+  a.turmas.filter(t=>ehModular(t)&&tipoEscola(escolaDe(t))==='profissional'&&escId(escolaDe(t))===ea).forEach(t=>{const k=normTurma(t.nome);if(vis.has(k))return;vis.add(k);const P=((turmaDM(a)[k]||{}).pap)||{};
     FP_M.forEach(([id,n,cor])=>{const m=P[id];if(m&&m.on)E.push({id,n,cor,turma:t.nome,curso:t.curso||(t.cnq&&t.cnq.nome)||'',ini:m.ini||'',fim:m.fim||m.ini||''})})});
   return E.sort((x,y)=>(x.ini||'9999').localeCompare(y.ini||'9999')||FP_M.findIndex(m=>m[0]===x.id)-FP_M.findIndex(m=>m[0]===y.id))}
 function cartaoFormProf(a,c){const E=fpEventos(a);if(!E.length)return '';const hj=isoHoje();
@@ -102,7 +102,7 @@ function fpMarcar(){if(VIEW!=='calendario')return;const E=fpEventos(A()).filter(
 function fpFieldset(t){const a=A();const P=((turmaDM(a)[normTurma(t.nome)]||{}).pap)||{};
   return `<fieldset class="etmra fpset"><legend>${ic('award',14)} Curso · FCT e PAP</legend><p class="hint" style="margin:0 0 8px">Indique o que este curso tem neste ano letivo. Só o que estiver marcado aparece no calendário escolar.</p>
     ${FP_M.map(([id,n])=>{const m=P[id]||{};return `<div class="fprow"><label class="chk" style="margin:0"><input type="checkbox" data-fpk="${id}|on" ${m.on?'checked':''}> <span>${esc(n)}</span></label><span class="fpd" ${m.on?'':'hidden'}><label>De <input type="date" data-fpk="${id}|ini" value="${esc(m.ini||'')}"></label><label>Até <input type="date" data-fpk="${id}|fim" value="${esc(m.fim||'')}"></label></span></div>`}).join('')}</fieldset>`}
-{const _etd=editarTurmaDlg;editarTurmaDlg=function(t){const r=_etd.apply(this,arguments);try{if(ehModular(t)){const ref=$('#drawer .etmra')||$('#et-prof');if(ref&&!$('#drawer .fpset'))ref.insertAdjacentHTML('afterend',fpFieldset(t))}}catch(e){console.warn(e)}return r}}
+{const _etd=editarTurmaDlg;editarTurmaDlg=function(t){const r=_etd.apply(this,arguments);try{if(ehModular(t)&&tipoEscola(escolaDe(t))==='profissional'){const ref=$('#drawer .etmra')||$('#et-prof');if(ref&&!$('#drawer .fpset'))ref.insertAdjacentHTML('afterend',fpFieldset(t))}}catch(e){console.warn(e)}return r}}
 document.addEventListener('change',e=>{const el=e.target;if(!el||!el.dataset||!el.dataset.fpk)return;const a=A();const t=T();const nome=($('#et-nome')||{}).value||(t&&t.nome);if(!a||!nome)return;
   const [id,k]=el.dataset.fpk.split('|');const P=fpCfg(a,nome);const m=P[id]=P[id]||{};
   if(k==='on'){m.on=el.checked;const d=el.closest('.fprow').querySelector('.fpd');if(d)d.hidden=!el.checked}else m[k]=el.value;

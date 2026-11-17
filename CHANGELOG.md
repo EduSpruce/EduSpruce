@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.120
+- PROFIJ: «Ano do curso» em vez do ano de escolaridade; disciplinas do referencial de dupla certificação e UFCD do curso ao criar a turma
+- N.º de projeto, dados MRA, FCT e PAP só nas escolas profissionais
+- Horários: turma conjunta mantém os dois horários; importar horário PROFIJ com nome diferente associa à turma
+- Logótipos do canto direito e do rodapé em todos os documentos
+- Aulas Previstas com gráficos; cores das turmas iguais em todo o lado
+- Vários acertos visuais (calendário anual, planta, sorteio, estatística, apps sem título repetido)
+
 ## 1.119
 - O Meu Calendário: acerto nas caixas de seleção
 

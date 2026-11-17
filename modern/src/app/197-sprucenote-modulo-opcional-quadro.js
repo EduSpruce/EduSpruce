@@ -38,7 +38,7 @@ async function bloqDetetar(){if(sessionStorage.getItem('es.bloqv'))return;let bl
 setTimeout(()=>{try{bloqDetetar()}catch(_){}},2500);
 
 /* 0.916 · modalidade de interação: a caixa de foco só aparece quando se usa o teclado */
-addEventListener('keydown',e=>{if(e.key==='Tab'||e.key.startsWith('Arrow'))document.documentElement.classList.add('kbd')},true);
+addEventListener('keydown',e=>{if(e.key==='Tab'||String(e.key||'').startsWith('Arrow'))document.documentElement.classList.add('kbd')},true);
 addEventListener('pointerdown',()=>document.documentElement.classList.remove('kbd'),true);
 /* fotografia: botão do caixote do lixo no canto superior direito */
 function phLixo(){[['#pf-del','.pfz'],['#fa-rm','#fa-ph']].forEach(([del,box])=>{const d=document.querySelector(del),b=document.querySelector(box);if(!d||!b||b.querySelector('.phdel'))return;

@@ -17,7 +17,7 @@ const A11Y={kb:false,live:null};
   ['#scrim','#dwscrim'].forEach(s=>{const e=$(s);if(e)e.setAttribute('aria-hidden','true')});
   const lv=document.createElement('div');lv.id='a11y-live';lv.className='a11y-sr';lv.setAttribute('aria-live','polite');lv.setAttribute('aria-atomic','true');document.body.append(lv);A11Y.live=lv;
   /* modo de interação (teclado vs toque/rato) */
-  addEventListener('keydown',e=>{if(e.key==='Tab'||e.key.startsWith('Arrow'))A11Y.kb=true},true);addEventListener('pointerdown',()=>{A11Y.kb=false},true);
+  addEventListener('keydown',e=>{if(e.key==='Tab'||String(e.key||'').startsWith('Arrow'))A11Y.kb=true},true);addEventListener('pointerdown',()=>{A11Y.kb=false},true);
   try{aplicarA11yCfg()}catch(_){}
   ['(prefers-reduced-motion: reduce)','(prefers-contrast: more)'].forEach(q=>{try{matchMedia(q).addEventListener('change',aplicarA11yCfg)}catch(_){}})
 })();

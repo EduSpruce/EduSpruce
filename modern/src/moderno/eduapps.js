@@ -8,7 +8,12 @@ function eaAplicar(){
   if(app&&!c){c=document.createElement('button');c.type='button';c.id='eacasa';c.className='btn ico';c.title='Voltar à EduSpruce';c.setAttribute('aria-label','Voltar à EduSpruce');c.innerHTML=ic('home',20);c.onclick=eaVoltar;t.insertBefore(c,t.firstChild)}
   if(c)c.hidden=!app;
   try{typeof barLayout==='function'&&barLayout()}catch(_){}
+  eaAlinha();setTimeout(eaAlinha,80);setTimeout(eaAlinha,400)
 }
+/* casa alinhada com o conteúdo de baixo (sem o nome da app, que já está no cartão) */
+function eaAlinha(){const b=document.getElementById('bar');if(!b)return;if(!document.body.classList.contains('eduapp')){b.style.removeProperty('padding-left');return}
+  const v=document.querySelector('#view .card');if(!v)return;const x=Math.round(v.getBoundingClientRect().left-b.getBoundingClientRect().left);if(x>0&&x<400)b.style.setProperty('padding-left',x+'px','important')}
+addEventListener('resize',()=>{clearTimeout(eaAlinha._t);eaAlinha._t=setTimeout(eaAlinha,120)});
 {const _gEa=go;go=function(v){const r=_gEa.apply(this,arguments);try{eaAplicar()}catch(e){console.warn(e)}return r};Object.assign(go,_gEa);go._f=_gEa._f}
 {const st=document.createElement('style');st.textContent=`html body.eduapp #side,html body.eduapp #railTgl,html body.eduapp #tabbar,html body.eduapp .spvolta,html body.eduapp #menuBtn,html body.eduapp #bar #crumb,html body.eduapp #bar #ctxTurma{display:none!important}
 html body.eduapp #main{margin-left:0!important;width:100%!important;max-width:none!important}
@@ -20,7 +25,8 @@ html body #bar #eacasa{flex:0 0 auto}
 html body.eduapp.dev-pc #bar.hgrid{grid-template-areas:"t e x a u i"!important}
 html body.eduapp #bar #barx{grid-area:x!important;justify-content:flex-end!important;flex-wrap:nowrap!important;margin:0!important}
 html body #bar #eacasa[hidden]{display:none!important}
-html body.est-sge #bar #eacasa{border-radius:0}`;document.head.appendChild(st)}
+html body.est-sge #bar #eacasa{border-radius:0}
+html body.eduapp #bar .ttlw #ttl{display:none!important}`;document.head.appendChild(st)}
 
 /* a cor de cada app (a mesma das Apps) no ícone do cabeçalho de cada app; o menu lateral fica com os ícones brancos */
 function eaCores(){try{if(typeof HUB_APPS==='undefined')return;let st=document.getElementById('eacores');if(!st){st=document.createElement('style');st.id='eacores';document.head.appendChild(st)}

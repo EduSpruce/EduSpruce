@@ -14,7 +14,7 @@ function vMeuHorario(){
   const hoje=[...hojeL,...extraHoje].sort((x,y)=>x.ini-y.ini);
   const prox=proximasAulas(aulas,1)[0];
   const cores=['#2f7fd0','#d98b00','#7a4fd0','#c0392b','#0f8b8d','#b0457b','#5b6b7f','#1a7f37'];
-  const corT=t=>(t.oferta==='profij'?['#1a7f37','#0f8b8d','#4f8a2b','#2e7d5b']:cores)[TT.filter(x=>x.oferta===t.oferta).indexOf(t)%4];
+  const corT=t=>{try{return corTurma(t.id)}catch(_){return (t.oferta==='profij'?['#1a7f37','#0f8b8d','#4f8a2b','#2e7d5b']:cores)[TT.filter(x=>x.oferta===t.oferta).indexOf(t)%4]}};
   const todos=[...aulas,...outras,...NL];
   const nTL=aulas.length+outras.length,nNL=NL.length;
   const gNL=[];NL.forEach(x=>{const d=gNL.find(d=>normSig(d.sig)===normSig(x.sig));if(d){d.n++;if(!d.gs.includes(x.g))d.gs.push(x.g)}else gNL.push({sig:x.sig,nome:x.nome,n:1,gs:[x.g]})});
@@ -65,7 +65,7 @@ function tabelaPreview(al,turmas){
   return `${turmas.length>1?`<div class="row" style="margin:6px 0"><label class="mut" style="margin:0">Importar alunos da turma</label><select id="prev-t" class="fld" style="width:auto"><option value="">Todas (${turmas.join(' + ')})</option>${turmas.map(t=>`<option>${esc(t)}</option>`).join('')}</select></div>`:''}
   <p class="hint">Verifique e corrija os nomes. Desmarque “Frequenta” para quem não tem a sua disciplina.${turmas.length>1?' Ao importar todas juntas, cada aluno mantém o número e a indicação da sua turma.':''}</p>
   <div style="max-height:46vh;overflow:auto;border:1px solid var(--line);border-radius:8px"><table class="lst" id="prev"><thead><tr><th>Incluir</th><th></th><th>N.º</th><th>Processo</th><th>Nome</th><th>Sexo</th>${turmas.length>1?'<th>Turma</th>':''}<th>Frequenta</th></tr></thead><tbody>
-  ${PREV.map((a,k)=>`<tr data-k="${k}" data-t="${esc(a.turma||'')}"><td><input type="checkbox" data-p="inc" checked></td><td style="width:70px">${avatar(a,56)}</td><td style="width:56px"><input data-p="num" value="${esc(a.num)}"></td><td style="width:76px"><input data-p="processo" value="${esc(a.processo)}"></td><td><input data-p="nome" value="${esc(a.nome)}"></td><td style="width:66px"><select data-p="genero"><option ${a.genero==='M'?'selected':''}>M</option><option ${a.genero==='F'?'selected':''}>F</option></select></td>${turmas.length>1?`<td class="mut" style="white-space:nowrap">${esc(a.turma)}</td>`:''}<td><input type="checkbox" data-p="frequenta" ${a.frequenta?'checked':''}></td></tr>`).join('')}
+  ${PREV.map((a,k)=>`<tr data-k="${k}" data-t="${esc(a.turma||'')}"><td><input type="checkbox" data-p="inc" checked></td><td style="width:70px">${avatar(a,56)}</td><td style="width:56px"><input data-p="num" value="${esc(a.num)}"></td><td style="width:76px"><input data-p="processo" value="${esc(a.processo)}"></td><td><input data-p="nome" value="${esc(a.nome)}"></td><td style="width:84px"><select data-p="genero" style="min-width:76px;padding:0 26px 0 12px!important"><option ${a.genero==='M'?'selected':''}>M</option><option ${a.genero==='F'?'selected':''}>F</option></select></td>${turmas.length>1?`<td class="mut" style="white-space:nowrap">${esc(a.turma)}</td>`:''}<td><input type="checkbox" data-p="frequenta" ${a.frequenta?'checked':''}></td></tr>`).join('')}
   </tbody></table></div>`;
 }
 function bindPreview(onTurma){

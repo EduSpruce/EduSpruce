@@ -1,0 +1,75 @@
+/* v1.120 · acertos visuais */
+/* O Meu Calendário › Ano letivo: 4 colunas a ocupar a largura, meses em cartão, dias maiores, cores visíveis */
+html body #view .oc .ocano{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}
+@media (max-width:1300px){html body #view .oc .ocano{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (max-width:900px){html body #view .oc .ocano{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:560px){html body #view .oc .ocano{grid-template-columns:1fr!important}}
+html body #view .oc .ocam{border:1px solid var(--line);background:var(--panel);padding:12px 14px 14px;border-radius:var(--r,10px)}
+html body.est-sge #view .oc .ocam{border-radius:0}
+html body #view .oc .ocam>b{font-size:15px;margin-bottom:8px;color:var(--acc)}
+html body #view .oc .ocam .ocmg{gap:3px!important}
+html body #view .oc .ocam .ocmg button{height:clamp(30px,2.6vw,40px)!important;min-height:0!important;font-size:13.5px!important;position:relative}
+html body #view .oc .ocam .ocmg button.f-fer{background:color-mix(in srgb,#e04848 22%,transparent)!important}
+html body #view .oc .ocam .ocmg button.f-int{background:color-mix(in srgb,#e0a030 26%,transparent)!important}
+html body #view .oc .ocam .ocmg button.te{box-shadow:inset 0 0 0 2px #c0392b!important}
+html body #view .oc .ocam .ocmg button.ev:after{content:"";position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--acc)}
+html body #view .oc .ocam .ocmg button.hj{background:var(--acc)!important;color:#fff!important}
+
+/* Planta da sala › Sem lugar: cartões do tamanho da fotografia, em grelha */
+html body .plfora{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))!important;gap:10px!important}
+html body .plfora .pls.solto{width:auto!important;max-width:none!important;min-height:0!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;padding:10px 6px!important;text-align:center}
+html body .plfora .pls.solto img,html body .plfora .pls.solto .ava{width:64px!important;height:64px!important;flex:none}
+html body .plfora .pls.solto span{font-size:12.5px;line-height:1.25;white-space:normal}
+
+/* Sorteio: espaçamento e ícone maior */
+html body #view .card.rodacard{padding:22px 24px 24px!important}
+html body .rodacard .rodah{gap:18px!important;margin-bottom:18px!important}
+html body .rodacard .rodaico{width:60px!important;height:60px!important}
+html body .rodacard .rodab{gap:12px!important}
+
+/* Painel da turma: caixas de seleção centradas e botões ao lado do nome alinhados */
+html body table.pntb th:first-child,html body table.pntb td:first-child{text-align:center!important;vertical-align:middle!important}
+html body table.pntb td{vertical-align:middle}
+html body table.pntb td .pnnm,html body table.pntb td .btn{vertical-align:middle}
+
+/* Planos de recuperação: regras da lei a toda a largura */
+html body .prlei{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+@media (max-width:800px){html body .prlei{grid-template-columns:1fr!important}}
+
+/* Registo de importações recolhível */
+html body details.regimp>summary::-webkit-details-marker{display:none}
+html body .rodacard .rodaico i{width:18px!important;height:18px!important}
+/* Aulas previstas (gaveta da turma): os 4 números numa linha, listas compactas */
+html body #dw-b .pvp .pvn{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;width:auto!important;max-width:none!important;padding:0!important;background:none!important;margin:12px 0!important}
+@media (max-width:520px){html body #dw-b .pvp .pvn{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+html body #dw-b .pvp .pvn>div{align-items:center;text-align:center;padding:10px 6px!important;width:auto!important;margin:0!important}
+html body #dw-b .pvp .pvn>div:last-child{border-color:var(--acc)!important;background:color-mix(in srgb,var(--acc) 7%,var(--panel))!important}
+html body #dw-b .pvp .pvn b{font-size:26px!important}
+html body #dw-b .pvp .pvn span{font-size:12px!important}
+html body #dw-b .pvp .pvd{display:flex;flex-wrap:wrap;gap:6px}
+html body #dw-b .pvp .pvx{display:grid!important;grid-template-columns:14px minmax(110px,auto) 1fr auto;align-items:center;gap:10px;font-size:13.5px!important;padding:6px 0;border-top:1px solid var(--line)}
+html body #dw-b .pvp .pvx b,html body #dw-b .pvp .pvx span{font-size:13.5px!important;color:var(--ink)}
+html body #dw-b .pvp .pvx .mut{color:var(--mut)!important;font-weight:700}
+html body #dw-b .pvp .pvx .sw{width:12px;height:12px}
+/* Aulas Previstas: gráficos */
+html body .apgw{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:16px;margin-top:16px}
+html body .apg-r{display:grid;grid-template-columns:minmax(150px,240px) 1fr 90px;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid var(--line)}
+html body .apg-n{display:flex;align-items:center;gap:8px;min-width:0}html body .apg-n .mut{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .apg-b{display:flex;height:16px;background:color-mix(in srgb,var(--ink) 8%,transparent);overflow:hidden}
+html body .apg-b i{display:block;height:100%}html body .apg-b i.d,html body .apc-leg i.apc-d{background:var(--acc)}html body .apg-b i.f,html body .apc-leg i.apc-f{background:var(--bad,#c0392b)}html body .apc-leg i.apc-r{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+html body .apg-v{text-align:right;font-size:13px}
+html body .apc{display:flex;gap:18px;align-items:flex-end;height:240px;padding:8px 0 0}
+html body .apc-g{flex:1;display:flex;flex-direction:column;height:100%;gap:6px;align-items:center}
+html body .apc-g>b{font-size:13px}
+html body .apc-bars{flex:1;width:100%;display:flex;gap:6px;align-items:flex-end;justify-content:center;border-bottom:1px solid var(--line)}
+html body .apc-c{flex:1;max-width:46px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
+html body .apc-c span{font-size:12px;font-weight:700}
+html body .apc-col{width:100%;position:relative;display:flex;align-items:flex-end;min-height:2px}
+html body .apc-col i{display:block;width:100%;background:rgba(0,0,0,.28)}
+html body :is(.apc,.apc-leg) .c0{background:#127fa6}html body :is(.apc,.apc-leg) .c1{background:#e07a2e}html body :is(.apc,.apc-leg) .c2{background:#2e9e5b}html body :is(.apc,.apc-leg) .c3{background:#7a4fd0}html body :is(.apc,.apc-leg) .c4{background:#c2417a}html body :is(.apc,.apc-leg) .c5{background:#b8860b}
+html body .apc-leg{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:12.5px}
+html body .apc-leg span{display:inline-flex;align-items:center;gap:6px}html body .apc-leg i{width:12px;height:12px;display:inline-block}html body .apc-leg i.apc-dd{background:rgba(0,0,0,.28)}
+/* Estatística da turma: espaço entre o título e os números */
+html body #view .card.avst>h2{margin:0 0 16px!important}
+html body #view .card.avst .avstd{margin-top:22px}
+html body #view .card.avst .avsb{column-gap:12px}
