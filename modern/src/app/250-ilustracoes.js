@@ -17,13 +17,32 @@ geral:`<rect x="30" y="22" width="80" height="80" rx="10" fill="var(--panel)" st
 const ILU_VISTA={turmas:'turma',alunos:'turma',painel:'turma',planta:'turma',cprofij:'turma',calendario:'calendario',meucal:'calendario',meuhorario:'calendario',horario:'calendario',aula:'calendario',sumarios:'calendario',
   testes:'avaliacao',avaliacao:'avaliacao',criterios:'avaliacao',instrumentos:'avaliacao',dominios:'avaliacao',analise:'avaliacao',intercalar:'avaliacao',oral:'avaliacao',relatorios:'documentos',
   tarefas:'tarefas',reunioes:'reunioes',direcao:'reunioes',documentos:'documentos',recursos:'documentos',biblioteca:'biblioteca',contactos:'contactos',jornal:'jornal'};
-function iluSvg(k,w){return `<svg class="ilu" viewBox="0 0 240 120" width="${w||220}" aria-hidden="true" focusable="false">${ILU_SVG[k]||ILU_SVG.geral}</svg>`}
-function iluAplicar(root){try{(root||document).querySelectorAll('#view .card.empty:not([data-ilu]),#view .empty:not([data-ilu]),#drawer .card.empty:not([data-ilu])').forEach(el=>{el.dataset.ilu='1';
+/* ILU_C/ILU_SVG são const: se alguma vista chamar isto antes de esta peça correr, não rebenta (devolve vazio) */
+function iluPronto(){try{return !!(ILU_C&&ILU_SVG)}catch(_){return false}}
+function iluSvg(k,w){if(!iluPronto())return '';return `<svg class="ilu" viewBox="0 0 240 120" width="${w||220}" aria-hidden="true" focusable="false">${ILU_SVG[k]||ILU_SVG.geral}</svg>`}
+function iluAplicar(root){if(!iluPronto())return setTimeout(()=>iluAplicar(root),200);try{(root||document).querySelectorAll('#view .card.empty:not([data-ilu]),#view .empty:not([data-ilu]),#drawer .card.empty:not([data-ilu])').forEach(el=>{el.dataset.ilu='1';
     if(el.closest('table,li,.mtlist,.hub-mini')||el.dataset.semIlu!=null)return;const r=el.getBoundingClientRect();const card=el.classList.contains('card');if(r.width<(card?300:420))return;
     const v=(typeof VIEW!=='undefined'&&VIEW)||'';const k=ILU_VISTA[v]||'geral';const ico=el.firstElementChild&&el.firstElementChild.matches('svg.ic')?el.firstElementChild:null;
     const w=Math.min(card?240:200,Math.round(r.width*.5));el.insertAdjacentHTML('afterbegin',`<span class="ilu-w">${iluSvg(k,w)}</span>`);el.classList.add('com-ilu');
     if(ico){const n=ico.nextSibling;ico.remove();if(n&&n.nodeName==='BR')n.remove()}})}catch(e){console.warn(e)}}
-{let t=0;const corre=()=>{clearTimeout(t);t=setTimeout(()=>iluAplicar(),60)};try{new MutationObserver(corre).observe(document.body,{childList:true,subtree:true})}catch(_){}}
+/* 1.113 — Definições: os cartões com espaço livre à direita recebem uma ilustração do assunto (só em ecrãs largos) */
+const ILU_DEF=[[/^Código de Acesso/,'codigo'],[/^Espaço Utilizado/,'espaco'],[/^Caixote do Lixo/,'lixo']];
+function iluDefSvg(k){const C=ILU_C;const S={
+codigo:`<rect x="62" y="40" width="96" height="66" rx="8" fill="var(--panel)" stroke="var(--line)"/><path d="M84 40V28a26 26 0 0 1 52 0v12" fill="none" stroke="${C.es}" stroke-width="7" stroke-linecap="round"/>${[0,1,2,3].map(i=>`<circle cx="${86+i*16}" cy="73" r="5" fill="${i<3?C.es:'var(--line)'}"/>`).join('')}<circle cx="182" cy="34" r="16" fill="${C.vd}" opacity=".9"/><path d="M175 34l5 5 9-10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+espaco:`<rect x="30" y="22" width="180" height="76" rx="8" fill="var(--panel)" stroke="var(--line)"/><g>${[[50,52,C.es],[74,36,C.vd],[98,60,C.az],[122,28,C.lj],[146,46,C.es]].map(([x,h,c])=>`<rect x="${x}" y="${86-h}" width="16" height="${h}" rx="2" fill="${c}" opacity=".8"/>`).join('')}</g><circle cx="186" cy="52" r="16" fill="none" stroke="var(--line)" stroke-width="7"/><path d="M186 36a16 16 0 0 1 14 8" fill="none" stroke="${C.vd}" stroke-width="7"/>`,
+lixo:`<rect x="88" y="34" width="64" height="72" rx="6" fill="var(--panel)" stroke="var(--line)"/><rect x="80" y="24" width="80" height="10" rx="3" fill="${C.es}"/><rect x="108" y="16" width="24" height="8" rx="2" fill="${C.es}"/><g stroke="var(--line)" stroke-width="3" stroke-linecap="round"><path d="M104 48v44M120 48v44M136 48v44"/></g><path d="M176 70a22 22 0 1 0-6 16" fill="none" stroke="${C.vd}" stroke-width="4" stroke-linecap="round"/><path d="M168 90l4-6 6 4" fill="none" stroke="${C.vd}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+bloqueio:`<rect x="40" y="30" width="110" height="70" rx="8" fill="var(--panel)" stroke="var(--line)"/><g fill="var(--mut)" opacity=".4"><rect x="54" y="44" width="70" height="6" rx="2"/><rect x="54" y="58" width="56" height="6" rx="2"/><rect x="54" y="72" width="64" height="6" rx="2"/></g><rect x="150" y="56" width="50" height="40" rx="6" fill="${C.es}"/><path d="M162 56v-8a13 13 0 0 1 26 0v8" fill="none" stroke="${C.es}" stroke-width="6"/><circle cx="175" cy="76" r="5" fill="#fff"/>`};
+  return `<svg class="ilu" viewBox="0 0 240 120" width="200" aria-hidden="true" focusable="false">${S[k]||''}</svg>`}
+function iluDefs(){if(!iluPronto()||typeof VIEW==='undefined'||VIEW!=='definicoes')return;document.querySelectorAll('#view .card').forEach(c=>{const h=c.querySelector(':scope>h2');if(!h)return;
+  const m=ILU_DEF.find(([r])=>r.test(h.textContent.trim()));const tem=c.querySelector(':scope>.ilu-def');if(!m){if(tem)tem.remove();return}
+  const larg=c.getBoundingClientRect().width>=1250;if(!larg){if(tem)tem.remove();return}if(tem)return;
+  c.classList.add('com-ilu-def');const hh=c.getBoundingClientRect().height;c.insertAdjacentHTML('beforeend',`<span class="ilu-def" aria-hidden="true">${iluDefSvg(m[1]).replace('width="200"','width="'+Math.max(120,Math.min(210,Math.round((hh-28)*2)))+'"')}</span>`)})}
+addEventListener('resize',()=>{clearTimeout(iluDefs._t);iluDefs._t=setTimeout(iluDefs,150)});
+{const s=document.createElement('style');s.textContent=`html body #view .card.com-ilu-def{position:relative;padding-right:270px!important}
+html body #view .card>.ilu-def{position:absolute;right:34px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.95;line-height:0}
+html body.est-sge #view .card>.ilu-def rect{rx:0}
+@media (max-width:1300px){html body #view .card>.ilu-def{display:none}html body #view .card.com-ilu-def{padding-right:revert!important}}`;document.head.appendChild(s)}
+{let t=0;const corre=()=>{clearTimeout(t);t=setTimeout(()=>{iluAplicar();iluDefs()},60)};try{new MutationObserver(corre).observe(document.body,{childList:true,subtree:true})}catch(_){}}
 {const s=document.createElement('style');s.textContent=`
 html body .ilu-w{display:block;margin:0 auto 14px;line-height:0}
 html body .ilu-w .ilu{display:block;margin:0 auto;height:auto;max-width:100%;color:var(--ink,#1f2937)}

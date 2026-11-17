@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.113
+- Definições › Segurança: Código de Acesso, Espaço Utilizado e Caixote do Lixo com ilustração no espaço livre à direita (ecrãs largos)
+- Corrigido o aviso «Cannot access 'ILU_C' before initialization» ao abrir o Início
+
 ## 1.112
 - Módulos desligados (Jornal Escolar, Contactos, JornalNote, Coord. PROFIJ) deixam mesmo de aparecer nas Apps e no menu
 - Com menos de 7 apps ligadas, o separador Apps desaparece do menu e do Início; volta ao ligar o 7.º módulo
