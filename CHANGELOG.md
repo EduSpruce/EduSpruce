@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.067
+- Spruce It, Pulso, Formulários e Provas abrem em ecrã inteiro como o EduSchedule: sem o menu nem a barra da EduSpruce, com o ícone da casa para voltar
+
 ## 1.066
 - Arrastar e-mails (convocatórias e atividades do Outlook ou de outro e-mail) só funciona no Calendário Escolar e em O Meu Calendário, para não chocar com o arrastar de turmas
 

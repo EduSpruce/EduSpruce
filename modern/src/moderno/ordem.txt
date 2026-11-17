@@ -10,3 +10,4 @@ banco.js
 avisos.js
 hub.js
 eduschedule.js
+eduapps.js

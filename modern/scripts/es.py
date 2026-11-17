@@ -16,6 +16,7 @@
 
 Caminhos relativos a modern/src/ (app/101-planta-sala-aula.js, moderno/provas.js); /aluno.html = raiz do repositório."""
 import sys,os,re,json,glob,subprocess,datetime,shutil
+import signal;signal.signal(signal.SIGPIPE,signal.SIG_DFL)
 from decimal import Decimal
 R=os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)),'..','..'))
 SRC=os.path.join(R,'modern','src');APP=os.path.join(SRC,'app');T='/tmp/es';os.makedirs(T,exist_ok=True)
