@@ -113,8 +113,9 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 /* a extensão marca a página depois de a app arrancar: tira o atalho */
 try{new MutationObserver(()=>{if(document.documentElement.hasAttribute('data-sn-clipper'))document.querySelectorAll('.snw-chip').forEach(c=>c.remove())}).observe(document.documentElement,{attributes:true,attributeFilter:['data-sn-clipper']})}catch(_){}
 {const s=document.createElement('style');s.textContent=`
-html body .dtop .snw-chip{margin-left:auto;display:flex;align-items:stretch;border:1px solid var(--line);background:var(--panel);border-radius:12px;min-width:0;flex:0 1 auto;overflow:hidden}
-html body .dtop .snw-chip+.hub-mini{margin-left:10px}
+html body .snw-chip{margin-left:auto;display:flex!important;flex-wrap:nowrap!important;flex:0 1 auto;align-self:center;align-items:stretch;border:1px solid var(--line);background:var(--panel);border-radius:12px;min-width:0;flex:0 1 auto;overflow:hidden}
+html body .snw-chip+.hub-mini{margin-left:10px!important}
+html body .snw-chip>button{margin:0!important;height:auto!important;min-height:0!important;box-shadow:none!important}
 html body .snw-chip-b{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:5px 10px 5px 6px;cursor:pointer;min-width:0;text-align:left;color:inherit;font:inherit}
 html body .snw-chip-b:hover{background:color-mix(in srgb,var(--acc) 8%,transparent)}
 html body .snw-chip-b .hbic{flex:none;box-shadow:none}
@@ -125,8 +126,38 @@ html body .snw-chip-i{flex:none;display:inline-flex;align-items:center;gap:4px;f
 html body .snw-chip-x{border:0;border-left:1px solid var(--line);background:transparent;color:var(--mut);padding:0 8px;cursor:pointer}
 html body .snw-chip-x:hover{color:var(--ink,inherit);background:color-mix(in srgb,var(--acc) 8%,transparent)}
 html body .snw-passos{margin:0;padding-left:20px;line-height:1.6}
-html body.est-sge .dtop .snw-chip,html body.est-sge .snw-chip-i{border-radius:0}
+html body.est-sge .snw-chip,html body.est-sge .snw-wc,html body.est-sge .snw-wc *,html body.est-sge .snw-chip-i{border-radius:0}
 @media (max-width:1100px){html body .snw-chip-t small{display:none}}
 @media (max-width:860px){html body .snw-chip-t{display:none}}
-@media (max-width:700px){html body .dtop .snw-chip{display:none}}
+@media (max-width:700px){html body .snw-chip{display:none!important}}
+
+`;document.head.appendChild(s)}
+
+/* 1.088 — Definições › Ferramentas: cartão que explica o SpruceNote Web Clipper (por baixo dos Avisos em Pop-up) */
+function cartaoWebClipper(){const inst=document.documentElement.getAttribute('data-sn-clipper');const u=navigator.userAgent;const pc=/Chrome\//.test(u)&&!/Mobile|Android|CriOS|iPad|iPhone/.test(u);
+  const a=(typeof HUB_APPS!=='undefined'&&HUB_APPS.find(x=>x.id==='sprucenote'))||null;const ico=a&&typeof hubIcone==='function'?hubIcone(a,40):ic('nvsn',20);
+  const est=inst?`<div class="snw-est ok">${ic('check',14)} Extensão instalada neste navegador (versão ${esc(inst)})</div>`:pc?`<div class="snw-est">${ic('download',14)} Ainda não está instalada neste navegador</div>`:`<div class="snw-est">${ic('alert',14)} Só funciona no Chrome ou no Edge de computador</div>`;
+  return `<div class="card snw-wc"><div class="snw-wc-h">${ico}<div><h2 style="margin:0">SpruceNote Web Clipper</h2><p class="hint" style="margin:2px 0 0">Extensão do Chrome para o SpruceNote</p></div></div>
+  <p style="margin:12px 0 8px">Enquanto navega na internet, guarde o que encontrar diretamente nos seus <b>quadros do SpruceNote</b>, sem copiar e colar nem descarregar ficheiros — como o «Web Clipper» do Milanote.</p>
+  <ul class="snw-lista">
+   <li>${ic('image',14)}<span><b>Imagens</b> — passe o rato por cima e carregue em «Guardar».</span></li>
+   <li>${ic('file',14)}<span><b>Texto</b> — selecione e use o botão direito › Guardar no SpruceNote.</span></li>
+   <li>${ic('play',14)}<span><b>Páginas e vídeos</b> (YouTube, Vimeo) — ícone na barra do Chrome ou Alt+Shift+S.</span></li>
+   <li>${ic('grid',14)}<span><b>Escolhe o quadro</b> — o principal ou um dos 10 abertos mais recentemente; tudo chega à coluna «Por Arrumar».</span></li>
+   <li>${ic('shield',14)}<span><b>Privado</b> — os recortes vão cifrados com a chave da sua conta; nada fica no computador além da sessão.</span></li>
+  </ul>
+  <p class="hint" style="margin:8px 0 10px">Ideal para recolher imagens para uma ficha, citações para um teste ou vídeos para uma aula.</p>
+  ${est}
+  <div class="snw-wc-b">${inst?'':`<a class="btn pri" href="${SNW_ZIP}" download>${ic('download',14)} Descarregar</a>`}<button type="button" class="btn" data-snw="info">${ic('list',14)} Como instalar</button><button type="button" class="btn ghost" data-snw="ajuda">${ic('help',14)} Ajuda</button></div></div>`}
+if(typeof defFerramentas==='function'){const _dfW=defFerramentas;defFerramentas=function(){const h=_dfW.apply(this,arguments);try{if(typeof snOn==='function'&&!snOn())return h;const c=cartaoWebClipper();
+  const p=typeof cartaoTestePopups==='function'?cartaoTestePopups():'';if(p&&h.startsWith(p))return p+c+h.slice(p.length);return c+h}catch(e){console.warn(e);return h}}}
+{const s=document.createElement('style');s.textContent=`
+html body .snw-wc-h{display:flex;align-items:center;gap:12px}
+html body .snw-wc-h .hbic{flex:none;box-shadow:none}
+html body .snw-lista{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+html body .snw-lista li{display:flex;gap:8px;align-items:flex-start;line-height:1.4;font-size:13.5px}
+html body .snw-lista li>svg{flex:none;margin-top:2px;color:var(--acc)}
+html body .snw-est{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--acc) 8%,transparent);color:var(--mut)}
+html body .snw-est.ok{background:color-mix(in srgb,#1a8f4e 12%,transparent);color:#1a7a43}
+html body .snw-wc-b{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 `;document.head.appendChild(s)}

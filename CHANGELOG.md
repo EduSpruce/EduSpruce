@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.088
+- Definições › Ferramentas: cartão que explica o SpruceNote Web Clipper, com o estado da instalação
+- Início: o atalho do Web Clipper já não se desfaz na vista Geral
+
 ## 1.087
 - Início: atalho para instalar o SpruceNote Web Clipper ao lado das apps (só no Chrome/Edge de computador; desaparece com a extensão instalada)
 - Ajuda e Manual: SpruceNote Web Clipper
