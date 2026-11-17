@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.033
+- Texto mais claro no pedido do código antigo
+
 ## 1.032
 - Entrada: não confiar em navigator.onLine; recarregar ao voltar a ligação
 

@@ -135,7 +135,7 @@ function sbPedirCodigoAntigo(p,pf){return new Promise(res=>{const d=document.cre
     <label for="sbc-1">Código de encriptação antigo</label><input type="password" id="sbc-1" autocomplete="off" autocapitalize="none" spellcheck="false">
     <div class="nverr" id="sbc-e" role="alert"></div>
     <div class="row" style="gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap"><button type="button" class="btn" id="sbc-s">Terminar Sessão</button><button type="submit" class="btn pri" id="sbc-ok">${ic('check',15)} Abrir os Meus Dados</button></div>
-    <p class="hint sbcalt">${ic('info',14)}<span><b>Não se lembra do código?</b> Abra a EduSpruce no aparelho onde os seus dados aparecem (por exemplo, o computador). Fica resolvido sozinho e este pedido desaparece aqui.</span></p></form>`;
+    <p class="hint sbcalt">${ic('info',14)}<span><b>Não se lembra do código?</b> Abra a EduSpruce noutro navegador ou aparelho onde já tenha entrado (Safari, Chrome, telemóvel, tablet, PC da escola — em eduspruce.pt ou eduspruce.github.io). A chave passa para a sua conta e este pedido desaparece aqui sozinho, sem escrever nada.</span></p></form>`;
   document.body.appendChild(d);d.addEventListener('cancel',e=>e.preventDefault());d.addEventListener('keydown',e=>e.stopPropagation());try{d.showModal()}catch(_){d.setAttribute('open','')}
   const er=d.querySelector('#sbc-e'),inp=d.querySelector('#sbc-1'),okb=d.querySelector('#sbc-ok');setTimeout(()=>inp.focus(),60);let fechado=false;
   const fim=v=>{if(fechado)return;fechado=true;clearInterval(t);try{d.close()}catch(_){}d.remove();res(v)};
