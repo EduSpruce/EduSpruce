@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.047
+- Horário: linhas compactas, hoje destacado, disciplina por extenso nas suas aulas. Menu lateral: traço dos subníveis visível com o menu aberto em ecrãs até 1100 px. Sorteio: espaçamento do cartão.
+
 ## 1.046
 - Perfis de Aprendizagem: Imprimir passa a incluir todas as secções, organizadas em A4 (resumo, perfil e evolução lado a lado, domínios em duas colunas), com cabeçalho, rodapé e assinaturas. Evolução nos Instrumentos legível com muitos instrumentos. Botão Ficha com margem.
 
