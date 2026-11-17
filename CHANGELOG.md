@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.032
+- Entrada: não confiar em navigator.onLine; recarregar ao voltar a ligação
+
 ## 1.031
 - O Meu Calendário (clone do Outlook)
 - Provas: Word/PDF, Explorar, áudio, fórmulas, acompanhamento ao vivo, relatórios

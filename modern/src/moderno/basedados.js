@@ -95,11 +95,11 @@ pedirLogin=function(){return new Promise(async ok=>{try{authCfg().catch(()=>{})}
       let papel='';try{papel=(await acVerificar(pf.email)).papel||''}catch(e){if(e&&e.semAcesso)return recusar(p,e.message)}
       _sbEntrouAgora=true;esAbrir._aut={e:pf.email,q:Date.now()};entrar(pf,papel)}
     catch(e){esCortina(false);ocup('');er.textContent=(e&&e.message)||'Não foi possível entrar. Tente de novo.'}};
-  bt.onclick=async()=>{er.textContent='';if(!navigator.onLine){er.textContent='Sem ligação à internet.';return}ocup('A abrir a Google…');try{const p=await sbObter();await p.entrarGoogle();setTimeout(()=>ocup(''),10000)}catch(e){ocup('');er.textContent=(e&&e.message)||'Não foi possível abrir a Google.'}};
+  bt.onclick=async()=>{er.textContent='';ocup('A abrir a Google…');try{const p=await sbObter();await p.entrarGoogle();setTimeout(()=>ocup(''),10000)}catch(e){ocup('');er.textContent=!navigator.onLine?'Sem ligação à internet. Assim que a ligação voltar, a página atualiza-se sozinha.':((e&&e.message)||'Não foi possível abrir a Google.')}};
   /* entrada alternativa: e-mail + palavra-passe da mesma conta */
   {const alt=o.querySelector('#lg-alt'),ob=o.querySelector('#lg-outra'),em=o.querySelector('#lg-em'),pw=o.querySelector('#lg-pw'),okb=o.querySelector('#lg-pwok');
     ob.onclick=()=>{alt.hidden=!alt.hidden;ob.setAttribute('aria-expanded',!alt.hidden);ob.textContent=alt.hidden?'Outra forma de entrar':'Esconder';if(!alt.hidden){try{em.value=em.value||localStorage.getItem('es.lge')||''}catch(_){}(em.value?pw:em).focus()}};
-    const vai=async()=>{er.textContent='';const e=em.value.trim(),s=pw.value;if(!/^\S+@\S+\.\S+$/.test(e)){er.textContent='Escreva o e-mail da conta.';em.focus();return}if(!s){er.textContent='Escreva a palavra-passe.';pw.focus();return}if(!navigator.onLine){er.textContent='Sem ligação à internet.';return}
+    const vai=async()=>{er.textContent='';const e=em.value.trim(),s=pw.value;if(!/^\S+@\S+\.\S+$/.test(e)){er.textContent='Escreva o e-mail da conta.';em.focus();return}if(!s){er.textContent='Escreva a palavra-passe.';pw.focus();return}
       okb.disabled=true;okb.textContent='A entrar…';try{const p=await sbObter();await p.entrarSenha(e,s);pw.value='';try{localStorage.setItem('es.lge',e)}catch(_){}await concluir()}catch(x){er.textContent=(x&&x.message)||'Não foi possível entrar.'}finally{okb.disabled=false;okb.textContent='Entrar'}};
     okb.onclick=vai;o.querySelector('form').onsubmit=ev=>{ev.preventDefault();if(!alt.hidden)vai();return false}}
   if(volta||g)concluir()})};
@@ -445,3 +445,6 @@ async function esVerNova(){try{if(!navigator.onLine||esVerNova._on)return;esVerN
     const tenta=()=>{if(calmo())vai();else setTimeout(tenta,5000)};tenta()}catch(_){}finally{esVerNova._on=0}}
 setTimeout(esVerNova,2500);setInterval(esVerNova,600000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')setTimeout(esVerNova,800)});
 try{if(/[?&]_v=/.test(location.search)&&!/[?&]code=/.test(location.search))history.replaceState(null,'',location.pathname+location.hash)}catch(_){}
+
+/* no ecrã de entrada: quando a ligação volta, recarrega para abrir a versão mais recente (e não a cópia guardada pelo navegador) */
+addEventListener('online',()=>{try{if(!window.__esPronto)location.reload()}catch(_){}});
