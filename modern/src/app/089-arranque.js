@@ -49,15 +49,20 @@ function cabecalhoImpressao(v){let h=$('#printHdr');if(!h){h=document.createElem
   h.innerHTML=`${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<div><b>${esc(c.escola||'EduSpruce')}</b><span>${esc(TITLES[v]||'')}${t&&NEEDS_T.includes(v)?' — '+esc(t.nome+' · '+t.disciplina):''}${a?' · Ano letivo '+esc(a.nome):''}</span></div><span class="pd">${esc(profNome(c.professor))}<br>${new Date().toLocaleDateString('pt-PT')}</span>`}
 /* ---------- dicas por toque longo / passar o rato (substituem title) ---------- */
 (function(){let tm=null,bx=null,src=null;
-  const mostra=(el,x,y)=>{const tx=el.getAttribute('data-tip')||el.getAttribute('title');if(!tx)return;if(el.hasAttribute('title')){el.setAttribute('data-tip',tx);el.removeAttribute('title')}
+  let cur=null;const mostra=(el,x,y,toque)=>{const tx=el.getAttribute('data-tip')||el.getAttribute('title');if(!tx)return;if(el.hasAttribute('title')){el.setAttribute('data-tip',tx);el.removeAttribute('title')}
+    /* 1.095: não mostra se o rato já saiu, se o elemento desapareceu, ou se o texto da dica já está escrito no próprio botão (menu lateral aberto) */
+    if(!el.isConnected||(!toque&&!el.matches(':hover')))return;{const nt=v=>String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();const vis=nt(el.innerText);if(!toque&&vis&&vis.includes(nt(tx)))return}cur=el;
     bx=bx||Object.assign(document.createElement('div'),{id:'tipbox'});bx.setAttribute('role','tooltip');bx.textContent=tx;document.body.appendChild(bx);
     const w=Math.min(320,innerWidth-24);bx.style.maxWidth=w+'px';const r=el.getBoundingClientRect();let L=Math.max(12,Math.min(innerWidth-w-12,(x!=null?x:r.left+r.width/2)-w/2));
     bx.style.left=L+'px';bx.style.top=Math.max(8,r.top-8)+'px';bx.classList.add('on');requestAnimationFrame(()=>{const h=bx.offsetHeight;bx.style.top=(r.top-h-10<8?r.bottom+10:r.top-h-10)+'px'})};
-  const esconde=()=>{clearTimeout(tm);if(bx)bx.classList.remove('on')};
-  document.addEventListener('pointerdown',e=>{esconde();if(e.pointerType==='mouse')return;const el=e.target.closest('[title],[data-tip]');if(!el)return;src=el;tm=setTimeout(()=>{mostra(el,e.clientX,e.clientY);el._tipShown=true},520)},true);
+  const esconde=()=>{clearTimeout(tm);cur=null;if(bx)bx.classList.remove('on')};
+  document.addEventListener('pointerdown',e=>{esconde();if(e.pointerType==='mouse')return;const el=e.target.closest('[title],[data-tip]');if(!el)return;src=el;tm=setTimeout(()=>{mostra(el,e.clientX,e.clientY,true);el._tipShown=true},520)},true);
   document.addEventListener('pointerup',()=>clearTimeout(tm),true);document.addEventListener('pointercancel',esconde,true);document.addEventListener('scroll',esconde,true);
   document.addEventListener('click',e=>{if(src&&src._tipShown){src._tipShown=false;e.stopPropagation();e.preventDefault()}},true);
-  document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('[title],[data-tip]');if(!el){esconde();return}clearTimeout(tm);tm=setTimeout(()=>mostra(el),450)});
+  document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('[title],[data-tip]');if(!el){esconde();return}if(el===cur)return;esconde();clearTimeout(tm);tm=setTimeout(()=>mostra(el),450)});
+  document.addEventListener('mouseout',e=>{if(cur&&(!e.relatedTarget||!cur.contains(e.relatedTarget)))esconde()});
+  ['blur','wheel','keydown','resize'].forEach(k=>addEventListener(k,esconde,true));document.addEventListener('visibilitychange',esconde);document.documentElement.addEventListener('mouseleave',esconde);
+  setInterval(()=>{if(cur&&(!cur.isConnected||!cur.matches(':hover'))&&bx&&bx.classList.contains('on')&&!cur._tipShown)esconde()},800);
 })();
 /* ---------- menu de contexto (toque longo / botão direito) ---------- */
 function menuContexto(x,y,itens){fecharMenu();const m=document.createElement('div');m.id='cmenu';m.setAttribute('role','menu');

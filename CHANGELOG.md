@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.095
+- Dicas ao passar o rato: deixam de ficar presas no ecrã e não repetem o que já está escrito no menu lateral
+
 ## 1.094
 - Apps: imagens ilustrativas alinhadas à direita, todas com o mesmo tamanho
 
