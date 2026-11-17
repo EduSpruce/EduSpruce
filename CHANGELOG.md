@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.051
+- Botão Mais opções dos cartões da Arena, Pulso e Formulários com ícone de três pontos.
+
 ## 1.050
 - Provas: Início com as colunas alinhadas em baixo. Módulos renomeados: Formulários, Pulso e Arena (menu, cabeçalhos, definições, modelos CSV e páginas dos alunos).
 
