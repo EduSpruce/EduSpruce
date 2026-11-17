@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.048
+- Planta da Sala reformulada: modo Desenhar a Sala com modelos e pincel (secretária do professor, porta, janela, corredores), ajuste automático do tamanho para caberem todos os alunos; distribuição por número, alfabética, aleatória, dificuldades à frente, turma mista e necessidades à frente; lugares fixos; PDF com secretária/porta/janela. Corrige o lugar desalinhado (conflito com o estilo do calendário).
+
 ## 1.047
 - Horário: linhas compactas, hoje destacado, disciplina por extenso nas suas aulas. Menu lateral: traço dos subníveis visível com o menu aberto em ecrãs até 1100 px. Sorteio: espaçamento do cartão.
 
