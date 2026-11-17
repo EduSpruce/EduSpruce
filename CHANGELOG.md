@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.117
+- Jornal Escolar: quadro das peças com colunas claras e etiquetas e botões compactos
+
 ## 1.116
 - Cópia no Google Drive: a barra de progresso de 0 a 100% volta a aparecer
 

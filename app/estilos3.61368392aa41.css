@@ -584,10 +584,10 @@ html body td .tnm>div>.tag{margin:0!important;vertical-align:middle;align-self:c
 html body .rcard .rmini{padding:10px 14px 10px 12px!important;gap:14px!important}
 html body .rcard .rmini .rdt{flex:0 0 52px!important;width:52px!important;min-width:0!important;min-height:52px;height:auto!important;padding:6px 0;box-sizing:border-box}
 html body .rcard .rmini .rinf{flex:1 1 auto;min-width:0}
-html body .esprg{min-width:min(440px,86vw);text-align:left;display:flex;flex-direction:column;gap:14px;padding:22px 24px!important}
+html body #ocup .esprg{min-width:min(440px,86vw);text-align:left;display:flex;flex-direction:column;align-items:stretch;justify-items:stretch;gap:14px;padding:22px 24px!important}
 html body .esprg .esph{display:flex;align-items:center;gap:10px;font-size:17px}
-html body .esprg .espb{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
-html body .esprg .espb i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+html body #ocup .esprg .espb{width:100%;align-self:stretch;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+html body #ocup .esprg .espb i{display:block;height:100%;min-width:0;background:var(--acc);transition:width .3s}
 html body .esprg .espn{display:flex;align-items:baseline;gap:12px;font-size:14px;flex-wrap:wrap}
 html body .esprg .espx,html body .esprg .espf{color:var(--mut);font-weight:500}
 html body .esprg .esps{margin:0;font-size:13px;color:var(--mut);font-weight:500}
@@ -796,3 +796,11 @@ html body.est-sge.escurox .spv .sph-tabs button[aria-current="page"]{background:
 html body.est-sge.escurox :is(.ocmg button.hj,.ocdc.hj .ocdn,.ocgd.hj b,.ocagd.hj .ocagh b){background:var(--accL,#127fa6)}
 /* Instrumentos: etiqueta «Produção Oral» (verde-azulado escuro fixo) aclarada */
 html body.escurox #view .inoral{color:color-mix(in srgb,#0f8b8d 45%,#fff)}
+/* Jornal Escolar — quadro das peças: colunas claras e etiquetas/botão compactos */
+html body #view .jn-kc{background:color-mix(in srgb,var(--line) 45%,var(--bg,#f4f5f7))!important;color:var(--txt,inherit)}
+html body #view .jn-kc h3{color:var(--txt,inherit)!important}
+html body #view .jn-kc h3 .mut{color:var(--mut)!important}
+html body #view .jn-pm{align-items:center!important;gap:4px}
+html body #view .jn-pm .tag{height:auto!important;min-height:0!important;padding:2px 7px!important;line-height:1.4!important;align-self:center!important;margin:0!important}
+html body #view .jn-pm .jn-adv{margin-left:auto!important;height:auto!important;min-height:0!important;padding:3px 8px!important;font-size:11px!important;line-height:1.3!important}
+html body #view .jn-kv0{color:var(--mut)!important}

@@ -1,0 +1,8 @@
+/* Jornal Escolar — quadro das peças: colunas claras e etiquetas/botão compactos */
+html body #view .jn-kc{background:color-mix(in srgb,var(--line) 45%,var(--bg,#f4f5f7))!important;color:var(--txt,inherit)}
+html body #view .jn-kc h3{color:var(--txt,inherit)!important}
+html body #view .jn-kc h3 .mut{color:var(--mut)!important}
+html body #view .jn-pm{align-items:center!important;gap:4px}
+html body #view .jn-pm .tag{height:auto!important;min-height:0!important;padding:2px 7px!important;line-height:1.4!important;align-self:center!important;margin:0!important}
+html body #view .jn-pm .jn-adv{margin-left:auto!important;height:auto!important;min-height:0!important;padding:3px 8px!important;font-size:11px!important;line-height:1.3!important}
+html body #view .jn-kv0{color:var(--mut)!important}
