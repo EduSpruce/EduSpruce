@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.073
+- EduSchedule como a EduSpruce: um horário por escola e por ano letivo
+- A escola, o ano letivo e o calendário escolar (início, fim, interrupções e feriados) vêm automaticamente da EduSpruce; turmas, professores, salas e disciplinas acrescentam-se à mão
+
 ## 1.072
 - EduSchedule vai buscar automaticamente à EduSpruce os dados da escola: nome, ano letivo, turmas, disciplinas, professor, salas, tempos por semana, grelha de tempos e interrupções letivas
 - Turmas novas na EduSpruce entram sozinhas no EduSchedule (sem repetir as que apagou)
