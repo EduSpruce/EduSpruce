@@ -72,3 +72,11 @@ Os módulos mais recentes (número maior) reescrevem funções dos anteriores: p
 ## Para gastar menos (trabalho)
 - Mudanças pequenas: procurar com grep pelo texto visível no ecrã e editar só essa linha.
 - Sem capturas de teste quando o utilizador disser «sem testar».
+
+## Provas (1.030) — módulo independente (clone do Intuitivo)
+- Código: `modern/src/moderno/provas.js` (juntado depois do forms.js pelo `db.mjs`); página dos alunos: `provas.html` (cópia adaptada do forms.html, chaves `es-pv-…`, resposta `{pv:1}`).
+- Não usa funções do Forms: a infraestrutura (sessões cifradas em `eduspruce_autoav`, correção, respostas, ligação a turmas/momentos) foi copiada com prefixo `pv`/classes `pq`.
+- Dados: `S.pv = {ex:[banco], av:[avaliações], rub:[rubricas], grupos:[{nome,code}]}`; agendamentos em `av.ag[codigo]={tid,ini,fim}`.
+- Tipos: escolha, vf, texto (curta/longa, contar, mat, rub), lacunas (modo arrastar/escolher/escrever, extraP), ordem (parc), ligar, tabela (cols, lins, marc, porLinha), legendar (img, marcas), segmentos (img, zonas); `dico` = dicotómica; `just`, `extra`, `resol`.
+- SQL: `modern/supabase/migrations/0015_provas.sql` (sessões até 4 MB e 62 dias, respostas até 200 000 caracteres, partilha `eduspruce_provas_partilha` + `provas_partilhar/importar/grupo/despartilhar`).
+- O Forms deixou de oferecer V/F, preencher e ligar e o modo exame (só aparecem em formulários antigos).
