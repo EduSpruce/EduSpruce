@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.092
+- Apps: ocupa a largura toda, com o cabeçalho alinhado como nas outras vistas
+
 ## 1.091
 - Definições › Ferramentas: imagem ilustrativa no cartão do SpruceNote Web Clipper
 
