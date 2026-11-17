@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.040
+- «ontem» em vez de «há 1 dias»
+- cabeçalho: botões principais ficam visíveis mais tempo
+- tema SGE: cantos retos em mais de 100 componentes
+- limite de faltas PROFIJ com plural certo
+
 ## 1.039
 - Provas: Atividade a cada 5 s, só submissões novas
 - Provas: instruções do modo exame revistas

@@ -104,7 +104,7 @@ function vTestes(){
   $$('[data-go-cal]').forEach(b=>b.onclick=e=>{e.preventDefault();UI.calTab='cal';go('calendario');setTimeout(()=>{const k=$('#ai-card');if(k)k.scrollIntoView({block:'start'})},50)});
   arrastarMarcacoes(t);
 }
-const contagem=iso=>{const d=Math.round((dataDeIso(iso)-dataDeIso(isoData(new Date())))/864e5);return d===0?'hoje':d===1?'amanhã':d<0?'há '+(-d)+' dias':'daqui a '+d+' dias'};
+const contagem=iso=>{const d=Math.round((dataDeIso(iso)-dataDeIso(isoData(new Date())))/864e5);return d===0?'hoje':d===1?'amanhã':d===-1?'ontem':d<0?'há '+(-d)+' dias':'daqui a '+d+' dias'};
 function painelPeriodo(t,a,p,oc,insts,DA,W){
   const L=insts.filter(i=>i.data>=p.ini&&i.data<=p.fim);const tot=Object.values(oc).filter(o=>o.per===p.n);const hj=isoData(new Date());
   const tempos=tot.reduce((s,o)=>s+o.tempos,0);

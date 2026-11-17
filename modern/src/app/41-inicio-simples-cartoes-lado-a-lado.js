@@ -296,7 +296,7 @@ function vPainel(){const t=T();if(!t)return go('turmas');const a=A();const C=PNL
     <section class="card"><h2>${ic('check',18)} Assiduidade</h2>
       <div class="pnweek">${sem8.map(w=>`<div class="pnwb" title="Semana de ${fmtIso(w.s)}: ${w.pc==null?'sem aulas':w.pc+'% de presenças'}"><i style="height:${w.pc==null?2:Math.max(4,w.pc)}%" class="${w.pc!=null&&w.pc<90?'lo':''}"></i><small>${fmtIso(w.s).slice(0,5)}</small></div>`).join('')}</div>
       <div class="pnstat"><span><b>${FT.F}</b> faltas de presença</span><span><b>${FT.FD}</b> disciplinares</span><span><b>${FT.J}</b> justificadas</span><span><b>${FT.F+FT.FD-FT.J}</b> por justificar</span></div>
-      <p class="hint" style="margin:6px 0 0">Limite: ${D.LF.prof?'10% das horas de formação':'o dobro dos tempos semanais'} = <b>${D.LF.lim}</b> faltas (${D.LF.sem} tempos/semana). Alerta a partir de metade.</p>
+      <p class="hint" style="margin:6px 0 0">Limite: ${D.LF.prof?'10% das horas de formação':'o dobro dos tempos semanais'} = <b>${D.LF.lim}</b> ${D.LF.lim===1?'falta':'faltas'}${D.LF.prof?'':` (${D.LF.sem} ${D.LF.sem===1?'tempo':'tempos'}/semana)`}. Alerta a partir de metade.</p>
       ${L.filter(l=>l.risco).length?`<div class="pnrisk">${L.filter(l=>l.risco).sort((x,y)=>y.f.tot-x.f.tot).slice(0,6).map(l=>`<span class="tag ${l.risco==='lim'?'bad':''}">${esc(l.a.nome.split(' ')[0])} · ${l.f.tot}</span>`).join('')}</div>`:''}</section>
     <section class="card"><h2>${ic('file',18)} Documentação e Conselho de Turma</h2>
       <table class="lst pndoc"><tbody>

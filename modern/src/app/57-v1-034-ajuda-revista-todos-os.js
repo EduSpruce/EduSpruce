@@ -275,7 +275,7 @@ try{const st=document.createElement('style');st.textContent='#view .jn-li{conten
   if(!x.querySelector('button:not(#barmais)')){const m=x.querySelector('#barmais');if(m)m.remove();return r}
   const B=[...x.children].filter(e=>e.tagName==='BUTTON'&&e.id!=='barmais');if(B.length<2)return r;
   {let m=x.querySelector('#barmais');if(!m){x.insertAdjacentHTML('beforeend',`<button type="button" class="btn" id="barmais" aria-haspopup="true" aria-expanded="false">${ic('dots',16)} Mais</button>`)}else{if(x.lastElementChild!==m)x.appendChild(m);m.style.removeProperty('display');delete m.dataset.esc}}
-  for(let k=B.length-1;k>=0;k--){B[k].dataset.ovf=1;B[k].style.setProperty('display','none','important');_cab.apply(this,arguments);if(b.classList.contains('hx1'))break}
+  /* 1.040 · os botões principais (ex.: «Novo Teste») são os últimos a ir para «Mais» */const O=[...B.filter(z=>!z.classList.contains('pri')).reverse(),...B.filter(z=>z.classList.contains('pri')).reverse()];for(const z of O){z.dataset.ovf=1;z.style.setProperty('display','none','important');_cab.apply(this,arguments);if(b.classList.contains('hx1'))break}
   if(!b.classList.contains('hx1')){B.forEach(e=>{e.style.removeProperty('display');delete e.dataset.ovf});x.querySelector('#barmais').style.setProperty('display','none','important');_cab.apply(this,arguments);return r}
   const mb=x.querySelector('#barmais');mb.onclick=e=>{e.stopPropagation();const ex=document.getElementById('barmpop');if(ex){ex.remove();mb.setAttribute('aria-expanded','false');return}
     const pop=document.createElement('div');pop.id='barmpop';pop.className='barmpop';pop.setAttribute('role','menu');const H=B.filter(z=>z.dataset.ovf);
