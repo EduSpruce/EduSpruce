@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.076
+- Tema SGE: nas Apps, cada app tem a sua cor de ícone dentro da paleta SGE
+
 ## 1.075
 - Tema SGE: o EduSchedule passa ao azul-escuro da Organização, como o SpruceNote (cores das apps coerentes por grupo)
 
