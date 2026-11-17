@@ -50,6 +50,7 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 
 ## O Meu Calendário (1.031) — clone do Outlook
 - Código em `app/221-meu-calendario-reunioes-tarefas.js` e `app/222-meu-calendario-estilo-calendario.js`: `OCAL()` = `S.cal {ev, cals, cat, src, cfg}`; eventos `{d0,d1,h0,h1 (minutos),dia,rep{f,int,dias,ate,n},exc,ov,lemb,est,priv,cat,esc}`; `ocColetar(A,B)` junta aulas, reuniões, testes, tarefas, Provas e calendário escolar.
+- Tema SGE (1.076): coerência final em `app/247-tema-sge-coerencia-total.css` (última peça CSS): destaque claro `--acc:#127fa6` (AA, evita os tons criados pelo ajuste de contraste), época sem efeito no SGE, cantos retos universais (exceto roda do sorteio, `.estring`, rádios), botões/separadores/etiquetas/ligações únicos. Regras novas do SGE: pôr aí, com `:not(#_sN)` para ganhar especificidade.
 - Tema SGE (`body.est-sge`): cantos retos nas Provas, no calendário e em `provas.html` (`D.quad`). Nunca usar o nome `A_` (é a configuração de autenticação).
 
 ## Avisos com a app fechada (1.036) — notificações push

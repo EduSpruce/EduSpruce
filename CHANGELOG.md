@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.077
+- Tema SGE 100 % coerente: uma só cor de destaque, sem tons de ciano soltos
+- Tema SGE: cantos retos em tudo (fichas, janelas, menu lateral, botão de notas)
+- Tema SGE: botões, separadores, etiquetas e ligações iguais em toda a app; a época do ano já não muda as cores
+
 ## 1.076
 - Tema SGE: nas Apps, cada app tem a sua cor de ícone dentro da paleta SGE
 
