@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.039
+- Provas: Atividade a cada 5 s, só submissões novas
+- Provas: instruções do modo exame revistas
+
 ## 1.038
 - Testar notificações: confirmação, limite de espera e ajuda do sistema
 
