@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.065
+- EduSchedule em ecrã inteiro, sem a barra da EduSpruce; volta-se à EduSpruce pelo ícone da casa no topo
+
 ## 1.064
 - EduSchedule (antigo EduTime): horários da escola dentro da EduSpruce — motor de horários, substituições, reuniões, vigilâncias, exames, gestão diária, alunos e cursos, impressão, calendários e exportação para o DBG pleon; abre em Apps › Organização
 - O horário fica guardado na sua conta (nunca no aparelho); pode ser desligado em Definições › Módulos Opcionais

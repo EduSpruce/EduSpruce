@@ -5,7 +5,7 @@ function quickSolve(st,ms){
 }
 function start(){
   if(!PONTE){document.body.innerHTML='<div style="font:16px system-ui;max-width:520px;margin:15vh auto;padding:24px;text-align:center"><b>O EduSchedule abre-se dentro da EduSpruce.</b><br><br><a href="./">Abrir a EduSpruce</a></div>';return;}
-  $('#menu-btn').append(ic('menu','w-5 h-5'));$('#undo').append(ic('undo'));$('#redo').append(ic('redo'));$('#logo').append(ic('grid','w-5 h-5'));
+  $('#menu-btn').append(ic('menu','w-5 h-5'));$('#es-casa').append(ic('home','w-5 h-5'));$('#es-casa').addEventListener('click',()=>PONTE.voltar());$('#undo').append(ic('undo'));$('#redo').append(ic('redo'));$('#logo').append(ic('grid','w-5 h-5'));
   $('#foot').textContent='Os dados ficam guardados na sua conta EduSpruce.';
   let raw=null;try{raw=localStorage.getItem(LS)||localStorage.getItem(LS_V2);}catch(e){}
   if(raw){try{S=normalize(JSON.parse(raw));}catch(e){S=null;}}
