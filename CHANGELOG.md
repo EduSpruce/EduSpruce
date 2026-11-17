@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.038
+- Testar notificações: confirmação, limite de espera e ajuda do sistema
+
 ## 1.037
 - Manual de Instruções novo (133 páginas, 182 imagens, todos os menus)
 - Ajuda revista e alargada (27 assuntos novos ou reescritos; textos de sincronização antigos corrigidos)
