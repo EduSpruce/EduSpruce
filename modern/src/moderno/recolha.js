@@ -252,8 +252,8 @@ function hubIlus(){try{if(VIEW!=='hub')return;$$('#view .hub-gr').forEach(sec=>{
 if(typeof vHub==='function'){const _vHI=vHub;vHub=function(){const r=_vHI.apply(this,arguments);try{requestAnimationFrame(hubIlus)}catch(_){}return r}}
 addEventListener('resize',()=>{clearTimeout(hubIlus._t);hubIlus._t=setTimeout(hubIlus,150)});
 {const s=document.createElement('style');s.textContent=`
-html body .hub-ilu{display:flex;align-items:center;justify-content:center;min-height:100%;border:1px dashed var(--line);border-radius:12px;background:color-mix(in srgb,var(--acc) 4%,transparent);padding:8px;box-sizing:border-box;overflow:hidden;color:var(--ink,#1f2937)}
-html body .hub-ilu svg{display:block;width:100%;height:100%;max-height:120px;max-width:340px}
+html body .hub-ilu{display:flex;align-items:center;justify-content:flex-end;padding-right:clamp(12px,4%,48px)!important;min-height:100%;border:1px dashed var(--line);border-radius:12px;background:color-mix(in srgb,var(--acc) 4%,transparent);padding:8px;box-sizing:border-box;overflow:hidden;color:var(--ink,#1f2937)}
+html body .hub-ilu svg{display:block;flex:0 1 340px;width:340px;height:auto;max-height:120px;max-width:100%}
 html body.est-sge .hub-ilu,html body.est-sge .hub-ilu rect{border-radius:0;rx:0}
 `;document.head.appendChild(s)}
 
