@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.074
+- Endereços dos alunos passam a eduspruce.pt/spruceit, eduspruce.pt/pulso, eduspruce.pt/forms e eduspruce.pt/provas
+
 ## 1.073
 - EduSchedule como a EduSpruce: um horário por escola e por ano letivo
 - A escola, o ano letivo e o calendário escolar (início, fim, interrupções e feriados) vêm automaticamente da EduSpruce; turmas, professores, salas e disciplinas acrescentam-se à mão

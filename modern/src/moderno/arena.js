@@ -8,7 +8,7 @@ const arD=()=>{S.arena=S.arena||{};const d=S.arena;d.conj=d.conj||[];d.jogos=d.j
 const arMoedasOn=()=>S.cfg.arenaMoedas!==false;
 async function arRpc(fn,args){const p=await sbObter();const c=p.cliente;if(!c||!c.rpc)throw new Error('A base de dados não está disponível.');const {data,error}=await c.rpc(fn,args||{});
   if(error){const m=String(error.message||error.code||error);if(/function .* does not exist|PGRST202|Could not find the function/i.test(m)){const e=new Error('O Spruce It ainda não está instalado na base de dados: falta correr o ficheiro 0012_arena.sql no Supabase.');e.semSql=true;throw e}throw new Error(m)}return data}
-const arUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'spruceit.html#'+AR.limpaCod(c);
+const arUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'spruceit#'+AR.limpaCod(c);
 const arTempos=[5,10,15,20,30,45,60,90,120];
 const arCores=['#e2453c','#1f7fd0','#e9a400','#2f9e44'];
 const arFormas=['▲','◆','●','■'];
@@ -39,7 +39,7 @@ function vArena(){if(!arOn())return go('inicio');const d=arD();if(!d.conj.length
   if(UI.arEd){const c=d.conj.find(x=>x.id===UI.arEd);if(c)return arEditor(c);UI.arEd=null}
   const tab=UI.arTab||'conj';
   barBtns(tab==='conj'?[{id:'ar-imp',t:ic('upload',15)+' Importar CSV/Excel',f:()=>arImportarDlg()},{id:'ar-novo',t:ic('plus',15)+' Novo Conjunto',c:'pri',f:()=>{const c={id:uid(),nome:'Novo conjunto',disc:(T()||{}).disciplina||'',turma:'',tema:'',pasta:'',criado:Date.now(),mod:Date.now(),perg:[{id:uid(),tp:'mc',t:'',o:['','','',''],c:0,s:20}]};d.conj.unshift(c);save();UI.arEd=c.id;vArena()}}]:[{id:'ar-atu',t:ic('refresh',15)+' Atualizar',f:()=>vArena()}]);
-  const head=`<div class="arhead sph"><span class="sph-logo">Spruce <em>It</em></span><nav class="sph-tabs" aria-label="Secções"><button data-artab="conj" aria-current="${tab==='conj'?'page':'false'}">${ic('layers',15)} Os meus conjuntos</button><button data-artab="jogos" aria-current="${tab==='jogos'?'page':'false'}">${ic('chart',15)} Jogos e relatórios</button></nav><span class="sph-info">Os alunos entram em <b>spruceit.html</b> com o código da sala</span></div>`;
+  const head=`<div class="arhead sph"><span class="sph-logo">Spruce <em>It</em></span><nav class="sph-tabs" aria-label="Secções"><button data-artab="conj" aria-current="${tab==='conj'?'page':'false'}">${ic('layers',15)} Os meus conjuntos</button><button data-artab="jogos" aria-current="${tab==='jogos'?'page':'false'}">${ic('chart',15)} Jogos e relatórios</button></nav><span class="sph-info">Os alunos entram em <b>eduspruce.pt/spruceit</b> com o código da sala</span></div>`;
   let body='';
   if(tab==='conj'){const F=UI.arF=UI.arF||{disc:'',turma:'',q:''};const q=normT(F.q||'');
     const L=d.conj.filter(c=>(!F.disc||c.disc===F.disc)&&(!F.turma||c.turma===F.turma)&&(!q||normT([c.nome,c.tema,c.pasta,c.disc].join(' ')).includes(q)));
