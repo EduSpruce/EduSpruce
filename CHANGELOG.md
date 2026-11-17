@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.042
+- Menu lateral: o nome da disciplina (ex.: Inglês) deixa de ficar colado ao nome da turma.
+
 ## 1.041
 - página publicada leve: código, estilos e dados em app/ com impressão digital no nome (cache pelo service worker)
 - GIF da Ajuda, pdf.js e MRA carregados a pedido
