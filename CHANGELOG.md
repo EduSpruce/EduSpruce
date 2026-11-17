@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.089
+- Início (Geral): barra das apps alinhada com as caixas dos filtros
+
 ## 1.088
 - Definições › Ferramentas: cartão que explica o SpruceNote Web Clipper, com o estado da instalação
 - Início: o atalho do Web Clipper já não se desfaz na vista Geral

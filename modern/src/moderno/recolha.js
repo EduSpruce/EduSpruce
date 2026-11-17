@@ -114,6 +114,7 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 try{new MutationObserver(()=>{if(document.documentElement.hasAttribute('data-sn-clipper'))document.querySelectorAll('.snw-chip').forEach(c=>c.remove())}).observe(document.documentElement,{attributes:true,attributeFilter:['data-sn-clipper']})}catch(_){}
 {const s=document.createElement('style');s.textContent=`
 html body .snw-chip{margin-left:auto;display:flex!important;flex-wrap:nowrap!important;flex:0 1 auto;align-self:center;align-items:stretch;border:1px solid var(--line);background:var(--panel);border-radius:12px;min-width:0;flex:0 1 auto;overflow:hidden}
+html body .snw-chip:not(.dtop>.snw-chip){align-self:flex-end;height:38px;box-sizing:border-box}html body .snw-chip:not(.dtop>.snw-chip) .snw-chip-b{padding:2px 8px 2px 4px}html body .snw-chip:not(.dtop>.snw-chip) .hbic{width:28px!important;height:28px!important}
 html body .snw-chip+.hub-mini{margin-left:10px!important}
 html body .snw-chip>button{margin:0!important;height:auto!important;min-height:0!important;box-shadow:none!important}
 html body .snw-chip-b{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:5px 10px 5px 6px;cursor:pointer;min-width:0;text-align:left;color:inherit;font:inherit}
