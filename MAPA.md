@@ -33,6 +33,14 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - **Base de dados**: `0019_seguranca_rgpd.sql` — limite de tentativas falhadas por rede (`eduspruce_ritmo`; `arena_entrar`/`pulso_entrar` passam a embrulhar `…_base`), limites de espaço, limpeza diária (`eduspruce_limpeza`), `eduspruce_apagar_conta`, `eduspruce_admin_uso`, `eduspruce_bd_versao()`. Na app: `sbRpc`, `SB_BD_MIN` (versão mínima dos scripts; o administrador é avisado se faltar), «Privacidade e Conta» em Definições › Conta e Dados.
 - **OCR**: o leitor e o trabalhador do tesseract.js estão em `esm/tesseract-*.js` (só o motor e o idioma vêm do jsDelivr).
 
+## Contraste e tema escuro (1.098)
+- Tema escuro = `body.escurox` (e `html[data-theme=dark]`). Regras do tema SGE com cores fixas precisam de `:not(.escurox)` ou de um par para o escuro; as correções estão em `app/251-legibilidade-tema-escuro-testes.css`.
+- A app corrige o contraste sozinha (`a11yContraste`, `app/115-…`: escurece/aclara a letra ou o fundo com estilos em linha), mas só nos momentos livres (1–2 s nas vistas grandes) e não percorre as grelhas: a folha de estilos tem de estar certa por si.
+- `.aula span{color:var(--mut)}` (blocos dos horários) também apanha os `span` dentro de `.mtc.aula` (dias com aula da Marcação de Testes): etiquetas e número do dia têm regra própria na peça 251.
+- Botões ativos com letra branca sobre `var(--acc)`: no SGE escuro o `--acc` é mais claro (#1f9fcf, 3:1 com branco); usar `var(--accL,#127fa6)` no fundo.
+- Medir: `node modern/tests/contraste.mjs` (todas as vistas, dois temas; `--rapido` = só a folha de estilos). Não entra no `./es testa` (demora uns 4 minutos).
+- Telemóvel: o botão Anular (`#undoBtn`) está escondido abaixo de 700 px — ações em massa precisam de pergunta (ex.: «assinalar todos» nos Alunos). Linhas de botões das tabelas em cartões (`td.act`) quebram de linha (`app/249-…`).
+
 ## Testar sem ecrã (quando pedido; «sem testar» = não testar)
 - `./es testa`: constrói as duas versões, verifica a sintaxe e corre, num Chromium sem ecrã: `tests/vistas.mjs` (todas as vistas, sem base de dados) · `tests/notas.mjs` (os casos das fórmulas da própria app + as classificações da demonstração contra `tests/notas-referencia.txt`; `--atualizar` só quando a mudança nas notas é a pretendida) · `tests/bd.mjs` (versão com base de dados falsa e política de conteúdo ativa: todas as vistas, gravar e recarregar, páginas dos alunos) · `tests/respostas.mjs` (respostas de alunos feitas para atacar) · `tests/percurso.mjs` (professor abre → aluno responde → professor importa, Provas e Formulários).
 - `tests/servidor.mjs`: servidor HTTP + base de dados falsa (`window.__tb` são as tabelas; `ctl.falhar=true` faz a base de dados recusar gravações). Com a política ativa o `EduGest.ev` não corre (usa `eval`): usar `EduGest.t` (`go`, `demo`, `S`, `auto`, `f('nomeDaFunção')` — lista em `app/107-…`).
