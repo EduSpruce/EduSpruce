@@ -15,8 +15,15 @@ window.__esched={
   email:()=>window.__esched._email,
   sge:()=>document.body.classList.contains('est-sge'),
   voltar:()=>esVoltar(),
+  escola:()=>{try{return esDadosEscola()}catch(e){return null}},
   publico:c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'horarios.html#'+c
 };
+/* dados da escola na EduSpruce (escola ativa, ano letivo, turmas, disciplinas, professor, salas, tempos por semana e calendário) para o EduSchedule ir buscar automaticamente */
+function esDadosEscola(){const a=A();if(!a)return null;const E=EC();const ts=(a.turmas||[]).filter(t=>escolaDe(t)===E&&!t.arquivada);
+  const aulas=t=>{try{return aulasTurma(t,a)||[]}catch(_){return []}};
+  const turmas=ts.map(t=>{const L=aulas(t);return {id:t.id,nome:t.nome||'',disciplina:t.disciplina||'',tempos:L.length,salas:[...new Set(L.map(x=>x.sala).filter(Boolean))],aulas:L.map(x=>({dia:x.dia,ini:x.ini,fim:x.fim,sala:x.sala||''}))}});
+  let cal=null;try{const c=CAL();if(c&&c.periodos&&c.periodos.length){cal={inicio:c.periodos[0].ini,fim:c.periodos[c.periodos.length-1].fim,ferias:eventosCalendario(c).filter(e=>e.t==='interrupcao').map(e=>({nome:e.nota||'Interrupção letiva',de:e.ini,ate:e.fim}))}}}catch(_){}
+  return {escola:nomeEscola(E)==='Escola principal'?'':nomeEscola(E),ano:a.nome||'',professor:(S.cfg&&S.cfg.professor)||'',turmas,calendario:cal}}
 async function esEmail(){try{const sb=(await sbObter()).cliente;const r=await sb.auth.getSession();window.__esched._email=((r.data&&r.data.session&&r.data.session.user&&r.data.session.user.email)||'').toLowerCase()}catch(_){}}
 function esVoltar(){document.body.classList.remove('esched');go(go._f&&go._f.hub?'hub':'inicio')}
 function vEduSchedule(){

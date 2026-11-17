@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.072
+- EduSchedule vai buscar automaticamente à EduSpruce os dados da escola: nome, ano letivo, turmas, disciplinas, professor, salas, tempos por semana, grelha de tempos e interrupções letivas
+- Turmas novas na EduSpruce entram sozinhas no EduSchedule (sem repetir as que apagou)
+
 ## 1.071
 - EduApps: ícone da casa e nome da app lado a lado, tudo numa linha
 
