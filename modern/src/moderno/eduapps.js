@@ -14,7 +14,7 @@ function eaAplicar(){
 html body.eduapp #main{margin-left:0!important;width:100%!important;max-width:none!important}
 html body.eduapp #bar{padding-left:14px!important}
 html body.eduapp #bar .ttlw,html body.eduapp.dev-pc #bar.hgrid>.ttlw,html body.eduapp.est-sge #bar .ttlw{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:10px!important}
-html body.eduapp #bar .ttlw #ttl{margin:0!important;white-space:nowrap}
+html body.eduapp #bar .ttlw #ttl{margin:0!important;white-space:nowrap;flex:0 0 auto!important;max-width:none!important;width:auto!important;overflow:visible!important;text-overflow:clip!important}html body.eduapp #bar .ttlw,html body.eduapp.dev-pc #bar.hgrid>.ttlw,html body.eduapp.est-sge #bar.hgrid>.ttlw{flex:0 0 auto!important;min-width:max-content!important;max-width:none!important;overflow:visible!important}
 html body.eduapp #bar #eacasa{width:40px;height:40px;min-height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 html body #bar #eacasa{flex:0 0 auto}
 html body.eduapp.dev-pc #bar.hgrid{grid-template-areas:"t e x a u i"!important}
@@ -24,8 +24,8 @@ html body.est-sge #bar #eacasa{border-radius:0}`;document.head.appendChild(st)}
 
 /* a cor de cada app (a mesma das Apps) no ícone do cabeçalho de cada app; o menu lateral fica com os ícones brancos */
 function eaCores(){try{if(typeof HUB_APPS==='undefined')return;let st=document.getElementById('eacores');if(!st){st=document.createElement('style');st.id='eacores';document.head.appendChild(st)}
-  st.textContent=HUB_APPS.map(a=>{const [c,c2]=hubCor(a);return `html body[data-eaapp="${a.v}"] #view :is(.pulogo,.pqlogo,.fmlogo){background:linear-gradient(145deg,${c},${c2})!important;color:#fff!important}html body[data-eaapp="${a.v}"] #view .sph-logo em{background:${c}!important;color:#fff!important}`}).join('\n')
-   +`\nhtml body.est-sge #view :is(.pulogo,.pqlogo,.fmlogo){border-radius:0!important}`
+  st.textContent=HUB_APPS.map(a=>{const [c,c2]=hubCor(a);return `html body[data-eaapp="${a.v}"] #view :is(.pulogo,.pqlogo,.fmlogo,.pvbrand>i){background:linear-gradient(145deg,${c},${c2})!important;color:#fff!important}html body[data-eaapp="${a.v}"] #view .sph-logo em{background:${c}!important;color:#fff!important}`}).join('\n')
+   +`\nhtml body.est-sge #view :is(.pulogo,.pqlogo,.fmlogo,.pvbrand>i){border-radius:0!important}`
    +`\nhtml body #bar #eaic{flex:0 0 auto;display:inline-flex}html body #bar #eaic[hidden]{display:none!important}html body #bar #eaic .hbic{box-shadow:none}html body.est-sge #bar #eaic .hbic{border-radius:0}`;
   const a=HUB_APPS.find(x=>x.v===VIEW);if(a)document.body.dataset.eaapp=a.v;else delete document.body.dataset.eaapp;const t=document.querySelector('#bar .ttlw');if(!t)return;let s=document.getElementById('eaic');
   if(s)s.remove()}catch(e){console.warn(e)}}

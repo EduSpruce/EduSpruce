@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.080
+- Provas: o ícone do cabeçalho usa a cor da app
+- O nome da app ao lado da casa aparece inteiro em todas as EduApps
+
 ## 1.079
 - O ícone no cabeçalho de cada app (Pulso, Formulários, Provas, Spruce It) usa a cor da app, igual às Apps
 - Menu lateral volta aos ícones brancos; sai o ícone repetido no topo

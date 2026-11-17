@@ -141,7 +141,7 @@ function cabecalho(){const b=$('#bar');if(!b)return;const pc=document.body.class
   const x=$('#barx'),tw=b.querySelector(':scope>.ttlw');if(x)x.classList.remove('cmp','cmp2');
   b.querySelectorAll(':scope>.ctx').forEach(c=>[...c.childNodes].forEach(n=>{if(n.nodeType===3&&n.nodeValue.trim()){const sp=document.createElement('span');sp.className='ctxt';sp.textContent=n.nodeValue.trim();n.replaceWith(sp,' ')}}));
   const larg=e=>{if(!e)return 0;const r=document.createRange();r.selectNodeContents(e);return Math.ceil(r.getBoundingClientRect().width)};
-  const nat=tw?Math.max(...[...tw.querySelectorAll('#ttl,.crumb')].map(larg),0)+2:0;
+  const nat=tw?Math.max(...[...tw.querySelectorAll('#ttl,.crumb')].map(larg),0)+2+((c=>c&&c.offsetWidth?c.offsetWidth+10:0)(tw.querySelector('#eacasa:not([hidden])'))):0;
   const escV=ce&&getComputedStyle(ce).display!=='none';let escN=0;if(escV){ce.style.setProperty('width','max-content','important');escN=Math.ceil(ce.getBoundingClientRect().width);ce.style.removeProperty('width')}
   const dir=()=>[...b.children].filter(e=>e!==tw&&e!==ce&&e!==x&&e.offsetWidth&&getComputedStyle(e).display!=='none').reduce((s,e)=>s+Math.ceil(e.getBoundingClientRect().width)+G,0);
   const hc=W>=1150?HCOL1:0;let tcol,ecol;const NIV=['hcomp','hcomp2','hcomp3'];
