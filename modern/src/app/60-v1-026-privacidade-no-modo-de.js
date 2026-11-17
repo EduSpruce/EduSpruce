@@ -170,6 +170,23 @@ function perfilEvol(X,show){const t=T();if(!t||!X||!X.P||!X.P.length)return '';c
   return `<svg viewBox="0 0 ${W} ${H}" class="pevo" role="img" aria-label="Evolução por ${esc(Wp.toLowerCase())}">${grid}${xl}${tm}${doms}${fin}</svg>${leg}`}
 {const _pR=perfilRadar;perfilRadar=function(X,show){const r=_pR.apply(this,arguments);let e='';try{e=perfilEvol(X,show)}catch(err){console.warn(err)}
   if(!e)return r;return (r||'<p class="mut">São precisos pelo menos 3 domínios avaliados.</p>')+`</section><section class="pc pevs"><h2>${ic('chart',16)} Evolução por ${esc(perW())}</h2>${e}`}}
+/* ===================== v1.046 · Perfis de Aprendizagem: impressão completa e organizada =====================
+   «Imprimir» mostra TODAS as secções (ignora o que está escondido em «Mostrar»), abre «Ver todos os domínios», troca campos por texto,
+   acrescenta cabeçalho (escola, turma, disciplina, período, data) e rodapé, imprime em A4 e repõe o ecrã como estava. */
+function perfilImprimir(){const o=document.getElementById('perfilap');if(!o)return;const t=T();const pb=o.querySelector('[data-pap].on');
+  const guard=JSON.stringify(S.cfg.perfilOcultos||null);S.cfg.perfilOcultos={normal:[],proj:[]};
+  const repor=()=>{S.cfg.perfilOcultos=JSON.parse(guard)||undefined;if(!S.cfg.perfilOcultos)delete S.cfg.perfilOcultos;document.body.classList.remove('perfil-print');const b=document.querySelector('#perfilap [data-pap].on');if(b)b.click()};
+  if(pb)pb.click();
+  setTimeout(()=>{try{const ab=o.querySelector('.pab');if(!ab){repor();return}
+    ab.querySelectorAll('details').forEach(d=>d.open=true);
+    ab.querySelectorAll('textarea,input:not([type=checkbox]):not([type=radio])').forEach(e=>{const v=String(e.value||'').trim();const d=document.createElement('div');d.className='pprtv'+(v?'':' vaz');d.textContent=v||'—';e.after(d)});
+    const nm=(o.querySelector('.pid h1')||{}).textContent||'';const per=pb?pb.textContent.trim():'';const esc_=(()=>{try{const e=escolaDe(t);const n=typeof e==='string'?e:nomeEscola(e);return /sem nome/.test(n)?'':n}catch(_){return ''}})();
+    const hj=new Date().toLocaleDateString('pt-PT',{day:'numeric',month:'long',year:'numeric'});
+    ab.insertAdjacentHTML('afterbegin',`<div class="pprth"><div><b>Perfil de Aprendizagem</b><span>${esc(t?t.nome+' · '+t.disciplina:'')}${per?' · '+esc(per.replace('Per.','período')):''}</span></div><div class="pprtr">${esc_?`<span>${esc(esc_)}</span>`:''}<span>${esc(hj)}</span></div></div>`);
+    ab.insertAdjacentHTML('beforeend',`<div class="pprtf"><span>${esc(nm)}</span><span>EduSpruce · ${esc(VERSAO||'')}</span></div><div class="pprtas"><div><i></i>O(A) Professor(a)</div><div><i></i>O(A) Aluno(a)</div><div><i></i>O(A) Encarregado(a) de Educação</div></div>`);
+    document.body.classList.add('perfil-print');let feito=false;const fim=()=>{if(feito)return;feito=true;window.removeEventListener('afterprint',fim);repor()};window.addEventListener('afterprint',fim);
+    setTimeout(()=>{try{window.print()}catch(_){}setTimeout(fim,400)},80)}catch(e){console.warn(e);repor()}},180)}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#perfilap #pa-pr');if(!b)return;e.preventDefault();e.stopImmediatePropagation();perfilImprimir()},true);
 
 /* ===================== v1.026 · Modo «Em teste»: abaixo da turma, só quando há teste — relógio, temporizador e nome do teste =====================
    Aparece no menu, por baixo da turma, no dia de um teste (instrumento do tipo teste, prova escrita ou questão-aula com a data de hoje)
@@ -241,23 +258,4 @@ function emtAbrir(iid,tid){const a=A();const t=a&&(a.turmas||[]).find(x=>x.id===
   o.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.fullscreenElement){e.preventDefault();emtFechar()}if(e.key===' '&&e.target===o){e.preventDefault();$('#emt-go').click()}});o.tabIndex=-1;o.focus();
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>EMT_WL=w).catch(()=>{})}catch(_){}
   tick();EMT_IV=setInterval(()=>{if(!document.getElementById('emteste')){clearInterval(EMT_IV);return}tick()},1000)}
-
-/* ===================== v1.026 · Desempenho em computadores mais antigos =====================
-   1) As regras de estilo com :has() sobre o atributo style obrigavam a recalcular o estilo da página inteira a cada medição do
-      cabeçalho (até 10 s a abrir «Aulas e sumários» num PC antigo) — foram retiradas.
-   2) Modo leve (Definições › Aparência › Desempenho): sem desfoques de vidro, sombras e animações. Liga-se sozinho em computadores
-      com poucos recursos ou quando o ecrã fica lento; pode forçar-se «Leve» ou «Normal» neste dispositivo. */
-const LEVE_K='es.leve';const leveCfg=()=>{try{return localStorage.getItem(LEVE_K)||'auto'}catch(_){return 'auto'}};
-let LEVE_AUTO=false;try{const c=navigator.hardwareConcurrency||8,m=navigator.deviceMemory||8;if(c<=2||m<=2)LEVE_AUTO=true}catch(_){}
-try{if(localStorage.getItem('es.leveAuto')==='1')LEVE_AUTO=true}catch(_){}
-const leveAtivo=()=>{const v=leveCfg();return v==='on'||(v==='auto'&&LEVE_AUTO)};
-function leveAplicar(){const on=leveAtivo();const r=document.documentElement;r.classList.toggle('leve',on);if(on)r.classList.add('a11y-rm')}
-{const _aaL=animAplicar;animAplicar=function(){const r=_aaL.apply(this,arguments);try{leveAplicar()}catch(_){}return r}}
-leveAplicar();
-/* medição automática: 120 imagens do ecrã depois de a app sossegar; se mais de metade forem lentas, liga o modo leve */
-setTimeout(function leveMedir(){if(leveCfg()!=='auto'||LEVE_AUTO||document.hidden)return;let n=0,lentos=0,prev=0;const f=t=>{if(document.hidden)return;if(prev&&t-prev>40)lentos++;prev=t;if(++n<120)requestAnimationFrame(f);else if(lentos>60){LEVE_AUTO=true;try{localStorage.setItem('es.leveAuto','1')}catch(_){}leveAplicar();toast('Modo leve ligado: este computador estava lento. Pode mudar em Definições › Aparência.','ok')}};requestAnimationFrame(f)},9000);
-function cartaoLeve(){const v=leveCfg();const o=(k,n,d)=>`<button type="button" role="radio" aria-checked="${v===k}" class="anopt ${v===k?'on':''}" data-lv="${k}"><b>${n}</b><small>${d}</small></button>`;
-  return `<div class="card" id="lv-cfg"><div class="row" style="gap:10px;flex-wrap:wrap"><h2 style="margin:0">${ic('sliders',18)} Desempenho</h2><span class="sp1"></span><span class="mut" style="font-size:13px">Só neste dispositivo${v==='auto'?' · agora: '+(LEVE_AUTO?'leve':'normal'):''}</span></div>
-  <div class="angrid" role="radiogroup" aria-label="Desempenho">${o('auto','Automático','Liga o modo leve sozinho em computadores mais antigos ou lentos.')}${o('on','Leve','Sem desfoques de vidro, sombras nem animações — mais rápido em PCs antigos e quadros interativos.')}${o('off','Normal','Aspeto completo, com todos os efeitos.')}</div></div>`}
-{const _vdL=vDefinicoes;vDefinicoes=function(){const r=_vdL.apply(this,arguments);try{if((UI.defTab||'geral')==='aparencia'&&!$('#lv-cfg')){const c=$('#an-cfg')||$('#view .card');if(c){c.insertAdjacentHTML($('#an-cfg')?'afterend':'beforebegin',cartaoLeve());$$('#lv-cfg [data-lv]').forEach(b=>b.onclick=()=>{try{localStorage.setItem(LEVE_K,b.dataset.lv);if(b.dataset.lv!=='auto')localStorage.removeItem('es.leveAuto')}catch(_){}if(b.dataset.lv==='auto'){LEVE_AUTO=false;try{const c2=navigator.hardwareConcurrency||8,m2=navigator.deviceMemory||8;if(c2<=2||m2<=2)LEVE_AUTO=true}catch(_){}}try{animAplicar()}catch(_){leveAplicar()}go('definicoes');toast('Desempenho: '+({auto:'automático',on:'leve',off:'normal'})[b.dataset.lv],'ok')})}}}catch(e){console.warn(e)}return r}}
 

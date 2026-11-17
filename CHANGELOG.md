@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.046
+- Perfis de Aprendizagem: Imprimir passa a incluir todas as secções, organizadas em A4 (resumo, perfil e evolução lado a lado, domínios em duas colunas), com cabeçalho, rodapé e assinaturas. Evolução nos Instrumentos legível com muitos instrumentos. Botão Ficha com margem.
+
 ## 1.045
 - Correções: acomodações escritas como texto deixam de aparecer com um número colado; nos Perfis de Aprendizagem, as medidas de apoio aparecem pelo nome em vez de pontos vazios.
 
