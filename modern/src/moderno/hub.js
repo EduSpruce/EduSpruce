@@ -204,10 +204,14 @@ if(typeof dashTopo==='function'){const _dtHb=dashTopo;dashTopo=function(){const 
   const k=h.lastIndexOf('</div>');return k<0?h+bar:h.slice(0,k)+bar+h.slice(k)}catch(e){console.warn(e);return h}}}
 /* a barra fica com a largura e as margens do cartão da coluna da direita (ex.: Ano Letivo / contagem) */
 function hubMiniAjusta(){try{const bar=document.querySelector('#view .hub-mini');if(!bar)return;const top=bar.closest('.dtop');
+  const n=bar.querySelectorAll('.hbm').length;
+  const tam=()=>{const w=bar.clientWidth-14-9;const t=Math.floor((w-(n-1)*4)/n)-4;bar.style.setProperty('--hbs',Math.max(26,Math.min(46,t))+'px');bar.classList.toggle('apert',t<26)};
+  const limpa=()=>{bar.classList.remove('larg','apert','mob');bar.style.width='';bar.style.removeProperty('--hbs')};
+  if(innerWidth<=700){limpa();bar.classList.add('larg','mob');tam();return}
   const sd=[...document.querySelectorAll('#view .inlay>.in-side')].find(e=>e.offsetWidth);const tr=top&&top.getBoundingClientRect();
-  if(!sd||!tr||innerWidth<=700){bar.classList.remove('larg');bar.style.width='';return}const r=sd.getBoundingClientRect();
-  if(Math.abs(r.right-tr.right)>4||r.left<tr.left+20){bar.classList.remove('larg');bar.style.width='';return}
-  bar.style.width=Math.round(r.width)+'px';bar.classList.add('larg')}catch(_){}}
+  if(!sd||!tr){limpa();return}const r=sd.getBoundingClientRect();
+  if(Math.abs(r.right-tr.right)>4||r.left<tr.left+20){limpa();return}
+  bar.style.width=Math.round(r.width)+'px';bar.classList.add('larg');bar.classList.remove('mob');tam()}catch(_){}}
 addEventListener('resize',()=>{clearTimeout(hubMiniAjusta._t);hubMiniAjusta._t=setTimeout(hubMiniAjusta,120)});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-hubmini]');if(!b)return;e.preventDefault();const id=b.dataset.hubmini;go._hubU=1;
   if(id==='@hub'){go('hub');return}const a=HUB_APPS.find(x=>x.id===id);if(a)go(a.v)});
@@ -227,6 +231,14 @@ html body .hub-mini .hbm-sep{width:1px;height:22px;background:var(--line);margin
 html body.est-sge .dtop .hub-mini,html body.est-sge .hub-mini .hbm{border-radius:0}
 html body.est-sge .hub-mini .hbm:hover{background:color-mix(in srgb,#1f9fcf 12%,transparent);transform:none}
 html body.est-sge .hub-mini .hbm-todas{color:#0e7095}
+html body .hub-mini.larg .hbm .hbic{width:var(--hbs,34px)!important;height:var(--hbs,34px)!important}
+html body .hub-mini.larg .hbm .hbic>svg{width:44%;height:44%}
+html body .hub-mini.larg .hbm-todas{width:calc(var(--hbs,34px) + 4px);height:calc(var(--hbs,34px) + 4px)}
+html body .hub-mini.larg .hbm-todas>svg{width:62%;height:62%}
+html body .hub-mini.apert{flex-wrap:wrap;justify-content:center}
+html body .dtop .hub-mini.mob{margin-left:0;width:100%;flex:1 1 100%}
+html body .dtop:has(.hub-mini.mob){flex-wrap:wrap}
+html body .in-side .cdown h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:clamp(17px,2.2vw,22px)}
 @media (max-width:700px){html body .dtop .hub-mini{margin-left:0}}
 `;document.head.appendChild(s)}
 /* menu lateral: um módulo desligado nunca aparece, seja qual for o menu (original, criado pelo professor ou da escola) nem o tema;

@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.085
+- Início: barra das apps responsiva — os ícones ajustam o tamanho à largura do cartão e ocupam a largura toda no telemóvel
+
 ## 1.084
 - Segurança reforçada: a app só corre o seu próprio código e trata como simples texto tudo o que os alunos escrevem nas respostas
 - «Guardado» só aparece quando as alterações estão mesmo na base de dados; se a gravação falhar, a app avisa, volta a tentar sozinha e deixa descarregar uma cópia
