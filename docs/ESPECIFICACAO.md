@@ -1367,3 +1367,7 @@ Escolas separadas, PAP/FCT, recuperação PROFIJ conforme a lei e correções
 ## v1.025
 
 Tema SGE: a seta (▾) do seletor de escola no cabeçalho deixava de ter espaço reservado (padding-right 8px) e ficava por cima do fim do nome da escola; passa a 30px e a seta fica branca.
+
+
+## v1.026
+

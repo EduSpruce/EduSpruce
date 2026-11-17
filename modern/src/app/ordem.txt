@@ -55,4 +55,6 @@
 55-v1-020-menu-lateral-organizado-por.js
 56-msai-catalogo-como-no-sge-data.js
 57-pautas-oficiais-profij-fpct-e-classificacao.js
-58-fecho.html
+58-v1-026-privacidade-no-modo-de.js
+59-v1-026-ajuda-privacidade-em-teste.js
+60-fecho.html

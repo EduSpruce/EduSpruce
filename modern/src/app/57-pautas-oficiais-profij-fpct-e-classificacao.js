@@ -329,4 +329,3 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 document.addEventListener('change',e=>{if(e.target.id==='org-f1'){const a=A();a.calendario.fimS1=e.target.value;a.calendario.periodos=semestresDe(a.calendario);saveNow();go(VIEW);toast('Semestres recalculados','ok')}});
 document.addEventListener('input',e=>{const t=e.target;if(t.matches&&t.matches('.nmw textarea'))t.parentElement.dataset.v=t.value});
 document.addEventListener('keydown',e=>{const t=e.target;if(e.key==='Enter'&&t.matches&&t.matches('.nmw textarea')){e.preventDefault();t.blur()}});
-})();
