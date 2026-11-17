@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.111
+- Ajuda: a animação de cada secção deixa de ter um espaço vazio por baixo
+- Corrigido de vez o aviso «Cannot access ILU_C before initialization» no Início
+
 ## 1.110
 - JornalNote passa a módulo opcional próprio: desligado, não aparece mesmo com o cargo do Jornal Escolar
 
