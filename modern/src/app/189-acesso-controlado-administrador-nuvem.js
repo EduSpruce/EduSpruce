@@ -41,7 +41,7 @@ setInterval(()=>{if(!nuvemObrig()||!SESSAO)return;const d=$('dialog.nvas');if(d)
   const of=$('#nv2-off');if(of){of.innerHTML=ic('back',14)+' Terminar Sessão e Limpar Aparelho';of.onclick=e=>{e.preventDefault();sairNuvem()}}
   const c=$('#nv-card');if(c&&!c.querySelector('.nvobr'))c.insertAdjacentHTML('afterbegin',`<div class="nvobr">${ic('shield',14)} Neste site a sincronização com a conta Google é obrigatória: os dados existem na sua conta (encriptados) e cada aparelho guarda apenas uma cópia de trabalho.</div>`)}}catch(e){console.warn(e)}return r}}
 /* terminar sessão: sincroniza tudo e só depois limpa a cópia deste aparelho */
-async function sairNuvem(){const L=nvL();let pend=Object.keys(L.mod||{}).length;
+async function sairNuvem(){try{nvMarcar()}catch(_){}const L=nvL();let pend=Object.keys(L.mod||{}).length;
   if(L.k&&navigator.onLine){toast('A enviar as últimas alterações…');try{await nvSincronizar(true)}catch(_){}pend=Object.keys(nvL().mod||{}).length}
   if(pend||nvL().erro){const r=await avisoModal('Há alterações ainda por enviar',['Não foi possível sincronizar '+(pend||'algumas')+' alteração(ões) com o Google Drive.','Se limpar agora, essas alterações perdem-se. Ligue-se à internet e tente de novo.'],[{t:'Tentar Mais Tarde',c:'pri',v:null},{t:'Limpar Mesmo Assim',c:'dng',v:'sim'}]);if(r!=='sim')return}
   try{audit('Sessão','Sessão terminada e aparelho limpo',(SESSAO||{}).u||'');saveNow()}catch(_){}

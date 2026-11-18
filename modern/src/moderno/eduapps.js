@@ -3,11 +3,13 @@
 const EDUAPPS={arena:1,pulso:1,forms:1,provas:1};
 function eaVoltar(){go(go._f&&go._f.hub?'hub':'inicio')}
 function eaAplicar(){
-  const app=!!EDUAPPS[VIEW];document.body.classList.toggle('eduapp',app);
+  const app=!!EDUAPPS[VIEW];const antes=document.body.classList.contains('eduapp');document.body.classList.toggle('eduapp',app);let mudou=antes!==app;
   const t=document.querySelector('#bar .ttlw');if(!t)return;let c=document.getElementById('eacasa');
-  if(app&&!c){c=document.createElement('button');c.type='button';c.id='eacasa';c.className='btn ico';c.title='Voltar à EduSpruce';c.setAttribute('aria-label','Voltar à EduSpruce');c.innerHTML=ic('home',20);c.onclick=eaVoltar;t.insertBefore(c,t.firstChild)}
-  if(c)c.hidden=!app;
-  try{typeof barLayout==='function'&&barLayout()}catch(_){}
+  if(app&&!c){c=document.createElement('button');c.type='button';c.id='eacasa';c.className='btn ico';c.title='Voltar à EduSpruce';c.setAttribute('aria-label','Voltar à EduSpruce');c.innerHTML=ic('home',20);c.onclick=eaVoltar;t.insertBefore(c,t.firstChild);mudou=true}
+  if(c&&c.hidden!==!app){c.hidden=!app;mudou=true}
+  /* o cabeçalho só é reorganizado aqui quando se entra ou sai de uma app (muda o botão da casa); nas outras mudanças de página
+     reorganiza-se no fotograma seguinte, já com o título ajustado (antes fazia-se aqui também, com o título antigo, e era refeito logo a seguir) */
+  if(mudou){try{typeof barLayout==='function'&&barLayout()}catch(_){}}
   eaAlinha();setTimeout(eaAlinha,80);setTimeout(eaAlinha,400)
 }
 /* casa alinhada com o conteúdo de baixo (sem o nome da app, que já está no cartão) */

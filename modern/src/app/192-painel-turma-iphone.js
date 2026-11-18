@@ -49,7 +49,7 @@ window.esSplash=function(txt){let d=document.getElementById('splash');if(txt===f
   if(!d){d=document.createElement('div');d.id='splash';d.innerHTML='<div class="spw">'+(document.querySelector('#splash-tpl')||{innerHTML:''}).innerHTML+'</div>';document.body.appendChild(d)}const t=document.getElementById('splash-t');if(t&&txt)t.textContent=txt};
 {const _sl=()=>{const d=document.getElementById('splash');if(!d)return clearInterval(_slT);const pronto=document.body.classList.contains('login-on')&&document.getElementById('login')||(document.getElementById('view')&&document.getElementById('view').children.length>0&&SESSAO);if(pronto){clearInterval(_slT);esSplash(false)}};const _slT=setInterval(_sl,80);setTimeout(()=>{clearInterval(_slT);esSplash(false)},25000)}
 /* v0.92 · sincroniza antes de sair (fechar, mudar de app, recarregar, terminar sessão) */
-function nvPendenteAgora(){try{const L=nvL();if(!L.prov||!_nvK||L.auto===false)return false;try{saveNow()}catch(_){}return Object.keys(nvL().mod||{}).length>0}catch(_){return false}}
+function nvPendenteAgora(){try{const L=nvL();if(!L.prov||!_nvK||L.auto===false)return false;try{saveNow()}catch(_){}try{nvMarcar()}catch(_){}return Object.keys(nvL().mod||{}).length>0}catch(_){return false}}
 let _nvSaida=null;
 function nvSyncSaida(){if(_nvSaida)return _nvSaida;if(!nvPendenteAgora())return null;clearTimeout(_nvT);
   _nvSaida=(async()=>{for(let i=0;i<4;i++){if(_nvBusy){await new Promise(r=>setTimeout(r,350));continue}await nvSincronizar(false);if(!Object.keys(nvL().mod||{}).length)break}})().catch(()=>{}).finally(()=>{_nvSaida=null;try{nvBadge()}catch(_){}});return _nvSaida}

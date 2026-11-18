@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.133
+- Primeira visita a cada página cerca de 20 % mais rápida (o cabeçalho deixou de ser arrumado duas vezes a cada mudança de página)
+- Gravar ficou quase duas vezes mais rápido (de ~38 para ~18 ms com muitos dados): várias gravações seguidas contam como uma para a sincronização
+
 ## 1.132
 - Início em ecrãs mais pequenos (portáteis): a área Complementar passa para onde equilibra a página — por baixo da Principal, com os cartões a pares — em vez de alongar a coluna da direita
 - Início em tablets e janelas estreitas: os cartões da Lateral e da Complementar ficam a pares em vez de numa só coluna comprida

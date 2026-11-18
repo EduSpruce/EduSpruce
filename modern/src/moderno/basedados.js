@@ -43,12 +43,12 @@ function sbEsquecer(){try{Object.keys(localStorage).forEach(k=>{if(k===SB_SES||k
   try{const L=nvL();const o={sb:0,conta:'',base:null,mod:{},erro:'',rekey:null};if(L.kConta){o.k=null;o.salt=null;o.kDe='';o.kConta=0;try{_nvK=null}catch(_){}}nvSet(o)}catch(_){}
   try{localStorage.removeItem('eskeep')}catch(_){}}
 async function sbTerminar(msgEntrada){try{esCortina(false)}catch(_){}if(sbTerminar._on)return;sbTerminar._on=true;
-  try{if(window.__esPronto&&navigator.onLine&&Object.keys(nvL().mod||{}).length)await Promise.race([nvSincronizar(false),new Promise(r=>setTimeout(r,6000))])}catch(_){}
+  try{try{nvMarcar()}catch(_){}if(window.__esPronto&&navigator.onLine&&Object.keys(nvL().mod||{}).length)await Promise.race([nvSincronizar(false),new Promise(r=>setTimeout(r,6000))])}catch(_){}
   try{const p=await Promise.race([sbObter(),new Promise((_,ko)=>setTimeout(()=>ko(new Error('t')),3000))]);await Promise.race([p.sair(),new Promise(r=>setTimeout(r,3000))])}catch(_){}
   sbEsquecer();try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY);sessionStorage.removeItem('es.loc')}catch(_){}
   try{if(msgEntrada)sessionStorage.setItem('es.lgmsg',msgEntrada)}catch(_){}
   window.__esSair=true;location.replace(location.origin+location.pathname)}
-terminarSessao=function(){try{if(window.__esPronto&&Object.keys(nvL().mod||{}).length&&!navigator.onLine&&!confirm('Há alterações que ainda não ficaram guardadas (sem internet). Se terminar a sessão agora, perdem-se.\n\nTerminar mesmo assim?'))return}catch(_){}sbTerminar()};
+terminarSessao=function(){try{try{nvMarcar()}catch(_){}if(window.__esPronto&&Object.keys(nvL().mod||{}).length&&!navigator.onLine&&!confirm('Há alterações que ainda não ficaram guardadas (sem internet). Se terminar a sessão agora, perdem-se.\n\nTerminar mesmo assim?'))return}catch(_){}sbTerminar()};
 /* quem deixa de estar autorizado sai também da base de dados (senão voltava a entrar sozinho) */
 {const _av=acVerificar;acVerificar=async function(){try{return await _av.apply(this,arguments)}catch(e){if(e&&e.semAcesso){sbEsquecer();try{sessionStorage.setItem('es.lgmsg',e.message)}catch(_){}}throw e}}}
 
@@ -261,7 +261,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState!==
 addEventListener('online',()=>{if(!SESSAO)return;if(window.__esPronto)setTimeout(sbPuxar,500);else setTimeout(()=>{if(sbModuloFalhou()&&$('#esabrir')&&$('#esabrir').dataset.m==='offline'&&sbRecarregar())return;esAbrir()},300)});
 addEventListener('es-bd',()=>{if(SESSAO&&!window.__esPronto&&$('#esabrir')&&$('#esabrir').dataset.m!=='abrir')esAbrir()});
 /* sair da página com alterações por guardar: avisa (não há cópia no aparelho) */
-addEventListener('beforeunload',e=>{try{if(!window.__esSair&&window.__esPronto&&nvL().prov==='supabase'&&Object.keys(nvL().mod||{}).length){e.preventDefault();e.returnValue=''}}catch(_){}});
+addEventListener('beforeunload',e=>{try{try{nvMarcar()}catch(_){}if(!window.__esSair&&window.__esPronto&&nvL().prov==='supabase'&&Object.keys(nvL().mod||{}).length){e.preventDefault();e.returnValue=''}}catch(_){}});
 /* sem ícone na barra: guardar e receber acontece em segundo plano; só um aviso discreto se a internet cair (e quando volta) */
 nvBadge=function(){try{const b=$('#nv-badge');if(b)b.remove()}catch(_){}};
 addEventListener('offline',()=>{if(window.__esPronto)toast('Sem internet — o que fizer é guardado assim que a ligação voltar.','aviso')});
@@ -324,7 +324,7 @@ async function gdCopiar(interativo){const L=nvL();if(!window.__esPronto||L.prov!
 async function gdApagar(){const L=nvL();if(!window.__esPronto||L.prov!=='supabase'||!(L.k||_nvK))return toast('Os dados ainda estão a abrir. Tente dentro de momentos.','erro');
   let bd;try{await nvSincronizar(true);bd=await PROV.supabase.lista()}catch(e){return toast('Não foi possível confirmar a base de dados: '+e.message,'erro')}
   const nb=Object.keys(bd).length;if(!bd[NV_PREF+'manifest.json']||nb<2)return toast('A base de dados ainda não tem os seus dados. Nada foi apagado.','erro');
-  if(nvL().erro||Object.keys(nvL().mod||{}).length)return toast('Há alterações por guardar na base de dados. Tente daqui a uns segundos.','erro');
+  try{nvMarcar()}catch(_){}if(nvL().erro||Object.keys(nvL().mod||{}).length)return toast('Há alterações por guardar na base de dados. Tente daqui a uns segundos.','erro');
   ocupado('A ligar ao Google Drive…');let m;try{await gsToken(true);m=await PROV.google._mapa(true)}catch(e){livre();return toast('Google Drive: '+e.message,'erro')}livre();
   const N=Object.keys(m||{}).filter(k=>k.startsWith(NV_PREF)||k===SB_CH);if(!N.length){gdFrioSet({auto:false,ultima:0,n:0});sbRedesenhar();return toast('O Google Drive já não tem dados da EduSpruce.','ok')}
   const w=(prompt(`Vai apagar ${N.length} ficheiro${N.length>1?'s':''} da EduSpruce do seu Google Drive (pasta privada da app).\n\nOs dados ficam só na Base de Dados EduSpruce (${nb} partes, confirmadas agora). A cópia diária fica desligada. Não é possível desfazer.\n\nPara confirmar, escreva APAGAR`)||'').trim().toUpperCase();
@@ -428,7 +428,7 @@ async function esMigrarEvidencias(){try{if(!indexedDB.databases)return 0;const L
   if(n){save();try{audit('Conta','Evidências passadas para a base de dados',n+'')}catch(_){}}return recs.length}catch(e){console.warn('[EduSpruce] evidências:',e);return -1}}
 /* depois da 1.ª gravação completa na base de dados, apaga a cópia antiga que ficou no aparelho (estado, cópias, fotografias, evidências) */
 let _esLimpo=false,_esEvMig=false;
-async function esLimparAparelho(){if(_esLimpo)return;const L=nvL();if(L.prov!=='supabase'||Object.keys(L.mod||{}).length||L.erro)return;
+async function esLimparAparelho(){if(_esLimpo)return;try{nvMarcar()}catch(_){}const L=nvL();if(L.prov!=='supabase'||Object.keys(L.mod||{}).length||L.erro)return;
   if(!_esEvMig){_esEvMig=true;const n=await esMigrarEvidencias();if(n>0){setTimeout(()=>{try{nvSincronizar(false)}catch(_){}},300);return}}
   _esLimpo=true;nvSet({sbOk:true});
   try{Object.keys(localStorage).forEach(k=>{if(ES_DADOS(k))window.__esLS.ri.call(localStorage,k)})}catch(_){}
@@ -540,9 +540,10 @@ setTimeout(function sbVigiarBd(){if(!window.__esPronto)return setTimeout(sbVigia
    (ou a ligação falhasse sem o navegador dar por isso), nada avisava — e nesta versão não fica cópia no aparelho.
    Agora o indicador segue as partes que ainda estão por enviar: «A guardar…» → «Guardado»; se falhar, «Por guardar» a vermelho,
    nova tentativa de 15 em 15 segundos e, ao fim de 20 segundos, uma faixa com o motivo, «Tentar Agora» e «Descarregar Cópia». */
-const sbPend=()=>{try{return Object.keys(nvL().mod||{}).length}catch(_){return 0}};
+/* (não obriga a marcar já: uma gravação com alterações ainda por marcar conta como pendente) */
+const sbPend=()=>{try{return (_nvMarcaPend?1:0)+Object.keys(nvL0().mod||{}).length}catch(_){return 0}};
 const sbGrav={desde:0,faixa:false,ult:0,reg:''};
-function sbEstadoReal(){if(!window.__esPronto||nvL().prov!=='supabase')return null;const n=sbPend();if(!n)return 'ok';if(!navigator.onLine)return 'off';return nvL().erro&&Date.now()-sbGrav.desde>4000?'erro':'pend'}
+function sbEstadoReal(){if(!window.__esPronto||nvL0().prov!=='supabase')return null;const n=sbPend();if(!n)return 'ok';if(!navigator.onLine)return 'off';return nvL0().erro&&Date.now()-sbGrav.desde>4000?'erro':'pend'}
 {const _eg=estadoGuardar;estadoGuardar=function(k){const r=sbEstadoReal();if(r==null||k==='erro')return _eg.apply(this,arguments);const el=document.getElementById('saveSt');if(!el)return;
     if(r==='ok'){_eg.call(this,'ok','Tudo guardado na base de dados');return}
     if(r==='pend'){_eg.call(this,'pend','A enviar as alterações para a base de dados');return}

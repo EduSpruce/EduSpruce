@@ -10,7 +10,7 @@
 const SNW_IN='ef-f-snin-',SNW_OC='ef-f-snic-',SNW_IDX='ef-f-snidx.bin',SNW_COL='Por Arrumar';
 let _snwRec=null,_snwPend=[],_snwSig='',_snwIdxT=0,_snwOn=false,_snwProx=false,_snwUlt=0;
 const snwPronto=()=>{try{const L=nvL();return !!(window.__esPronto&&L.prov==='supabase'&&(L.k||_nvK))}catch(_){return false}};
-const snwGravado=()=>{try{return !Object.keys(nvL().mod||{}).length&&!_nvBusy}catch(_){return false}};
+const snwGravado=()=>{try{nvMarcar()}catch(_){}try{return !Object.keys(nvL().mod||{}).length&&!_nvBusy}catch(_){return false}};
 /* os quadros de cada contexto (sn = SpruceNote, snj = JornalNote), sem depender do que está aberto no ecrã */
 function snwQuadros(c){const k=UI.mqCtx;UI.mqCtx=c==='snj'?'jornal':'prof';try{return MQ()}finally{UI.mqCtx=k}}
 /* só os quadros ligados à raiz (os que estão na lixeira ficam de fora) */

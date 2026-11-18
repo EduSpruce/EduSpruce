@@ -23,9 +23,12 @@ let saveT,_savePend=false;function save(){if(window.__ES_OFF)return;clearTimeout
 const HIST=[];let _ultimoJ=null,_semHist=false;
 /* a última gravação mudou alguma coisa? (false só quando se sabe que ficou tudo igual) — as camadas seguintes do saveNow poupam trabalho quando não mudou */
 let _saveMudou=true;
+/* as duas gravações são iguais tirando a hora (_ts)? — compara as partes antes e depois da hora sem copiar o texto inteiro (antes copiava 2 × o estado a cada gravação) */
+function jIgualSemTs(u,j){const re=/"_ts":\d+,?/;const m1=re.exec(u),m2=re.exec(j);if(!m1||!m2)return u.replace(re,'')===j.replace(re,'');
+  const i1=m1.index,i2=m2.index,f1=i1+m1[0].length,f2=i2+m2[0].length;return i1===i2&&u.length-f1===j.length-f2&&u.slice(0,i1)===j.slice(0,i2)&&u.slice(f1)===j.slice(f2)}
 function saveNow(){clearTimeout(saveT);_savePend=false;if(window.__ES_OFF){try{estadoGuardar('ok')}catch(_){}return}let j;try{arrumarFotos();S._ts=Date.now();j=JSON.stringify(S)}catch(e){return}
   _saveMudou=true;
-  if(_ultimoJ!=null&&!_semHist){const a=_ultimoJ.replace(/"_ts":\d+,?/,''),b=j.replace(/"_ts":\d+,?/,'');_saveMudou=a!==b;if(a!==b){const _n=Date.now();S._mod=_n;j=/"_mod":\d+/.test(j)?j.replace(/"_mod":\d+/,'"_mod":'+_n):j.replace(/"_ts":/,'"_mod":'+_n+',"_ts":');HIST.push(_ultimoJ);if(HIST.length>40)HIST.shift();/* dados muito grandes: menos cópias para Anular (no máximo ~80 MB em memória) */{let tot=0;for(let i=HIST.length-1;i>=0;i--){tot+=HIST[i].length;if(tot>8e7&&i<HIST.length-1){HIST.splice(0,i+1);break}}}atualizarAnular()}}
+  if(_ultimoJ!=null&&!_semHist){_saveMudou=!jIgualSemTs(_ultimoJ,j);if(_saveMudou){const _n=Date.now();S._mod=_n;j=/"_mod":\d+/.test(j)?j.replace(/"_mod":\d+/,'"_mod":'+_n):j.replace(/"_ts":/,'"_mod":'+_n+',"_ts":');HIST.push(_ultimoJ);if(HIST.length>40)HIST.shift();/* dados muito grandes: menos cópias para Anular (no máximo ~80 MB em memória) */{let tot=0;for(let i=HIST.length-1;i>=0;i--){tot+=HIST[i].length;if(tot>8e7&&i<HIST.length-1){HIST.splice(0,i+1);break}}}atualizarAnular()}}
   _ultimoJ=j;_semHist=false;idbEstado(j);
   try{localStorage.setItem(KEY,j);const hj=isoData(new Date());if(localStorage.getItem(KEY+'.bakd')!==hj){localStorage.setItem(KEY+'.bak',j);localStorage.setItem(KEY+'.bakd',hj)}
     if(j.length>4.2e6&&!saveNow.av){saveNow.av=1;toast('Atenção: o espaço do browser está quase cheio — os dados continuam guardados no IndexedDB; exporte uma cópia de segurança','aviso')}}

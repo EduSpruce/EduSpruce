@@ -108,9 +108,11 @@ function alinharBar(){const b=$('#bar'),v=$('#view');if(!b||!v)return;if(!docume
   const chave=[pl,pr,innerWidth,VIEW,document.body.className,b.textContent,b.querySelectorAll('button:not([hidden])').length].join('\u0001');const c=_alBarMemo.get(chave);
   if(c){ap(c.f);if(b.offsetHeight<=c.h+1&&(cabecalho.aperto||0)<=c.a&&ov()<=c.o)return}
   b.style.paddingLeft=b.style.paddingRight='16px';try{cabecalho()}catch(_){}const h0=b.offsetHeight,a0=cabecalho.aperto||0,o0=ov();let lo=0,hi=1;const bom=()=>b.offsetHeight<=h0+1&&(cabecalho.aperto||0)<=a0&&ov()<=o0;
-  const fim=f=>{_alBarMemo.set(chave,{f,h:h0,a:a0,o:o0});if(_alBarMemo.size>60)_alBarMemo.delete(_alBarMemo.keys().next().value)};
+  const fim=f=>{_alBarMemo.set(chave,{f,h:h0,a:a0,o:o0})};
   ap(1);if(bom())return fim(1);for(let i=0;i<4;i++){const m=(lo+hi)/2;ap(m);if(bom())lo=m;else hi=m}ap(lo);fim(lo)}
-const _alBarMemo=new Map();
+/* memória (só nesta abertura) da margem encontrada para cada arrumação da barra */
+const _alBarMemo=esUiMemo();
+function esUiMemo(){const M=new Map();return {get:k=>M.get(k),set:(k,v)=>{M.delete(k);M.set(k,v);if(M.size>80)M.delete(M.keys().next().value)}}}
 {const _gAB=go;go=function(){const r=_gAB.apply(this,arguments);requestAnimationFrame(()=>requestAnimationFrame(alinharBar));setTimeout(alinharBar,400);return r}}
 addEventListener('resize',()=>{clearTimeout(alinharBar._t);alinharBar._t=setTimeout(alinharBar,120)});
 

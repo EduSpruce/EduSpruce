@@ -4,7 +4,11 @@
    encriptados no dispositivo (AES-256-GCM), junção por parte entre dispositivos
    ===================================================================== */
 const NV_KEY='edugest.nuvem',NV_CONF='edugest.nuvem.conf',NV_PREF='ef-';
-const nvL=()=>{try{return JSON.parse(localStorage.getItem(NV_KEY)||'{}')}catch(_){return {}}};
+/* nvL() lê o estado da sincronização já com as alterações marcadas (nvMarcar, adiada desde a última gravação): quem decide se há algo
+   por guardar vê sempre a verdade. nvL0() lê sem marcar — só para as camadas do próprio saveNow, que adiam a marcação de propósito. */
+let _nvMarcaPend=false;
+const nvL0=()=>{try{return JSON.parse(localStorage.getItem(NV_KEY)||'{}')}catch(_){return {}}};
+const nvL=()=>{if(_nvMarcaPend)nvMarcar();return nvL0()};;
 const nvSet=o=>{const x={...nvL(),...o};try{localStorage.setItem(NV_KEY,JSON.stringify(x))}catch(_){}return x};
 const nvHash=s=>{let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (h2>>>0).toString(36)+(h1>>>0).toString(36)};
 const NV_LOCAIS=['anoAtivo','turmaAtiva','escolaAtiva','filtroOferta','_ts'];const NV_CFG_LOC=['gsync','sazForcar'];
@@ -108,7 +112,7 @@ const nvTudoIgual=(L,manTxt)=>!!_nvMemo&&!!manTxt&&_nvMemo.man===manTxt&&!!L.bas
 const nvLocalIgual=()=>!!_nvMemo&&_nvMemo.sig===nvSigLocal();
 /* verificação periódica (a cada poucos segundos, com a app à vista): por omissão é uma sincronização silenciosa; a versão com base de dados troca-a por uma pergunta mais leve */
 async function nvSondar(){return nvSincronizar(false)}
-async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)return null;const k=await nvChave();if(!k){if(interativo)toast('Defina a palavra-passe de encriptação da nuvem.','erro');return null}
+async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)return null;nvMarcar();const k=await nvChave();if(!k){if(interativo)toast('Defina a palavra-passe de encriptação da nuvem.','erro');return null}
   _nvBusy=true;nvEstadoTxt('a sincronizar…');const res={env:0,rec:0,conf:0,fotosEnv:0,fotosRec:0};
   try{const L=nvL();const base={...(L.base||{})};const primeira=!L.base;
     let manTxt=await prov.ler(NV_PREF+'manifest.json');
@@ -150,9 +154,13 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     window.__nvUlt=res;return res}
   catch(e){nvSet({erro:e.message});nvEstadoTxt('erro: '+e.message);if(interativo)toast(e.message,'erro');console.warn(e);return null}finally{_nvBusy=false}}
 /* registo da hora de alteração de cada parte (para decidir conflitos pela versão mais recente) */
-{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const mod=L.mod||{};let m=false;
-  /* só se resumem as partes quando a gravação mudou alguma coisa, e nunca as que já estão marcadas para enviar */
-  if(_saveMudou){const P=nvPartes(true);Object.keys(P).forEach(n=>{if(mod[n])return;const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]){mod[n]=Date.now();m=true}})}if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),250)}}}catch(_){}return r}}
+{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL0();if(L.prov&&L.base){
+  /* marcar o que mudou (resumir as partes) já não se faz em cada gravação: fica para o envio, 250 ms depois da última — várias gravações seguidas
+     (escrever notas) contam como uma, e a gravação em si fica mais rápida. Quem precisa da marcação já (sair, fechar, mudar de conta) chama nvMarcar(). */
+  if(_saveMudou)_nvMarcaPend=true;if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>{nvMarcar();nvSincronizar(false)},250)}else nvMarcar()}}catch(_){}return r}}
+/* marca as partes que mudaram desde a última sincronização (só se resumem as que ainda não estão marcadas) */
+function nvMarcar(){if(!_nvMarcaPend)return;_nvMarcaPend=false;try{const L=nvL0();if(!(L.prov&&L.base))return;const mod=L.mod||{};let m=false;const P=nvPartes(true);
+  Object.keys(P).forEach(n=>{if(mod[n])return;const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod})}catch(_){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&nvL().prov&&_nvK&&nvL().auto!==false){clearTimeout(_nvT);nvSincronizar(false)}else if(document.visibilityState==='visible'&&nvL().prov&&_nvK&&nvL().auto!==false)setTimeout(()=>nvSincronizar(false),1500)});
 addEventListener('online',()=>{if(nvL().prov&&_nvK)nvSincronizar(false)});
 setInterval(()=>{if(nvL().prov&&_nvK&&nvL().auto!==false&&!document.hidden)nvSincronizar(false)},5*60*1000);

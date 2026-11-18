@@ -116,7 +116,7 @@ function nvBadge(){try{const bar=$('#bar');if(!bar)return;let b=$('#nv-badge');c
 setInterval(()=>nvBadge(),2500);addEventListener('online',()=>nvBadge());addEventListener('offline',()=>nvBadge());
 {const _gNv=go;go=function(v){const r=_gNv.apply(this,arguments);try{nvBadge()}catch(_){}return r}}
 /* ao sair/esconder (iPhone/iPad ao mudar de app) envia o que estiver pendente */
-addEventListener('pagehide',()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&Object.keys(L.mod||{}).length)nvSincronizar(false)}catch(_){}});
+addEventListener('pagehide',()=>{try{nvMarcar();const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&Object.keys(L.mod||{}).length)nvSincronizar(false)}catch(_){}});
 /* armazenamento persistente (o Safari não apaga os dados da app) */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(p=>{if(!p)navigator.storage.persist()})}catch(_){}
 /* --- ligar outro dispositivo por link --- */
