@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.126
+- Horário da turma: grupos de UFCD por professor (UFCD A, B, C…) — escolha o seu grupo e marque os blocos; os blocos com a sua letra são as suas aulas de UFCD
+
 ## 1.125
 - Horário da turma: grupos de UFCD (A–Z) e atribuição de uma UFCD ou de um grupo a cada bloco «UFCD»
 - Roda da Sorte: ícone do som novo (altifalante)

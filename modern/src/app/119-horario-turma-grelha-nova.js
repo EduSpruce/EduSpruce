@@ -24,7 +24,7 @@ function grelhaTurma(aulas,o){o=o||{};if(!aulas.length)return '<div class="empty
   const old=$('#view .card.wide div[style*="overflow:auto"]:has(> table.hor)')||($('#view table.hor')||{}).parentElement;if(!old)return r;
   const minhas=aulasTurma(t);const sig=t.horAbs&&t.horAbs.length?t.horAbs:siglasDaDisciplina(h,t.disciplina);
   const tit=x=>{const l=h.legenda.find(l=>l.ab===x.ab);return l?l.nome+(l.profs.length?' — '+l.profs.join(', '):''):x.ab};
-  const wrap=document.createElement('div');wrap.innerHTML=grelhaTurma(h.aulas,{minha:x=>sig.includes(x.ab)&&(!minhas.some(m=>m.prof)||minhas.some(m=>m.dia===x.dia&&m.ini===x.ini)),titulo:tit,...(typeof htGrelhaOpts==='function'?htGrelhaOpts(t,h):{})});old.replaceWith(wrap.firstElementChild);
+  const wrap=document.createElement('div');wrap.innerHTML=grelhaTurma(h.aulas,{minha:x=>sig.includes(x.ab)&&(!minhas.some(m=>m.prof)||minhas.some(m=>m.dia===x.dia&&m.ini===x.ini)),titulo:tit,...(typeof htGrelhaOpts==='function'?htGrelhaOpts(t,h,x=>sig.includes(x.ab)&&(!minhas.some(m=>m.prof)||minhas.some(m=>m.dia===x.dia&&m.ini===x.ini))):{})});old.replaceWith(wrap.firstElementChild);
   const usadas=[...new Set(h.aulas.map(x=>x.ab))];const leg=h.legenda.filter(l=>usadas.includes(l.ab));
   const g=$('#view .htw');if(g&&leg.length)g.insertAdjacentHTML('afterend',`<div class="htleg">${leg.map(l=>`<span class="htl ${sig.includes(l.ab)?'minha':''}" style="--h:${corSigla(l.ab)}"><b>${esc(l.ab)}</b> ${esc(l.nome)}${l.profs.length?` <span class="mut">· ${esc(l.profs.map(p=>profNome(p)).join(', '))}</span>`:''}</span>`).join('')}</div>`);
   const lg=$('#view .card.wide .leg');if(lg)lg.innerHTML=`<span class="htl minha" style="--h:0;padding:2px 8px"><b>${esc(t.disciplina)}</b></span>`;
