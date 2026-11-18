@@ -15,3 +15,9 @@ function iniTamAplicar(){const m=$('#view .in-main');if(!m)return;m.classList.ad
 {const _wp=wgPreparar;wgPreparar=function(){const r=_wp.apply(this,arguments);try{if(wgModo()==='simples')iniTamAplicar()}catch(e){console.warn(e)}return r}}
 {const _wgG=wgGuardar;wgGuardar=function(){const r=_wgG.apply(this,arguments);try{if(wgModo()==='simples'){$$('#view .in-side>.card,#view .in-fav>.card').forEach(c=>{c.style.gridColumn='';const x=c.querySelector(':scope>.wgrs');if(x)x.remove()});iniTamAplicar()}}catch(_){}return r}}
 
+/* 1.123 — cartões lado a lado sem espaço vazio: cada cartão fica com a sua altura e os seguintes encaixam por baixo (grelha em tijolo) */
+function iniTijolo(){const m=$('#view .in-main.ingrid');if(!m)return;m.classList.add('intij');const U=4;
+  [...m.children].forEach(c=>{const cs=getComputedStyle(c);if(cs.display==='none'){c.style.gridRowEnd='';return}const h=c.getBoundingClientRect().height+(parseFloat(cs.marginTop)||0)+(parseFloat(cs.marginBottom)||0);const sp='span '+Math.max(1,Math.ceil(h/U));if(c.style.gridRowEnd!==sp)c.style.gridRowEnd=sp});
+  if(!m._ro&&typeof ResizeObserver!=='undefined'){let t=0;m._ro=new ResizeObserver(()=>{cancelAnimationFrame(t);t=requestAnimationFrame(()=>{try{iniTijolo()}catch(_){}})});[...m.children].forEach(c=>m._ro.observe(c));
+    new MutationObserver(L=>{L.forEach(x=>x.addedNodes.forEach(n=>{if(n.nodeType===1)m._ro.observe(n)}));try{iniTijolo()}catch(_){}}).observe(m,{childList:true})}}
+{const _it=iniTamAplicar;iniTamAplicar=function(){const r=_it.apply(this,arguments);try{iniTijolo()}catch(e){console.warn(e)}return r}}

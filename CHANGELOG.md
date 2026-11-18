@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.124
+- Fechar Ano Letivo: o botão «+ Ano Letivo» passa a fechar o ano — toda a informação fica bloqueada e protegida (só consulta e exportação) e abre logo a construção do novo ano
+- PDF muito melhorados: horários em grelha colorida (O Meu Horário e horário da turma), tabelas com larguras automáticas e cabeçalhos certos, assinatura contida
+- Horário da turma (PROFIJ): associar as UFCD à pauta diretamente no cartão «Disciplina Nesta Turma»; a sigla UFCD é reconhecida automaticamente
+- Início: cartões lado a lado sem espaço vazio — cada cartão fica com a sua altura
+
 ## 1.123
 - Provas: logótipo e nome da escola alinhados com a coluna do conteúdo
 

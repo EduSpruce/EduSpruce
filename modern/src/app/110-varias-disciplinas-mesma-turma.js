@@ -29,7 +29,7 @@ function parseUfcds(txt){return String(txt||'').split('\n').map(l=>l.trim()).fil
     const res=orig.apply(this,arguments);const a=A();if(!a||a.turmas.length<=n0)return res;const t=a.turmas[a.turmas.length-1];
     const soK=(L,d)=>L.filter(m=>d===UC_N?/^UC/i.test(m.cod):!/^UC/i.test(m.cod));if(ehComp(t.disciplina)&&U.length){const X=soK(U,t.disciplina);t.modulos=(t.modulos||[]).concat(X.length?X:U)}
     extras.forEach(d=>{const cic=t.oferta==='profij'?'profij':t.ciclo;if(a.turmas.some(z=>z.nome===t.nome&&z.disciplina===d))return;const k=discKey(d,cic);if(!discAno().includes(k))discAno().push(k);
-      const t2=JSON.parse(JSON.stringify(t));Object.assign(t2,{id:uid(),disciplina:d,dominios:mkDominiosDisc(d,cic,t.oferta),instrumentos:[],mencoes:MENCOES_DEF.map(m=>({...m}))});delete t2.planta;delete t2.modulos;
+      const t2=JSON.parse(JSON.stringify(t));Object.assign(t2,{id:uid(),disciplina:d,dominios:mkDominiosDisc(d,cic,t.oferta),instrumentos:[],mencoes:MENCOES_DEF.map(m=>({...m}))});delete t2.planta;delete t2.modulos;delete t2.horAbs;
       if(t.oferta==='profij'&&ehComp(d))t2.modulos=soK(U,d).map(m=>({...m,id:uid()+Math.random().toString(36).slice(2,5)}));else if(t.oferta==='profissional')t2.modulos=[];
       t2.alunos=t2.alunos.map(x=>({...x,id:uid()+Math.random().toString(36).slice(2,5)}));a.turmas.push(t2)});
     if(extras.length){saveNow();audit('Turmas','Várias disciplinas',t.nome+': '+[t.disciplina,...extras].join(', '));toast(t.nome+': '+(extras.length+1)+' disciplinas criadas','ok');navTurmas()}return res}}}

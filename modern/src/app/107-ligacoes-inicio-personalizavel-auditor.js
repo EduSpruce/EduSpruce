@@ -9,7 +9,7 @@ Object.assign(AJ_VIEW,{tarefas:'inicio2',planta:'planta',sumarios:'sumarios',rec
 APRES_BLOQ.push('direcao','documentos');
 if(/^(file:|http:\/\/(localhost|127\.0\.0\.1))/.test(location.href)||(()=>{try{return localStorage.getItem('edugest.debug')==='1'}catch(_){return false}})()){window.EduGest.ev=function(s){return eval(s)};
   /* 1.084 · para os testes com a política de conteúdo ativa (onde o eval não corre): acessos com nome, sem eval */
-  window.EduGest.t={go:v=>go(v),vista:()=>VIEW,vistas:()=>Object.keys(TITLES),demo:()=>criarDemo(),S:()=>S,A:()=>A(),T:()=>T(),save:()=>save(),saveNow:()=>saveNow(),prefs:()=>aplicarPrefs(),
+  window.EduGest.t={go:v=>go(v),vista:()=>VIEW,vistas:()=>Object.keys(TITLES),demo:()=>criarDemo(),anoDesf:()=>[anoProteger.n||0,anoProteger.v||''],S:()=>S,A:()=>A(),T:()=>T(),save:()=>save(),saveNow:()=>saveNow(),prefs:()=>aplicarPrefs(),
     calc:()=>({periodos,ponderada,pctsPer,pctsFinal,instTotal}),auto:()=>autoTestes(),
     f:n=>({mraAbrir:()=>mraAbrir,mraM:()=>mraM,getPdfLib:()=>getPdfLib,ocrImagem:()=>ocrImagem,verFicheiro:()=>verFicheiro,imprimirBytes:()=>imprimirBytes,FOTOS:()=>FOTOS,toast:()=>toast,audit:()=>audit,UI:()=>UI,
       pvAvNova:()=>pvAvNova,pvExNovo:()=>pvExNovo,pvParaItem:()=>pvParaItem,pvAbrir:()=>pvAbrir,pvCh:()=>pvCh,pvImportar:()=>pvImportar,pvRespostas:()=>pvRespostas,pvUma:()=>pvUma,pvPerg:()=>pvPerg,pvReceber:()=>pvReceber,PV:()=>PV,

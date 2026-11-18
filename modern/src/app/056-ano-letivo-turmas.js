@@ -4,7 +4,7 @@
 function novoAno(nome){{const ja=S.anos.find(x=>x.nome===(nome||anoAuto()));if(ja){S.anoAtivo=ja.id;S.turmaAtiva=null;save();try{toast('O ano letivo '+ja.nome+' já existe — foi aberto.','aviso')}catch(_){}return ja}}const a=prepAno({id:uid(),nome:nome||anoAuto(),turmas:[]});a.org='periodo';S.anos.push(a);S.anos.sort((x,y)=>y.nome.localeCompare(x.nome));S.anoAtivo=a.id;S.turmaAtiva=null;save();return a}
 function vTurmas(){
   const a=A();const TF=turmasFiltradas(a);
-  barBtns(!A()?[]:[{id:'b-na',t:'+ Ano letivo',f:()=>{const n=prompt('Ano letivo (ex.: '+anoAuto()+')',sugAno());if(!n)return;if(!/^\d{4}\/\d{4}$/.test(n.trim()))return alert('Use o formato 2026/2027.');if(S.anos.some(x=>x.nome===n.trim()))return alert('Esse ano letivo já existe.');novoAno(n.trim());go('turmas')}}]);
+  barBtns(!A()?[]:[{id:'b-na',t:ic('cadeado',15)+(A().fechado?' Ano Letivo Fechado':' Fechar Ano Letivo'),f:()=>fecharAnoDlg()}]);
   if(!a){$('#view').innerHTML=`<div class="card empty">Comece por criar o ano letivo.<br><br><button class="btn pri" id="mkA">Criar ano letivo ${anoAuto()}</button></div>`;$('#mkA').onclick=()=>{novoAno(anoAuto());go('turmas')};return}
   $('#view').innerHTML=`
   <div class="card ed"><div class="row"><h2 style="margin:0">Ano letivo ${esc(a.nome)}</h2><span class="sp1"></span>

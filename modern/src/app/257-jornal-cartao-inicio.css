@@ -14,3 +14,18 @@ html body .td-vi{flex:0 0 48px;width:48px;height:48px;display:inline-flex;align-
 html body .td-vazio b{display:block;font-size:16px;margin-bottom:3px}
 html body .td-vazio span:not(.td-vi){display:block;font-size:14px;line-height:1.45;color:var(--mut,#5b6573)}
 html body.est-sge .td-vazio,html body.est-sge .td-vi{border-radius:0}
+/* 1.123 — UFCD desta pauta (horário da turma) */
+html body .htu{margin-top:16px;padding-top:14px;border-top:1px solid var(--line,#d5dbe3)}
+html body .htu h3{display:flex;align-items:center;gap:6px;margin:0 0 6px;font-size:15px}
+html body .htul{display:flex;flex-direction:column;gap:4px;max-height:340px;overflow:auto;margin:6px 0}
+html body .htul .chk{padding:6px 8px;border:1px solid var(--line,#d5dbe3);border-radius:var(--r,8px);margin:0}
+html body .htul .chk.on{border-color:var(--pri,#0f6f94);background:color-mix(in srgb,var(--pri,#0f6f94) 7%,transparent)}
+html body .htadd{gap:6px;flex-wrap:wrap;margin-top:8px}
+html body.est-sge .htul .chk{border-radius:0}
+/* 1.123 — Início em tijolo: sem espaço vazio dentro dos cartões lado a lado */
+html body #view .in-main.ingrid.intij{grid-auto-rows:4px!important;row-gap:0!important;align-items:start!important;grid-auto-flow:row dense}
+html body #view .in-main.ingrid.intij>*{align-self:start!important}
+/* 1.123 — Fechar Ano Letivo: botão junto do ano letivo e aviso de ano fechado */
+html body .anofx{display:flex;align-items:center;gap:8px;margin:0 0 14px;padding:10px 14px;border:1px solid #d9a441;border-left-width:4px;background:#fff8e6;color:#5a4300;border-radius:var(--r,8px);font-size:14px}
+html body.est-sge .anofx{border-radius:0}
+@media print{html body .anofx{display:none}}

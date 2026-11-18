@@ -253,5 +253,7 @@ dados/199-logotipos-novos.js
 250-ilustracoes.js
 254-correcoes-profij-turmas.js
 256-profij-sem-disciplina-principal.js
+258-horario-associar-ufcd.js
+259-fechar-ano-letivo.js
 245-fim-do-programa.js
 246-fecho.html
