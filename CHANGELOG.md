@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.127
+- Horário da turma: arraste um bloco para outro dia ou tempo (se estiver ocupado, trocam de lugar); clique num bloco para mudar a disciplina, mover ou retirar
+- O logótipo animado volta a aparecer enquanto a app carrega
+
 ## 1.126
 - Horário da turma: grupos de UFCD por professor (UFCD A, B, C…) — escolha o seu grupo e marque os blocos; os blocos com a sua letra são as suas aulas de UFCD
 

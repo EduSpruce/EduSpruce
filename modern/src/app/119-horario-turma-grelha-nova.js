@@ -3,7 +3,7 @@
 const COR_DISC=[[/^(PORT|PT|LP|PLNM)/,215],[/^MAT|^MACS/,28],[/^(ING|LE ?I(?!I)|LEI\b)/,195],[/^(FRAN|LE ?II|LEII|ALEM|ESP|FR\b)/,338],[/^FIL/,258],[/^(EF|ED\.? ?F)/,46],[/^(BIO|CN|CIEN|BG)/,138],[/^(FQ|FIS|QUI|CFQ)/,2],[/^(HIST|HGP|HCA)/,178],[/^GEO/,292],[/^(TIC|INF|APLIC|AI\b|PROG)/,88],[/^(EV|ET|EDV|DES|GD|ART|HCA)/,318],[/^(MUS|EM\b)/,272],[/^(EMRC|EMR|REL)/,60],[/^(CID|DAC|OF|OC)/,160],[/^(ECON|ECO|SOC|PSI)/,232]];
 const corSigla=ab=>{const k=String(ab||'').trim().toUpperCase();for(const [r,h] of COR_DISC)if(r.test(k))return h;let h=0;for(const c of k)h=(h*31+c.charCodeAt(0))%997;return [8,22,52,72,105,120,150,168,205,225,245,265,282,305,328,350][h%16]};
 function grelhaTurma(aulas,o){o=o||{};if(!aulas.length)return '<div class="empty">Sem aulas.</div>';
-  const ds=[1,2,3,4,5,...(aulas.some(a=>a.dia===6)?[6]:[])];const S_=[];aulas.forEach(a=>{if(!S_.some(s=>s.ini===a.ini))S_.push({ini:a.ini,fim:a.fim})});S_.sort((x,y)=>x.ini-y.ini);
+  const ds=[1,2,3,4,5,...(aulas.some(a=>a.dia===6)?[6]:[])];const S_=[];[...(o.slots||[]),...aulas].forEach(a=>{if(!S_.some(s=>s.ini===a.ini))S_.push({ini:a.ini,fim:a.fim})});S_.sort((x,y)=>x.ini-y.ini);
   /* linhas: tempos + intervalos (≥15 min) */
   const R=[];S_.forEach((s,i)=>{if(i&&s.ini-S_[i-1].fim>=15)R.push({pausa:true,ini:S_[i-1].fim,fim:s.ini});R.push(s)});
   const rowDe=ini=>R.findIndex(r=>!r.pausa&&r.ini===ini);
@@ -17,7 +17,7 @@ function grelhaTurma(aulas,o){o=o||{};if(!aulas.length)return '<div class="empty
     blocos+=`<div class="htb ${now?'agora':''}" style="grid-column:${ci+2};grid-row:${i+2}/${j+3}">${L.map(a=>{const m=o.minha&&o.minha(a);return `<div class="htc ${m?'minha':''}"${o.attr?o.attr(a,ini,fim):''} style="--h:${corSigla(a.ab)}" title="${esc((o.titulo?o.titulo(a):a.ab)+' · '+fmtHM(ini)+'–'+fmtHM(fim)+(a.sala?' · Sala '+a.sala:''))}"><b>${esc(a.ab)}</b>${a.sala?`<span class="hts">${esc(a.sala)}</span>`:''}${n>1?`<span class="htt">${fmtHM(ini)}–${fmtHM(fim)}</span>`:''}${o.extra?o.extra(a,ini,fim):''}</div>`}).join('')}</div>`;i=j+1}});
   const cab=`<div class="hth hhd"></div>${ds.map((d,ci)=>`<div class="hth ${d===hoje?'hj':''}" style="grid-column:${ci+2}">${DIAS[d]}</div>`).join('')}`;
   const tms=R.map((r,i)=>r.pausa?`<div class="htp" style="grid-row:${i+2};grid-column:1/-1"><span>${r.fim-r.ini>=45?'Almoço':'Intervalo'} · ${fmtHM(r.ini)}–${fmtHM(r.fim)}</span></div>`:`<div class="htm" style="grid-row:${i+2}"><b>${fmtHM(r.ini)}</b><span>${fmtHM(r.fim)}</span></div>`).join('');
-  const fundos=R.map((r,i)=>r.pausa?'':ds.map((d,ci)=>`<div class="htf ${d===hoje?'hj':''}" style="grid-row:${i+2};grid-column:${ci+2}"></div>`).join('')).join('');
+  const fundos=R.map((r,i)=>r.pausa?'':ds.map((d,ci)=>`<div class="htf ${d===hoje?'hj':''}" data-cel="${d}|${r.ini}" style="grid-row:${i+2};grid-column:${ci+2}"></div>`).join('')).join('');
   const rows=R.map(r=>r.pausa?'22px':'minmax(54px,auto)').join(' ');
   return `<div class="htw" role="region" aria-label="Horário semanal" tabindex="0"><div class="htg" style="grid-template-columns:62px repeat(${ds.length},minmax(110px,1fr));grid-template-rows:auto ${rows}">${cab}${fundos}${tms}${blocos}</div></div>`}
 {const _vh=vHorario;vHorario=function(){const r=_vh.apply(this,arguments);try{const t=T(),a=A();const h=horarioDe(a,UI.horC);if(!h)return r;

@@ -65,7 +65,13 @@ function sbEcraEntrar(){document.body.classList.add('login-on');let o=$('#login'
   document.body.appendChild(o);try{loginHero()}catch(_){}try{loginLegal()}catch(_){}return o}
 let _sbEntrouAgora=false;
 /* v0.942 · cortina: nada da app fica à vista enquanto a sessão se confirma ou antes de pedir o código de acesso */
-function esCortina(on){let o=$('#escofre');if(!on){if(o)o.remove();return}if(o)return;o=document.createElement('div');o.id='escofre';o.setAttribute('aria-busy','true');o.innerHTML='<span class="sr" role="status">A abrir…</span><i aria-hidden="true"></i>';document.body.appendChild(o);
+/* logótipo animado (o do ecrã de arranque, com a animação escolhida nas Definições) enquanto a app carrega */
+function esLogoCss(){if(esLogoCss._f)return;esLogoCss._f=1;try{let out='';const tr=x=>x.replace(/#splash/g,'.eslogo');
+  for(const sh of document.styleSheets){let R;try{R=sh.cssRules}catch(_){continue}for(const r of R){if(r.selectorText&&r.selectorText.includes('#splash .splg'))out+=tr(r.selectorText)+'{'+r.style.cssText+'}';
+    else if(r.media&&r.cssRules){let o2='';for(const q of r.cssRules)if(q.selectorText&&q.selectorText.includes('#splash'))o2+=tr(q.selectorText)+'{'+q.style.cssText+'}';if(o2)out+='@media '+r.media.mediaText+'{'+o2+'}'}}}
+  const st=document.createElement('style');st.id='eslogocss';st.textContent=out+'.eslogo{display:grid;place-items:center}.eslogo .splg{width:92px;height:92px}#esabrir>.eslogo{min-height:62vh}.anim-sem .eslogo .splg .s2,.a11y-rm .eslogo .splg .s2{opacity:1!important}';document.head.appendChild(st)}catch(e){console.warn(e)}}
+function esLogoAnim(){const tpl=document.querySelector('#splash-tpl');const svg=tpl?tpl.innerHTML.split('<div class="spn">')[0]:'';if(!svg)return '<i aria-hidden="true"></i>';esLogoCss();return `<div class="eslogo" aria-hidden="true">${svg}</div>`}
+function esCortina(on){let o=$('#escofre');if(!on){if(o)o.remove();return}if(o)return;o=document.createElement('div');o.id='escofre';o.setAttribute('aria-busy','true');o.innerHTML='<span class="sr" role="status">A abrir…</span>'+esLogoAnim();document.body.appendChild(o);
   /* nunca fica presa: sai se aparecer o ecrã de entrada, uma mensagem de erro ou ao fim de 12 s */
   const t0=Date.now();const t=setInterval(()=>{const c=$('#escofre');if(!c){clearInterval(t);return}if((document.body.classList.contains('login-on')&&!c.dataset.volta)||$('#pinlock')||$('#esabrir.falha')||$('#esabrir .esab-f')||Date.now()-t0>12000){clearInterval(t);c.remove()}},250)}
 const sbGuardadaValida=()=>{try{const j=JSON.parse(localStorage.getItem(SB_SES)||'null');return !!(j&&j.expires_at&&j.expires_at*1000>Date.now()+30000)}catch(_){return false}};
@@ -151,7 +157,7 @@ function sbPedirCodigoAntigo(p,pf){return new Promise(res=>{const d=document.cre
 function esEsqueleto(modo,tit,txt){let o=$('#esabrir');if(!modo){document.body.classList.remove('es-abrir');if(o)o.remove();return}
   document.body.classList.add('es-abrir');if(!o){o=document.createElement('div');o.id='esabrir';const v=$('#view');if(v&&v.parentNode)v.parentNode.insertBefore(o,v);else document.body.appendChild(o)}
   if(o.dataset.m===modo&&modo==='abrir')return;o.dataset.m=modo;
-  if(modo==='abrir'){o.setAttribute('aria-busy','true');o.innerHTML=`<span class="sr" role="status">A abrir os seus dados…</span><div class="eskg" aria-hidden="true"><div class="esk eskh"></div><div class="eskr"><div class="esk"></div><div class="esk"></div><div class="esk"></div><div class="esk"></div></div><div class="eskc"><div class="esk eskb"></div><div class="esk eskb"></div></div><div class="esk eskl"></div><div class="esk eskl"></div><div class="esk eskl c"></div></div>`;return}
+  if(modo==='abrir'){o.setAttribute('aria-busy','true');o.innerHTML=`<span class="sr" role="status">A abrir os seus dados…</span>${esLogoAnim()}`;return}
   o.removeAttribute('aria-busy');o.innerHTML=`<div class="esmsg" role="alert"><span class="esmi">${ic(modo==='offline'?'cloud':'alert',30)}</span><h2>${esc(tit)}</h2><p>${esc(txt)}</p><div class="row" style="gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="btn pri" id="esab-r">${ic('refresh',15)} Tentar de Novo</button><button type="button" class="btn" id="esab-s">Terminar Sessão</button></div></div>`;
   o.querySelector('#esab-r').onclick=()=>{if(sbModuloFalhou()){window.__esSair=true;return location.reload()}esAbrir()};o.querySelector('#esab-s').onclick=()=>sbTerminar()}
 function esFalha(e){esCortina(false);const rede=!navigator.onLine||(e&&e.rede);console.warn('[EduSpruce] abrir dados:',e&&e.message);
