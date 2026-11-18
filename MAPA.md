@@ -42,6 +42,12 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Cabeçalho: `ajustarBarraAg()` junta os ajustes pedidos na mesma imagem; no telemóvel o título é ajustado uma vez (eram duas).
 - Medir: estilos/disposição/código por navegação com `Performance.getMetrics` (CDP) e `Emulation.setCPUThrottlingRate` 4.
 
+## Junção de dados entre aparelhos (1.131) — junção a três, nunca «juntar tudo»
+- Quando dois aparelhos mudam a mesma parte antes de se sincronizarem, `nvSincronizar` (`app/120`) usa `nvJuntar3(comum, a, b)`: compara cada lado com a **última versão comum** (`_nvBT[parte] = {h, t}`, o texto que os dois tinham na última sincronização, guardado em memória e só usado se `h` for o resumo da base). Apagado de um lado e intacto do outro → fica apagado; campo mudado só de um lado → fica a mudança; mudado nos dois → ganha o mais recente; apagado de um lado e mudado do outro → fica o mudado.
+- A junção antiga (`nvJuntar`, união sem versão comum) fazia voltar o que fora apagado (tarefas e jornal de exemplo) e deixava um campo nunca tocado numa cópia antiga (ex.: nome da escola) apagar o que o outro aparelho escreveu. Só fica como recurso quando não há versão comum conhecida (versão sem base de dados).
+- `btN` (versões comuns novas) só passa a `_nvBT` no fim de uma sincronização bem-sucedida (`nvSet({base…})`); qualquer `base:null` leva a `primeira` e recomeça.
+- Testes: `modern/tests/sinc.mjs` («aparelho sem rede», nos dois sentidos) — falha na 1.130 e passa na 1.131.
+
 ## App parada = processador e base de dados parados (1.130)
 - **Escritas repetidas** (`app/262-escritas-repetidas-na-pagina.js`, logo a seguir ao catálogo): `setAttribute`, `classList.add/toggle`, `className`, `title` e `textContent` com o valor que o elemento já tem deixam de gerar mutações (antes acordavam todos os `MutationObserver` da página). Ficam de fora `src`, `href`, `srcdoc`, `data`, `value`, `action`, `poster` e tudo o que não é HTML (SVG). `dataset.x=` e `innerHTML=` **não** estão cobertos: em código que corre por temporizador, comparar antes de escrever (ex.: `estadoPor` em `049`, `_bq` no bloqueio, contagem decrescente do Início, que escreve no próprio nó de texto).
 - **Temporizadores e escutas com funções redefinidas**: `setInterval(()=>f(),…)` e `el.onclick=()=>f()`, nunca `setInterval(f,…)`/`onclick=f` — por referência ficam presos à primeira definição e ignoram as peças seguintes (era o caso do `nvBadge`, do X da gaveta, do `beforeunload` e do `aplicarA11yCfg`).

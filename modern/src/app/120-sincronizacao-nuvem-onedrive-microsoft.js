@@ -66,6 +66,29 @@ const nvGuardaConflito=(parte,dados,de)=>{const L=nvConflitos();L.unshift({parte
 const nvRotulo=k=>{if(k==='geral')return 'Definições e dados gerais';if(k==='audit')return 'Auditoria';if(k.startsWith('ano-')){const a=S.anos.find(x=>x.id===k.slice(4));return 'Ano letivo '+(a?a.nome:'')}if(k.startsWith('turma-')){let t=null;S.anos.forEach(a=>a.turmas.forEach(x=>{if(x.id===k.slice(6))t=x}));return t?'Turma '+t.nome+' · '+t.disciplina:'Turma'}return k};
 /* --- sincronizar --- */
 /* junta dois estados JSON: listas de registos com id juntam-se por id, objetos campo a campo; em caso de valor diferente fica o de «b» (o mais recente) */
+/* ===== junção a três (1.131) =====
+   A junção antiga (nvJuntar, em baixo) só via as duas versões atuais e juntava tudo: o que um aparelho tinha apagado voltava pelo outro
+   (as tarefas e o jornal de exemplo «ressuscitavam»), e um campo que um aparelho nem tinha tocado (ex.: o nome da escola, ainda vazio
+   numa cópia antiga) apagava o que o outro tinha escrito, se fosse o mais recente a gravar.
+   Agora compara-se cada lado com a última versão comum (o = o que os dois aparelhos tinham na última sincronização): só conta o que
+   cada lado mudou de facto. Apagado de um lado e intacto do outro → fica apagado; mudado de um lado só → fica a mudança; mudado nos
+   dois → fica o do lado b (o mais recente); apagado de um lado e mudado do outro → fica a versão mudada (nada se perde). */
+function nvJuntar3(o,a,b){const J=JSON.stringify;const ja=J(a),jb=J(b);if(ja===jb)return b;
+  if(o!==undefined){const jo=J(o);if(ja===jo)return b;if(jb===jo)return a}
+  if(a===undefined)return b;if(b===undefined)return a;
+  const obj=x=>!!x&&typeof x==='object';
+  if(Array.isArray(a)&&Array.isArray(b)){const O=Array.isArray(o)?o:[];const idd=x=>obj(x)&&x.id!=null?'i:'+x.id:null;const comId=L=>L.every(idd);
+    if(comId(a)&&comId(b)&&comId(O)){const mA=new Map(a.map(x=>[idd(x),x])),mB=new Map(b.map(x=>[idd(x),x])),mO=new Map(O.map(x=>[idd(x),x]));const out=[];
+      const um=(k,vA,vB)=>{const v=nvJuntar3(mO.get(k),vA,vB);if(v!==undefined)out.push(v)};
+      b.forEach(x=>{const k=idd(x);um(k,mA.get(k),x)});a.forEach(x=>{const k=idd(x);if(!mB.has(k))um(k,x,undefined)});return out}
+    if([a,b,O].every(L=>L.every(x=>x===null||typeof x!=='object'))){const sO=new Set(O.map(x=>J(x))),sA=new Set(a.map(x=>J(x))),sB=new Set(b.map(x=>J(x)));const out=[],vis=new Set();
+      const quer=x=>{const k=J(x);if(vis.has(k))return;vis.add(k);if(sO.has(k)&&(!sA.has(k)||!sB.has(k)))return;out.push(x)};b.forEach(quer);a.forEach(quer);return out}
+    return b}
+  if(obj(a)&&obj(b)&&!Array.isArray(a)&&!Array.isArray(b)){const oo=obj(o)&&!Array.isArray(o)?o:{};const r={};
+    new Set([...Object.keys(a),...Object.keys(b)]).forEach(k=>{const v=nvJuntar3(oo[k],a[k],b[k]);if(v!==undefined)r[k]=v});return r}
+  return b}
+/* a última versão comum de cada parte (texto e resumo), guardada em memória a cada sincronização; só é usada se o resumo for o da base */
+let _nvBT={};
 function nvJuntar(a,b){if(b===undefined)return a;if(a===undefined)return b;
   if(Array.isArray(a)&&Array.isArray(b)){const idd=x=>x&&typeof x==='object'&&x.id!=null?'i:'+x.id:null;
     if(a.length&&b.length&&a.every(idd)&&b.every(idd)){const M=new Map(a.map(x=>[idd(x),x]));const vis=new Set();const out=b.map(x=>{const k_=idd(x);vis.add(k_);return M.has(k_)?nvJuntar(M.get(k_),x):x});a.forEach(x=>{if(!vis.has(idd(x)))out.push(x)});return out}
@@ -94,9 +117,11 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     if(man&&man.chk){try{if(await nvDecifrar(man.chk,k)!=='eduflow')throw 0}catch(_){throw new Error('A palavra-passe de encriptação não corresponde à dos dados na nuvem.')}}
     if(!man)man={v:1,salt:L.salt,chk:await nvCifrar('eduflow',k),partes:{},fotos:{},rev:0};man.partes=man.partes||{};man.fotos=man.fotos||{};
     /* a assinatura é tirada no instante em que os dados são copiados: o que o utilizador gravar a meio desta sincronização muda-a, e a verificação seguinte volta a ser completa */
-    let _sigIni=nvSigLocal();const P=nvPartes();const loc={};Object.keys(P).forEach(n=>loc[n]=nvHash(JSON.stringify(P[n])));const mod=L.mod||{};
+    let _sigIni=nvSigLocal();const P=nvPartes();const loc={},locT={};Object.keys(P).forEach(n=>loc[n]=nvHash(locT[n]=JSON.stringify(P[n])));const mod=L.mod||{};
+    /* versões comuns depois desta sincronização (só passam a valer no fim, se tudo correr bem) */
+    const btN=primeira?{}:{..._nvBT};const btPor=(n,h,t)=>{if(h===undefined||t===undefined)delete btN[n];else btN[n]={h,t}};
     const todos=new Set([...Object.keys(loc),...Object.keys(man.partes),...Object.keys(base)]);let mudouLocal=false;let _pi=0;const _pt=Math.max(1,todos.size);const agora=Date.now(),disp=nvDisp();
-    await nvPool([...todos],12,async n=>{try{window.__nvProg&&window.__nvProg(0.8*(++_pi)/_pt)}catch(_){}const l=loc[n],r=man.partes[n]?man.partes[n].h:undefined,b=base[n];if(l===r){base[n]=l;return}
+    await nvPool([...todos],12,async n=>{try{window.__nvProg&&window.__nvProg(0.8*(++_pi)/_pt)}catch(_){}const l=loc[n],r=man.partes[n]?man.partes[n].h:undefined,b=base[n];if(l===r){base[n]=l;btPor(n,l,locT[n]);return}
       const lm=l!==b,rm=r!==b;let usar=null;
       if(n==='audit'&&lm&&rm&&l!==undefined&&r!==undefined){/* auditoria: junta os registos dos dois lados */const txt=await prov.ler(NV_PREF+'audit.bin');const R=txt?JSON.parse(await nvDecifrar(txt,k)):[];const vis=new Set();const M=[...(P.audit||[]),...R].filter(e=>{const id=e.q+'|'+e.area+'|'+e.acao+'|'+e.det;if(vis.has(id))return false;vis.add(id);return true}).sort((x,y)=>y.q-x.q).slice(0,5000);
         P.audit=M;const h=nvHash(JSON.stringify(M));if(h===r){/* este aparelho não tinha registos novos: fica com os da nuvem, sem gravar nada */base.audit=h;mudouLocal=true;res.rec++;res._aud=(res._aud||0)+1;return}await prov.escrever(NV_PREF+'audit.bin',await nvCifrar(JSON.stringify(M),k));man.partes.audit={h,ts:agora,dev:disp};base.audit=h;mudouLocal=true;res.env++;(res._up=res._up||[]).push('audit');return}
@@ -105,26 +130,29 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
       else if(lm&&!rm)usar='local';else if(rm&&!lm)usar='remoto';else{const lt=primeira?0:(mod[n]||S._ts||0),rt=man.partes[n]?man.partes[n].ts:0;
         /* 0.910: alterações nos dois aparelhos → junta-as (registo a registo; no mesmo campo fica a mais recente) e não cria conflito */
         if(l!==undefined&&r!==undefined){let R_=null;try{const tx=await prov.ler(NV_PREF+n+'.bin');if(tx!=null)R_=JSON.parse(await nvDecifrar(tx,k))}catch(_){}
-          if(R_!=null&&P[n]!=null&&typeof R_==='object'&&typeof P[n]==='object'){const M_=rt>lt?nvJuntar(P[n],R_):nvJuntar(R_,P[n]);P[n]=M_;const h=nvHash(JSON.stringify(M_));await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(M_),k));man.partes[n]={h,ts:agora,dev:disp};base[n]=h;mudouLocal=true;res.env++;res.rec++;res.junt=(res.junt||0)+1;(res._up=res._up||[]).push(n);return}}
+          if(R_!=null&&P[n]!=null&&typeof R_==='object'&&typeof P[n]==='object'){const C_=_nvBT[n]&&_nvBT[n].h===b?JSON.parse(_nvBT[n].t):undefined;
+            const M_=C_!==undefined?(rt>lt?nvJuntar3(C_,P[n],R_):nvJuntar3(C_,R_,P[n])):(rt>lt?nvJuntar(P[n],R_):nvJuntar(R_,P[n]));P[n]=M_;const tM=JSON.stringify(M_);const h=nvHash(tM);btPor(n,h,tM);await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(M_),k));man.partes[n]={h,ts:agora,dev:disp};base[n]=h;mudouLocal=true;res.env++;res.rec++;res.junt=(res.junt||0)+1;(res._up=res._up||[]).push(n);return}}
         (res.cp=res.cp||[]).push(n);usar=(r===undefined&&l!==undefined)?'local':(l===undefined&&r!==undefined)?'remoto':(rt>lt?'remoto':'local');res.conf++;
         if(usar==='remoto'&&P[n]!==undefined)nvGuardaConflito(n,P[n],'este dispositivo');else if(usar==='local'&&r!==undefined){try{nvGuardaConflito(n,JSON.parse(await nvDecifrar(await prov.ler(NV_PREF+n+'.bin'),k)),(man.partes[n]||{}).dev||'outro dispositivo')}catch(_){}}}
-      if(usar==='local'){if(l===undefined){await prov.apagar(NV_PREF+n+'.bin');delete man.partes[n];delete base[n]}else{await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(P[n]),k));man.partes[n]={h:l,ts:mod[n]||agora,dev:disp};base[n]=l}res.env++;(res._up=res._up||[]).push(n)}
-      else{if(r===undefined){delete P[n];delete base[n]}else{const txt=await prov.ler(NV_PREF+n+'.bin');if(txt==null)return;P[n]=JSON.parse(await nvDecifrar(txt,k));base[n]=r}mudouLocal=true;res.rec++;if(n==='audit')res._aud=(res._aud||0)+1}});
+      if(usar==='local'){if(l===undefined){await prov.apagar(NV_PREF+n+'.bin');delete man.partes[n];delete base[n];btPor(n)}else{await prov.escrever(NV_PREF+n+'.bin',await nvCifrar(JSON.stringify(P[n]),k));man.partes[n]={h:l,ts:mod[n]||agora,dev:disp};base[n]=l;btPor(n,l,locT[n])}res.env++;(res._up=res._up||[]).push(n)}
+      else{if(r===undefined){delete P[n];delete base[n];btPor(n)}else{const txt=await prov.ler(NV_PREF+n+'.bin');if(txt==null)return;const tR=await nvDecifrar(txt,k);P[n]=JSON.parse(tR);base[n]=r;btPor(n,r,tR)}mudouLocal=true;res.rec++;if(n==='audit')res._aud=(res._aud||0)+1}});
     /* fotografias e anexos: imutáveis — envia as que faltam, recebe as que não existem aqui */
     /* fotografias apagadas (ex.: órfãs corrigidas na Integridade): saem da lista e da nuvem, para não voltarem a ser descarregadas */
     {const Lx=Array.isArray(S.fotosLixo)?S.fotosLixo:[];for(const id of Lx){if(FOTOS[id])continue;if(man.fotos[id]){delete man.fotos[id];res.fotosApag=(res.fotosApag||0)+1;try{prov.apagar&&await prov.apagar(nvNomeF(id))}catch(_){}}}}
     if(!window.__nvSemFotos)await nvPool(Object.keys(FOTOS),10,async id=>{if(!man.fotos[id]){try{await prov.escrever(nvNomeF(id),await nvCifrar(FOTOS[id],k));man.fotos[id]=1;res.fotosEnv++}catch(e){(res.fotosFalha=res.fotosFalha||[]).push(id);console.warn('[EduSpruce] ficheiro não enviado',id,e)}}});
     {const _F=Object.keys(man.fotos);let _fi=0;var _fprog=()=>{try{window.__nvProg&&window.__nvProg(0.8+0.2*(++_fi)/Math.max(1,_F.length))}catch(_){}}}if(!window.__nvSemFotos)await nvPool(Object.keys(man.fotos),10,async id=>{_fprog();if(!FOTOS[id]){let txt=null;try{txt=await prov.ler(nvNomeF(id))}catch(e){console.warn('[EduSpruce] ficheiro não recebido',id,e);return}if(txt!=null){const v=await nvDecifrar(txt,k);FOTOS[id]=v;idbPor(id,v);res.fotosRec++}}});
-    if(mudouLocal){const st=nvMontar(P);const ok=validarCopia(st);if(ok.length)throw new Error('Dados recebidos incompletos: '+ok[0]);S=migrate(st);_semHist=true;saveNow();_semHist=false;_sigIni=nvSigLocal();const P2=nvPartes(true);Object.keys(P2).forEach(n=>{const h2=nvHash(JSON.stringify(P2[n]));if(man.partes[n]&&base[n]===man.partes[n].h&&h2!==base[n]){man.partes[n].h=h2;base[n]=h2;res._fix=1}})}
+    if(mudouLocal){const st=nvMontar(P);const ok=validarCopia(st);if(ok.length)throw new Error('Dados recebidos incompletos: '+ok[0]);S=migrate(st);_semHist=true;saveNow();_semHist=false;_sigIni=nvSigLocal();const P2=nvPartes(true);Object.keys(P2).forEach(n=>{const t2=JSON.stringify(P2[n]);const h2=nvHash(t2);if(man.partes[n]&&base[n]===man.partes[n].h&&h2!==base[n]){man.partes[n].h=h2;base[n]=h2;btPor(n,h2,t2);res._fix=1}})}
     if(res.env||res.conf||res.fotosEnv||res.fotosApag||res._fix||!manTxt){/* evita escrever por cima de outro dispositivo que sincronizou entretanto */const atual=await prov.ler(NV_PREF+'manifest.json');if(atual&&manTxt&&atual!==manTxt){_nvBusy=false;const b0=L.base||{};(res._up||[]).forEach(n=>{if(b0[n]===undefined)delete base[n];else base[n]=b0[n]});nvSet({base,mod:L.mod||{}});return await nvSincronizar(interativo)}
       man.rev=(man.rev||0)+1;man.q=agora;man.dev=disp;_manFim=JSON.stringify(man);await prov.escrever(NV_PREF+'manifest.json',_manFim)}
-    nvSet({base,mod:{},ultimo:agora,erro:''});_nvMemo=(_manFim&&!res.fotosFalha&&!window.__nvSemFotos)?{man:_manFim,sig:_sigIni,q:Date.now()}:null;const t=res.rec||res.env||res.fotosRec||res.fotosEnv?`sincronizado · ${res.env} enviadas · ${res.rec} recebidas${res.conf?' · '+res.conf+' conflito(s)':''}`:'sincronizado — tudo igual';nvEstadoTxt(t);
+    nvSet({base,mod:{},ultimo:agora,erro:''});_nvBT=btN;_nvMemo=(_manFim&&!res.fotosFalha&&!window.__nvSemFotos)?{man:_manFim,sig:_sigIni,q:Date.now()}:null;const t=res.rec||res.env||res.fotosRec||res.fotosEnv?`sincronizado · ${res.env} enviadas · ${res.rec} recebidas${res.conf?' · '+res.conf+' conflito(s)':''}`:'sincronizado — tudo igual';nvEstadoTxt(t);
     if(mudouLocal&&res.rec-(res._aud||0)>0){aplicarPrefs();go(VIEW);toast('Recebidas alterações de outro dispositivo ('+(res.rec-(res._aud||0))+')','ok')}else if(interativo)toast('Sincronizado'+(res.env?' — '+res.env+' parte(s) enviada(s)':''),'ok');
     if(res.conf)toast(res.conf+' conflito(s): ficou a versão mais recente; a outra está em Definições › Sincronização','aviso');if(res.junt)try{audit('Sincronização','Alterações de dois aparelhos juntadas',res.junt+' parte(s)')}catch(_){}if(res.fotosFalha&&interativo)toast(res.fotosFalha.length+' fotografia(s)/documento(s) muito grande(s) ou com erro — os restantes dados foram sincronizados; volta a tentar sozinha.','aviso');
     window.__nvUlt=res;return res}
   catch(e){nvSet({erro:e.message});nvEstadoTxt('erro: '+e.message);if(interativo)toast(e.message,'erro');console.warn(e);return null}finally{_nvBusy=false}}
 /* registo da hora de alteração de cada parte (para decidir conflitos pela versão mais recente) */
-{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const P=nvPartes(true);const mod=L.mod||{};let m=false;Object.keys(P).forEach(n=>{const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]&&!mod[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),250)}}}catch(_){}return r}}
+{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const mod=L.mod||{};let m=false;
+  /* só se resumem as partes quando a gravação mudou alguma coisa, e nunca as que já estão marcadas para enviar */
+  if(_saveMudou){const P=nvPartes(true);Object.keys(P).forEach(n=>{if(mod[n])return;const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]){mod[n]=Date.now();m=true}})}if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),250)}}}catch(_){}return r}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&nvL().prov&&_nvK&&nvL().auto!==false){clearTimeout(_nvT);nvSincronizar(false)}else if(document.visibilityState==='visible'&&nvL().prov&&_nvK&&nvL().auto!==false)setTimeout(()=>nvSincronizar(false),1500)});
 addEventListener('online',()=>{if(nvL().prov&&_nvK)nvSincronizar(false)});
 setInterval(()=>{if(nvL().prov&&_nvK&&nvL().auto!==false&&!document.hidden)nvSincronizar(false)},5*60*1000);

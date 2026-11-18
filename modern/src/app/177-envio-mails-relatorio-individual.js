@@ -82,7 +82,8 @@ document.addEventListener('click',e=>{if(VIEW!=='meuhorario')return;const el=e.t
   if(!x){toast('Esta semana não há aula nesse tempo (interrupção, feriado ou fora do período)','aviso');return}S.turmaAtiva=t.id;save();aulaDlg(t,x.k,'sum')},true);
 
 /* nomes longos na lista de alunos: a caixa cresce com o texto */
-function autoAltura(root){(root||document).querySelectorAll('table.alst textarea[data-k="nome"]').forEach(ta=>{ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';if(!ta._ah){ta._ah=1;ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=ta.scrollHeight+'px'})}})}
+/* (primeiro todas a «auto», depois todas as medições, depois todas as alturas: um só cálculo da página em vez de um por aluno) */
+function autoAltura(root){const L=[...(root||document).querySelectorAll('table.alst textarea[data-k="nome"]')];L.forEach(ta=>{ta.style.height='auto'});const H=L.map(ta=>ta.scrollHeight);L.forEach((ta,i)=>{ta.style.height=H[i]+'px';if(!ta._ah){ta._ah=1;ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=ta.scrollHeight+'px'})}})}
 {const _vAA=vAlunos;vAlunos=function(){const r=_vAA.apply(this,arguments);try{requestAnimationFrame(()=>autoAltura($('#view')))}catch(_){}return r};if(go._f)go._f.alunos=vAlunos}
 addEventListener('resize',()=>{if(VIEW==='alunos')autoAltura($('#view'))});
 
@@ -102,8 +103,14 @@ function alinharBar(){const b=$('#bar'),v=$('#view');if(!b||!v)return;if(!docume
     const k=[...c.querySelectorAll(':scope>.card,:scope>*>.card')].map(x=>x.getBoundingClientRect()).filter(x=>x.width>150);const rr=k.length&&(cs.backgroundColor==='rgba(0, 0, 0, 0)'||cs.backgroundColor==='transparent')?{left:Math.min(...k.map(x=>x.left)),right:Math.max(...k.map(x=>x.right))}:r;L=Math.min(L,rr.left);R=Math.max(R,rr.right)});
   if(!isFinite(L))return;const pl=Math.max(16,Math.round(L-br.left)),pr=Math.max(16,Math.round(br.right-R));if(pl+pr>br.width*.6)return;
   /* tudo na mesma linha sempre que possível: só aplica a margem que não faz a barra quebrar */
-  b.style.paddingLeft=b.style.paddingRight='16px';try{cabecalho()}catch(_){}const h0=b.offsetHeight,a0=cabecalho.aperto||0,ov=()=>b.querySelectorAll('#barx [data-ovf]').length,o0=ov();let lo=0,hi=1;const ap=f=>{b.style.paddingLeft=Math.max(16,Math.round(pl*f))+'px';b.style.paddingRight=Math.max(16,Math.round(pr*f))+'px';try{cabecalho()}catch(_){}};const bom=()=>b.offsetHeight<=h0+1&&(cabecalho.aperto||0)<=a0&&ov()<=o0;
-  ap(1);if(bom())return;for(let i=0;i<4;i++){const m=(lo+hi)/2;ap(m);if(bom())lo=m;else hi=m}ap(lo)}
+  const ov=()=>b.querySelectorAll('#barx [data-ovf]').length;const ap=f=>{b.style.paddingLeft=Math.max(16,Math.round(pl*f))+'px';b.style.paddingRight=Math.max(16,Math.round(pr*f))+'px';try{cabecalho()}catch(_){}};
+  /* a mesma barra na mesma página e janela já foi alinhada antes: aplica logo a margem encontrada (1 cálculo do cabeçalho em vez de até 7) e só procura de novo se o resultado não for o mesmo */
+  const chave=[pl,pr,innerWidth,VIEW,document.body.className,b.textContent,b.querySelectorAll('button:not([hidden])').length].join('\u0001');const c=_alBarMemo.get(chave);
+  if(c){ap(c.f);if(b.offsetHeight<=c.h+1&&(cabecalho.aperto||0)<=c.a&&ov()<=c.o)return}
+  b.style.paddingLeft=b.style.paddingRight='16px';try{cabecalho()}catch(_){}const h0=b.offsetHeight,a0=cabecalho.aperto||0,o0=ov();let lo=0,hi=1;const bom=()=>b.offsetHeight<=h0+1&&(cabecalho.aperto||0)<=a0&&ov()<=o0;
+  const fim=f=>{_alBarMemo.set(chave,{f,h:h0,a:a0,o:o0});if(_alBarMemo.size>60)_alBarMemo.delete(_alBarMemo.keys().next().value)};
+  ap(1);if(bom())return fim(1);for(let i=0;i<4;i++){const m=(lo+hi)/2;ap(m);if(bom())lo=m;else hi=m}ap(lo);fim(lo)}
+const _alBarMemo=new Map();
 {const _gAB=go;go=function(){const r=_gAB.apply(this,arguments);requestAnimationFrame(()=>requestAnimationFrame(alinharBar));setTimeout(alinharBar,400);return r}}
 addEventListener('resize',()=>{clearTimeout(alinharBar._t);alinharBar._t=setTimeout(alinharBar,120)});
 

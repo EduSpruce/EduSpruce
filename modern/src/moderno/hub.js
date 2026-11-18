@@ -46,7 +46,7 @@ const hubCorDef=a=>hubSge()?(HUB_SGE_DEF[a.id]||'sgeAzul'):a.c;
 const hubCor=(a,o)=>{const c=((o||hubCfg().ic[a.id]||{}).c)||hubCorDef(a);if(HUB_CORES[c])return HUB_CORES[c];if(/^#[0-9a-f]{6}$/i.test(c))return[c,'color-mix(in srgb,'+c+' 62%,#000)'];return HUB_CORES[a.c]};
 const hubNome=a=>{const n=(hubCfg().ic[a.id]||{}).n;return n&&n.trim()?n.trim():a.n};
 /* o símbolo de cada app é o mesmo do menu lateral (incluindo ícones mudados em Definições › Menu Lateral) */
-function hubIcMenu(a,px){try{const L=[...document.querySelectorAll('#side [data-v="'+a.v+'"] svg')];const sv=L.find(x=>x.closest('[data-v]').offsetParent)||L[0];if(!sv)return'';
+function hubIcMenu(a,px){try{const L=[...document.querySelectorAll('#side [data-v="'+a.v+'"] svg')];const sv=L.length>1?(L.find(x=>x.closest('[data-v]').offsetParent)||L[0]):L[0];if(!sv)return''; /* (só se mede qual está à vista quando há mais de um: medir obrigava a recalcular a página uma vez por ícone) */
   const c=sv.cloneNode(true);c.setAttribute('width',px);c.setAttribute('height',px);c.removeAttribute('style');return c.outerHTML}catch(_){return''}}
 function hubIcone(a,sz,o){o=o||hubCfg().ic[a.id]||{};const [c1,c2]=hubCor(a,o);const est=hubCfg().est||'cheio';sz=sz||64;
   const st=`--h1:${c1};--h2:${c2};width:${sz}px;height:${sz}px`;

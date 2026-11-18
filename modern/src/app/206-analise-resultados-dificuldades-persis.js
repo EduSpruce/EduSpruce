@@ -63,7 +63,8 @@ function vAnalise(){const t=T();if(!t)return go('turmas');const an=A();const P=p
   const li=$('#an-lim');if(li)li.onchange=()=>{S.cfg.difLim=+li.value;save();vAnalise()};
   $$('#view [data-anfi]').forEach(b=>b.onclick=()=>fichaAluno(b.dataset.anfi,'integral'));
   $$('#view [data-anal]').forEach(b=>b.onclick=()=>{UI.anAl=b.dataset.anal;UI.anTab='aluno';vAnalise()});
-  $$('#view [data-ank]').forEach(b=>{const f=()=>{const [k,id]=b.dataset.ank.split(':');if(k==='t'){S.turmaAtiva=id;save();go('analise')}else if(k==='i'){UI.instSel=id;UI.instTab='stats';go('instrumentos');try{const i=t.instrumentos.find(z=>z.id===id);if(i&&typeof abrirInstrumento==='function')abrirInstrumento(i.id)}catch(_){}}};b.onclick=f;b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}})}
+  $$('#view [data-ank]').forEach(b=>{const f=()=>{const [k,id]=b.dataset.ank.split(':');if(k==='t'){S.turmaAtiva=id;save();go('analise')}else if(k==='i'){/* abre o próprio instrumento (UI.inst), no separador das estatísticas — antes só abria a lista dos instrumentos */
+UI.inst=t.instrumentos.some(z=>z.id===id)?id:null;UI.instTab='stats';go('instrumentos')}};b.onclick=f;b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}})}
 {const _gAn=go;go=function(v){if(go._f&&go._f.analise!==vAnalise)go._f.analise=vAnalise;return _gAn.apply(this,arguments)};go._f=_gAn._f;if(go._f)go._f.analise=vAnalise}
 /* Alerta precoce: também as dificuldades persistentes num domínio */
 {const _apD=alertaPrecoce;alertaPrecoce=function(t,a){const R=_apD.apply(this,arguments);try{if(S.cfg.difAlerta!==false)dificuldades(t,a).forEach(o=>R.push('dificuldade persistente em '+o.d.nome+' ('+o.u.map(q=>Math.round(q.p*100)+'%').join(' → ')+')'))}catch(_){}return R}}

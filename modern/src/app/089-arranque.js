@@ -9,7 +9,8 @@ window.EduGest={state:()=>S,integ:()=>verificarIntegridade(false),ocorrenciasTur
 if(S.anos.length&&!A())S.anoAtivo=S.anos[0].id;
 function fotosUsadas(){const o={};S.anos.forEach(an=>an.turmas.forEach(t=>t.alunos.forEach(a=>{if(a.foto&&a.foto.startsWith('f:')){const k=a.foto.slice(2);if(FOTOS[k])o[k]=FOTOS[k]}})));return o}
 $$('[data-ico]').forEach(el=>el.outerHTML=ic(el.dataset.ico,18));
-{let dt;new MutationObserver(()=>{clearTimeout(dt);dt=setTimeout(()=>decorar(),0)}).observe(document.body,{childList:true,subtree:true})}
+/* (mensagens de estado — «Guardado às…», avisos que se leem em voz alta — não têm nada para decorar: mudarem não obriga a percorrer a página toda) */
+{let dt;new MutationObserver(R=>{if(R.every(r=>{const e=r.target.nodeType===1?r.target:r.target.parentElement;return e&&e.closest&&e.closest('[role=status],[aria-live]')}))return;clearTimeout(dt);dt=setTimeout(()=>decorar(),0)}).observe(document.body,{childList:true,subtree:true})}
 /* =====================================================================
    v0.23 — 100 MELHORIAS: preferências, navegação, toque, acessibilidade,
    dados/segurança, ferramentas

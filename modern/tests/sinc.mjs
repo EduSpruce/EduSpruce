@@ -10,6 +10,7 @@ const abrir=async rt=>{const P=await pagina(b,{init:SESSAO_INIT+(rt?';window.__r
 const nome=pg=>pg.evaluate(()=>{const S=window.EduGest.t.S();const a=S.anos.find(x=>x.turmas.length);return a.turmas[0].nome});
 const mudar=(pg,n)=>pg.evaluate(n=>{const t=window.EduGest.t;const S=t.S();const a=S.anos.find(x=>x.turmas.length);a.turmas[0].nome=n;t.save()},n);
 const espera=async(pg,n,ms)=>{const t0=Date.now();while(Date.now()-t0<ms){if(await nome(pg)===n)return Date.now()-t0;await pg.waitForTimeout(250)}return -1};
+let okA=false,okB=false,okA2=false,okB2=false;
 try{
   const A=await abrir();passo='dados de demonstração';await T(A.pg,'demo');await A.pg.waitForTimeout(1200);await fechar(A.pg);await T(A.pg,'saveNow');await A.pg.waitForTimeout(4000);
   passo='segundo aparelho';const B=await abrir();await B.pg.waitForTimeout(6000);
@@ -23,6 +24,29 @@ try{
   if(g1!==g0)falhas.push('com a app parada houve '+(g1-g0)+' gravações na base de dados: '+out.filter(x=>/^(escrever|criar|apagar)/.test(x)).slice(0,5).join(', '));
   if(man>4)falhas.push('com a app parada o índice foi lido '+man+' vezes em 24 s (dois aparelhos; esperado: 4 no máximo)');
   if(!sin)falhas.push('a pergunta leve («sinal») não foi usada');
+  /* um aparelho sem rede altera a parte «geral» enquanto o outro apaga as tarefas de exemplo e escreve o nome da escola:
+     ao voltar a rede, o que foi apagado não pode voltar e o nome da escola não pode desaparecer (junção a três, 1.131) */
+  passo='aparelho sem rede';
+  const todoIds=pg=>pg.evaluate(()=>(window.EduGest.t.S().todo||[]).map(x=>x.t));
+  const ex0=await todoIds(A.pg);if(ex0.length<2)falhas.push('a demonstração não criou tarefas de exemplo para o teste');
+  await A.pg.waitForTimeout(1500);await A.ctx.setOffline(true);await A.pg.waitForTimeout(300);
+  await A.pg.evaluate(()=>{const t=window.EduGest.t;const S=t.S();S.todo=S.todo||[];S.todo.push({id:'nova-a',t:'Tarefa nova do aparelho A',feito:false,criada:Date.now()});t.save()});await A.pg.waitForTimeout(800);
+  await B.pg.evaluate(()=>{const t=window.EduGest.t;const S=t.S();S.todo=[];S.cfg.escola='Escola Básica do Teste';t.save()});
+  await B.pg.waitForTimeout(5000);
+  await A.ctx.setOffline(false);await A.pg.evaluate(()=>{dispatchEvent(new Event('online'))});
+  const ate=async(pg,f,ms)=>{const t0=Date.now();while(Date.now()-t0<ms){if(await pg.evaluate(f))return true;await pg.waitForTimeout(300)}return false};
+  const certo=()=>{const S=window.EduGest.t.S();const T=(S.todo||[]).map(x=>x.t);return S.cfg.escola==='Escola Básica do Teste'&&T.length===1&&T[0]==='Tarefa nova do aparelho A'};
+  okA=await ate(A.pg,certo,25000);okB=await ate(B.pg,certo,25000);
+  for(const [nm,P_,okX] of [['A',A,okA],['B',B,okB]])if(!okX){const st=await P_.pg.evaluate(()=>{const S=window.EduGest.t.S();return {escola:S.cfg.escola,todo:(S.todo||[]).map(x=>x.t)}});falhas.push('depois de o aparelho A voltar à rede, o aparelho '+nm+' ficou com: escola «'+st.escola+'», tarefas '+JSON.stringify(st.todo)+' (esperado: o nome escrito no B e só a tarefa nova do A)')}
+  /* o inverso: o aparelho sem rede grava DEPOIS (é o mais recente) — antes, os apagados voltavam e o nome da escola antigo apagava o novo */
+  passo='aparelho sem rede, mais recente';
+  await A.ctx.setOffline(true);await A.pg.waitForTimeout(300);
+  await B.pg.evaluate(()=>{const t=window.EduGest.t;const S=t.S();S.todo=[];S.cfg.escola='Escola Secundária Nova';t.save()});await B.pg.waitForTimeout(5000);
+  await A.pg.evaluate(()=>{const t=window.EduGest.t;const S=t.S();S.cfg.notaTeste='do aparelho A';t.save()});await A.pg.waitForTimeout(800);
+  await A.ctx.setOffline(false);await A.pg.evaluate(()=>{dispatchEvent(new Event('online'))});
+  const certo2=()=>{const S=window.EduGest.t.S();return S.cfg.escola==='Escola Secundária Nova'&&!(S.todo||[]).length&&S.cfg.notaTeste==='do aparelho A'};
+  okA2=await ate(A.pg,certo2,25000);okB2=await ate(B.pg,certo2,25000);
+  for(const [nm,P_,okX] of [['A',A,okA2],['B',B,okB2]])if(!okX){const st=await P_.pg.evaluate(()=>{const S=window.EduGest.t.S();return {escola:S.cfg.escola,todo:(S.todo||[]).map(x=>x.t),nota:S.cfg.notaTeste}});falhas.push('(A mais recente) o aparelho '+nm+' ficou com: escola «'+st.escola+'», tarefas '+JSON.stringify(st.todo)+', nota «'+st.nota+'» (esperado: o nome do B, sem tarefas, e a nota do A)')}
   for(const P of [A,B]){for(const e of P.erros)falhas.push('erro: '+e);await P.ctx.close()}
   /* com o canal de tempo real a funcionar: chega logo, e a app parada quase não pergunta nada */
   passo='canal de tempo real';const C=await abrir('ok'),D=await abrir('ok');await D.pg.waitForTimeout(5000);
@@ -35,7 +59,7 @@ try{
   await mudar(F.pg,'Canal mudo 1');const t5=await espera(E.pg,'Canal mudo 1',30000);if(t5<0)falhas.push('com o canal mudo, o que o aparelho F gravou não chegou ao E em 30 s');
   await E.pg.waitForTimeout(2000);await mudar(F.pg,'Canal mudo 2');const t6=await espera(E.pg,'Canal mudo 2',12000);if(t6<0)falhas.push('depois de o canal falhar uma vez, a gravação seguinte não chegou em 12 s (devia ter voltado ao ritmo de 4 s)');
   for(const P of [E,F]){for(const e of P.erros)falhas.push('erro: '+e);await P.ctx.close()}
-  console.log(`dois aparelhos: B→A em ${(t1/1000).toFixed(1)} s · A→B em ${(t2/1000).toFixed(1)} s · gravação a meio em ${(t3/1000).toFixed(1)} s · parada 24 s: ${sin} perguntas leves, ${man} leituras do índice, ${g1-g0} gravações · com canal: ${(t4/1000).toFixed(1)} s e ${sin2+man2} pedidos em 16 s · canal mudo: ${(t5/1000).toFixed(1)} s, depois ${(t6/1000).toFixed(1)} s`);
+  console.log(`dois aparelhos: B→A em ${(t1/1000).toFixed(1)} s · A→B em ${(t2/1000).toFixed(1)} s · gravação a meio em ${(t3/1000).toFixed(1)} s · parada 24 s: ${sin} perguntas leves, ${man} leituras do índice, ${g1-g0} gravações · com canal: ${(t4/1000).toFixed(1)} s e ${sin2+man2} pedidos em 16 s · canal mudo: ${(t5/1000).toFixed(1)} s, depois ${(t6/1000).toFixed(1)} s · aparelho sem rede: apagados não voltaram nos dois sentidos ${okA&&okB&&okA2&&okB2?'(certo)':'(ERRADO)'}`);
 }catch(e){falhas.push(passo+': '+String(e&&e.message||e).slice(0,300))}
 await b.close();await s.fechar();const u=[...new Set(falhas)];
 console.log('erros: '+u.length+(u.length?'\n'+u.slice(0,25).join('\n'):''));process.exit(u.length?1:0)

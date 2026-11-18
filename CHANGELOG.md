@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.131
+- Dados entre aparelhos corrigidos: o que apaga (ex.: tarefas e jornal de exemplo) já não volta a aparecer, e o nome da escola e as suas outras alterações já não são substituídos pela cópia antiga de outro aparelho (computador ou tablet que ficou aberto ou sem rede)
+- Mudar de página ficou cerca de 25 % mais rápido (o cabeçalho deixou de se reorganizar várias vezes seguidas)
+- Escrever notas na grelha ficou mais leve: menos trabalho por cada nota e a confirmação «Guardado às…» já não obriga a redesenhar a página
+- Análise de resultados: clicar num instrumento abre o próprio instrumento (antes só abria a lista)
+
 ## 1.130
 - Revisão geral da app (erros, rapidez, segurança): com a EduSpruce aberta e parada, o trabalho em segundo plano desceu para menos de um quinto — menos bateria gasta no iPad e no portátil, e computadores antigos mais soltos
 - Sincronização mais leve: em vez de reler o índice dos dados de 3 em 3 segundos, a app pergunta só se alguma coisa mudou e, com o aviso em tempo real ligado, quase não pergunta nada; o que se grava noutro aparelho continua a aparecer sozinho

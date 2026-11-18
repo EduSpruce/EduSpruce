@@ -144,14 +144,18 @@ function mqLixoDlg(){const L=mqLixo();const nomeQ=id=>(MQ().find(z=>z.id===id)||
 try{aplicarPrefs()}catch(_){}
 try{const st=document.createElement('style');st.textContent='#view .jn-li{content-visibility:auto;contain-intrinsic-size:auto 96px}#view{overscroll-behavior:contain}html body #barx>*,html body #barmais{animation:none!important}html body #bar #ctxTurma,#ctxTurma.semt{display:none!important}';document.head.appendChild(st)}catch(_){}
 /* v0.919 · cabeçalho: quando as ações não cabem, as que sobram vão para «Mais» (em vez de uma 2.ª linha) */
-{const _cab=cabecalho;let _cabIn=false;cabecalho=function(){if(_cabIn)return _cab.apply(this,arguments);_cabIn=true;try{const b=$('#bar'),x=$('#barx');
+const _cabMaisMemo=new Map();{const _cab=cabecalho;let _cabIn=false;cabecalho=function(){if(_cabIn)return _cab.apply(this,arguments);_cabIn=true;try{const b=$('#bar'),x=$('#barx');
   /* v0.941 · o botão «Mais» é reaproveitado (antes era apagado e criado de novo a cada medição, e piscava) */
   if(x){x.querySelectorAll('[data-ovf]').forEach(e=>{e.style.removeProperty('display');delete e.dataset.ovf});const m=x.querySelector('#barmais');if(m){m.style.setProperty('display','none','important');m.dataset.esc=1}}
   const r=_cab.apply(this,arguments);if(!b||!x||!b.classList.contains('hgrid')||b.classList.contains('hx1'))return r;
   if(!x.querySelector('button:not(#barmais)')){const m=x.querySelector('#barmais');if(m)m.remove();return r}
   const B=[...x.children].filter(e=>e.tagName==='BUTTON'&&e.id!=='barmais');if(B.length<2)return r;
   {let m=x.querySelector('#barmais');if(!m){x.insertAdjacentHTML('beforeend',`<button type="button" class="btn" id="barmais" aria-haspopup="true" aria-expanded="false">${ic('dots',16)} Mais</button>`)}else{if(x.lastElementChild!==m)x.appendChild(m);m.style.removeProperty('display');delete m.dataset.esc}}
-  /* 1.040 · os botões principais (ex.: «Novo Teste») são os últimos a ir para «Mais» */const O=[...B.filter(z=>!z.classList.contains('pri')).reverse(),...B.filter(z=>z.classList.contains('pri')).reverse()];for(const z of O){z.dataset.ovf=1;z.style.setProperty('display','none','important');_cab.apply(this,arguments);if(b.classList.contains('hx1'))break}
+  /* 1.040 · os botões principais (ex.: «Novo Teste») são os últimos a ir para «Mais» */const O=[...B.filter(z=>!z.classList.contains('pri')).reverse(),...B.filter(z=>z.classList.contains('pri')).reverse()];
+    /* quantos botões vão para «Mais» com esta mesma barra e esta janela já se sabe de uma vez anterior: aplica-se logo (1 cálculo em vez de um por botão) */
+    const chv=innerWidth+'\u0001'+b.clientWidth+'\u0001'+VIEW+'\u0001'+document.body.className+'\u0001'+b.outerHTML;const kM=_cabMaisMemo.get(chv);let feito=false;
+    if(kM){O.forEach((z,i)=>{if(i<kM){z.dataset.ovf=1;z.style.setProperty('display','none','important')}});_cab.apply(this,arguments);if(b.classList.contains('hx1'))feito=true;else O.forEach(z=>{z.style.removeProperty('display');delete z.dataset.ovf})}
+    if(!feito){let k=0;for(const z of O){k++;z.dataset.ovf=1;z.style.setProperty('display','none','important');_cab.apply(this,arguments);if(b.classList.contains('hx1')){_cabMaisMemo.set(chv,k);if(_cabMaisMemo.size>60)_cabMaisMemo.delete(_cabMaisMemo.keys().next().value);break}}}
   if(!b.classList.contains('hx1')){B.forEach(e=>{e.style.removeProperty('display');delete e.dataset.ovf});x.querySelector('#barmais').style.setProperty('display','none','important');_cab.apply(this,arguments);return r}
   const mb=x.querySelector('#barmais');mb.onclick=e=>{e.stopPropagation();const ex=document.getElementById('barmpop');if(ex){ex.remove();mb.setAttribute('aria-expanded','false');return}
     const pop=document.createElement('div');pop.id='barmpop';pop.className='barmpop';pop.setAttribute('role','menu');const H=B.filter(z=>z.dataset.ovf);
