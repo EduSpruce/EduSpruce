@@ -16,3 +16,26 @@ html body.est-sge :is(.htuf,.hugaz button){border-radius:0}
 html body .htc.htarr{opacity:.45}
 html body .htf.htdrop{outline:2px dashed var(--acc);outline-offset:-3px;background:color-mix(in srgb,var(--acc) 12%,transparent)}
 html body .htc.htdrop{outline:3px dashed var(--ink);outline-offset:-3px}
+/* assinatura do Coordenador: centrada, assente na linha, com espaço por cima; o botão das notas flutuantes não tapa o fim da página */
+html body .cpm-lin{position:relative;height:18mm!important;display:flex;align-items:flex-end;justify-content:center}
+html body .cpm-assimg{position:static!important;transform:none!important;display:block;margin:0 auto -2.5mm;height:16mm!important;max-width:62mm;width:auto;object-fit:contain;object-position:center bottom;mix-blend-mode:multiply}
+html body .cpm-ass>div{min-width:260px}
+html body #view{padding-bottom:max(84px,var(--vpb,0px))}
+@media print{html body #view{padding-bottom:0!important}}
+/* Pautas FPCT: caixas centradas por baixo do título de cada coluna */
+html body #view table.pttb td>.ptin{display:block;margin-left:auto!important;margin-right:auto!important}
+html body .hugr span.meu{border-color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+html body .hugml{display:flex;flex-direction:column}
+html body .cpm-gl{display:inline-grid;place-items:center;width:28px;height:28px;background:var(--acc);color:#fff;border-radius:6px}
+html body .cpm-grt input{width:100%;min-width:180px}
+html body .cpm-grd{margin-top:10px}
+html body .cpm-grd summary{cursor:pointer;font-weight:600;padding:4px 0}
+html body .cpm-grh{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px;margin-top:6px}
+html body .cpm-grh label,html body .cpm-gr .hugl label{display:flex;align-items:center;gap:8px;margin:0;font-size:13px}
+html body .cpm-grh label span{flex:0 0 130px}
+html body .cpm-gr .hugl{display:flex;flex-direction:column;gap:4px;max-height:360px;overflow:auto;margin:6px 0}
+html body .cpm-gr .hugl select{flex:0 0 auto;width:58px;min-width:58px;padding:4px 6px}
+html body.est-sge .cpm-gl{border-radius:0}
+@media print{html body .cpm-grd{display:none}}
+/* Classificações e Pautas (Coord. PROFIJ): caixas centradas por baixo de cada coluna */
+html body #view td>.pz-n{display:block;margin-left:auto!important;margin-right:auto!important}

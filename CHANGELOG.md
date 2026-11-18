@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.129
+- Matriz Curricular: grupos de UFCD (A–Z), cada um com o seu professor e as suas UFCD; no horário cada bloco «UFCD» leva a letra do grupo, a matriz conta as aulas de cada UFCD só nos tempos do seu grupo e cada professor vê como suas as aulas do seu grupo (também nas alterações semanais ao horário base)
+- Pautas FPCT em Word e PDF: sem o código postal antes da localidade e a assinatura assente na linha
+- Pautas e Classificações: caixas centradas por baixo do título de cada coluna
+- Assinatura do Coordenador centrada na linha; o fim das páginas deixa de ficar tapado pelo botão das notas
+
 ## 1.128
 - Provas: depois de publicar as classificações, os alunos podem vê-las durante 30 dias com o mesmo código (mesmo que a prova já tenha fechado)
 - Provas: respostas com o código pessoal errado deixam de se perder — aparecem em Atividade e Correção para aceitar ou apagar
