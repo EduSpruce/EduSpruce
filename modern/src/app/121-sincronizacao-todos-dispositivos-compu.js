@@ -112,7 +112,8 @@ function nvBadge(){try{const bar=$('#bar');if(!bar)return;let b=$('#nv-badge');c
   const pend=Object.keys(L.mod||{}).length>0;const est=_nvBusy?'sync':L.renovar?'renovar':!L.k?'falta':L.erro?'erro':!navigator.onLine?'offline':pend?'pend':'ok';
   const tt={sync:'A sincronizar…',renovar:'Ligação à nuvem expirada — toque para renovar',falta:'Sincronização por terminar — falta a palavra-passe',erro:'Erro na sincronização: '+(L.erro||''),offline:'Sem internet — as alterações ficam guardadas aqui e são enviadas depois',pend:'Alterações por enviar — toque para sincronizar agora',ok:'Sincronizado'+(L.ultimo?' às '+new Date(L.ultimo).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}):'')}[est];
   if(b.dataset.e!==est||b.title!==tt){b.dataset.e=est;b.title=tt;b.setAttribute('aria-label',tt);b.innerHTML=ic('cloud',19)+'<span class="nvdot"></span>'}}catch(_){}}
-setInterval(nvBadge,2500);addEventListener('online',nvBadge);addEventListener('offline',nvBadge);
+/* sempre a versão atual do nvBadge (por referência ficava presa à primeira: na versão com base de dados voltava a criar o botão da nuvem de 2,5 em 2,5 s) */
+setInterval(()=>nvBadge(),2500);addEventListener('online',()=>nvBadge());addEventListener('offline',()=>nvBadge());
 {const _gNv=go;go=function(v){const r=_gNv.apply(this,arguments);try{nvBadge()}catch(_){}return r}}
 /* ao sair/esconder (iPhone/iPad ao mudar de app) envia o que estiver pendente */
 addEventListener('pagehide',()=>{try{const L=nvL();if(L.prov&&_nvK&&L.auto!==false&&Object.keys(L.mod||{}).length)nvSincronizar(false)}catch(_){}});

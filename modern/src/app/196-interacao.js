@@ -95,9 +95,9 @@ function mqItensBind(){const u=mqUI(),q=mqQ(u.q),cv=$('#mq-cv');
 
 /* 0.910 · sessões abertas noutros aparelhos atualizam-se sozinhas: com a app à vista, verifica a nuvem a cada 4 s
    (1 pedido pequeno; só descarrega quando outro aparelho mudou alguma coisa — ex.: testes orais gravados no telemóvel) */
-{let _lv=0;const vivo=()=>{try{const L=nvL();if(document.visibilityState!=='visible'||!navigator.onLine||!L.prov||L.auto===false||L.renovar||_nvBusy||!(L.k||_nvK)||!SESSAO||document.getElementById('nvgate')||document.body.classList.contains('priv-on'))return;
-    if(Date.now()-_lv<3500)return;_lv=Date.now();nvSincronizar(false).catch(()=>{})}catch(_){}};
-  setInterval(()=>{if(!window.__nvRapido)vivo()},4000);addEventListener('focus',()=>setTimeout(vivo,300));addEventListener('online',()=>setTimeout(vivo,800))}
+{let _lv=0;const vivo=agora=>{try{const L=nvL();if(document.visibilityState!=='visible'||!navigator.onLine||!L.prov||L.auto===false||L.renovar||_nvBusy||!(L.k||_nvK)||!SESSAO||document.getElementById('nvgate')||document.body.classList.contains('priv-on'))return;
+    if(Date.now()-_lv<3500)return;_lv=Date.now();Promise.resolve(nvSondar(agora===true)).catch(()=>{})}catch(_){}};
+  setInterval(()=>{if(!window.__nvRapido)vivo()},4000);addEventListener('focus',()=>setTimeout(()=>vivo(true),300));addEventListener('online',()=>setTimeout(()=>vivo(true),800))}
 
 /* 0.915 · arrastar dentro da app nunca abre «Largue aqui o e-mail» */
 addEventListener('dragstart',()=>{window.__dragInt=true},true);addEventListener('dragend',()=>{setTimeout(()=>{window.__dragInt=false},50)},true);addEventListener('drop',()=>{setTimeout(()=>{window.__dragInt=false},50)},true);

@@ -78,7 +78,8 @@ function ladoInicio0(a){
 let _cdTimer=null;
 function iniciarContagem(){clearInterval(_cdTimer);const el=$('#cdt');if(!el)return;const alvo=+el.dataset.alvo;
   const tick=()=>{const e=$('#cdt');if(!e){clearInterval(_cdTimer);return}let ms=Math.max(0,alvo-Date.now());const v={dias:Math.floor(ms/864e5)};ms-=v.dias*864e5;v.horas=Math.floor(ms/36e5);ms-=v.horas*36e5;v.min=Math.floor(ms/6e4);ms-=v.min*6e4;v.seg=Math.floor(ms/1e3);
-    Object.entries(v).forEach(([k,n])=>{const b=e.querySelector('[data-k="'+k+'"]');if(b)b.textContent=k==='dias'?n:String(n).padStart(2,'0')})};
+    /* só o algarismo que muda é escrito, e no próprio texto (sem trocar o nó): o resto da página não é acordado a cada segundo */
+    Object.entries(v).forEach(([k,n])=>{const b=e.querySelector('[data-k="'+k+'"]');if(!b)return;const tx=k==='dias'?String(n):String(n).padStart(2,'0');const c=b.firstChild;if(c&&c===b.lastChild&&c.nodeType===3){if(c.data!==tx)c.data=tx}else b.textContent=tx})};
   tick();_cdTimer=setInterval(tick,1000)}
 function lembreteCopia(){const c=S.cfg;if(!S.anos.length)return '';try{if(nvL().prov||nuvemObrig())return ''}catch(_){}const d=c.ultimaCopia?Math.floor((Date.now()-c.ultimaCopia)/864e5):null;if(d!=null&&d<14)return '';
   return `<div class="card copiab priv"><span class="cbi">${ic('shield',18)}</span><div><b>${d==null?'Ainda não exportou nenhuma cópia de segurança':'A última cópia de segurança foi há '+d+' dias'}</b><div class="mut">Os dados só existem neste dispositivo. Exporte uma cópia (pode ser encriptada) e guarde-a no iCloud ou numa pen.</div></div><span class="sp1"></span><button class="btn pri" id="cp-agora">${ic('download',15)} Exportar Agora</button></div>`}

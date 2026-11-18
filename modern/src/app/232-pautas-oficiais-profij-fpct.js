@@ -197,7 +197,7 @@ function calcMostrar(){const L=[];window.__regT=(n,v,e)=>L.push({n:String(n),v,e
   const so=$('#cl-so');if(so)so.onchange=()=>box.querySelectorAll('.cltb tbody tr:not(.mal)').forEach(t=>t.style.display=so.checked?'none':'')}
 
 /* 0.932 · marca os campos de data/hora vazios (para ficarem todos em cinzento, sem misturar cores) */
-{const mv=el=>{if(el.value)el.removeAttribute('data-vazio');else el.setAttribute('data-vazio','')};const sel='input[type=date],input[type=time]';
+{const mv=el=>{if(el.value){if(el.hasAttribute('data-vazio'))el.removeAttribute('data-vazio')}else if(!el.hasAttribute('data-vazio'))el.setAttribute('data-vazio','')};const sel='input[type=date],input[type=time]';
   const todos=r=>{try{(r||document).querySelectorAll(sel).forEach(mv)}catch(_){}};
   ['input','change'].forEach(t=>document.addEventListener(t,e=>{if(e.target&&e.target.matches&&e.target.matches(sel))mv(e.target)},true));
   let _t=0;new MutationObserver(()=>{cancelAnimationFrame(_t);_t=requestAnimationFrame(()=>todos())}).observe(document.body,{childList:true,subtree:true});setTimeout(todos,300)}

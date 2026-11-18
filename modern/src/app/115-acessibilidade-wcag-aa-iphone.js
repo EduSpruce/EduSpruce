@@ -19,7 +19,7 @@ const A11Y={kb:false,live:null};
   /* modo de interação (teclado vs toque/rato) */
   addEventListener('keydown',e=>{if(e.key==='Tab'||String(e.key||'').startsWith('Arrow'))A11Y.kb=true},true);addEventListener('pointerdown',()=>{A11Y.kb=false},true);
   try{aplicarA11yCfg()}catch(_){}
-  ['(prefers-reduced-motion: reduce)','(prefers-contrast: more)'].forEach(q=>{try{matchMedia(q).addEventListener('change',aplicarA11yCfg)}catch(_){}})
+  ['(prefers-reduced-motion: reduce)','(prefers-contrast: more)'].forEach(q=>{try{matchMedia(q).addEventListener('change',()=>aplicarA11yCfg())}catch(_){}})
 })();
 function anunciar(t){const l=A11Y.live;if(!l)return;l.textContent='';setTimeout(()=>{l.textContent=t},80)}
 /* barra lateral fora do ecrã (iPhone / iPad ao alto): não pode receber foco */
@@ -60,9 +60,13 @@ function a11yPasso(root){if(!root)return;
   root.querySelectorAll('svg:not([aria-hidden]):not([role])').forEach(s=>s.setAttribute('aria-hidden','true'));
   root.querySelectorAll('img:not([alt])').forEach(i=>i.setAttribute('alt',''));
   root.querySelectorAll('table').forEach(tb=>{if(tb.dataset.a11y)return;tb.dataset.a11y='1';tb.querySelectorAll('thead th').forEach(th=>{if(!th.scope)th.scope='col'});tb.querySelectorAll('tbody th').forEach(th=>{if(!th.scope)th.scope='row'})});
-  root.querySelectorAll('.tblw,[data-ov],.sheetwrap,.cnqt,.ntmais,.hscroll,.calev,.suml,[style*="overflow:auto"],[style*="overflow-x:auto"]').forEach(w=>{const o=getComputedStyle(w);const sc=/auto|scroll/.test(o.overflowX+o.overflowY);
+  root.querySelectorAll('.tblw,.gwrap,[data-ov],.sheetwrap,.cnqt,.ntmais,.hscroll,.calev,.suml,[style*="overflow:auto"],[style*="overflow-x:auto"]').forEach(w=>{const o=getComputedStyle(w);const sc=/auto|scroll/.test(o.overflowX+o.overflowY);
     if(sc&&!w.hasAttribute('tabindex')&&!w.querySelector('a[href],button,input,select,textarea,[tabindex]')){w.tabIndex=0;w.setAttribute('role','region');const h=(w.closest('.card,.dwb')||document).querySelector('h2,h3');w.setAttribute('aria-label',(h?h.textContent.trim():'Tabela')+' (deslocável)')}});
-  root.querySelectorAll('button.on,[data-of].on').forEach(b=>{if(b.closest('#side'))return;const p=b.parentElement;if(!p)return;const bs=[...p.children].filter(x=>x.tagName==='BUTTON');if(bs.length<2)return;p.dataset.a11yg='1';if(!p.getAttribute('role'))p.setAttribute('role','group')});
+  /* separadores: os botões de um «tablist» são «tab» com o estado selecionado (sem isto o leitor de ecrã anunciava um grupo de separadores vazio) */
+  root.querySelectorAll('[role=tablist]').forEach(tl=>{for(const b of tl.children){if(b.tagName!=='BUTTON')continue;if(b.dataset.a11yt!=='1'){if(b.getAttribute('role'))continue;b.dataset.a11yt='1';b.setAttribute('role','tab')}if(b.hasAttribute('aria-pressed'))b.removeAttribute('aria-pressed');b.setAttribute('aria-selected',b.classList.contains('on')?'true':'false')}});
+  /* listas de opções: os cabeçalhos das letras são só visuais */
+  root.querySelectorAll('[role=listbox] > h5:not([aria-hidden]),[role=listbox] > p:not([aria-hidden])').forEach(h=>h.setAttribute('aria-hidden','true'));
+  root.querySelectorAll('button.on,[data-of].on').forEach(b=>{if(b.closest('#side'))return;const p=b.parentElement;if(!p)return;const bs=[...p.children].filter(x=>x.tagName==='BUTTON');if(bs.length<2)return;if(p.dataset.a11yg!=='1')p.dataset.a11yg='1';if(!p.getAttribute('role'))p.setAttribute('role','group')});
   root.querySelectorAll('[data-a11yg] > button:not([role])').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('on')?'true':'false'));
   root.querySelectorAll('[data-cd]:not([aria-label])').forEach(c=>{if(c.title)c.setAttribute('aria-label',c.title)});
   root.querySelectorAll('details>summary').forEach(s=>{const d=s.parentElement;s.setAttribute('aria-expanded',d.open?'true':'false')});

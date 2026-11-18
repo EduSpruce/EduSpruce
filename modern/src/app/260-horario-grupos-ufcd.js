@@ -25,10 +25,6 @@ function ufAtivo(t){const m=ufMeu(t);if(!m.g)return false;const a=A();return tur
 function ufFiltra(t,L,classe){const a=A();const m=ufMeu(t,classe);const h=horarioDe(a,classe);if(!h)return L;const SG=ufSiglas(h).map(normSig);return L.filter(x=>!x.ab||!SG.includes(normSig(x.ab))||ufLetraH(h,x)===m.g)}
 function htSlots(h){if(h.tempos&&h.tempos.length){const S_=h.tempos.slice();h.aulas.forEach(a=>{if(!S_.some(s=>s.ini===a.ini))S_.push({ini:a.ini,fim:a.fim})});return S_.sort((x,y)=>x.ini-y.ini)}
   const S_=[];h.aulas.forEach(a=>{if(!S_.some(s=>s.ini===a.ini))S_.push({ini:a.ini,fim:a.fim})});return S_.sort((x,y)=>x.ini-y.ini)}
-function htGrelhaOpts(t,h,mn){const SG=ufSiglas(h);const L=(a,ini)=>ufLetra(u,UI.horC,a.dia,ini);const o={slots:h.tempos||[],
-    attr:(a,ini,fim)=>` data-blk="${a.dia}|${ini}|${fim}|${esc(a.ab)}" draggable="true" role="button" tabindex="0" aria-label="${esc(a.ab+(SG.includes(a.ab)&&L(a,ini)?' '+L(a,ini):'')+' · '+DIAS[a.dia]+' '+fmtHM(ini)+'–'+fmtHM(fim)+' — mudar a disciplina ou mover')}"`,
-    extra:(a,ini)=>{const l=SG.includes(a.ab)&&L(a,ini);return l?`<span class="htuf" title="Grupo de UFCD ${l}${l===u.ufMeu?' — o seu grupo':''}">UFCD ${l}</span>`:''}};
-  if(SG.length&&u===t&&ufAtivo(u))o.minha=x=>SG.includes(x.ab)?L(x,x.ini)===u.ufMeu:mn(x);return o}
 /* mover um bloco (arrastado ou pelo painel) para outro dia/tempo; se o destino estiver ocupado, os dois trocam de lugar */
 function htMover(t,h,dia,ini,fim,ab,dDia,dIni){if(dia===dDia&&ini===dIni)return false;const slots=htSlots(h);const B=h.aulas.filter(x=>x.dia===dia&&x.ab===ab&&x.ini>=ini&&x.ini<fim).sort((x,y)=>x.ini-y.ini);const n=B.length;if(!n)return false;
   const i0=slots.findIndex(s=>s.ini===dIni);const D=i0<0?[]:slots.slice(i0,i0+n);if(D.length<n||D.some((s,k)=>k&&s.ini-D[k-1].fim>=15)){toast('O bloco não cabe aí: precisa de '+n+' tempos seguidos','warn');return false}

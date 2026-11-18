@@ -112,7 +112,7 @@ AJUDA.push({id:'mra',ic:'refresh',t:'Mecanismo de Recuperação (MRA) por módul
 /* botão de bloqueio também na barra de cima */
 function bloqBarBtn(){const aj=$('#ajBtn');if(!aj)return;let b=$('#bloqBar');const tem=S.anos.some(a=>a.turmas.length);
   if(!tem){if(b)b.remove();return}if(!b){aj.insertAdjacentHTML('beforebegin','<button class="btn ico" id="bloqBar" type="button"></button>');b=$('#bloqBar');b.onclick=()=>bloqAlternar(!bloqOn())}
-  const on=bloqOn();b.classList.toggle('bloqon',on);b.setAttribute('aria-pressed',on);b.setAttribute('aria-label',on?'Dados de base bloqueados — desbloquear':'Bloquear dados de base');b.title=on?'Dados de base bloqueados — toque para desbloquear':'Bloquear turmas, alunos, critérios, horários e calendário';b.innerHTML=ic(on?'cadeado':'cadeadoAb',18)}
+  const on=bloqOn();b.classList.toggle('bloqon',on);b.setAttribute('aria-pressed',on);b.setAttribute('aria-label',on?'Dados de base bloqueados — desbloquear':'Bloquear dados de base');b.title=on?'Dados de base bloqueados — toque para desbloquear':'Bloquear turmas, alunos, critérios, horários e calendário';if(b._bq!==on||!b.firstChild){b._bq=on;b.innerHTML=ic(on?'cadeado':'cadeadoAb',18)}}
 {const _bu=bloqUI;bloqUI=function(){const r=_bu.apply(this,arguments);try{bloqBarBtn()}catch(_){}return r}}
 setTimeout(()=>{try{bloqBarBtn()}catch(_){}},60);
 

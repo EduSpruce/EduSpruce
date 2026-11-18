@@ -10,7 +10,9 @@ const nvHash=s=>{let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){con
 const NV_LOCAIS=['anoAtivo','turmaAtiva','escolaAtiva','filtroOferta','_ts'];const NV_CFG_LOC=['gsync','sazForcar'];
 const nvDisp=()=>{let d=nvL().disp;if(!d){d=(/iPad/.test(navigator.userAgent)||navigator.maxTouchPoints>1&&/Mac/.test(navigator.userAgent)?'iPad':/iPhone/.test(navigator.userAgent)?'iPhone':/Mac/.test(navigator.platform)?'Mac':/Win/.test(navigator.platform)?'Windows':'Browser')+' '+Math.random().toString(36).slice(2,6);nvSet({disp:d})}return d};
 /* --- partes --- */
-function nvPartes(){const P={};const st=JSON.parse(JSON.stringify(S));const g={};Object.keys(st).forEach(k=>{if(!NV_LOCAIS.includes(k)&&k!=='anos'&&k!=='audit')g[k]=st[k]});g.cfg={...(st.cfg||{})};NV_CFG_LOC.forEach(k=>delete g.cfg[k]);
+/* nvPartes(true) = «vista»: as partes apontam para os dados vivos, sem os copiar — só para ler (resumir/comparar); nunca alterar o que devolve.
+   É o que cada gravação usa para marcar o que mudou: poupa a cópia integral do estado (era ~40 % do tempo de cada gravação). */
+function nvPartes(vista){const P={};const st=vista===true?S:JSON.parse(JSON.stringify(S));const g={};Object.keys(st).forEach(k=>{if(!NV_LOCAIS.includes(k)&&k!=='anos'&&k!=='audit')g[k]=st[k]});g.cfg={...(st.cfg||{})};NV_CFG_LOC.forEach(k=>delete g.cfg[k]);
   g.anosOrdem=(st.anos||[]).map(a=>a.id);P.geral=g;(st.anos||[]).forEach(a=>{const o={...a};o.turmasOrdem=(a.turmas||[]).map(t=>t.id);delete o.turmas;P['ano-'+a.id]=o;(a.turmas||[]).forEach(t=>{P['turma-'+t.id]={...t,_ano:a.id}})});P.audit=st.audit||[];return P}
 function nvMontar(P){const g=P.geral||{};const st={...g};delete st.anosOrdem;const anoIds=[...new Set([...(g.anosOrdem||[]),...Object.keys(P).filter(k=>k.startsWith('ano-')).map(k=>k.slice(4))])];
   st.anos=anoIds.map(id=>{const a=P['ano-'+id];if(!a)return null;const o={...a};const ord=o.turmasOrdem||[];delete o.turmasOrdem;const tids=[...new Set([...ord,...Object.keys(P).filter(k=>k.startsWith('turma-')&&P[k]._ano===id).map(k=>k.slice(6))])];
@@ -72,13 +74,27 @@ function nvJuntar(a,b){if(b===undefined)return a;if(a===undefined)return b;
   if(a&&b&&typeof a==='object'&&typeof b==='object'&&!Array.isArray(a)&&!Array.isArray(b)){const o={...a};Object.keys(b).forEach(k_=>{o[k_]=nvJuntar(a[k_],b[k_])});return o}
   return b}
 async function nvPool(L,n,fn){let i=0;const w=async()=>{while(i<L.length){const x=L[i++];await fn(x)}};await Promise.all(Array.from({length:Math.min(n,L.length)},w))}
+/* Sincronização sem trabalho inútil: depois de uma sincronização completa fica a «fotografia» do momento — o índice da nuvem (texto por texto)
+   e a assinatura deste aparelho (hora da última gravação, n.º de fotografias/anexos, dados da ficha MRA). Enquanto as duas coisas estiverem iguais
+   e não houver nada por enviar, a verificação seguinte acaba logo a seguir a ler o índice: não volta a copiar, dividir e resumir todos os dados
+   (era isso que gastava processador de poucos em poucos segundos com a app parada). De 2 em 2 minutos faz-se na mesma a comparação completa. */
+let _nvMemo=null;
+const nvSigLocal=()=>{let f=0,x=0,e='';try{f=Object.keys(FOTOS).length}catch(_){}try{x=(S.fotosLixo||[]).length}catch(_){}try{if(typeof nvSigExtra==='function')e=nvSigExtra()}catch(_){}return (S._ts||0)+'|'+f+'|'+x+'|'+e};
+const nvTudoIgual=(L,manTxt)=>!!_nvMemo&&!!manTxt&&_nvMemo.man===manTxt&&!!L.base&&!Object.keys(L.mod||{}).length&&!L.erro&&!L.rekey&&!window.__esAbrirBD&&!window.__nvSemFotos&&Date.now()-_nvMemo.q<120000&&_nvMemo.sig===nvSigLocal();
+/* este aparelho está tal e qual a última sincronização completa o deixou? (nada gravado, nenhuma fotografia/anexo novo) */
+const nvLocalIgual=()=>!!_nvMemo&&_nvMemo.sig===nvSigLocal();
+/* verificação periódica (a cada poucos segundos, com a app à vista): por omissão é uma sincronização silenciosa; a versão com base de dados troca-a por uma pergunta mais leve */
+async function nvSondar(){return nvSincronizar(false)}
 async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)return null;const k=await nvChave();if(!k){if(interativo)toast('Defina a palavra-passe de encriptação da nuvem.','erro');return null}
   _nvBusy=true;nvEstadoTxt('a sincronizar…');const res={env:0,rec:0,conf:0,fotosEnv:0,fotosRec:0};
   try{const L=nvL();const base={...(L.base||{})};const primeira=!L.base;
-    let manTxt=await prov.ler(NV_PREF+'manifest.json');let man=manTxt?JSON.parse(manTxt):null;
+    let manTxt=await prov.ler(NV_PREF+'manifest.json');
+    if(!interativo&&nvTudoIgual(L,manTxt)){if(Date.now()-(L.ultimo||0)>60000)nvSet({ultimo:Date.now()});nvEstadoTxt('sincronizado — tudo igual');return window.__nvUlt={env:0,rec:0,conf:0,fotosEnv:0,fotosRec:0,igual:1}}
+    let man=manTxt?JSON.parse(manTxt):null;let _manFim=manTxt;
     if(man&&man.chk){try{if(await nvDecifrar(man.chk,k)!=='eduflow')throw 0}catch(_){throw new Error('A palavra-passe de encriptação não corresponde à dos dados na nuvem.')}}
     if(!man)man={v:1,salt:L.salt,chk:await nvCifrar('eduflow',k),partes:{},fotos:{},rev:0};man.partes=man.partes||{};man.fotos=man.fotos||{};
-    const P=nvPartes();const loc={};Object.keys(P).forEach(n=>loc[n]=nvHash(JSON.stringify(P[n])));const mod=L.mod||{};
+    /* a assinatura é tirada no instante em que os dados são copiados: o que o utilizador gravar a meio desta sincronização muda-a, e a verificação seguinte volta a ser completa */
+    let _sigIni=nvSigLocal();const P=nvPartes();const loc={};Object.keys(P).forEach(n=>loc[n]=nvHash(JSON.stringify(P[n])));const mod=L.mod||{};
     const todos=new Set([...Object.keys(loc),...Object.keys(man.partes),...Object.keys(base)]);let mudouLocal=false;let _pi=0;const _pt=Math.max(1,todos.size);const agora=Date.now(),disp=nvDisp();
     await nvPool([...todos],12,async n=>{try{window.__nvProg&&window.__nvProg(0.8*(++_pi)/_pt)}catch(_){}const l=loc[n],r=man.partes[n]?man.partes[n].h:undefined,b=base[n];if(l===r){base[n]=l;return}
       const lm=l!==b,rm=r!==b;let usar=null;
@@ -99,16 +115,16 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     {const Lx=Array.isArray(S.fotosLixo)?S.fotosLixo:[];for(const id of Lx){if(FOTOS[id])continue;if(man.fotos[id]){delete man.fotos[id];res.fotosApag=(res.fotosApag||0)+1;try{prov.apagar&&await prov.apagar(nvNomeF(id))}catch(_){}}}}
     if(!window.__nvSemFotos)await nvPool(Object.keys(FOTOS),10,async id=>{if(!man.fotos[id]){try{await prov.escrever(nvNomeF(id),await nvCifrar(FOTOS[id],k));man.fotos[id]=1;res.fotosEnv++}catch(e){(res.fotosFalha=res.fotosFalha||[]).push(id);console.warn('[EduSpruce] ficheiro não enviado',id,e)}}});
     {const _F=Object.keys(man.fotos);let _fi=0;var _fprog=()=>{try{window.__nvProg&&window.__nvProg(0.8+0.2*(++_fi)/Math.max(1,_F.length))}catch(_){}}}if(!window.__nvSemFotos)await nvPool(Object.keys(man.fotos),10,async id=>{_fprog();if(!FOTOS[id]){let txt=null;try{txt=await prov.ler(nvNomeF(id))}catch(e){console.warn('[EduSpruce] ficheiro não recebido',id,e);return}if(txt!=null){const v=await nvDecifrar(txt,k);FOTOS[id]=v;idbPor(id,v);res.fotosRec++}}});
-    if(mudouLocal){const st=nvMontar(P);const ok=validarCopia(st);if(ok.length)throw new Error('Dados recebidos incompletos: '+ok[0]);S=migrate(st);_semHist=true;saveNow();_semHist=false;const P2=nvPartes();Object.keys(P2).forEach(n=>{const h2=nvHash(JSON.stringify(P2[n]));if(man.partes[n]&&base[n]===man.partes[n].h&&h2!==base[n]){man.partes[n].h=h2;base[n]=h2;res._fix=1}})}
+    if(mudouLocal){const st=nvMontar(P);const ok=validarCopia(st);if(ok.length)throw new Error('Dados recebidos incompletos: '+ok[0]);S=migrate(st);_semHist=true;saveNow();_semHist=false;_sigIni=nvSigLocal();const P2=nvPartes(true);Object.keys(P2).forEach(n=>{const h2=nvHash(JSON.stringify(P2[n]));if(man.partes[n]&&base[n]===man.partes[n].h&&h2!==base[n]){man.partes[n].h=h2;base[n]=h2;res._fix=1}})}
     if(res.env||res.conf||res.fotosEnv||res.fotosApag||res._fix||!manTxt){/* evita escrever por cima de outro dispositivo que sincronizou entretanto */const atual=await prov.ler(NV_PREF+'manifest.json');if(atual&&manTxt&&atual!==manTxt){_nvBusy=false;const b0=L.base||{};(res._up||[]).forEach(n=>{if(b0[n]===undefined)delete base[n];else base[n]=b0[n]});nvSet({base,mod:L.mod||{}});return await nvSincronizar(interativo)}
-      man.rev=(man.rev||0)+1;man.q=agora;man.dev=disp;await prov.escrever(NV_PREF+'manifest.json',JSON.stringify(man))}
-    nvSet({base,mod:{},ultimo:agora,erro:''});const t=res.rec||res.env||res.fotosRec||res.fotosEnv?`sincronizado · ${res.env} enviadas · ${res.rec} recebidas${res.conf?' · '+res.conf+' conflito(s)':''}`:'sincronizado — tudo igual';nvEstadoTxt(t);
+      man.rev=(man.rev||0)+1;man.q=agora;man.dev=disp;_manFim=JSON.stringify(man);await prov.escrever(NV_PREF+'manifest.json',_manFim)}
+    nvSet({base,mod:{},ultimo:agora,erro:''});_nvMemo=(_manFim&&!res.fotosFalha&&!window.__nvSemFotos)?{man:_manFim,sig:_sigIni,q:Date.now()}:null;const t=res.rec||res.env||res.fotosRec||res.fotosEnv?`sincronizado · ${res.env} enviadas · ${res.rec} recebidas${res.conf?' · '+res.conf+' conflito(s)':''}`:'sincronizado — tudo igual';nvEstadoTxt(t);
     if(mudouLocal&&res.rec-(res._aud||0)>0){aplicarPrefs();go(VIEW);toast('Recebidas alterações de outro dispositivo ('+(res.rec-(res._aud||0))+')','ok')}else if(interativo)toast('Sincronizado'+(res.env?' — '+res.env+' parte(s) enviada(s)':''),'ok');
     if(res.conf)toast(res.conf+' conflito(s): ficou a versão mais recente; a outra está em Definições › Sincronização','aviso');if(res.junt)try{audit('Sincronização','Alterações de dois aparelhos juntadas',res.junt+' parte(s)')}catch(_){}if(res.fotosFalha&&interativo)toast(res.fotosFalha.length+' fotografia(s)/documento(s) muito grande(s) ou com erro — os restantes dados foram sincronizados; volta a tentar sozinha.','aviso');
     window.__nvUlt=res;return res}
   catch(e){nvSet({erro:e.message});nvEstadoTxt('erro: '+e.message);if(interativo)toast(e.message,'erro');console.warn(e);return null}finally{_nvBusy=false}}
 /* registo da hora de alteração de cada parte (para decidir conflitos pela versão mais recente) */
-{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const P=nvPartes();const mod=L.mod||{};let m=false;Object.keys(P).forEach(n=>{const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]&&!mod[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),250)}}}catch(_){}return r}}
+{const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL();if(L.prov&&L.base){const P=nvPartes(true);const mod=L.mod||{};let m=false;Object.keys(P).forEach(n=>{const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]&&!mod[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod});if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>nvSincronizar(false),250)}}}catch(_){}return r}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&nvL().prov&&_nvK&&nvL().auto!==false){clearTimeout(_nvT);nvSincronizar(false)}else if(document.visibilityState==='visible'&&nvL().prov&&_nvK&&nvL().auto!==false)setTimeout(()=>nvSincronizar(false),1500)});
 addEventListener('online',()=>{if(nvL().prov&&_nvK)nvSincronizar(false)});
 setInterval(()=>{if(nvL().prov&&_nvK&&nvL().auto!==false&&!document.hidden)nvSincronizar(false)},5*60*1000);

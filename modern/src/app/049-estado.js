@@ -18,17 +18,19 @@ const CTX_ESC=['calendario','horarios','horProf','naoLetivos','reunioes','datasA
 const CTX_HERDA=['calendario','org'];
 let ERRO_CARGA=false;
 let S=(()=>{if(window.__ES_OFF){try{return migrate(JSON.parse(JSON.stringify(window.__ES_OFF.estado)))}catch(e){console.error(e)}}try{const v=localStorage.getItem(KEY);if(v)return migrate(JSON.parse(v))}catch(e){console.error("EduSpruce: erro ao ler os dados",e);ERRO_CARGA=true}return vazio()})();
-let saveT;function save(){if(window.__ES_OFF)return;clearTimeout(saveT);estadoGuardar('pend');saveT=setTimeout(saveNow,150)}
+let saveT,_savePend=false;function save(){if(window.__ES_OFF)return;clearTimeout(saveT);_savePend=true;estadoGuardar('pend');saveT=setTimeout(saveNow,150)}
 /* guardar: localStorage + IndexedDB (cópia principal para turmas grandes), histórico para Anular e cópia de recuperação diária */
 const HIST=[];let _ultimoJ=null,_semHist=false;
-function saveNow(){clearTimeout(saveT);if(window.__ES_OFF){try{estadoGuardar('ok')}catch(_){}return}let j;try{arrumarFotos();S._ts=Date.now();j=JSON.stringify(S)}catch(e){return}
+function saveNow(){clearTimeout(saveT);_savePend=false;if(window.__ES_OFF){try{estadoGuardar('ok')}catch(_){}return}let j;try{arrumarFotos();S._ts=Date.now();j=JSON.stringify(S)}catch(e){return}
   if(_ultimoJ!=null&&!_semHist){const a=_ultimoJ.replace(/"_ts":\d+,?/,''),b=j.replace(/"_ts":\d+,?/,'');if(a!==b){const _n=Date.now();S._mod=_n;j=/"_mod":\d+/.test(j)?j.replace(/"_mod":\d+/,'"_mod":'+_n):j.replace(/"_ts":/,'"_mod":'+_n+',"_ts":');HIST.push(_ultimoJ);if(HIST.length>40)HIST.shift();/* dados muito grandes: menos cópias para Anular (no máximo ~80 MB em memória) */{let tot=0;for(let i=HIST.length-1;i>=0;i--){tot+=HIST[i].length;if(tot>8e7&&i<HIST.length-1){HIST.splice(0,i+1);break}}}atualizarAnular()}}
   _ultimoJ=j;_semHist=false;idbEstado(j);
   try{localStorage.setItem(KEY,j);const hj=isoData(new Date());if(localStorage.getItem(KEY+'.bakd')!==hj){localStorage.setItem(KEY+'.bak',j);localStorage.setItem(KEY+'.bakd',hj)}
     if(j.length>4.2e6&&!saveNow.av){saveNow.av=1;toast('Atenção: o espaço do browser está quase cheio — os dados continuam guardados no IndexedDB; exporte uma cópia de segurança','aviso')}}
   catch(e){try{localStorage.removeItem(KEY+'.bak')}catch(_){}if(!IDB){alert('Não foi possível guardar (espaço cheio?). Exporte uma cópia de segurança em Definições.\n\n'+e.message);estadoGuardar('erro');return}}
   estadoGuardar('ok')}
-function estadoGuardar(k){const el=document.getElementById('saveSt');if(!el)return;el.className='savest '+k;el.innerHTML=k==='pend'?'<span class="sp"></span>A guardar…':k==='erro'?ic('alert',13)+' Erro ao guardar':ic('check',13)+' Guardado';el.title=k==='ok'?'Tudo guardado neste dispositivo':''}
+/* o indicador só é reescrito quando muda (é pedido várias vezes por minuto: reescrevê-lo igual acordava a página inteira) */
+function estadoPor(el,cls,html,tit){const ch=cls+'\u0001'+html;if(el._est!==ch||el.className!==cls){el._est=ch;el.className=cls;el.innerHTML=html}if(el.title!==tit)el.title=tit}
+function estadoGuardar(k,tit){const el=document.getElementById('saveSt');if(!el)return;estadoPor(el,'savest '+k,k==='pend'?'<span class="sp"></span>A guardar…':k==='erro'?ic('alert',13)+' Erro ao guardar':ic('check',13)+' Guardado',tit!=null?tit:k==='ok'?'Tudo guardado neste dispositivo':'')}
 function atualizarAnular(){const b=document.getElementById('undoBtn');if(b)b.disabled=!HIST.length}
 function desfazer(){if(!HIST.length)return toast('Nada para anular');const j=HIST.pop();try{S=migrate(JSON.parse(j))}catch(e){return}_ultimoJ=j;_semHist=true;saveNow();_ultimoJ=JSON.stringify(S);atualizarAnular();go(VIEW);toast('Última alteração anulada','ok')}
 function idbEstado(j){if(!IDB)return;try{IDB.transaction('estado','readwrite').objectStore('estado').put(j,'S')}catch(e){}}

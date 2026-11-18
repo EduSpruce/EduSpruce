@@ -180,7 +180,7 @@ function maoBtn(){const old=$('#mao');if(old)old.remove();if(!st.info||st.info.m
   b.onclick=async()=>{st.maoOn=!st.maoOn;b.classList.toggle('on',st.maoOn);try{await rpc('pulso_mao',{p_ativ:st.ativ.id,p_a:st.a,p_tok:st.tok,p_levantar:st.maoOn})}catch(_){}if(st.maoOn){U.vibrar(30);toastL('Mão levantada — só o professor vê')}}}
 function toastL(t){const d=document.createElement('div');d.className='lig';d.style.background='#1e3a8a';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&st.sala)atualizar()});addEventListener('online',()=>{semRede(false);if(st.sala)atualizar()});
-const h=U.limpaCod(decodeURIComponent(location.hash.slice(1)));ecraCodigo('',h);if(h.length===6)abrirSala(h);
+const h=U.limpaCod((h=>{try{return decodeURIComponent(h)}catch(_){return h}})(location.hash.slice(1)));ecraCodigo('',h);if(h.length===6)abrirSala(h);
 })();
 </script>
 </body>

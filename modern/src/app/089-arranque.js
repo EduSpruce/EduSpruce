@@ -2,7 +2,8 @@
    ARRANQUE
    ===================================================================== */
 window.addEventListener('afterprint',()=>document.body.classList.remove('print-landscape'));
-window.addEventListener('beforeunload',saveNow);
+/* ao sair: se há uma alteração à espera (os 150 ms do save), grava-a já — pela versão atual do saveNow, com as proteções (ano fechado, dados bloqueados) */
+window.addEventListener('beforeunload',()=>{if(_savePend)saveNow()});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 window.EduGest={state:()=>S,integ:()=>verificarIntegridade(false),ocorrenciasTurma,datasImportantes,lerHorarioProfPdf,ui:()=>UI,go:v=>go(v),aulasPrevistas,CAL,lerCalendarioPdf,eventosCalendario,parseLinhas,lerXlsx,lerFicheiro,calc:{pctsPer,pctsFinal,ponderada,fmtNota}};
 if(S.anos.length&&!A())S.anoAtivo=S.anos[0].id;

@@ -53,7 +53,7 @@ html body.bloq-alunos.bloq-alunos.bloq-alunos #main #view table.alst:not(#_q1):n
 function bloqUI(){const sp=$('#side .sessao');if(sp){let n=$('#bloqNav');const tem=S.anos.some(a=>a.turmas.length);
     if(!tem){if(n)n.remove()}else{if(!n){sp.insertAdjacentHTML('beforebegin','<button class="nav" id="bloqNav" type="button"></button>');n=$('#bloqNav');n.onclick=()=>bloqAlternar(!bloqOn())}
       const on=bloqOn();n.className='nav bloqnav'+(on?' on':'');n.setAttribute('aria-pressed',on);n.title=on?'Dados de base bloqueados — toque para desbloquear':'Bloquear turmas, alunos, critérios, horários e calendário';
-      n.innerHTML=`<span data-ico>${ic(on?'cadeado':'cadeadoAb',18)}</span><span class="lbl">${on?'Dados Bloqueados':'Bloquear Dados'}</span>`}}
+      if(n._bq!==on||!n.firstChild){n._bq=on;n.innerHTML=`<span data-ico>${ic(on?'cadeado':'cadeadoAb',18)}</span><span class="lbl">${on?'Dados Bloqueados':'Bloquear Dados'}</span>`}}}
   document.body.classList.toggle('bloq-on',bloqOn());document.body.classList.toggle('bloq-alunos',bloqOn()&&!_bloqLivre&&!!bloqM().cat.alunos);bloqAlRO();
   const v=$('#view');if(!v)return;const ex=v.querySelector('.bloqban');if(ex)ex.remove();const c=BLOQ_VISTAS[VIEW];
   if(c&&bloqOn()&&bloqM().cat[c]){const h=v.querySelector('h1')||v.firstElementChild;const html=`<div class="bloqban" role="status">${ic('cadeado',16)}<span><b>Dados de base bloqueados.</b> ${esc(BLOQ_CAT.find(x=>x[0]===c)[1])} não podem ser alterados nem apagados.</span><span class="sp1"></span><button class="btn sm" type="button" data-bloqoff>${ic('cadeadoAb',14)} Desbloquear</button></div>`;

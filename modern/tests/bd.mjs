@@ -6,7 +6,7 @@ import {servir,navegador,pagina,SESSAO_INIT} from './servidor.mjs';
 const dir=process.argv[2];if(!dir){console.error('uso: node bd.mjs PASTA');process.exit(1)}
 const s=await servir(dir);const b=await navegador();const falhas=[];let passo='arranque';
 const T=(pg,f,...a)=>pg.evaluate(([f,a])=>{const t=window.EduGest&&window.EduGest.t;if(!t)throw new Error('EduGest.t em falta');return t[f](...a)},[f,a]);
-const fecharJanelas=pg=>pg.evaluate(()=>{document.querySelectorAll('dialog[open]').forEach(d=>{try{d.close()}catch(_){}d.remove()});const w=document.getElementById('drawer');if(w)w.classList.remove('open')});
+const fecharJanelas=pg=>pg.evaluate(()=>{document.querySelectorAll('dialog[open]').forEach(d=>{try{d.close()}catch(_){}d.remove()});const w=document.getElementById('drawer');if(w&&w.classList.contains('on')){const x=document.getElementById('dw-x');if(x)x.click()}});
 const todasViolacoes=async P=>{const v=await P.violacoes();for(const f of P.pg.frames()){if(f===P.pg.mainFrame())continue;try{v.push(...await f.evaluate(()=>(window.__csp||[]).map(x=>'[moldura] '+x)))}catch(_){}}return [...new Set(v)]};
 try{
   /* 1) a app (professor) */

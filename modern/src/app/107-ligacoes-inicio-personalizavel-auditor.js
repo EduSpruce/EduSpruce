@@ -43,7 +43,8 @@ function posInicio(){const main=$('.in-main');if(!main)return;const side=$('.in-
   {const hero2=$('.in-hero .esc-hero');if(hero2&&!$('#in-av')){let n=0;try{n=avisosUrgentes().length}catch(_){}const b=document.createElement('button');b.className='btn sm'+(n?' avon':'');b.id='in-av';b.innerHTML=ic('bell',14)+' Ver Avisos'+(n?` <span class="nbadge avn">${n}</span>`:'');b.title=n?n+' aviso(s) urgente(s) por tratar':'Sem avisos urgentes';const ref=$('#in-pers')||hero2.querySelector('[data-go="escola"]');hero2.insertBefore(b,ref||null);b.onclick=()=>mostrarAvisos(true)}}
   bindWidgets();bindProxTarefas();$$('.wprox [data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go))}
 /* ---------- Auditoria: ligar às ações ---------- */
-{const _sv=saveNow;saveNow=function(){try{if(SESSAO&&!_semHist&&!document.body.classList.contains('login-on'))auditEdicao()}catch(_){}return _sv.apply(this,arguments)}}
+/* (com base de dados, antes de os dados chegarem não há edições do utilizador: sem isto, cada abertura da app deixava um registo «Edição» falso na auditoria e uma gravação a mais) */
+{const _sv=saveNow;saveNow=function(){try{if(SESSAO&&!_semHist&&!document.body.classList.contains('login-on')&&!(window.__esSoNuvem&&!window.__esPronto))auditEdicao()}catch(_){}return _sv.apply(this,arguments)}}
 {const _dl=download;download=function(name){try{audit('Exportação','Ficheiro exportado',name)}catch(_){}return _dl.apply(this,arguments)}}
 {const _rg=regista;regista=function(tipo,ficheiro,resumo){try{audit(tipo||'Registo',ficheiro?'Importação':'Registo',[ficheiro,resumo].filter(Boolean).join(' · '))}catch(_){}return _rg.apply(this,arguments)}}
 {const _rl=restaurarLixo;restaurarLixo=function(id){const x=(S.lixo||[]).find(l=>l.id===id);try{audit('Lixo','Restauro',x?(x.nome||x.tipo||id):id)}catch(_){}return _rl.apply(this,arguments)}}

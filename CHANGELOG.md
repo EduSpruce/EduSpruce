@@ -2,6 +2,15 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.130
+- Revisão geral da app (erros, rapidez, segurança): com a EduSpruce aberta e parada, o trabalho em segundo plano desceu para menos de um quinto — menos bateria gasta no iPad e no portátil, e computadores antigos mais soltos
+- Sincronização mais leve: em vez de reler o índice dos dados de 3 em 3 segundos, a app pergunta só se alguma coisa mudou e, com o aviso em tempo real ligado, quase não pergunta nada; o que se grava noutro aparelho continua a aparecer sozinho
+- Gravar ficou cerca de 40 % mais rápido (nota-se em turmas grandes e em computadores antigos)
+- Auditoria: abrir a app já não deixa um registo «Edição» falso nem faz uma gravação a mais na base de dados
+- Fechar a ficha lateral no X pára a gravação de áudio que estiver a decorrer (antes só parava ao fechar de outra forma)
+- Páginas dos alunos (Provas, Formulários, Pulso, Spruce It, autoavaliação, horários): uma ligação com o código estragado já não deixa a página em branco
+- Acessibilidade: separadores e listas de contactos anunciados corretamente pelos leitores de ecrã; a grelha dos domínios percorre-se com o teclado
+
 ## 1.129
 - Matriz Curricular: grupos de UFCD (A–Z), cada um com o seu professor e as suas UFCD; no horário cada bloco «UFCD» leva a letra do grupo, a matriz conta as aulas de cada UFCD só nos tempos do seu grupo e cada professor vê como suas as aulas do seu grupo (também nas alterações semanais ao horário base)
 - Pautas FPCT em Word e PDF: sem o código postal antes da localidade e a assinatura assente na linha

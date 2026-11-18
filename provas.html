@@ -2,7 +2,7 @@
 <html lang="pt-PT">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-0VXncwlE1sm9ZcTO1AbsveaCxE/D0NABtfUC/1YlaIA='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://ssuescpqyhuqkphauwde.supabase.co wss://ssuescpqyhuqkphauwde.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-oqt32oFTf4L2xWclK3wqyf6KVBTzqL5NFp3tyW1c+7s='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://ssuescpqyhuqkphauwde.supabase.co wss://ssuescpqyhuqkphauwde.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
@@ -346,7 +346,7 @@ function ecraResultado(resp,pub){const F=S.D.f;const Q=F.itens.filter(PERG);cons
     let tx=txt(q,resp[q.id]);((pub&&pub.an&&pub.an[q.id])||[]).forEach(z=>{const e=esc(z.t);const j=tx.indexOf(e);if(e&&j>=0)tx=tx.slice(0,j)+'<mark>'+e+'</mark><small class="anc">'+esc(z.c)+'</small>'+tx.slice(j+e.length)});
     return `<section class="card fq rq ${cls}"><h2><span class="n">${i+1}.</span><span>${esc(q.titulo||'Pergunta')}</span>${+q.pts?`<span class="pts">${a==null?'?':nf(a)} / ${nf(q.pts)}</span>`:''}</h2>${q.html?`<div class="enun">${limpa(q.html)}</div>`:''}<div class="ra">${tx}</div>${resp[q.id+'~j']?`<div class="ra"><b>Justificação:</b> ${esc(resp[q.id+'~j']).replace(/\n/g,'<br>')}</div>`:''}${q.resol?`<div class="rk"><b>Proposta de resolução:</b> ${esc(q.resol).replace(/\n/g,'<br>')}</div>`:''}${k&&cls!=='c'?`<div class="rk">Resposta certa: ${k}</div>`:''}${fb.map(x=>`<div class="fb">${esc(x)}</div>`).join('')}${cp?`<div class="fb"><b>Professor:</b> ${esc(cp)}</div>`:''}</section>`}).join('')}`;scrollTo(0,0)}
 /* arranque */
-const raw=decodeURIComponent((location.hash||'').slice(1)).trim();
+const raw=(h=>{try{return decodeURIComponent(h)}catch(_){return h}})((location.hash||'').slice(1)).trim();
 if(!window.crypto||!crypto.subtle){app.innerHTML='<section class="card"><h1>Navegador antigo</h1><p>Abre esta página num navegador atualizado (Safari, Chrome, Firefox ou Edge).</p></section>'}
 else if(raw==='previsualizar'){app.innerHTML=`<section class="card"><p>${espera('A preparar a pré-visualização…')}</p></section>`;
   addEventListener('message',ev=>{if(ev.origin!==location.origin||!ev.data||!ev.data.pvPrev)return;S={code:'',id:'',k:null,D:ev.data.pvPrev,aluno:null,chave:'',nome:'',prev:true};cor();comecar()})}

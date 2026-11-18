@@ -12,6 +12,6 @@ try{await E('(criarDemo(),1)')}catch(e){erros.push('criarDemo: '+String(e.messag
 await pg.evaluate(()=>document.querySelectorAll('dialog[open]').forEach(d=>d.close()));
 let vs=[];try{vs=await E('Object.keys(TITLES)')}catch(e){erros.push('TITLES: '+e.message)}
 for(const v of vs){vista=v;try{await E(`go(${JSON.stringify(v)})`)}catch(e){erros.push(v+': '+String(e.message).slice(0,200))}await pg.waitForTimeout(120);
-  await pg.evaluate(()=>{document.querySelectorAll('dialog[open]').forEach(d=>d.close());const w=document.getElementById('drawer');if(w)w.classList.remove('open')})}
+  await pg.evaluate(()=>{document.querySelectorAll('dialog[open]').forEach(d=>d.close());const w=document.getElementById('drawer');if(w&&w.classList.contains('on')){const x=document.getElementById('dw-x');if(x)x.click()}})}
 await b.close();const u=[...new Set(erros)];
 console.log(`vistas abertas: ${vs.length} · erros: ${u.length}`+(u.length?'\n'+u.slice(0,12).join('\n'):''));process.exit(u.length?1:0)

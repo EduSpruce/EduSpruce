@@ -190,7 +190,7 @@ async function esAbrir0(){clearTimeout(esFalha._t);esEsqueleto('abrir');let b=$(
   if(!r&&/recusou a operação/i.test(nvL().erro||'')&&S.anos&&S.anos.length){/* leu os dados mas a base de dados recusa gravar: abre na mesma e avisa */r={soLeitura:true};setTimeout(()=>esSemGravar(nvL().erro),600)}
   if(!r){const m=nvL().erro||'';const e=new Error(m||'Não foi possível abrir os dados.');if(/Sem ligação|internet|rede/i.test(m))e.rede=true;throw e}
   window.__esPronto=true;clearTimeout(esFalha._t);try{sessionStorage.removeItem('es.rl')}catch(_){}
-  if(!_sbCanal)_sbCanal=p.tempoReal(pf.id,sbPuxar)||1;
+  if(!_sbCanal)_sbCanal=p.tempoReal(pf.id,v=>{sbSonda.ev=Date.now();if(typeof v==='number'&&isFinite(v))sbSonda.rt=v;sbPuxar()},st=>{sbSonda.st=String(st||'')})||1;
   await esPosCarga(pf);try{nvFotosFundo()}catch(_){}setTimeout(sbArrumarCopias,30000)}
 
 /* o que só faz sentido com os dados à frente: ano/turma, código de acesso, boas-vindas (uma única vez), avisos */
@@ -226,6 +226,27 @@ posArranque=function(){/* as boas-vindas e a nota de versão só depois de os da
 
 /* ---------- 4. guardar e receber: tudo sozinho e em silêncio ---------- */
 function sbPuxar(){const L=nvL();if(!window.__esPronto||L.prov!=='supabase'||!(L.k||_nvK))return;clearTimeout(sbPuxar._t);sbPuxar._t=setTimeout(()=>{nvSincronizar(false).then(()=>{try{nvBadge()}catch(_){}}).catch(()=>{})},150)}
+/* Verificação periódica leve. Antes, de 4 em 4 s (e de 10 em 10 s), cada separador aberto lia o índice inteiro dos dados e voltava a resumir tudo.
+   Agora pergunta só o «sinal» da conta (um número que a base de dados aumenta a cada gravação): se não mudou, não há nada a fazer.
+   Com o canal de tempo real ligado (avisa no próprio instante) a pergunta é feita de 12 em 12 s, e de minuto a minuto depois de o canal provar que entrega
+   avisos (sbSonda.rt = último número recebido pelo canal). Se a pergunta encontrar uma gravação que o canal não anunciou, o canal deixa de contar durante
+   10 minutos e volta-se ao ritmo de 4 s. Sem «sinal», ou se a pergunta falhar, fica como antes (sincronização silenciosa). De 5 em 5 min compara-se tudo na mesma. */
+const sbSonda={v:undefined,q:0,ev:0,rt:null,st:'',comp:0,falhou:-1e12};
+{const _sd=nvSondar;nvSondar=async function(agora){const L=nvL();if(L.prov!=='supabase'||!window.__esPronto)return _sd.apply(this,arguments);
+  /* há alterações por enviar, um erro por resolver, ou este aparelho já não está como a última sincronização completa o deixou (ex.: fotografia nova): sincroniza já */
+  if(Object.keys(L.mod||{}).length||L.erro||!nvLocalIgual())return nvSincronizar(false);
+  let p;try{p=await sbObter()}catch(_){return null}
+  if(typeof p.sinal!=='function')return nvSincronizar(false);
+  const t=Date.now();const canal=sbSonda.st==='SUBSCRIBED'&&t-sbSonda.falhou>600000;
+  const espera=agora===true?0:canal?(sbSonda.rt!=null?60000:12000):3500;if(t-sbSonda.q<espera)return null;sbSonda.q=t;
+  let v=null;try{v=await p.sinal()}catch(_){}
+  if(v==null)return nvSincronizar(false);v=+v;
+  if(v===sbSonda.v&&t-sbSonda.comp<300000)return null; /* nada mudou na base de dados */
+  /* a base de dados mudou e o canal não o anunciou (nem está a anunciar agora): não se pode contar com ele */
+  if(canal&&sbSonda.v!==undefined&&v!==sbSonda.v&&(sbSonda.rt==null||sbSonda.rt<v)&&Date.now()-sbSonda.ev>8000)sbSonda.falhou=Date.now();
+  const r=await nvSincronizar(false);if(r){sbSonda.v=v;sbSonda.comp=Date.now()}return r}}
+/* assinatura da ficha MRA (vive fora do estado da app) para a sincronização saber que nada mudou */
+function nvSigExtra(){let n=0,c=0;for(const k in ES_MEM)if(k.startsWith('mra.')){n++;c+=k.length+String(ES_MEM[k]).length}return n+'.'+c}
 function sbRedesenhar(){try{nvBadge()}catch(_){}try{const c=$('#nv-card');if(c&&typeof nvPainel==='function'){const d=document.createElement('div');d.innerHTML=nvPainel();c.replaceWith(d.firstElementChild);bindNvPainel()}}catch(_){}}
 async function sbLigar(){return esAbrir()}
 function sbLembrete(){}
@@ -523,9 +544,9 @@ const sbPend=()=>{try{return Object.keys(nvL().mod||{}).length}catch(_){return 0
 const sbGrav={desde:0,faixa:false,ult:0,reg:''};
 function sbEstadoReal(){if(!window.__esPronto||nvL().prov!=='supabase')return null;const n=sbPend();if(!n)return 'ok';if(!navigator.onLine)return 'off';return nvL().erro&&Date.now()-sbGrav.desde>4000?'erro':'pend'}
 {const _eg=estadoGuardar;estadoGuardar=function(k){const r=sbEstadoReal();if(r==null||k==='erro')return _eg.apply(this,arguments);const el=document.getElementById('saveSt');if(!el)return;
-    if(r==='ok'){_eg.call(this,'ok');el.title='Tudo guardado na base de dados';return}
-    if(r==='pend'){_eg.call(this,'pend');el.title='A enviar as alterações para a base de dados';return}
-    el.className='savest erro';el.innerHTML=ic('alert',13)+(r==='off'?' Sem internet':' Por guardar');el.title=r==='off'?'Sem internet: as alterações são guardadas quando a ligação voltar. Não feche a app.':'As últimas alterações ainda não estão na base de dados. Não feche a app.'}}
+    if(r==='ok'){_eg.call(this,'ok','Tudo guardado na base de dados');return}
+    if(r==='pend'){_eg.call(this,'pend','A enviar as alterações para a base de dados');return}
+    estadoPor(el,'savest erro',ic('alert',13)+(r==='off'?' Sem internet':' Por guardar'),r==='off'?'Sem internet: as alterações são guardadas quando a ligação voltar. Não feche a app.':'As últimas alterações ainda não estão na base de dados. Não feche a app.')}}
 function sbFaixaGravar(mostrar){let f=document.getElementById('es-porguardar');if(!mostrar){if(f)f.remove();return}
   const off=!navigator.onLine;const motivo=off?'Sem ligação à internet.':String(nvL().erro||'A base de dados não respondeu.').slice(0,220);
   const h=`<span class="epg-t"><b>${off?'Sem internet: há alterações por guardar.':'As últimas alterações ainda não estão guardadas.'}</b> Não feche a app. <span class="epg-m">${esc(motivo)}</span></span><span class="epg-b"><button type="button" class="btn sm" id="epg-ja">Tentar Agora</button><button type="button" class="btn sm" id="epg-cp">Descarregar Cópia</button></span>`;

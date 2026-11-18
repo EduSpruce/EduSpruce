@@ -385,7 +385,7 @@ async function ecraColecao(novo){let c;try{c=await rpc('arena_colecao',{p_id:st.
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&st.j){atualizar();if(st.livre&&!ocupado&&ecraAtual.startsWith('q')===false&&ecraAtual!=='colheita'&&ecraAtual!=='fb')proxima()}});
 addEventListener('online',()=>{semRede(false);if(st.j)atualizar()});
 document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('[data-recarregar]'))location.reload()});
-const h=AR.limpaCod(decodeURIComponent(location.hash.slice(1)));ecraCodigo('',h);if(h.length===6)abrir(h);
+const h=AR.limpaCod((h=>{try{return decodeURIComponent(h)}catch(_){return h}})(location.hash.slice(1)));ecraCodigo('',h);if(h.length===6)abrir(h);
 })();
 </script>
 </body>

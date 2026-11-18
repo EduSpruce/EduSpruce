@@ -24,14 +24,17 @@ const cliente={from:t=>q(t),rpc:async(fn,a)=>{(window.__rpc=window.__rpc||[]).pu
   storage:{from:()=>({upload:async()=>({data:{},error:null}),download:async()=>({data:null,error:null}),remove:async()=>({data:[],error:null}),list:async()=>({data:[],error:null})})},
   auth:{getSession:async()=>({data:{session:{user:{id:C.id,email:C.email,user_metadata:{full_name:C.nome}},access_token:'t.t.t'}},error:null}),refreshSession:async()=>({data:{},error:null}),onAuthStateChange(){return {data:{subscription:{unsubscribe(){}}}}},signOut:async()=>({error:null}),updateUser:async()=>({data:{},error:null}),getUser:async()=>({data:{user:{id:C.id,email:C.email}},error:null})}};
 window.EduSpruceModerno={ativo:true,pronto:true,supabase:{n:'Base de dados EduSpruce (teste)',cliente,
-  async sessao(){return perfil},aoMudar(){},async entrarGoogle(){},async entrarSenha(){},async definirSenha(){},async autorizado(){return true},async diagAut(){return 'teste'},tempoReal(){return null},async sair(){},
-  async lista(){return (await bd('lista')).v},async lerDados(){return (await bd('dados')).v},async ler(n){return (await bd('ler',n)).v},async escrever(n,t){await bd('escrever',n,t)},async criar(n,t){return (await bd('criar',n,t)).v},async apagar(n){await bd('apagar',n)}}};
+  async sessao(){return perfil},aoMudar(){},async entrarGoogle(){},async entrarSenha(){},async definirSenha(){},async autorizado(){return true},async diagAut(){return 'teste'},
+  /* canal de tempo real de imitação (window.__rtModo, posto pelo teste antes de a página abrir): 'ok' avisa a cada gravação; 'mudo' liga-se mas nunca avisa; sem valor, não há canal */
+  tempoReal(uid,cb,est){const m=window.__rtModo;if(!m)return null;setTimeout(()=>{try{est&&est('SUBSCRIBED')}catch(_){}},50);if(m==='ok'){let u=null;setInterval(async()=>{try{const v=(await bd('rt')).v;if(u!==null&&v!==u)cb(v);u=v}catch(_){}},250)}return {}},async sair(){},
+  async sinal(){return (await bd('sinal')).v},async lista(){return (await bd('lista')).v},async lerDados(){return (await bd('dados')).v},async ler(n){return (await bd('ler',n)).v},async escrever(n,t){await bd('escrever',n,t)},async criar(n,t){return (await bd('criar',n,t)).v},async apagar(n){await bd('apagar',n)}}};
 try{window.dispatchEvent(new Event('es-bd'))}catch(_){}`;
-export async function servir(dir,{porta=0}={}){const bd=new Map();const pedidos=[];const ctl={falhar:false,gravacoes:0}; /* ctl.falhar=true → a base de dados recusa gravar (para testar o aviso de falha) */
+export async function servir(dir,{porta=0}={}){const bd=new Map();const pedidos=[];const ctl={falhar:false,gravacoes:0,ops:[]}; /* ctl.falhar=true → a base de dados recusa gravar (para testar o aviso de falha) */
   const cfg=JSON.stringify({googleClientId:'',microsoftClientId:'',acessoGoogle:'lista',modoNuvem:'obrigatorio',contasGoogle:[{h:createHash('sha256').update('eduspruce:'+CONTA.email).digest('hex'),papel:'admin'}]});
   const srv=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');let p=decodeURIComponent(u.pathname);pedidos.push(p);
-    if(p==='/__bd'&&req.method==='POST'){let b='';req.on('data',c=>b+=c);req.on('end',()=>{let o={};try{o=JSON.parse(b)}catch(_){}let v=null;
+    if(p==='/__bd'&&req.method==='POST'){let b='';req.on('data',c=>b+=c);req.on('end',()=>{let o={};try{o=JSON.parse(b)}catch(_){}let v=null;if(o.op!=='rt')ctl.ops.push(o.op+' '+(o.nome||''));
         if(['escrever','criar','apagar'].includes(o.op)){if(ctl.falhar){res.writeHead(500,{'Content-Type':'text/plain'});res.end('falha simulada');return}ctl.gravacoes++}
+        if(o.op==='sinal'||o.op==='rt')v=ctl.gravacoes||null;else
         if(o.op==='lista'){v={};for(const [k,t] of bd)v[k]=t.length}else if(o.op==='dados'){v={};for(const [k,t] of bd)if(!k.startsWith('ef-f-'))v[k]=t}
         else if(o.op==='ler')v=bd.has(o.nome)?bd.get(o.nome):null;else if(o.op==='escrever'){bd.set(o.nome,String(o.texto))}
         else if(o.op==='criar'){if(bd.has(o.nome))v=false;else{bd.set(o.nome,String(o.texto));v=true}}else if(o.op==='apagar')bd.delete(o.nome);

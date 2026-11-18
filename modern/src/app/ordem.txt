@@ -54,6 +54,7 @@ dados/045-ficha-mra.html
 dados/046-pdfjs-worker.html
 047-corpo-3.html
 048-catalogo-disciplinas-ensino-regular.js
+262-escritas-repetidas-na-pagina.js
 049-estado.js
 050-calculos.js
 051-utilitarios.js

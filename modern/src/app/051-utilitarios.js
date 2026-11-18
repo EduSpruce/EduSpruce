@@ -93,7 +93,7 @@ function titleCase(s){const low=['de','da','do','das','dos','e'];return s.toLowe
 function idade(n){if(!n)return'';const d=new Date(n);if(isNaN(d))return'';return Math.floor((Date.now()-d)/31557600000)}
 function openDrawer(title,html){const d=$('#drawer');if(!d.classList.contains('on'))openDrawer.ret=document.activeElement;$('#dw-t').textContent=title;$('#dw-b').innerHTML=html;d.classList.add('on');document.body.classList.add('dw-on');d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','dw-t');setTimeout(()=>{if(!d.contains(document.activeElement)){const f=d.querySelector('.dwb input:not([type=hidden]),.dwb select,.dwb textarea,.dwb button');(f||$('#dw-x')).focus({preventScroll:true})}},60)}
 function closeDrawer(){const d=$('#drawer');if(!d.classList.contains('on'))return;d.classList.remove('on');document.body.classList.remove('dw-on');const r=openDrawer.ret;openDrawer.ret=null;if(r&&document.contains(r)&&r.focus)try{r.focus({preventScroll:true})}catch(_){}}
-$('#dw-x').onclick=closeDrawer;
+$('#dw-x').onclick=()=>closeDrawer(); /* a versão atual: fechar no X também pára a gravação de áudio e limpa o cabeçalho do perfil */
 function novoAluno(t,nome){const n=Math.max(0,...t.alunos.map(a=>+a.num||0))+1;return {id:uid(),num:n,processo:'',nome:nome||'',genero:guessGen(nome),nasc:'',frequenta:true,repetente:false,ase:'',eeNome:'',eeContacto:'',email:'',obs:'',medidas:{univ:[],selet:[],adic:[]},acomod:[],autoav:{},obsPer:{}}}
 function mkDominios(tpl){return (MODELOS[tpl]||MODELOS.gen).map(([ab,nome,peso],k)=>({id:uid()+k,ab,nome,peso}))}
 const discInfo=n=>DISCIPLINAS.find(d=>d.n===n);
