@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.128
+- Provas: depois de publicar as classificações, os alunos podem vê-las durante 30 dias com o mesmo código (mesmo que a prova já tenha fechado)
+- Provas: respostas com o código pessoal errado deixam de se perder — aparecem em Atividade e Correção para aceitar ou apagar
+- Provas: se a prova já fechou, o aluno é avisado em vez de ver «enviada»
+- Provas: textos corrigidos (Correção vazia, mosaico das Apps, etiqueta do formato na página do aluno, enunciados sem maiúsculas a mais) e a Ajuda abre no tópico do Provas
+
 ## 1.127
 - Horário da turma: arraste um bloco para outro dia ou tempo (se estiver ocupado, trocam de lugar); clique num bloco para mudar a disciplina, mover ou retirar
 - O logótipo animado volta a aparecer enquanto a app carrega
