@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.132
+- Início em ecrãs mais pequenos (portáteis): a área Complementar passa para onde equilibra a página — por baixo da Principal, com os cartões a pares — em vez de alongar a coluna da direita
+- Início em tablets e janelas estreitas: os cartões da Lateral e da Complementar ficam a pares em vez de numa só coluna comprida
+- Favoritos: a dica do cabeçalho deixou de ficar cortada
+
 ## 1.131
 - Dados entre aparelhos corrigidos: o que apaga (ex.: tarefas e jornal de exemplo) já não volta a aparecer, e o nome da escola e as suas outras alterações já não são substituídos pela cópia antiga de outro aparelho (computador ou tablet que ficou aberto ou sem rede)
 - Mudar de página ficou cerca de 25 % mais rápido (o cabeçalho deixou de se reorganizar várias vezes seguidas)

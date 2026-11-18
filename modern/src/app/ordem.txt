@@ -46,6 +46,7 @@ dados/004-manifesto.html
 257-jornal-cartao-inicio.css
 261-horario-grupos-ufcd.css
 264-indicador-gravacao-largura-fixa.css
+266-inicio-ecras-pequenos.css
 040-corpo.html
 dados/041-hash-wasm.html
 042-corpo-2.html
@@ -260,5 +261,6 @@ dados/199-logotipos-novos.js
 259-fechar-ano-letivo.js
 260-horario-grupos-ufcd.js
 263-cabecalho-sem-recalculos-repetidos.js
+265-inicio-ecras-pequenos.js
 245-fim-do-programa.js
 246-fecho.html
