@@ -27,7 +27,7 @@ const HUB_APPS=[
   {id:'forms',gr:'recreio',n:'Formulários',v:'forms',g:['mvForms','clipboard'],c:'ciano',d:'Formulários e testes online',on:()=>typeof fmOn!=='function'||fmOn(),
    info:()=>{const F=Array.isArray(S.forms)?S.forms:[];const r=F.reduce((s,o)=>s+((o.resp||[]).length),0);return hubN(F.length,'formulário','formulários')+(r?' · '+hubN(r,'resposta','respostas'):'')},tag:'Liga à Avaliação'},
   {id:'provas',gr:'recreio',n:'Provas',v:'provas',g:['award'],c:'ambar',d:'Avaliações digitais corrigidas',on:()=>typeof pvOn!=='function'||pvOn(),
-   info:()=>{const p=S.pv||{};return hubN((p.ex||[]).length,'prova','provas')+' · '+hubN((p.av||[]).length,'avaliação','avaliações')},tag:'Liga à Avaliação'},
+   info:()=>{const p=S.pv||{};return hubN((p.ex||[]).length,'exercício','exercícios')+' · '+hubN((p.av||[]).length,'avaliação','avaliações')},tag:'Liga à Avaliação'},
   {id:'sprucenote',gr:'org',n:'SpruceNote',v:'sprucenote',g:['nvsn','grid'],c:'pinho',d:'Quadros de notas e ideias',on:()=>typeof snOn!=='function'||snOn(),
    info:()=>hubN(((S.sn||{}).quadros||[]).length,'quadro','quadros')},
   {id:'eduschedule',gr:'org',n:'EduSchedule',v:'eduschedule',g:['calendar'],c:'azul',d:'Horários da escola, gestão diária e pleon',on:()=>typeof esOn!=='function'||esOn(),
