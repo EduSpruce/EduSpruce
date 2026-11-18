@@ -26,14 +26,7 @@ function vReunioes(){const a=A();if(!a){$('#view').innerHTML='<div class="card e
     const adi=reunioes(a).filter(r=>r.estado==='adiada'&&reunFim(r).getTime()<agora);
     corpo=G.length?G.map(([n,L])=>`<div class="card"><h2>${n} <span class="mut" style="font-weight:500">${L.length}</span></h2><div class="rlista">${L.map(linha).join('')}</div></div>`).join(''):`<div class="card empty">${ic('users',30)}<br><b>Sem reuniões agendadas</b><br><span class="mut">Registe conselhos de turma, reuniões de departamento e de grupo, atendimentos… com lembretes, ordem de trabalhos, preparação e ata.</span><br><br><button class="btn pri" id="r-nova">${ic('plus',15)} Nova Reunião</button></div>`;
     if(adi.length)corpo+=`<div class="card"><h2>Adiadas sem nova data</h2><div class="rlista">${adi.map(linha).join('')}</div></div>`}
-  else if(tab==='cal'){const base=UI.reMes||hj.slice(0,7);const [y,m]=base.split('-').map(Number);const d1=new Date(y,m-1,1);const off=(d1.getDay()+6)%7;const nd=new Date(y,m,0).getDate();const cal=a.calendario;
-    let cel='';for(let k=0;k<off;k++)cel+='<div class="rmc vz"></div>';
-    for(let dd=1;dd<=nd;dd++){const iso=y+'-'+String(m).padStart(2,'0')+'-'+String(dd).padStart(2,'0');const L=R.filter(r=>r.data===iso);const tp=cal&&cal.dias?cal.dias[iso]:'';const fds=[0,6].includes(new Date(y,m-1,dd).getDay());
-      cel+=`<div class="rmc ${iso===hj?'hj':''} ${fds?'fds':''} ${tp&&!['letivo','inicio','inicio2'].includes(tp)?'nl':''}" data-rd="${iso}"><span class="rmn">${dd}</span>${L.map(r=>`<span class="rme ${r.estado}" data-ro="${r.id}" style="--rc:${reunTipo(r).cor}">${r.semHora?'':fmtHM(r.ini)+' '}${esc(reunTipo(r).ab)}<i>${esc(reunTitulo(r,a))}</i></span>`).join('')}</div>`}
-    const nav=(dlt)=>{const d=new Date(y,m-1+dlt,1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
-    corpo=`<div class="card"><div class="row"><h2 style="margin:0">${MESES[m]} ${y}</h2><span class="sp1"></span><button class="btn sm ico" data-rm="${nav(-1)}" aria-label="Mês anterior">${ic('back',15)}</button><button class="btn sm" data-rm="${hj.slice(0,7)}">Hoje</button><button class="btn sm ico rot" data-rm="${nav(1)}" aria-label="Mês seguinte">${ic('back',15)}</button></div>
-      <div class="rmgrid">${['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].map(x=>`<div class="rmh">${x}</div>`).join('')}${cel}</div>
-      <div class="rleg">${Object.entries(REUN_T).map(([k,v])=>`<span><i style="background:${v.cor}"></i>${v.n}</span>`).join('')}</div><p class="hint">Toque num dia para agendar uma reunião nesse dia.</p></div>`}
+  else if(tab==='cal'){corpo=reMapaMes(R,a,hj)}
   else if(tab==='tar'){const todas=reunioes(a).flatMap(r=>(r.decisoes||[]).map((d,i)=>({d,r,i}))).sort((x,y)=>(x.d.ok-y.d.ok)||((x.d.prazo||'9')).localeCompare(y.d.prazo||'9'));
     corpo=`<div class="card"><h2>Decisões e Tarefas das Reuniões</h2>${todas.length?`<div class="rlista">${todas.map(({d,r,i})=>`<div class="rdec ${d.ok?'ok':''} ${!d.ok&&d.prazo&&d.prazo<hj?'atr':''}"><input type="checkbox" data-tk="${r.id}|${i}" ${d.ok?'checked':''} aria-label="Concluída"><span><b>${esc(d.t)}</b><span class="mut">${d.resp?esc(d.resp)+' · ':''}${d.prazo?'até '+esc(fmtIsoL(d.prazo))+' ('+esc(contagem(d.prazo))+') · ':''}${esc(reunTitulo(r,a))}</span></span><button class="btn sm" data-ro="${r.id}">Reunião</button></div>`).join('')}</div>`:'<p class="mut">Ainda não há tarefas. Abra uma reunião e registe as decisões e tarefas em “Decisões e Tarefas”.</p>'}</div>`}
   else{const H=R.filter(r=>!reunAtiva(r)||reunFim(r).getTime()<agora).reverse();
@@ -98,3 +91,21 @@ function cartoesInicioAval(a){
       :`<p class="mut" style="margin:0">Sem testes marcados nas próximas semanas. Marque-os em <b>Turma › Marcação de Testes</b>.</p>`}</div>`;
 }
 
+/* Mapa Mensal das Reuniões com a mesma grelha d'O Meu Calendário (vista Mês): barra «Hoje ‹ › mês», 6 semanas de segunda a domingo
+   com os dias dos meses vizinhos, números das semanas como n'O Meu Calendário, e os dias do calendário escolar do ano letivo
+   (feriados e interrupções com fundo e etiqueta; outros dias sem atividades letivas sombreados como o fim de semana). */
+function reMapaMes(R,a,hj){const base=UI.reMes||hj.slice(0,7);const [y,m]=base.split('-').map(Number);const p1=y+'-'+String(m).padStart(2,'0')+'-01';
+  const A=ocSegunda(p1);let semN=false;try{semN=!!OCAL().cfg.semN}catch(_){}
+  const cal=a.calendario||{};const dias=cal.dias||{},notas=cal.notas||{};
+  const nav=dlt=>{const d=new Date(y,m-1+dlt,1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
+  const ordem=(x,z)=>(x.semHora?-1:(x.ini||'')).toString().localeCompare((z.semHora?-1:(z.ini||'')).toString());
+  let h=`<section class="ocmain rmoc"><div class="octb"><button class="btn sm" data-rm="${hj.slice(0,7)}">Hoje</button><button class="btn sm ico" data-rm="${nav(-1)}" aria-label="Mês anterior">‹</button><button class="btn sm ico" data-rm="${nav(1)}" aria-label="Mês seguinte">›</button><h2 class="octit">${MESES[m]} ${y}</h2></div>
+    <div class="ocmes ${semN?'sn':''}" style="margin-top:10px"><div class="ocmhd">${semN?'<span></span>':''}${['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].map(x=>`<span>${x}</span>`).join('')}</div>`;
+  for(let w=0;w<6;w++){h+=`<div class="ocmw">${semN?`<span class="ocsn" title="Semana ${ocSemN(ocAdd(A,w*7))}">${ocSemN(ocAdd(A,w*7))}</span>`:''}`;
+    for(let i=0;i<7;i++){const k=ocAdd(A,w*7+i);const tp=dias[k]||'';const fer=/^feriado/.test(tp),itr=/^interrupcao/.test(tp);const nl=tp&&!fer&&!itr&&!['letivo','inicio','inicio2'].includes(tp);
+      const L=R.filter(r=>r.data===k).sort(ordem);const nota=notas[k]||'';
+      h+=`<div class="ocdc ${k.slice(0,7)!==base?'fo':''} ${k===hj?'hj':''} ${i>=5||nl?'fds':''} ${fer?'f-fer':itr?'f-int':''}" data-rd="${k}" title="Toque para agendar uma reunião neste dia"><span class="ocdn">${+k.slice(8)===1?OC_MES[+k.slice(5,7)-1].slice(0,3)+' ':''}${+k.slice(8)}</span>
+        ${fer||itr?`<span class="ocev esc" style="--c:${fer?'#e04848':'#e0a030'}" title="${esc((fer?'Feriado':'Interrupção letiva')+(nota?' · '+nota:''))}">${fer?'Feriado':'Interrupção letiva'}${nota?' · '+esc(nota):''}</span>`:''}
+        ${L.map(r=>{const T=reunTipo(r);return `<button type="button" class="ocev reun ${r.estado==='cancelada'?'falta':''}" style="--c:${T.cor}" data-ro="${r.id}" title="${esc(T.n+' · '+reunTitulo(r,a)+(r.semHora?'':' · '+fmtHM(r.ini))+(r.local?' · '+r.local:''))}">${r.semHora?'':`<b>${fmtHM(r.ini)}</b> `}${esc(T.ab)} · ${esc(reunTitulo(r,a))}</button>`}).join('')}</div>`}h+='</div>'}
+  h+=`</div><div class="rleg" style="margin-top:10px">${Object.entries(REUN_T).map(([k,v])=>`<span><i style="background:${v.cor}"></i>${v.n}</span>`).join('')}<span><i class="ocleg f-fer" style="margin:0"></i>Feriado</span><span><i class="ocleg f-int" style="margin:0"></i>Interrupção letiva</span></div><p class="hint">Toque num dia para agendar uma reunião nesse dia.</p></section>`;
+  return h}

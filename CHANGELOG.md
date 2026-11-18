@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.134
+- Reuniões › Mapa Mensal com a mesma grelha d'O Meu Calendário (vista Mês): barra Hoje ‹ ›, semanas completas de segunda a domingo com os dias dos meses vizinhos e números das semanas; feriados e interrupções letivas do calendário escolar assinalados como n'O Meu Calendário
+
 ## 1.133
 - Primeira visita a cada página cerca de 20 % mais rápida (o cabeçalho deixou de ser arrumado duas vezes a cada mudança de página)
 - Gravar ficou quase duas vezes mais rápido (de ~38 para ~18 ms com muitos dados): várias gravações seguidas contam como uma para a sincronização
