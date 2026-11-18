@@ -6,7 +6,7 @@ SRC="$(cd "$(dirname "$0")/../.." && pwd)"; DST="${ES_ESPELHO:-$(dirname "$SRC")
 [ -d "$DST/.git" ] || git clone -q --depth 1 https://github.com/EduSpruce/eduspruce.github.io.git "$DST"
 cd "$DST"; git fetch -q --depth 1 origin main && git reset -q --hard origin/main
 # apps independentes publicadas no mesmo site (não fazem parte da EduSpruce): nunca apagar nem substituir
-MANTER="${ES_ESPELHO_MANTER:-boxdoc}"
+MANTER="${ES_ESPELHO_MANTER:-boxdoc voa-cagarro}"
 excl=(! -name .git); for m in $MANTER; do excl+=(! -name "$m"); done
 find "$DST" -mindepth 1 -maxdepth 1 "${excl[@]}" -exec rm -rf {} +
 cd "$SRC"
