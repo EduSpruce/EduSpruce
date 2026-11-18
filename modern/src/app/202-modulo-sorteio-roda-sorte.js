@@ -18,10 +18,10 @@ function rodaAbrir(t,ids,op){op=op||null;const c=op?Object.assign(Object.create(
       <div class="rdseg" role="group" aria-label="O que sortear">${[['um','1 Aluno'],['pares','Pares'],['grupos','Grupos']].map(([k,n])=>`<button type="button" data-rm="${k}" class="${c.modo===k?'on':''}">${n}</button>`).join('')}</div>
       <label class="rdn" ${c.modo==='grupos'?'':'hidden'}>de <input type="number" id="rd-n" min="2" max="12" value="${c.n}" inputmode="numeric" aria-label="Alunos por grupo"> alunos</label>
       <div class="rdseg" role="group" aria-label="Estilo">${[['roda','Roda'],['cartas','Cartas']].map(([k,n])=>`<button type="button" data-re="${k}" class="${c.estilo===k?'on':''}">${n}</button>`).join('')}</div>
-      <button type="button" class="rdic ${c.som?'on':''}" id="rd-som" aria-pressed="${c.som}" title="Som" aria-label="Som">${c.som?'🔔':'🔕'}</button><button type="button" class="rdic" id="rd-x" aria-label="Fechar">${ic('x',18)}</button></header>
+      <button type="button" class="rdic ${c.som?'on':''}" id="rd-som" aria-pressed="${c.som}" title="Som" aria-label="Som">${rodaSomIc(c.som)}</button><button type="button" class="rdic" id="rd-x" aria-label="Fechar">${ic('x',18)}</button></header>
       <main class="rdm" id="rd-m"></main>
       <footer class="rdf" id="rd-f"></footer></div>`;
-    d.querySelector('#rd-x').onclick=fim;d.querySelector('#rd-som').onclick=e=>{c.som=!c.som;save();e.currentTarget.textContent=c.som?'🔔':'🔕';e.currentTarget.classList.toggle('on',c.som);if(c.som)rodaSom('tic')};
+    d.querySelector('#rd-x').onclick=fim;d.querySelector('#rd-som').onclick=e=>{c.som=!c.som;save();e.currentTarget.innerHTML=rodaSomIc(c.som);e.currentTarget.classList.toggle('on',c.som);if(c.som)rodaSom('tic')};
     d.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{if(ocup)return;c.modo=b.dataset.rm;save();fora=new Set();base()});d.querySelectorAll('[data-re]').forEach(b=>b.onclick=()=>{if(ocup)return;c.estilo=b.dataset.re;save();base()});
     const ni=d.querySelector('#rd-n');if(ni)ni.onchange=()=>{c.n=Math.max(2,Math.min(12,+ni.value||4));ni.value=c.n;save();if(!ocup)base()};
     cena()};
@@ -82,3 +82,6 @@ function rodaAbrir(t,ids,op){op=op||null;const c=op?Object.assign(Object.create(
     sec.querySelectorAll('[data-rq]').forEach(b=>b.onclick=()=>{c.modo=b.dataset.rq;save();rodaAbrir(T(),pres())})}}catch(e){console.warn(e)}return r};if(go._f)Object.keys(go._f).forEach(k=>{if(go._f[k]===_vaR)go._f[k]=vAula})}
 {const _caR=cartaoAvisosDef,_baR=bindAvisosDef;cartaoAvisosDef=function(){let h=_caR.apply(this,arguments);return h.replace(/(<div class="card ed" id="def-mods">[\s\S]*?id="mod-sn"[\s\S]*?<\/label>)()/,`$1<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-roda" ${rodaOn()?'checked':''}> ${ic('target',15)} <span><b>Sorteio (Roda da Sorte)</b><br><span class="mut">No Modo Aula, por baixo do sumário: escolher ao acaso um aluno, pares ou grupos, com roda ou cartas animadas.</span></span></label>$2`)};
   bindAvisosDef=function(){_baR.apply(this,arguments);const m=$('#mod-roda');if(m)m.onchange=()=>{S.cfg.rodaOn=m.checked;save();toast(m.checked?'Sorteio ligado':'Sorteio desligado','ok')}}}
+
+/* ícone do som (altifalante de traço, como os outros ícones da app) */
+function rodaSomIc(on){return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/>${on?'<path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>':'<path d="m22 9-6 6"/><path d="m16 9 6 6"/>'}</svg>`}
