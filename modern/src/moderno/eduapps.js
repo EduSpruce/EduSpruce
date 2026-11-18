@@ -11,8 +11,10 @@ function eaAplicar(){
   eaAlinha();setTimeout(eaAlinha,80);setTimeout(eaAlinha,400)
 }
 /* casa alinhada com o conteúdo de baixo (sem o nome da app, que já está no cartão) */
-function eaAlinha(){const b=document.getElementById('bar');if(!b)return;if(!document.body.classList.contains('eduapp')){b.style.removeProperty('padding-left');return}
-  const v=document.querySelector('#view .pvnav,#view .card');if(!v)return;const x=Math.round(v.getBoundingClientRect().left-b.getBoundingClientRect().left);if(x>0&&x<400)b.style.setProperty('padding-left',x+'px','important')}
+function eaAlinha(){const b=document.getElementById('bar');if(!b)return;if(!document.body.classList.contains('eduapp')){b.style.removeProperty('padding-left');eaAlinhaEsc();return}
+  const v=document.querySelector('#view .pvnav,#view .card');if(!v)return;const x=Math.round(v.getBoundingClientRect().left-b.getBoundingClientRect().left);if(x>0&&x<400)b.style.setProperty('padding-left',x+'px','important');eaAlinhaEsc()}
+/* logótipo e nome da escola alinhados com a coluna do conteúdo (à direita do menu da app) */
+function eaAlinhaEsc(){const e=document.getElementById('ctxEsc');if(!e)return;e.style.removeProperty('margin-left');if(!document.body.classList.contains('eduapp'))return;const m=document.querySelector('#view .pvmain'),c=document.getElementById('eacasa');if(!m||!e.getBoundingClientRect().width)return;const l=m.getBoundingClientRect().left;if(c&&l<c.getBoundingClientRect().right+8)return;const d=Math.round(l-e.getBoundingClientRect().left);if(d)e.style.setProperty('margin-left',d+'px','important')}
 addEventListener('resize',()=>{clearTimeout(eaAlinha._t);eaAlinha._t=setTimeout(eaAlinha,120)});
 {const _gEa=go;go=function(v){const r=_gEa.apply(this,arguments);try{eaAplicar()}catch(e){console.warn(e)}return r};Object.assign(go,_gEa);go._f=_gEa._f}
 {const st=document.createElement('style');st.textContent=`html body.eduapp #side,html body.eduapp #railTgl,html body.eduapp #tabbar,html body.eduapp .spvolta,html body.eduapp #menuBtn,html body.eduapp #bar #crumb,html body.eduapp #bar #ctxTurma{display:none!important}

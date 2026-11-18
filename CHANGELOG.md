@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.123
+- Provas: logótipo e nome da escola alinhados com a coluna do conteúdo
+
 ## 1.122
 - Início: cartão Próximas Tarefas com estado vazio maior e mais claro («Tudo em dia»)
 
