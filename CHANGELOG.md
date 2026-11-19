@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.155
+- Pulso › Quizzes: as pastas e os quizzes ficam dentro de um cartão, alinhados com o resto da página
+
 ## 1.154
 - Pulso: ícone laranja (como na demonstração)
 - Pulso: o quiz de exemplo deixa de aparecer em duplicado

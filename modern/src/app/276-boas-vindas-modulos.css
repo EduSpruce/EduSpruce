@@ -232,3 +232,7 @@ html body #mqdemo.bv-pulso .mqd-go{background:#fff;color:#c2410c}html body #mqde
 /* botão ⋯ dos cartões (Pulso, Spruce It, Formulários): os três pontos tinham deixado de aparecer */
 html body .btn .icdots{display:block!important;flex:none!important;min-width:18px!important;max-width:none!important;width:18px!important;height:18px!important;opacity:1!important;visibility:visible!important;fill:currentColor!important;stroke:none!important}
 html body .btn .icdots circle{fill:currentColor!important;stroke:none!important}
+
+/* Pulso › Quizzes: as pastas e os cartões ficam dentro de um cartão, alinhados com o resto */
+html body .card.puqlista{min-height:320px}
+html body .card.puqlista>.arpasta:first-child{margin-top:0}
