@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.142
+- Spruce It: página inicial nova com indicadores (conjuntos, perguntas, jogos, participações, acerto médio e último jogo)
+- Spruce It: conjuntos em grelha com capa (imagem do conjunto ou iniciais) ou em lista, ordenar, favoritos e pastas
+- Spruce It: painéis Continuar, Jogos recentes (vencedor e acerto), Atividade das últimas 8 semanas, Modos mais usados e Perguntas a rever
+- Spruce It: no ecrã projetado, painel «Ao vivo» com o que acontece no jogo, total da sala, acerto e quem vai à frente
+
 ## 1.141
 - SpruceNote e JornalNote: pesquisa em todos os quadros (Ctrl+F)
 - SpruceNote e JornalNote: modelos de quadro (plano de aula, projeto, visita de estudo, reunião, brainstorm, pesquisa, semana, edição do jornal)

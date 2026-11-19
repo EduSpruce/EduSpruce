@@ -163,3 +163,7 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Pesquisa em todos os quadros (`mqmPesquisa`, Ctrl+F no quadro), modelos (`MQM_MODELOS`/`mqmAplicar`), exportar em Markdown (`mqmExportar`/`mqmMd`), botões no topo (`#mqm-pq`, `#mqm-md`, `#mqm-tx`).
 - Setas: campos opcionais `et` (etiqueta), `tr` (tracejado), `pt` (`fim`|`ambas`|`nenhuma`), `cor`, `cv` (curva; omissão .12). A seta selecionada fica em `mqUI().selSeta` (o `mqRender` filtra `u.sel` só para elementos).
 - Largar elementos em cima de um cartão de quadro move-os para dentro (`mqmMover`); Ctrl+C/X/V de elementos (`_mqmClip`, só cola se a área de transferência ainda tiver o texto copiado).
+
+## Spruce It — página inicial nova e «Ao vivo» (1.142, `moderno/arena-inicio.js`, depois de `banco.js`)
+- Embrulha `vArena` (só no separador dos conjuntos): troca a lista antiga por indicadores (`arsStats`), grelha/lista (`S.cfg.arVista`), ordenação (`S.cfg.arOrd`), favoritos (`c.fav`) e pastas em botões (`UI.arPasta`, `★` = favoritos), e um painel lateral (continuar, jogos recentes, atividade de 8 semanas, modos, perguntas a rever com <70% de acerto e ≥3 respostas). Respeita o filtro do ano letivo do `banco.js` (`bcAnoNome`).
+- Embrulha `arDesenhar`: nos modos ao ritmo de cada aluno (`.arhlv`) junta `aside.arhfeed` com o que mudou desde a última leitura (ganhou/perdeu/ficou com pontos de outro — pares de +n/−n na mesma leitura), total da sala, acerto e quem vai à frente.

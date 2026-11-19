@@ -7,6 +7,7 @@ pulso.js
 forms.js
 provas.js
 banco.js
+arena-inicio.js
 avisos.js
 hub.js
 eduschedule.js
