@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.140
+- SpruceNote e JornalNote: o quadro de exemplo passa a usar o tipo de letra da app
+
 ## 1.139
 - Ecrã do código: cartão mais compacto e teclado novo, com letras, onda ao tocar e animações de entrada, erro e sucesso
 
