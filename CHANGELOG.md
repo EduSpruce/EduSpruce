@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.144
+- Formulários: página inicial nova ao estilo do Microsoft Forms — novo questionário, novo formulário, importação rápida, modelos (questionário, registo, feedback, pesquisa), separadores, favoritos, grelha ou lista e as suas turmas
+- Spruce It, Formulários e Provas: boas-vindas animadas na primeira entrada e botão «Ver exemplo» para voltar a vê-las
+
 ## 1.143
 - Spruce It: apresentação animada «Como funciona» (criar, lançar, jogar ao vivo, pódio e relatório) no espaço livre à direita nos ecrãs largos e no botão «Como funciona»
 - Spruce It: ícones dos indicadores centrados

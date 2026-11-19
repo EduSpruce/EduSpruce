@@ -14,3 +14,4 @@ eduschedule.js
 eduapps.js
 recolha.js
 modulos.js
+vitrines.js
