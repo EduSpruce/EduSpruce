@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.138
+- SpruceNote e JornalNote: quadro de exemplo animado na primeira entrada, com «Começar a criar» e «Criar quadro de exemplo»
+- Botão «Ver exemplo» no canto inferior direito do quadro para voltar a ver a demonstração
+
 ## 1.137
 - EduSchedule: importação em massa de horários do Untis — todos os PDF de professores e turmas de uma vez, códigos por reconhecer escolhidos na pré-visualização e lembrados
 - Ficheiros GPU do Untis passam a juntar-se ao horário atual sem apagar nada (por omissão)
