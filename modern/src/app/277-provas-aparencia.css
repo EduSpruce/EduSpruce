@@ -4,14 +4,14 @@ html body .pv .pvnav,html body.est-sge.est-sge.est-sge .pv .pvnav{background:#0f
 html body .pv .pvnav button,html body.est-sge.est-sge.est-sge .pv .pvnav button{color:#cbd5e1!important}
 html body .pv .pvnav button svg{color:#94a3b8!important}
 html body .pv .pvnav button:hover{background:#ffffff14!important}
-html body .pv .pvnav button.on,html body.est-sge.est-sge.est-sge .pv .pvnav button.on{background:#22c55e!important;color:#fff!important}
+html body .pv .pvnav button.on,html body.est-sge.est-sge.est-sge .pv .pvnav button.on{background:#15803d!important;color:#fff!important}
 html body .pv .pvnav button.on svg{color:#fff!important}
 html body .pv .pvbrand{color:#fff!important}html body .pv .pvbrand i{background:#22c55e!important;color:#fff!important}
-html body .pv .btn.pri,html body.est-sge.est-sge.est-sge .pv .btn.pri{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
-html body .pv .btn.pri:hover,html body.est-sge.est-sge.est-sge .pv .btn.pri:hover{background:#16a34a!important;border-color:#16a34a!important}
+html body .pv .btn.pri,html body.est-sge.est-sge.est-sge .pv .btn.pri{background:#15803d!important;border-color:#15803d!important;color:#fff!important}
+html body .pv .btn.pri:hover{background:#166534!important;border-color:#166534!important}
 /* arrumação da página inicial: tudo azul-noite e verde, sem laranja; cartões da direita sem espaço vazio */
 html body .pv .pvico.o{background:color-mix(in srgb,#0f172a 10%,transparent)!important;color:#0f172a!important}
-html body .pv .pvnew .btn,html body.est-sge.est-sge.est-sge .pv .pvnew .btn,html body.est-sge.est-sge.est-sge.est-sge #view .pv .pvnew .btn{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+html body .pv .pvnew .btn,html body.est-sge.est-sge.est-sge .pv .pvnew .btn,html body.est-sge.est-sge.est-sge.est-sge #view .pv .pvnew .btn{background:#15803d!important;border-color:#15803d!important;color:#fff!important}
 html body .pv .pvhero h2 em{color:#16a34a!important}
 html body #view .pvgrid2{align-items:stretch!important}
 html body #view .pvgrid2>div{display:flex;flex-direction:column;gap:16px}html body #view .pvgrid2>div>.pvcard:last-child{flex:1;display:flex;flex-direction:column}html body #view .pvgrid2>div>.pvcard:last-child .pvstat3{flex:1;align-content:center;align-items:center}
@@ -20,11 +20,25 @@ html body .pv .pvstat3{margin-top:6px}
 html body .pv .pvrec small svg{flex:none}
 html body .pv .pvilu-img{background:color-mix(in srgb,#22c55e 7%,transparent)!important}
 /* botão «Ver exemplo» com a cor de cada app */
-html body[data-eaapp="provas"] #bv-ver{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+html body[data-eaapp="provas"] #bv-ver{background:#15803d!important;border-color:#15803d!important;color:#fff!important}
 html body[data-eaapp="arena"] #bv-ver{background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
 html body[data-eaapp="forms"] #bv-ver{background:#0e7490!important;border-color:#0e7490!important;color:#fff!important}
 
-html body #view form.pvnew button.btn,html body.est-sge.est-sge.est-sge.est-sge #view form.pvnew button.btn:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+html body #view form.pvnew button.btn,html body.est-sge.est-sge.est-sge.est-sge #view form.pvnew button.btn:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#15803d!important;border-color:#15803d!important;color:#fff!important}
 
-html body.est-sge.est-sge.est-sge.est-sge #view .pv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#22c55e!important;border-color:#16a34a!important;color:#fff!important}
-html body.est-sge.est-sge.est-sge.est-sge #view .pv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e):hover{background:#16a34a!important}
+html body.est-sge.est-sge.est-sge.est-sge #view .pv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#15803d!important;border-color:#15803d!important;color:#fff!important}
+html body.est-sge.est-sge.est-sge.est-sge #view .pv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e):hover{background:#166534!important}
+/* menu do lado que encolhe (como na apresentação): só ícones */
+html body .pv{transition:grid-template-columns .2s}
+@media (min-width:901px){html body .pv .pvbrand{display:flex!important;align-items:center}}
+html body .pv .pvcol{margin-left:auto;width:30px;height:30px;border:0;border-radius:8px;background:#ffffff14;color:#cbd5e1;display:grid;place-items:center;cursor:pointer;flex:none}
+html body .pv .pvcol:hover{background:#ffffff26;color:#fff}
+html body .pv .pvcol b{display:block;font-size:18px;line-height:1;transition:transform .2s}
+html body .pv.pvmini{grid-template-columns:68px minmax(0,1fr)!important}
+html body .pv.pvmini .pvnav{padding:12px 8px!important;align-items:center}
+html body .pv.pvmini .pvnav button>span,html body .pv.pvmini .pvbrand>span{display:none!important}
+html body .pv.pvmini .pvnav button{justify-content:center;padding:8px!important;width:46px}
+html body .pv.pvmini .pvbrand{flex-direction:column;gap:10px;padding:4px 0 14px!important}
+html body .pv.pvmini .pvcol{margin:0}html body .pv.pvmini .pvcol b{transform:rotate(180deg)}
+@media (max-width:900px){html body .pv .pvcol{display:none}html body .pv.pvmini{grid-template-columns:1fr!important}html body .pv.pvmini .pvnav button>span{display:inline!important}}
+html body .pv .pvcol svg{width:17px!important;height:17px!important;display:block}

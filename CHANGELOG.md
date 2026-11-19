@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.147
+- Provas: o menu do lado pode encolher para só ícones (botão «), como na apresentação, e lembra-se da escolha
+- Provas: botões verdes com texto branco legível (verde mais escuro), também na página dos alunos
+
 ## 1.146
 - Provas: página inicial arrumada só em azul-noite e verde (logótipo, botão de criar, ícones e ilustrações) e cartões da direita sem espaço vazio
 - Apps: o Spruce It passa a roxo e o Provas a verde no tema SGE, iguais às apresentações
