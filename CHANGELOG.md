@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.137
+- EduSchedule: importação em massa de horários do Untis — todos os PDF de professores e turmas de uma vez, códigos por reconhecer escolhidos na pré-visualização e lembrados
+- Ficheiros GPU do Untis passam a juntar-se ao horário atual sem apagar nada (por omissão)
+
 ## 1.136
 - EduSchedule › Horários e Ficheiro: importar horários em PDF do Untis (de professores, turmas ou salas), com pré-visualização — coloca as aulas sem apagar nada
 - Botões de importar marcados para se distinguirem dos outros
