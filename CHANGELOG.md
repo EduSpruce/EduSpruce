@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.148
+- Novo tema «Spruce» (Definições › Aparência): a aparência do eduspruce.app — fundo azul-céu, azul-marinho, toque de laranja, títulos em Bricolage e cartões arredondados, com modo claro e escuro
+
 ## 1.147
 - Provas: o menu do lado pode encolher para só ícones (botão «), como na apresentação, e lembra-se da escolha
 - Provas: botões verdes com texto branco legível (verde mais escuro), também na página dos alunos
