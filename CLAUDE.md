@@ -23,7 +23,7 @@ Português de Portugal, respostas curtas. Publicar sem perguntar («publica e ac
 - `app/dados/` — dados embutidos (imagens, bibliotecas, novidades, versão): não ler. O `./es pub` atualiza a versão e as Novidades.
 - `moderno/*.js` — só na versão com base de dados (ordem em `moderno/ordem.txt`: basedados, autoav, digit, arena-comum, arena, pulso, forms, provas, banco, avisos, hub), juntados por `modern/scripts/db.mjs`, que também aplica `moderno/patches.json` (trocas de texto na app; se uma deixar de encaixar, o build diz qual).
 - Páginas dos alunos: `/aluno.html`, `/forms.html`, `/provas.html` (editar diretamente); `arena/arena.html` → `/spruceit.html` (Spruce It, antiga Arena; `/arena.html` só reencaminha), `pulso/pulso.html` → `/pulso.html`.
-- EduSchedule (antigo EduTime) foi retirado da app (1.147): os dados antigos (S.esched) ficam na base de dados, sem nada que os use.
+- EduSchedule (antigo EduTime) foi retirado da app (1.149): os dados antigos (S.esched) ficam na base de dados, sem nada que os use.
 - SQL do Supabase: `modern/supabase/migrations/` (o utilizador corre-o no Supabase).
 - Gerados (nunca editar à mão): `/index.html`, `/app/`, `/arquivo.html`, `/spruceit.html`, `/arena.html`, `/pulso.html`, `/versao.json`, `/esm/`.
 - Espelho para a rede da escola: `EduSpruce/eduspruce.github.io` (o `./es pub` clona-o e atualiza-o). As pastas `boxdoc/` (BoxCheck) e `voa-cagarro/` (jogo Voa, Cagarro!) desse site são apps independentes, publicadas à parte: o espelho nunca as apaga (`ES_ESPELHO_MANTER` em `modern/scripts/espelho.sh`); não lhes mexer a partir da EduSpruce.
