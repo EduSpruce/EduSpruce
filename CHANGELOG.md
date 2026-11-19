@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.145
+- Spruce It: o jogo passa a ter a aparência da apresentação (roxo e amarelo, tema «Recreio» por omissão)
+- Spruce It: personagens Cubos (as da apresentação) como personagens comuns e escolhidas por omissão; a apresentação «Como funciona» usa os mesmos Cubos e cores
+- Spruce It: página do professor com o roxo e o amarelo do jogo
+- Provas: aparência igual à apresentação (azul-noite e verde), no módulo e na página dos alunos
+
 ## 1.144
 - Formulários: página inicial nova ao estilo do Microsoft Forms — novo questionário, novo formulário, importação rápida, modelos (questionário, registo, feedback, pesquisa), separadores, favoritos, grelha ou lista e as suas turmas
 - Spruce It, Formulários e Provas: boas-vindas animadas na primeira entrada e botão «Ver exemplo» para voltar a vê-las

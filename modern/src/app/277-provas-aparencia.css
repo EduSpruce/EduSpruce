@@ -1,0 +1,11 @@
+/* ===================== 1.145 · Provas: aparência igual à apresentação (azul-noite e verde) ===================== */
+html body .pv{--acc:#16a34a}
+html body .pv .pvnav,html body.est-sge.est-sge.est-sge .pv .pvnav{background:#0f172a!important;border-color:#0f172a!important}
+html body .pv .pvnav button,html body.est-sge.est-sge.est-sge .pv .pvnav button{color:#cbd5e1!important}
+html body .pv .pvnav button svg{color:#94a3b8!important}
+html body .pv .pvnav button:hover{background:#ffffff14!important}
+html body .pv .pvnav button.on,html body.est-sge.est-sge.est-sge .pv .pvnav button.on{background:#22c55e!important;color:#fff!important}
+html body .pv .pvnav button.on svg{color:#fff!important}
+html body .pv .pvbrand{color:#fff!important}html body .pv .pvbrand i{background:#22c55e!important;color:#fff!important}
+html body .pv .btn.pri,html body.est-sge.est-sge.est-sge .pv .btn.pri{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+html body .pv .btn.pri:hover,html body.est-sge.est-sge.est-sge .pv .btn.pri:hover{background:#16a34a!important;border-color:#16a34a!important}

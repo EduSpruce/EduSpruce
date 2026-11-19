@@ -130,7 +130,7 @@ const AR_OBJ={floresta:{u:'árvores',p:2,min:4,d:12,f:v=>'Primeiro a '+v+' árvo
 const arObjDe=m=>AR_OBJ[m]||AR_OBJ._;
 function arLancarDlg(c,tipo0){if(!c)return;const P=c.perg.filter(p=>p.t.trim()&&p.o.filter(x=>String(x).trim()).length>=2&&String(p.o[p.c]||'').trim());
   if(!P.length)return toast('Este conjunto ainda não tem perguntas completas.','aviso');
-  const L=UI.arL=Object.assign({modo:'classico',tipo:'vivo',dur:420,obj:0,fim:'tempo',nomes:'livre',turma:c.turma||((T()||{}).id)||'',tardias:true,moedas:arMoedasOn(),limite:'',tema:S.cfg.arenaTema||'spruce',equipas:4,mostrar:true,alcAleat:false,silencio:true},UI.arL||{});
+  const L=UI.arL=Object.assign({modo:'classico',tipo:'vivo',dur:420,obj:0,fim:'tempo',nomes:'livre',turma:c.turma||((T()||{}).id)||'',tardias:true,moedas:arMoedasOn(),limite:'',tema:S.cfg.arenaTema||'recreio',equipas:4,mostrar:true,alcAleat:false,silencio:true},UI.arL||{});
   if(L.ordem==null)L.ordem=L.aleat===false?'seq':'ale';if(!AR.MODOS[L.modo])L.modo='classico';if(c.turma)L.turma=c.turma;if(tipo0)L.tipo=tipo0;L.passo='modo';
   const TT=arTurmas();const hoje=new Date(Date.now()+7*864e5);hoje.setHours(23,59,0,0);const limDef=new Date(hoje.getTime()-hoje.getTimezoneOffset()*6e4).toISOString().slice(0,16);
   const tagDe=(k,m)=>m.tag||(k==='classico'?'Todos ao mesmo tempo':'Ao ritmo de cada um');

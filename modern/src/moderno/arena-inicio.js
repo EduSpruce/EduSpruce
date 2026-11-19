@@ -199,12 +199,13 @@ const ARS_CENAS=[
   ['Jogam ao vivo','A classificação mexe-se a cada resposta e o painel «Ao vivo» conta o que acontece.'],
   ['Pódio no fim','Os três primeiros sobem ao pódio. Nunca conta para a nota.'],
   ['Veja o relatório','Acerto por pergunta e por aluno: sabe logo o que tem de rever.']];
-function arsAv(k,sz){try{const P=AR.PINHAS||[];const B=P.filter(p=>p&&p.bicho);const L=B.length>=5?B:P;const p=L[(k*3+1)%L.length]||P[0];return AR.svg(p.id||p[0],sz)}catch(_){return ''}}
+/* sempre Pinhas (as personagens do Spruce It), de cores e acessórios diferentes, no mesmo estilo */
+function arsAv(k,sz){const E=AR.CUBOS&&AR.CUBOS.length?AR.CUBOS:['p01'];try{return AR.svg(E[k%E.length],sz)}catch(_){return ''}}
 function arsCena(i){const L=['Ana','Rui','Leo','Mia','Tó'];
-  if(i===0)return `<div class="arsx-ed"><div class="arsx-q"><span>1</span><i style="width:70%"></i></div><div class="arsx-ops">${['#127fa6','#d98a1f','#16a34a','#c2410c'].map((c,k)=>`<div style="--c:${c};--d:${.25+k*.22}s"><b>${['▲','◆','●','■'][k]}</b><i style="width:${[60,45,70,52][k]}%"></i>${k===2?'<u>✓</u>':''}</div>`).join('')}</div><div class="arsx-q s" style="--d:1.3s"><span>2</span><i style="width:55%"></i></div><div class="arsx-q s" style="--d:1.6s"><span>3</span><i style="width:62%"></i></div></div>`;
+  if(i===0)return `<div class="arsx-ed"><div class="arsx-q"><span>1</span><i style="width:70%"></i></div><div class="arsx-ops">${['#eab308','#3b82f6','#22c55e','#ef4444'].map((c,k)=>`<div style="--c:${c};--d:${.25+k*.22}s"><b>${['▲','◆','●','■'][k]}</b><i style="width:${[60,45,70,52][k]}%"></i>${k===2?'<u>✓</u>':''}</div>`).join('')}</div><div class="arsx-q s" style="--d:1.3s"><span>2</span><i style="width:55%"></i></div><div class="arsx-q s" style="--d:1.6s"><span>3</span><i style="width:62%"></i></div></div>`;
   if(i===1)return `<div class="arsx-lob"><div class="arsx-cod"><small>Código da sala</small><b>482 107</b><span>eduspruce.pt/spruceit</span></div><div class="arsx-avs">${L.map((n,k)=>`<div style="--d:${.3+k*.35}s">${arsAv(k,46)}<span>${n}</span></div>`).join('')}</div><div class="arsx-n"><b class="arsx-cnt"></b> jogadores</div></div>`;
   if(i===2){const pts=[[320,1],[282,0],[208,2],[130,3],[96,4]];return `<div class="arsx-live"><div class="arsx-lb">${pts.map(([p,k],r)=>`<div style="--o:${r};--w:${Math.round(p/3.3)}%">${arsAv(k,30)}<span>${L[k]}</span><i></i><b>${p}</b></div>`).join('')}</div><div class="arsx-feed"><small><em></em> Ao vivo</small><p style="--d:.6s"><b>Mia</b> ganhou 40 pts</p><p style="--d:1.4s"><b>Rui</b> ficou com 25 pts da <b>Ana</b></p><p style="--d:2.2s"><b>Leo</b> duplicou!</p></div></div>`}
-  if(i===3)return `<div class="arsx-pod">${[[1,1,'282'],[0,0,'320'],[2,2,'208']].map(([k,pos,p],c)=>`<div class="p${pos+1}" style="--d:${[.5,.2,.8][c]}s"><span class="arsx-pa">${arsAv(k,pos===0?62:50)}</span><b>${L[k]}</b><div><em>${pos+1}.º</em><small>${p} pts</small></div></div>`).join('')}${Array.from({length:18},(_,k)=>`<i class="arsx-cf" style="--x:${(k*37)%100}%;--d:${(k%6)*.18}s;--c:${['#127fa6','#d98a1f','#16a34a','#c2410c','#7c5cc4'][k%5]}"></i>`).join('')}</div>`;
+  if(i===3)return `<div class="arsx-pod">${[[1,1,'282'],[0,0,'320'],[2,2,'208']].map(([k,pos,p],c)=>`<div class="p${pos+1}" style="--d:${[.5,.2,.8][c]}s"><span class="arsx-pa">${arsAv(k,pos===0?62:50)}</span><b>${L[k]}</b><div><em>${pos+1}.º</em><small>${p} pts</small></div></div>`).join('')}${Array.from({length:18},(_,k)=>`<i class="arsx-cf" style="--x:${(k*37)%100}%;--d:${(k%6)*.18}s;--c:${['#facc15','#f97316','#4ade80','#60a5fa','#f472b6'][k%5]}"></i>`).join('')}</div>`;
   return `<div class="arsx-rel"><div class="arsx-rh"><b>Relatório</b><span>5 jogadores · acerto 73%</span></div>${[92,81,42,77,68].map((v,k)=>`<div class="arsx-rq ${v<50?'mau':''}" style="--d:${.2+k*.18}s"><span>P${k+1}</span><i><u style="--v:${v}%;background:${v<50?'#dc2626':v<70?'#d97706':'#16a34a'}"></u></i><b>${v}%</b></div>`).join('')}<p class="arsx-dica">⚠ A pergunta 3 precisa de ser revista</p></div>`}
 function arsApresHTML(fechar){return `<div class="arsx" role="region" aria-label="Como funciona o Spruce It"><div class="arsx-top"><b>Como funciona o Spruce It</b>${fechar?`<button type="button" class="arsx-x" data-arsx-x title="Esconder" aria-label="Esconder">✕</button>`:''}</div>
   <div class="arsx-ecra"><div class="arsx-bar"><i></i><i></i><i></i><span>Spruce It</span></div><div class="arsx-palco"></div></div>
@@ -242,36 +243,43 @@ addEventListener('resize',()=>{clearTimeout(arsApresPos._t);arsApresPos._t=setTi
 
 (()=>{if(document.getElementById('arsx-css'))return;const st=document.createElement('style');st.id='arsx-css';st.textContent=`
 .spv .ars-ki svg{margin:0!important;display:block;flex:none}
+/* 1.145 · cores do Spruce It (roxo e amarelo, iguais à apresentação e ao jogo) */
+html body .arv.spv{--acc:#6d28d9}
+html body .spv .btn.pri,html body.est-sge.est-sge.est-sge .spv .btn.pri{background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
+html body .spv .btn.pri:hover,html body.est-sge.est-sge.est-sge .spv .btn.pri:hover{background:#5b21b6!important;border-color:#5b21b6!important}
+html body .spv .sph-tabs button[aria-current=page],html body.est-sge.est-sge.est-sge .spv .sph-tabs button[aria-current=page]{background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
+html body .spv .sph-logo em,html body.est-sge.est-sge.est-sge .spv .sph-logo em{background:#facc15!important;color:#3b0764!important}
+html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis button[aria-pressed=true]{background:#6d28d9!important;border-color:#6d28d9!important}
 .spv .arsx-bt{margin-left:auto;margin-right:12px}
 #ars-apres{position:absolute;z-index:2;animation:arsxIn .5s ease-out}
 @keyframes arsxIn{from{opacity:0;transform:translateX(20px)}}
 .arsx{background:var(--panel,#fff);border:1px solid var(--line,#dfe5eb);padding:14px;color:var(--ink,#1f2937)}
 .arsx-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}.arsx-top b{font-size:15px}.arsx-x{margin-left:auto;border:0;background:none;color:var(--mut,#64748b);font-size:15px;cursor:pointer;padding:2px 6px}
-.arsx-ecra{border:1px solid var(--line,#dfe5eb);overflow:hidden;background:#0f2433}
-.arsx-bar{display:flex;align-items:center;gap:5px;padding:7px 10px;background:#173a4f;color:#cfe3ee;font:700 11px system-ui,sans-serif}.arsx-bar i{width:7px;height:7px;border-radius:50%;background:#2e5b74}.arsx-bar span{margin-left:8px}
-.arsx-palco{position:relative;aspect-ratio:16/10;color:#f1f5f9;font:13px/1.3 Figtree,system-ui,sans-serif;overflow:hidden;background:radial-gradient(500px 300px at 15% -10%,#1d5a7a 0,transparent 60%),radial-gradient(400px 300px at 110% 110%,#5a3a12 0,transparent 55%),#0f2433}
+.arsx-ecra{border:3px solid #facc15;overflow:hidden;background:#4c1d95}
+.arsx-bar{display:flex;align-items:center;gap:5px;padding:7px 10px;background:#3b0f7a;color:#fff;font:800 12px system-ui,sans-serif}.arsx-bar i{width:7px;height:7px;border-radius:50%;background:#7c3aed}.arsx-bar span::after{content:'';}.arsx-bar span{margin-left:8px}
+.arsx-palco{position:relative;aspect-ratio:16/10;color:#f1f5f9;font:13px/1.3 Figtree,system-ui,sans-serif;overflow:hidden;background:radial-gradient(rgba(255,255,255,.08) 2px,transparent 2.5px) 0 0/22px 22px,radial-gradient(circle at 20% 10%,#8b5cf6,#5b21b6 45%,#312e81)}
 .arsx-palco>*{position:absolute;inset:0;padding:16px}
 .arsx-palco [style*="--d"]{animation:arsxPop .5s var(--d) both cubic-bezier(.2,.8,.3,1.3)}
 @keyframes arsxPop{from{opacity:0;transform:translateY(12px) scale(.9)}}
 .arsx-ed{display:flex;flex-direction:column;gap:8px}
-.arsx-q{display:flex;align-items:center;gap:8px;background:#ffffff14;padding:8px}.arsx-q span{width:22px;height:22px;background:#127fa6;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex:none}.arsx-q i{height:9px;background:#ffffff55}.arsx-q.s{opacity:.85}
+.arsx-q{display:flex;align-items:center;gap:8px;background:#ffffff14;padding:8px}.arsx-q span{width:22px;height:22px;background:#facc15;color:#3b0764;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex:none}.arsx-q i{height:9px;background:#ffffff55}.arsx-q.s{opacity:.85}
 .arsx-ops{display:grid;grid-template-columns:1fr 1fr;gap:6px}.arsx-ops div{position:relative;display:flex;align-items:center;gap:7px;padding:9px 8px;background:var(--c)}.arsx-ops b{font-size:12px}.arsx-ops i{height:7px;background:#ffffffaa}.arsx-ops u{position:absolute;right:6px;text-decoration:none;background:#fff;color:#16a34a;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;animation:arsxPop .4s 1.1s both}
 .arsx-lob{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
-.arsx-cod{background:#fff;color:#0f2433;padding:8px 16px;animation:arsxPop .5s .05s both}.arsx-cod small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#64748b}.arsx-cod b{display:block;font:900 28px/1.1 ui-monospace,Menlo,monospace;letter-spacing:.06em}.arsx-cod span{font-size:10.5px;color:#127fa6}
+.arsx-cod{background:#fff;color:#1e1b4b;border-radius:12px;box-shadow:0 5px 0 rgba(0,0,0,.2);padding:8px 16px;animation:arsxPop .5s .05s both}.arsx-cod small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#64748b}.arsx-cod b{display:block;font:900 28px/1.1 ui-monospace,Menlo,monospace;letter-spacing:.06em}.arsx-cod span{font-size:10.5px;color:#6d28d9;font-weight:700}
 .arsx-avs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.arsx-avs div{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px}
 .arsx-n{font-size:13px;opacity:.9}.arsx-n b{font-size:16px}
 .arsx-live{display:grid;grid-template-columns:1.25fr 1fr;gap:10px}
 .arsx-lb{display:flex;flex-direction:column;gap:6px}.arsx-lb div{display:grid;grid-template-columns:30px 40px 1fr 34px;align-items:center;gap:6px;background:#ffffff12;padding:3px 6px;animation:arsxSobe .7s calc(var(--o)*.15s) both}
 @keyframes arsxSobe{from{opacity:0;transform:translateY(calc(var(--o)*-10px + 30px))}}
-.arsx-lb span{font-size:11.5px;font-weight:700;overflow:hidden;white-space:nowrap}.arsx-lb i{height:8px;background:linear-gradient(90deg,#127fa6,#5bb7de);width:var(--w);animation:arsxBarra 1.6s .4s both}
+.arsx-lb span{font-size:11.5px;font-weight:700;overflow:hidden;white-space:nowrap}.arsx-lb i{height:8px;background:linear-gradient(90deg,#facc15,#f97316);width:var(--w);animation:arsxBarra 1.6s .4s both}
 @keyframes arsxBarra{from{width:0}}.arsx-lb b{font-size:12px;text-align:right}
 .arsx-feed{background:#ffffff10;padding:8px;display:flex;flex-direction:column;gap:6px}.arsx-feed small{font-size:10px;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:5px}.arsx-feed em{width:7px;height:7px;border-radius:50%;background:#ef4444;animation:arsxPisca 1s infinite}
-@keyframes arsxPisca{50%{opacity:.3}}.arsx-feed p{margin:0;font-size:11px;padding:5px 6px;background:#ffffff12;border-left:3px solid #d98a1f}
+@keyframes arsxPisca{50%{opacity:.3}}.arsx-feed p{margin:0;font-size:11px;padding:5px 6px;background:#ffffff12;border-left:3px solid #facc15}
 .arsx-pod{display:flex;align-items:flex-end;justify-content:center;gap:8px;padding-bottom:0!important}
 .arsx-pod>div{display:flex;flex-direction:column;align-items:center;width:28%}.arsx-pod>div>b{font-size:12px;margin:2px 0}
 .arsx-pod>div>div{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;animation:arsxPod .8s var(--d) both cubic-bezier(.2,.8,.3,1.1);transform-origin:bottom}
 @keyframes arsxPod{from{transform:scaleY(0)}}
-.arsx-pod .p1>div{height:46%;background:#127fa6}.arsx-pod .p2>div{height:34%;background:#d98a1f}.arsx-pod .p3>div{height:24%;background:#16a34a}.arsx-pod em{font-style:normal;font-weight:900;font-size:20px}.arsx-pod small{font-size:10px;opacity:.9}
+.arsx-pod .p1>div{height:46%;background:#facc15;color:#3b0764!important}.arsx-pod .p2>div{height:34%;background:#94a3b8}.arsx-pod .p3>div{height:24%;background:#fb923c}.arsx-pod em{font-style:normal;font-weight:900;font-size:20px}.arsx-pod small{font-size:10px;opacity:.9}
 .arsx-pod .p1{height:100%;justify-content:flex-end}.arsx-pod .p2,.arsx-pod .p3{height:100%;justify-content:flex-end}
 .arsx-cf{position:absolute!important;inset:auto!important;left:var(--x);top:-8px;width:7px;height:11px;padding:0!important;background:var(--c);animation:arsxCai 2.4s calc(1s + var(--d)) infinite linear!important}
 @keyframes arsxCai{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}

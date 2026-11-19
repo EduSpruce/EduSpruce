@@ -52,6 +52,7 @@ dados/004-manifesto.html
 272-pin-teclado-compacto-animado.css
 274-sprucenote-jornalnote-melhorias.css
 276-boas-vindas-modulos.css
+277-provas-aparencia.css
 040-corpo.html
 dados/041-hash-wasm.html
 042-corpo-2.html
