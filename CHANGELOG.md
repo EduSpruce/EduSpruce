@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.153
+- Tema Spruce: gradiente de fundo mais pronunciado (laranja no canto de cima, azul no de baixo)
+- Ecrã do código: o 0 fica centrado na tecla
+
 ## 1.152
 - Pulso: boas-vindas animadas na primeira entrada, com a grelha de respostas em direto, e botão «Ver exemplo» para voltar a vê-las
 
