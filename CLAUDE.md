@@ -27,3 +27,4 @@ Português de Portugal, respostas curtas. Publicar sem perguntar («publica e ac
 - SQL do Supabase: `modern/supabase/migrations/` (o utilizador corre-o no Supabase).
 - Gerados (nunca editar à mão): `/index.html`, `/app/`, `/arquivo.html`, `/spruceit.html`, `/arena.html`, `/pulso.html`, `/versao.json`, `/esm/`.
 - Espelho para a rede da escola: `EduSpruce/eduspruce.github.io` (o `./es pub` clona-o e atualiza-o). As pastas `boxdoc/` (BoxCheck) e `voa-cagarro/` (jogo Voa, Cagarro!) desse site são apps independentes, publicadas à parte: o espelho nunca as apaga (`ES_ESPELHO_MANTER` em `modern/scripts/espelho.sh`); não lhes mexer a partir da EduSpruce.
+- eduspruce.app (landing, repositório `EduSpruce/eduspruce-app`): o `./es pub` também regenera `/changelog/` a partir das Novidades (`modern/scripts/changelog-app.mjs`).

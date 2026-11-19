@@ -274,6 +274,8 @@ def pub(a):
     if not sem_esp:
         e=subprocess.run(['bash',os.path.join(R,'modern','scripts','espelho.sh'),m.split('\n')[0]],capture_output=True,text=True)
         out+=' · '+((e.stdout.strip().split('\n') or ['espelho?'])[-1] if e.returncode==0 else 'ESPELHO FALHOU: '+(e.stderr or e.stdout).strip()[-300:])
+        c=subprocess.run(['bash',os.path.join(R,'modern','scripts','changelog-app.sh'),v],capture_output=True,text=True)
+        out+=' · '+((c.stdout.strip().split('\n') or ['changelog?'])[-1] if c.returncode==0 else 'CHANGELOG (eduspruce.app) FALHOU: '+(c.stderr or c.stdout).strip()[-300:])
     print(out)
 def mapa(a):
     """vista → título → função → peças onde a função é definida (a última é a que vale)"""
