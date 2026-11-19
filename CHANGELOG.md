@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.150
+- Novidades: na primeira entrada depois de uma atualização aparece uma janela com tudo o que mudou desde a última vez
+- Definições › Changelog: todas as alterações desde a primeira versão, com pesquisa
+- Tema Spruce: ícones das apps planos, separadores das Definições com mais espaço e filtro Todas/Regular/PROFIJ legível no menu
+
 ## 1.149
 - EduSchedule retirado da app (Apps, menu e Módulos Opcionais); os dados guardados não se apagam
 - Ecrã do código: a última tecla já não fica presa com aspeto de premida

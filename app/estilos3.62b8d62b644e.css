@@ -1169,7 +1169,8 @@ html body #login.pinmode .pdk button{position:relative;overflow:hidden;width:76p
   box-shadow:0 1px 0 rgba(0,0,0,.08),inset 0 -2px 0 rgba(0,0,0,.05);transition:background .12s,transform .12s,box-shadow .12s!important;animation:pnTecla .4s calc(.3s + var(--i,0)*35ms) cubic-bezier(.3,1.4,.5,1) both;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html body #login.pinmode .pdk button small{font-size:8.5px;font-weight:700;letter-spacing:.14em;opacity:.45;height:9px}
 html body #login.pinmode .pdk button:hover{transform:translateY(-2px);box-shadow:0 6px 14px -6px rgba(0,0,0,.28),inset 0 -2px 0 rgba(0,0,0,.05)}
-html body #login.pinmode .pdk button:active,html body #login.pinmode .pdk button.prem{transform:translateY(1px) scale(.95)!important;box-shadow:inset 0 2px 4px rgba(0,0,0,.12)}
+html body #login.pinmode .pdk button:active{transform:translateY(1px) scale(.95)!important;box-shadow:inset 0 2px 4px rgba(0,0,0,.12)}
+html body #login.pinmode .pdk button.prem{animation:pnPrem .18s ease-out!important}@keyframes pnPrem{40%{transform:translateY(1px) scale(.95);box-shadow:inset 0 2px 4px rgba(0,0,0,.12)}}
 html body #login.pinmode .pdk button:focus-visible{outline:2px solid var(--pin-acc)!important;outline-offset:2px}
 html body #login.pinmode .pdk button.pdc,html body #login.pinmode .pdk button.pdb{box-shadow:none!important;font-size:13.5px!important;color:var(--pin-mut)!important;border-color:transparent!important}
 html body #login.pinmode .pdk button.pdc:hover,html body #login.pinmode .pdk button.pdb:hover{background:var(--pin-key)!important;color:var(--pin-ink)!important}
@@ -1556,3 +1557,27 @@ body.est-spruce.escurox #login.pinmode{--pin-bg:linear-gradient(160deg,#0c2f42,#
 
 /* foco visível pelo teclado (acessibilidade) */
 html:root body.est-spruce.est-spruce.est-spruce :focus-visible{outline:2.5px solid var(--sp-sun)!important;outline-offset:2px}
+/* 1.150 · ícones das apps planos, como o logótipo do eduspruce.app: cor única, sem brilho nem sombra */
+html body.est-spruce .hbic.hb-cheio{background:color-mix(in srgb,var(--h1) 55%,var(--h2))!important;box-shadow:none!important;border-radius:24%!important}
+html body.est-spruce .hbic.hb-cheio:before{display:none!important}
+/* 1.150 · menu lateral: filtro Todas/Regular/PROFIJ legível no fundo azul-marinho */
+html:root body.est-spruce.est-spruce.est-spruce #side .seg{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important}
+html:root body.est-spruce.est-spruce.est-spruce #side .seg button{background:transparent!important;color:rgba(230,243,250,.75)!important;box-shadow:none!important}
+html:root body.est-spruce.est-spruce.est-spruce #side .seg button.on{background:rgba(27,147,198,.45)!important;color:#fff!important}
+/* ===================== 1.150 · modal de novidades ===================== */
+html body dialog.nvmodal{width:min(620px,calc(100vw - 28px));max-height:min(80vh,760px);padding:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}
+html body dialog.nvmodal:not([open]){display:none}
+html body dialog.nvmodal::backdrop{background:rgba(10,20,35,.45);backdrop-filter:blur(2px)}
+html body .nvmodal .nvm-cab{display:flex;gap:14px;align-items:center;padding:20px 22px 14px;border-bottom:1px solid var(--line)}
+html body .nvmodal .nvm-ic{width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--acc);color:#fff}
+html body .nvmodal h2{margin:0;font-size:19px}html body .nvmodal .nvm-cab p{margin:3px 0 0;color:var(--mut);font-size:13.5px}
+html body .nvmodal .nvm-corpo{overflow:auto;padding:6px 22px 10px;flex:1}
+html body .nvmodal section{padding:12px 0;border-bottom:1px dashed var(--line)}html body .nvmodal section:last-child{border-bottom:0}
+html body .nvmodal h3{margin:0 0 6px;font-size:14.5px;display:flex;gap:8px;align-items:baseline}html body .nvmodal h3 small{color:var(--mut);font-weight:400;font-size:12.5px}
+html body .nvmodal ul{margin:0;padding-left:20px;font-size:13.5px;line-height:1.5}html body .nvmodal li{margin:3px 0}
+html body .nvmodal .nvm-pe{padding:12px 22px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+html body.est-sge dialog.nvmodal,html body.est-sge .nvmodal .nvm-ic{border-radius:0}
+html body .defcl .nvver{margin:0 0 6px}
+/* separadores das Definições com espaço entre eles (tema Spruce) */
+html body.est-spruce #view>.tabs.deftabs{gap:4px!important;padding:6px!important}
+html body.est-spruce #view>.tabs.deftabs>button{padding:8px 14px!important;gap:7px;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px!important}

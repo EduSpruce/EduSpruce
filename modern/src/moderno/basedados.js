@@ -210,7 +210,7 @@ async function esPosCarga(pf){
   try{let m=false;const c=S.cfg;
     if(!S.anos.length){if(!c.bemVindo){c.bemVindo=Date.now();c.tourVisto=true;m=true;setTimeout(()=>{try{passosModal(true)}catch(e){console.warn(e)}},500)}} /* conta nova: boas-vindas, uma única vez */
     else{if(!c.bemVindo){c.bemVindo=1;m=true}if(!c.tourVisto){c.tourVisto=true;m=true}
-      if(esVer(VERSAO)>esVer(c.versaoVista)){const tinha=!!c.versaoVista;c.versaoVista=VERSAO;m=true;if(tinha)setTimeout(()=>toast('Nova versão '+VERSAO+' — veja as novidades em Definições › Ferramentas','ok'),900)}}
+      if(esVer(VERSAO)>esVer(c.versaoVista)){const antes=c.versaoVista;c.versaoVista=VERSAO;m=true;if(antes)setTimeout(()=>{try{novidadesDesde(antes)}catch(e){console.warn(e);toast('Nova versão '+VERSAO+' — veja as novidades em Definições › Ferramentas','ok')}},900)}}
     if(m)save()}catch(e){console.warn(e)}
   setTimeout(()=>{try{mostrarAvisos(false)}catch(_){}},700)}
 posArranque=function(){/* as boas-vindas e a nota de versão só depois de os dados chegarem (esPosCarga) */};

@@ -105,3 +105,10 @@ body.est-spruce.escurox #login.pinmode{--pin-bg:linear-gradient(160deg,#0c2f42,#
 
 /* foco visível pelo teclado (acessibilidade) */
 html:root body.est-spruce.est-spruce.est-spruce :focus-visible{outline:2.5px solid var(--sp-sun)!important;outline-offset:2px}
+/* 1.150 · ícones das apps planos, como o logótipo do eduspruce.app: cor única, sem brilho nem sombra */
+html body.est-spruce .hbic.hb-cheio{background:color-mix(in srgb,var(--h1) 55%,var(--h2))!important;box-shadow:none!important;border-radius:24%!important}
+html body.est-spruce .hbic.hb-cheio:before{display:none!important}
+/* 1.150 · menu lateral: filtro Todas/Regular/PROFIJ legível no fundo azul-marinho */
+html:root body.est-spruce.est-spruce.est-spruce #side .seg{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important}
+html:root body.est-spruce.est-spruce.est-spruce #side .seg button{background:transparent!important;color:rgba(230,243,250,.75)!important;box-shadow:none!important}
+html:root body.est-spruce.est-spruce.est-spruce #side .seg button.on{background:rgba(27,147,198,.45)!important;color:#fff!important}

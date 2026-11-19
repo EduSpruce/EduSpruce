@@ -1,0 +1,17 @@
+/* ===================== 1.150 · modal de novidades ===================== */
+html body dialog.nvmodal{width:min(620px,calc(100vw - 28px));max-height:min(80vh,760px);padding:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}
+html body dialog.nvmodal:not([open]){display:none}
+html body dialog.nvmodal::backdrop{background:rgba(10,20,35,.45);backdrop-filter:blur(2px)}
+html body .nvmodal .nvm-cab{display:flex;gap:14px;align-items:center;padding:20px 22px 14px;border-bottom:1px solid var(--line)}
+html body .nvmodal .nvm-ic{width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--acc);color:#fff}
+html body .nvmodal h2{margin:0;font-size:19px}html body .nvmodal .nvm-cab p{margin:3px 0 0;color:var(--mut);font-size:13.5px}
+html body .nvmodal .nvm-corpo{overflow:auto;padding:6px 22px 10px;flex:1}
+html body .nvmodal section{padding:12px 0;border-bottom:1px dashed var(--line)}html body .nvmodal section:last-child{border-bottom:0}
+html body .nvmodal h3{margin:0 0 6px;font-size:14.5px;display:flex;gap:8px;align-items:baseline}html body .nvmodal h3 small{color:var(--mut);font-weight:400;font-size:12.5px}
+html body .nvmodal ul{margin:0;padding-left:20px;font-size:13.5px;line-height:1.5}html body .nvmodal li{margin:3px 0}
+html body .nvmodal .nvm-pe{padding:12px 22px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+html body.est-sge dialog.nvmodal,html body.est-sge .nvmodal .nvm-ic{border-radius:0}
+html body .defcl .nvver{margin:0 0 6px}
+/* separadores das Definições com espaço entre eles (tema Spruce) */
+html body.est-spruce #view>.tabs.deftabs{gap:4px!important;padding:6px!important}
+html body.est-spruce #view>.tabs.deftabs>button{padding:8px 14px!important;gap:7px;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px!important}
