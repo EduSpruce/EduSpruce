@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.135
+- Coord. PROFIJ › Pontos de Situação: cronograma de cada disciplina e UFCD ao longo do ano, com as interrupções, a FCT e o dia de hoje
+- Coord. PROFIJ: «Para Cumprir o Plano» mostra as disciplinas que não acabam no ano e de onde podem vir os tempos — o botão «Ceder» abre a cedência já preenchida
+- Pontos de situação: nova coluna com as aulas dadas desde o ponto anterior
+- Calendário Escolar: importar o calendário detalhado da escola (Word ou PDF) — períodos, interrupções e datas da FCT das turmas PROFIJ
+
 ## 1.134
 - Reuniões › Mapa Mensal com a mesma grelha d'O Meu Calendário (vista Mês): barra Hoje ‹ ›, semanas completas de segunda a domingo com os dias dos meses vizinhos e números das semanas; feriados e interrupções letivas do calendário escolar assinalados como n'O Meu Calendário
 

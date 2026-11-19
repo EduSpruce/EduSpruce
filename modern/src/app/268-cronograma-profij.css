@@ -1,0 +1,30 @@
+/* ===================== cronograma-profij ===================== */
+/* Coord. PROFIJ › Pontos de Situação: cronograma (cantos retos, tema SGE) */
+html body .cpcr-g{position:relative;overflow-x:auto;margin-top:8px}
+html body .cpcr-r{display:grid;grid-template-columns:200px 1fr;min-width:720px;height:30px;border-bottom:1px solid var(--line);align-items:stretch}
+html body .cpcr-r>.cpcr-n{font-weight:600;font-size:12.5px;align-self:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-right:8px;display:flex;flex-direction:column;line-height:1.2}
+html body .cpcr-r>.cpcr-n small{font-weight:400;color:var(--mut);font-size:11px}
+html body .cpcr-t{position:relative;height:100%}
+html body .cpcr-r.cpcr-m{height:20px}
+html body .cpcr-m .cpcr-t span{position:absolute;top:2px;font-size:11px;color:var(--mut);padding-left:3px;border-left:1px solid var(--line)}
+html body .cpcr-c{min-width:720px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--acc);padding:10px 0 4px}
+html body .cpcr-f{position:absolute;top:0;bottom:0}
+html body .cpcr-f.int{background:repeating-linear-gradient(135deg,#fde7c4 0 3px,transparent 3px 6px)}
+html body .cpcr-f.fct{background:repeating-linear-gradient(45deg,#bbf7d0 0 4px,transparent 4px 8px)}
+html body .cpcr-b{position:absolute;top:7px;height:16px;background:color-mix(in srgb,var(--c) 28%,transparent);border:1px solid var(--c);border-radius:0;z-index:1}
+html body .cpcr-b.nao{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 30%,transparent) 0 4px,transparent 4px 8px)}
+html body .cpcr-hj{position:absolute;top:0;bottom:0;width:2px;background:var(--acc);z-index:2}
+html body .cpcr-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12px;color:var(--mut)}
+html body .cpcr-leg span{display:inline-flex;align-items:center;gap:5px}
+html body .cpcr-leg b{width:14px;height:12px;display:inline-block;border-radius:0}
+html body .cpcr-leg b.fct{background:repeating-linear-gradient(45deg,#86efac 0 3px,#ecfdf5 3px 6px)}
+html body .cpcr-leg b.int{background:#fde7c4}
+html body .cpcr-leg b.hj{width:2px;background:var(--acc)}
+html body .cpcr-sug{margin:8px 0 0;padding-left:18px}
+html body .cpcr-sug li{margin:6px 0;line-height:1.5}
+html body .cpcr-de{margin:4px 0 2px;padding-left:16px;list-style:circle}
+html body .cpcr-sug li.cpcr-ced{margin:3px 0;display:list-item}
+html body .cpcr-ced .btn{margin-left:6px}
+html body .cdet h3{margin:14px 0 6px;font-size:14px}
+html body .cdet-l{margin:0;padding-left:18px;font-size:13px}
+@media print{html body .cpcr-f,html body .cpcr-b,html body .cpcr-hj,html body .cpcr-leg b{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
