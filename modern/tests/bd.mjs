@@ -26,7 +26,7 @@ try{
   passo='app';for(const e of P.erros)falhas.push('app: '+e);for(const v of await todasViolacoes(P))falhas.push('política (app): '+v);
   await P.ctx.close();
   /* 2) páginas dos alunos e páginas públicas: abrem sem erros nem violações */
-  for(const f of ['aluno.html','forms.html','provas.html','spruceit.html','pulso.html','horarios.html','privacidade.html','termos.html','arena.html#ABCDEF']){passo=f;
+  for(const f of ['aluno.html','forms.html','provas.html','spruceit.html','pulso.html','privacidade.html','termos.html','arena.html#ABCDEF']){passo=f;
     const Q=await pagina(b,{vp:{width:390,height:844}});await Q.pg.goto(s.url+f);await Q.pg.waitForTimeout(900);
     for(const e of Q.erros)falhas.push(f+': '+e);for(const v of await todasViolacoes(Q))falhas.push('política ('+f+'): '+v);
     const vazio=await Q.pg.evaluate(()=>(document.body.innerText||'').trim().length<5);if(vazio)falhas.push(f+': página vazia');await Q.ctx.close()}

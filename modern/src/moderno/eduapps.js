@@ -1,4 +1,4 @@
-/* ===================== EduApps em ecrã inteiro (Spruce It, Pulso, Formulários, Provas; o EduSchedule tem o seu próprio topo) =====================
+/* ===================== EduApps em ecrã inteiro (Spruce It, Pulso, Formulários, Provas) =====================
    Sem menu lateral: uma só linha em cima — a barra da EduSpruce com o ícone da casa (volta às Apps) antes do nome da app, a escola, o ano letivo, os ícones e as ações da vista. */
 const EDUAPPS={arena:1,pulso:1,forms:1,provas:1};
 function eaVoltar(){go(go._f&&go._f.hub?'hub':'inicio')}

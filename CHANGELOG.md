@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.149
+- EduSchedule retirado da app (Apps, menu e Módulos Opcionais); os dados guardados não se apagam
+- Ecrã do código: a última tecla já não fica presa com aspeto de premida
+
 ## 1.148
 - Novo tema «Spruce» (Definições › Aparência): a aparência do eduspruce.app — fundo azul-céu, azul-marinho, toque de laranja, títulos em Bricolage e cartões arredondados, com modo claro e escuro
 

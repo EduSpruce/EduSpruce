@@ -30,8 +30,6 @@ const HUB_APPS=[
    info:()=>{const p=S.pv||{};return hubN((p.ex||[]).length,'exercício','exercícios')+' · '+hubN((p.av||[]).length,'avaliação','avaliações')},tag:'Liga à Avaliação'},
   {id:'sprucenote',gr:'org',n:'SpruceNote',v:'sprucenote',g:['nvsn','grid'],c:'pinho',d:'Quadros de notas e ideias',on:()=>typeof snOn!=='function'||snOn(),
    info:()=>hubN(((S.sn||{}).quadros||[]).length,'quadro','quadros')},
-  {id:'eduschedule',gr:'org',n:'EduSchedule',v:'eduschedule',g:['calendar'],c:'azul',d:'Horários da escola, gestão diária e pleon',on:()=>typeof esOn!=='function'||esOn(),
-   info:()=>(S.esched&&S.esched.estado)?'Horário guardado na conta':'Criar o horário da escola'}
 ];
 const hubCfg=()=>{S.cfg=S.cfg||{};const h=S.cfg.hub=(S.cfg.hub&&typeof S.cfg.hub==='object')?S.cfg.hub:{};if(!h.ic||typeof h.ic!=='object')h.ic={};return h};
 const hubIni=()=>hubCfg().ini===true;
@@ -40,7 +38,7 @@ const hubG=(a,o)=>{const c=(o||hubCfg().ic[a.id]||{}).g;if(c&&ICONS[c])return c;
 const HUB_SGE={sgeAzul:['#1b93c6','#1b93c6'],sgeEscuro:['#0e7095','#0e7095'],sgeLaranja:['#f39200','#f39200'],sgeCeu:['#5bb7de','#2a9fd0'],sgeCinza:['#7a8a96','#55656f'],sgeVerde:['#16a34a','#15803d'],sgeTeal:['#0f8b8d','#0b6b6d'],sgeVermelho:['#dc2626','#b91c1c'],sgeTerra:['#c2410c','#9a3412'],sgeAmbar:['#f59e0b','#b45309'],sgeRoxo:['#7c3aed','#5b21b6'],sgeProvas:['#22c55e','#15803d']};
 Object.assign(HUB_CORES,HUB_SGE);
 /* 1.076: cada app com a sua cor dentro da paleta SGE */
-const HUB_SGE_DEF={turmas:'sgeAzul',avaliacao:'sgeVerde',sumarios:'sgeCeu',arena:'sgeRoxo',pulso:'sgeVermelho',forms:'sgeTeal',provas:'sgeProvas',sprucenote:'sgeAmbar',eduschedule:'sgeEscuro'};
+const HUB_SGE_DEF={turmas:'sgeAzul',avaliacao:'sgeVerde',sumarios:'sgeCeu',arena:'sgeRoxo',pulso:'sgeVermelho',forms:'sgeTeal',provas:'sgeProvas',sprucenote:'sgeAmbar'};
 const hubSge=()=>{try{return document.body.classList.contains('est-sge')}catch(_){return false}};
 const hubCorDef=a=>hubSge()?(HUB_SGE_DEF[a.id]||'sgeAzul'):a.c;
 const hubCor=(a,o)=>{const c=((o||hubCfg().ic[a.id]||{}).c)||hubCorDef(a);if(HUB_CORES[c])return HUB_CORES[c];if(/^#[0-9a-f]{6}$/i.test(c))return[c,'color-mix(in srgb,'+c+' 62%,#000)'];return HUB_CORES[a.c]};
