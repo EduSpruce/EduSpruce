@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.141
+- SpruceNote e JornalNote: pesquisa em todos os quadros (Ctrl+F)
+- SpruceNote e JornalNote: modelos de quadro (plano de aula, projeto, visita de estudo, reunião, brainstorm, pesquisa, semana, edição do jornal)
+- SpruceNote e JornalNote: setas com etiqueta, tracejado, pontas, cor, curva e inverter sentido; setas passam a poder ser selecionadas e apagadas
+- SpruceNote e JornalNote: largar elementos em cima de um quadro move-os para lá; copiar, cortar e colar elementos; enviar para trás; copiar o quadro como texto
+
 ## 1.140
 - SpruceNote e JornalNote: o quadro de exemplo passa a usar o tipo de letra da app
 

@@ -158,3 +158,8 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Apps: com menos de `HUB_MIN` (7) apps à vista, `body.hub-poucas` esconde «Apps» no menu e a `.hub-mini`; `go('hub')` → início.
 - Licenças: `eduspruce_autorizados.modulos` (text[], null = todos; script 0020), lido por `eduspruce_meus_modulos()` → `MOD_PERM`; `modInc(id)` embrulha `HUB_APPS[].on`. Admin escolhe em «Módulos por Conta».
 - 1.112: `on('jnOn')` em recolha.js usava `window[f]` (as funções são const, não estão em window) → Jornal, Contactos, JornalNote e Coord. PROFIJ apareciam sempre.
+
+## SpruceNote e JornalNote — melhorias (1.141, `app/273-sprucenote-jornalnote-melhorias.{js,css}`)
+- Pesquisa em todos os quadros (`mqmPesquisa`, Ctrl+F no quadro), modelos (`MQM_MODELOS`/`mqmAplicar`), exportar em Markdown (`mqmExportar`/`mqmMd`), botões no topo (`#mqm-pq`, `#mqm-md`, `#mqm-tx`).
+- Setas: campos opcionais `et` (etiqueta), `tr` (tracejado), `pt` (`fim`|`ambas`|`nenhuma`), `cor`, `cv` (curva; omissão .12). A seta selecionada fica em `mqUI().selSeta` (o `mqRender` filtra `u.sel` só para elementos).
+- Largar elementos em cima de um cartão de quadro move-os para dentro (`mqmMover`); Ctrl+C/X/V de elementos (`_mqmClip`, só cola se a área de transferência ainda tiver o texto copiado).

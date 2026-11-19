@@ -1,0 +1,23 @@
+/* ===================== 1.141 · SpruceNote e JornalNote: melhorias ===================== */
+html body .mq-seta .pt{stroke:none}
+html body .mq-seta .mqm-et rect{fill:var(--card,#fff);stroke:var(--line,#d5dbe0);stroke-width:1}
+html body .mq-seta .mqm-et text{font:12px/1 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;fill:var(--ink,#333);pointer-events:none}
+html body .mq-seta .mqm-et{pointer-events:all;cursor:pointer}
+html body .mq-it.mqm-alvo{outline:3px dashed var(--acc,#1b93c6)!important;outline-offset:4px;transform:scale(1.05);transition:transform .12s}
+html body .mq-it.mqm-hit{animation:mqmHit 1.5s}
+@keyframes mqmHit{0%,60%{outline:3px solid #f39200;outline-offset:4px}}
+html body .mq-ctx .btn.on{background:var(--acc,#1b93c6);color:#fff}
+html body .mqm-tras{font-size:11px;margin-left:1px}
+html body .mqm-q{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--line,#d5dbe0);background:var(--bg,#fff);color:inherit}
+html body .mqm-r{margin-top:10px;display:flex;flex-direction:column}
+html body .mqm-res{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line,#e5e7eb);padding:9px 6px;color:inherit;cursor:pointer;font:inherit}
+html body .mqm-res:hover,html body .mqm-res:focus-visible{background:var(--accL,#e8f4fa)}
+html body .mqm-res small{display:block;color:var(--mut,#5f6b76);margin-top:2px}
+html body .mqm-res mark{background:#fde68a;color:inherit}
+html body .mqm-mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:8px}
+html body .mqm-mod{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px;border:1px solid var(--line,#d5dbe0);background:var(--card,#fff);color:inherit;cursor:pointer;font:inherit}
+html body .mqm-mod:hover{border-color:var(--acc,#1b93c6)}
+html body .mqm-mod svg{color:var(--acc,#1b93c6)}
+html body .mqm-mod small{color:var(--mut,#5f6b76);line-height:1.35}
+html body .mqm-md{width:100%;min-height:320px;font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:1px solid var(--line,#d5dbe0);background:var(--bg,#fff);color:inherit}
+@media (max-width:900px){html body .mq-top .mqm-l{display:none}}
