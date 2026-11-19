@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.152
+- Pulso: boas-vindas animadas na primeira entrada, com a grelha de respostas em direto, e botão «Ver exemplo» para voltar a vê-las
+
 ## 1.151
 - Logótipo do eduspruce.app à escolha em Definições › Aparência (é o «Automático» no tema Spruce)
 - Tema Spruce: o selecionado vê-se sempre em seletores, separadores e chips (pastilha azul-marinho)

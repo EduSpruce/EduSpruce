@@ -3,6 +3,7 @@
    · Spruce It, Formulários e Provas: boas-vindas animadas na primeira vez + botão «Ver exemplo» (app/275-boas-vindas-modulos.js) */
 {const _go=go;go=function(){bvDesligar();return _go.apply(this,arguments)}}
 {const _a=vArena;vArena=function(){const r=_a.apply(this,arguments);if($('#view .arhead'))bvLigar('spruceit');else bvDesligar();return r}}
+{const _pu=vPulso;vPulso=function(){const r=_pu.apply(this,arguments);if(!UI.puEd&&!UI.puVivo&&!UI.puRel)bvLigar('pulso');else bvDesligar();return r}}
 {const _p=vProvas;vProvas=function(){const r=_p.apply(this,arguments);if(!UI.pvEd)bvLigar('provas');else bvDesligar();return r}}
 
 /* ---------- Formulários: início novo ---------- */

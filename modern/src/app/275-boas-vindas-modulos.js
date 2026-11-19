@@ -35,6 +35,20 @@ const BVM={
        <div class="bv-pvc bv-pvq" style="--d:.8s"><h5>Por questão</h5>${[['Q1 · Escolha múltipla',92],['Q2 · Verdadeiro/Falso',85],['Q4 · Ordenar acontecimentos',71],['Q7 · Legenda do mapa',58],['Q9 · Associação',63],['Q11 · Resposta curta',44]].map((q,i)=>`<div class="bv-q" style="--w:${q[1]}%;--d:${2.3+i*.12}s"><span>${q[0]}</span><div><i></i></div><em>${q[1]}%</em></div>`).join('')}</div>
        <div class="bv-pvc bv-pva" style="--d:1.1s"><h5>Alunos</h5>${[['Afonso',17],['Beatriz',15],['Carolina',12],['Diogo',9]].map((a,i)=>`<div class="bv-al" style="--d:${2.6+i*.12}s"><span>${a[0][0]}</span><b>${a[0]}</b><em class="${a[1]<10?'neg':''}">${a[1]}</em></div>`).join('')}<div class="bv-pexp">${ic('download',13)} Enviar para a avaliação</div></div></div></div></div>`}
 };
+
+BVM.pulso={nome:'Pulso',ic:'chart',tit:'Veja em direto o que a turma já aprendeu.',sub:'Perguntas rápidas com correção automática e uma grelha que se preenche à medida que os alunos respondem — para intervir no momento certo.',
+  pe:'Lance uma sala, os alunos entram com o código e as respostas aparecem em direto · sempre formativo, só conta se o professor quiser.',
+  maq:()=>{const Q=[['A','B'],['Clorofila','Folhas','Cloroplasto','Pigmento'],['B','A'],['V','F'],['53','170']];
+   const AL=[['Afonso Lima',[1,1,1,1,1]],['Beatriz Sousa',[0,0,1,0,null]],['Carlos Pires',[1,0,0,1,1]],['Diana Rocha',[0,0,1,0,0]],['Eva Martins',[0,1,1,0,null]],['Filipe Costa',[0,null,1,0,null]]];
+   const cel=(q,ok,r)=>ok===null?'<td class="vz"></td>':`<td class="${ok?'ok':'no'}"><span>${ok?'✓':'✗'} ${ok?Q[q][0]:Q[q][1+((q+r)%(Q[q].length-1))]}</span></td>`;
+   const pct=r=>Math.round(r.filter(x=>x===1).length/5*100);
+   const tot=q=>Math.round(AL.filter(a=>a[1][q]===1).length/AL.length*100);
+   let d=.5;return`<div class="bv-pu2"><div class="bv-puc"><div class="bv-puh"><b>Quiz de Ciências Naturais <i>i</i></b><span class="bv-sp"></span><span class="bv-pub l"><em>❚❚</em> Pausar</span><span class="bv-pub l">${ic('check',14)} Terminar</span><span class="bv-pub">${ic('users',14)} Convidar alunos</span></div>
+   <div class="bv-putg">${['Mostrar nomes','Mostrar respostas','Mostrar resultados'].map((t,i)=>`<span style="--d:${.2+i*.1}s"><i></i>${t}</span>`).join('')}</div>
+   <table class="bv-put"><thead><tr><th class="n">NOME ↓</th><th class="s">PONTOS ⌄</th>${[1,2,3,4,5].map((n,i)=>`<th style="--c:${['#f5b942','#f2683c','#f5b942','#4f5fa8','#f2683c'][i]}">${n}</th>`).join('')}</tr></thead>
+   <tbody>${AL.map((a,r)=>`<tr style="--d:${.3+r*.08}s"><td class="n"><i></i>${a[0]}</td><td class="s">${pct(a[1])}%</td>${a[1].map((ok,q)=>{const c=cel(q,ok,r);d+=.09;return c.replace('<td ',`<td style="--e:${(1+q*.55+r*.12).toFixed(2)}s" `)}).join('')}</tr>`).join('')}
+   <tr class="tot"><td class="n">${AL.length} &nbsp;Total da turma</td><td class="s"></td>${[0,1,2,3,4].map(q=>`<td style="--e:${(4.4+q*.1).toFixed(2)}s"><span>${tot(q)}%</span></td>`).join('')}</tr></tbody></table></div>
+   <div class="bv-puexp" style="--d:3.2s"><b>${ic('check',14)} Correto!</b><small>Pergunta</small><p>A clorofila dá a cor verde às plantas.</p><small>Explicação</small><p>A clorofila absorve a luz para a fotossíntese.</p></div></div>`}};
 function bvAbrir(k){const d=BVM[k];if(!d||$('#mqdemo'))return;
   const o=document.createElement('div');o.id='mqdemo';o.className='bv bv-'+k;o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label',d.nome+' — exemplo');
   o.innerHTML=`<div class="mqd-pn"><button type="button" class="mqd-x" aria-label="Fechar">✕</button>
