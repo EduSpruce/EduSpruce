@@ -188,3 +188,100 @@ arDesenhar=function(){const r=_arsDes.apply(this,arguments);try{arsFeed()}catch(
 #arhost .arhtot span{display:block;font-size:12px;opacity:.8;text-transform:uppercase;letter-spacing:.05em}#arhost .arhtot b{display:block;font-size:26px;font-weight:800;line-height:1.15}#arhost .arhtot small{font-size:12px;opacity:.8}
 #arhost .arhtot .arhlid{grid-column:1/-1;display:flex;align-items:center;gap:10px}#arhost .arhtot .arhlid b{font-size:18px}
 `;document.head.appendChild(st)})();
+
+/* ===================== 1.143 · Spruce It: apresentação animada «Como funciona» =====================
+   Feita de raiz (personagens Pinhas e desenhos próprios). Aparece no espaço livre à direita da página quando cabe
+   (ecrãs largos) e abre-se em janela pelo botão «Como funciona» no topo do Spruce It. 5 cenas em ciclo:
+   criar o conjunto → lançar (código e alunos a entrar) → jogo ao vivo → pódio → relatório. */
+const ARS_CENAS=[
+  ['Crie um conjunto','Escreva as perguntas ou importe-as de um Excel. Cada pergunta tem até quatro opções.'],
+  ['Lance o jogo','Escolha o modo. Os alunos entram em eduspruce.pt/spruceit com o código da sala.'],
+  ['Jogam ao vivo','A classificação mexe-se a cada resposta e o painel «Ao vivo» conta o que acontece.'],
+  ['Pódio no fim','Os três primeiros sobem ao pódio. Nunca conta para a nota.'],
+  ['Veja o relatório','Acerto por pergunta e por aluno: sabe logo o que tem de rever.']];
+function arsAv(k,sz){try{const P=AR.PINHAS||[];const B=P.filter(p=>p&&p.bicho);const L=B.length>=5?B:P;const p=L[(k*3+1)%L.length]||P[0];return AR.svg(p.id||p[0],sz)}catch(_){return ''}}
+function arsCena(i){const L=['Ana','Rui','Leo','Mia','Tó'];
+  if(i===0)return `<div class="arsx-ed"><div class="arsx-q"><span>1</span><i style="width:70%"></i></div><div class="arsx-ops">${['#127fa6','#d98a1f','#16a34a','#c2410c'].map((c,k)=>`<div style="--c:${c};--d:${.25+k*.22}s"><b>${['▲','◆','●','■'][k]}</b><i style="width:${[60,45,70,52][k]}%"></i>${k===2?'<u>✓</u>':''}</div>`).join('')}</div><div class="arsx-q s" style="--d:1.3s"><span>2</span><i style="width:55%"></i></div><div class="arsx-q s" style="--d:1.6s"><span>3</span><i style="width:62%"></i></div></div>`;
+  if(i===1)return `<div class="arsx-lob"><div class="arsx-cod"><small>Código da sala</small><b>482 107</b><span>eduspruce.pt/spruceit</span></div><div class="arsx-avs">${L.map((n,k)=>`<div style="--d:${.3+k*.35}s">${arsAv(k,46)}<span>${n}</span></div>`).join('')}</div><div class="arsx-n"><b class="arsx-cnt"></b> jogadores</div></div>`;
+  if(i===2){const pts=[[320,1],[282,0],[208,2],[130,3],[96,4]];return `<div class="arsx-live"><div class="arsx-lb">${pts.map(([p,k],r)=>`<div style="--o:${r};--w:${Math.round(p/3.3)}%">${arsAv(k,30)}<span>${L[k]}</span><i></i><b>${p}</b></div>`).join('')}</div><div class="arsx-feed"><small><em></em> Ao vivo</small><p style="--d:.6s"><b>Mia</b> ganhou 40 pts</p><p style="--d:1.4s"><b>Rui</b> ficou com 25 pts da <b>Ana</b></p><p style="--d:2.2s"><b>Leo</b> duplicou!</p></div></div>`}
+  if(i===3)return `<div class="arsx-pod">${[[1,1,'282'],[0,0,'320'],[2,2,'208']].map(([k,pos,p],c)=>`<div class="p${pos+1}" style="--d:${[.5,.2,.8][c]}s"><span class="arsx-pa">${arsAv(k,pos===0?62:50)}</span><b>${L[k]}</b><div><em>${pos+1}.º</em><small>${p} pts</small></div></div>`).join('')}${Array.from({length:18},(_,k)=>`<i class="arsx-cf" style="--x:${(k*37)%100}%;--d:${(k%6)*.18}s;--c:${['#127fa6','#d98a1f','#16a34a','#c2410c','#7c5cc4'][k%5]}"></i>`).join('')}</div>`;
+  return `<div class="arsx-rel"><div class="arsx-rh"><b>Relatório</b><span>5 jogadores · acerto 73%</span></div>${[92,81,42,77,68].map((v,k)=>`<div class="arsx-rq ${v<50?'mau':''}" style="--d:${.2+k*.18}s"><span>P${k+1}</span><i><u style="--v:${v}%;background:${v<50?'#dc2626':v<70?'#d97706':'#16a34a'}"></u></i><b>${v}%</b></div>`).join('')}<p class="arsx-dica">⚠ A pergunta 3 precisa de ser revista</p></div>`}
+function arsApresHTML(fechar){return `<div class="arsx" role="region" aria-label="Como funciona o Spruce It"><div class="arsx-top"><b>Como funciona o Spruce It</b>${fechar?`<button type="button" class="arsx-x" data-arsx-x title="Esconder" aria-label="Esconder">✕</button>`:''}</div>
+  <div class="arsx-ecra"><div class="arsx-bar"><i></i><i></i><i></i><span>Spruce It</span></div><div class="arsx-palco"></div></div>
+  <div class="arsx-leg"><span class="arsx-num"></span><div><b class="arsx-t"></b><p class="arsx-d"></p></div></div>
+  <div class="arsx-nav">${ARS_CENAS.map((c,k)=>`<button type="button" data-arsx="${k}" aria-label="${k+1}. ${esc(c[0])}"><i></i></button>`).join('')}<span class="sp1"></span><button type="button" class="arsx-pp" data-arsx-pp aria-label="Pausar">❚❚</button></div></div>`}
+function arsApresLigar(el){let i=0,pausa=false,t=null;const reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mostra=k=>{i=(k+ARS_CENAS.length)%ARS_CENAS.length;const p=el.querySelector('.arsx-palco');p.innerHTML=arsCena(i);p.className='arsx-palco c'+i;
+    el.querySelector('.arsx-num').textContent=i+1;el.querySelector('.arsx-t').textContent=ARS_CENAS[i][0];el.querySelector('.arsx-d').textContent=ARS_CENAS[i][1];
+    el.querySelectorAll('[data-arsx]').forEach((b,n)=>b.setAttribute('aria-current',n===i?'true':'false'));
+    const cnt=el.querySelector('.arsx-cnt');if(cnt){let n=0;const f=()=>{if(!cnt.isConnected||n>=5)return;n++;cnt.textContent=n;setTimeout(f,350)};setTimeout(f,300)}};
+  const ciclo=()=>{clearTimeout(t);if(!el.isConnected)return;t=setTimeout(()=>{if(!el.isConnected)return;if(!pausa)mostra(i+1);ciclo()},5200)};
+  el.querySelectorAll('[data-arsx]').forEach(b=>b.onclick=()=>{mostra(+b.dataset.arsx);ciclo()});
+  const pp=el.querySelector('[data-arsx-pp]');pp.onclick=()=>{pausa=!pausa;pp.textContent=pausa?'▶':'❚❚';pp.setAttribute('aria-label',pausa?'Continuar':'Pausar')};
+  el.addEventListener('mouseenter',()=>{pausa=true});el.addEventListener('mouseleave',()=>{pausa=pp.textContent==='▶'});
+  if(reduz){pausa=true;pp.textContent='▶'}mostra(0);ciclo()}
+/* no espaço livre à direita, quando cabe */
+function arsApresPos(){const v=$('#view .arv.spv');let ap=document.getElementById('ars-apres');const host=$('#view');
+  if(!v||!host||S.cfg.arsApresOff||UI.arEd||(UI.arTab||'conj')!=='conj'||VIEW!=='arena'){if(ap)ap.remove();return}
+  const r=v.getBoundingClientRect(),hr=host.getBoundingClientRect();const livre=window.innerWidth-r.right-40;
+  if(livre<360){if(ap)ap.remove();return}
+  if(!ap){ap=document.createElement('div');ap.id='ars-apres';ap.innerHTML=arsApresHTML(true);host.appendChild(ap);arsApresLigar(ap);
+    ap.querySelector('[data-arsx-x]').onclick=()=>{S.cfg.arsApresOff=true;save();ap.remove();toast('Pode voltar a ver em «Como funciona», no topo do Spruce It','ok')}}
+  if(getComputedStyle(host).position==='static')host.style.position='relative';
+  const w=Math.min(520,livre-8);ap.style.width=w+'px';ap.style.left=Math.round(r.right-hr.left+24+Math.max(0,(livre-8-w)/2-12))+'px';ap.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}
+function arsApresJanela(){const d=document.createElement('dialog');d.className='arsx-dlg';d.innerHTML=arsApresHTML(false)+`<div class="arsx-dlgb"><button class="btn" data-f>Fechar</button>${S.cfg.arsApresOff?'<button class="btn pri" data-mostra>Mostrar ao lado nos ecrãs largos</button>':''}</div>`;
+  document.body.appendChild(d);d.showModal();arsApresLigar(d.querySelector('.arsx'));const fe=()=>{d.close();d.remove()};d.querySelector('[data-f]').onclick=fe;d.addEventListener('cancel',e=>{e.preventDefault();fe()});d.addEventListener('click',e=>{if(e.target===d)fe()});
+  const m=d.querySelector('[data-mostra]');if(m)m.onclick=()=>{S.cfg.arsApresOff=false;save();fe();arsApresPos()}}
+const _arsV2=vArena;
+vArena=function(){const r=_arsV2.apply(this,arguments);try{const h=$('#view .arhead');if(h&&!h.querySelector('.arsx-bt')){const inf=h.querySelector('.sph-info');const b=document.createElement('button');b.type='button';b.className='btn arsx-bt';b.innerHTML=ic('play',14)+' Como funciona';b.onclick=arsApresJanela;inf?inf.before(b):h.appendChild(b)}
+  requestAnimationFrame(arsApresPos)}catch(e){console.warn(e)}return r};
+try{if(go._f)go._f.arena=vArena}catch(_){}
+addEventListener('resize',()=>{clearTimeout(arsApresPos._t);arsApresPos._t=setTimeout(arsApresPos,150)});
+/* ao sair do Spruce It, a apresentação sai também */
+{const _g=go;go=function(){const r=_g.apply(this,arguments);try{requestAnimationFrame(arsApresPos)}catch(_){}return r};try{Object.assign(go,_g)}catch(_){}}
+
+(()=>{if(document.getElementById('arsx-css'))return;const st=document.createElement('style');st.id='arsx-css';st.textContent=`
+.spv .ars-ki svg{margin:0!important;display:block;flex:none}
+.spv .arsx-bt{margin-left:auto;margin-right:12px}
+#ars-apres{position:absolute;z-index:2;animation:arsxIn .5s ease-out}
+@keyframes arsxIn{from{opacity:0;transform:translateX(20px)}}
+.arsx{background:var(--panel,#fff);border:1px solid var(--line,#dfe5eb);padding:14px;color:var(--ink,#1f2937)}
+.arsx-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}.arsx-top b{font-size:15px}.arsx-x{margin-left:auto;border:0;background:none;color:var(--mut,#64748b);font-size:15px;cursor:pointer;padding:2px 6px}
+.arsx-ecra{border:1px solid var(--line,#dfe5eb);overflow:hidden;background:#0f2433}
+.arsx-bar{display:flex;align-items:center;gap:5px;padding:7px 10px;background:#173a4f;color:#cfe3ee;font:700 11px system-ui,sans-serif}.arsx-bar i{width:7px;height:7px;border-radius:50%;background:#2e5b74}.arsx-bar span{margin-left:8px}
+.arsx-palco{position:relative;aspect-ratio:16/10;color:#f1f5f9;font:13px/1.3 Figtree,system-ui,sans-serif;overflow:hidden;background:radial-gradient(500px 300px at 15% -10%,#1d5a7a 0,transparent 60%),radial-gradient(400px 300px at 110% 110%,#5a3a12 0,transparent 55%),#0f2433}
+.arsx-palco>*{position:absolute;inset:0;padding:16px}
+.arsx-palco [style*="--d"]{animation:arsxPop .5s var(--d) both cubic-bezier(.2,.8,.3,1.3)}
+@keyframes arsxPop{from{opacity:0;transform:translateY(12px) scale(.9)}}
+.arsx-ed{display:flex;flex-direction:column;gap:8px}
+.arsx-q{display:flex;align-items:center;gap:8px;background:#ffffff14;padding:8px}.arsx-q span{width:22px;height:22px;background:#127fa6;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex:none}.arsx-q i{height:9px;background:#ffffff55}.arsx-q.s{opacity:.85}
+.arsx-ops{display:grid;grid-template-columns:1fr 1fr;gap:6px}.arsx-ops div{position:relative;display:flex;align-items:center;gap:7px;padding:9px 8px;background:var(--c)}.arsx-ops b{font-size:12px}.arsx-ops i{height:7px;background:#ffffffaa}.arsx-ops u{position:absolute;right:6px;text-decoration:none;background:#fff;color:#16a34a;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;animation:arsxPop .4s 1.1s both}
+.arsx-lob{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.arsx-cod{background:#fff;color:#0f2433;padding:8px 16px;animation:arsxPop .5s .05s both}.arsx-cod small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#64748b}.arsx-cod b{display:block;font:900 28px/1.1 ui-monospace,Menlo,monospace;letter-spacing:.06em}.arsx-cod span{font-size:10.5px;color:#127fa6}
+.arsx-avs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.arsx-avs div{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px}
+.arsx-n{font-size:13px;opacity:.9}.arsx-n b{font-size:16px}
+.arsx-live{display:grid;grid-template-columns:1.25fr 1fr;gap:10px}
+.arsx-lb{display:flex;flex-direction:column;gap:6px}.arsx-lb div{display:grid;grid-template-columns:30px 40px 1fr 34px;align-items:center;gap:6px;background:#ffffff12;padding:3px 6px;animation:arsxSobe .7s calc(var(--o)*.15s) both}
+@keyframes arsxSobe{from{opacity:0;transform:translateY(calc(var(--o)*-10px + 30px))}}
+.arsx-lb span{font-size:11.5px;font-weight:700;overflow:hidden;white-space:nowrap}.arsx-lb i{height:8px;background:linear-gradient(90deg,#127fa6,#5bb7de);width:var(--w);animation:arsxBarra 1.6s .4s both}
+@keyframes arsxBarra{from{width:0}}.arsx-lb b{font-size:12px;text-align:right}
+.arsx-feed{background:#ffffff10;padding:8px;display:flex;flex-direction:column;gap:6px}.arsx-feed small{font-size:10px;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:5px}.arsx-feed em{width:7px;height:7px;border-radius:50%;background:#ef4444;animation:arsxPisca 1s infinite}
+@keyframes arsxPisca{50%{opacity:.3}}.arsx-feed p{margin:0;font-size:11px;padding:5px 6px;background:#ffffff12;border-left:3px solid #d98a1f}
+.arsx-pod{display:flex;align-items:flex-end;justify-content:center;gap:8px;padding-bottom:0!important}
+.arsx-pod>div{display:flex;flex-direction:column;align-items:center;width:28%}.arsx-pod>div>b{font-size:12px;margin:2px 0}
+.arsx-pod>div>div{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;animation:arsxPod .8s var(--d) both cubic-bezier(.2,.8,.3,1.1);transform-origin:bottom}
+@keyframes arsxPod{from{transform:scaleY(0)}}
+.arsx-pod .p1>div{height:46%;background:#127fa6}.arsx-pod .p2>div{height:34%;background:#d98a1f}.arsx-pod .p3>div{height:24%;background:#16a34a}.arsx-pod em{font-style:normal;font-weight:900;font-size:20px}.arsx-pod small{font-size:10px;opacity:.9}
+.arsx-pod .p1{height:100%;justify-content:flex-end}.arsx-pod .p2,.arsx-pod .p3{height:100%;justify-content:flex-end}
+.arsx-cf{position:absolute!important;inset:auto!important;left:var(--x);top:-8px;width:7px;height:11px;padding:0!important;background:var(--c);animation:arsxCai 2.4s calc(1s + var(--d)) infinite linear!important}
+@keyframes arsxCai{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(260px) rotate(540deg);opacity:0}}
+.arsx-rel{display:flex;flex-direction:column;gap:6px}.arsx-rh{display:flex;justify-content:space-between;align-items:baseline}.arsx-rh b{font-size:15px}.arsx-rh span{font-size:11px;opacity:.85}
+.arsx-rq{display:grid;grid-template-columns:28px 1fr 38px;align-items:center;gap:8px;font-size:12px}.arsx-rq i{height:12px;background:#ffffff18}.arsx-rq u{display:block;height:100%;width:var(--v);animation:arsxBarra 1.2s var(--d) both}
+.arsx-rq.mau{background:#dc262622;outline:1px solid #dc262666}.arsx-dica{margin:4px 0 0;font-size:11.5px;color:#fecaca;animation:arsxPop .5s 1.4s both}
+.arsx-leg{display:flex;gap:10px;align-items:flex-start;margin-top:12px;min-height:58px}.arsx-num{width:28px;height:28px;flex:none;background:var(--acc,#127fa6);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.arsx-leg b{display:block;font-size:15px}.arsx-leg p{margin:2px 0 0;font-size:13px;color:var(--mut,#5f6b76);line-height:1.4}
+.arsx-nav{display:flex;align-items:center;gap:6px;margin-top:8px}.arsx-nav [data-arsx]{border:0;background:none;padding:6px 2px;cursor:pointer}.arsx-nav [data-arsx] i{display:block;width:22px;height:4px;background:var(--line,#dfe5eb)}.arsx-nav [aria-current=true] i{background:var(--acc,#127fa6)}
+.arsx-pp{border:1px solid var(--line,#dfe5eb);background:none;color:inherit;font-size:11px;padding:3px 8px;cursor:pointer}
+.arsx-dlg{border:0;padding:0;width:min(560px,94vw);background:transparent}.arsx-dlg::backdrop{background:rgba(15,23,42,.55)}.arsx-dlgb{display:flex;gap:8px;justify-content:flex-end;background:var(--panel,#fff);padding:0 14px 14px;border:1px solid var(--line,#dfe5eb);border-top:0}
+@media (prefers-reduced-motion:reduce){.arsx *{animation:none!important}}
+`;document.head.appendChild(st)})();

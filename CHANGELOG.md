@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.143
+- Spruce It: apresentação animada «Como funciona» (criar, lançar, jogar ao vivo, pódio e relatório) no espaço livre à direita nos ecrãs largos e no botão «Como funciona»
+- Spruce It: ícones dos indicadores centrados
+
 ## 1.142
 - Spruce It: página inicial nova com indicadores (conjuntos, perguntas, jogos, participações, acerto médio e último jogo)
 - Spruce It: conjuntos em grelha com capa (imagem do conjunto ou iniciais) ou em lista, ordenar, favoritos e pastas
