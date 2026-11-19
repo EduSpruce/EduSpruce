@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.154
+- Pulso: ícone laranja (como na demonstração)
+- Pulso: o quiz de exemplo deixa de aparecer em duplicado
+- Botão ⋯ dos cartões do Pulso, Spruce It e Formulários volta a mostrar os três pontos
+
 ## 1.153
 - Tema Spruce: gradiente de fundo mais pronunciado (laranja no canto de cima, azul no de baixo)
 - Ecrã do código: o 0 fica centrado na tecla

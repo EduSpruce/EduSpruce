@@ -3,7 +3,13 @@
    · Spruce It, Formulários e Provas: boas-vindas animadas na primeira vez + botão «Ver exemplo» (app/275-boas-vindas-modulos.js) */
 {const _go=go;go=function(){bvDesligar();return _go.apply(this,arguments)}}
 {const _a=vArena;vArena=function(){const r=_a.apply(this,arguments);if($('#view .arhead'))bvLigar('spruceit');else bvDesligar();return r}}
-{const _pu=vPulso;vPulso=function(){const r=_pu.apply(this,arguments);if(!UI.puEd&&!UI.puVivo&&!UI.puRel)bvLigar('pulso');else bvDesligar();return r}}
+/* exemplo do Pulso: nunca duplicar (cópias idênticas, nunca editadas nem usadas, saem; o resto fica) */
+function puSemDupExemplo(){try{const d=puD();const ex=d.quiz.filter(q=>q.pasta==='Exemplos'&&/^Exemplo · /.test(q.nome||''));if(ex.length)S.cfg.pulsoEx=1;if(ex.length<2)return;
+  const sig=q=>JSON.stringify([q.nome,q.disc,(q.perg||[]).map(p=>[p.tp,p.t,p.o,p.c])]);const txt=JSON.stringify(d);const vistos=new Set();let tirou=0;
+  d.quiz=d.quiz.filter(q=>{if(!ex.includes(q))return true;const k=sig(q);if(!vistos.has(k)){vistos.add(k);return true}
+    const usado=txt.split(q.id).length-1>1,editado=(q.mod||0)-(q.criado||0)>1000;if(usado||editado)return true;tirou++;return false});
+  if(tirou)save()}catch(e){console.warn('puSemDupExemplo',e)}}
+{const _pu=vPulso;vPulso=function(){puSemDupExemplo();const r=_pu.apply(this,arguments);if(!UI.puEd&&!UI.puVivo&&!UI.puRel)bvLigar('pulso');else bvDesligar();return r}}
 {const _p=vProvas;vProvas=function(){const r=_p.apply(this,arguments);if(!UI.pvEd)bvLigar('provas');else bvDesligar();return r}}
 
 /* ---------- Formulários: início novo ---------- */
