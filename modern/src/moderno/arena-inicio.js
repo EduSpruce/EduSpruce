@@ -245,8 +245,8 @@ addEventListener('resize',()=>{clearTimeout(arsApresPos._t);arsApresPos._t=setTi
 .spv .ars-ki svg{margin:0!important;display:block;flex:none}
 /* 1.145 · cores do Spruce It (roxo e amarelo, iguais à apresentação e ao jogo) */
 html body .arv.spv{--acc:#6d28d9}
-html body .spv .btn.pri,html body.est-sge.est-sge.est-sge .spv .btn.pri{background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
-html body .spv .btn.pri:hover,html body.est-sge.est-sge.est-sge .spv .btn.pri:hover{background:#5b21b6!important;border-color:#5b21b6!important}
+html body .spv .btn.pri,html body.est-sge.est-sge.est-sge.est-sge #view .spv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
+html body .spv .btn.pri:hover,html body.est-sge.est-sge.est-sge.est-sge #view .spv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e):hover{background:#5b21b6!important;border-color:#5b21b6!important}
 html body .spv .sph-tabs button[aria-current=page],html body.est-sge.est-sge.est-sge .spv .sph-tabs button[aria-current=page]{background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
 html body .spv .sph-logo em,html body.est-sge.est-sge.est-sge .spv .sph-logo em{background:#facc15!important;color:#3b0764!important}
 html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis button[aria-pressed=true]{background:#6d28d9!important;border-color:#6d28d9!important}

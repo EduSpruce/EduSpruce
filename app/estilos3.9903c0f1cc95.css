@@ -1405,3 +1405,33 @@ html body.est-sge :is(.fmc-b,.fmc-m,.fmc-c,.fmc-ls,.fmc-vz,.fmc-filt,.fmc-g span
 .bv-pod .bv-bi{width:44px;height:44px}
 .bv-pod b{display:grid;place-items:center;width:100%;border-radius:8px 8px 0 0;color:#fff;font-size:20px;font-weight:900;transform-origin:bottom;animation:bvAlto .8s calc(var(--d) + .1s) cubic-bezier(.2,.8,.3,1.3) both}
 .bv-pod>div:nth-child(1) b{height:70px;background:#94a3b8}.bv-pod>div:nth-child(2) b{height:100px;background:#facc15;color:#713f12}.bv-pod>div:nth-child(3) b{height:50px;background:#fb923c}
+/* ===================== 1.145 · Provas: aparência igual à apresentação (azul-noite e verde) ===================== */
+html body .pv{--acc:#16a34a}
+html body .pv .pvnav,html body.est-sge.est-sge.est-sge .pv .pvnav{background:#0f172a!important;border-color:#0f172a!important}
+html body .pv .pvnav button,html body.est-sge.est-sge.est-sge .pv .pvnav button{color:#cbd5e1!important}
+html body .pv .pvnav button svg{color:#94a3b8!important}
+html body .pv .pvnav button:hover{background:#ffffff14!important}
+html body .pv .pvnav button.on,html body.est-sge.est-sge.est-sge .pv .pvnav button.on{background:#22c55e!important;color:#fff!important}
+html body .pv .pvnav button.on svg{color:#fff!important}
+html body .pv .pvbrand{color:#fff!important}html body .pv .pvbrand i{background:#22c55e!important;color:#fff!important}
+html body .pv .btn.pri,html body.est-sge.est-sge.est-sge .pv .btn.pri{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+html body .pv .btn.pri:hover,html body.est-sge.est-sge.est-sge .pv .btn.pri:hover{background:#16a34a!important;border-color:#16a34a!important}
+/* arrumação da página inicial: tudo azul-noite e verde, sem laranja; cartões da direita sem espaço vazio */
+html body .pv .pvico.o{background:color-mix(in srgb,#0f172a 10%,transparent)!important;color:#0f172a!important}
+html body .pv .pvnew .btn,html body.est-sge.est-sge.est-sge .pv .pvnew .btn,html body.est-sge.est-sge.est-sge.est-sge #view .pv .pvnew .btn{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+html body .pv .pvhero h2 em{color:#16a34a!important}
+html body #view .pvgrid2{align-items:stretch!important}
+html body #view .pvgrid2>div{display:flex;flex-direction:column;gap:16px}html body #view .pvgrid2>div>.pvcard:last-child{flex:1;display:flex;flex-direction:column}html body #view .pvgrid2>div>.pvcard:last-child .pvstat3{flex:1;align-content:center;align-items:center}
+html body .pv .pvgrid2>div>.pvcard{margin:0}
+html body .pv .pvstat3{margin-top:6px}
+html body .pv .pvrec small svg{flex:none}
+html body .pv .pvilu-img{background:color-mix(in srgb,#22c55e 7%,transparent)!important}
+/* botão «Ver exemplo» com a cor de cada app */
+html body[data-eaapp="provas"] #bv-ver{background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+html body[data-eaapp="arena"] #bv-ver{background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
+html body[data-eaapp="forms"] #bv-ver{background:#0e7490!important;border-color:#0e7490!important;color:#fff!important}
+
+html body #view form.pvnew button.btn,html body.est-sge.est-sge.est-sge.est-sge #view form.pvnew button.btn:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#22c55e!important;border-color:#22c55e!important;color:#fff!important}
+
+html body.est-sge.est-sge.est-sge.est-sge #view .pv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#22c55e!important;border-color:#16a34a!important;color:#fff!important}
+html body.est-sge.est-sge.est-sge.est-sge #view .pv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e):hover{background:#16a34a!important}

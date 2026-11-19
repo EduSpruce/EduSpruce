@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.146
+- Provas: página inicial arrumada só em azul-noite e verde (logótipo, botão de criar, ícones e ilustrações) e cartões da direita sem espaço vazio
+- Apps: o Spruce It passa a roxo e o Provas a verde no tema SGE, iguais às apresentações
+- «Ver exemplo» com a cor de cada app
+
 ## 1.145
 - Spruce It: o jogo passa a ter a aparência da apresentação (roxo e amarelo, tema «Recreio» por omissão)
 - Spruce It: personagens Cubos (as da apresentação) como personagens comuns e escolhidas por omissão; a apresentação «Como funciona» usa os mesmos Cubos e cores
