@@ -49,6 +49,7 @@ dados/004-manifesto.html
 266-inicio-ecras-pequenos.css
 268-cronograma-profij.css
 270-sprucenote-demo-inicial.css
+272-pin-teclado-compacto-animado.css
 040-corpo.html
 dados/041-hash-wasm.html
 042-corpo-2.html
@@ -266,5 +267,6 @@ dados/199-logotipos-novos.js
 265-inicio-ecras-pequenos.js
 267-cronograma-profij.js
 269-sprucenote-demo-inicial.js
+271-pin-teclado-compacto-animado.js
 245-fim-do-programa.js
 246-fecho.html

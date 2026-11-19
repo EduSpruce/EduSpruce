@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.139
+- Ecrã do código: cartão mais compacto e teclado novo, com letras, onda ao tocar e animações de entrada, erro e sucesso
+
 ## 1.138
 - SpruceNote e JornalNote: quadro de exemplo animado na primeira entrada, com «Começar a criar» e «Criar quadro de exemplo»
 - Botão «Ver exemplo» no canto inferior direito do quadro para voltar a ver a demonstração
