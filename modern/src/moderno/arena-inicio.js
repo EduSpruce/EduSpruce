@@ -229,7 +229,7 @@ function arsApresPos(){const v=$('#view .arv.spv');let ap=document.getElementByI
   if(!ap){ap=document.createElement('div');ap.id='ars-apres';ap.innerHTML=arsApresHTML(true);host.appendChild(ap);arsApresLigar(ap);
     ap.querySelector('[data-arsx-x]').onclick=()=>{S.cfg.arsApresOff=true;save();ap.remove();toast('Pode voltar a ver em «Como funciona», no topo do Spruce It','ok')}}
   if(getComputedStyle(host).position==='static')host.style.position='relative';
-  const w=Math.min(520,livre-8);ap.style.width=w+'px';ap.style.left=Math.round(r.right-hr.left+24+Math.max(0,(livre-8-w)/2-12))+'px';ap.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}
+  const w=Math.min(400,livre-8);ap.style.width=w+'px';ap.style.left=Math.round(r.right-hr.left+24+Math.max(0,(livre-8-w)/2-12))+'px';ap.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}
 function arsApresJanela(){const d=document.createElement('dialog');d.className='arsx-dlg';d.innerHTML=arsApresHTML(false)+`<div class="arsx-dlgb"><button class="btn" data-f>Fechar</button>${S.cfg.arsApresOff?'<button class="btn pri" data-mostra>Mostrar ao lado nos ecrãs largos</button>':''}</div>`;
   document.body.appendChild(d);d.showModal();arsApresLigar(d.querySelector('.arsx'));const fe=()=>{d.close();d.remove()};d.querySelector('[data-f]').onclick=fe;d.addEventListener('cancel',e=>{e.preventDefault();fe()});d.addEventListener('click',e=>{if(e.target===d)fe()});
   const m=d.querySelector('[data-mostra]');if(m)m.onclick=()=>{S.cfg.arsApresOff=false;save();fe();arsApresPos()}}
@@ -248,7 +248,7 @@ html body .arv.spv{--acc:#6d28d9}
 html body .spv .btn.pri,html body.est-sge.est-sge.est-sge.est-sge #view .spv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
 html body .spv .btn.pri:hover,html body.est-sge.est-sge.est-sge.est-sge #view .spv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e):hover{background:#5b21b6!important;border-color:#5b21b6!important}
 html body .spv .sph-tabs button[aria-current=page],html body.est-sge.est-sge.est-sge .spv .sph-tabs button[aria-current=page]{background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
-html body .spv .sph-logo em,html body.est-sge.est-sge.est-sge .spv .sph-logo em{background:#facc15!important;color:#3b0764!important}
+
 html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis button[aria-pressed=true]{background:#6d28d9!important;border-color:#6d28d9!important}
 .spv .arsx-bt{margin-left:auto;margin-right:12px}
 #ars-apres{position:absolute;z-index:2;animation:arsxIn .5s ease-out}
@@ -293,3 +293,14 @@ html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis but
 .arsx-dlg{border:0;padding:0;width:min(560px,94vw);background:transparent}.arsx-dlg::backdrop{background:rgba(15,23,42,.55)}.arsx-dlgb{display:flex;gap:8px;justify-content:flex-end;background:var(--panel,#fff);padding:0 14px 14px;border:1px solid var(--line,#dfe5eb);border-top:0}
 @media (prefers-reduced-motion:reduce){.arsx *{animation:none!important}}
 `;document.head.appendChild(st)})();
+/* 1.151 · no espaço livre à esquerda (ecrãs largos): os modos de jogo, para equilibrar com «Como funciona» à direita */
+{const _ap=arsApresPos;arsApresPos=function(){const r0=_ap.apply(this,arguments);try{
+  const v=$('#view .arv.spv'),host=$('#view');let es=document.getElementById('ars-esq');
+  if(!v||!host||UI.arEd||(UI.arTab||'conj')!=='conj'||VIEW!=='arena'){if(es)es.remove();return r0}
+  const r=v.getBoundingClientRect(),hr=host.getBoundingClientRect();const livre=r.left-hr.left-40;
+  if(livre<300){if(es)es.remove();return r0}
+  if(!es){es=document.createElement('aside');es.id='ars-esq';es.setAttribute('aria-label','Modos de jogo');
+    const M=Object.entries(AR.MODOS||{});
+    es.innerHTML=`<div class="arse"><div class="arse-top"><b>Modos de jogo</b><small>${M.length} modos · escolhe-se ao lançar</small></div><ul>${M.map(([k,m])=>`<li><span class="arse-ic" style="--c:${m.cor||'#6d28d9'}">${m.ic||'★'}</span><div><b>${esc(m.nome)}</b><small>${esc(String(m.desc||'').split('. ')[0].replace(/\.$/,''))}</small></div></li>`).join('')}</ul><p class="arse-pe">Nunca conta para a nota.</p></div>`;host.appendChild(es)}
+  if(getComputedStyle(host).position==='static')host.style.position='relative';
+  const w=Math.min(340,livre-8);es.style.width=w+'px';es.style.left=Math.round(r.left-hr.left-24-w-Math.max(0,(livre-8-w)/2-12))+'px';es.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}catch(e){console.warn(e)}return r0}}

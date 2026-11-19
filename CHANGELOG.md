@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.151
+- Logótipo do eduspruce.app à escolha em Definições › Aparência (é o «Automático» no tema Spruce)
+- Tema Spruce: o selecionado vê-se sempre em seletores, separadores e chips (pastilha azul-marinho)
+- Spruce It: novo logótipo, «Como funciona» mais estreito, modos de jogo no espaço livre à esquerda e ícones dos indicadores ao centro
+- Início das apps: título branco no tema Spruce
+
 ## 1.150
 - Novidades: na primeira entrada depois de uma atualização aparece uma janela com tudo o que mudou desde a última vez
 - Definições › Changelog: todas as alterações desde a primeira versão, com pesquisa

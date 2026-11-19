@@ -1,0 +1,15 @@
+/* ===================== spruceit-lados ===================== */
+html body #ars-esq{position:absolute;z-index:2;animation:arsxIn .5s ease-out}
+html body #ars-esq .arse{background:var(--panel,#fff);border:1px solid var(--line,#dfe5eb);padding:14px;color:var(--ink,#1f2937);max-height:calc(100vh - 120px);overflow:auto}
+html body #ars-esq .arse-top{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}html body #ars-esq .arse-top small{color:var(--mut,#64748b);font-size:12px}
+html body #ars-esq ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+html body #ars-esq li{display:flex;gap:10px;align-items:flex-start}
+html body #ars-esq .arse-ic{width:32px;height:32px;flex:none;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--c) 16%,transparent);border-radius:9px}
+html body #ars-esq li b{display:block;font-size:13.5px}html body #ars-esq li small{display:block;font-size:12px;line-height:1.35;color:var(--mut,#64748b)}
+html body #ars-esq .arse-pe{margin:12px 0 0;font-size:12px;font-weight:700;color:#6d28d9}
+html body.est-sge #ars-esq .arse-ic{border-radius:0}
+html body:not(.est-sge) #ars-esq .arse{border-radius:16px}
+/* indicadores do Spruce It: ícone ao centro da caixa */
+html body .spv .ars-k{display:flex!important;align-items:flex-start;gap:10px}
+html body .spv .ars-ki{display:flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:34px!important;padding:0!important}
+html body .spv .ars-ki svg{width:18px!important;height:18px!important;margin:0!important}

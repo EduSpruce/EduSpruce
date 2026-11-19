@@ -55,6 +55,7 @@ dados/004-manifesto.html
 277-provas-aparencia.css
 279-tema-spruce.css
 281-novidades-modal.css
+283-spruceit-lados.css
 040-corpo.html
 dados/041-hash-wasm.html
 042-corpo-2.html
@@ -277,5 +278,6 @@ dados/199-logotipos-novos.js
 275-boas-vindas-modulos.js
 278-tema-spruce.js
 280-novidades-modal.js
+282-logotipo-spruce.js
 245-fim-do-programa.js
 246-fecho.html

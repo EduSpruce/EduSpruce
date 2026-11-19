@@ -1557,3 +1557,51 @@ body.est-spruce.escurox #login.pinmode{--pin-bg:linear-gradient(160deg,#0c2f42,#
 
 /* foco visível pelo teclado (acessibilidade) */
 html:root body.est-spruce.est-spruce.est-spruce :focus-visible{outline:2.5px solid var(--sp-sun)!important;outline-offset:2px}
+/* 1.150 · ícones das apps planos, como o logótipo do eduspruce.app: cor única, sem brilho nem sombra */
+html body.est-spruce .hbic.hb-cheio{background:color-mix(in srgb,var(--h1) 55%,var(--h2))!important;box-shadow:none!important;border-radius:24%!important}
+html body.est-spruce .hbic.hb-cheio:before{display:none!important}
+/* 1.150 · menu lateral: filtro Todas/Regular/PROFIJ legível no fundo azul-marinho */
+html:root body.est-spruce.est-spruce.est-spruce #side .seg{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important}
+html:root body.est-spruce.est-spruce.est-spruce #side .seg button{background:transparent!important;color:rgba(230,243,250,.75)!important;box-shadow:none!important}
+html:root body.est-spruce.est-spruce.est-spruce #side .seg button.on{background:rgba(27,147,198,.45)!important;color:#fff!important}
+/* 1.151 · seletores (segmentos, separadores, chips): o selecionado vê-se sempre — pastilha azul-marinho com texto branco */
+html:root body.est-spruce.est-spruce.est-spruce #view :is(.seg,.tabs,.chips,.segc){gap:4px!important;padding:5px!important;display:inline-flex;flex-wrap:wrap;align-items:center}
+html:root body.est-spruce.est-spruce.est-spruce #view :is(.seg,.tabs,.chips,.segc)>:is(button,a,label){padding:7px 13px!important;border-radius:10px!important;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;transition:background .15s,color .15s}
+html:root body.est-spruce.est-spruce.est-spruce #view :is(.seg,.tabs,.chips,.segc)>:is(button,a,label):not(.on):not([aria-selected="true"]):not([aria-pressed="true"]):not([aria-current="page"]):hover{background:rgba(27,147,198,.10)!important}
+html:root body.est-spruce.est-spruce.est-spruce #view :is(.seg,.tabs,.chips,.segc)>:is(button,a,label):is(.on,[aria-selected="true"],[aria-pressed="true"],[aria-current="page"]){background:var(--sp-ink)!important;color:#fff!important;box-shadow:0 4px 0 -1px var(--sp-sun)!important}
+html:root body.est-spruce.est-spruce.est-spruce #view :is(.seg,.tabs,.chips,.segc)>:is(button,a,label):is(.on,[aria-selected="true"],[aria-pressed="true"],[aria-current="page"]) svg{color:#fff!important}
+html:root body.est-spruce.est-spruce.est-spruce.escurox #view :is(.seg,.tabs,.chips,.segc)>:is(button,a,label):is(.on,[aria-selected="true"],[aria-pressed="true"],[aria-current="page"]){background:var(--sp-blue)!important;color:#0a1f2b!important}
+/* Início das apps (heróis coloridos): títulos em branco, não em azul-marinho */
+html:root body.est-spruce.est-spruce.est-spruce #mqdemo .mqd-hero :is(h1,h2,h3){color:#fff!important}
+/* ===================== 1.150 · modal de novidades ===================== */
+html body dialog.nvmodal{width:min(620px,calc(100vw - 28px));max-height:min(80vh,760px);padding:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}
+html body dialog.nvmodal:not([open]){display:none}
+html body dialog.nvmodal::backdrop{background:rgba(10,20,35,.45);backdrop-filter:blur(2px)}
+html body .nvmodal .nvm-cab{display:flex;gap:14px;align-items:center;padding:20px 22px 14px;border-bottom:1px solid var(--line)}
+html body .nvmodal .nvm-ic{width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--acc);color:#fff}
+html body .nvmodal h2{margin:0;font-size:19px}html body .nvmodal .nvm-cab p{margin:3px 0 0;color:var(--mut);font-size:13.5px}
+html body .nvmodal .nvm-corpo{overflow:auto;padding:6px 22px 10px;flex:1}
+html body .nvmodal section{padding:12px 0;border-bottom:1px dashed var(--line)}html body .nvmodal section:last-child{border-bottom:0}
+html body .nvmodal h3{margin:0 0 6px;font-size:14.5px;display:flex;gap:8px;align-items:baseline}html body .nvmodal h3 small{color:var(--mut);font-weight:400;font-size:12.5px}
+html body .nvmodal ul{margin:0;padding-left:20px;font-size:13.5px;line-height:1.5}html body .nvmodal li{margin:3px 0}
+html body .nvmodal .nvm-pe{padding:12px 22px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+html body.est-sge dialog.nvmodal,html body.est-sge .nvmodal .nvm-ic{border-radius:0}
+html body .defcl .nvver{margin:0 0 6px}
+/* separadores das Definições com espaço entre eles (tema Spruce) */
+html body.est-spruce #view>.tabs.deftabs{gap:4px!important;padding:6px!important}
+html body.est-spruce #view>.tabs.deftabs>button{padding:8px 14px!important;gap:7px;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px!important}
+/* ===================== spruceit-lados ===================== */
+html body #ars-esq{position:absolute;z-index:2;animation:arsxIn .5s ease-out}
+html body #ars-esq .arse{background:var(--panel,#fff);border:1px solid var(--line,#dfe5eb);padding:14px;color:var(--ink,#1f2937);max-height:calc(100vh - 120px);overflow:auto}
+html body #ars-esq .arse-top{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}html body #ars-esq .arse-top small{color:var(--mut,#64748b);font-size:12px}
+html body #ars-esq ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+html body #ars-esq li{display:flex;gap:10px;align-items:flex-start}
+html body #ars-esq .arse-ic{width:32px;height:32px;flex:none;display:grid;place-items:center;font-size:17px;background:color-mix(in srgb,var(--c) 16%,transparent);border-radius:9px}
+html body #ars-esq li b{display:block;font-size:13.5px}html body #ars-esq li small{display:block;font-size:12px;line-height:1.35;color:var(--mut,#64748b)}
+html body #ars-esq .arse-pe{margin:12px 0 0;font-size:12px;font-weight:700;color:#6d28d9}
+html body.est-sge #ars-esq .arse-ic{border-radius:0}
+html body:not(.est-sge) #ars-esq .arse{border-radius:16px}
+/* indicadores do Spruce It: ícone ao centro da caixa */
+html body .spv .ars-k{display:flex!important;align-items:flex-start;gap:10px}
+html body .spv .ars-ki{display:flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:34px!important;padding:0!important}
+html body .spv .ars-ki svg{width:18px!important;height:18px!important;margin:0!important}
