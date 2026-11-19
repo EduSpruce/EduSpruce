@@ -179,7 +179,7 @@ function overview(m,arr){
 PAGES.horarios=function(m){
   const all=list(ui.kind),arr=all.filter(x=>matchQ('ent',[x.name,x.short]));if(!arr.some(x=>x.id===ui.id))ui.id=arr[0]?arr[0].id:null;
   const rep=REP(),mdl=M(),ix=IX(),idx=arr.findIndex(x=>x.id===ui.id),go=n=>{ui.id=arr[(idx+n+arr.length)%arr.length].id;ui.sel=null;render();};
-  m.append(pageHead('Horários',null,h('a',{href:'#otimizacao',class:'btn btn-primary btn-sm noprint'},ic('bolt'),'Otimizar')));
+  m.append(pageHead('Horários',null,btn('Importar horários (PDF)',updfEscolher,'btn-sm btn-imp noprint',{disabled:busy,title:'Ler horários impressos pelo Untis (de professores, turmas ou salas) e colocar as aulas'}),h('a',{href:'#otimizacao',class:'btn btn-primary btn-sm noprint'},ic('bolt'),'Otimizar')));
   m.append(h('div',{class:'flex flex-wrap items-center gap-2 noprint'},
     tabsEl(['c','t','r'].map(k=>[k,KINDS[k][2]]),ui.kind,k=>{ui.kind=k;ui.id=null;ui.sel=null;ui.q.ent='';ui.pg.ov=0;render();},'Ver por'),
     tabsEl([['ind','Um horário'],['geral','Visão geral']],ui.visao,v=>{ui.visao=v;ui.sel=null;render();},'Modo'),

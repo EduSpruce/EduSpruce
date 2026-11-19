@@ -44,7 +44,7 @@ function importPreview(st,fs){
       let n=0;const key=x=>String(x.short||x.name||'').toLowerCase(),map=new Map();
       mutate(()=>{for(const k of ['classes','teachers','rooms','subjects']){const has=new Map(S[k].map(x=>[key(x),x.id]));for(const x of st[k]){const kk=key(x);if(has.has(kk)){map.set(x.id,has.get(kk));continue;}map.set(x.id,x.id);if(!sel[k])continue;const o=JSON.parse(JSON.stringify(x));if(k==='classes'){o.roomId='';o.dt='';}if(k==='rooms')o.alt='';S[k].push(o);has.set(kk,o.id);n++;}}
         if(sel.off)for(const ok in st.off){const id=map.get(ok.slice(2));if(!id||!IXhas(ok[0],id))continue;const dst=ok[0]+':'+id;if(!S.off[dst]){S.off[dst]=st.off[ok];n++;}}normalize(S);});
-      toast('Fusão concluída: '+n+' elementos acrescentados.','Anular',desfazer,'ok');},'btn-primary')],true);
+      toast('Fusão concluída: '+n+' elementos acrescentados.','Anular',desfazer,'ok');},'btn-primary btn-imp')],true);
 }
 const IXhas=(k,id)=>S[KINDS[k][0]].some(x=>x.id===id);
 function autoteste(){
@@ -88,7 +88,7 @@ function cursoSimular(l){
   wrap('ficheiro',m=>{
     m.append(panel('Testes e histórico',h('div',{class:'flex flex-wrap items-center gap-2'},h('span',{class:'text-sm opacity-70 grow'},'O autoteste corre o motor, o verificador independente, as trocas em cadeia e as exportações neste computador, sem tocar nos seus dados.'),
       btn('Correr o autoteste',autoteste,'btn-sm btn-primary',{disabled:busy}),btn('Histórico de passos ('+undo.length+')',historico,'btn-sm'),
-      h('label',{class:'btn btn-sm',for:'im-xml'},'Importar XML de intercâmbio…'),h('input',{type:'file',id:'im-xml',accept:'.xml,text/xml,application/xml',class:'sr-only',disabled:busy,onchange:async ev=>{const f=ev.target.files[0];if(!f)return;try{importPreview(xmlTrocaIn(await f.text()),{});}catch(x){toast(x.message||'Não foi possível ler esse ficheiro.',null,null,'bad');}ev.target.value='';}}))));
+      h('label',{class:'btn btn-sm btn-imp',for:'im-xml'},'Importar XML de intercâmbio…'),h('input',{type:'file',id:'im-xml',accept:'.xml,text/xml,application/xml',class:'sr-only',disabled:busy,onchange:async ev=>{const f=ev.target.files[0];if(!f)return;try{importPreview(xmlTrocaIn(await f.text()),{});}catch(x){toast(x.message||'Não foi possível ler esse ficheiro.',null,null,'bad');}ev.target.value='';}}))));
   });
   wrap('horarios',m=>{
     if(!ui.id||ui.visao!=='ind')return;const ix=IX(),sel=ui.sel&&S.cards.find(c=>c.id===ui.sel),lado=ui.lado||(ui.lado={k:'',id:''});

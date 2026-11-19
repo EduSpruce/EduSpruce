@@ -36,7 +36,7 @@ function alImport(){
     h('textarea',{id:'al-imp',class:'textarea w-full h-56 font-mono text-xs','aria-label':'Lista de alunos',placeholder:'1;Ana Silva;7ºA\n2;Rui Costa;7ºA'})),
     [btn('Cancelar',closeDlg),btn('Importar',()=>{const txt=$('#al-imp').value,byN=new Map(S.classes.map(c=>[c.name.toLowerCase().replace(/\s+/g,''),c.id]));let ok=0,ko=0;const add=[],bySub=new Map();S.subjects.forEach(s=>{bySub.set(s.name.toLowerCase(),s.id);if(s.short)bySub.set(s.short.toLowerCase(),s.id);});
       for(const ln of txt.split(/\r?\n/)){if(!ln.trim())continue;const p=ln.split(ln.includes('\t')?'\t':ln.includes(';')?';':',').map(x=>x.trim().replace(/^"|"$/g,''));const cid=byN.get((p[2]||'').toLowerCase().replace(/\s+/g,''));if(p.length<3||!cid){ko++;continue;}const esc2=[],sup2=[];for(const x of p.slice(3)){if(!x)continue;const q=x[0]==='?',sid=bySub.get((q?x.slice(1):x).trim().toLowerCase());if(sid)(q?sup2:esc2).push(sid);}add.push({id:uid(),num:p[0],nome:p[1]||'Aluno',classId:cid,fora:[],extra:[],esc:esc2,sup:sup2,nOpc:0});ok++;}
-      closeDlg();if(ok)mutate(()=>{S.alunos.push(...add);});toast(ok+' alunos importados'+(ko?'; '+ko+' linhas ignoradas (turma desconhecida ou linha incompleta)':'')+'.');},'btn-primary')],true);
+      closeDlg();if(ok)mutate(()=>{S.alunos.push(...add);});toast(ok+' alunos importados'+(ko?'; '+ko+' linhas ignoradas (turma desconhecida ou linha incompleta)':'')+'.');},'btn-primary btn-imp')],true);
 }
 function cursoInscrever(l){
   let cls=(S.classes.find(c=>!l.classIds.includes(c.id))||{}).id||'';const ch=new Map(),box=h('div',{class:'grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 max-h-64 overflow-auto border border-base-300 rounded-box p-2',id:'ci-box'});
@@ -49,7 +49,7 @@ PAGES.alunos=function(m){
   const ix=IX(),mdl=M();ui.alTab=ui.alTab||'lista';if(ui.alC&&!ix.c.has(ui.alC))ui.alC='';
   const chq=alChoques(),nCh=chq.size;
   m.append(pageHead('Alunos e cursos','Registe os alunos e as aulas que cada um frequenta; o otimizador evita choques entre as aulas do mesmo aluno.',
-    btn('Novo aluno',()=>alDialog(),'btn-primary btn-sm noprint',{disabled:busy||!S.classes.length}),btn('Importar lista',alImport,'btn-sm noprint',{disabled:busy||!S.classes.length}),btn('Imprimir',imprimir,'btn-sm noprint')));
+    btn('Novo aluno',()=>alDialog(),'btn-primary btn-sm noprint',{disabled:busy||!S.classes.length}),btn('Importar lista',alImport,'btn-sm btn-imp noprint',{disabled:busy||!S.classes.length}),btn('Imprimir',imprimir,'btn-sm noprint')));
   m.append(tabsEl([['lista','Alunos ('+S.alunos.length+')'],['cursos','Cursos e inscrições'],['dist','Distribuição e bandas'],['choques','Choques ('+nCh+')']],ui.alTab,v=>{ui.alTab=v;render();},'Alunos e cursos'));
   const tb=(heads,rows,empty)=>tableWrap(h('table',{class:'table table-sm'},h('thead',{},h('tr',{},heads.map(t=>h('th',{},t)))),h('tbody',{},rows,rows.length?null:h('tr',{},h('td',{colspan:heads.length,class:'opacity-60'},empty)))));
   if(ui.alTab==='lista'){

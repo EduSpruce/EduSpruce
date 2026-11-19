@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.136
+- EduSchedule › Horários e Ficheiro: importar horários em PDF do Untis (de professores, turmas ou salas), com pré-visualização — coloca as aulas sem apagar nada
+- Botões de importar marcados para se distinguirem dos outros
+
 ## 1.135
 - Coord. PROFIJ › Pontos de Situação: cronograma de cada disciplina e UFCD ao longo do ano, com as interrupções, a FCT e o dia de hoje
 - Coord. PROFIJ: «Para Cumprir o Plano» mostra as disciplinas que não acabam no ano e de onde podem vir os tempos — o botão «Ceder» abre a cedência já preenchida
