@@ -2,10 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.157
+- Licenças de terceiros: avisos dos tipos de letra completos
+
 ## 1.156
 - Spruce It: respostas identificadas por letras (A, B, C, D) e cores próprias da EduSpruce
 - SpruceNote: novo texto no quadro de demonstração
-- Estilo da interface «iOS 27» passa a chamar-se «Vidro»
+- Novo nome para um dos estilos da interface: «Vidro»
 - Nova página Licenças de terceiros (eduspruce.pt/licencas.html), com ligação na Privacidade e nos Termos
 - Textos da ajuda, do manual e das Novidades revistos
 

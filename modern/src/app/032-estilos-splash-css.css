@@ -729,7 +729,7 @@ body.est-sge .ond{border-radius:4px}
 .ondm{margin:auto 0 0;font-size:12.5px;color:var(--mut);border-top:1px dashed var(--line);padding-top:8px}
 .ondx{margin-top:12px}.ondx summary{cursor:pointer;font-weight:600;color:var(--acc);margin-bottom:10px}
 .pab.proj .ond{font-size:1.05em}
-/* v0.921 · Minhas Tarefas (To Do) */
+/* v0.921 · Minhas Tarefas */
 .xtw{display:grid;grid-template-columns:250px minmax(0,1fr);padding:0!important;overflow:hidden;min-height:calc(100vh - 190px);align-items:stretch}
 .xtw.comdet{grid-template-columns:250px minmax(0,1fr) 340px}
 .xtside{background:color-mix(in srgb,var(--ink) 3%,var(--panel));border-right:1px solid var(--line);padding:12px 8px;display:flex;flex-direction:column;gap:2px;overflow:auto}
