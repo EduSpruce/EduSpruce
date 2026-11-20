@@ -306,3 +306,11 @@ html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis but
   const w=340,z=parseFloat(getComputedStyle(v).zoom)||1,mg=Math.max(12,Math.round(document.documentElement.clientWidth-r.right)),alvo=mg+w+24;if(Math.abs(r.left-alvo)>2){const ml=(parseFloat(getComputedStyle(v).marginLeft)||0)+(alvo-r.left)/z;v.style.setProperty('margin-left',Math.max(0,ml)+'px','important');v.style.setProperty('max-width','none','important')}const r2=v.getBoundingClientRect();es.style.width=w+'px';es.classList.remove('larga');es.style.left=Math.round(r2.left-hr.left-24-w)+'px';es.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}catch(e){console.warn(e)}return r0}}
 /* 1.161 · página larga: sem «Como funciona» ao lado, o conteúdo ocupa também a direita */
 {const _ap2=arsApresPos;arsApresPos=function(){document.body.classList.toggle('ars-sa',!!S.cfg.arsApresOff);const r=_ap2.apply(this,arguments);try{if(VIEW==='arena'&&!document.getElementById('ars-apres'))document.body.classList.add('ars-sa');typeof eaAlinhaEsc==='function'&&eaAlinhaEsc()}catch(_){}return r}}
+/* 1.174 — «Modos de jogo» e o conteúdo centrados: a margem esquerda do painel é igual à margem direita do conteúdo
+   (medida depois de se saber se «Como funciona» aparece à direita) */
+{const _ap3=arsApresPos;arsApresPos=function(){const r0=_ap3.apply(this,arguments);try{
+  const v=$('#view .arv.spv'),es=document.getElementById('ars-esq'),host=$('#view');if(!v||!es||!host)return r0;
+  const z=parseFloat(getComputedStyle(v).zoom)||1,w=es.getBoundingClientRect().width||340,gap=24;
+  const r=v.getBoundingClientRect(),mg=Math.max(12,Math.round(document.documentElement.clientWidth-r.right)),alvo=mg+w+gap;
+  if(Math.abs(r.left-alvo)>1){const ml=(parseFloat(getComputedStyle(v).marginLeft)||0)+(alvo-r.left)/z;v.style.setProperty('margin-left',Math.max(0,ml)+'px','important');v.style.setProperty('max-width','none','important')}
+  const hr=host.getBoundingClientRect();es.style.left=Math.round(mg-hr.left)+'px'}catch(e){console.warn(e)}return r0}}
