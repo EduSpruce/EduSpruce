@@ -297,12 +297,12 @@ html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis but
 {const _ap=arsApresPos;arsApresPos=function(){const r0=_ap.apply(this,arguments);try{
   const v=$('#view .arv.spv'),host=$('#view');let es=document.getElementById('ars-esq');
   if(!v||!host||UI.arEd||(UI.arTab||'conj')!=='conj'||VIEW!=='arena'){if(es)es.remove();return r0}
-  const r=v.getBoundingClientRect(),hr=host.getBoundingClientRect();const livre=r.left-hr.left-40;
+  v.style.removeProperty('margin-left');v.style.removeProperty('max-width');const r=v.getBoundingClientRect(),hr=host.getBoundingClientRect();const livre=r.left-hr.left-40;
   if(livre<300){if(es)es.remove();return r0}
   if(!es){es=document.createElement('aside');es.id='ars-esq';es.setAttribute('aria-label','Modos de jogo');
     const M=Object.entries(AR.MODOS||{});
     es.innerHTML=`<div class="arse"><div class="arse-top"><b>Modos de jogo</b><small>${M.length} modos · escolhe-se ao lançar</small></div><ul>${M.map(([k,m])=>`<li><span class="arse-ic" style="--c:${m.cor||'#6d28d9'}">${m.ic||'★'}</span><div><b>${esc(m.nome)}</b><small>${esc(String(m.desc||'').split('. ')[0].replace(/\.$/,''))}</small></div></li>`).join('')}</ul><p class="arse-pe">Nunca conta para a nota.</p></div>`;host.appendChild(es)}
   if(getComputedStyle(host).position==='static')host.style.position='relative';
-  const w=Math.max(300,livre-8);es.style.width=w+'px';es.classList.toggle('larga',w>=560);es.style.left=Math.round(r.left-hr.left-24-w)+'px';es.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}catch(e){console.warn(e)}return r0}}
+  const w=340,z=parseFloat(getComputedStyle(v).zoom)||1,alvo=hr.left+16+w+24;if(Math.abs(r.left-alvo)>2){const ml=(parseFloat(getComputedStyle(v).marginLeft)||0)+(alvo-r.left)/z;v.style.setProperty('margin-left',Math.max(0,ml)+'px','important');v.style.setProperty('max-width','none','important')}const r2=v.getBoundingClientRect();es.style.width=w+'px';es.classList.remove('larga');es.style.left=Math.round(r2.left-hr.left-24-w)+'px';es.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}catch(e){console.warn(e)}return r0}}
 /* 1.161 · página larga: sem «Como funciona» ao lado, o conteúdo ocupa também a direita */
 {const _ap2=arsApresPos;arsApresPos=function(){document.body.classList.toggle('ars-sa',!!S.cfg.arsApresOff);const r=_ap2.apply(this,arguments);try{if(VIEW==='arena'&&!document.getElementById('ars-apres'))document.body.classList.add('ars-sa');typeof eaAlinhaEsc==='function'&&eaAlinhaEsc()}catch(_){}return r}}

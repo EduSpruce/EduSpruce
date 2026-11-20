@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.172
+- Spruce It!: o conteúdo alarga para a esquerda até junto de «Modos de jogo», em qualquer largura de ecrã
+
 ## 1.171
 - Spruce Exam: a barra de atalhos acaba alinhada com o fundo do menu lateral
 
