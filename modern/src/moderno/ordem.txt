@@ -14,3 +14,4 @@ eduapps.js
 recolha.js
 modulos.js
 vitrines.js
+visorpdf.js

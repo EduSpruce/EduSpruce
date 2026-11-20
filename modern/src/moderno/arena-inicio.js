@@ -305,4 +305,4 @@ html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis but
   if(getComputedStyle(host).position==='static')host.style.position='relative';
   const w=Math.min(340,livre-8);es.style.width=w+'px';es.style.left=Math.round(r.left-hr.left-24-w-Math.max(0,(livre-8-w)/2-12))+'px';es.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}catch(e){console.warn(e)}return r0}}
 /* 1.161 · página larga: sem «Como funciona» ao lado, o conteúdo ocupa também a direita */
-{const _ap2=arsApresPos;arsApresPos=function(){document.body.classList.toggle('ars-sa',!!S.cfg.arsApresOff);const r=_ap2.apply(this,arguments);try{typeof eaAlinhaEsc==='function'&&eaAlinhaEsc()}catch(_){}return r}}
+{const _ap2=arsApresPos;arsApresPos=function(){document.body.classList.toggle('ars-sa',!!S.cfg.arsApresOff);const r=_ap2.apply(this,arguments);try{if(VIEW==='arena'&&!document.getElementById('ars-apres'))document.body.classList.add('ars-sa');typeof eaAlinhaEsc==='function'&&eaAlinhaEsc()}catch(_){}return r}}

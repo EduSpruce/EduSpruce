@@ -150,7 +150,7 @@ const SNW_ILU=`<svg viewBox="0 0 520 300" width="100%" role="img">
 <rect x="28" y="70" width="52" height="18" rx="9" fill="#c25e12"/><text x="54" y="83" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="inherit">Guardar</text>
 <rect x="164" y="66" width="80" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="78" width="72" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="90" width="78" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="102" width="56" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/>
 <rect x="18" y="166" width="226" height="40" rx="3" fill="color-mix(in srgb,#c25e12 16%,transparent)"/><rect x="24" y="172" width="210" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/><rect x="24" y="184" width="196" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/><rect x="24" y="196" width="120" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/>
-<rect x="120" y="198" width="132" height="44" rx="6" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/><rect x="128" y="206" width="10" height="10" rx="2" fill="#c25e12"/><text x="144" y="215" font-size="9.5" font-weight="700" fill="currentColor" font-family="inherit">Guardar no Spruce Notes</text><rect x="128" y="226" width="90" height="5" rx="2.5" fill="var(--mut)" opacity=".3"/>
+<rect x="114" y="208" width="140" height="42" rx="6" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/><rect x="121" y="216" width="9" height="9" rx="2" fill="#c25e12"/><text x="135" y="224" font-size="8.6" font-weight="700" fill="currentColor" font-family="inherit" textLength="112" lengthAdjust="spacingAndGlyphs">Guardar no Spruce Notes</text><rect x="121" y="235" width="90" height="5" rx="2.5" fill="var(--mut)" opacity=".3"/>
 <rect x="22" y="222" width="86" height="40" rx="5" fill="#2b2f36"/><path d="M58 234v16l13-8z" fill="#fff"/></g>
 <path d="M266 120C300 96 316 96 338 110" fill="none" stroke="#c25e12" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#snwSeta)"/>
 <path d="M266 190C300 210 318 200 338 186" fill="none" stroke="#c25e12" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#snwSeta)"/>
@@ -407,7 +407,7 @@ function spruceAppsNome(){try{if(!S.cfg)return;let mud=0;const vis=G=>(G||[]).fo
 setTimeout(spruceAppsNome,900);setTimeout(spruceAppsNome,4000);
 /* menu lateral: um só item realçado — o da vista atual (ou o último tocado) */
 {let ult='';document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#side [data-v]');if(b)ult=b.dataset.v},true);
-  const um=()=>{try{const L=[...document.querySelectorAll('#side .nav.on,#side [data-v].on')];if(L.length<2)return;const k=L.find(b=>b.dataset.v===VIEW)||L.find(b=>b.dataset.v===ult)||L[L.length-1];L.forEach(b=>{if(b!==k)b.classList.remove('on')})}catch(_){}};
+  const um=()=>{try{const pf=document.getElementById('mnProf');if(pf&&VIEW==='definicoes'&&UI.defTab==='prof'){if(!pf.classList.contains('on'))pf.classList.add('on');document.querySelectorAll('#side .nav.on,#side [data-v].on').forEach(x=>{if(x!==pf)x.classList.remove('on')});return}const L=[...document.querySelectorAll('#side .nav.on,#side [data-v].on')];if(L.length<2)return;const k=L.find(b=>b.dataset.v===VIEW)||L.find(b=>b.dataset.v===ult)||L[L.length-1];L.forEach(b=>{if(b!==k)b.classList.remove('on')})}catch(_){}};
   const lig=()=>{const s=document.getElementById('side');if(!s||s.dataset.um)return;s.dataset.um=1;new MutationObserver(um).observe(s,{subtree:true,attributes:true,attributeFilter:['class']});
     s.addEventListener('pointerleave',()=>s.querySelectorAll('.hov').forEach(x=>x.classList.remove('hov')))};
   try{lig();addEventListener('load',lig);setTimeout(lig,1500)}catch(_){}}
@@ -557,3 +557,5 @@ nvApagarTudo=async function(){const r=await avisoModal('Apagar tudo e recomeçar
   try{sbEsquecer()}catch(_){}try{localStorage.clear();sessionStorage.clear()}catch(_){}
   try{const D=indexedDB.databases?await indexedDB.databases():[];await Promise.all(D.map(d=>d.name).filter(Boolean).map(n=>new Promise(ok=>{const q=indexedDB.deleteDatabase(n);q.onsuccess=q.onerror=q.onblocked=()=>ok()})))}catch(_){}
   try{sessionStorage.setItem('es.lgmsg','Todos os dados foram apagados. Entre de novo para recomeçar do zero.')}catch(_){}location.replace(location.origin+location.pathname)};
+/* menu lateral: «Professor» fica realçado como os outros itens; ao mudar de separador nas Definições o realce acompanha */
+{const _vdPf=vDefinicoes;vDefinicoes=function(){const r=_vdPf.apply(this,arguments);try{menuRender()}catch(_){}return r}}

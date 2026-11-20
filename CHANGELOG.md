@@ -2,6 +2,14 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.169
+- Menu lateral: «Professor» fica realçado como os outros itens
+- Spruce It!: a página ocupa toda a largura quando não há espaço para «Como funciona» ao lado
+- Spruce It! (alunos): o botão do som fica no canto superior direito
+- Spruce Exam: atalhos no fundo do Início
+- Spruce Notes: ilustração do Web Clipper corrigida (texto dentro da caixa)
+- Ajuda: os manuais em PDF abrem num leitor dentro da app, com páginas, zoom, ecrã inteiro e botão para descarregar
+
 ## 1.168
 - Spruce It!: logótipo e nome da escola alinhados com o conteúdo da página
 
