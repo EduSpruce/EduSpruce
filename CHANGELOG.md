@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.167
+- Início: o botão das apps passa para a barra de cima, junto da pesquisa
+
 ## 1.166
 - JornalNote passa a chamar-se Jornal Notes em toda a app, na ajuda e na extensão
 - Spruce Live com o vermelho de «em direto» (ícone e etiqueta nas Apps, boas-vindas); a etiqueta passa a «Só conta se quiser», numa só linha

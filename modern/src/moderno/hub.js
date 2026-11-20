@@ -200,7 +200,9 @@ if(typeof dashTopo==='function'){const _dtHb=dashTopo;dashTopo=function(){const 
   /* 1.096: são muitas apps — no Início fica só o ícone que abre o painel Apps */
   const bar=`<div class="hub-mini hub-so" role="toolbar" aria-label="Apps"><button type="button" class="hbm hbm-todas" data-hubmini="@hub" title="Todas as apps" aria-label="Todas as apps">${ic('apps',22)}</button></div>`;
   requestAnimationFrame(hubMiniAjusta);setTimeout(hubMiniAjusta,350);
-  const k=h.lastIndexOf('</div>');return k<0?h+bar:h.slice(0,k)+bar+h.slice(k)}catch(e){console.warn(e);return h}}}
+  /* 1.167: o ícone das apps vai para a barra de cima, junto da pesquisa */
+  const bi=document.querySelector('#top .barico, .barico');if(bi&&!document.getElementById('appsBtn')){bi.insertAdjacentHTML('afterbegin',`<button class="btn ico" id="appsBtn" type="button" data-hubmini="@hub" title="Todas as apps" aria-label="Todas as apps">${ic('apps',20)}</button>`)}
+  if(bi)return h;const k=h.lastIndexOf('</div>');return k<0?h+bar:h.slice(0,k)+bar+h.slice(k)}catch(e){console.warn(e);return h}}}
 /* a barra fica com a largura e as margens do cartão da coluna da direita (ex.: Ano Letivo / contagem) */
 function hubMiniAjusta(){try{const bar=document.querySelector('#view .hub-mini');if(!bar)return;if(bar.classList.contains('hub-so')){bar.classList.remove('larg','apert','mob');bar.style.width='';return}const top=bar.closest('.dtop');
   const n=bar.querySelectorAll('.hbm').length;
