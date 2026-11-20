@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.168
+- Spruce It!: logótipo e nome da escola alinhados com o conteúdo da página
+
 ## 1.167
 - Início: o botão das apps passa para a barra de cima, junto da pesquisa
 
