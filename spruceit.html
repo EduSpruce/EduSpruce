@@ -2,7 +2,7 @@
 <html lang="pt-PT">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-SCnTV443XH+1c8juFqDCuNLMnUIWunmPeFAXhacAN60=' 'sha256-RDNLiNTBK+REu044tQWEsMMzK0E0l2maFlqOJ9dSVfI=' 'sha256-J7wIZTa0tLGcW4FTSbAtLoDHHKOXJDimd4pJ3xYcq8E='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://ssuescpqyhuqkphauwde.supabase.co wss://ssuescpqyhuqkphauwde.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-SCnTV443XH+1c8juFqDCuNLMnUIWunmPeFAXhacAN60=' 'sha256-6s7T8QbDXD8rPGiQzvS8cLn1PdiciqFU9FSyb7sFnZM=' 'sha256-F0z/o9udzjLb15nNa90V/45Kgq3iZCjZMu+ZNd7+SXs='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://ssuescpqyhuqkphauwde.supabase.co wss://ssuescpqyhuqkphauwde.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5efe2">
 <meta name="robots" content="noindex">
@@ -417,7 +417,7 @@ AR.temaEscuro=k=>k==='arena'||k==='neon';
   testemunho:()=>{[523,784].forEach((f,i)=>tom(f,i*.08,.12,'triangle',.1))}
 }[n];if(x)return x();return _t(n)}}
 /* ---------- 1.145 · aparência «Recreio» (roxo e amarelo, igual à apresentação do Spruce It) e Cubos ---------- */
-AR.TEMAS.recreio={nome:'Recreio',v:{'--bg':'#ede9fe','--surface':'#ffffff','--ink':'#1e1b4b','--muted':'#5b5794','--line':'#d9d0fb','--primary':'#6d28d9','--on-primary':'#fff','--accent':'#facc15','--on-accent':'#3b0764','--hero':'#5b21b6','--hero-ink':'#ffffff','--hero-line':'#facc15','--radius':'18px','--bw':'2px','--display':"'Baloo 2'",'--dw':'800','--case':'none','--track':'-.01em','--shadow':'0 5px 0 #3b0f7a','--shadow-a':'0 4px 0 #a16207','--a1':'#eab308','--a2':'#3b82f6','--a3':'#22c55e','--a4':'#ef4444','--on-a':'#fff'}};
+AR.TEMAS.recreio={nome:'Recreio',v:{'--bg':'#ede9fe','--surface':'#ffffff','--ink':'#1e1b4b','--muted':'#5b5794','--line':'#d9d0fb','--primary':'#6d28d9','--on-primary':'#fff','--accent':'#facc15','--on-accent':'#3b0764','--hero':'#5b21b6','--hero-ink':'#ffffff','--hero-line':'#facc15','--radius':'18px','--bw':'2px','--display':"'Baloo 2'",'--dw':'800','--case':'none','--track':'-.01em','--shadow':'0 5px 0 #3b0f7a','--shadow-a':'0 4px 0 #a16207','--a1':'#f59e0b','--a2':'#0ea5e9','--a3':'#ec4899','--a4':'#14b8a6','--on-a':'#fff'}};
 {const _ok=AR.temaOk;AR.temaOk=k=>AR.TEMAS[k]?k:'recreio'}
 /* Cubos: personagens originais em forma de cubo arredondado com olhos (as mesmas das apresentações) */
 AR.CUBOS_DEF=[['p52','Brasa','#f97316','#c2410c','o'],['p53','Rela','#4ade80','#16a34a',''],['p54','Bip','#60a5fa','#1d4ed8','a'],['p55','Algodão','#f472b6','#be185d','o'],['p56','Sol','#facc15','#a16207',''],['p57','Lilás','#c084fc','#7e22ce','a'],['p58','Maré','#2dd4bf','#0f766e','o'],['p59','Coral','#fb7185','#be123c','']];
@@ -434,7 +434,7 @@ window.ARENA=AR;
 <script>
 (()=>{const AR=window.ARENA;const $=s=>document.querySelector(s);const app=$('#app');
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const CORES=['var(--a1)','var(--a2)','var(--a3)','var(--a4)'],FORMAS=['▲','◆','●','■'];
+const CORES=['var(--a1)','var(--a2)','var(--a3)','var(--a4)'],FORMAS=['A','B','C','D'];
 let CFG=null;const st={};
 function tema(k){k=AR.temaOk(k||'');if(st.tema===k)return;st.tema=k;document.documentElement.style.cssText=AR.temaCss(k);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=AR.TEMAS[k].v['--bg'];try{localStorage.setItem('arena.tema',k)}catch(_){}}
 {let k0='';try{k0=new URLSearchParams(location.search).get('tema')||localStorage.getItem('arena.tema')||''}catch(_){}tema(k0)}

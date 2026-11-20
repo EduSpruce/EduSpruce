@@ -5,7 +5,7 @@ Português de Portugal, respostas curtas. Publicar sem perguntar («publica e ac
 ## Regras do utilizador
 - Sem dados no aparelho: tudo na base de dados (Supabase), sem o utilizador ver sincronização. Só a chave publicável do Supabase.
 - Nunca escrever no SGE/DB da escola, nunca dados de alunos no GitHub, o e-mail nunca passa pela EduSpruce, nunca nomes reais em código, ajuda ou exemplos.
-- Arena nunca conta para a nota. Pulso é formativo (só conta se o professor escolher um domínio). Nomes da Arena originais (inspirados no Blooket, nunca copiados).
+- Arena nunca conta para a nota. Pulso é formativo (só conta se o professor escolher um domínio). Nomes, personagens e aspeto da Arena criados de raiz. Nunca referir marcas de outras apps em nenhum lado (código, comentários, ajuda, Novidades, docs).
 - Tema SGE: cantos retos em todos os módulos. Não mexer no eduspruce.app (landing) nem no manual PDF sem pedido.
 
 ## Gastar poucos tokens

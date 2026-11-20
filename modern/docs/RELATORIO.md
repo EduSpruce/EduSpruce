@@ -10,7 +10,7 @@ Baseline: ramo `EDUSPRUCE_ORIGINAL_BASELINE` (0.923). Versão testada: `dist/mod
 | Visual, **controlo**: baseline × a própria baseline | **76/80** iguais |
 
 ## Leitura honesta dos resultados visuais
-- As 2 capturas diferentes da versão moderna (Avaliação/SGE e Alunos/iOS 27) são **só no cabeçalho** (a barra de ações reorganiza-se de forma assíncrona) ou 12 píxeis de antialiasing; o conteúdo é idêntico.
+- As 2 capturas diferentes da versão moderna (Avaliação/SGE e Alunos/Vidro) são **só no cabeçalho** (a barra de ações reorganiza-se de forma assíncrona) ou 12 píxeis de antialiasing; o conteúdo é idêntico.
 - O teste de controlo mostra o mesmo tipo de diferenças **entre duas aberturas da própria baseline** (4 capturas). Não são causadas pela modernização: são ruído de temporização do navegador.
 - Antes de juntar a camada ES Modules, a versão reconstruída deu 80/80.
 - Melhoria proposta para o teste (não para a app): comparar o cabeçalho depois de um evento «layout estável», para eliminar este ruído.

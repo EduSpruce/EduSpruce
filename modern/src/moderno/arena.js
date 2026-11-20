@@ -10,8 +10,8 @@ async function arRpc(fn,args){const p=await sbObter();const c=p.cliente;if(!c||!
   if(error){const m=String(error.message||error.code||error);if(/function .* does not exist|PGRST202|Could not find the function/i.test(m)){const e=new Error('O Spruce It ainda não está instalado na base de dados: falta correr o ficheiro 0012_arena.sql no Supabase.');e.semSql=true;throw e}throw new Error(m)}return data}
 const arUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'spruceit#'+AR.limpaCod(c);
 const arTempos=[5,10,15,20,30,45,60,90,120];
-const arCores=['#e2453c','#1f7fd0','#e9a400','#2f9e44'];
-const arFormas=['▲','◆','●','■'];
+const arCores=['#d97706','#0284c7','#db2777','#0f766e'];
+const arFormas=['A','B','C','D'];
 let arCanal=null;
 
 /* ---------- dados de exemplo (fictícios) ---------- */
@@ -346,7 +346,7 @@ function arAssociar(j,porA,t){if(!t)return toast('Escolha a turma','aviso');cons
 .arop{display:flex;align-items:center;gap:8px;border:2px solid color-mix(in srgb,var(--oc) 45%,transparent);border-radius:12px;padding:6px 8px;margin:0;background:color-mix(in srgb,var(--oc) 7%,transparent)}
 .arop:has(input[type=radio]:checked){border-color:var(--oc);background:color-mix(in srgb,var(--oc) 18%,transparent)}
 .arop input[type=radio]{width:20px;height:20px;flex:none;accent-color:var(--oc);margin:0}.arop{min-width:0}.arqt{min-width:0}html body .arop input[data-qo]{flex:1;min-width:0!important;width:100%!important;border:0;background:transparent;font-size:15px;padding:6px 4px}
-.arof{color:var(--oc);font-size:16px;width:18px;text-align:center}.arqhint{margin:6px 0 0;font-size:12px}
+.arof{color:var(--oc);font-size:15px;font-weight:800;width:18px;text-align:center}.arqhint{margin:6px 0 0;font-size:12px}
 .arcab td,.arcab th{font-size:12px;white-space:nowrap}
 .armodos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
 .armd{all:unset;box-sizing:border-box;cursor:pointer;border:2px solid var(--line,#dfe5eb);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px}

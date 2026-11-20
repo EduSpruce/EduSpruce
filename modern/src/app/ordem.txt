@@ -18,7 +18,7 @@ dados/004-manifesto.html
 018-login.css
 019-estilo-azul-corporativo-omissao.css
 020-in-main.css
-021-acessibilidade-wcag-aa-apple.css
+021-acessibilidade-wcag-aa.css
 022-sazb.css
 023-inicio-versao-geral.css
 024-estados-vazios-aspeto-coerente.css
@@ -27,7 +27,7 @@ dados/004-manifesto.html
 027-comum-ipad-telemovel-toque.css
 028-correcoes-animacoes.css
 029-estilo-sge-cabecalho-ciano.css
-030-estilo-ios-liquid-glass.css
+030-estilo-vidro.css
 031-entre-estilos.html
 032-estilos-splash-css.css
 033-avst.css
@@ -248,7 +248,7 @@ dados/199-logotipos-novos.js
 228-msai-catalogo-como-sge.js
 229-perfil-onde-estou-como.js
 230-horario-professor-partir-teacherschedu.js
-231-minhas-tarefas-estilo-microsoft.js
+231-minhas-tarefas.js
 232-pautas-oficiais-profij-fpct.js
 233-pin-ok.js
 234-importar-reunioes-atividades-outlook.js

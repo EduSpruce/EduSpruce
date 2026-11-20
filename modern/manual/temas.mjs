@@ -1,5 +1,5 @@
 import {abrirApp} from './lib.mjs';import {readFileSync,mkdirSync} from 'node:fs';
-const T={sge:'SGE',institucional:'Institucional',ios27:'iOS 27',coral:'Coral',social:'Social',gradiente:'Gradiente',academico:'Académico'};
+const T={sge:'SGE',institucional:'Institucional',ios27:'Vidro',coral:'Coral',social:'Social',gradiente:'Gradiente',academico:'Académico'};
 const R='mwallw5c8pkji',PF='mwallw5c14run',PR='mwallw5c3yznz';
 const G=(v,t=R)=>`(()=>{UI.arEd=null;UI.pvEd=null;UI.puEd=null;UI.fmId=null;S.turmaAtiva='${t}';go('${v}');document.getElementById('view').scrollTo(0,0);return 1})()`;
 const tab=(sel,t)=>`(()=>{const b=[...document.querySelectorAll('${sel}')].find(x=>x.innerText.trim().replace(/\\s+/g,' ').startsWith(${JSON.stringify(t)}));if(!b)throw new Error('tab '+${JSON.stringify(t)});b.click();return 1})()`;

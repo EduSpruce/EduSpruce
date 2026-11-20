@@ -1,5 +1,5 @@
 /* ===================== 1.142 · vitrines dos módulos =====================
-   · Formulários: página inicial ao estilo do Microsoft Forms (botões de criação, modelos, separadores, grelha/lista, turmas)
+   · Formulários: página inicial (botões de criação, modelos, separadores, grelha/lista, turmas)
    · Spruce It, Formulários e Provas: boas-vindas animadas na primeira vez + botão «Ver exemplo» (app/275-boas-vindas-modulos.js) */
 {const _go=go;go=function(){bvDesligar();return _go.apply(this,arguments)}}
 {const _a=vArena;vArena=function(){const r=_a.apply(this,arguments);if($('#view .arhead'))bvLigar('spruceit');else bvDesligar();return r}}

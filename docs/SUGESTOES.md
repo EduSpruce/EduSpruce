@@ -9,7 +9,7 @@
 2. Feedback de Produção Oral (AN1–AN4) com comentários predefinidos por nível.
 3. Autoavaliação e heteroavaliação dos alunos por período, integradas na nota (peso opcional).
 4. Testes com versões A/B e cotações diferentes por versão.
-5. Importar classificações a partir de Excel/CSV (ex.: Google Forms, Microsoft Forms).
+5. Importar classificações a partir de Excel/CSV (ex.: exportados de outras plataformas de formulários).
 6. Classificação por QR code: o aluno mostra o código e abre logo a sua linha.
 7. Análise de item: % de acerto por pergunta, itens difíceis e discriminação.
 8. Gráfico de evolução de cada aluno por domínio ao longo do ano.

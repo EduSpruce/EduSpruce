@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.156
+- Spruce It: respostas identificadas por letras (A, B, C, D) e cores próprias da EduSpruce
+- SpruceNote: novo texto no quadro de demonstração
+- Estilo da interface «iOS 27» passa a chamar-se «Vidro»
+- Nova página Licenças de terceiros (eduspruce.pt/licencas.html), com ligação na Privacidade e nos Termos
+- Textos da ajuda, do manual e das Novidades revistos
+
 ## 1.155
 - Pulso › Quizzes: as pastas e os quizzes ficam dentro de um cartão, alinhados com o resto da página
 
@@ -51,7 +58,7 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Provas: aparência igual à apresentação (azul-noite e verde), no módulo e na página dos alunos
 
 ## 1.144
-- Formulários: página inicial nova ao estilo do Microsoft Forms — novo questionário, novo formulário, importação rápida, modelos (questionário, registo, feedback, pesquisa), separadores, favoritos, grelha ou lista e as suas turmas
+- Formulários: página inicial nova — novo questionário, novo formulário, importação rápida, modelos (questionário, registo, feedback, pesquisa), separadores, favoritos, grelha ou lista e as suas turmas
 - Spruce It, Formulários e Provas: boas-vindas animadas na primeira entrada e botão «Ver exemplo» para voltar a vê-las
 
 ## 1.143
@@ -81,11 +88,11 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Botão «Ver exemplo» no canto inferior direito do quadro para voltar a ver a demonstração
 
 ## 1.137
-- EduSchedule: importação em massa de horários do Untis — todos os PDF de professores e turmas de uma vez, códigos por reconhecer escolhidos na pré-visualização e lembrados
-- Ficheiros GPU do Untis passam a juntar-se ao horário atual sem apagar nada (por omissão)
+- EduSchedule: importação em massa de horários em PDF — todos os PDF de professores e turmas de uma vez, códigos por reconhecer escolhidos na pré-visualização e lembrados
+- Ficheiros GPU passam a juntar-se ao horário atual sem apagar nada (por omissão)
 
 ## 1.136
-- EduSchedule › Horários e Ficheiro: importar horários em PDF do Untis (de professores, turmas ou salas), com pré-visualização — coloca as aulas sem apagar nada
+- EduSchedule › Horários e Ficheiro: importar horários em PDF (de professores, turmas ou salas), com pré-visualização — coloca as aulas sem apagar nada
 - Botões de importar marcados para se distinguirem dos outros
 
 ## 1.135
@@ -314,7 +321,7 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Administrador: é preciso correr uma vez o ficheiro 0019_seguranca_rgpd.sql no Supabase (limite de tentativas nos códigos das salas, limpeza diária, eliminação de conta)
 
 ## 1.083
-- SpruceNote Web Clipper: extensão do Chrome (como a do Milanote) para guardar imagens, texto, ligações e vídeos de qualquer site no SpruceNote — descarregar
+- SpruceNote Web Clipper: extensão do Chrome para guardar imagens, texto, ligações e vídeos de qualquer site no SpruceNote — descarregar
 - Os recortes chegam ao quadro escolhido numa coluna «Por Arrumar»; «Abrir» na extensão leva diretamente ao quadro
 
 ## 1.082
@@ -506,7 +513,7 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Entrada: não confiar em navigator.onLine; recarregar ao voltar a ligação
 
 ## 1.031
-- O Meu Calendário (clone do Outlook)
+- O Meu Calendário
 - Provas: Word/PDF, Explorar, áudio, fórmulas, acompanhamento ao vivo, relatórios
 - Tema SGE coerente; PROFIJ sem número no ícone
 
@@ -670,7 +677,7 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Anular com limite de memória
 
 ## 0.989
-- Contactos estilo macOS (listas, cartão, vCard, duplicados)
+- Contactos (listas, cartão, vCard, duplicados)
 - Sorteio em ecrã inteiro no tema SGE
 - Análise por domínio redesenhada
 
@@ -937,7 +944,7 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Importação do histórico/média detalhada (xlsx)
 
 ## 0.921
-- Minhas Tarefas ao estilo do Microsoft To Do (listas, O Meu Dia, Importante, Planeado, passos, lembretes, repetição, notas, listas próprias)
+- Minhas Tarefas (listas, O Meu Dia, Importante, Planeado, passos, lembretes, repetição, notas, listas próprias)
 
 ## 0.920
 - Catálogo MSAI do SGE (Data de início · Ação · Disciplina) na ficha e no Quadro MSAI
@@ -1170,7 +1177,7 @@ O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/E
 - Listas de seleção legíveis no Windows; tema SGE com separadores discretos e barra de ações compacta; síntese descritiva justificada e com avanço (ecrã e PDF).
 
 ## 0.64 — 4 nov 2026
-- Estilo «iOS 27» (Liquid Glass com controlo de transparência); tema SGE corrigido; avisos do Jornal numa secção própria; módulo Jornal ativado pelo cargo.
+- Estilo «Vidro» (com controlo de transparência); tema SGE corrigido; avisos do Jornal numa secção própria; módulo Jornal ativado pelo cargo.
 
 ## 0.63 — 4 nov 2026
 - Jornal Escolar consolidado (PAA .docx, peças, edições, redação, calendário, avisos) e incluído na demonstração.

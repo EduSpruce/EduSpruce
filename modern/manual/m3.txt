@@ -62,7 +62,7 @@ Portaria n.º 52/2016, Portaria n.º 86/2018 e os documentos da escola (ex.: reg
 @parte VI | Ferramentas digitais para os alunos | Forms, Provas, Arena, Pulso e autoavaliação — os alunos respondem no telemóvel, sem conta
 
 # Forms
-Menu **Forms**. Formulários (inquéritos, fichas) e testes com correção automática, ao estilo do Microsoft Forms. Os alunos respondem em **forms.html** por QR code ou código, sem contas.
+Menu **Forms**. Formulários (inquéritos, fichas) e testes com correção automática. Os alunos respondem em **forms.html** por QR code ou código, sem contas.
 !forms | Forms: lista de testes e formulários, filtros e, em cada cartão, Recolher, Editar e Mais.
 ## Criar um formulário ou teste
 1. Toque em **Novo Teste** ou **Novo Formulário** (botão Banco na barra para os de outros anos letivos).
@@ -82,7 +82,7 @@ Os alunos abrem forms.html, escrevem o código, escolhem o número e respondem. 
 ? Para testes de avaliação completos (verdadeiro/falso, preencher, conectar, tabelas, rubricas, modo exame, agendamento) use as **Provas**.
 
 # Provas
-Menu **Provas**. Módulo independente para testes, fichas, quizzes e TPC digitais (ao estilo do Intuitivo), com correção automática e ligação opcional às turmas e aos momentos de avaliação. Os alunos respondem em **provas.html**.
+Menu **Provas**. Módulo independente para testes, fichas, quizzes e TPC digitais, com correção automática e ligação opcional às turmas e aos momentos de avaliação. Os alunos respondem em **provas.html**.
 !provas-inicio | Provas › Início: criar uma avaliação pelo título, importar, próximas avaliações, continuar de onde parou e dados de utilização.
 ## O menu das Provas
 - **Início** — «Crie uma avaliação» (escreva o título e +), **Importar Avaliação**, **Criar Manualmente**, calendário das próximas avaliações, «Continue de onde parou» e dados de utilização (mês, trimestre, ano).

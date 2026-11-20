@@ -756,8 +756,8 @@ Auditoria automática repetida a todo o código e a todas as secções:
 - Módulo Jornal Escolar (vindo de outra versão de trabalho, integrado sobre a 0.62): vista `jornal` (Painel, Atividades do PAA, Calendário, Peças, Edições, Redação), importação do PAA (.docx), avisos, exportação .ics; desativável (`S.cfg.modulos.jornal=false`). Demonstração do Jornal (`criarDemoJornal`, só com o jornal do ano vazio).
 - Perfis de animação `S.cfg.animPerfil` = 'sem' | 'min' | 'cheio' (predefinição: cheio); classes `anim-*` no `<html>`; «sem» liga `a11y-rm`; a Acessibilidade «Reduzir» prevalece.
 
-## 0.64 — 4 nov 2026 · Estilo iOS 27, tema SGE, avisos e cargos do Jornal
-- Estilo `ios27` (Liquid Glass) com `S.cfg.iosVidro` (0–100, transparente ↔ com cor → `--lg-a`).
+## 0.64 — 4 nov 2026 · Estilo Vidro, tema SGE, avisos e cargos do Jornal
+- Estilo `ios27` (Vidro) com `S.cfg.iosVidro` (0–100, transparente ↔ com cor → `--lg-a`).
 - Tema SGE: campos legíveis nas faixas azuis, etiquetas `td::before` no telemóvel, estados das etiquetas, `#ctxEsc` com contraste ≥ 4,5.
 - Avisos Urgentes: itens `g:'jornal'` no fim, em secção própria.
 - Jornal: `jnOn()` = interruptor explícito (`S.cfg.modulos.jornal`) ou cargo com «jornal» em `perfil().porEscola[*].cargos` ou ano de demonstração. Novos cargos: «Coordenador(a) do jornal da escola», «Equipa do jornal da escola».

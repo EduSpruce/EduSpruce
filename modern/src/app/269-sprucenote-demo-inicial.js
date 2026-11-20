@@ -1,8 +1,8 @@
-/* ===================== 1.138 · SpruceNote e JornalNote: quadro de demonstração (ao estilo do Milanote) =====================
+/* ===================== 1.138 · SpruceNote e JornalNote: quadro de demonstração  =====================
    Aparece uma vez, na primeira entrada em cada contexto (S.cfg.mqDemo.sn / .snj), e volta a abrir no botão «Ver exemplo»
    no canto inferior direito do quadro. Só dados fictícios. «Criar quadro de exemplo» acrescenta um subquadro — nunca apaga nada. */
 const MQD={
-  sn:{nome:'SpruceNote',tit:'Organize-se. Continue a criar.',sub:'O SpruceNote é a forma fácil de organizar aulas, projetos e ideias — tudo num quadro.',
+  sn:{nome:'SpruceNote',tit:'Da ideia à aula, num só quadro.',sub:'No SpruceNote, as aulas, os projetos e as ideias da escola ficam lado a lado, à vista de todos.',
     bc:['Início','Turmas','Projeto «A minha escola»'],quadro:'Projeto «A minha escola»',
     sobre:['Sobre','1 cartão, 1 ficheiro','<b>A minha escola</b> é um projeto do 7.º ano: cada grupo apresenta um espaço da escola com fotografias, entrevistas e um mapa. Objetivo: <mark>trabalho colaborativo</mark>, comunicação oral e espírito crítico.','Guiao-do-projeto.pdf','184 KB'],
     cor:['#0E7095','Azul Spruce'],insp:['Inspiração','1 cartão, 1 ficheiro'],tipo:['Abc','Tipografia dos cartazes'],video:['visita-de-estudo.mp4','48,2 MB'],

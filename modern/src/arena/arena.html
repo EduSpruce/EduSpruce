@@ -133,7 +133,7 @@ window.__ES_SB="__ES_SB__";</script>
 <script>
 (()=>{const AR=window.ARENA;const $=s=>document.querySelector(s);const app=$('#app');
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const CORES=['var(--a1)','var(--a2)','var(--a3)','var(--a4)'],FORMAS=['▲','◆','●','■'];
+const CORES=['var(--a1)','var(--a2)','var(--a3)','var(--a4)'],FORMAS=['A','B','C','D'];
 let CFG=null;const st={};
 function tema(k){k=AR.temaOk(k||'');if(st.tema===k)return;st.tema=k;document.documentElement.style.cssText=AR.temaCss(k);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=AR.TEMAS[k].v['--bg'];try{localStorage.setItem('arena.tema',k)}catch(_){}}
 {let k0='';try{k0=new URLSearchParams(location.search).get('tema')||localStorage.getItem('arena.tema')||''}catch(_){}tema(k0)}

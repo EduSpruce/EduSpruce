@@ -1,4 +1,4 @@
-/* ===================== v0.921 · As Minhas Tarefas ao estilo do Microsoft To Do ===================== */
+/* ===================== v0.921 · As Minhas Tarefas ===================== */
 try{Object.assign(ICONS,{sun:ICONS.sun||'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',repeat:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',home2:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',note:'<path d="M4 4h16v12l-4 4H4z"/><path d="M16 20v-4h4"/>',steps:'<circle cx="5" cy="6" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="5" cy="18" r="1.6"/><path d="M10 6h10M10 12h10M10 18h10"/>'})}catch(_){}
 const TD_LISTAS_FIX=[['dia','O Meu Dia','sun','#2564cf'],['imp','Importante','star','#c2185b'],['plan','Planeado','calendar','#107c41'],['reun','Das Reuniões','meet','#8a5a00'],['todas','Tarefas','home2','#2564cf'],['avisos','Avisos Urgentes','bell','#c0392b']];
 const TD_CORES=['#2564cf','#107c41','#c2185b','#8764b8','#ca5010','#038387','#5b6b7f','#b4009e'];

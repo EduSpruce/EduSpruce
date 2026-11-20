@@ -1,4 +1,4 @@
-/* ===================== EduSpruce Provas — avaliações digitais (inspirado no Intuitivo) =====================
+/* ===================== EduSpruce Provas — avaliações digitais =====================
    Módulo independente (não depende do Forms nem partilha dados com ele): banco de exercícios com etiquetas, avaliações
    (teste, ficha, quiz de aula, quiz de revisão, TPC), rubricas, agendamento por turma, modo exame, acompanhamento ao vivo,
    correção automática e manual (pontos, comentários, anotações, rubricas), estatísticas avançadas, ligação a turmas e
@@ -499,7 +499,7 @@ function pvAvMais(a){openDrawer(a.titulo,`<div class="ed"><div class="armais">
     if(k==='ag')return pvAgendarDlg(a);if(k==='tu')return pvAssocDlg(a);if(k==='sh')return pvPartilharDlg('av',a);if(k==='csv')return pvCSV(a);if(k==='rel'){closeDrawer();return pvRelatorios(a)}if(k==='pdf'){closeDrawer();return pvPapel(a)}
     if(k==='dup'){const c=pvClone(a);Object.assign(c,{id:uid(),titulo:a.titulo+' (cópia)',resp:[],sess:[],assoc:[],ag:{},criado:Date.now(),alterado:Date.now(),publicado:false});c.itens.forEach(q=>q.id=uid());PV().av.unshift(c);save();closeDrawer();toast('Duplicada','ok');return vProvas()}
     if(k==='x'){if(!confirm('Apagar «'+a.titulo+'» e as '+a.resp.length+' respostas?'))return;(a.sess||[]).forEach(s=>pvFechar(a,s).catch(()=>{}));S.pv.av=PV().av.filter(x=>x!==a);save();closeDrawer();UI.pvEd=null;vProvas()}})}
-/* versão em papel (Intuitivo: exportar para PDF) */
+/* versão em papel (exportar para PDF) */
 function pvPapel(a){const w=window.open('','_blank');if(!w)return toast('O navegador bloqueou a janela.','erro');let n=0;
   const corpo=a.itens.map(q=>{if(q.tipo==='secao')return `<h2>${esc(q.titulo||'')}</h2>`;if(q.tipo==='info')return `<div class="info">${pvLimpa(q.html)}</div>`;n++;let r='';
     if(q.tipo==='escolha')r='<ol type="A">'+q.ops.map(o=>`<li>${esc(o.t)}</li>`).join('')+'</ol>';
@@ -547,7 +547,7 @@ function pvPrev(f,sub){const el=document.createElement('div');el.className='pqpr
   ecraAmplo({titulo:'Pré-visualizar',sub:sub||f.titulo,el});const fr=el.querySelector('iframe');fr.onload=()=>setTimeout(()=>{try{fr.contentWindow.postMessage({pvPrev:D},location.origin)}catch(_){}},150);
   el.querySelectorAll('[data-ppd]').forEach(b=>b.onclick=()=>{el.querySelectorAll('[data-ppd]').forEach(x=>x.classList.toggle('on',x===b));el.classList.toggle('tlm',b.dataset.ppd==='tlm')})}
 const pvPrevEx=e=>pvPrev({titulo:'Pré-visualizar exercício',desc:'',quiz:true,cor:pvAcc(),defs:Object.assign(pvDefs(),{numerar:false}),itens:[pvParaItem(e)]},pvTipo(e.tipo)[2]);
-/* ---------- editor de exercício (como no Intuitivo: secções numeradas) ---------- */
+/* ---------- editor de exercício (secções numeradas) ---------- */
 function pvExEditor(w,ctx){const v=$('#view');barBtns([]);let n=0;const sec=(t,body,dir)=>`<section class="pvcard"><h3><span>${++n}. ${t}</span><span class="pvsp"></span>${dir||''}</h3>${body}</section>`;
   const tg=(id,on,l)=>`<label class="pvtg"><span>${l}</span><input type="checkbox" id="${id}" ${on?'checked':''}><i></i></label>`;
   const corr=(desc)=>sec('Opções de correção',`<div class="pvseg"><button type="button" data-pdc="0" class="${!w.dico?'on':''}">${ic('check',15)} Parcial</button><button type="button" data-pdc="1" class="${w.dico?'on':''}">${ic('x',15)} Dicotómica</button></div><p class="pvhint" style="margin:10px 0 0">${w.dico?'Só tem a cotação se estiver tudo certo; caso contrário, 0.':desc}</p>`);

@@ -6,7 +6,7 @@
    · painéis: continuar (último editado / último jogado), jogos recentes com vencedor e acerto, atividade das últimas
      8 semanas, modos mais usados e perguntas a rever (as que menos acertam nos relatórios guardados)
    Ecrã projetado (modos ao ritmo de cada aluno): painel «Ao vivo» com o que acontece (quem ganhou, perdeu ou ficou com
-   pontos de outro jogador), total da sala e acerto. Os nomes e as personagens são originais (nada copiado do Blooket). */
+   pontos de outro jogador), total da sala e acerto. Os nomes e as personagens são originais (criados de raiz). */
 
 const ARS_ORD={recente:'Editados há menos tempo',jogos:'Mais jogados',nome:'Nome (A–Z)',perg:'Mais perguntas'};
 function arsConjs(){const d=arD();let ano=null;try{if(typeof bcAnoNome==='function'){if(typeof bcMarcar==='function')bcMarcar(d.conj);ano=bcAnoNome()}}catch(_){}return d.conj.filter(c=>!ano||c.ano===ano)}
@@ -202,7 +202,7 @@ const ARS_CENAS=[
 /* sempre Pinhas (as personagens do Spruce It), de cores e acessórios diferentes, no mesmo estilo */
 function arsAv(k,sz){const E=AR.CUBOS&&AR.CUBOS.length?AR.CUBOS:['p01'];try{return AR.svg(E[k%E.length],sz)}catch(_){return ''}}
 function arsCena(i){const L=['Ana','Rui','Leo','Mia','Tó'];
-  if(i===0)return `<div class="arsx-ed"><div class="arsx-q"><span>1</span><i style="width:70%"></i></div><div class="arsx-ops">${['#eab308','#3b82f6','#22c55e','#ef4444'].map((c,k)=>`<div style="--c:${c};--d:${.25+k*.22}s"><b>${['▲','◆','●','■'][k]}</b><i style="width:${[60,45,70,52][k]}%"></i>${k===2?'<u>✓</u>':''}</div>`).join('')}</div><div class="arsx-q s" style="--d:1.3s"><span>2</span><i style="width:55%"></i></div><div class="arsx-q s" style="--d:1.6s"><span>3</span><i style="width:62%"></i></div></div>`;
+  if(i===0)return `<div class="arsx-ed"><div class="arsx-q"><span>1</span><i style="width:70%"></i></div><div class="arsx-ops">${['#f59e0b','#0ea5e9','#ec4899','#14b8a6'].map((c,k)=>`<div style="--c:${c};--d:${.25+k*.22}s"><b>${'ABCD'[k]}</b><i style="width:${[60,45,70,52][k]}%"></i>${k===2?'<u>✓</u>':''}</div>`).join('')}</div><div class="arsx-q s" style="--d:1.3s"><span>2</span><i style="width:55%"></i></div><div class="arsx-q s" style="--d:1.6s"><span>3</span><i style="width:62%"></i></div></div>`;
   if(i===1)return `<div class="arsx-lob"><div class="arsx-cod"><small>Código da sala</small><b>482 107</b><span>eduspruce.pt/spruceit</span></div><div class="arsx-avs">${L.map((n,k)=>`<div style="--d:${.3+k*.35}s">${arsAv(k,46)}<span>${n}</span></div>`).join('')}</div><div class="arsx-n"><b class="arsx-cnt"></b> jogadores</div></div>`;
   if(i===2){const pts=[[320,1],[282,0],[208,2],[130,3],[96,4]];return `<div class="arsx-live"><div class="arsx-lb">${pts.map(([p,k],r)=>`<div style="--o:${r};--w:${Math.round(p/3.3)}%">${arsAv(k,30)}<span>${L[k]}</span><i></i><b>${p}</b></div>`).join('')}</div><div class="arsx-feed"><small><em></em> Ao vivo</small><p style="--d:.6s"><b>Mia</b> ganhou 40 pts</p><p style="--d:1.4s"><b>Rui</b> ficou com 25 pts da <b>Ana</b></p><p style="--d:2.2s"><b>Leo</b> duplicou!</p></div></div>`}
   if(i===3)return `<div class="arsx-pod">${[[1,1,'282'],[0,0,'320'],[2,2,'208']].map(([k,pos,p],c)=>`<div class="p${pos+1}" style="--d:${[.5,.2,.8][c]}s"><span class="arsx-pa">${arsAv(k,pos===0?62:50)}</span><b>${L[k]}</b><div><em>${pos+1}.º</em><small>${p} pts</small></div></div>`).join('')}${Array.from({length:18},(_,k)=>`<i class="arsx-cf" style="--x:${(k*37)%100}%;--d:${(k%6)*.18}s;--c:${['#facc15','#f97316','#4ade80','#60a5fa','#f472b6'][k%5]}"></i>`).join('')}</div>`;

@@ -99,7 +99,7 @@ Menu **SpruceNote**. Quadros livres para planear e organizar ideias.
 - Duplo toque abre ou edita; arraste para mover; zoom − / + e ajustar ao ecrã; anular e refazer; **Aumentar** para ecrã inteiro.
 !snjornal | JornalNote: igual ao SpruceNote, só com os quadros do Jornal Escolar.
 ## SpruceNote Web Clipper (extensão do Chrome)
-Guarda **imagens, texto, ligações e vídeos** de qualquer site nos quadros do SpruceNote, como no Milanote. No Início, o atalho **SpruceNote Web Clipper › Instalar** (à esquerda das apps, só no computador) descarrega a extensão e mostra os passos; desaparece quando a extensão está instalada.
+Guarda **imagens, texto, ligações e vídeos** de qualquer site nos quadros do SpruceNote. No Início, o atalho **SpruceNote Web Clipper › Instalar** (à esquerda das apps, só no computador) descarrega a extensão e mostra os passos; desaparece quando a extensão está instalada.
 1. Descompacte **sprucenote-web-clipper.zip** (Ajuda › SpruceNote Web Clipper ou atalho do Início).
 2. No Chrome, abra **chrome://extensions** e ligue o **Modo de programador**.
 3. **Carregar expandida** › escolha a pasta **sprucenote-web-clipper**; fixe o ícone na barra (peça de puzzle › alfinete).
@@ -132,7 +132,7 @@ Assinale os cargos (Diretor(a) de turma, Coordenador(a) de departamento, Delegad
 ## Aparência
 !def-Aparência | Aparência: tema, cor de destaque, logotipo da app e estilo da interface.
 - **Tema** — Automático, Claro, Escuro. **Cor de destaque**. **Logotipo da app**.
-- **Estilo da interface** — EduSpruce, Azul Corporativo, **SGE (predefinido)**, Coral, Social, Gradiente, Institucional, Académico e iOS 27.
+- **Estilo da interface** — EduSpruce, Azul Corporativo, **SGE (predefinido)**, Coral, Social, Gradiente, Institucional, Académico e Vidro.
 - **Interface por dispositivo** (Automático, Computador, iPad, Telemóvel), **temas sazonais**, **densidade**, **tamanho do texto**, **alto contraste** e **cores para daltonismo**.
 !def-Aparência-2 | Estilo, interface por dispositivo, temas sazonais, densidade, texto, contraste, Notas Flutuantes e O Meu Dia.
 !def-Aparência-3 | Barra Lateral, Fotografias dos Alunos, Avaliação e Marcações e Logotipo Animado.

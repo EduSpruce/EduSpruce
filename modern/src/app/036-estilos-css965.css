@@ -244,7 +244,7 @@ body.est-sge.est-sge.est-sge :is(#view,#ampv) table.grid thead th.niv{background
 body.est-sge.est-sge.est-sge :is(#view,#ampv) table.grid thead th.niv.folha{background:#1690b6!important;color:#fff!important;font-weight:700}
 body.est-sge.est-sge.est-sge :is(#view,#ampv) table.grid thead th.niv.vz{background:#0a7ea6!important}
 body.est-sge.est-sge.est-sge #ampv :is(table.grid,.grid) thead th :is(.dh,small,button){color:rgba(255,255,255,.9)!important}
-/* v0.989 · Contactos ao estilo macOS (três colunas), adaptados ao tema */
+/* v0.989 · Contactos (três colunas), adaptados ao tema */
 html body .cmw{display:grid;grid-template-columns:220px minmax(230px,300px) minmax(0,1fr);height:var(--cmh,70vh);border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden;color:var(--ink)}
 html body .cmw>*{min-width:0;min-height:0}
 html body .cmsb{background:color-mix(in srgb,var(--bg) 70%,var(--panel));border-right:1px solid var(--line);padding:10px 8px;overflow:auto;display:flex;flex-direction:column;gap:1px}

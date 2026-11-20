@@ -481,7 +481,7 @@ body.est-sge #login.pinmode .pdk button{border:1px solid #d5dbe0!important;font-
 body.est-sge #login.pinmode .pdots i{border-radius:2px!important}
 body.est-sge #login.pinmode .pinside{color:#fff;align-self:start;margin-top:8vh}
 @media (min-width:900px){body.est-sge #login.pinmode{--pin-bg:linear-gradient(90deg,#1b93c6 0 50%,#e9eef2 50% 100%)}}
-/* iOS 27: vidro */
+/* Vidro */
 body.est-ios27 #login.pinmode{--pin-bg:radial-gradient(100% 80% at 30% 0%,#7aa7ff 0%,#4a6fd8 40%,#1f2f6b 100%);--pin-card:rgba(255,255,255,.62);--pin-key:rgba(255,255,255,.55);--pin-keyh:rgba(255,255,255,.75);--pin-acc:#0a84ff;--pin-r:34px}
 body.est-ios27 #login.pinmode .lgb.pinc{backdrop-filter:blur(30px) saturate(1.6)!important;box-shadow:0 20px 60px -20px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.6)!important}
 /* Institucional: azul-marinho e dourado */

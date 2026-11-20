@@ -61,7 +61,7 @@
     anda(raiz);
     return raiz.innerHTML.replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>').trim().slice(0, 50000);
   }
-  /* a nota completa: o texto + a ligação para a fonte (como no Milanote) */
+  /* a nota completa: o texto + a ligação para a fonte */
   function notaDeTexto(html, texto, pagina, titulo) {
     let corpo = html && html.replace(/<[^>]*>/g, '').trim() ? html : esc(String(texto || '').trim()).replace(/\n/g, '<br>');
     if (!/^\s*<(p|div|ul|ol|h3|blockquote)\b/i.test(corpo)) corpo = '<p>' + corpo + '</p>';
@@ -360,7 +360,7 @@
       if (r.buscar && (r.tipo === 'ligacao' || r.tipo === 'video')) this._meta(c);
       return el;
     }
-    /* título e descrição verdadeiros da página ligada (como os cartões de ligação do Milanote) */
+    /* título e descrição verdadeiros da página ligada */
     async _meta(c) {
       const r = c.r;
       let m = null;

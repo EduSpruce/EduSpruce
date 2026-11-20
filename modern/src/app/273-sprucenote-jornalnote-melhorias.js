@@ -1,4 +1,4 @@
-/* ===================== 1.141 · SpruceNote e JornalNote: melhorias (ideias do site do Milanote) =====================
+/* ===================== 1.141 · SpruceNote e JornalNote: melhorias =====================
    · pesquisa em todos os quadros (botão ou Ctrl+F no quadro)
    · modelos de quadro (plano de aula, projeto, visita de estudo, reunião, brainstorm, pesquisa, semana, edição do jornal)
    · setas: etiqueta, tracejado, pontas (fim, ambas, nenhuma), cor, curva e inverter sentido
