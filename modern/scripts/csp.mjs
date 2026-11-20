@@ -64,7 +64,7 @@ function hashesMRA(html,dir){const m=/<script type="application\/octet-stream" i
   if(!b64)return [];return hashesDe(gunzipSync(Buffer.from(b64,'base64')).toString('utf8'))}
 
 const PAGINAS={'index.html':'app','spruceit.html':'aluno','pulso.html':'aluno','aluno.html':'aluno','forms.html':'aluno','provas.html':'aluno',
-  'arena.html':'texto','privacidade.html':'texto','termos.html':'texto'};
+  'eduschedule.html':'eduschedule','horarios.html':'horarios','arena.html':'texto','privacidade.html':'texto','termos.html':'texto'};
 /* páginas editadas à mão na raiz do repositório: numa construção de teste copiam-se para a pasta de saída; na publicação recebem a política no próprio sítio */
 const DA_RAIZ=['aluno.html','forms.html','provas.html','privacidade.html','termos.html'];
 

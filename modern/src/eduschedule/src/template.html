@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduSchedule · EduSpruce</title>
+<script>/* nunca dentro de uma página de outro sítio (proteção contra cliques enganados) */try{if(top!==self){let m=false;try{m=top.location.origin===location.origin}catch(_){}if(!m)document.documentElement.style.display='none'}}catch(_){}
+try{var t=localStorage.getItem('ph-tema');if(t)document.documentElement.setAttribute('data-theme',t);var z=+localStorage.getItem('ph-zoom');if(z>=70&&z<=160)document.documentElement.style.fontSize=z+'%';}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>/*CSS*/</style>
+</head>
+<body class="bg-base-200 text-base-content">
+<div class="drawer lg:drawer-open">
+  <input id="nav-drawer" type="checkbox" class="drawer-toggle" aria-label="Abrir menu">
+  <div class="drawer-content flex flex-col min-h-screen min-w-0">
+    <header class="navbar noprint bg-base-100 border-b border-base-300 sticky top-0 z-30 gap-2 px-3 min-h-14">
+      <label for="nav-drawer" class="btn btn-ghost btn-square btn-sm lg:hidden" id="menu-btn" aria-label="Menu"></label>
+      <button type="button" class="btn btn-ghost btn-square btn-sm" id="es-casa" title="Voltar à EduSpruce" aria-label="Voltar à EduSpruce"></button>
+      <input type="text" id="school" aria-label="Nome da escola" class="input input-ghost input-sm font-semibold w-44 sm:w-64">
+      <input type="text" id="ano" aria-label="Ano letivo" class="input input-ghost input-sm w-28 hidden sm:block">
+      <span class="grow"></span>
+      <span id="status" class="text-xs opacity-70 hidden md:inline"></span>
+      <div class="join">
+        <button type="button" class="btn btn-sm join-item" id="undo" title="Anular (Ctrl+Z)" aria-label="Anular"></button>
+        <button type="button" class="btn btn-sm join-item" id="redo" title="Refazer (Ctrl+Y)" aria-label="Refazer"></button>
+      </div>
+      <div class="join" role="group" aria-label="Tamanho da letra"><button type="button" class="btn btn-ghost btn-sm join-item px-2" id="fs-menos" title="Diminuir a letra" aria-label="Diminuir a letra">A−</button><button type="button" class="btn btn-ghost btn-sm join-item px-2 text-base" id="fs-mais" title="Aumentar a letra" aria-label="Aumentar a letra">A+</button></div>
+      <button type="button" class="btn btn-ghost btn-sm btn-square" id="tema" title="Tema claro ou escuro" aria-label="Mudar tema"></button>
+    </header>
+    <main id="main" class="p-4 lg:p-6 flex flex-col gap-4 w-full min-w-0"></main>
+  </div>
+  <div class="drawer-side z-40">
+    <label for="nav-drawer" class="drawer-overlay"><span class="sr-only">Fechar menu</span></label>
+    <aside class="bg-base-100 border-r border-base-300 min-h-full w-60 flex flex-col">
+      <div class="px-4 py-4 flex items-center gap-2 border-b border-base-300">
+        <span class="w-8 h-8 rounded-lg bg-primary text-primary-content grid place-items-center" id="logo"></span>
+        <span class="fd font-bold leading-tight">EduSchedule<br><span class="text-xs font-medium opacity-60">horários da escola</span></span>
+      </div>
+      <ul id="nav" class="menu menu-sm w-full grow gap-0.5 p-2"></ul>
+      <div class="p-3 text-xs opacity-60 border-t border-base-300" id="foot"></div>
+    </aside>
+  </div>
+</div>
+<dialog id="dlg" class="modal"><div class="modal-box max-w-3xl" id="dlg-box"></div><form method="dialog" class="modal-backdrop"><button aria-label="Fechar">fechar</button></form></dialog>
+<div id="toast" class="toast toast-end z-50 noprint" role="status"></div>
+<div id="printarea"></div>
+<script id="engine">/*ENGINE*/</script>
+<script>/*APP*/</script>
+</body>
+</html>

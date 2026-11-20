@@ -10,7 +10,7 @@ MANTER="${ES_ESPELHO_MANTER:-boxdoc voa-cagarro}"
 excl=(! -name .git); for m in $MANTER; do excl+=(! -name "$m"); done
 find "$DST" -mindepth 1 -maxdepth 1 "${excl[@]}" -exec rm -rf {} +
 cd "$SRC"
-for f in index.html arquivo.html aluno.html forms.html provas.html  spruceit.html arena.html pulso.html sw.js versao.json manifest.webmanifest favicon.png eduspruce-config.json supabase-config.json privacidade.html termos.html .nojekyll LICENSE; do [ -e "$f" ] && cp -p "$f" "$DST/"; done
+for f in index.html arquivo.html aluno.html forms.html provas.html eduschedule.html horarios.html spruceit.html arena.html pulso.html sw.js versao.json manifest.webmanifest favicon.png eduspruce-config.json supabase-config.json privacidade.html termos.html .nojekyll LICENSE; do [ -e "$f" ] && cp -p "$f" "$DST/"; done
 git ls-files esm app icons ajuda manual fontes | while read -r f; do mkdir -p "$DST/$(dirname "$f")"; cp -p "$f" "$DST/$f"; done
 # a extensão do Chrome (SpruceNote Web Clipper), para se poder instalar também a partir da rede da escola
 [ -e extensao/sprucenote-web-clipper.zip ] && mkdir -p "$DST/extensao" && cp -p extensao/sprucenote-web-clipper.zip "$DST/extensao/"
