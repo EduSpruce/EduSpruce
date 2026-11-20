@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.170
+- Spruce It!: «Modos de jogo» ocupa todo o espaço à esquerda, em duas colunas nos ecrãs largos
+
 ## 1.169
 - Menu lateral: «Professor» fica realçado como os outros itens
 - Spruce It!: a página ocupa toda a largura quando não há espaço para «Como funciona» ao lado

@@ -13,3 +13,6 @@ html body:not(.est-sge) #ars-esq .arse{border-radius:16px}
 html body .spv .ars-k{display:flex!important;align-items:flex-start;gap:10px}
 html body .spv .ars-ki{display:flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:34px!important;padding:0!important}
 html body .spv .ars-ki svg{width:18px!important;height:18px!important;margin:0!important}
+/* 1.170 — «Modos de jogo» ocupa todo o espaço à esquerda do conteúdo; largo, mostra os modos em duas colunas */
+html body #ars-esq.larga ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+html body #ars-esq.larga .arse{max-height:none}
