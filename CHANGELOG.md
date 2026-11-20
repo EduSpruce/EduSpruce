@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.173
+- Spruce It!: «Modos de jogo» fica com a mesma margem à esquerda que o conteúdo tem à direita
+
 ## 1.172
 - Spruce It!: o conteúdo alarga para a esquerda até junto de «Modos de jogo», em qualquer largura de ecrã
 
