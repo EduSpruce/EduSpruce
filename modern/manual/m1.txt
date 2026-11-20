@@ -93,7 +93,7 @@ Por omissão o menu mostra só os ícones (passe o rato por cima para ver o nome
 - **Jornal Escolar** e **JornalNote** — só para o responsável pelo jornal.
 - **Coord. PROFIJ** — só para quem coordena o PROFIJ.
 - **SpruceNote** — quadros de ideias.
-- **O Meu Calendário** — agenda pessoal ao estilo do Outlook.
+- **O Meu Calendário** — agenda pessoal.
 Os módulos opcionais ligam-se e desligam-se em [[Definições › Geral › Módulos Opcionais]].
 ## Turmas
 Por baixo fica o filtro **Todas / Regular / PROFIJ** e a lista das turmas. Toque numa turma para abrir as suas secções: Painel da Turma, Alunos, Planta, Horário, Modo Aula, Sumários, Sorteio, Critérios, Marcação de Testes, Instrumentos, Produção Oral, Domínios, Análise de Resultados, Avaliação Intercalar, Avaliação Final e Relatórios. Nas turmas de cursos profissionais aparecem também **Módulos** e **Recuperação (MRA)**; nas turmas PROFIJ, **Planos de Recuperação**.
@@ -209,7 +209,7 @@ Menu **O Meu Horário**. O seu horário semanal com todas as turmas e os tempos 
 !meuhorario-baixo | A grelha semanal completa.
 
 # O Meu Calendário
-Menu **O Meu Calendário**. Uma agenda pessoal ao estilo do Outlook que junta as suas aulas, reuniões, testes, tarefas, Provas agendadas e o calendário escolar com os seus próprios eventos.
+Menu **O Meu Calendário**. Uma agenda pessoal que junta as suas aulas, reuniões, testes, tarefas, Provas agendadas e o calendário escolar com os seus próprios eventos.
 !meucal-Mês | Vista Mês: calendário pequeno, os seus calendários e as camadas da EduSpruce à esquerda.
 ## Vistas
 **Dia**, **3 dias**, **Semana de trabalho**, **Semana**, **Mês**, **Agenda** e **Ano letivo**. Use **Hoje**, ‹ › e o calendário pequeno para mudar de data.

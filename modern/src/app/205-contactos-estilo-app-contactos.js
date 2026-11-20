@@ -1,4 +1,4 @@
-/* ===================== v0.989 · Contactos ao estilo da app Contactos do macOS: listas, cartão, edição no próprio cartão, vCard, duplicados ===================== */
+/* ===================== v0.989 · Contactos: listas, cartão, edição no próprio cartão, vCard, duplicados ===================== */
 const CT_ROT=['telemóvel','trabalho','casa','escola','outro'];
 const ctListas=()=>{if(!Array.isArray(S.cfg.contListas))S.cfg.contListas=[];return S.cfg.contListas};
 const ctIni=n=>{const p=String(n||'').trim().split(/\s+/);return ((p[0]||'?')[0]+(p.length>1?p[p.length-1][0]:'')).toUpperCase()};

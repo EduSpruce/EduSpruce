@@ -1,4 +1,4 @@
-/* ---------- O Meu Calendário (1.031): ao estilo do calendário do Outlook ----------
+/* ---------- O Meu Calendário (1.031) ----------
    Vistas Dia, 3 dias, Semana de trabalho, Semana, Mês, Agenda e Ano letivo; minicalendário; calendários com cores (mostrar/esconder);
    eventos com repetição e exceções, dia inteiro e vários dias, local, ligação online, lembretes, estado, privado, categorias;
    criar arrastando na grelha, mover e alterar a duração arrastando; criação rápida em linguagem natural; pesquisa; .ics; imprimir.

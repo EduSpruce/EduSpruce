@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.158
+- Ajuda e manual: textos revistos
+
 ## 1.157
 - Licenças de terceiros: avisos dos tipos de letra completos
 

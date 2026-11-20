@@ -1,7 +1,7 @@
 @parte VII | Escola e comunicação | Tarefas, reuniões, direção de turma, documentos, biblioteca, contactos, jornal e SpruceNote
 
 # As Minhas Tarefas
-Menu **As Minhas Tarefas**. Listas de tarefas ao estilo do Microsoft To Do.
+Menu **As Minhas Tarefas**. Listas de tarefas.
 !tarefas | O Meu Dia: adicionar uma tarefa (com data e estrela) e as sugestões para hoje.
 ## As listas
 - **O Meu Dia** — recomeça vazio todos os dias; «Sugestões para hoje» propõe as que vencem.
@@ -72,7 +72,7 @@ Menu **Biblioteca**. Os seus recursos (fichas, testes, apresentações, imagens,
 !recursos-baixo | As pastas das turmas e a zona para arrastar ficheiros.
 
 # Contactos
-Menu **Contactos**. Os contactos da escola ao estilo dos Contactos do Mac.
+Menu **Contactos**. Os contactos da escola.
 !contactos | Contactos: listas (todos, departamentos), procura, lista alfabética e o cartão do contacto com mensagem, ligar e e-mail.
 - Listas à esquerda: Todos os Contactos, departamentos e as suas listas (arraste contactos para lá).
 - Cartão: escola, e-mail institucional, departamento, ano letivo e notas; **Partilhar** e **Editar**.
@@ -234,7 +234,7 @@ Tabela de consulta rápida: cada entrada do menu, o que faz e o capítulo onde e
 | Jornal Escolar / JornalNote | PAA, peças, edições, redação | Jornal Escolar |
 | Coord. PROFIJ | Coordenação do programa PROFIJ | Coordenação do PROFIJ |
 | SpruceNote | Quadros de ideias | SpruceNote e JornalNote |
-| O Meu Calendário | Agenda pessoal ao estilo do Outlook | O Meu Calendário |
+| O Meu Calendário | Agenda pessoal | O Meu Calendário |
 | Turma › Painel da Turma | Resumo da turma | Painel da Turma |
 | Turma › Alunos | Lista, fotografias, MSAI, ficha | Alunos |
 | Turma › Planta | Lugares na sala | Planta da Sala |
