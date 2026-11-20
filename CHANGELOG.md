@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.162
+- Spruce It: com «Como funciona» fechado, a página ocupa também o espaço da direita
+
 ## 1.161
 - Spruce It: a página ocupa o espaço entre «Modos de jogo» e «Como funciona» e cresce em proporção nos ecrãs grandes; indicadores reorganizam-se conforme o espaço
 
