@@ -227,7 +227,7 @@ function arsApresPos(){const v=$('#view .arv.spv');let ap=document.getElementByI
   const r=v.getBoundingClientRect(),hr=host.getBoundingClientRect();const livre=window.innerWidth-r.right-40;
   if(livre<360){if(ap)ap.remove();return}
   if(!ap){ap=document.createElement('div');ap.id='ars-apres';ap.innerHTML=arsApresHTML(true);host.appendChild(ap);arsApresLigar(ap);
-    ap.querySelector('[data-arsx-x]').onclick=()=>{S.cfg.arsApresOff=true;save();ap.remove();toast('Pode voltar a ver em «Como funciona», no topo do Spruce It','ok')}}
+    ap.querySelector('[data-arsx-x]').onclick=()=>{S.cfg.arsApresOff=true;save();ap.remove();arsApresPos();toast('Pode voltar a ver em «Como funciona», no topo do Spruce It','ok')}}
   if(getComputedStyle(host).position==='static')host.style.position='relative';
   const w=Math.min(400,livre-8);ap.style.width=w+'px';ap.style.left=Math.round(r.right-hr.left+24+Math.max(0,(livre-8-w)/2-12))+'px';ap.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}
 function arsApresJanela(){const d=document.createElement('dialog');d.className='arsx-dlg';d.innerHTML=arsApresHTML(false)+`<div class="arsx-dlgb"><button class="btn" data-f>Fechar</button>${S.cfg.arsApresOff?'<button class="btn pri" data-mostra>Mostrar ao lado nos ecrãs largos</button>':''}</div>`;
@@ -304,3 +304,5 @@ html body .spv .ars-pastas button[aria-pressed=true],html body .spv .ars-vis but
     es.innerHTML=`<div class="arse"><div class="arse-top"><b>Modos de jogo</b><small>${M.length} modos · escolhe-se ao lançar</small></div><ul>${M.map(([k,m])=>`<li><span class="arse-ic" style="--c:${m.cor||'#6d28d9'}">${m.ic||'★'}</span><div><b>${esc(m.nome)}</b><small>${esc(String(m.desc||'').split('. ')[0].replace(/\.$/,''))}</small></div></li>`).join('')}</ul><p class="arse-pe">Nunca conta para a nota.</p></div>`;host.appendChild(es)}
   if(getComputedStyle(host).position==='static')host.style.position='relative';
   const w=Math.min(340,livre-8);es.style.width=w+'px';es.style.left=Math.round(r.left-hr.left-24-w-Math.max(0,(livre-8-w)/2-12))+'px';es.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}catch(e){console.warn(e)}return r0}}
+/* 1.161 · página larga: sem «Como funciona» ao lado, o conteúdo ocupa também a direita */
+{const _ap2=arsApresPos;arsApresPos=function(){const v=$('#view .arv.spv');if(v)v.classList.toggle('spv-sa',!!S.cfg.arsApresOff);return _ap2.apply(this,arguments)}}

@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.161
+- Spruce It: a página ocupa o espaço entre «Modos de jogo» e «Como funciona» e cresce em proporção nos ecrãs grandes; indicadores reorganizam-se conforme o espaço
+
 ## 1.160
 - Provas: tipos de letra iguais aos do resto da app (títulos, números e subtítulos); mês do calendário sem «De» em maiúscula
 
