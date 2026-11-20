@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.159
+- Manual de Instruções 1.038: refeito de raiz no tema Spruce, organizado app a app (Apps, Spruce It, Pulso, Formulários, Provas, SpruceNote, Os Meus Módulos, Fechar Ano Letivo, grupos de UFCD), com 10 primeiros passos e muito menos espaço em branco
+
 ## 1.158
 - Ajuda e manual: textos revistos
 

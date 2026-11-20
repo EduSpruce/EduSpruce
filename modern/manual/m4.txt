@@ -1,259 +1,137 @@
-@parte VII | Escola e comunicação | Tarefas, reuniões, direção de turma, documentos, biblioteca, contactos, jornal e SpruceNote
+@parte VI | SpruceApps | Spruce It, Pulso, Formulários e Provas — os alunos respondem no telemóvel, sem conta
 
-# As Minhas Tarefas
-Menu **As Minhas Tarefas**. Listas de tarefas.
-!tarefas | O Meu Dia: adicionar uma tarefa (com data e estrela) e as sugestões para hoje.
-## As listas
-- **O Meu Dia** — recomeça vazio todos os dias; «Sugestões para hoje» propõe as que vencem.
-- **Importante** — as que têm estrela. **Planeado** — as que têm data.
-- **Das Reuniões** — decisões e tarefas registadas nas atas, com o botão **Reunião**.
-- **Tarefas** — todas. **Avisos Urgentes** — os seus avisos programados.
-- **+ Nova lista** cria listas suas (ex.: «Clube de Ciências»).
-!!tarefas-planeado,tarefas-reunioes | Planeado e Das Reuniões.
-> Exemplo: escreva «Preparar a matriz do Teste 2 (10.º A)», escolha a data de segunda-feira e carregue em **Adicionar**. A tarefa aparece em Planeado, no Início e no O Meu Calendário; na segunda aparece nas sugestões de O Meu Dia.
+# Como funcionam as SpruceApps
+As quatro SpruceApps servem para trabalhar **com os alunos**. Têm em comum:
+- **Abrem à parte**, sem o menu lateral, com uma barra de cima numa só linha. O **ícone da casa** volta à EduSpruce.
+- **Os alunos não precisam de conta**: abrem a página da app no telemóvel, escrevem o código que o professor mostra (ou leem o QR code) e respondem. Tudo vai cifrado.
+- Cada app tem a sua cor, as suas personagens e uma **apresentação de boas-vindas** na primeira abertura (volta no botão **Ver exemplo**).
+- Os conteúdos pertencem ao ano letivo em que foram criados; o **Banco** mostra os de outros anos e reutiliza-os.
+- Ligam-se e desligam-se em [[Definições › Os Meus Módulos › SpruceApps]].
+| App | Para quê | Página do aluno | Conta para a nota? |
+| Spruce It | Jogos de perguntas em tempo real ou TPC | eduspruce.pt/spruceit | Nunca |
+| Pulso | Verificar num instante o que a turma percebeu | eduspruce.pt/pulso | Só se escolher um domínio |
+| Formulários | Inquéritos, registos e questionários que se corrigem sozinhos | eduspruce.pt/forms | Se ligar a um momento de avaliação |
+| Provas | Testes e fichas completos, com modo exame e rubricas | eduspruce.pt/provas | Se ligar a um momento de avaliação |
+!!!!al-arena,al-pulso,al-forms,al-provas | As páginas dos alunos: Spruce It, Pulso, Formulários e Provas — basta o código.
 
-# Reuniões
-Menu **Reuniões**. O mapa de todas as reuniões do ano, com atas, decisões e tarefas.
-!reunioes-Próximas | Reuniões: próxima reunião, desta semana, tarefas pendentes, atas por fazer, avisos e as próximas reuniões.
-## Separadores
-- **Próximas** — as próximas semanas e mais tarde, com a contagem de dias.
-- **Mapa Mensal** — calendário do mês com todas as reuniões.
-- **Tarefas** — decisões e tarefas das reuniões, com responsável e prazo.
-- **Histórico e Atas** — reuniões realizadas, com o estado da ata.
-!!reunioes-Mapa_Mensal,reunioes-Tarefas | Mapa Mensal e Tarefas.
-!reunioes-Histórico_e_Atas | Histórico e Atas.
-## Marcar uma reunião
-!reunioes-nova | Nova Reunião: tipo, título, data, início e fim, local, ligação online, turmas associadas, convocada por, participantes e lembretes.
-1. Toque em **Nova Reunião** e escolha o tipo (Conselho de Turma, Departamento, Grupo Disciplinar, Conselho Pedagógico, Diretores de Turma, Encarregados de Educação, Reunião Geral, Equipa/Projeto, Formação, Atividade/Evento, Reunião de Avaliação, Outra). A ordem de trabalhos é sugerida.
-2. Indique a data, a hora, o local (ou ligação Teams/Zoom) e as turmas.
-3. A app avisa logo se a hora coincide com uma aula, um tempo não letivo ou outra reunião.
-4. Escolha os lembretes e guarde.
-## A ficha da reunião
-Toque numa reunião: lista de preparação, ordem de trabalhos, notas, decisões e tarefas (responsável e prazo); marcar como realizada, adiar ou cancelar; descarregar ou copiar a **ata**.
-? Pode importar o calendário de reuniões de um PDF (**Mais › Importar PDF**) e colar uma convocatória de e-mail (arraste o e-mail para a app): a data, a hora, o local e a ordem de trabalhos são reconhecidos.
+# Spruce It
+Menu **Spruce It** (ou Apps › SpruceApps). Jogos de perguntas para a turma, com personagens originais (os «Bichos» e as Pinhas), modos de jogo e pódio. Serve para revisões na aula e para trabalho de casa. O Spruce It **nunca conta para a nota**.
+!!bv-spruceit,arena | A apresentação de boas-vindas («Aprender é o melhor jogo») e o ecrã principal.
+## O ecrã principal
+- Separadores **Os meus conjuntos**, **Jogos e relatórios** e **Como Funciona**; lembrete «Os alunos entram em eduspruce.pt/spruceit com o código da sala».
+- Contadores: conjuntos e pastas, perguntas, jogos, participações, acerto médio e último jogo.
+- **Os meus conjuntos** — filtros por disciplina e turma, **Todos / ★ Favoritos / Exemplos**, ordenar (editados há menos tempo, mais jogados, nome, mais perguntas), vista Grelha ou Lista. Em cada cartão: ☆ favorito, **Editar**, **Mais opções**, **Atribuir** (TPC) e **Lançar**.
+- À direita: **Continuar** (o último conjunto editado), **Jogos recentes**, **Atividade** das últimas 8 semanas e **Perguntas a rever** (as que a turma erra mais, abaixo de 70%).
+- Na barra: **Novo Conjunto** e **Mais** (Banco, Importar CSV/Excel).
+## Criar um conjunto de perguntas
+!arena-editor | Editor do conjunto: nome, disciplina, turma (opcional), tema e pasta; cada pergunta com tipo, tempo, imagem e resposta certa.
+1. Toque em **Novo Conjunto**. Escreva o nome, a disciplina e, se quiser, a turma, o tema e a pasta.
+2. Em cada pergunta escolha **Escolha múltipla** ou **Verdadeiro / Falso**, o tempo (5 s a 2 min), escreva as opções e toque na certa (fica azul com ✓). **Imagem (Opcional)** junta uma imagem.
+3. Use as setas para reordenar, duplicar ou apagar; em baixo **+ Pergunta** ou **+ Verdadeiro / Falso**.
+4. Tudo fica guardado sozinho. **Jogar** (na barra) lança logo o conjunto.
+!!arena-importar,arena-mais | Importar perguntas de CSV/Excel (com o modelo para descarregar) e o menu Mais de um conjunto (Duplicar, Exportar CSV, Jogar, Apagar).
+## Lançar um jogo na aula
+1. No cartão do conjunto toque em **Lançar**.
+2. Escolha o **modo** (tabela abaixo) e toque em **Continuar**. Escolha se os alunos usam alcunhas livres ou a lista da turma.
+3. Projete o ecrã do anfitrião: mostra o **código**, o QR code, quem entrou e a classificação ao vivo.
+4. Os alunos abrem **eduspruce.pt/spruceit**, escrevem o código e o nome e jogam. No fim aparece o pódio e o relatório (acerto por pergunta e por aluno).
+!arena-lancar | Lançar Jogo: escolha o modo. As mesmas perguntas, regras diferentes — todos funcionam com qualquer conjunto.
+| Modo | Como se ganha |
+| Clássico | Todos à mesma pergunta ao mesmo tempo; quem acerta mais depressa ganha mais pontos. |
+| Colheita | Cada certa abre uma de três pinhas: pontos, duplicar, perder uma parte ou trocar com outro jogador. |
+| Floresta | Cada certa faz crescer a árvore; 3 seguidas dão um rebento extra. Ganha a maior floresta. |
+| Pesca no Lago | Cada certa lança a cana (sardinhas, robalos… Atum Gigante); ganha quem pescar mais quilos. |
+| Corrida | Cada certa avança uma casa; 3 seguidas dão turbo (+2). Ganha quem chegar à meta. |
+| Máquina da Garra | Cada certa dá uma tentativa na garra: peluches, prémios grandes, o prémio dourado… |
+| Mina Profunda | Cada certa parte uma rocha: pedra, ouro, gemas, diamantes… cuidado com a dinamite. |
+| Colmeia | Cada certa dá mel; depois escolhe mais abelhas, mais flores ou vender o mel. |
+| Caça-Estrelas | Estrelas, cometas que multiplicam, supernovas… ou um buraco negro. |
+| Código Pirata | Cada certa abre um cofre: cristais, duplicar, piratear pontos… ou o alarme. |
+| Laser | Carrega o laser: rouba pontos a um dos primeiros, liga um escudo ou recolhe energia. |
+| Corrida ao Cume | Individual, velocidade: cada certa sobe a montanha; quem responde depressa sobe mais. |
+| Cofre Partilhado | Equipas, estratégia: enchem um cofre comum e podem arriscar o que juntaram. |
+| Maré Viva | Individual, sobrevivência: a água sobe a cada erro; ganha o último em terra firme. |
+| Duelo Relâmpago | 1 contra 1: pares sorteados, três perguntas; quem perde apoia o vencedor. |
+| Expedição | Ao teu ritmo, sem relógio: avança no mapa — ideal para TPC. |
+| Estafeta | Equipas, colaboração: cada um responde à sua vez; um erro devolve o testemunho. |
+## Trabalho de casa
+Toque em **Atribuir** (ícone de calendário) no cartão do conjunto. Escolha o modo — os «ao ritmo de cada um», como Expedição, são os mais indicados —, a duração ou o objetivo por aluno e a **Data-limite**, e toque em **Criar trabalho de casa**. Os alunos jogam em casa com o código até à data-limite; pode fechar o trabalho mais cedo. Os resultados ficam em **Jogos e relatórios**.
+? Com o módulo **Moedas e coleção de Pinhas** ligado, os alunos ganham moedas e colecionam Pinhas (comuns, raras, épicas, lendárias e míticas) — só para motivar, nunca para avaliar.
 
-# Direção de Turma
-Menu **Direção de Turma** (aparece quando é Diretor(a) de Turma de alguma turma). Reúne os alunos de todas as disciplinas da turma.
-!direcao-Painel | Painel do DT: alunos, faltas injustificadas, com negativas, classificações em falta, alunos a acompanhar, próximas reuniões e últimas diligências.
-## Os separadores
-- **Painel** — o resumo da turma.
-- **Processos** — a ficha completa de cada aluno.
-- **Enc. Educação** — encarregados de educação e contactos.
-- **Contactos** — registo de contactos (telefone, presencial, reunião, e-mail), com filtros e «Sem contactos nos últimos 60 dias».
-- **Atendimentos** — presenciais e telefónicos.
-- **Convocatórias** — convocatórias e comunicações feitas no Gerador de Documentos.
-- **Assiduidade** — faltas por aluno (injustificadas, justificadas, atrasos, material, disciplinares) com limite de alerta.
-- **Avaliações** — monitorização das classificações em todas as disciplinas e instrumentos por realizar.
-- **Ocorrências**, **Conselhos** (lista de preparação e síntese automática), **Apreciação Global** (por período, para os encarregados de educação), **Planos** (de acompanhamento), **Diligências** (histórico) e **Arquivo**.
-!!direcao-Processos,direcao-Contactos | Processos individuais e Registo de Contactos.
-!!direcao-Assiduidade,direcao-Avaliações | Assiduidade e Avaliações.
-!!direcao-Conselhos,direcao-Apreciação_Global | Conselhos de Turma (com a preparação) e Apreciação Global por período.
-!!direcao-Atendimentos,direcao-Diligências | Atendimentos e Histórico de Diligências.
-> Exemplo: um aluno chega a 4 faltas injustificadas. Em **Assiduidade** a linha fica em destaque; toque em **Gerar Documento** e escolha «Comunicação de assiduidade»: o documento sai preenchido com o nome, o encarregado de educação e as faltas, e fica no Arquivo e nas Diligências.
+# Pulso
+Menu **Pulso**. Avaliação em tempo real na sala: quizzes com correção imediata, corrida de equipas, bilhete de saída e pergunta rápida. Os alunos entram em **eduspruce.pt/pulso** com o código da sala. É sempre **formativo**: só conta para a avaliação se escolher um domínio. O banco de perguntas é próprio, separado do Spruce It.
+!bv-pulso | Boas-vindas do Pulso: «Veja em direto o que a turma já aprendeu».
+## 1. Criar as salas
+!!pulso-nova-sala,pulso-salas | Nova Sala (nome, turma, sala com lista, mão levantada) e a sala criada, com o código fixo.
+1. Toque em **Nova Sala**. Dê o nome (ex.: «7.º A · Inglês») e, se quiser, a turma.
+2. **Sala com lista** — só entram os alunos da turma, cada um com o seu código pessoal. **Deixar os alunos levantar a mão** — só o professor vê.
+3. **Guardar**. O código da sala (ex.: 482-913) fica sempre o mesmo: os alunos só o aprendem uma vez.
+## 2. Preparar os quizzes
+!!pulso-quizzes,pulso-quiz-abrir | Quizzes (pastas, Lançar, Editar) e o editor: escolha múltipla, várias certas, verdadeiro/falso e resposta curta.
+Cada pergunta tem tipo, pontos, imagem opcional e uma **explicação** (o aluno vê-a depois de responder). Pode importar perguntas por CSV ou colando texto — sem IA.
+## 3. Lançar uma atividade
+!pulso-lancar | Lançar Atividade: Quiz, Corrida de Equipas, Bilhete de Saída ou Pergunta Rápida; sala, quiz, modo e opções.
+- **Quiz** — modos **Correção imediata** (uma pergunta de cada vez; o aluno vê logo se acertou e a explicação), **Navegação livre** (salta entre perguntas até submeter) ou **Ao ritmo do professor**.
+- **Corrida de Equipas** (barcos que avançam a cada certa), **Bilhete de Saída** (no fim da aula) e **Pergunta Rápida** (votação imediata).
+- Opções: pedir o nome (desligado = anónimo), baralhar perguntas e opções, mostrar a nota final ao aluno.
+Durante a atividade vê ao vivo quem respondeu, a percentagem de acerto e as mãos levantadas.
+## 4. Relatórios
+Em **Relatórios** ficam os resultados de cada atividade: Excel da turma (folhas Alunos e Perguntas) e PDF por aluno e por pergunta. Associação à pauta só se escolher um domínio.
+> Exemplo: nos últimos 5 minutos da aula lance um **Bilhete de Saída** com 3 perguntas sobre o Past Simple. Antes de sair, a turma responde no telemóvel; na aula seguinte começa pelas perguntas com menos acerto.
 
-# Documentos
-Menu **Documentos**. Gerador de documentos com modelos preenchidos com os dados já registados.
-!documentos-Novo | Novo: escolha o modelo por área (Direção de Turma, Comunicação, Avaliação, Gestão de Aulas, Reuniões, Pedagógico, Declarações, Departamento).
-## Criar um documento
-1. Em **Novo**, escolha o modelo (ex.: Convocatória para encarregado de educação). Os modelos «por aluno» geram uma página por aluno.
-2. Escolha a turma, os alunos e o título.
-3. O texto tem campos variáveis entre chavetas, como {{aluno}}, {{ee}} ou {{faltas_injustificadas}}, preenchidos sozinhos; veja a pré-visualização à direita.
-4. Gere o PDF: o documento recebe número, cabeçalho com o logotipo e a sua assinatura, e fica no **Arquivo**.
-!documentos-convocatoria | Convocatória para Encarregado de Educação: turma, alunos (um documento por aluno), título, texto com variáveis e pré-visualização.
-!!documentos-Modelos,documentos-Arquivo | Modelos (editar os modelos base ou criar novos) e Arquivo.
-!documentos-Ficheiros_Importados | Ficheiros Importados: os PDF e Excel originais que importou (turmas, horários, calendário, reuniões, critérios).
+# Formulários
+Menu **Formulários**. Inquéritos, fichas de registo e **questionários que se corrigem sozinhos**. Os alunos respondem em **eduspruce.pt/forms** por QR code ou código, sem contas. Os questionários podem entrar na avaliação.
+!!bv-forms,forms | Boas-vindas («Pergunte. Recolha. Analise.») e o ecrã principal com modelos, recentes e turmas.
+## O ecrã principal
+- **Novo questionário** (teste com pontos e respostas certas), **Novo formulário** (inquérito sem nota), **Importação rápida** e **Banco**.
+- **Explorar modelos** — Questionário, Registo, Feedback, Pesquisa e a **Galeria do Banco**; **Ocultar modelos** esconde a faixa.
+- Listas **Recentes**, **Os meus questionários**, **Os meus formulários**, **A receber respostas** e **Favoritos**; em cada cartão, **Recolher** e ⋯.
+- **As minhas turmas** — os formulários de cada turma.
+## Criar
+1. Toque em **Novo questionário** ou **Novo formulário** (ou num modelo).
+2. Escreva o título e a descrição.
+3. Em **Adicionar** escolha o tipo: **Escolha**, **Texto**, **Classificação**, **Data**, **Ordenação**, **Likert**, **Net Promoter Score**, **Secção** ou **Texto ou Imagem**.
+4. Nos questionários indique os pontos e a resposta certa (✓) de cada pergunta.
+!!forms-editor,forms-quiz | Editor de um formulário (escolha, estrelas, Likert, texto) e de um questionário (pontos e resposta certa).
+!!forms-modelo,forms-importar | Um formulário criado a partir do modelo Feedback e a Importação rápida (cole as perguntas, uma por linha).
+## Recolher respostas
+!forms-recolher | Recolher Respostas: turma, duração e código pessoal; depois **Abrir e Mostrar o QR Code**.
+Os alunos abrem a página, escrevem o código, escolhem o número e respondem.
+## Respostas e avaliação
+!forms-quiz-Respostas_ | Respostas: Resumo, Respostas Individuais e Classificações; Excel (CSV), Publicar Classificações e Enviar para a Avaliação.
+- **Ligar a uma Turma / Momento de Avaliação** — as classificações entram sozinhas na grelha do instrumento.
+- Correção automática nas perguntas fechadas; as abertas corrigem-se à mão.
+? Para testes completos (preencher, conectar, tabelas, rubricas, modo exame, agendamento) use as **Provas**.
 
-# Biblioteca
-Menu **Biblioteca**. Os seus recursos (fichas, testes, apresentações, imagens, áudio, ligações).
-!recursos | Biblioteca: recursos, partilhados, modelos, ligações, filtros e etiquetas.
-- Pesquisa por título, tema ou etiqueta; filtros por disciplina, ano, tipo, coleção e ano letivo; ordem (mais recentes…).
-- **Pastas** — Todos os Recursos, Sem Pasta, pastas suas (**+ Nova Pasta**) e uma pasta por turma criada automaticamente.
-- **Carregar Ficheiros** ou arrastar (PDF, Word, Excel, PowerPoint, imagens, áudio — até 15 MB cada).
-!recursos-baixo | As pastas das turmas e a zona para arrastar ficheiros.
+# Provas
+Menu **Provas**. Testes, fichas, quizzes e TPC digitais, com banco de exercícios, agendamento, modo exame, rubricas, correção e estatísticas. Os alunos respondem em **eduspruce.pt/provas**. É completamente separado dos outros módulos; liga-se às turmas e aos momentos de avaliação só se quiser.
+!!bv-provas,provas-inicio | Boas-vindas («Avaliar em minutos») e Provas › Início.
+## O menu das Provas (à esquerda)
+- **Início** — «Crie uma avaliação» (título e +), **Importar Avaliação**, **Criar Manualmente**, calendário das próximas avaliações, «Continue de onde parou» e dados de utilização (mês, trimestre, ano).
+- **Explorar** — conteúdos partilhados pelos colegas do grupo (**Importar por Código**).
+- **Avaliações** — todas, com filtros por turma e etiquetas; **Agendar** em cada uma.
+- **Exercícios** — o banco de exercícios reutilizáveis. **Rubricas** — critérios e níveis para respostas abertas. **Grupos** — departamento ou escola, para partilhar. **Ajuda**.
+!!provas-Avaliações,provas-Exercícios | Avaliações e Exercícios.
+## Tipos de exercício
+Escolha múltipla (com justificação), verdadeiro/falso, texto (curta ou longa, contagem de palavras, símbolos matemáticos, rubrica), preencher o texto (arrastar, escolher ou escrever), ordenar, conectar, tabela, legendar uma imagem e segmentos. Correção parcial ou dicotómica, texto extra e proposta de resolução.
+## Importar
+!provas-importar | Importar Avaliação: Colar Texto, Word / PDF, Ficheiro das Provas, Código de Partilha ou Do Forms.
+> Exemplo de texto para colar: «1. Choose the correct form: She ___ to school. a) go *b) goes c) going» cria uma escolha múltipla (a certa tem *); «V: London is the capital of the UK.» cria um verdadeiro/falso; «Yesterday I [went] to the cinema» cria um preencher o texto.
+## O editor da avaliação
+!provas-av-editor | Editor: separadores Exercícios, Correção, Estatísticas e Atividade; Pré-Visualizar, Definições e Agendar.
+- **Ligar a uma Turma / Momento de Avaliação (Opcional)**.
+- **Definições** — formato (teste, ficha, quiz, TPC), tempo limite, baralhar, numerar, **modo exame** (ecrã inteiro e registo de saídas), código pessoal, uma resposta por aluno, quando mostrar resultados, mensagem final e cor.
+- **Agendar** por turma, com início e fim; aparece no calendário das Provas e em O Meu Calendário.
+!!provas-av-Definições,provas-av-Agendar | Definições da avaliação e Agendar.
+- **Atividade** — ao vivo: quem entrou e entregou, saídas da página, prolongar, terminar.
+- **Correção** — automática nas fechadas; à mão nas abertas, com comentários e rubricas; **Publicar classificações**.
+- **Estatísticas** — média, mediana, desvio padrão, positivas, tempo médio, taxa de acerto e discriminação por exercício.
+> Exemplo: crie «Teste de Inglês — Unidade 2» colando o texto, ligue-o ao 7.º A › Teste 2, agende para terça das 10:20 às 11:05 com modo exame. Os alunos entram com o código; no fim corrija as abertas com a rubrica e toque em **Publicar classificações**: as notas entram na grelha do Teste 2.
 
-# Contactos
-Menu **Contactos**. Os contactos da escola.
-!contactos | Contactos: listas (todos, departamentos), procura, lista alfabética e o cartão do contacto com mensagem, ligar e e-mail.
-- Listas à esquerda: Todos os Contactos, departamentos e as suas listas (arraste contactos para lá).
-- Cartão: escola, e-mail institucional, departamento, ano letivo e notas; **Partilhar** e **Editar**.
-- **Importar** (Excel ou vCard) e exportar vCard; deteção de duplicados.
-
-# Jornal Escolar
-Menu **Jornal Escolar** (só para o responsável pelo jornal; liga-se em Módulos Opcionais). Ajuda a não perder nenhuma atividade da escola.
-!jornal-Painel | Painel do Jornal: avisos, próximos 14 dias, peças em curso, próximo fecho e o que não pode esquecer.
-## Separadores
-- **Painel** — avisos, entregas próximas e atividades a decidir (**Cobrir** ou ✕).
-- **Atividades do PAA** — o Plano Anual de Atividades importado de Word (**Importar PAA…**), com filtros.
-- **Calendário** — atividades e entregas no mês.
-- **Peças** — quadro por estado (ideia, atribuída, em escrita, em revisão, pronta, publicada); arraste os cartões.
-- **Edições** — data de fecho e publicação, lista de verificação.
-- **Redação** — alunos e professores da equipa, com função e turma.
-!!jornal-Atividades_do_PAA,jornal-Calendário | Atividades do PAA e Calendário.
-!!jornal-Peças,jornal-Redação | Peças (quadro por estado) e Redação.
-
-# SpruceNote e JornalNote
-Menu **SpruceNote**. Quadros livres para planear e organizar ideias.
-!sprucenote | SpruceNote: a barra de elementos à esquerda e o quadro com título, notas, uma ideia e uma lista de pendências.
-## Elementos (arraste da barra para o quadro)
-**Anotação**, **Link**, **Pendências** (lista de tarefas), **Linha** (seta entre elementos), **Quadro** (sub-quadro), **Coluna**, **Comentário**, **Áudio**, **Título**, **Vídeo**, **Mapa**, **Imagem**, **Enviar** (ficheiro), **Desenho** e **Lixeira**.
-- Duplo toque abre ou edita; arraste para mover; zoom − / + e ajustar ao ecrã; anular e refazer; **Aumentar** para ecrã inteiro.
-!snjornal | JornalNote: igual ao SpruceNote, só com os quadros do Jornal Escolar.
-## SpruceNote Web Clipper (extensão do Chrome)
-Guarda **imagens, texto, ligações e vídeos** de qualquer site nos quadros do SpruceNote. No Início, o atalho **SpruceNote Web Clipper › Instalar** (à esquerda das apps, só no computador) descarrega a extensão e mostra os passos; desaparece quando a extensão está instalada.
-1. Descompacte **sprucenote-web-clipper.zip** (Ajuda › SpruceNote Web Clipper ou atalho do Início).
-2. No Chrome, abra **chrome://extensions** e ligue o **Modo de programador**.
-3. **Carregar expandida** › escolha a pasta **sprucenote-web-clipper**; fixe o ícone na barra (peça de puzzle › alfinete).
-4. Nas **Opções** da extensão, entre com a mesma conta Google da EduSpruce.
-- **Imagens:** passe o rato por cima e carregue em «Guardar». **Texto:** selecione › botão direito › **Guardar no SpruceNote**. **Páginas e vídeos:** ícone na barra do Chrome ou **Alt+Shift+S**.
-- «Guardar em ▾» escolhe o quadro (o principal ou um dos 10 abertos mais recentemente). Os recortes chegam à coluna **«Por Arrumar»**, cifrados com a chave da conta.
-? Não funciona no iPad nem no telemóvel: só no Chrome ou no Edge de computador.
-
-@parte VIII | Definições e ajuda | Todos os separadores das Definições, ajuda, perguntas frequentes e glossário
-
-# Definições
-Menu **Definições**, com onze separadores: Geral, Professor, Domínios e Ponderações, Conta e Acesso, Aparência, Menu Lateral, Segurança, Conta e Dados, Notificações, Auditoria e Ferramentas.
-## Geral
-!def-Geral | Geral: Escola e Professor, Acessibilidade, Disciplinas que Leciono e Tipos de Instrumento.
-- **Escola e Professor** — nome da escola, nome do professor, ano letivo e e-mail institucional.
-- **Acessibilidade** — movimento e animações (Como o Sistema, Reduzir, Normal) e ligações (Como no Desenho, Sempre Sublinhadas).
-- **Disciplinas que Leciono** e **Tipos de Instrumento** (arraste para ordenar; **Repor Predefinidos**).
-!def-Geral-2 | Tipos de Tempo Não Letivo e Textos da Síntese Descritiva por menção.
-!def-Geral-3 | Avisos Automáticos (matriz antes do teste, aniversários) e Módulos Opcionais.
-**Módulos Opcionais**: Jornal Escolar, Coord. PROFIJ, SpruceNote, Contactos, Sorteio, Autoavaliação pelo Telemóvel, Forms, Arena, Pulso, Provas… Desligue o que não usa para simplificar o menu.
-## Professor
-!def-Professor | Professor: fotografia, dados pessoais e dados profissionais por escola.
-!def-Professor-2 | Cargos e funções em cada escola, assinatura digitalizada e notas.
-Assinale os cargos (Diretor(a) de turma, Coordenador(a) de departamento, Delegado(a) de grupo, Coordenador(a) do PROFIJ…): os módulos correspondentes aparecem no menu. A assinatura entra nos documentos e pautas (o fundo branco é retirado sozinho).
-## Domínios e Ponderações
-!def-Domínios_e_Ponderações | Modelos de domínios e ponderações por disciplina; Editar e Duplicar.
-## Conta e Acesso
-!def-Conta_e_Acesso | Quem Pode Entrar com Google, Sessão e Perfis e Permissões.
-!def-Conta_e_Acesso-2 | Perfis e Permissões: o que cada perfil (Administrador, Professor, Direção) pode fazer; **Novo Perfil**.
-## Aparência
-!def-Aparência | Aparência: tema, cor de destaque, logotipo da app e estilo da interface.
-- **Tema** — Automático, Claro, Escuro. **Cor de destaque**. **Logotipo da app**.
-- **Estilo da interface** — EduSpruce, Azul Corporativo, **SGE (predefinido)**, Coral, Social, Gradiente, Institucional, Académico e Vidro.
-- **Interface por dispositivo** (Automático, Computador, iPad, Telemóvel), **temas sazonais**, **densidade**, **tamanho do texto**, **alto contraste** e **cores para daltonismo**.
-!def-Aparência-2 | Estilo, interface por dispositivo, temas sazonais, densidade, texto, contraste, Notas Flutuantes e O Meu Dia.
-!def-Aparência-3 | Barra Lateral, Fotografias dos Alunos, Avaliação e Marcações e Logotipo Animado.
-? Em computadores antigos escolha **Desempenho › Leve** (sem desfoques, sombras nem animações) — a escolha vale só para esse computador.
-## Menu Lateral
-!def-Menu_Lateral | Menu Lateral: reordenar com as setas, mudar ícone e nome, «Fora» do menu, Novo Menu, Nova Secção, Separador e Repor o Original.
-!def-Menu_Lateral-3 | Menus Guardados: guarde várias versões do menu e associe cada uma a escolas — ao mudar de escola no topo, o menu muda sozinho.
-- **Guardar o Menu Atual** cria um menu guardado; em cada um: **Usar Agora**, copiar para o menu que está a editar, apagar e as **Escolas** a que fica associado (as escolas sem menu associado usam o menu habitual).
-> Exemplo: quer as ferramentas digitais juntas. Toque em **Nova Secção**, chame-lhe «Alunos online» e mova para lá a Arena, o Pulso, o Forms e as Provas com as setas.
-## Segurança
-!def-Segurança | Segurança: espaço utilizado, caixote do lixo (30 dias), registo de importações, privacidade (RGPD) e conta e dados.
-## Conta e Dados
-!def-Conta_e_Dados | Conta e Dados: a base de dados, como funciona, sessão iniciada e Terminar Sessão.
-- **Chave de Recuperação** — guarde-a (copiar ou descarregar em .txt): abre os seus dados se algum dia a app pedir um código. **Descarregar Cópia Completa** — um ficheiro com todos os seus dados, para guardar numa pen ou no disco. São duas proteções que não dependem de nenhum aparelho.
-## Notificações
-!def-Notificações | Notificações neste aparelho: o que notificar, silêncio e com a app fechada.
-Aula a começar (com antecedência), sumário por escrever, resumo do dia e avaliações de amanhã (com hora), avisos urgentes e reuniões, número no ícone; horário de silêncio e fins de semana em silêncio.
-!def-Notificações-2 | Silêncio e Com a App Fechada: avisos enviados pela base de dados mesmo com a app fechada ou o aparelho bloqueado.
-- **Com a App Fechada** — toque em **Ativar Avisos com a App Fechada** em cada aparelho onde os quer receber (no iPhone/iPad, com a app adicionada ao ecrã principal). A EduSpruce envia à hora certa os avisos de aulas, resumo do dia, avaliações de amanhã, reuniões e avisos urgentes, respeitando o silêncio. **Avisos discretos** mostra só «Tem um aviso», sem títulos. **Desligar Neste Aparelho** para parar.
-- Se o navegador não suportar avisos com a app fechada, use **Juntar ao Calendário (.ics)**.
-## Auditoria
-!def-Auditoria | Auditoria e Registos: data e hora, utilizador, área, ação e detalhe; filtros e Exportar CSV/PDF.
-## Ferramentas
-!def-Ferramentas | Ferramentas: Integridade dos Dados (Verificar Agora), Avisos em Pop-Up e Diagnóstico dos Dados com Corrigir.
-!def-Ferramentas-2 | Verificar os Cálculos, Dados de Demonstração e Ajuda e Novidades (Visita Guiada, Novidades Desta Versão, Enviar Sugestão ou Problema).
-
-# Ajuda
-Menu **Ajuda** (ou o botão ? da barra de cima, que abre a ajuda já no assunto do ecrã).
-!ajuda | Ajuda: o Manual de Instruções em PDF, o Guia com pesquisa e a lista de todos os assuntos.
-- Pesquise por palavra (ex.: faltas, MSAI, calendário).
-- Cada assunto tem a explicação e uma imagem do ecrã no tema que está a usar.
-- **Descarregar** o Manual de Instruções (este documento).
-
-# Perguntas frequentes
-## A app não reconhece as minhas aulas no horário da turma.
-Confirme o seu nome em [[Definições › Professor]] e a disciplina por ciclo; em Turma › Horário assinale a sigla certa, ou importe o seu horário em PDF.
-## O 3.º período tem menos dias para a minha turma.
-O termo das aulas depende do ano de escolaridade (9.º, 11.º e 12.º terminam mais cedo) — vem do calendário escolar.
-## Faltei a uma aula. Como registo?
-Em Aulas e Sumários toque em **Faltei** nessa lição: não conta como dada e fica por repor.
-## Apaguei uma turma sem querer.
-Use **Anular** (Ctrl+Z) logo a seguir, ou recupere em [[Definições › Segurança › Caixote do Lixo]] (30 dias).
-## Os alunos não conseguem entrar na Arena, no Pulso, no Forms ou nas Provas.
-Confirme que o módulo está ligado em Módulos Opcionais, que a sessão/sala está aberta e que os alunos usam o endereço certo (arena.html, pulso.html, forms.html, provas.html) com o código atual.
-## Na rede da escola a app não abre.
-Use o espelho **eduspruce.github.io** (mesmos dados) ou outra rede.
-## Não quero que a turma veja dados pessoais quando projeto.
-Ligue o **Modo de Apresentação** (olho) antes de projetar; em caso de urgência, o **escudo** tapa tudo.
-## A app está lenta num computador antigo.
-Em [[Definições › Aparência › Desempenho]] escolha **Leve**.
-
-# Atalhos e glossário
-## Atalhos
-| Atalho | O que faz |
-| Ctrl+K / ⌘K | Pesquisar em toda a app |
-| Ctrl+Z / ⌘Z | Anular a última alteração |
-| Ctrl+Shift+L | Modo de privacidade (tapar tudo) |
-| ? | Ajuda da secção onde está |
-| Esc | Fechar janelas e menus |
-| Enter / Tab / setas | Navegar na grelha de classificações |
-| Toque longo | Menu de ações (mover, duplicar, mudar de período…) |
-| Deslizar para a esquerda | Apagar um instrumento ou tempo não letivo |
-| Arrastar | Tempos do horário, marcações de testes, dias do calendário, ficheiros e e-mails |
-## Glossário
-| Termo | Significado |
-| Σ | Soma dos tempos letivos dados até um dia (numeração das lições) |
-| AI | Avaliação intercalar |
-| RA | Reunião de avaliação (conselho de turma) |
-| DT | Diretor(a) de Turma / Direção de Turma |
-| MSAI | Medidas de suporte à aprendizagem e à inclusão (DL 54/2018) |
-| RTP · PEI · PIT | Relatório técnico-pedagógico · Programa educativo individual · Plano individual de transição |
-| PO · CO · CE · PE | Produção oral · Compreensão oral · Compreensão escrita · Produção escrita |
-| PROFIJ | Programa formativo de inserção de jovens (Açores) |
-| UFCD · UC | Unidade de formação de curta duração · Unidade de competência |
-| FPCT | Formação prática em contexto de trabalho |
-| PAF · PEA | Prova de avaliação final · Prova especial de avaliação |
-| CFA | Classificação final anual (PROFIJ) |
-| MRA | Mecanismo de recuperação (ensino profissional) |
-| PAA | Plano anual de atividades |
-| Instrumento rápido | Registo de uma % por domínio, sem itens |
-
-# Mapa de todos os menus
-Tabela de consulta rápida: cada entrada do menu, o que faz e o capítulo onde está explicada.
-| Menu | Para que serve | Capítulo |
-| Início | Painel do dia: contagem, tarefas, aulas de hoje, desempenho | Início |
-| Ano Letivo e Turmas | Anos letivos, disciplinas, turmas e importação do Excel | Ano Letivo e Turmas |
-| O Meu Horário | Horário semanal e tempos não letivos | O Meu Horário |
-| Calendário Escolar | Períodos, interrupções, feriados, aulas previstas, intercalar | Calendário Escolar |
-| As Minhas Tarefas | Listas de tarefas | As Minhas Tarefas |
-| Reuniões | Mapa, atas, decisões e tarefas | Reuniões |
-| Direção de Turma | Processos, EE, contactos, assiduidade, conselhos | Direção de Turma |
-| Biblioteca | Recursos e pastas | Biblioteca |
-| Documentos | Gerador de documentos e arquivo | Documentos |
-| Contactos | Contactos dos colegas | Contactos |
-| Arena | Jogos de perguntas (nunca contam para a nota) | Arena |
-| Pulso | Avaliação em tempo real (formativa) | Pulso |
-| Forms | Formulários e testes online | Forms |
-| Provas | Avaliações digitais completas | Provas |
-| Jornal Escolar / JornalNote | PAA, peças, edições, redação | Jornal Escolar |
-| Coord. PROFIJ | Coordenação do programa PROFIJ | Coordenação do PROFIJ |
-| SpruceNote | Quadros de ideias | SpruceNote e JornalNote |
-| O Meu Calendário | Agenda pessoal | O Meu Calendário |
-| Turma › Painel da Turma | Resumo da turma | Painel da Turma |
-| Turma › Alunos | Lista, fotografias, MSAI, ficha | Alunos |
-| Turma › Planta | Lugares na sala | Planta da Sala |
-| Turma › Horário | Horário da turma e aulas previstas | Horário da Turma |
-| Turma › Modo Aula | Chamada, sumário e sorteio | Modo Aula |
-| Turma › Sumários | Lições, faltas, substituições | Aulas e Sumários |
-| Turma › Sorteio | Aluno, pares ou grupos ao acaso | Sorteio |
-| Turma › Critérios | Escala, domínios e ponderações | Critérios de Avaliação |
-| Turma › Marcação de Testes | Calendário de avaliações | Marcação de Testes |
-| Turma › Instrumentos | Testes e grelhas de classificação | Instrumentos de Avaliação |
-| Turma › Produção Oral | Momentos de oralidade | Produção Oral |
-| Turma › Domínios | Análise por domínio | Domínios por Período |
-| Turma › Análise de Resultados | Estatística da turma | Análise de Resultados |
-| Turma › Avaliação Intercalar | Menções a meio do período | Avaliação Intercalar |
-| Turma › Avaliação Final | Pauta por período | Avaliação Final |
-| Turma › Relatórios | Relatórios individuais | Relatórios Individuais |
-| Turma › Módulos | Avaliação por módulo (profissional) | Módulos |
-| Turma › Recuperação (MRA) | Faltas por módulo e fichas | Recuperação (MRA) |
-| Turma › Planos de Recuperação | Assiduidade e aprendizagens (PROFIJ) | Planos de Recuperação |
-| Escola | Escolas, logotipo e tipologia | Escolas |
-| Definições | Onze separadores de configuração | Definições |
-| Ajuda | Guia pesquisável e manual | Ajuda |
+# Autoavaliação pelo telemóvel
+Os alunos fazem a autoavaliação no telemóvel, sem conta, com QR code ou link e código (módulo **Autoavaliação dos Alunos pelo Telemóvel**). Abre-se no **Painel da Turma** ou na **Avaliação Final** (botão **Autoavaliação**).
+1. Toque em **Autoavaliação** e escolha a turma e o período.
+2. Modo com **código pessoal** (um papel com o QR de cada aluno, para o ano todo) ou só com o **código da turma** (o aluno escolhe o número).
+3. Projete o QR code; os alunos respondem em eduspruce.pt/aluno.
+4. As respostas chegam aos **Perfis de Aprendizagem** e à coluna Autoavaliação da pauta.
+!al-aluno | A página do aluno para a autoavaliação.

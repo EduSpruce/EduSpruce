@@ -30,11 +30,19 @@ for raw in src.split('\n'):
         out.append(f'<h1 class="cap" id="c{cap}"><span class="cn">{cap}</span>{inl(t)}</h1>');continue
     if l.startswith('## '):
         fecha();out.append(f'<h2>{inl(l[3:])}</h2>');continue
-    m=re.match(r'^(!{1,3})\s*([^|]+?)\s*\|\s*(.*)$',l)
+    m=re.match(r'^!>\s*([^|]+?)\s*\|\s*(.*)$',l)
+    if m:
+        fecha();nimg+=1;out.append(f'<figure class="fr">{imgtag(m.group(1).strip())}<figcaption>{inl(m.group(2))}</figcaption></figure>');continue
+    m=re.match(r'^(!{1,4})\s*([^|]+?)\s*\|\s*(.*)$',l)
     if m:
         fecha();ns=[x.strip() for x in m.group(2).split(',')];leg=m.group(3);nimg+=len(ns)
         k=len(m.group(1))
-        if k==1: out.append(f'<figure class="f1">{imgtag(ns[0])}<figcaption>{inl(leg)}</figcaption></figure>')
+        if k==1:
+            try:
+                from PIL import Image as _I;_w,_h=_I.open('img/%s.jpg'%ns[0]).size
+            except Exception: _w,_h=4,3
+            cl='f1 lat' if _w/_h<1.3 and not re.match(r'(tel-|al-|login-tel)',ns[0]) else 'f1'
+            out.append(f'<figure class="{cl}">{imgtag(ns[0])}<figcaption>{inl(leg)}</figcaption></figure>')
         else: out.append(f'<figure class="fn f{len(ns)}"><div class="row">'+''.join(f'<div>{imgtag(n)}</div>' for n in ns)+f'</div><figcaption>{inl(leg)}</figcaption></figure>')
         continue
     if l.startswith('> '):
@@ -65,8 +73,8 @@ capa=f'''<section class="capa"><div class="cbg"></div><div class="cin">
 <img class="clogo" src="data:image/png;base64,{logo}">
 <div class="cmarca">EduSpruce</div>
 <h1>Manual de Instruções</h1>
-<p class="csub">Guia completo de todos os menus, ecrãs e funcionalidades — com exemplos e {nimg} imagens, para quem usa a app pela primeira vez.</p>
-<div class="cgrid"><img src="img/inicio-simples.jpg"><img src="img/avaliacao.jpg"><img src="img/meucal-Mês.jpg"><img src="img/provas-av-editor.jpg"></div>
+<p class="csub">Guia completo da EduSpruce, app a app e módulo a módulo — com passos, exemplos e {nimg} imagens no tema Spruce, para quem a usa pela primeira vez e a quer aproveitar a 100%.</p>
+<div class="cgrid"><img src="img/hub.jpg"><img src="img/bv-spruceit.jpg"><img src="img/avaliacao.jpg"><img src="img/sprucenote.jpg"></div>
 <p class="cver">Versão {V} · novembro de 2026 · eduspruce.pt</p></div></section>'''
 css=open('manual.css').read()
 open('capa.html','w').write(f'<!DOCTYPE html><html lang="pt-PT"><head><meta charset="utf-8"><style>{css}</style></head><body>{capa}</body></html>')

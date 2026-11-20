@@ -58,7 +58,7 @@ for(const [k,p] of [['0','Legislação'],['1','Criação do Curso'],['2','Dia a 
 }
 await shot('cprofij-pautas',[G('cprofij'),'@Pautas Oficiais',900]);
 // definições
-for(const t of ['Geral','Professor','Domínios e Ponderações','Conta e Acesso','Aparência','Menu Lateral','Segurança','Conta e Dados','Notificações','Auditoria','Ferramentas']){
+for(const t of ['Geral','Os Meus Módulos','Professor','Domínios e Ponderações','Aparência','Menu Lateral','Segurança','Conta e Dados','Notificações','Changelog']){
   const id='def-'+t.replace(/ /g,'_');await shot(id,[G('definicoes'),tab('#main .deftabs button',t),800]);
   await shot(id+'-2',['S:820'],{keep:true});await shot(id+'-3',['S:1640'],{keep:true});}
 await shot('ajuda',[G('ajuda')]);

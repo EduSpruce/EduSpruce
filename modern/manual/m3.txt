@@ -1,4 +1,4 @@
-@parte V | Ensino Profissional e PROFIJ | Módulos, Mecanismo de Recuperação, planos de recuperação e coordenação do PROFIJ
+@parte V | Ensino Profissional e PROFIJ | Módulos, recuperação, horário por grupos de UFCD e coordenação do PROFIJ
 
 # Módulos (cursos profissionais)
 Nas turmas de escolas profissionais a avaliação faz-se por **módulo** (ou UFCD). Abra a turma e toque em **Módulos**.
@@ -30,6 +30,14 @@ Nas turmas PROFIJ, menu **Planos de Recuperação**. Plano de Recuperação da *
 - Cada plano tem início, prazo, horas a recuperar, motivo, medidas, situação (em curso, cumprido, não cumprido), resultado e impressão com assinaturas.
 !avaliacao-profij | A Avaliação Final de uma turma PROFIJ (0 a 20 valores).
 
+# Horário PROFIJ e grupos de UFCD
+Nas turmas PROFIJ o horário da turma tem uma particularidade: as **UFCD** organizam-se em **grupos de A a Z, um por professor**. O grupo de um professor reúne todas as UFCD que ele leciona na turma.
+!horario-profij | Horário de uma turma PROFIJ: as suas aulas, a próxima aula, os tempos semanais e as aulas previstas.
+1. Na **Coord. PROFIJ › Matriz** (ou ao criar o curso) defina os grupos: letra → professor (ex.: A → o seu nome; B → outro colega).
+2. No horário da turma marque nos tempos a letra do grupo (ex.: «A»): esse tempo refere-se à totalidade das UFCD desse professor.
+3. Em **Associar UFCD** indique que UFCD estão em cada grupo. Os grupos refletem-se no horário, nas aulas previstas e nas alterações ao horário base.
+> Exemplo: é o grupo A, com 3 UFCD. No horário marca «A» à terça e à quinta; a app conta esses tempos para as 3 UFCD, pela ordem do referencial, e mostra no Pontos de Situação quando termina cada uma.
+
 # Coordenação do PROFIJ
 Menu **Coord. PROFIJ** (aparece ao assinalar o cargo em [[Definições › Professor]] ou em [[Definições › Geral › Módulos Opcionais]]). Está organizado pelas fases do trabalho do coordenador: **0 Legislação · 1 Criação do Curso · 2 Dia a Dia · 3 Avaliação**.
 !cprofij-f0 | Coordenação PROFIJ: contadores (turmas, em risco, FPCT por colocar, provas) e as quatro fases.
@@ -44,11 +52,11 @@ Portaria n.º 52/2016, Portaria n.º 86/2018 e os documentos da escola (ex.: reg
 !!cprofij-f1-Matriz,cprofij-f1-Planeamento | Matriz Curricular (criar curso, importar PDF, dados, horário, disciplinas e UFCD) e Planeamento Anual.
 ## 2 · Dia a Dia
 - **Painel** — o que precisa de atenção (FPCT por colocar, componentes abaixo de 10…) e as turmas do programa.
-- **Pontos** — Pontos de Situação: aulas previstas, dadas, em falta e previsão de conclusão (importe o horário da turma para a app contar sozinha).
+- **Pontos** — Pontos de Situação: aulas previstas, dadas, em falta e previsão de conclusão (importe o horário da turma para a app contar sozinha). Inclui o **cronograma** das disciplinas e UFCD (concluída, em curso, por começar, não acaba no ano) e sugestões de **cedências**: de onde podem vir os tempos que faltam, com o botão **Ceder** que abre a cedência já preenchida.
 - **Horários** — Horários Semanais e Cedências: ceder tempos de uma disciplina que acabou, dar tempos livres a quem está atrasado, substituir professor a partir de uma data.
 - **Recuperações** — Recuperação das Aprendizagens e da Assiduidade de todas as turmas.
 - **Conselho** — Conselho dos Cursos: membros, **Convocar Reunião** e as reuniões.
-!!cprofij-f2-Painel,cprofij-f2-Recuperações | Dia a Dia: Painel e Recuperações.
+!!cprofij-f2-Painel,cprofij-f2-Pontos | Dia a Dia: Painel e Pontos de Situação.
 !cprofij-f2-Conselho | Conselho dos Cursos.
 ## 3 · Avaliação
 - **FPCT** — Formação Prática em Contexto de Trabalho: critérios do relatório (C1 a C4), avaliação da entidade, nota (20% relatório + 80% entidade, editáveis) e **Importar Grelha de Avaliação (Excel)**.
@@ -59,108 +67,3 @@ Portaria n.º 52/2016, Portaria n.º 86/2018 e os documentos da escola (ex.: reg
 !cprofij-f3-Pautas_Oficiais | Pautas Oficiais em Word e PDF.
 > Exemplo: no início do ano abra 1 · Criação do Curso › Matriz, toque em **Criar Curso Completo**, escolha «PROFIJ II · Tipo 2» e o referencial das UFCD; depois, em Equipa, atribua cada disciplina a um professor. Ao longo do ano acompanhe em 2 · Dia a Dia › Pontos quando termina cada disciplina.
 
-@parte VI | Ferramentas digitais para os alunos | Forms, Provas, Arena, Pulso e autoavaliação — os alunos respondem no telemóvel, sem conta
-
-# Forms
-Menu **Forms**. Formulários (inquéritos, fichas) e testes com correção automática. Os alunos respondem em **forms.html** por QR code ou código, sem contas.
-!forms | Forms: lista de testes e formulários, filtros e, em cada cartão, Recolher, Editar e Mais.
-## Criar um formulário ou teste
-1. Toque em **Novo Teste** ou **Novo Formulário** (botão Banco na barra para os de outros anos letivos).
-2. Escreva o título e a descrição.
-3. Em **Adicionar**, escolha o tipo de pergunta: **Escolha**, **Texto**, **Classificação**, **Data**, **Ordenação**, **Likert**, **Net Promoter Score**, **Secção** ou **Texto ou Imagem**.
-4. Nos testes, indique os pontos e a resposta certa de cada pergunta.
-!forms-editor | Editor de um formulário: perguntas de escolha, classificação por estrelas, Likert e texto longo.
-!forms-quiz | Editor de um teste: cada pergunta com os pontos e a resposta certa (✓).
-## Recolher respostas
-!forms-recolher | Recolher Respostas: escolha a turma, a duração e se pede o código pessoal de cada aluno; depois **Abrir e Mostrar o QR Code**.
-Os alunos abrem forms.html, escrevem o código, escolhem o número e respondem. As respostas chegam cifradas.
-!!al-forms | A página do aluno: escreve o código que o professor mostrou.
-## Respostas e avaliação
-!forms-quiz-Respostas_ | Respostas: Resumo, Respostas Individuais e Classificações; Excel (CSV), Publicar Classificações e Enviar para a Avaliação.
-- **Ligar a uma Turma / Momento de Avaliação** — as classificações entram sozinhas na grelha do instrumento escolhido.
-- Correção automática nas perguntas fechadas; as abertas corrigem-se à mão.
-? Para testes de avaliação completos (verdadeiro/falso, preencher, conectar, tabelas, rubricas, modo exame, agendamento) use as **Provas**.
-
-# Provas
-Menu **Provas**. Módulo independente para testes, fichas, quizzes e TPC digitais, com correção automática e ligação opcional às turmas e aos momentos de avaliação. Os alunos respondem em **provas.html**.
-!provas-inicio | Provas › Início: criar uma avaliação pelo título, importar, próximas avaliações, continuar de onde parou e dados de utilização.
-## O menu das Provas
-- **Início** — «Crie uma avaliação» (escreva o título e +), **Importar Avaliação**, **Criar Manualmente**, calendário das próximas avaliações, «Continue de onde parou» e dados de utilização (mês, trimestre, ano).
-- **Explorar** — conteúdos partilhados pelos colegas do seu grupo (**Importar por Código**).
-- **Avaliações** — todas as avaliações, com filtros por turma e etiquetas; **Agendar** e Mais em cada uma.
-- **Exercícios** — o banco de exercícios reutilizáveis, com tipos e etiquetas.
-- **Rubricas** — grelhas de critérios e níveis para corrigir respostas abertas.
-- **Grupos** — grupos de professores (departamento, escola) para partilhar; **Criar** ou **Entrar Num Grupo**.
-!!provas-Avaliações,provas-Exercícios | Avaliações e Exercícios.
-!!provas-Rubricas,provas-Grupos | Rubricas e Grupos.
-## Tipos de exercício
-Escolha múltipla (com justificação), verdadeiro/falso, texto (curta ou longa, contagem de palavras, símbolos matemáticos, rubrica), preencher o texto (arrastar, escolher ou escrever; palavras extra), ordenar, conectar, tabela (por linha ou por tabela), legendar uma imagem e segmentos (zonas certas numa imagem). Correção parcial ou dicotómica, texto extra e proposta de resolução.
-## Importar
-!provas-importar | Importar Avaliação: Colar Texto, Word / PDF, Ficheiro das Provas, Código de Partilha ou Do Forms.
-> Exemplo de texto para colar: «1. Choose the correct form: She ___ to school. a) go *b) goes c) going» cria uma escolha múltipla (a certa tem *); «V: London is the capital of the UK.» e «F: Children is singular.» criam um verdadeiro/falso; «Yesterday I [went] to the cinema» cria um preencher o texto; uma pergunta sem opções fica de resposta aberta.
-## O editor da avaliação
-!provas-av-editor | Editor da avaliação: separadores Exercícios, Correção, Estatísticas e Atividade; Pré-Visualizar, Definições e Agendar.
-!provas-av-editor-2 | Os exercícios da avaliação, com a cotação de cada um e as setas para reordenar.
-- **Ligar a uma Turma / Momento de Avaliação (Opcional)**.
-- **Definições** — formato (teste, ficha, quiz, TPC), tempo limite, baralhar, numerar, modo exame (ecrã inteiro e registo de saídas), código pessoal, uma resposta por aluno, quando mostrar os resultados, mensagem final e cor.
-!!provas-av-Definições,provas-av-Agendar | Definições da avaliação e Agendar (turma, início, fim, código pessoal, ligação ao momento de avaliação).
-- **Agendar** por turma, com início e fim; aparece no calendário das Provas e no O Meu Calendário.
-- **Atividade** — em tempo real: quem entrou, quem entregou, saídas da página, prolongar, terminar.
-- **Correção** — automática nas fechadas; à mão nas abertas, com comentários, anotações e rubricas; **Publicar classificações**.
-- **Estatísticas** — média, mediana, desvio padrão, positivas, tempo médio, taxa de acerto e discriminação por exercício.
-!!provas-av-Atividade,provas-av-Estatísticas | Atividade e Estatísticas.
-!!al-provas | A página do aluno: provas.html com o código.
-
-# Arena
-Menu **Arena**. Jogos de perguntas em tempo real para a turma; os alunos entram em **arena.html** com o código da sala, sem contas. A Arena **nunca conta para a nota**.
-!arena | Arena: Conjuntos de Perguntas e Jogos e Relatórios; filtros e o conjunto de exemplo com Jogar e Editar.
-## Criar um conjunto de perguntas
-!arena-editor | Editor do conjunto: nome, disciplina, turma (opcional), tema e pasta; cada pergunta com o tipo, o tempo, a imagem e a resposta certa.
-1. **Novo Conjunto** (ou importar de CSV/Excel com as colunas pergunta ; tipo EM/VF ; opções 1–4 ; certa ; tempo).
-2. Para cada pergunta: escolha múltipla ou verdadeiro/falso, o tempo (5 s a 2 min) e marque a certa.
-3. Use as setas para reordenar, duplicar ou apagar; **+ Pergunta** ou **+ Verdadeiro/Falso** em baixo.
-!arena-editor-baixo | O fim do conjunto: + Pergunta, + Verdadeiro/Falso e o número de perguntas.
-## Lançar um jogo
-!arena-jogar | Lançar Jogo: os 11 modos, como se joga (ao vivo na aula ou trabalho de casa) e nomes dos alunos (alcunhas livres ou lista da turma).
-| Modo | Como se ganha |
-| Clássico | Todos à mesma pergunta; quem acerta mais depressa ganha mais pontos. |
-| Colheita | Cada certa abre uma de três pinhas: pontos, duplicar, perder uma parte ou trocar. |
-| Floresta | Cada certa faz crescer a árvore; 3 seguidas dão um rebento extra. |
-| Pesca no Lago | Cada certa lança a cana; ganha quem pescar mais quilos. |
-| Corrida | Cada certa avança uma casa; 3 seguidas dão turbo. |
-| Máquina da Garra | Cada certa dá uma tentativa na garra (peluches, prémio dourado…). |
-| Mina Profunda | Cada certa parte uma rocha: pedra, ouro, gemas… cuidado com a dinamite. |
-| Colmeia | Mel por cada certa; escolhe abelhas, flores ou vender o mel. |
-| Caça-Estrelas | Estrelas, cometas, supernovas… ou um buraco negro. |
-| Código Pirata | Cofres com cristais, duplicar ou piratear pontos. |
-| Laser | Carrega o laser: rouba pontos aos primeiros, escudo ou energia. |
-O ecrã do anfitrião (para projetar) mostra o código, o QR code, quem entrou e a classificação ao vivo, com personagens originais (pinhas comuns, raras, épicas, lendárias e míticas).
-!!al-arena | A página do aluno: «Entra no jogo» com o código do quadro.
-? Os conjuntos pertencem ao ano letivo em que foram feitos; o **Banco** mostra os de outros anos e reutiliza-os.
-
-# Pulso
-Menu **Pulso**. Avaliação em tempo real: verifica num instante o que a turma percebeu. Os alunos entram em **pulso.html** com o código da sala. É sempre **formativo** — só conta para a avaliação se o professor escolher um domínio. Tem banco de perguntas próprio, separado da Arena.
-!pulso | Pulso: Salas, Quizzes e Relatórios.
-## Salas
-!pulso-lancar | Nova Sala: nome, turma (opcional), sala com lista (só entram os alunos da turma, com código pessoal) e deixar os alunos levantar a mão.
-Crie uma sala por turma (até 20). O código fica sempre o mesmo, por isso os alunos só o aprendem uma vez.
-## Quizzes
-!pulso-quizzes | Quizzes: o quiz de exemplo com o tipo das perguntas, Lançar, Editar e Mais.
-!pulso-quiz-abrir | Editor do quiz: escolha múltipla, várias certas, verdadeiro/falso e resposta curta, com pontos, imagem e explicação.
-## Lançar uma atividade
-- **Quiz** — correção imediata (uma pergunta de cada vez, com explicação), navegação livre ou ao ritmo do professor.
-- **Corrida de Equipas**, **Bilhete de Saída** e **Pergunta Rápida** com votação.
-- Resultados ao vivo e «mão levantada».
-## Relatórios
-Excel da turma (folhas Alunos e Perguntas) e PDF por aluno e por pergunta; associação à pauta só se quiser.
-!!al-pulso | A página do aluno: «Entra na sala».
-!pulso-banco | Banco: quizzes e conjuntos de outros anos letivos.
-
-# Autoavaliação pelo telemóvel
-Os alunos fazem a autoavaliação no telemóvel, sem contas, com QR code ou link + código. Abre-se no **Painel da Turma** ou na **Avaliação Final** (botão **Autoavaliação**).
-1. Toque em **Autoavaliação** e escolha a turma e o período.
-2. Escolha o modo: com **código pessoal** (papel com o QR code de cada aluno, para o ano todo) ou só com o **código da turma** (o aluno escolhe o seu número).
-3. Projete o QR code; os alunos respondem em aluno.html.
-4. As respostas aparecem nos **Perfis de Aprendizagem** e na coluna Autoavaliação da pauta.
-!!al-aluno | A página do aluno para a autoavaliação.
-? Pode desligar a autoavaliação em [[Definições › Geral › Módulos Opcionais]]. Tudo vai cifrado: a base de dados nunca vê nomes nem respostas.
