@@ -1,4 +1,4 @@
-/* ===================== Arena · código comum (app do professor e página do aluno) =====================
+/* ===================== Spruce It! · código comum (app do professor e página do aluno) =====================
    Pinhas (personagens originais em SVG), modos de jogo, sons sintetizados, filtro de alcunhas e cifra da lista da turma.
    Tudo original: nomes, desenhos, textos e sons. */
 (function(){
@@ -145,7 +145,7 @@ AR.pinhaFechada=(sz,cor)=>`<svg viewBox="0 0 100 100" width="${sz}" height="${sz
 /* ---------- pontuação por extenso ---------- */
 AR.nf=n=>Math.round(+n||0).toLocaleString('pt-PT');
 /*ARENA-EXTRA-INI*/
-/* ===================== v0.990 · Arena: 8 modos novos (6 «especiais») e 24 Bichos novos — tudo original ===================== */
+/* ===================== v0.990 · Spruce It!: 8 modos novos (6 «especiais») e 24 Bichos novos — tudo original ===================== */
 Object.assign(AR.MODOS,{
   pesca:{nome:'Pesca no Lago',ic:'🎣',cor:'#0284c7',ritmo:'livre',dur:true,obj:'kg',desc:'Cada resposta certa lança a cana: sardinhas, robalos, polvos… e, com sorte, o Atum Gigante ou a Baleia Dourada. Ganha quem pescar mais quilos.'},
   corrida:{nome:'Corrida',ic:'🏁',cor:'#dc2626',ritmo:'livre',dur:true,obj:'casas',desc:'Cada resposta certa avança uma casa; três certas seguidas dão turbo (+2). Quem chegar primeiro à meta ganha.'},
@@ -285,7 +285,7 @@ AR.temaEscuro=k=>k==='arena'||k==='neon';
   duelo:()=>{tom(880,0,.06,'sawtooth',.07);tom(660,.07,.06,'sawtooth',.07);tom(990,.14,.15,'sawtooth',.07)},
   testemunho:()=>{[523,784].forEach((f,i)=>tom(f,i*.08,.12,'triangle',.1))}
 }[n];if(x)return x();return _t(n)}}
-/* ---------- 1.145 · aparência «Recreio» (roxo e amarelo, igual à apresentação do Spruce It) e Cubos ---------- */
+/* ---------- 1.145 · aparência «Recreio» (roxo e amarelo, igual à apresentação do Spruce It!) e Cubos ---------- */
 AR.TEMAS.recreio={nome:'Recreio',v:{'--bg':'#ede9fe','--surface':'#ffffff','--ink':'#1e1b4b','--muted':'#5b5794','--line':'#d9d0fb','--primary':'#6d28d9','--on-primary':'#fff','--accent':'#facc15','--on-accent':'#3b0764','--hero':'#5b21b6','--hero-ink':'#ffffff','--hero-line':'#facc15','--radius':'18px','--bw':'2px','--display':"'Baloo 2'",'--dw':'800','--case':'none','--track':'-.01em','--shadow':'0 5px 0 #3b0f7a','--shadow-a':'0 4px 0 #a16207','--a1':'#f59e0b','--a2':'#0ea5e9','--a3':'#ec4899','--a4':'#14b8a6','--on-a':'#fff'}};
 {const _ok=AR.temaOk;AR.temaOk=k=>AR.TEMAS[k]?k:'recreio'}
 /* Cubos: personagens originais em forma de cubo arredondado com olhos (as mesmas das apresentações) */

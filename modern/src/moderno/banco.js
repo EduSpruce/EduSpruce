@@ -1,5 +1,5 @@
-/* ===================== Banco por ano letivo — Forms, Arena e Pulso =====================
-   Cada teste/formulário (Forms), conjunto de perguntas (Arena) e quiz (Pulso) pertence a um ano letivo.
+/* ===================== Banco por ano letivo — Spruce Forms, Spruce It! e Spruce Live =====================
+   Cada teste/formulário (Spruce Forms), conjunto de perguntas (Spruce It!) e quiz (Spruce Live) pertence a um ano letivo.
    A lista de cada módulo mostra só os do ano letivo aberto; o «Banco» mostra os dos outros anos (por ano ou por título)
    e reutiliza-os no ano aberto (cópia limpa: sem respostas, sessões nem ligações à avaliação). */
 const bcAnoNome=()=>(A()||{}).nome||anoAuto();
@@ -30,7 +30,7 @@ function bcBanco(mod){const M=BC_MOD[mod];const atual=bcAnoNome();const todos=bc
     <div id="bc-l" class="bcl"></div></div>`);
   $('#bc-q').oninput=e=>{F.q=e.target.value;pinta()};$('#bc-a').onchange=e=>{F.ano=e.target.value;if(F.ano===atual)F.atual=true,$('#bc-at').checked=true;pinta()};$('#bc-at').onchange=e=>{F.atual=e.target.checked;pinta()};pinta();setTimeout(()=>{const i=$('#bc-q');if(i)i.focus()},60)}
 /* ---------- listas só do ano letivo aberto + botão do Banco ---------- */
-{/* Forms: a lista usa FMS(); filtra-se no momento de desenhar a lista */
+{/* Spruce Forms: a lista usa FMS(); filtra-se no momento de desenhar a lista */
  const _vF=vForms;vForms=function(){const sv=S.forms;let r;if(!(UI.fmId&&FMS().find(x=>x.id===UI.fmId))){bcMarcar(FMS());const todos=S.forms;S.forms=todos.filter(x=>x.ano===bcAnoNome());try{r=_vF.apply(this,arguments)}finally{S.forms=todos}
    return r}return _vF.apply(this,arguments)};if(go._f)go._f.forms=vForms}
 {const _vA=vArena;vArena=function(){if(UI.arEd||(UI.arTab||'conj')!=='conj')return _vA.apply(this,arguments);const d=arD();bcMarcar(d.conj);const todos=d.conj;d.conj=todos.filter(x=>x.ano===bcAnoNome());if(!d.conj.length)S.cfg.arenaEx=1;let r;try{r=_vA.apply(this,arguments)}finally{const novos=d.conj.filter(x=>!todos.includes(x));d.conj=[...novos,...todos]}
@@ -41,4 +41,4 @@ function bcBotaoBar(id,t,f){const x=document.getElementById('barx');if(!x||docum
 (()=>{const st=document.createElement('style');st.textContent=`.fmnv.bc{background:color-mix(in srgb,#038387 10%,var(--panel))}.fmnv.bc svg{color:#038387}
 .bcl{display:flex;flex-direction:column;gap:6px;margin-top:6px}.bcano{margin:12px 0 2px;font-size:15px}.bci{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
 .bcin{display:flex;flex-direction:column;gap:2px;min-width:0}.bcin b{overflow-wrap:anywhere}@media (max-width:600px){.bci{flex-direction:column;align-items:stretch}}`;document.head.appendChild(st)})();
-try{AJUDA.push({id:'banco',ic:'layers',t:'Banco por ano letivo (Forms, Spruce It e Pulso)',gif:null,txt:`<p>Os testes e formulários dos <b>Formulários</b>, os conjuntos de perguntas do <b>Spruce It</b> e os quizzes do <b>Pulso</b> pertencem ao ano letivo em que foram feitos; cada lista mostra só os do ano letivo aberto.</p><ul><li>Toque em <b>Banco</b> (nos Formulários, no cartão ao lado de Novo Teste; no Spruce It e no Pulso, no cabeçalho) para ver os dos outros anos letivos.</li><li>Procure por <b>título</b> ou escolha o <b>ano letivo</b>; marque «Mostrar também os deste ano» para ver tudo.</li><li><b>Reutilizar</b> copia para o ano letivo aberto, pronto a editar: sem respostas, resultados, sessões nem ligações à avaliação do ano original.</li></ul>`})}catch(_){}
+try{AJUDA.push({id:'banco',ic:'layers',t:'Banco por ano letivo (Spruce Forms, Spruce It! e Spruce Live)',gif:null,txt:`<p>Os testes e formulários do <b>Spruce Forms</b>, os conjuntos de perguntas do <b>Spruce It!</b> e os quizzes do <b>Spruce Live</b> pertencem ao ano letivo em que foram feitos; cada lista mostra só os do ano letivo aberto.</p><ul><li>Toque em <b>Banco</b> (no Spruce Forms, no cartão ao lado de Novo Teste; no Spruce It! e no Spruce Live, no cabeçalho) para ver os dos outros anos letivos.</li><li>Procure por <b>título</b> ou escolha o <b>ano letivo</b>; marque «Mostrar também os deste ano» para ver tudo.</li><li><b>Reutilizar</b> copia para o ano letivo aberto, pronto a editar: sem respostas, resultados, sessões nem ligações à avaliação do ano original.</li></ul>`})}catch(_){}

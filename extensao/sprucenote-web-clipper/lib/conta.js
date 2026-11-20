@@ -1,4 +1,4 @@
-// SpruceNote Web Clipper · a conta (Supabase Auth) e os pedidos à base de dados (PostgREST)
+// Spruce Notes Web Clipper · a conta (Supabase Auth) e os pedidos à base de dados (PostgREST)
 // A extensão tem a SUA sessão (independente da da app): entra-se com a mesma conta Google da EduSpruce,
 // pelo fluxo OAuth com PKCE (chrome.identity.launchWebAuthFlow), ou com e-mail e palavra-passe de reserva.
 import {SB_URL, SB_KEY, ES_VER, TABELA} from './config.js';
@@ -8,7 +8,7 @@ const K_SES = 'sessao';   // chrome.storage.local: só a sessão (como a app gua
 let _ses = null, _renovar = null;
 
 const erro = (msg, cod, extra) => Object.assign(new Error(msg), {cod}, extra || {});
-export const semSessao = () => erro('Entre com a sua conta da EduSpruce para guardar no SpruceNote.', 'semsessao');
+export const semSessao = () => erro('Entre com a sua conta da EduSpruce para guardar no Spruce Notes.', 'semsessao');
 
 async function lerSes() {
   if (_ses) return _ses;

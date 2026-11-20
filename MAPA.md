@@ -16,7 +16,7 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Planta da Sala (1.048): `vPlanta` reescrita (`app/101-planta-sala-robusta.js`); `pl.tipo={"r-c":'v'|'p'|'porta'|'jan'}` (omissão = lugar; `pl.vazios` mantido para compatibilidade), `pl.fix[aid]` lugares fixos, `plModelo`/`plDistribuir`/`plLugares` (frente = secretária). Atenção: `html body .oc` é do O Meu Calendário — nunca usar a classe `.oc` sem seletor forte.
 - Perfis (1.044–1.046): `perfilEvol` (ao lado do radar, injetado por `perfilRadar`), `perfilImprimir` (impressão completa, intercepta `#pa-pr`).
 - Menu lateral, turma + disciplina (1.042): espaço entre linhas por regra `#side .tnode .lbl` em `app/020-in-main.css`.
-- Em teste (1.026): `S.emt[instId]`; entrada `.emtnav` por baixo da turma. Turmas só de coordenação: `CP().y.coordT` (nunca em `a.turmas`). `criarDemo()` cria 3 anos letivos. Forms: tipos `vf`, `lacunas`, `ligar` e `defs.exame`. Código da 1.026 nas peças `app/239`–`244`.
+- Em teste (1.026): `S.emt[instId]`; entrada `.emtnav` por baixo da turma. Turmas só de coordenação: `CP().y.coordT` (nunca em `a.turmas`). `criarDemo()` cria 3 anos letivos. Spruce Forms: tipos `vf`, `lacunas`, `ligar` e `defs.exame`. Código da 1.026 nas peças `app/239`–`244`.
 - Código novo: `./es novo NOME` (peça antes de `app/245-fim-do-programa.js`).
 - CSS novo: `./es novo NOME --css` (fica no bloco `<style id="css965">`), com seletores fortes (`html body …`) por causa do tema SGE.
 - Vistas: `TITLES.x`, envolver `go` e `go._f.x=vX`; módulos desativáveis põem o interruptor em `#def-mods`.
@@ -80,11 +80,11 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Telemóvel: o botão Anular (`#undoBtn`) está escondido abaixo de 700 px — ações em massa precisam de pergunta (ex.: «assinalar todos» nos Alunos). Linhas de botões das tabelas em cartões (`td.act`) quebram de linha (`app/249-…`).
 
 ## Testar sem ecrã (quando pedido; «sem testar» = não testar)
-- `./es testa`: constrói as duas versões, verifica a sintaxe e corre, num Chromium sem ecrã: `tests/vistas.mjs` (todas as vistas, sem base de dados) · `tests/notas.mjs` (os casos das fórmulas da própria app + as classificações da demonstração contra `tests/notas-referencia.txt`; `--atualizar` só quando a mudança nas notas é a pretendida) · `tests/bd.mjs` (versão com base de dados falsa e política de conteúdo ativa: todas as vistas, gravar e recarregar, páginas dos alunos) · `tests/respostas.mjs` (respostas de alunos feitas para atacar) · `tests/percurso.mjs` (professor abre → aluno responde → professor importa, Provas e Formulários).
+- `./es testa`: constrói as duas versões, verifica a sintaxe e corre, num Chromium sem ecrã: `tests/vistas.mjs` (todas as vistas, sem base de dados) · `tests/notas.mjs` (os casos das fórmulas da própria app + as classificações da demonstração contra `tests/notas-referencia.txt`; `--atualizar` só quando a mudança nas notas é a pretendida) · `tests/bd.mjs` (versão com base de dados falsa e política de conteúdo ativa: todas as vistas, gravar e recarregar, páginas dos alunos) · `tests/respostas.mjs` (respostas de alunos feitas para atacar) · `tests/percurso.mjs` (professor abre → aluno responde → professor importa, Spruce Exam e Spruce Forms).
 - `tests/servidor.mjs`: servidor HTTP + base de dados falsa (`window.__tb` são as tabelas; `ctl.falhar=true` faz a base de dados recusar gravações). Com a política ativa o `EduGest.ev` não corre (usa `eval`): usar `EduGest.t` (`go`, `demo`, `S`, `auto`, `f('nomeDaFunção')` — lista em `app/107-…`).
 - Testes à medida: `EduGest.ev("código")` corre código dentro da app; o `INIT` de `modern/tests/comum.mjs` salta a entrada (ver `modern/tests/vistas.mjs`). Se o Playwright não encontrar o browser: `chromium.launch({executablePath:'/opt/pw-browsers/chromium-1243/chrome-linux64/chrome'})`.
 - Versão com base de dados sem rede: servir a pasta por HTTP, trocar `esm/arranque.mjs` por um fornecedor falso em memória (sessao/autorizado/lerDados/ler/escrever/criar/apagar), semear `localStorage['eduspruce.sb']` e servir um `eduspruce-config.json` com o hash (`'eduspruce:'+email`) da conta de teste.
-- PostgreSQL 16 local: dá para correr os scripts SQL (com stubs de `auth`, `storage`, `cron`, `net`, papéis anon/authenticated) e jogar a Arena de ponta a ponta.
+- PostgreSQL 16 local: dá para correr os scripts SQL (com stubs de `auth`, `storage`, `cron`, `net`, papéis anon/authenticated) e jogar o Spruce It! de ponta a ponta.
 
 ## Onde está cada parte (caminhos relativos a modern/src/)
 - `./es mapa`: vista → título → função → peças (gerado na hora, nunca desatualizado). `./es fn NOME` mostra a definição e as redefinições.
@@ -94,20 +94,20 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Modo de apresentação e privacidade: `app/054-modo-apresentacao.js`, `235-…`, `236-…`. Perfis: `237-…`, `238-…`. Planta da Sala: `app/101-planta-sala-robusta.js`.
 - O Meu Calendário: `app/221-…`, `222-meu-calendario-estilo-calendario.js`. Ajuda: `app/088-ajuda.js` (+ textos por versão em `113`, `216`, `225`, `244`).
 - Estilos: peças `.css` de `006` a `039`; o bloco `css965` vai de `036` a `039` (as regras mais recentes no fim de `039`). CSS novo: `./es novo NOME --css`.
-- Só na versão com base de dados: `moderno/` (ordem em `moderno/ordem.txt`): base de dados, cópia no Drive, palavra-passe → `basedados.js` (+ `esm/supabase-prov.mjs`); Formulários → `forms.js`; Arena, Pulso, banco de perguntas, autoavaliação, Provas, avisos, Apps → os ficheiros com esse nome.
+- Só na versão com base de dados: `moderno/` (ordem em `moderno/ordem.txt`): base de dados, cópia no Drive, palavra-passe → `basedados.js` (+ `esm/supabase-prov.mjs`); Spruce Forms → `forms.js`; Spruce It!, Spruce Live, banco de perguntas, autoavaliação, Spruce Exam, avisos, Apps → os ficheiros com esse nome.
 
-## Provas (1.030) — módulo independente
+## Spruce Exam (1.030) — módulo independente
 - Código: `modern/src/moderno/provas.js` (juntado depois do forms.js pelo `db.mjs`); página dos alunos: `provas.html` (cópia adaptada do forms.html, chaves `es-pv-…`, resposta `{pv:1}`).
-- Não usa funções do Forms: a infraestrutura (sessões cifradas em `eduspruce_autoav`, correção, respostas, ligação a turmas/momentos) foi copiada com prefixo `pv`/classes `pq`.
+- Não usa funções do Spruce Forms: a infraestrutura (sessões cifradas em `eduspruce_autoav`, correção, respostas, ligação a turmas/momentos) foi copiada com prefixo `pv`/classes `pq`.
 - Dados: `S.pv = {ex:[banco], av:[avaliações], rub:[rubricas], grupos:[{nome,code}]}`; agendamentos em `av.ag[codigo]={tid,ini,fim}`.
 - Tipos: escolha, vf, texto (curta/longa, contar, mat, rub), lacunas (modo arrastar/escolher/escrever, extraP), ordem (parc), ligar, tabela (cols, lins, marc, porLinha), legendar (img, marcas), segmentos (img, zonas); `dico` = dicotómica; `just`, `extra`, `resol`.
 - SQL: `modern/supabase/migrations/0015_provas.sql` (sessões até 4 MB e 62 dias, respostas até 200 000 caracteres, partilha `eduspruce_provas_partilha` + `provas_partilhar/importar/grupo/despartilhar`).
-- O Forms deixou de oferecer V/F, preencher e ligar e o modo exame (só aparecem em formulários antigos).
+- O Spruce Forms deixou de oferecer V/F, preencher e ligar e o modo exame (só aparecem em formulários antigos).
 
 ## O Meu Calendário (1.031)
-- Código em `app/221-meu-calendario-reunioes-tarefas.js` e `app/222-meu-calendario-estilo-calendario.js`: `OCAL()` = `S.cal {ev, cals, cat, src, cfg}`; eventos `{d0,d1,h0,h1 (minutos),dia,rep{f,int,dias,ate,n},exc,ov,lemb,est,priv,cat,esc}`; `ocColetar(A,B)` junta aulas, reuniões, testes, tarefas, Provas e calendário escolar.
+- Código em `app/221-meu-calendario-reunioes-tarefas.js` e `app/222-meu-calendario-estilo-calendario.js`: `OCAL()` = `S.cal {ev, cals, cat, src, cfg}`; eventos `{d0,d1,h0,h1 (minutos),dia,rep{f,int,dias,ate,n},exc,ov,lemb,est,priv,cat,esc}`; `ocColetar(A,B)` junta aulas, reuniões, testes, tarefas, Spruce Exam e calendário escolar.
 - Tema SGE (1.076): coerência final em `app/247-tema-sge-coerencia-total.css` (última peça CSS): destaque claro `--acc:#127fa6` (AA, evita os tons criados pelo ajuste de contraste), época sem efeito no SGE, cantos retos universais (exceto roda do sorteio, `.estring`, rádios), botões/separadores/etiquetas/ligações únicos. Regras novas do SGE: pôr aí, com `:not(#_sN)` para ganhar especificidade.
-- Tema SGE (`body.est-sge`): cantos retos nas Provas, no calendário e em `provas.html` (`D.quad`). Nunca usar o nome `A_` (é a configuração de autenticação).
+- Tema SGE (`body.est-sge`): cantos retos no Spruce Exam, no calendário e em `provas.html` (`D.quad`). Nunca usar o nome `A_` (é a configuração de autenticação).
 
 ## Avisos com a app fechada (1.036) — notificações push
 - App: `modern/src/moderno/avisos.js` (juntado no fim pelo `db.mjs`); `sw.js` tem o evento `push`. Cartão «Com a App Fechada» em Definições › Notificações (envolve `defNotif`/`bindNotif`).
@@ -123,8 +123,8 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Menu lateral: `hubMenuMods()` (corre antes de cada `menuRender` e depois do `aplicarPrefs`) põe `hidden` nas entradas dos módulos desligados em qualquer menu; a regra `#side .nav[hidden]{display:none!important}` garante que nenhum tema as mostra.
 - 1.053–1.055: tema SGE em `vHub` (painéis `.hub-gr` com título `.hub-sec`, mosaicos planos com faixa de cor, mosaicos alinhados à esquerda); caixa «Turma» (`#hb-tur`, muda `S.turmaAtiva`) no painel Gestão — apps com `turma:1` pedem a turma. Início: `dashTopo` envolvido para pôr a barra `.hub-mini` (ícones pequenos à direita, `data-hubmini`).
 
-## Spruce It (1.060) — antiga Arena, com o aspeto do design «EduSpruce Arena»
-- Nome visível: **Spruce It** (código interno continua `arena`: `arena.js`, `arena-comum.js`, `arena.html`, tabelas `eduspruce_arena_*`). Abre sem o menu lateral (`body.spruceit`, ligado em `go`/`vArena`) com o botão «← Voltar à EduSpruce» (`spVoltar` → Apps).
+## Spruce It! (1.060) — antiga Spruce It!, com o aspeto do design «Spruce It!»
+- Nome visível: **Spruce It!** (código interno continua `arena`: `arena.js`, `arena-comum.js`, `arena.html`, tabelas `eduspruce_arena_*`). Abre sem o menu lateral (`body.spruceit`, ligado em `go`/`vArena`) com o botão «← Voltar à EduSpruce» (`spVoltar` → Apps).
 - Temas do jogo (`AR.TEMAS`: spruce, arena, papel, neon; `AR.temaCss`) escolhidos ao lançar (`cfg.tema`), aplicados à página dos alunos e ao ecrã projetado (`#arhost.v2`). Tipos de letra alojados em `fontes/` (sem Google Fonts).
 - Lançar em 2 passos (`arLancarDlg`: grelha de modos com `AR.emblema` → definições: termina por tempo/objetivo `AR_OBJ`, ordem aleatória/sequencial/até dominar, equipas, interruptores mostrar/tardias/alcunhas aleatórias/silêncio). Biblioteca em linhas (Editar · Atribuir = TPC · Lançar jogo).
 - 6 modos novos (`AR.NOVOS`): cume, cofre, mare, duelo, expedicao, estafeta. Servidor: `modern/supabase/migrations/0017_arena_modos_cume.sql` (`arena_pergunta2`, `arena_responder2`, `arena_acao_modo`, `arena_equipas`, `arena_versao()=17`, coluna `sala.equipas`). Os modos antigos continuam nas funções antigas (as novas delegam). Sem o SQL 0017, os modos novos dão aviso ao lançar.
@@ -139,7 +139,7 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Em massa (1.137): vários PDF/páginas de uma vez; 1.º resolvem-se os donos das páginas (o código do cabeçalho, ex. 158, fica como alias para as páginas das turmas); códigos não reconhecidos escolhem-se na pré-visualização («Não reconhecidos») e ficam em `S.updfAlias {k:{código:id}}`; desdobramentos (cada professor já com a sua aula no tempo) = já estava. Ficheiros GPU/XML: modo «Juntar» (por omissão) → `updfDeEstado(st)` gera as mesmas páginas (`a.pre` já classificado, `pg.nomes` com os nomes completos) e segue pela mesma pré-visualização sem apagar nada.
 - Consulta pública: `/horarios.html#<código>[/<página>.html]`; calendários `.ics` pela Edge Function `modern/supabase/functions/eduschedule-ics` (Verify JWT desligado).
 
-## SpruceNote Web Clipper (1.083) — extensão do Chrome
+## Spruce Notes Web Clipper (1.083) — extensão do Chrome
 - Código: `extensao/sprucenote-web-clipper/` (zip para instalar: eduspruce.pt/extensao/sprucenote-web-clipper.zip, também no espelho). ID fixo `cnbghikaofjkhinjidkbdpeeldmaponn` (chave no manifesto); o Supabase tem de ter `https://cnbghikaofjkhinjidkbdpeeldmaponn.chromiumapp.org/` em Redirect URLs.
 - Sessão própria da extensão (Google por OAuth PKCE com `launchWebAuthFlow`, ou e-mail + palavra-passe de reserva); lê a `conta-chave` e grava cada recorte cifrado (EF1, igual a `nvCifrar`) numa linha nova `ef-f-snin-<id>.bin`. Nunca escreve nos dados da app.
 - App: `moderno/recolha.js` (último em `moderno/ordem.txt`; nomes `snw…`). `snwRecolher()` reclama cada linha (passa a `ef-f-snic-…`), põe o recorte no topo da coluna `recolha:1` «Por Arrumar» do quadro (ou da raiz), guarda o id em `S.snWeb.ok` e só apaga a linha com `nvL().mod` vazio. Corre ao abrir, a cada aviso do tempo real (`sbPuxar`), ao voltar ao separador e de 90 em 90 s.
@@ -150,7 +150,7 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 ## Imagens ilustrativas (filosofia em toda a app, 1.096)
 - Onde há espaço, em vez de ícones soltos ou espaço vazio, usar uma pequena ilustração SVG do assunto (cores do tema: var(--panel)/--line/--mut/--acc + paleta SGE; cantos retos no tema SGE via `rect{rx:0}`).
 - Estados vazios: `app/250-ilustracoes.js` acrescenta sozinho a ilustração a `.card.empty` (≥300 px) e `.empty` (≥420 px, fora de tabelas/listas), escolhida pela vista (`ILU_VISTA` → `ILU_SVG`). `data-sem-ilu` num elemento desliga-a.
-- Outros sítios já com ilustração: Apps (espaço livre de cada grupo, `HUB_ILU` em moderno/recolha.js), Provas › Início (`PV_ILUS`), Definições › Ferramentas (Web Clipper, `SNW_ILU`). Ao criar ecrãs novos, seguir o mesmo estilo.
+- Outros sítios já com ilustração: Apps (espaço livre de cada grupo, `HUB_ILU` em moderno/recolha.js), Spruce Exam › Início (`PV_ILUS`), Definições › Ferramentas (Web Clipper, `SNW_ILU`). Ao criar ecrãs novos, seguir o mesmo estilo.
 
 ## Módulos por conta e perfis (1.112) — `moderno/modulos.js`
 - Professor: Definições sem Conta e Acesso, Auditoria, Ferramentas; cartões técnicos tirados por título (`MOD_TEC_TIT`). Admin vê tudo.
@@ -159,15 +159,15 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Licenças: `eduspruce_autorizados.modulos` (text[], null = todos; script 0020), lido por `eduspruce_meus_modulos()` → `MOD_PERM`; `modInc(id)` embrulha `HUB_APPS[].on`. Admin escolhe em «Módulos por Conta».
 - 1.112: `on('jnOn')` em recolha.js usava `window[f]` (as funções são const, não estão em window) → Jornal, Contactos, JornalNote e Coord. PROFIJ apareciam sempre.
 
-## SpruceNote e JornalNote — melhorias (1.141, `app/273-sprucenote-jornalnote-melhorias.{js,css}`)
+## Spruce Notes e JornalNote — melhorias (1.141, `app/273-sprucenote-jornalnote-melhorias.{js,css}`)
 - Pesquisa em todos os quadros (`mqmPesquisa`, Ctrl+F no quadro), modelos (`MQM_MODELOS`/`mqmAplicar`), exportar em Markdown (`mqmExportar`/`mqmMd`), botões no topo (`#mqm-pq`, `#mqm-md`, `#mqm-tx`).
 - Setas: campos opcionais `et` (etiqueta), `tr` (tracejado), `pt` (`fim`|`ambas`|`nenhuma`), `cor`, `cv` (curva; omissão .12). A seta selecionada fica em `mqUI().selSeta` (o `mqRender` filtra `u.sel` só para elementos).
 - Largar elementos em cima de um cartão de quadro move-os para dentro (`mqmMover`); Ctrl+C/X/V de elementos (`_mqmClip`, só cola se a área de transferência ainda tiver o texto copiado).
 
-## Spruce It — página inicial nova e «Ao vivo» (1.142, `moderno/arena-inicio.js`, depois de `banco.js`)
+## Spruce It! — página inicial nova e «Ao vivo» (1.142, `moderno/arena-inicio.js`, depois de `banco.js`)
 - Embrulha `vArena` (só no separador dos conjuntos): troca a lista antiga por indicadores (`arsStats`), grelha/lista (`S.cfg.arVista`), ordenação (`S.cfg.arOrd`), favoritos (`c.fav`) e pastas em botões (`UI.arPasta`, `★` = favoritos), e um painel lateral (continuar, jogos recentes, atividade de 8 semanas, modos, perguntas a rever com <70% de acerto e ≥3 respostas). Respeita o filtro do ano letivo do `banco.js` (`bcAnoNome`).
 - Embrulha `arDesenhar`: nos modos ao ritmo de cada aluno (`.arhlv`) junta `aside.arhfeed` com o que mudou desde a última leitura (ganhou/perdeu/ficou com pontos de outro — pares de +n/−n na mesma leitura), total da sala, acerto e quem vai à frente.
 - 1.143: apresentação animada «Como funciona» (5 cenas, `ARS_CENAS`/`arsCena`) no espaço livre à direita quando cabe (≥360 px, `arsApresPos`, `#ars-apres` absoluto no `#view`) e em janela pelo botão «Como funciona» (`arsApresJanela`); esconder grava `S.cfg.arsApresOff`.
-- 1.145: aparência «Recreio» (`AR.TEMAS.recreio`, roxo/amarelo) é o tema por omissão do jogo (`AR.temaOk` cai em `recreio`; `S.cfg.arenaTema`); Cubos (`AR.CUBOS`, p52–p59, `AR.svgC`) passam a ser as primeiras personagens comuns e a personagem por omissão dos alunos; a página do professor e a apresentação usam o roxo (#6d28d9) e o amarelo (#facc15). Provas: azul-noite (#0f172a) e verde (#22c55e) em `app/277-provas-aparencia.css` e em `/provas.html`, iguais à apresentação do `275-boas-vindas`.
-- 1.146: cores das apps no tema SGE: Spruce It `sgeRoxo` (#7c3aed) e Provas `sgeProvas` (#22c55e) em `HUB_SGE_DEF` (hub.js), que o `eduapps.js` usa nos logótipos; `PV_A` (ilustrações do Provas) passa a azul-noite; o botão «Ver exemplo» (`#bv-ver`) toma a cor de cada app. Para vencer as regras do SGE em `.btn.pri` são precisos ≥6 IDs na especificidade (`#view` + 5× `:not(#_x)`).
-- 1.147: menu do Provas encolhe para só ícones (`S.cfg.pvMini`, `.pv.pvmini`, botão `#pv-col` no `pvShell`). Botões verdes com texto branco em #15803d (o corretor de contraste da app escurece o texto em #22c55e).
+- 1.145: aparência «Recreio» (`AR.TEMAS.recreio`, roxo/amarelo) é o tema por omissão do jogo (`AR.temaOk` cai em `recreio`; `S.cfg.arenaTema`); Cubos (`AR.CUBOS`, p52–p59, `AR.svgC`) passam a ser as primeiras personagens comuns e a personagem por omissão dos alunos; a página do professor e a apresentação usam o roxo (#6d28d9) e o amarelo (#facc15). Spruce Exam: azul-noite (#0f172a) e verde (#22c55e) em `app/277-provas-aparencia.css` e em `/provas.html`, iguais à apresentação do `275-boas-vindas`.
+- 1.146: cores das apps no tema SGE: Spruce It! `sgeRoxo` (#7c3aed) e Spruce Exam `sgeProvas` (#22c55e) em `HUB_SGE_DEF` (hub.js), que o `eduapps.js` usa nos logótipos; `PV_A` (ilustrações do Spruce Exam) passa a azul-noite; o botão «Ver exemplo» (`#bv-ver`) toma a cor de cada app. Para vencer as regras do SGE em `.btn.pri` são precisos ≥6 IDs na especificidade (`#view` + 5× `:not(#_x)`).
+- 1.147: menu do Spruce Exam encolhe para só ícones (`S.cfg.pvMini`, `.pv.pvmini`, botão `#pv-col` no `pvShell`). Botões verdes com texto branco em #15803d (o corretor de contraste da app escurece o texto em #22c55e).

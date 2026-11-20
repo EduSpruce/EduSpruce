@@ -1,4 +1,4 @@
-@parte VI | SpruceApps | Spruce It, Pulso, Formulários e Provas — os alunos respondem no telemóvel, sem conta
+@parte VI | SpruceApps | Spruce It!, Spruce Live, Spruce Forms e Spruce Exam — os alunos respondem no telemóvel, sem conta
 
 # Como funcionam as SpruceApps
 As quatro SpruceApps servem para trabalhar **com os alunos**. Têm em comum:
@@ -7,15 +7,15 @@ As quatro SpruceApps servem para trabalhar **com os alunos**. Têm em comum:
 - Cada app tem a sua cor, as suas personagens e uma **apresentação de boas-vindas** na primeira abertura (volta no botão **Ver exemplo**).
 - Os conteúdos pertencem ao ano letivo em que foram criados; o **Banco** mostra os de outros anos e reutiliza-os.
 - Ligam-se e desligam-se em [[Definições › Os Meus Módulos › SpruceApps]].
-| App | Para quê | Página do aluno | Conta para a nota? |
-| Spruce It | Jogos de perguntas em tempo real ou TPC | eduspruce.pt/spruceit | Nunca |
-| Pulso | Verificar num instante o que a turma percebeu | eduspruce.pt/pulso | Só se escolher um domínio |
-| Formulários | Inquéritos, registos e questionários que se corrigem sozinhos | eduspruce.pt/forms | Se ligar a um momento de avaliação |
-| Provas | Testes e fichas completos, com modo exame e rubricas | eduspruce.pt/provas | Se ligar a um momento de avaliação |
-!!!!al-arena,al-pulso,al-forms,al-provas | As páginas dos alunos: Spruce It, Pulso, Formulários e Provas — basta o código.
+| App | Lema | Para quê | Página do aluno | Conta para a nota? |
+| Spruce It! | Joga e aprende | Jogos de perguntas em tempo real ou TPC | eduspruce.pt/spruceit | Nunca |
+| Spruce Live | Pergunta e vê | Verificar num instante o que a turma percebeu | eduspruce.pt/pulso | Só se escolher um domínio |
+| Spruce Forms | Recolhe e organiza | Inquéritos, registos e questionários que se corrigem sozinhos | eduspruce.pt/forms | Se ligar a um momento de avaliação |
+| Spruce Exam | Testa e avalia | Testes e fichas completos, com modo exame e rubricas | eduspruce.pt/provas | Se ligar a um momento de avaliação |
+!!!!al-arena,al-pulso,al-forms,al-provas | As páginas dos alunos: Spruce It!, Spruce Live, Spruce Forms e Spruce Exam — basta o código.
 
-# Spruce It
-Menu **Spruce It** (ou Apps › SpruceApps). Jogos de perguntas para a turma, com personagens originais (os «Bichos» e as Pinhas), modos de jogo e pódio. Serve para revisões na aula e para trabalho de casa. O Spruce It **nunca conta para a nota**.
+# Spruce It!
+Menu **Spruce It!** (ou Apps › SpruceApps) — «Joga e aprende». Jogos de perguntas para a turma, com personagens originais (os «Bichos» e as Pinhas), modos de jogo e pódio. Serve para revisões na aula e para trabalho de casa. O Spruce It! **nunca conta para a nota**.
 !!bv-spruceit,arena | A apresentação de boas-vindas («Aprender é o melhor jogo») e o ecrã principal.
 ## O ecrã principal
 - Separadores **Os meus conjuntos**, **Jogos e relatórios** e **Como Funciona**; lembrete «Os alunos entram em eduspruce.pt/spruceit com o código da sala».
@@ -58,9 +58,9 @@ Menu **Spruce It** (ou Apps › SpruceApps). Jogos de perguntas para a turma, co
 Toque em **Atribuir** (ícone de calendário) no cartão do conjunto. Escolha o modo — os «ao ritmo de cada um», como Expedição, são os mais indicados —, a duração ou o objetivo por aluno e a **Data-limite**, e toque em **Criar trabalho de casa**. Os alunos jogam em casa com o código até à data-limite; pode fechar o trabalho mais cedo. Os resultados ficam em **Jogos e relatórios**.
 ? Com o módulo **Moedas e coleção de Pinhas** ligado, os alunos ganham moedas e colecionam Pinhas (comuns, raras, épicas, lendárias e míticas) — só para motivar, nunca para avaliar.
 
-# Pulso
-Menu **Pulso**. Avaliação em tempo real na sala: quizzes com correção imediata, corrida de equipas, bilhete de saída e pergunta rápida. Os alunos entram em **eduspruce.pt/pulso** com o código da sala. É sempre **formativo**: só conta para a avaliação se escolher um domínio. O banco de perguntas é próprio, separado do Spruce It.
-!bv-pulso | Boas-vindas do Pulso: «Veja em direto o que a turma já aprendeu».
+# Spruce Live
+Menu **Spruce Live** — «Pergunta e vê». Avaliação em tempo real na sala: quizzes com correção imediata, corrida de equipas, bilhete de saída e pergunta rápida. Os alunos entram em **eduspruce.pt/pulso** com o código da sala. É sempre **formativo**: só conta para a avaliação se escolher um domínio. O banco de perguntas é próprio, separado do Spruce It!
+!bv-pulso | Boas-vindas do Spruce Live: «Veja em direto o que a turma já aprendeu».
 ## 1. Criar as salas
 !!pulso-nova-sala,pulso-salas | Nova Sala (nome, turma, sala com lista, mão levantada) e a sala criada, com o código fixo.
 1. Toque em **Nova Sala**. Dê o nome (ex.: «7.º A · Inglês») e, se quiser, a turma.
@@ -79,8 +79,8 @@ Durante a atividade vê ao vivo quem respondeu, a percentagem de acerto e as mã
 Em **Relatórios** ficam os resultados de cada atividade: Excel da turma (folhas Alunos e Perguntas) e PDF por aluno e por pergunta. Associação à pauta só se escolher um domínio.
 > Exemplo: nos últimos 5 minutos da aula lance um **Bilhete de Saída** com 3 perguntas sobre o Past Simple. Antes de sair, a turma responde no telemóvel; na aula seguinte começa pelas perguntas com menos acerto.
 
-# Formulários
-Menu **Formulários**. Inquéritos, fichas de registo e **questionários que se corrigem sozinhos**. Os alunos respondem em **eduspruce.pt/forms** por QR code ou código, sem contas. Os questionários podem entrar na avaliação.
+# Spruce Forms
+Menu **Spruce Forms** — «Recolhe e organiza». Inquéritos, fichas de registo e **questionários que se corrigem sozinhos**. Os alunos respondem em **eduspruce.pt/forms** por QR code ou código, sem contas. Os questionários podem entrar na avaliação.
 !!bv-forms,forms | Boas-vindas («Pergunte. Recolha. Analise.») e o ecrã principal com modelos, recentes e turmas.
 ## O ecrã principal
 - **Novo questionário** (teste com pontos e respostas certas), **Novo formulário** (inquérito sem nota), **Importação rápida** e **Banco**.
@@ -101,12 +101,12 @@ Os alunos abrem a página, escrevem o código, escolhem o número e respondem.
 !forms-quiz-Respostas_ | Respostas: Resumo, Respostas Individuais e Classificações; Excel (CSV), Publicar Classificações e Enviar para a Avaliação.
 - **Ligar a uma Turma / Momento de Avaliação** — as classificações entram sozinhas na grelha do instrumento.
 - Correção automática nas perguntas fechadas; as abertas corrigem-se à mão.
-? Para testes completos (preencher, conectar, tabelas, rubricas, modo exame, agendamento) use as **Provas**.
+? Para testes completos (preencher, conectar, tabelas, rubricas, modo exame, agendamento) use as **Spruce Exam**.
 
-# Provas
-Menu **Provas**. Testes, fichas, quizzes e TPC digitais, com banco de exercícios, agendamento, modo exame, rubricas, correção e estatísticas. Os alunos respondem em **eduspruce.pt/provas**. É completamente separado dos outros módulos; liga-se às turmas e aos momentos de avaliação só se quiser.
-!!bv-provas,provas-inicio | Boas-vindas («Avaliar em minutos») e Provas › Início.
-## O menu das Provas (à esquerda)
+# Spruce Exam
+Menu **Spruce Exam** — «Testa e avalia». Testes, fichas, quizzes e TPC digitais, com banco de exercícios, agendamento, modo exame, rubricas, correção e estatísticas. Os alunos respondem em **eduspruce.pt/provas**. É completamente separado dos outros módulos; liga-se às turmas e aos momentos de avaliação só se quiser.
+!!bv-provas,provas-inicio | Boas-vindas («Avaliar em minutos») e Spruce Exam › Início.
+## O menu do Spruce Exam (à esquerda)
 - **Início** — «Crie uma avaliação» (título e +), **Importar Avaliação**, **Criar Manualmente**, calendário das próximas avaliações, «Continue de onde parou» e dados de utilização (mês, trimestre, ano).
 - **Explorar** — conteúdos partilhados pelos colegas do grupo (**Importar por Código**).
 - **Avaliações** — todas, com filtros por turma e etiquetas; **Agendar** em cada uma.
@@ -115,13 +115,13 @@ Menu **Provas**. Testes, fichas, quizzes e TPC digitais, com banco de exercício
 ## Tipos de exercício
 Escolha múltipla (com justificação), verdadeiro/falso, texto (curta ou longa, contagem de palavras, símbolos matemáticos, rubrica), preencher o texto (arrastar, escolher ou escrever), ordenar, conectar, tabela, legendar uma imagem e segmentos. Correção parcial ou dicotómica, texto extra e proposta de resolução.
 ## Importar
-!provas-importar | Importar Avaliação: Colar Texto, Word / PDF, Ficheiro das Provas, Código de Partilha ou Do Forms.
+!provas-importar | Importar Avaliação: Colar Texto, Word / PDF, Ficheiro do Spruce Exam, Código de Partilha ou Do Spruce Forms.
 > Exemplo de texto para colar: «1. Choose the correct form: She ___ to school. a) go *b) goes c) going» cria uma escolha múltipla (a certa tem *); «V: London is the capital of the UK.» cria um verdadeiro/falso; «Yesterday I [went] to the cinema» cria um preencher o texto.
 ## O editor da avaliação
 !provas-av-editor | Editor: separadores Exercícios, Correção, Estatísticas e Atividade; Pré-Visualizar, Definições e Agendar.
 - **Ligar a uma Turma / Momento de Avaliação (Opcional)**.
 - **Definições** — formato (teste, ficha, quiz, TPC), tempo limite, baralhar, numerar, **modo exame** (ecrã inteiro e registo de saídas), código pessoal, uma resposta por aluno, quando mostrar resultados, mensagem final e cor.
-- **Agendar** por turma, com início e fim; aparece no calendário das Provas e em O Meu Calendário.
+- **Agendar** por turma, com início e fim; aparece no calendário do Spruce Exam e em O Meu Calendário.
 !!provas-av-Definições,provas-av-Agendar | Definições da avaliação e Agendar.
 - **Atividade** — ao vivo: quem entrou e entregou, saídas da página, prolongar, terminar.
 - **Correção** — automática nas fechadas; à mão nas abertas, com comentários e rubricas; **Publicar classificações**.

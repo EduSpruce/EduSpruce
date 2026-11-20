@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.165
+- Novos nomes das SpruceApps: Spruce It! (Joga e aprende), Spruce Live (Pergunta e vê), Spruce Forms (Recolhe e organiza), Spruce Exam (Testa e avalia) e Spruce Notes (Pensa e liga), em toda a app, nas páginas dos alunos, na ajuda e na extensão Spruce Notes Web Clipper
+- Ajuda: capturas das SpruceApps refeitas em todos os temas
+- Manual de Instruções 1.039 com os nomes novos e capturas refeitas
+
 ## 1.164
 - Dia de ordenado: quando o dia 20 calha ao fim de semana, o aviso passa para a sexta-feira antes, com «Será hoje…?»
 

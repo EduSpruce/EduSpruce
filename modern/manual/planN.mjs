@@ -14,7 +14,7 @@ await shot('novidades',[G('inicio'),`(novidadesDesde('1.148'),1)`,1200]);
 // boas-vindas
 for(const k of ['spruceit','pulso','forms','provas'])await shot('bv-'+k,[G('inicio'),`(bvAbrir('${k}'),1)`,2600]);
 await shot('bv-sprucenote',[G('sprucenote'),ID('mq-demo'),2600]);
-// Spruce It
+// Spruce It!
 await shot('arena',[G('arena'),900]);
 await shot('arena-baixo',[G('arena'),'S:700']);
 await shot('arena-jogos',[G('arena'),tab('#main button','Jogos e relatórios'),900]);
@@ -24,7 +24,7 @@ await shot('arena-lancar-baixo',['S:600',`(()=>{const d=document.querySelector('
 await shot('arena-atribuir',[G('arena'),tab('#main button','Atribuir'),1000]);
 await shot('arena-novo',[G('arena'),ID('ars-novo'),900]);
 await shot('arena-mais',[G('arena'),MAIS,600]);
-// Pulso: criar sala
+// Spruce Live: criar sala
 await shot('pulso-vazio',[G('pulso')]);
 await shot('pulso-nova-sala',[G('pulso'),ID('pu-ns'),900],{keep:true});
 await E(`(()=>{const i=[...document.querySelectorAll('input')].filter(x=>x.getClientRects().length&&(!x.type||x.type=='text'))[0];if(i){i.value='7.º A · Inglês';i.dispatchEvent(new Event('input',{bubbles:true}))}const b=[...document.querySelectorAll('button')].filter(x=>x.getClientRects().length).find(x=>/^(Guardar|Criar)/.test(x.innerText.trim()));b&&b.click();return 1})()`).catch(e=>console.log('sala',e));
@@ -33,12 +33,12 @@ await shot('pulso-salas',[G('pulso'),900]);
 await shot('pulso-quizzes',[G('pulso'),tab('#main button','Quizzes'),800]);
 await shot('pulso-lancar',[G('pulso'),tab('#main button','Quizzes'),tab('#main button','Lançar'),1100]);
 await shot('pulso-relatorios',[G('pulso'),tab('#main button','Relatórios'),800]);
-// Formulários
+// Spruce Forms
 await shot('forms',[G('forms'),900]);
 await shot('forms-modelo',[G('forms'),tab('#main button','Feedback'),1000]);
 await shot('forms-importar',[G('forms'),ID('fmc-i'),900]);
 await shot('forms-banco',[G('forms'),ID('fmc-bc'),900]);
-// SpruceNote
+// Spruce Notes
 await shot('sprucenote',[G('sprucenote'),900]);
 await shot('sprucenote-modelos',[G('sprucenote'),ID('mqm-md'),900]);
 await shot('sprucenote-mais',[G('sprucenote'),ID('mq-more'),700]);

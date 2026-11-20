@@ -1,4 +1,4 @@
-/* SpruceNote Web Clipper · janela pequena, para páginas onde o painel não pode aparecer
+/* Spruce Notes Web Clipper · janela pequena, para páginas onde o painel não pode aparecer
    (páginas internas do Chrome, a loja de extensões, o leitor de PDF…) */
 (async () => {
   const {Painel, notaDeTexto, eVideo} = globalThis.SNPainel;

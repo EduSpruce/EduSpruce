@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f6f96">
 <meta name="robots" content="noindex">
-<title>Pulso</title>
+<title>Spruce Live</title>
 <link rel="icon" href="favicon.png">
 <style>
 :root{--bg:#f2f6f9;--panel:#fff;--line:#d9e2ea;--ink:#16222d;--mut:#5d6d7c;--acc:#0f7fa8;--acc2:#e3f2f8;--ok:#15803d;--bad:#b91c1c;--r:16px}
@@ -68,12 +68,12 @@ window.__ES_SB="__ES_SB__";</script>
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const LT='ABCDE';const ESC=['Percebi tudo','Percebi quase tudo','Percebi pouco','Não percebi'];const COR=['#ef4444','#3b82f6','#f59e0b','#22c55e','#a855f7','#ec4899','#14b8a6','#f97316','#64748b','#84cc16'];
 let CFG=null;const st={};let tPoll=null,canal=null,ocup=false,ecraK='';
-async function cfg(){if(CFG)return CFG;let c=window.__ES_SB;if(!c||typeof c!=='object'){try{c=await (await fetch('supabase-config.json',{cache:'no-store'})).json()}catch(_){c=null}}if(!c||!c.url)throw new Error('O Pulso não está configurado.');CFG=c;return c}
+async function cfg(){if(CFG)return CFG;let c=window.__ES_SB;if(!c||typeof c!=='object'){try{c=await (await fetch('supabase-config.json',{cache:'no-store'})).json()}catch(_){c=null}}if(!c||!c.url)throw new Error('O Spruce Live não está configurado.');CFG=c;return c}
 async function rpc(fn,args){const c=await cfg();let r;try{r=await fetch(c.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:c.anonKey,Authorization:'Bearer '+c.anonKey},body:JSON.stringify(args)})}catch(e){const x=new Error('Sem ligação. A tentar de novo…');x.rede=true;throw x}
-  if(!r.ok){const x=new Error(r.status===404?'O Pulso ainda não está disponível nesta escola.':'Erro do servidor ('+r.status+').');x.http=r.status;throw x}return r.json()}
+  if(!r.ok){const x=new Error(r.status===404?'O Spruce Live ainda não está disponível nesta escola.':'Erro do servidor ('+r.status+').');x.http=r.status;throw x}return r.json()}
 const MSG={espere:'Demasiadas tentativas falhadas a partir desta rede. Espera uns minutos e tenta de novo.',sala:'Não encontrei essa sala. Confirma o código.',ativ:'A atividade já terminou.',lista:'Escolhe o teu nome.',codigo:'O código pessoal não está certo. Confirma com o professor.',nome:'Escreve o teu nome (2 a 40 letras).',emuso:'Esse nome está a ser usado noutro aparelho. Espera uns segundos e tenta de novo.',cheia:'A sala está cheia.',pedido:'Pedido inválido.'};
 const ls=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(_){return null}};
-const topo=()=>`<header class="top"><span class="lg">P</span><b>EduSpruce <em>Pulso</em></b><span class="sp"></span>${st.info?`<small>${esc(st.info.nome)}${st.eu?'<br>'+esc(st.eu.nome):''}</small>`:''}</header>`;
+const topo=()=>`<header class="top"><span class="lg">P</span><b>EduSpruce <em>Spruce Live</em></b><span class="sp"></span>${st.info?`<small>${esc(st.info.nome)}${st.eu?'<br>'+esc(st.eu.nome):''}</small>`:''}</header>`;
 function ecra(k,h){ecraK=k;app.innerHTML=topo()+h;maoBtn();window.scrollTo(0,0)}
 let ligEl=null;const semRede=v=>{if(v&&!ligEl){ligEl=document.createElement('div');ligEl.className='lig';ligEl.textContent='Sem ligação · a tentar de novo…';document.body.appendChild(ligEl)}if(!v&&ligEl){ligEl.remove();ligEl=null}};
 /* baralhar de forma estável para cada aluno */

@@ -92,10 +92,10 @@ Menu **Jornal Escolar** (só para o responsável pelo jornal; liga-se em Módulo
 !!jornal-Atividades_do_PAA,jornal-Calendário | Atividades do PAA e Calendário.
 !!jornal-Peças,jornal-Redação | Peças (quadro por estado) e Redação.
 
-@parte VIII | Organização | SpruceNote, JornalNote, SpruceNote Web Clipper e Notas Flutuantes
+@parte VIII | Organização | Spruce Notes, JornalNote, Spruce Notes Web Clipper e Notas Flutuantes
 
-# SpruceNote
-Menu **SpruceNote** (módulo opcional). Quadros visuais livres para planear aulas, projetos, visitas de estudo e ideias — notas, imagens, ligações, listas de tarefas, colunas e sub-quadros, arrastados para onde quiser.
+# Spruce Notes
+Menu **Spruce Notes** (módulo opcional) — «Pensa e liga». Quadros visuais livres para planear aulas, projetos, visitas de estudo e ideias — notas, imagens, ligações, listas de tarefas, colunas e sub-quadros, arrastados para onde quiser.
 !!bv-sprucenote,sprucenote | Boas-vindas («Organize-se. Continue a criar.») e um quadro com título, notas, uma ideia e uma lista de pendências.
 ## A barra de elementos (à esquerda)
 Arraste um elemento da barra para o quadro: **Anotação** (texto), **Link**, **Pendências** (lista de tarefas), **Linha** (seta entre elementos), **Quadro** (sub-quadro — abre com duplo toque), **Coluna** (agrupa cartões), **Comentário**, **Áudio**, **Título**, **Vídeo**, **Mapa**, **Imagem**, **Enviar** (qualquer ficheiro), **Desenho** e **Lixeira** (o que apagou, para recuperar). **Mais elementos** mostra os restantes.
@@ -112,16 +112,16 @@ Arraste um elemento da barra para o quadro: **Anotação** (texto), **Link**, **
 > Exemplo: escolha **Modelos › Plano de projeto**, chame-lhe «PAP 12.º ano»; arraste para «A fazer» uma Pendência com as tarefas do mês e junte as imagens e ligações que for recolhendo com o Web Clipper.
 
 # JornalNote
-Menu **JornalNote** (por baixo do Jornal Escolar). Igual ao SpruceNote, mas só com os quadros do **Jornal Escolar** — para planear edições, entrevistas e reportagens com a equipa do jornal.
+Menu **JornalNote** (por baixo do Jornal Escolar). Igual ao Spruce Notes, mas só com os quadros do **Jornal Escolar** — para planear edições, entrevistas e reportagens com a equipa do jornal.
 !snjornal | JornalNote: a apresentação de boas-vindas («Cada edição, num só quadro»).
 
-# SpruceNote Web Clipper
-Extensão do Chrome que guarda **imagens, texto, ligações e vídeos** de qualquer site nos quadros do SpruceNote. No Início, o atalho **SpruceNote Web Clipper › Instalar** (só no computador) descarrega-a e mostra os passos.
-1. Descompacte **sprucenote-web-clipper.zip** (Ajuda › SpruceNote Web Clipper ou atalho do Início).
+# Spruce Notes Web Clipper
+Extensão do Chrome que guarda **imagens, texto, ligações e vídeos** de qualquer site nos quadros do Spruce Notes. No Início, o atalho **Spruce Notes Web Clipper › Instalar** (só no computador) descarrega-a e mostra os passos.
+1. Descompacte **sprucenote-web-clipper.zip** (Ajuda › Spruce Notes Web Clipper ou atalho do Início).
 2. No Chrome, abra **chrome://extensions** e ligue o **Modo de programador**.
 3. **Carregar expandida** › pasta **sprucenote-web-clipper**; fixe o ícone (peça de puzzle › alfinete).
 4. Nas **Opções** da extensão entre com a mesma conta Google da EduSpruce.
-- **Imagens:** passe o rato e carregue em «Guardar». **Texto:** selecione › botão direito › **Guardar no SpruceNote**. **Páginas e vídeos:** ícone na barra ou **Alt+Shift+S**.
+- **Imagens:** passe o rato e carregue em «Guardar». **Texto:** selecione › botão direito › **Guardar no Spruce Notes**. **Páginas e vídeos:** ícone na barra ou **Alt+Shift+S**.
 - «Guardar em ▾» escolhe o quadro. Os recortes chegam à coluna **«Por Arrumar»**, cifrados com a chave da conta.
 ? Só no Chrome ou Edge de computador (não no iPad nem no telemóvel).
 
@@ -144,9 +144,9 @@ Menu **Definições**, com dez separadores: **Geral**, **Os Meus Módulos**, **P
 A escolha é só da sua conta e fica logo disponível.
 | Grupo | Módulos |
 | Gestão e sala de aula | Coord. PROFIJ · Sorteio (Roda da Sorte) · Autoavaliação dos Alunos pelo Telemóvel · Digitalização de Testes · Direção de Turma · Documentos · Modo de Apresentação |
-| SpruceApps | Spruce It · Moedas e coleção de Pinhas · Pulso · Formulários · Provas |
+| SpruceApps | Spruce It! · Moedas e coleção de Pinhas · Spruce Live · Spruce Forms · Spruce Exam |
 | Escola e comunicação | Reuniões · Jornal Escolar · JornalNote · Contactos |
-| Organização | SpruceNote · Biblioteca · Notas Flutuantes · SpruceNote Web Clipper |
+| Organização | Spruce Notes · Biblioteca · Notas Flutuantes · Spruce Notes Web Clipper |
 !def-Os_Meus_Módulos-2 | Os grupos SpruceApps, Escola e Comunicação e Organização, cada módulo com a sua cor.
 > Exemplo: não usa o Jornal nem a Coordenação do PROFIJ. Desligue **Jornal Escolar**, **JornalNote** e **Coord. PROFIJ**: desaparecem do menu, das Apps e do Início. Se um dia precisar, volte a ligar — tudo o que tinha continua lá.
 ## Professor
@@ -165,7 +165,7 @@ Assinale os cargos (Diretor(a) de turma, Coordenador(a) de departamento, Coorden
 !def-Menu_Lateral | Menu Lateral: arrastar pela pega, mudar ícone e nome, «Fora» do menu, Novo Menu, Nova Secção, Separador e Repor o Original.
 - **Secção** (título sempre aberto, como «Geral») ou **Menu** (abre e fecha com um toque); largue um item em cima de um menu para o pôr lá dentro.
 - **Menus Guardados** — **Guardar o Menu Atual** e associe cada menu a escolas: ao mudar de escola no topo, o menu muda sozinho.
-> Exemplo: quer as SpruceApps juntas num menu. Toque em **Novo Menu**, chame-lhe «Com os alunos» e arraste para lá o Spruce It, o Pulso, os Formulários e as Provas.
+> Exemplo: quer as SpruceApps juntas num menu. Toque em **Novo Menu**, chame-lhe «Com os alunos» e arraste para lá o Spruce It!, o Spruce Live, o Spruce Forms e o Spruce Exam.
 ## Segurança
 !def-Segurança | Segurança: cópia de segurança (exportar tudo, só este ano, encriptada, importar) e caixote do lixo de 30 dias.
 **Exportar Tudo**, **Só Este Ano Letivo**, **Exportar Encriptada…** (AES-256 com palavra-passe), **Importar Cópia…**, **Só as Definições**. O **Caixote do Lixo** guarda turmas, instrumentos e anos letivos apagados durante 30 dias.
@@ -193,11 +193,11 @@ O termo das aulas depende do ano de escolaridade (9.º, 11.º e 12.º terminam m
 Em Aulas e Sumários toque em **Faltei** nessa lição: não conta como dada e fica por repor.
 ## Apaguei uma turma sem querer.
 Use **Anular** (Ctrl+Z) logo a seguir, ou recupere em [[Definições › Segurança › Caixote do Lixo]] (30 dias). Com o ano fechado (Fechar Ano Letivo), nada se pode apagar.
-## Os alunos não conseguem entrar no Spruce It, no Pulso, nos Formulários ou nas Provas.
+## Os alunos não conseguem entrar no Spruce It!, no Spruce Live, no Spruce Forms ou no Spruce Exam.
 Confirme que o módulo está ligado em [[Definições › Os Meus Módulos]], que o jogo, a sala ou a recolha está aberta e que os alunos usam o endereço certo (eduspruce.pt/spruceit, /pulso, /forms, /provas) com o código atual.
 ## Um módulo desapareceu do menu.
 Foi desligado em [[Definições › Os Meus Módulos]]. Volte a ligá-lo: os dados continuam lá.
-## Como volto à EduSpruce a partir do Spruce It (ou de outra SpruceApp)?
+## Como volto à EduSpruce a partir do Spruce It! (ou de outra SpruceApp)?
 Toque no ícone da casa, no canto superior esquerdo.
 ## Quero ver outra vez a apresentação de uma app.
 Toque em **Ver exemplo** (canto inferior direito da app).
@@ -237,7 +237,7 @@ Em [[Definições › Aparência › Desempenho]] escolha **Leve**.
 | MRA | Mecanismo de recuperação (ensino profissional) |
 | PAA | Plano anual de atividades |
 | Instrumento rápido | Registo de uma % por domínio, sem itens |
-| SpruceApps | Spruce It, Pulso, Formulários e Provas |
+| SpruceApps | Spruce It!, Spruce Live, Spruce Forms e Spruce Exam |
 | Grupo de UFCD | Letra (A, B, C…) que junta as UFCD de um professor no horário PROFIJ |
 
 # Mapa de todos os menus
@@ -254,13 +254,13 @@ Tabela de consulta rápida: cada entrada do menu, o que faz e o capítulo onde e
 | Documentos | Gerador de documentos e arquivo | Documentos |
 | Contactos | Contactos dos colegas | Contactos |
 | Apps | Painel de todas as apps e módulos | Apps |
-| Spruce It | Jogos de perguntas (nunca contam para a nota) | Spruce It |
-| Pulso | Avaliação em tempo real (formativa) | Pulso |
-| Formulários | Formulários e questionários online | Formulários |
-| Provas | Avaliações digitais completas | Provas |
+| Spruce It! | Jogos de perguntas (nunca contam para a nota) | Spruce It! |
+| Spruce Live | Avaliação em tempo real (formativa) | Spruce Live |
+| Spruce Forms | Spruce Forms e questionários online | Spruce Forms |
+| Spruce Exam | Avaliações digitais completas | Spruce Exam |
 | Jornal Escolar / JornalNote | PAA, peças, edições, redação; quadros do jornal | Jornal Escolar, JornalNote |
 | Coord. PROFIJ | Coordenação do programa PROFIJ | Coordenação do PROFIJ |
-| SpruceNote | Quadros visuais de ideias | SpruceNote |
+| Spruce Notes | Quadros visuais de ideias | Spruce Notes |
 | O Meu Calendário | Agenda pessoal | O Meu Calendário |
 | Turma › Painel da Turma | Resumo da turma | Painel da Turma |
 | Turma › Alunos | Lista, fotografias, MSAI, ficha | Alunos |

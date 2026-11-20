@@ -1,4 +1,4 @@
-// SpruceNote Web Clipper · os quadros do SpruceNote e a caixa de entrada
+// Spruce Notes Web Clipper · os quadros do Spruce Notes e a caixa de entrada
 // · a lista dos quadros (e dos abertos recentemente) vem da linha cifrada «ef-f-snidx.bin», que a app escreve;
 //   se a app ainda não a tiver escrito, lê-se a parte geral só para tirar os nomes dos quadros (nada fica guardado)
 // · cada recorte vai cifrado para uma linha nova «ef-f-snin-<id>.bin»; a app arruma-o na coluna «Por Arrumar»
@@ -38,18 +38,18 @@ function alcancaveis(qs) {
   return qs.filter(q => q && vis.has(q.id)).map(q => ({id: q.id, nome: String(q.nome || 'Quadro'), pai: q.pai || null, cor: q.cor || ''}));
 }
 function indiceDaParteGeral(G) {
-  const sn = G && G.sn && Array.isArray(G.sn.quadros) && G.sn.quadros.length ? G.sn.quadros : [{id: 'raiz', nome: 'SpruceNote', itens: []}];
+  const sn = G && G.sn && Array.isArray(G.sn.quadros) && G.sn.quadros.length ? G.sn.quadros : [{id: 'raiz', nome: 'Spruce Notes', itens: []}];
   const o = {v: 1, q: Date.now(), rec: [], sn: {quadros: alcancaveis(sn)}};
   const snj = G && G.snj && Array.isArray(G.snj.quadros) ? G.snj.quadros : [];
   if (snj.length) o.snj = {quadros: alcancaveis(snj)};
   return o;
 }
 
-/* o que o painel mostra: as raízes (SpruceNote, JornalNote) e até 10 quadros abertos recentemente */
+/* o que o painel mostra: as raízes (Spruce Notes, JornalNote) e até 10 quadros abertos recentemente */
 function resumo(idx) {
-  idx = idx || {sn: {quadros: [{id: 'raiz', nome: 'SpruceNote', pai: null, cor: '#60a5fa'}]}};
+  idx = idx || {sn: {quadros: [{id: 'raiz', nome: 'Spruce Notes', pai: null, cor: '#60a5fa'}]}};
   const raizes = [], por = {};
-  for (const [c, nomeP] of [['sn', 'SpruceNote'], ['snj', 'JornalNote']]) {
+  for (const [c, nomeP] of [['sn', 'Spruce Notes'], ['snj', 'JornalNote']]) {
     const L = idx[c] && Array.isArray(idx[c].quadros) ? idx[c].quadros : [];
     if (!L.length) continue;
     const m = new Map(L.map(q => [q.id, q]));
@@ -97,7 +97,7 @@ export async function quadros(forcar) {
 
 const idNovo = () => Date.now().toString(36) + '-' + Array.from(crypto.getRandomValues(new Uint8Array(6)), b => (b % 36).toString(36)).join('');
 
-/* deixa um recorte na caixa de entrada do SpruceNote */
+/* deixa um recorte na caixa de entrada do Spruce Notes */
 export async function guardarRecorte(x, destino, fonte) {
   const k = await chave(true);
   const corpo = {

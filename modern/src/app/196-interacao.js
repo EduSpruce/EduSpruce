@@ -1,7 +1,7 @@
 /* ---------- interação ---------- */
 function mqBind(){const cv=$('#mq-cv'),u=mqUI();
   $('#mq-und').onclick=()=>mqDesfazer(false);
-  const abreAmp=()=>{UI.mqFull=true;const m=$('#mq');ecraAmplo({titulo:UI.mqCtx==='jornal'?'JornalNote':'SpruceNote',sub:mqQ(u.q).nome,el:m,aoFechar:()=>{UI.mqFull=false;if(VIEW==='sprucenote')vSpruceNote();if(VIEW==='snjornal')vSnJornal()}});requestAnimationFrame(()=>{try{mqSetas()}catch(_){}})};
+  const abreAmp=()=>{UI.mqFull=true;const m=$('#mq');ecraAmplo({titulo:UI.mqCtx==='jornal'?'JornalNote':'Spruce Notes',sub:mqQ(u.q).nome,el:m,aoFechar:()=>{UI.mqFull=false;if(VIEW==='sprucenote')vSpruceNote();if(VIEW==='snjornal')vSnJornal()}});requestAnimationFrame(()=>{try{mqSetas()}catch(_){}})};
   $('#mq-amp').onclick=abreAmp;if(UI.mqFull&&!document.getElementById('ampv'))setTimeout(abreAmp,0);$('#mq-red').onclick=()=>mqDesfazer(true);
   const zoom=(f,cx,cy)=>{const v=mqVis(u.q),r=cv.getBoundingClientRect();cx=cx==null?r.width/2:cx-r.left;cy=cy==null?r.height/2:cy-r.top;const nz=Math.max(.25,Math.min(2.5,v.z*f));v.x=cx-(cx-v.x)*nz/v.z;v.y=cy-(cy-v.y)*nz/v.z;v.z=nz;mqZoomAp();mqFmtPos($('.mq-it.ed [data-ed]')||document.body)};
   $('#mq-zp').onclick=()=>zoom(1.2);$('#mq-zm').onclick=()=>zoom(1/1.2);$('#mq-zr').onclick=()=>{const v=mqVis(u.q);v.z=1;mqZoomAp()};

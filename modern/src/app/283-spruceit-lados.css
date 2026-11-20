@@ -9,7 +9,7 @@ html body #ars-esq li b{display:block;font-size:13.5px}html body #ars-esq li sma
 html body #ars-esq .arse-pe{margin:12px 0 0;font-size:12px;font-weight:700;color:#6d28d9}
 html body.est-sge #ars-esq .arse-ic{border-radius:0}
 html body:not(.est-sge) #ars-esq .arse{border-radius:16px}
-/* indicadores do Spruce It: ícone ao centro da caixa */
+/* indicadores do Spruce It!: ícone ao centro da caixa */
 html body .spv .ars-k{display:flex!important;align-items:flex-start;gap:10px}
 html body .spv .ars-ki{display:flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:34px!important;padding:0!important}
 html body .spv .ars-ki svg{width:18px!important;height:18px!important;margin:0!important}

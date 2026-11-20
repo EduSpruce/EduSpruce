@@ -1,4 +1,4 @@
-/* ===================== 1.142 · Spruce It: página inicial nova e atividade ao vivo no ecrã projetado =====================
+/* ===================== 1.142 · Spruce It!: página inicial nova e atividade ao vivo no ecrã projetado =====================
    Página «Os meus conjuntos»:
    · indicadores (conjuntos, perguntas, jogos, participações, acerto médio, último jogo)
    · conjuntos em grelha (capa com a 1.ª imagem do conjunto ou iniciais, n.º de perguntas, jogos, editado há…) ou em lista
@@ -189,9 +189,9 @@ arDesenhar=function(){const r=_arsDes.apply(this,arguments);try{arsFeed()}catch(
 #arhost .arhtot .arhlid{grid-column:1/-1;display:flex;align-items:center;gap:10px}#arhost .arhtot .arhlid b{font-size:18px}
 `;document.head.appendChild(st)})();
 
-/* ===================== 1.143 · Spruce It: apresentação animada «Como funciona» =====================
+/* ===================== 1.143 · Spruce It!: apresentação animada «Como funciona» =====================
    Feita de raiz (personagens Pinhas e desenhos próprios). Aparece no espaço livre à direita da página quando cabe
-   (ecrãs largos) e abre-se em janela pelo botão «Como funciona» no topo do Spruce It. 5 cenas em ciclo:
+   (ecrãs largos) e abre-se em janela pelo botão «Como funciona» no topo do Spruce It! 5 cenas em ciclo:
    criar o conjunto → lançar (código e alunos a entrar) → jogo ao vivo → pódio → relatório. */
 const ARS_CENAS=[
   ['Crie um conjunto','Escreva as perguntas ou importe-as de um Excel. Cada pergunta tem até quatro opções.'],
@@ -199,7 +199,7 @@ const ARS_CENAS=[
   ['Jogam ao vivo','A classificação mexe-se a cada resposta e o painel «Ao vivo» conta o que acontece.'],
   ['Pódio no fim','Os três primeiros sobem ao pódio. Nunca conta para a nota.'],
   ['Veja o relatório','Acerto por pergunta e por aluno: sabe logo o que tem de rever.']];
-/* sempre Pinhas (as personagens do Spruce It), de cores e acessórios diferentes, no mesmo estilo */
+/* sempre Pinhas (as personagens do Spruce It!), de cores e acessórios diferentes, no mesmo estilo */
 function arsAv(k,sz){const E=AR.CUBOS&&AR.CUBOS.length?AR.CUBOS:['p01'];try{return AR.svg(E[k%E.length],sz)}catch(_){return ''}}
 function arsCena(i){const L=['Ana','Rui','Leo','Mia','Tó'];
   if(i===0)return `<div class="arsx-ed"><div class="arsx-q"><span>1</span><i style="width:70%"></i></div><div class="arsx-ops">${['#f59e0b','#0ea5e9','#ec4899','#14b8a6'].map((c,k)=>`<div style="--c:${c};--d:${.25+k*.22}s"><b>${'ABCD'[k]}</b><i style="width:${[60,45,70,52][k]}%"></i>${k===2?'<u>✓</u>':''}</div>`).join('')}</div><div class="arsx-q s" style="--d:1.3s"><span>2</span><i style="width:55%"></i></div><div class="arsx-q s" style="--d:1.6s"><span>3</span><i style="width:62%"></i></div></div>`;
@@ -207,8 +207,8 @@ function arsCena(i){const L=['Ana','Rui','Leo','Mia','Tó'];
   if(i===2){const pts=[[320,1],[282,0],[208,2],[130,3],[96,4]];return `<div class="arsx-live"><div class="arsx-lb">${pts.map(([p,k],r)=>`<div style="--o:${r};--w:${Math.round(p/3.3)}%">${arsAv(k,30)}<span>${L[k]}</span><i></i><b>${p}</b></div>`).join('')}</div><div class="arsx-feed"><small><em></em> Ao vivo</small><p style="--d:.6s"><b>Mia</b> ganhou 40 pts</p><p style="--d:1.4s"><b>Rui</b> ficou com 25 pts da <b>Ana</b></p><p style="--d:2.2s"><b>Leo</b> duplicou!</p></div></div>`}
   if(i===3)return `<div class="arsx-pod">${[[1,1,'282'],[0,0,'320'],[2,2,'208']].map(([k,pos,p],c)=>`<div class="p${pos+1}" style="--d:${[.5,.2,.8][c]}s"><span class="arsx-pa">${arsAv(k,pos===0?62:50)}</span><b>${L[k]}</b><div><em>${pos+1}.º</em><small>${p} pts</small></div></div>`).join('')}${Array.from({length:18},(_,k)=>`<i class="arsx-cf" style="--x:${(k*37)%100}%;--d:${(k%6)*.18}s;--c:${['#facc15','#f97316','#4ade80','#60a5fa','#f472b6'][k%5]}"></i>`).join('')}</div>`;
   return `<div class="arsx-rel"><div class="arsx-rh"><b>Relatório</b><span>5 jogadores · acerto 73%</span></div>${[92,81,42,77,68].map((v,k)=>`<div class="arsx-rq ${v<50?'mau':''}" style="--d:${.2+k*.18}s"><span>P${k+1}</span><i><u style="--v:${v}%;background:${v<50?'#dc2626':v<70?'#d97706':'#16a34a'}"></u></i><b>${v}%</b></div>`).join('')}<p class="arsx-dica">⚠ A pergunta 3 precisa de ser revista</p></div>`}
-function arsApresHTML(fechar){return `<div class="arsx" role="region" aria-label="Como funciona o Spruce It"><div class="arsx-top"><b>Como funciona o Spruce It</b>${fechar?`<button type="button" class="arsx-x" data-arsx-x title="Esconder" aria-label="Esconder">✕</button>`:''}</div>
-  <div class="arsx-ecra"><div class="arsx-bar"><i></i><i></i><i></i><span>Spruce It</span></div><div class="arsx-palco"></div></div>
+function arsApresHTML(fechar){return `<div class="arsx" role="region" aria-label="Como funciona o Spruce It!"><div class="arsx-top"><b>Como funciona o Spruce It!</b>${fechar?`<button type="button" class="arsx-x" data-arsx-x title="Esconder" aria-label="Esconder">✕</button>`:''}</div>
+  <div class="arsx-ecra"><div class="arsx-bar"><i></i><i></i><i></i><span>Spruce It!</span></div><div class="arsx-palco"></div></div>
   <div class="arsx-leg"><span class="arsx-num"></span><div><b class="arsx-t"></b><p class="arsx-d"></p></div></div>
   <div class="arsx-nav">${ARS_CENAS.map((c,k)=>`<button type="button" data-arsx="${k}" aria-label="${k+1}. ${esc(c[0])}"><i></i></button>`).join('')}<span class="sp1"></span><button type="button" class="arsx-pp" data-arsx-pp aria-label="Pausar">❚❚</button></div></div>`}
 function arsApresLigar(el){let i=0,pausa=false,t=null;const reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -227,7 +227,7 @@ function arsApresPos(){const v=$('#view .arv.spv');let ap=document.getElementByI
   const r=v.getBoundingClientRect(),hr=host.getBoundingClientRect();const livre=window.innerWidth-r.right-40;
   if(livre<360){if(ap)ap.remove();return}
   if(!ap){ap=document.createElement('div');ap.id='ars-apres';ap.innerHTML=arsApresHTML(true);host.appendChild(ap);arsApresLigar(ap);
-    ap.querySelector('[data-arsx-x]').onclick=()=>{S.cfg.arsApresOff=true;save();ap.remove();arsApresPos();toast('Pode voltar a ver em «Como funciona», no topo do Spruce It','ok')}}
+    ap.querySelector('[data-arsx-x]').onclick=()=>{S.cfg.arsApresOff=true;save();ap.remove();arsApresPos();toast('Pode voltar a ver em «Como funciona», no topo do Spruce It!','ok')}}
   if(getComputedStyle(host).position==='static')host.style.position='relative';
   const w=Math.min(400,livre-8);ap.style.width=w+'px';ap.style.left=Math.round(r.right-hr.left+24+Math.max(0,(livre-8-w)/2-12))+'px';ap.style.top=Math.round(r.top-hr.top+host.scrollTop)+'px'}
 function arsApresJanela(){const d=document.createElement('dialog');d.className='arsx-dlg';d.innerHTML=arsApresHTML(false)+`<div class="arsx-dlgb"><button class="btn" data-f>Fechar</button>${S.cfg.arsApresOff?'<button class="btn pri" data-mostra>Mostrar ao lado nos ecrãs largos</button>':''}</div>`;
@@ -238,12 +238,12 @@ vArena=function(){const r=_arsV2.apply(this,arguments);try{const h=$('#view .arh
   requestAnimationFrame(arsApresPos)}catch(e){console.warn(e)}return r};
 try{if(go._f)go._f.arena=vArena}catch(_){}
 addEventListener('resize',()=>{clearTimeout(arsApresPos._t);arsApresPos._t=setTimeout(arsApresPos,150)});
-/* ao sair do Spruce It, a apresentação sai também */
+/* ao sair do Spruce It!, a apresentação sai também */
 {const _g=go;go=function(){const r=_g.apply(this,arguments);try{requestAnimationFrame(arsApresPos)}catch(_){}return r};try{Object.assign(go,_g)}catch(_){}}
 
 (()=>{if(document.getElementById('arsx-css'))return;const st=document.createElement('style');st.id='arsx-css';st.textContent=`
 .spv .ars-ki svg{margin:0!important;display:block;flex:none}
-/* 1.145 · cores do Spruce It (roxo e amarelo, iguais à apresentação e ao jogo) */
+/* 1.145 · cores do Spruce It! (roxo e amarelo, iguais à apresentação e ao jogo) */
 html body .arv.spv{--acc:#6d28d9}
 html body .spv .btn.pri,html body.est-sge.est-sge.est-sge.est-sge #view .spv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e){background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important}
 html body .spv .btn.pri:hover,html body.est-sge.est-sge.est-sge.est-sge #view .spv .btn.pri:not(#_a):not(#_b):not(#_c):not(#_d):not(#_e):hover{background:#5b21b6!important;border-color:#5b21b6!important}

@@ -1,4 +1,4 @@
-/* ===================== 1.141 · SpruceNote e JornalNote: melhorias =====================
+/* ===================== 1.141 · Spruce Notes e JornalNote: melhorias =====================
    · pesquisa em todos os quadros (botão ou Ctrl+F no quadro)
    · modelos de quadro (plano de aula, projeto, visita de estudo, reunião, brainstorm, pesquisa, semana, edição do jornal)
    · setas: etiqueta, tracejado, pontas (fim, ambas, nenhuma), cor, curva e inverter sentido
@@ -21,7 +21,7 @@ function mqmCentrar(q,id){const it=mqItem(q,id);if(!it)return;const base=it.pai?
   setTimeout(()=>{const el=$(`[data-mq="${it.id}"]`);if(el){el.classList.add('mqm-hit');setTimeout(()=>el.classList.remove('mqm-hit'),1600)}},60)}
 
 /* ---------- pesquisa em todos os quadros ---------- */
-function mqmPesquisa(){mqmLimpaSel();const nome=UI.mqCtx==='jornal'?'JornalNote':'SpruceNote';
+function mqmPesquisa(){mqmLimpaSel();const nome=UI.mqCtx==='jornal'?'JornalNote':'Spruce Notes';
   openDrawer('Pesquisar no '+nome,`<input type="search" id="mqm-q" class="mqm-q" placeholder="Notas, tarefas, ligações, colunas, quadros…" autocomplete="off" aria-label="Pesquisar"><div id="mqm-r" class="mqm-r" role="list"></div>`);
   const inp=$('#mqm-q'),out=$('#mqm-r');let R=[];
   const corre=()=>{const v=inp.value.trim().toLowerCase();if(!v){out.innerHTML=`<p class="mut">Procura em todos os quadros do ${nome}.</p>`;return}R=[];
@@ -146,7 +146,7 @@ const mqmNoQuadro=e=>{const cv=$('#mq-cv');if(!cv||_mqEd)return false;const a=do
 function mqmCopia(){const u=mqUI(),q=mqQ(u.q);const top=u.sel.map(id=>mqItem(q,id)).filter(i=>i&&!i.pai&&i.t!=='quadro');if(!top.length)return null;
   const ids=new Set(top.map(i=>i.id));q.itens.forEach(i=>{if(i.pai&&ids.has(i.pai))ids.add(i.id)});
   const its=JSON.parse(JSON.stringify(q.itens.filter(i=>ids.has(i.id))));const setas=JSON.parse(JSON.stringify(q.setas.filter(s=>ids.has(s.de)&&ids.has(s.para))));
-  const tx=top.map(i=>mqmTexto(i)).filter(Boolean).join('\n\n')||'SpruceNote';_mqmClip={ctx:UI.mqCtx,its,setas,tx:tx.trim()};return _mqmClip}
+  const tx=top.map(i=>mqmTexto(i)).filter(Boolean).join('\n\n')||'Spruce Notes';_mqmClip={ctx:UI.mqCtx,its,setas,tx:tx.trim()};return _mqmClip}
 function mqmColar(){const c=_mqmClip;if(!c)return;const q=mqQ(mqUI().q);mqAntes();const map={};c.its.forEach(i=>map[i.id]=uid());
   const top=c.its.filter(i=>!i.pai);const minx=Math.min(...top.map(i=>i.x)),miny=Math.min(...top.map(i=>i.y));const p=mqCentro();const mesmo=c.its.every(i=>mqItem(q,i.id));
   const nv=c.its.map(i=>{const n=JSON.parse(JSON.stringify(i));n.id=map[i.id];if(n.pai)n.pai=map[n.pai]||null;else if(mesmo){n.x+=30;n.y+=30}else{n.x=Math.round(n.x-minx+p.x-100);n.y=Math.round(n.y-miny+p.y-60)}return n});

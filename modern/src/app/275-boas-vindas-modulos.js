@@ -1,10 +1,10 @@
-/* ===================== 1.142 · boas-vindas animadas do Spruce It, Formulários e Provas (como no SpruceNote) =====================
+/* ===================== 1.142 · boas-vindas animadas do Spruce It!, Spruce Forms e Spruce Exam (como no Spruce Notes) =====================
    Aparece uma vez a cada utilizador (S.cfg.bvVisto[k]) e volta no botão «Ver exemplo». Tudo original e fictício.
    As maquetes (bvMaq) também são usadas pelo gerador das páginas eduspruce.app/spruceit, /formularios e /provas. */
 function bvBicho(c1,c2,o){o=o||'';/* personagem original: cubo arredondado com olhos */
   return`<svg viewBox="0 0 60 60" class="bv-bi" aria-hidden="true"><rect x="6" y="10" width="48" height="44" rx="12" fill="${c1}" stroke="${c2}" stroke-width="3"/>${o==='o'?`<circle cx="14" cy="10" r="6" fill="${c1}" stroke="${c2}" stroke-width="3"/><circle cx="46" cy="10" r="6" fill="${c1}" stroke="${c2}" stroke-width="3"/>`:''}${o==='a'?`<path d="M22 10 L18 1 M38 10 L42 1" stroke="${c2}" stroke-width="3" stroke-linecap="round"/>`:''}<circle cx="22" cy="28" r="6" fill="#fff"/><circle cx="38" cy="28" r="6" fill="#fff"/><circle class="bv-pu" cx="23" cy="29" r="3" fill="#111827"/><circle class="bv-pu" cx="39" cy="29" r="3" fill="#111827"/><path d="M24 41 Q30 46 36 41" stroke="#111827" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`}
 const BVM={
-  spruceit:{nome:'Spruce It',ic:'star',tit:'Aprender é o melhor jogo.',sub:'Jogos de perguntas com Bichos, modos de jogo e corridas ao pódio — a revisão que os alunos pedem para repetir.',
+  spruceit:{nome:'Spruce It!',ic:'star',tit:'Aprender é o melhor jogo.',sub:'Jogos de perguntas com Bichos, modos de jogo e corridas ao pódio — a revisão que os alunos pedem para repetir.',
     pe:'Escolha um conjunto de perguntas, um modo de jogo e mostre o código à turma · nunca conta para a nota.',
     maq:()=>{const J=[['Leo','#f97316','#c2410c','o'],['Bia','#4ade80','#16a34a',''],['Rui','#60a5fa','#1d4ed8','a'],['Inês','#f472b6','#be185d','o'],['Tomás','#facc15','#a16207',''],['Rita','#c084fc','#7e22ce','a'],['Duarte','#2dd4bf','#0f766e','o'],['Matilde','#fb7185','#be123c','']];
       const C=[['Rita',920],['Leo',860],['Bia',740],['Duarte',610],['Rui',480]];
@@ -14,9 +14,9 @@ const BVM={
       <div class="bv-sic bv-per"><div class="bv-pnum">Pergunta 4 de 10</div><div class="bv-ptxt">Quanto é 7 × 8?</div><div class="bv-res">${[['54','#f59e0b'],['56','#0ea5e9'],['63','#ec4899'],['48','#14b8a6']].map((r,i)=>`<div class="bv-r${i===1?' ok':''}" style="--c:${r[1]};--d:${1.2+i*.12}s"><i>${'ABCD'[i]}</i>${r[0]}</div>`).join('')}</div><div class="bv-barra"><span></span></div></div>
       <div class="bv-sic bv-cla"><h5>${ic('award',14)} Pódio</h5>${C.map((c,i)=>`<div class="bv-cl" style="--d:${1.6+i*.15}s;--w:${c[1]/9.2}%"><b>${i+1}</b><span>${c[0]}</span><div><i></i></div><em>${c[1]}</em></div>`).join('')}<div class="bv-pod"><div style="--d:2.6s">${bvBicho('#f97316','#c2410c','o')}<b>2</b></div><div style="--d:2.9s">${bvBicho('#c084fc','#7e22ce','a')}<b>1</b></div><div style="--d:2.4s">${bvBicho('#4ade80','#16a34a','')}<b>3</b></div></div></div></div>
       <div class="bv-modos">${['Corrida ao Cume','Pesca no Lago','Rainha do Pinhal','Ao teu ritmo','Torre de Blocos'].map((m,i)=>`<span style="--d:${2.2+i*.12}s">${m}</span>`).join('')}</div></div>`}},
-  forms:{nome:'Formulários',ic:'clipboard',tit:'Pergunte. Recolha. Analise.',sub:'Formulários e testes online: os alunos respondem pelo QR code, sem contas, e os testes corrigem-se sozinhos.',
+  forms:{nome:'Spruce Forms',ic:'clipboard',tit:'Pergunte. Recolha. Analise.',sub:'Inquéritos e testes online: os alunos respondem pelo QR code, sem contas, e os testes corrigem-se sozinhos.',
     pe:'Crie um questionário ou formulário, partilhe o código com a turma e veja as respostas a chegar em direto.',
-    maq:()=>`<div class="bv-fm"><div class="bv-fmtop"><b>${ic('clipboard',16)} Formulários</b><span class="bv-sp"></span><span class="bv-fmtb on">Perguntas</span><span class="bv-fmtb">Respostas <em>24</em></span><span class="bv-fmbt">${ic('send',13)} Recolher</span></div>
+    maq:()=>`<div class="bv-fm"><div class="bv-fmtop"><b>${ic('clipboard',16)} Spruce Forms</b><span class="bv-sp"></span><span class="bv-fmtb on">Perguntas</span><span class="bv-fmtb">Respostas <em>24</em></span><span class="bv-fmbt">${ic('send',13)} Recolher</span></div>
       <div class="bv-fmgr"><div class="bv-fmed"><div class="bv-fmcab"><b>Visita de estudo ao porto</b><small>Diga-nos como correu — demora 2 minutos.</small></div>
         <div class="bv-fq" style="--d:.3s"><b>1. Gostaste da visita de estudo?</b>${['Muito','Mais ou menos','Pouco'].map((o,i)=>`<label class="${i?'':'bv-sel'}"><span></span>${o}</label>`).join('')}</div>
         <div class="bv-fq" style="--d:.6s"><b>2. Classifica a atividade</b><div class="bv-est">${[0,1,2,3,4].map(i=>`<i style="--d:${1.4+i*.18}s">★</i>`).join('')}</div></div>
@@ -24,7 +24,7 @@ const BVM={
       <div class="bv-fmres"><div class="bv-fc" style="--d:.5s"><h5>Gostaste da visita de estudo?</h5><div class="bv-dn"><svg viewBox="0 0 42 42"><circle r="15.9" cx="21" cy="21" class="a"/><circle r="15.9" cx="21" cy="21" class="b"/><circle r="15.9" cx="21" cy="21" class="c"/></svg><ul><li><i style="background:#0e7490"></i>Muito <b>17</b></li><li><i style="background:#f59e0b"></i>Mais ou menos <b>5</b></li><li><i style="background:#e11d48"></i>Pouco <b>2</b></li></ul></div></div>
         <div class="bv-fc" style="--d:.8s"><h5>Classifica a atividade <em>média 4,3 ★</em></h5>${[[5,62],[4,25],[3,9],[2,4]].map((b,i)=>`<div class="bv-hb" style="--w:${b[1]}%;--d:${1.2+i*.12}s"><span>${b[0]}★</span><div><i></i></div><em>${b[1]}%</em></div>`).join('')}</div>
         <div class="bv-fc bv-qr" style="--d:1.1s"><div class="bv-qrc">${Array.from({length:49},(_,i)=>`<i${[0,1,2,4,6,7,9,13,14,16,18,20,21,23,26,28,31,33,35,36,38,40,41,42,43,45,47,48].includes(i)?' class="p"':''}></i>`).join('')}</div><div><small>Os alunos respondem em</small><b>eduspruce.pt/forms</b><small>código <b>7KQ2</b> · sem contas</small><span class="bv-novo">+1 resposta</span></div></div></div></div></div>`},
-  provas:{nome:'Provas',ic:'award',tit:'Avaliar em minutos. Ensinar o resto do tempo.',sub:'Crie a prova, agende-a para a turma e deixe a correção automática fazer o trabalho repetitivo — as classificações seguem para a avaliação.',
+  provas:{nome:'Spruce Exam',ic:'award',tit:'Avaliar em minutos. Ensinar o resto do tempo.',sub:'Crie a prova, agende-a para a turma e deixe a correção automática fazer o trabalho repetitivo — as classificações seguem para a avaliação.',
     pe:'Criar · Agendar · Corrigir — com banco de exercícios, correção automática e classificações de 0 a 20 valores.',
     maq:()=>`<div class="bv-pv"><div class="bv-pvlado">${['grid','pen','calendar','chart','layers','gear'].map((n,i)=>`<i class="${i===1?'on':''}">${ic(n,17)}</i>`).join('')}</div><div class="bv-pvm">
       <div class="bv-pvtop"><div><small>Bom dia,</small><b>Prof. Rui Mendes</b></div><span class="bv-sp"></span><span class="bv-pvbt">${ic('plus',13)} Nova prova</span></div>
@@ -36,7 +36,7 @@ const BVM={
        <div class="bv-pvc bv-pva" style="--d:1.1s"><h5>Alunos</h5>${[['Afonso',17],['Beatriz',15],['Carolina',12],['Diogo',9]].map((a,i)=>`<div class="bv-al" style="--d:${2.6+i*.12}s"><span>${a[0][0]}</span><b>${a[0]}</b><em class="${a[1]<10?'neg':''}">${a[1]}</em></div>`).join('')}<div class="bv-pexp">${ic('download',13)} Enviar para a avaliação</div></div></div></div></div>`}
 };
 
-BVM.pulso={nome:'Pulso',ic:'chart',tit:'Veja em direto o que a turma já aprendeu.',sub:'Perguntas rápidas com correção automática e uma grelha que se preenche à medida que os alunos respondem — para intervir no momento certo.',
+BVM.pulso={nome:'Spruce Live',ic:'chart',tit:'Veja em direto o que a turma já aprendeu.',sub:'Perguntas rápidas com correção automática e uma grelha que se preenche à medida que os alunos respondem — para intervir no momento certo.',
   pe:'Lance uma sala, os alunos entram com o código e as respostas aparecem em direto · sempre formativo, só conta se o professor quiser.',
   maq:()=>{const Q=[['A','B'],['Clorofila','Folhas','Cloroplasto','Pigmento'],['B','A'],['V','F'],['53','170']];
    const AL=[['Afonso Lima',[1,1,1,1,1]],['Beatriz Sousa',[0,0,1,0,null]],['Carlos Pires',[1,0,0,1,1]],['Diana Rocha',[0,0,1,0,0]],['Eva Martins',[0,1,1,0,null]],['Filipe Costa',[0,null,1,0,null]]];

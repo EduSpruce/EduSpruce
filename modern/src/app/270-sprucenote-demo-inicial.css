@@ -1,4 +1,4 @@
-/* ===================== 1.138 · SpruceNote/JornalNote: quadro de demonstração ===================== */
+/* ===================== 1.138 · Spruce Notes/JornalNote: quadro de demonstração ===================== */
 html body .mq-cv .mq-demob{position:absolute;right:12px;bottom:12px;z-index:6;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;font-family:inherit;font-weight:600;font-size:13px;line-height:1;color:#fff;background:var(--acc);border:0;border-radius:10px;cursor:pointer;box-shadow:0 4px 14px -4px color-mix(in srgb,var(--acc) 70%,transparent);transition:transform .15s,box-shadow .15s}
 html body .mq-cv .mq-demob:hover{transform:translateY(-1px);box-shadow:0 8px 20px -6px color-mix(in srgb,var(--acc) 80%,transparent)}
 html body .mq-cv .mq-demob:focus-visible{outline:2px solid var(--ink);outline-offset:2px}

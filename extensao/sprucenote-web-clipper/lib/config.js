@@ -1,4 +1,4 @@
-// SpruceNote Web Clipper · configuração
+// Spruce Notes Web Clipper · configuração
 // A base de dados é a mesma da EduSpruce (eduspruce.pt). A chave é a PUBLICÁVEL (pública por natureza,
 // como na app): a proteção é feita pelas regras RLS da base de dados e pela cifra dos dados no aparelho.
 export const SB_URL = 'https://ssuescpqyhuqkphauwde.supabase.co';

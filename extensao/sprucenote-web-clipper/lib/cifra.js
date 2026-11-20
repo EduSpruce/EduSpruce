@@ -1,4 +1,4 @@
-// SpruceNote Web Clipper · cifra igual à da EduSpruce (nvCifrar / nvDecifrar)
+// Spruce Notes Web Clipper · cifra igual à da EduSpruce (nvCifrar / nvDecifrar)
 // Formato EF1: 'EF1.' + comprimido(0|1) + '.' + iv(base64) + '.' + dados(base64), AES-256-GCM com a chave da conta.
 export const b64 = u => {
   const a = u instanceof Uint8Array ? u : new Uint8Array(u);

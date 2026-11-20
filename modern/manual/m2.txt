@@ -130,7 +130,7 @@ Os estados possíveis são **Classificado**, **Classificação incompleta**, **C
 !instrumentos-abrir-baixo | A grelha com as classificações por item, o total, a nota, a menção e a percentagem por domínio.
 - Separadores: **Classificações**, **Itens e Cotações**, **Produção Oral**, **Análise** e **Vista Ampla**.
 - **Enunciado** e **Critérios de correção**: carregue o PDF, Word ou imagem.
-- **Ligar** um questionário dos **Formulários** ou uma avaliação das **Provas**: as classificações entram sozinhas na grelha.
+- **Ligar** um questionário dos **Spruce Forms** ou uma avaliação das **Spruce Exam**: as classificações entram sozinhas na grelha.
 - **Digitalizar** (módulo Digitalização de Testes): no telemóvel fotografe a folha de cada aluno — a app deteta a folha, endireita-a e limpa-a — e veja depois todas em livro.
 > Exemplo: um teste de 100 pontos com 8 itens. O item 1 (20 pts) é de CE e o item 8 (30 pts) é de PE. Um aluno com 15 no item 1 tem 75% nesse item; a % de CE é a soma dos pontos de CE a dividir pela cotação de CE.
 

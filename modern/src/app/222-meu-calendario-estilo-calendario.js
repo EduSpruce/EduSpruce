@@ -2,14 +2,14 @@
    Vistas Dia, 3 dias, Semana de trabalho, Semana, Mês, Agenda e Ano letivo; minicalendário; calendários com cores (mostrar/esconder);
    eventos com repetição e exceções, dia inteiro e vários dias, local, ligação online, lembretes, estado, privado, categorias;
    criar arrastando na grelha, mover e alterar a duração arrastando; criação rápida em linguagem natural; pesquisa; .ics; imprimir.
-   Junta (só para ver) as aulas do horário, reuniões, testes e momentos de avaliação, tarefas, Provas agendadas e o calendário escolar.
+   Junta (só para ver) as aulas do horário, reuniões, testes e momentos de avaliação, tarefas, provas agendadas (Spruce Exam) e o calendário escolar.
    Os eventos pessoais guardam a escola (cada escola com o seu calendário; «Todas as escolas» nas definições). */
 const OCAL=()=>{let c=S.cal;if(!c||typeof c!=='object')c=S.cal={};if(!Array.isArray(c.ev))c.ev=[];
   if(!Array.isArray(c.cals)||!c.cals.length)c.cals=[{id:'pessoal',nome:'Pessoal',cor:'#7c3aed',on:true},{id:'escola',nome:'Trabalho',cor:'#0e7490',on:true},{id:'familia',nome:'Família',cor:'#db2777',on:true}];
   if(!Array.isArray(c.cat))c.cat=[{id:'c1',nome:'Importante',cor:'#dc2626'},{id:'c2',nome:'Preparar',cor:'#ea580c'},{id:'c3',nome:'Pendente',cor:'#ca8a04'},{id:'c4',nome:'Concluído',cor:'#16a34a'},{id:'c5',nome:'Formação',cor:'#2563eb'},{id:'c6',nome:'Pessoal',cor:'#9333ea'}];
   c.src=Object.assign({aula:true,reun:true,tes:true,tar:true,prova:true,esc:true},c.src||{});
   c.cfg=Object.assign({vista:'mes',h0:8,h1:19,slot:30,semN:true,todas:false,lembR:15,resumo:true,carga:true},c.cfg||{});return c};
-const OC_SRC=[['aula','Aulas (horário)','#0369a1'],['reun','Reuniões','#0f8b8d'],['tes','Testes e avaliações','#c0392b'],['tar','Tarefas','#2f7fd0'],['prova','Provas agendadas','#7c3aed'],['esc','Calendário escolar','#e0a030']];
+const OC_SRC=[['aula','Aulas (horário)','#0369a1'],['reun','Reuniões','#0f8b8d'],['tes','Testes e avaliações','#c0392b'],['tar','Tarefas','#2f7fd0'],['prova','provas agendadas (Spruce Exam)','#7c3aed'],['esc','Calendário escolar','#e0a030']];
 const OC_EST=[['ocupado','Ocupado'],['provisorio','Provisório'],['fora','Fora do escritório'],['livre','Livre'],['outro','A trabalhar noutro local']];
 const OC_MES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 const OC_DS=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];

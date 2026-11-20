@@ -1,13 +1,13 @@
-/* ===================== Arena · app do professor =====================
+/* ===================== Spruce It! · app do professor =====================
    Conjuntos de perguntas, lançamento de jogos (ao vivo ou trabalho de casa), ecrã do anfitrião para projetar,
    relatórios e associação à turma. Os conjuntos e os relatórios ficam nos dados do professor (cifrados, na base de dados);
-   os jogos usam as tabelas da Arena (ver supabase/migrations/0012_arena.sql). Módulo desativável nas Definições. */
+   os jogos usam as tabelas do Spruce It! (ver supabase/migrations/0012_arena.sql). Módulo desativável nas Definições. */
 const AR=window.ARENA;
 const arOn=()=>S.cfg.arenaOn!==false;
 const arD=()=>{S.arena=S.arena||{};const d=S.arena;d.conj=d.conj||[];d.jogos=d.jogos||[];return d};
 const arMoedasOn=()=>S.cfg.arenaMoedas!==false;
 async function arRpc(fn,args){const p=await sbObter();const c=p.cliente;if(!c||!c.rpc)throw new Error('A base de dados não está disponível.');const {data,error}=await c.rpc(fn,args||{});
-  if(error){const m=String(error.message||error.code||error);if(/function .* does not exist|PGRST202|Could not find the function/i.test(m)){const e=new Error('O Spruce It ainda não está instalado na base de dados: falta correr o ficheiro 0012_arena.sql no Supabase.');e.semSql=true;throw e}throw new Error(m)}return data}
+  if(error){const m=String(error.message||error.code||error);if(/function .* does not exist|PGRST202|Could not find the function/i.test(m)){const e=new Error('O Spruce It! ainda não está instalado na base de dados: falta correr o ficheiro 0012_arena.sql no Supabase.');e.semSql=true;throw e}throw new Error(m)}return data}
 const arUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'spruceit#'+AR.limpaCod(c);
 const arTempos=[5,10,15,20,30,45,60,90,120];
 const arCores=['#d97706','#0284c7','#db2777','#0f766e'];
@@ -23,12 +23,12 @@ function arExemplo(){return {id:uid(),nome:'Exemplo · Present Simple',disc:'Ing
   {id:uid(),tp:'vf',t:'We use the Present Simple for habits and routines.',o:['Verdadeiro','Falso'],c:0,s:15}]}}
 
 /* ---------- navegação ---------- */
-TITLES.arena='Spruce It';
-{const h=document.querySelector('#side [data-v="contactos"]')||document.querySelector('#side [data-v="recursos"]');if(h&&!document.querySelector('#side [data-v="arena"]')){h.insertAdjacentHTML('afterend',`<button class="nav" data-v="arena" title="Spruce It · jogos de perguntas"><span data-ico="sparkle"></span><span class="lbl">Spruce It</span></button>`);const b=document.querySelector('#side [data-v="arena"]');b.querySelector('[data-ico]').innerHTML=ic('sparkle',18);b.onclick=()=>go('arena')}}
+TITLES.arena='Spruce It!';
+{const h=document.querySelector('#side [data-v="contactos"]')||document.querySelector('#side [data-v="recursos"]');if(h&&!document.querySelector('#side [data-v="arena"]')){h.insertAdjacentHTML('afterend',`<button class="nav" data-v="arena" title="Spruce It! · jogos de perguntas"><span data-ico="sparkle"></span><span class="lbl">Spruce It!</span></button>`);const b=document.querySelector('#side [data-v="arena"]');b.querySelector('[data-ico]').innerHTML=ic('sparkle',18);b.onclick=()=>go('arena')}}
 {const _gAr=go;go=function(v){if(v==='arena'&&!arOn())v='inicio';if(go._f&&go._f.arena!==vArena)go._f.arena=vArena;const r=_gAr.call(this,v);try{$$('#side [data-v="arena"]').forEach(b=>{b.hidden=!arOn();b.classList.toggle('on',VIEW==='arena')})}catch(_){}return r};go._f=_gAr._f;if(go._f)go._f.arena=vArena}
-{const _vDa=vDefinicoes;vDefinicoes=function(){const r=_vDa.apply(this,arguments);try{const mods=$('#view #def-mods');if(mods&&!$('#ar-on')){mods.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="ar-on" ${arOn()?'checked':''}> ${ic('sparkle',15)} <span><b>Spruce It</b><br><span class="mut">Jogos de perguntas em tempo real para a turma: os alunos entram pelo telemóvel com um código, sem contas. Também serve para trabalho de casa.</span></span></label>
-      <label class="chk" style="margin:4px 0 0 30px" ${arOn()?'':'hidden'} id="ar-mdef"><input type="checkbox" id="ar-moe" ${arMoedasOn()?'checked':''}> <span>Moedas e coleção de Pinhas no Spruce It</span></label>`);
-      $('#ar-on').onchange=e=>{S.cfg.arenaOn=e.target.checked;save();toast(e.target.checked?'Arena ligada':'Arena desligada','ok');$('#ar-mdef').hidden=!e.target.checked;try{$$('#side [data-v="arena"]').forEach(b=>b.hidden=!arOn())}catch(_){}};
+{const _vDa=vDefinicoes;vDefinicoes=function(){const r=_vDa.apply(this,arguments);try{const mods=$('#view #def-mods');if(mods&&!$('#ar-on')){mods.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="ar-on" ${arOn()?'checked':''}> ${ic('sparkle',15)} <span><b>Spruce It!</b><br><span class="mut">Jogos de perguntas em tempo real para a turma: os alunos entram pelo telemóvel com um código, sem contas. Também serve para trabalho de casa.</span></span></label>
+      <label class="chk" style="margin:4px 0 0 30px" ${arOn()?'':'hidden'} id="ar-mdef"><input type="checkbox" id="ar-moe" ${arMoedasOn()?'checked':''}> <span>Moedas e coleção de Pinhas no Spruce It!</span></label>`);
+      $('#ar-on').onchange=e=>{S.cfg.arenaOn=e.target.checked;save();toast(e.target.checked?'Spruce It! ligado':'Spruce It! desligado','ok');$('#ar-mdef').hidden=!e.target.checked;try{$$('#side [data-v="arena"]').forEach(b=>b.hidden=!arOn())}catch(_){}};
       $('#ar-moe').onchange=e=>{S.cfg.arenaMoedas=e.target.checked;save();toast(e.target.checked?'Moedas e Pinhas ligadas':'Moedas e Pinhas desligadas','ok')}}}catch(e){console.warn(e)}return r};if(go._f)go._f.definicoes=vDefinicoes}
 
 /* ---------- vista principal ---------- */
@@ -39,7 +39,7 @@ function vArena(){if(!arOn())return go('inicio');const d=arD();if(!d.conj.length
   if(UI.arEd){const c=d.conj.find(x=>x.id===UI.arEd);if(c)return arEditor(c);UI.arEd=null}
   const tab=UI.arTab||'conj';
   barBtns(tab==='conj'?[{id:'ar-imp',t:ic('upload',15)+' Importar CSV/Excel',f:()=>arImportarDlg()},{id:'ar-novo',t:ic('plus',15)+' Novo Conjunto',c:'pri',f:()=>{const c={id:uid(),nome:'Novo conjunto',disc:(T()||{}).disciplina||'',turma:'',tema:'',pasta:'',criado:Date.now(),mod:Date.now(),perg:[{id:uid(),tp:'mc',t:'',o:['','','',''],c:0,s:20}]};d.conj.unshift(c);save();UI.arEd=c.id;vArena()}}]:[{id:'ar-atu',t:ic('refresh',15)+' Atualizar',f:()=>vArena()}]);
-  const head=`<div class="arhead sph"><span class="sph-logo"><em aria-hidden="true">${ic('star',20)}</em><span class="sph-lt">Spruce It<small>da EduSpruce</small></span></span><nav class="sph-tabs" aria-label="Secções"><button data-artab="conj" aria-current="${tab==='conj'?'page':'false'}">${ic('layers',15)} Os meus conjuntos</button><button data-artab="jogos" aria-current="${tab==='jogos'?'page':'false'}">${ic('chart',15)} Jogos e relatórios</button></nav><span class="sph-info">Os alunos entram em <b>eduspruce.pt/spruceit</b> com o código da sala</span></div>`;
+  const head=`<div class="arhead sph"><span class="sph-logo"><em aria-hidden="true">${ic('star',20)}</em><span class="sph-lt">Spruce It!<small>da EduSpruce</small></span></span><nav class="sph-tabs" aria-label="Secções"><button data-artab="conj" aria-current="${tab==='conj'?'page':'false'}">${ic('layers',15)} Os meus conjuntos</button><button data-artab="jogos" aria-current="${tab==='jogos'?'page':'false'}">${ic('chart',15)} Jogos e relatórios</button></nav><span class="sph-info">Os alunos entram em <b>eduspruce.pt/spruceit</b> com o código da sala</span></div>`;
   let body='';
   if(tab==='conj'){const F=UI.arF=UI.arF||{disc:'',turma:'',q:''};const q=normT(F.q||'');
     const L=d.conj.filter(c=>(!F.disc||c.disc===F.disc)&&(!F.turma||c.turma===F.turma)&&(!q||normT([c.nome,c.tema,c.pasta,c.disc].join(' ')).includes(q)));
@@ -114,13 +114,13 @@ function arImportarDlg(alvo){openDrawer('Importar perguntas',`<div class="ed"><p
   <div class="tblw"><table class="lst arcab"><thead><tr>${AR_CAB.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody><tr><td>Capital de Portugal?</td><td>EM</td><td>Porto</td><td>Lisboa</td><td>Braga</td><td></td><td>2</td><td>20</td></tr><tr><td>O Sol é uma estrela.</td><td>VF</td><td></td><td></td><td></td><td></td><td>V</td><td>15</td></tr></tbody></table></div>
   <p class="hint">A «Certa» pode ser o número da opção (1 a 4), a letra (A a D) ou o próprio texto. As imagens acrescentam-se depois, no editor.</p>
   <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="ari-mod">${ic('download',15)} Descarregar Modelo</button><span class="sp1"></span><button class="btn pri" id="ari-f">${ic('upload',15)} Escolher Ficheiro</button><input type="file" id="ari-i" accept=".csv,.txt,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div></div>`);
-  $('#ari-mod').onclick=()=>download('Modelo de perguntas Arena.csv','﻿'+[AR_CAB,['Capital de Portugal?','EM','Porto','Lisboa','Braga','','2','20'],['O Sol é uma estrela.','VF','','','','','V','15']].map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n'),'text/csv;charset=utf-8');
+  $('#ari-mod').onclick=()=>download('Modelo de perguntas Spruce It!.csv','﻿'+[AR_CAB,['Capital de Portugal?','EM','Porto','Lisboa','Braga','','2','20'],['O Sol é uma estrela.','VF','','','','','V','15']].map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n'),'text/csv;charset=utf-8');
   $('#ari-f').onclick=()=>$('#ari-i').click();
   $('#ari-i').onchange=async e=>{const f=e.target.files[0];if(!f)return;let L=[];try{if(/\.xlsx$/i.test(f.name)){const F=await lerXlsxCru(f);const C=Object.values(F)[0]||{};const R={};Object.entries(C).forEach(([ref,v])=>{const m=ref.match(/^([A-Z]+)(\d+)$/);if(!m)return;const col=m[1].split('').reduce((s,ch)=>s*26+ch.charCodeAt(0)-64,0)-1;(R[m[2]]=R[m[2]]||[])[col]=v});L=Object.keys(R).sort((a,b)=>a-b).map(k=>Array.from(R[k],x=>x==null?'':x))}else L=arCsvLinhas(await f.text())}catch(err){return toast('Não foi possível ler o ficheiro: '+err.message,'erro')}
     const P=arDeLinhas(L);if(!P.length)return toast('Não encontrei perguntas no ficheiro. Veja o modelo.','aviso');
-    const d=arD();let c=alvo;if(!c){c={id:uid(),nome:f.name.replace(/\.[^.]+$/,''),disc:(T()||{}).disciplina||'',turma:'',tema:'',pasta:'',criado:Date.now(),mod:Date.now(),perg:[]};d.conj.unshift(c)}c.perg.push(...P);c.mod=Date.now();save();audit('Spruce It','Importação de perguntas',c.nome+' · '+P.length);closeDrawer();toast(P.length+' pergunta'+(P.length>1?'s':'')+' importada'+(P.length>1?'s':''),'ok');UI.arEd=c.id;vArena()}}
+    const d=arD();let c=alvo;if(!c){c={id:uid(),nome:f.name.replace(/\.[^.]+$/,''),disc:(T()||{}).disciplina||'',turma:'',tema:'',pasta:'',criado:Date.now(),mod:Date.now(),perg:[]};d.conj.unshift(c)}c.perg.push(...P);c.mod=Date.now();save();audit('Spruce It!','Importação de perguntas',c.nome+' · '+P.length);closeDrawer();toast(P.length+' pergunta'+(P.length>1?'s':'')+' importada'+(P.length>1?'s':''),'ok');UI.arEd=c.id;vArena()}}
 function arExportar(c){const L=[AR_CAB,...c.perg.map(p=>[p.t,p.tp==='vf'?'VF':'EM',...(p.tp==='vf'?['','','','']:[0,1,2,3].map(k=>p.o[k]||'')),p.tp==='vf'?(p.c===0?'V':'F'):String(p.c+1),String(p.s||20)])];
-  download(c.nome+'.csv','﻿'+L.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Spruce It','Exportação de perguntas',c.nome)}
+  download(c.nome+'.csv','﻿'+L.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Spruce It!','Exportação de perguntas',c.nome)}
 
 /* ---------- lançar um jogo ---------- */
 /* v1.054 · lançar jogo em dois passos (como no design): 1) escolher o modo, 2) definições da sala */
@@ -188,7 +188,7 @@ async function arCriar(c,P,L){const code=AR.codigo();const id=await AR.salaId(co
   if(L.tipo==='tpc'&&new Date(limite)<=new Date())throw new Error('A data-limite tem de ser no futuro.');
   await arRpc('arena_criar',{p_id:id,p_tipo:L.tipo,p_modo:L.modo,p_cfg:cfg,p_perguntas:perguntas,p_certas:certas,p_limite:limite});
   const j={id,codigo:code,conj:c.id,nome:c.nome,modo:L.modo,tipo:L.tipo,tema:cfg.tema,turma:L.nomes==='lista'?L.turma:'',refs,criado:Date.now(),limite,perg:P.map(p=>({t:p.t,o:p.tp==='vf'?['Verdadeiro','Falso']:p.o.slice(),c:p.c}))};
-  arD().jogos.unshift(j);if(arD().jogos.length>200)arD().jogos.length=200;save();audit('Spruce It','Jogo lançado',c.nome+' · '+M.nome+' · '+(L.tipo==='tpc'?'trabalho de casa':'ao vivo'));
+  arD().jogos.unshift(j);if(arD().jogos.length>200)arD().jogos.length=200;save();audit('Spruce It!','Jogo lançado',c.nome+' · '+M.nome+' · '+(L.tipo==='tpc'?'trabalho de casa':'ao vivo'));
   closeDrawer();arAnfitriao(j)}
 
 /* v1.054 · ecrã projetado dos modos novos */
@@ -218,7 +218,7 @@ function arCanalAbrir(id){arCanalFechar();sbObter().then(p=>{try{const c=p.clien
 function arCanalFechar(){try{if(arCanal){arCanal.unsubscribe&&arCanal.unsubscribe()}}catch(_){}arCanal=null}
 function arAvisar(ev){try{arCanal&&arCanal.send({type:'broadcast',event:'s',payload:{e:ev||'sync',t:Date.now()}})}catch(_){}}
 async function arAnfitriao(j){arFecharHost();await aaQrLib().catch(()=>{});arFontes();
-  const o=document.createElement('div');o.id='arhost';o.className='arhost v2';o.style.cssText=AR.temaCss(j.tema);o.setAttribute('role','dialog');o.setAttribute('aria-label','Spruce It · '+j.nome);document.body.appendChild(o);document.body.classList.add('arh-on');
+  const o=document.createElement('div');o.id='arhost';o.className='arhost v2';o.style.cssText=AR.temaCss(j.tema);o.setAttribute('role','dialog');o.setAttribute('aria-label','Spruce It! · '+j.nome);document.body.appendChild(o);document.body.classList.add('arh-on');
   arH={j,o,d:null,vivo:true,ultV:-1,fase:'',rev:-1,ultAv:0,topAnt:{}};arCanalAbrir(j.id);
   o.innerHTML=`<header class="arhh"><span class="arhlogo">Spruce <em>It</em></span><div class="arht"><b>${esc(j.nome)}</b><span>${AR.MODOS[j.modo].ic} ${AR.MODOS[j.modo].nome} · ${j.tipo==='tpc'?'Trabalho de casa':'Ao vivo'}</span></div><span class="sp1"></span>
     <span class="arhcod" title="Código da sala">${AR.fmt(j.codigo)}</span><button type="button" class="arhb" id="arh-som" aria-label="Som">${AR.som?'🔔':'🔕'}</button><button type="button" class="arhb" id="arh-pau" hidden>${ic('clock',16)} Pausar</button><button type="button" class="arhb dng" id="arh-fim" hidden>Terminar</button><button type="button" class="arhb" id="arh-x" aria-label="Fechar">${ic('x',18)}</button></header>
@@ -317,13 +317,13 @@ function arRelatorio(j){const R=j.res;if(!R){toast('Ainda sem resultados','aviso
   $$('#view [data-arlg]').forEach(s=>s.onchange=()=>{j.liga=j.liga||{};j.liga[s.dataset.arlg]=s.value;const x=R.jog.find(z=>z.id===s.dataset.arlg);if(x)x.al=s.value;save();const y=window.scrollY,v=$('#view').scrollTop;arRelatorio(j);window.scrollTo(0,y);$('#view').scrollTop=v});
   $('#arr-as').onclick=()=>arAssociar(j,porA,tSel)}
 function arRelCsv(j,porA,porP){const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';const L=[['Jogador','Certas','Erradas','Acerto (%)',j.modo==='floresta'?'Árvores':j.modo==='pesca'?'Quilos':j.modo==='corrida'?'Casas':j.modo==='cume'?'Metros':j.modo==='expedicao'?'Etapas':'Pontos'],...porA.map(x=>[x.a,x.ok,x.n-x.ok,x.taxa==null?'':Math.round(x.taxa*100),j.modo==='floresta'?AR.arvores(x.arv).inteiras:j.modo==='pesca'?Math.round(x.pts)/10:x.pts]),[],['Pergunta','Resposta certa','Respostas','Acerto (%)'],...porP.map(x=>[x.p.t,(x.p.o||[])[x.p.c]||'',x.n,x.taxa==null?'':Math.round(x.taxa*100)])];
-  download('Arena - '+j.nome+'.csv','﻿'+L.map(r=>r.map(q).join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Spruce It','Exportação de relatório',j.nome)}
+  download('Spruce It! - '+j.nome+'.csv','﻿'+L.map(r=>r.map(q).join(';')).join('\r\n'),'text/csv;charset=utf-8');audit('Spruce It!','Exportação de relatório',j.nome)}
 function arAssociar(j,porA,t){if(!t)return toast('Escolha a turma','aviso');const lig=porA.filter(x=>x.al&&x.taxa!=null&&t.alunos.some(a=>a.id===x.al));if(!lig.length)return toast(j.turma?'Nenhum aluno da lista jogou.':'Ligue pelo menos uma alcunha a um aluno.','aviso');
   let i=j.assoc&&t.instrumentos.find(z=>z.id===j.assoc.inst);const hoje=new Date(j.criado).toISOString().slice(0,10);
-  if(!i){i={id:uid(),nome:'Spruce It · '+j.nome,tipo:'Jogo Spruce It (formativo)',periodo:perAtual(t),data:hoje,itens:[{id:uid(),rot:'Acerto (%)',dom:'',cot:100}],notas:{},arena:j.id};t.instrumentos.push(i)}
+  if(!i){i={id:uid(),nome:'Spruce It! · '+j.nome,tipo:'Jogo Spruce It! (formativo)',periodo:perAtual(t),data:hoje,itens:[{id:uid(),rot:'Acerto (%)',dom:'',cot:100}],notas:{},arena:j.id};t.instrumentos.push(i)}
   const it=i.itens[0].id;lig.forEach(x=>{i.notas[x.al]={[it]:Math.round(x.taxa*100)}});
-  j.assoc={inst:i.id,turma:t.id,txt:t.nome+' · '+t.disciplina+' · '+lig.length+' alunos'};save();audit('Spruce It','Resultados associados à turma',j.nome+' · '+t.nome);toast('Resultados guardados em '+t.nome+' como instrumento formativo','ok');arRelatorio(j)}
-/* os instrumentos formativos da Arena não têm domínio: não contam para a classificação, mas aparecem na Ficha Integral */
+  j.assoc={inst:i.id,turma:t.id,txt:t.nome+' · '+t.disciplina+' · '+lig.length+' alunos'};save();audit('Spruce It!','Resultados associados à turma',j.nome+' · '+t.nome);toast('Resultados guardados em '+t.nome+' como instrumento formativo','ok');arRelatorio(j)}
+/* os instrumentos formativos do Spruce It! não têm domínio: não contam para a classificação, mas aparecem na Ficha Integral */
 
 /* ---------- estilos ---------- */
 (()=>{const st=document.createElement('style');st.id='arena-css';st.textContent=`
@@ -503,8 +503,8 @@ body.est-sge :is(.arcapa,.armc,.armnovo,.arbarra,.arhero2,.arabrir,.arstep,.arst
 #arhost.v2 .arhn-mb{display:flex;flex-wrap:wrap;gap:6px}#arhost.v2 .arhn-mb span{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;background:var(--bg);border-radius:var(--radius);padding:2px 8px 2px 2px}#arhost.v2 .arhn-mb span.vez{background:var(--ec);color:#fff}
 #arhost.v2 .arhn-eqf{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 18px}#arhost.v2 .arhn-eqf div{display:flex;align-items:center;gap:10px;background:var(--surface);border:var(--bw) solid var(--line);border-left:8px solid var(--ec);border-radius:var(--radius);padding:8px 14px}#arhost.v2 .arhn-eqf div:first-child{background:var(--ec);color:#fff}#arhost.v2 .arhn-eqf i{font-style:normal;font-weight:800}
 `;document.head.appendChild(st)})();
-/* ---------- v1.054 · Spruce It: módulo especial que abre sem o menu lateral (com botão para voltar à EduSpruce) ---------- */
-TITLES.arena='Spruce It';try{MN_NOME.arena='Spruce It'}catch(_){}
+/* ---------- v1.054 · Spruce It!: módulo especial que abre sem o menu lateral (com botão para voltar à EduSpruce) ---------- */
+TITLES.arena='Spruce It!';try{MN_NOME.arena='Spruce It!'}catch(_){}
 function spVoltar(){document.body.classList.remove('spruceit');go(go._f&&go._f.hub?'hub':'inicio')}
 {const _gSp=go;go=function(v){const r=_gSp.apply(this,arguments);try{document.body.classList.toggle('spruceit',VIEW==='arena')}catch(_){}return r};Object.assign(go,_gSp);if(_gSp._f)go._f=_gSp._f}
 {const _vSp=vArena;vArena=function(){const r=_vSp.apply(this,arguments);try{arFontes();document.body.classList.add('spruceit');const h=$('#view .arhead');if(h&&!h.querySelector('.spvolta')){const b=document.createElement('button');b.type='button';b.className='btn spvolta';b.innerHTML='← Voltar à EduSpruce';b.title='Voltar ao menu e às outras ferramentas';b.onclick=spVoltar;h.prepend(b)}}catch(_){}return r}}

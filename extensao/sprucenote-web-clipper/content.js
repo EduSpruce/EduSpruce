@@ -1,4 +1,4 @@
-/* SpruceNote Web Clipper · na página
+/* Spruce Notes Web Clipper · na página
    · botão «Guardar» no canto superior esquerdo das imagens, ao passar o rato
    · botão junto ao texto selecionado (opcional, nas Opções)
    · recebe os recortes do menu do botão direito e do ícone da barra e abre o painel à direita */
@@ -206,7 +206,7 @@
 
   const aoMensagem = (m, snd, responder) => {
     if (!m || snd.id !== chrome.runtime.id) return false;
-    if (m.tipo === 'recorte') { try { receber(m.r || {}); } catch (e) { console.warn('[SpruceNote]', e); } responder(true); return false; }
+    if (m.tipo === 'recorte') { try { receber(m.r || {}); } catch (e) { console.warn('[Spruce Notes]', e); } responder(true); return false; }
     if (m.tipo === 'lerImagem') { lerImagemNaPagina(m.src).then(responder, () => responder(null)); return true; }
     return false;
   };

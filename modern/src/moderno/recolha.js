@@ -1,17 +1,17 @@
-/* ===================== SpruceNote Web Clipper (extensão do Chrome) =====================
+/* ===================== Spruce Notes Web Clipper (extensão do Chrome) =====================
    A extensão guarda cada recorte (imagem, texto, ligação ou vídeo) cifrado com a chave da conta numa linha nova
    «ef-f-snin-<id>.bin» da base de dados — nunca mexe nos dados da app. Aqui a app:
    · arruma esses recortes no quadro escolhido, numa coluna «Por Arrumar», e apaga a linha.
      Antes de arrumar, reclama a linha (muda-lhe o nome para ef-f-snic-…): dois aparelhos abertos nunca arrumam o mesmo recorte.
      A linha só é apagada depois de os dados da app estarem gravados na base de dados.
-   · escreve em «ef-f-snidx.bin» (cifrada) a lista dos quadros do SpruceNote/JornalNote e dos abertos mais recentemente,
+   · escreve em «ef-f-snidx.bin» (cifrada) a lista dos quadros do Spruce Notes/JornalNote e dos abertos mais recentemente,
      que a extensão mostra em «Guardar em ▾»
    · abre um quadro pela ligação #sn=sn:<id> ou #sn=snj:<id> («Abrir» na extensão) */
 const SNW_IN='ef-f-snin-',SNW_OC='ef-f-snic-',SNW_IDX='ef-f-snidx.bin',SNW_COL='Por Arrumar';
 let _snwRec=null,_snwPend=[],_snwSig='',_snwIdxT=0,_snwOn=false,_snwProx=false,_snwUlt=0;
 const snwPronto=()=>{try{const L=nvL();return !!(window.__esPronto&&L.prov==='supabase'&&(L.k||_nvK))}catch(_){return false}};
 const snwGravado=()=>{try{nvMarcar()}catch(_){}try{return !Object.keys(nvL().mod||{}).length&&!_nvBusy}catch(_){return false}};
-/* os quadros de cada contexto (sn = SpruceNote, snj = JornalNote), sem depender do que está aberto no ecrã */
+/* os quadros de cada contexto (sn = Spruce Notes, snj = JornalNote), sem depender do que está aberto no ecrã */
 function snwQuadros(c){const k=UI.mqCtx;UI.mqCtx=c==='snj'?'jornal':'prof';try{return MQ()}finally{UI.mqCtx=k}}
 /* só os quadros ligados à raiz (os que estão na lixeira ficam de fora) */
 function snwAlc(Q){const por=new Map(Q.filter(q=>q&&q.id).map(q=>[q.id,q]));const raiz=por.get('raiz')||Q[0];if(!raiz)return new Set();const vis=new Set([raiz.id]),fila=[raiz];
@@ -68,7 +68,7 @@ async function snwRecolher(){if(_snwOn){_snwProx=true;return}if(!snwPronto())ret
       const ok=snwOk();novos.forEach(x=>ok.push(x.id));if(ok.length>300)ok.splice(0,ok.length-300);save();
       /* se o quadro está à vista: mostra os recortes; se a coluna é nova, ajusta o quadro ao ecrã para ela aparecer */
       try{if((VIEW==='sprucenote'||VIEW==='snjornal')&&!_mqEd&&$('#mq-its')){mqRender();const c=VIEW==='snjornal'?'snj':'sn',u=mqUI();if(onde.some(w=>w.nova&&w.c===c&&w.q===u.q)&&$('#mq-zf'))$('#mq-zf').click()}}catch(_){}
-      if(n)toast((n===1?'Chegou 1 recorte da Web':'Chegaram '+n+' recortes da Web')+' ao '+(onde.every(w=>w.c==='snj')?'JornalNote':'SpruceNote')+' (coluna «'+SNW_COL+'»).','ok');
+      if(n)toast((n===1?'Chegou 1 recorte da Web':'Chegaram '+n+' recortes da Web')+' ao '+(onde.every(w=>w.c==='snj')?'JornalNote':'Spruce Notes')+' (coluna «'+SNW_COL+'»).','ok');
       if(await snwEsperarGravado())novos.forEach(x=>apagar.push(x.nome))}
     for(const n of apagar){try{await cli.from(T).delete().eq('nome',n)}catch(_){}}}
   catch(e){console.warn('[EduSpruce] recortes da extensão:',e&&e.message)}
@@ -88,28 +88,28 @@ function snwLigacaoIr(){const l=_snwLig;if(!l)return;_snwLig=null;setTimeout(()=
 snwHash();
 {const _pc=esPosCarga;esPosCarga=async function(){const r=await _pc.apply(this,arguments);try{snwLigacaoIr()}catch(_){}return r}}
 window.addEventListener('hashchange',()=>{if(snwHash()&&window.__esPronto)snwLigacaoIr()});
-/* 1.086 — Início: atalho para instalar o SpruceNote Web Clipper, no espaço livre da barra de cima (à esquerda das apps).
-   Só no Chrome/Edge de computador, com o SpruceNote ligado e a extensão ainda por instalar (a extensão marca a página com data-sn-clipper). */
+/* 1.086 — Início: atalho para instalar o Spruce Notes Web Clipper, no espaço livre da barra de cima (à esquerda das apps).
+   Só no Chrome/Edge de computador, com o Spruce Notes ligado e a extensão ainda por instalar (a extensão marca a página com data-sn-clipper). */
 const SNW_ZIP='extensao/sprucenote-web-clipper.zip';
 const snwChipVer=()=>{try{if(typeof snOn==='function'&&!snOn())return false;if(document.documentElement.hasAttribute('data-sn-clipper'))return false;if(S.snWeb&&S.snWeb.dicaX)return false;
   const u=navigator.userAgent;return /Chrome\//.test(u)&&!/Mobile|Android|CriOS|iPad|iPhone/.test(u)&&!(navigator.maxTouchPoints>1&&/Macintosh/.test(u)&&!/Chrome/.test(u))}catch(_){return false}};
 if(typeof dashTopo==='function'){const _dtSnw=dashTopo;dashTopo=function(){const h=_dtSnw.apply(this,arguments);try{if(!snwChipVer())return h;
   const a=(typeof HUB_APPS!=='undefined'&&HUB_APPS.find(x=>x.id==='sprucenote'))||null;const ico=a&&typeof hubIcone==='function'?hubIcone(a,30):ic('nvsn',18);
-  const chip=`<div class="snw-chip" role="group" aria-label="SpruceNote Web Clipper"><button type="button" class="snw-chip-b" data-snw="info" title="Guarde imagens, texto, ligações e vídeos de qualquer site nos quadros do SpruceNote">${ico}<span class="snw-chip-t"><b>SpruceNote Web Clipper</b><small>Guardar da web nos seus quadros</small></span><span class="snw-chip-i">${ic('download',14)} Instalar</span></button><button type="button" class="snw-chip-x" data-snw="x" title="Não mostrar mais" aria-label="Não mostrar mais">${ic('x',14)}</button></div>`;
+  const chip=`<div class="snw-chip" role="group" aria-label="Spruce Notes Web Clipper"><button type="button" class="snw-chip-b" data-snw="info" title="Guarde imagens, texto, ligações e vídeos de qualquer site nos quadros do Spruce Notes">${ico}<span class="snw-chip-t"><b>Spruce Notes Web Clipper</b><small>Guardar da web nos seus quadros</small></span><span class="snw-chip-i">${ic('download',14)} Instalar</span></button><button type="button" class="snw-chip-x" data-snw="x" title="Não mostrar mais" aria-label="Não mostrar mais">${ic('x',14)}</button></div>`;
   const k=h.indexOf('<div class="hub-mini"');if(k>=0){const t=h.indexOf('hbm-todas',k),e=t<0?-1:h.indexOf('</div>',t);if(e>0)return h.slice(0,k)+'<div class="hub-grp">'+chip+h.slice(k,e+6)+'</div>'+h.slice(e+6);return h.slice(0,k)+chip+h.slice(k)}const j=h.lastIndexOf('</div>');return j<0?h+chip:h.slice(0,j)+chip+h.slice(j)}catch(e){console.warn(e);return h}}}
-function snwInstalar(){openDrawer('SpruceNote Web Clipper',`
-  <p style="margin-top:0">Extensão do Chrome (e do Edge) para guardar <b>imagens, texto, ligações e vídeos</b> de qualquer site nos seus quadros do SpruceNote. Os recortes chegam à coluna <b>«Por Arrumar»</b> do quadro escolhido.</p>
+function snwInstalar(){openDrawer('Spruce Notes Web Clipper',`
+  <p style="margin-top:0">Extensão do Chrome (e do Edge) para guardar <b>imagens, texto, ligações e vídeos</b> de qualquer site nos seus quadros do Spruce Notes. Os recortes chegam à coluna <b>«Por Arrumar»</b> do quadro escolhido.</p>
   <a class="btn pri" href="${SNW_ZIP}" download>${ic('download',14)} Descarregar a extensão (.zip)</a>
   <h3 style="margin:20px 0 6px">Instalar (uma vez)</h3>
   <ol class="snw-passos"><li>Descompacte o ficheiro <b>sprucenote-web-clipper.zip</b>.</li><li>No Chrome, abra <b>chrome://extensions</b> e ligue o <b>Modo de programador</b> (canto superior direito).</li><li>Carregue em <b>Carregar expandida</b> e escolha a pasta <b>sprucenote-web-clipper</b>.</li><li>Fixe o ícone na barra do Chrome (peça de puzzle › alfinete).</li><li>Nas <b>Opções</b> da extensão, entre com a mesma conta Google da EduSpruce.</li></ol>
   <h3 style="margin:20px 0 6px">Usar</h3>
-  <ul class="snw-passos"><li><b>Imagens:</b> passe o rato por cima e carregue em «Guardar».</li><li><b>Texto:</b> selecione, botão direito › <b>Guardar no SpruceNote</b>.</li><li><b>Páginas e vídeos</b> (YouTube, Vimeo): ícone na barra do Chrome ou <b>Alt+Shift+S</b>.</li><li>«Guardar em ▾» escolhe o quadro: o principal ou um dos 10 abertos mais recentemente.</li></ul>
+  <ul class="snw-passos"><li><b>Imagens:</b> passe o rato por cima e carregue em «Guardar».</li><li><b>Texto:</b> selecione, botão direito › <b>Guardar no Spruce Notes</b>.</li><li><b>Páginas e vídeos</b> (YouTube, Vimeo): ícone na barra do Chrome ou <b>Alt+Shift+S</b>.</li><li>«Guardar em ▾» escolhe o quadro: o principal ou um dos 10 abertos mais recentemente.</li></ul>
   <p class="mut">Os recortes vão cifrados com a chave da sua conta, como os restantes dados. Não funciona no iPad nem no telemóvel.</p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button type="button" class="btn" data-snw="ajuda">${ic('help',14)} Ver na Ajuda</button><button type="button" class="btn ghost" data-snw="x">Já instalei · não mostrar mais</button></div>`)}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-snw]');if(!b)return;const k=b.dataset.snw;
   if(k==='info'){snwInstalar();return}
   if(k==='ajuda'){try{closeDrawer()}catch(_){}UI.ajQ='Web Clipper';go('ajuda');return}
-  if(k==='x'){S.snWeb=S.snWeb&&typeof S.snWeb==='object'?S.snWeb:{};S.snWeb.dicaX=1;save();try{closeDrawer()}catch(_){}document.querySelectorAll('.snw-chip').forEach(c=>c.remove());try{hubMiniAjusta()}catch(_){}toast('Pode instalar mais tarde em Ajuda › SpruceNote Web Clipper','ok')}});
+  if(k==='x'){S.snWeb=S.snWeb&&typeof S.snWeb==='object'?S.snWeb:{};S.snWeb.dicaX=1;save();try{closeDrawer()}catch(_){}document.querySelectorAll('.snw-chip').forEach(c=>c.remove());try{hubMiniAjusta()}catch(_){}toast('Pode instalar mais tarde em Ajuda › Spruce Notes Web Clipper','ok')}});
 /* a extensão marca a página depois de a app arrancar: tira o atalho */
 try{new MutationObserver(()=>{if(document.documentElement.hasAttribute('data-sn-clipper'))document.querySelectorAll('.snw-chip').forEach(c=>c.remove())}).observe(document.documentElement,{attributes:true,attributeFilter:['data-sn-clipper']})}catch(_){}
 {const s=document.createElement('style');s.textContent=`
@@ -138,8 +138,8 @@ html body.est-sge .snw-chip,html body.est-sge .snw-wc,html body.est-sge .snw-wc 
 
 `;document.head.appendChild(s)}
 
-/* 1.088 — Definições › Ferramentas: cartão que explica o SpruceNote Web Clipper (por baixo dos Avisos em Pop-up) */
-/* ilustração do cartão: página da web → recortes → quadro do SpruceNote (coluna «Por Arrumar») */
+/* 1.088 — Definições › Ferramentas: cartão que explica o Spruce Notes Web Clipper (por baixo dos Avisos em Pop-up) */
+/* ilustração do cartão: página da web → recortes → quadro do Spruce Notes (coluna «Por Arrumar») */
 const SNW_ILU=`<svg viewBox="0 0 520 300" width="100%" role="img">
 <defs><marker id="snwSeta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c25e12"/></marker></defs>
 <g class="snw-jan"><rect x="8" y="22" width="250" height="250" rx="12" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/>
@@ -150,13 +150,13 @@ const SNW_ILU=`<svg viewBox="0 0 520 300" width="100%" role="img">
 <rect x="28" y="70" width="52" height="18" rx="9" fill="#c25e12"/><text x="54" y="83" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="inherit">Guardar</text>
 <rect x="164" y="66" width="80" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="78" width="72" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="90" width="78" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/><rect x="164" y="102" width="56" height="5" rx="2.5" fill="var(--mut)" opacity=".35"/>
 <rect x="18" y="166" width="226" height="40" rx="3" fill="color-mix(in srgb,#c25e12 16%,transparent)"/><rect x="24" y="172" width="210" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/><rect x="24" y="184" width="196" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/><rect x="24" y="196" width="120" height="5" rx="2.5" fill="var(--mut)" opacity=".55"/>
-<rect x="120" y="198" width="132" height="44" rx="6" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/><rect x="128" y="206" width="10" height="10" rx="2" fill="#c25e12"/><text x="144" y="215" font-size="9.5" font-weight="700" fill="currentColor" font-family="inherit">Guardar no SpruceNote</text><rect x="128" y="226" width="90" height="5" rx="2.5" fill="var(--mut)" opacity=".3"/>
+<rect x="120" y="198" width="132" height="44" rx="6" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/><rect x="128" y="206" width="10" height="10" rx="2" fill="#c25e12"/><text x="144" y="215" font-size="9.5" font-weight="700" fill="currentColor" font-family="inherit">Guardar no Spruce Notes</text><rect x="128" y="226" width="90" height="5" rx="2.5" fill="var(--mut)" opacity=".3"/>
 <rect x="22" y="222" width="86" height="40" rx="5" fill="#2b2f36"/><path d="M58 234v16l13-8z" fill="#fff"/></g>
 <path d="M266 120C300 96 316 96 338 110" fill="none" stroke="#c25e12" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#snwSeta)"/>
 <path d="M266 190C300 210 318 200 338 186" fill="none" stroke="#c25e12" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#snwSeta)"/>
 <g class="snw-qd"><rect x="346" y="22" width="166" height="250" rx="12" fill="color-mix(in srgb,#c25e12 7%,var(--panel))" stroke="var(--line)" stroke-width="1.5"/>
 <rect x="358" y="34" width="22" height="22" rx="5" fill="#c25e12"/><path d="M364 40h5v5h-5zM371 44h5v5h-5zM365 47h5v5h-5z" fill="none" stroke="#fff" stroke-width="1.4"/>
-<text x="388" y="44" font-size="11" font-weight="700" fill="currentColor" font-family="inherit">SpruceNote</text><text x="388" y="56" font-size="9" fill="var(--mut)" font-family="inherit">Quadro de ideias</text>
+<text x="388" y="44" font-size="11" font-weight="700" fill="currentColor" font-family="inherit">Spruce Notes</text><text x="388" y="56" font-size="9" fill="var(--mut)" font-family="inherit">Quadro de ideias</text>
 <rect x="358" y="68" width="142" height="194" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="368" y="85" font-size="9.5" font-weight="700" fill="#c25e12" font-family="inherit">POR ARRUMAR</text>
 <rect x="366" y="94" width="126" height="54" rx="5" fill="#d9ecf7"/><circle cx="470" cy="106" r="6" fill="#f2b84b"/><path d="M366 148l26-30 18 19 12-12 70 23z" fill="#5a9fcf"/>
 <rect x="366" y="156" width="126" height="42" rx="5" fill="var(--panel)" stroke="var(--line)"/><rect x="374" y="165" width="104" height="4" rx="2" fill="var(--mut)" opacity=".5"/><rect x="374" y="175" width="96" height="4" rx="2" fill="var(--mut)" opacity=".5"/><rect x="374" y="185" width="60" height="4" rx="2" fill="var(--mut)" opacity=".5"/>
@@ -165,11 +165,11 @@ const SNW_ILU=`<svg viewBox="0 0 520 300" width="100%" role="img">
 function cartaoWebClipper(){const inst=document.documentElement.getAttribute('data-sn-clipper');const u=navigator.userAgent;const pc=/Chrome\//.test(u)&&!/Mobile|Android|CriOS|iPad|iPhone/.test(u);
   const a=(typeof HUB_APPS!=='undefined'&&HUB_APPS.find(x=>x.id==='sprucenote'))||null;const ico=a&&typeof hubIcone==='function'?hubIcone(a,40):ic('nvsn',20);
   const est=inst?`<div class="snw-est ok">${ic('check',14)} Extensão instalada neste navegador (versão ${esc(inst)})</div>`:pc?`<div class="snw-est">${ic('download',14)} Ainda não está instalada neste navegador</div>`:`<div class="snw-est">${ic('alert',14)} Só funciona no Chrome ou no Edge de computador</div>`;
-  return `<div class="card snw-wc"><div class="snw-wc-tx"><div class="snw-wc-h">${ico}<div><h2 style="margin:0">SpruceNote Web Clipper</h2><p class="hint" style="margin:2px 0 0">Extensão do Chrome para o SpruceNote</p></div></div>
-  <p style="margin:12px 0 8px">Enquanto navega na internet, guarde o que encontrar diretamente nos seus <b>quadros do SpruceNote</b>, sem copiar e colar nem descarregar ficheiros.</p>
+  return `<div class="card snw-wc"><div class="snw-wc-tx"><div class="snw-wc-h">${ico}<div><h2 style="margin:0">Spruce Notes Web Clipper</h2><p class="hint" style="margin:2px 0 0">Extensão do Chrome para o Spruce Notes</p></div></div>
+  <p style="margin:12px 0 8px">Enquanto navega na internet, guarde o que encontrar diretamente nos seus <b>quadros do Spruce Notes</b>, sem copiar e colar nem descarregar ficheiros.</p>
   <ul class="snw-lista">
    <li>${ic('image',14)}<span><b>Imagens</b> — passe o rato por cima e carregue em «Guardar».</span></li>
-   <li>${ic('file',14)}<span><b>Texto</b> — selecione e use o botão direito › Guardar no SpruceNote.</span></li>
+   <li>${ic('file',14)}<span><b>Texto</b> — selecione e use o botão direito › Guardar no Spruce Notes.</span></li>
    <li>${ic('play',14)}<span><b>Páginas e vídeos</b> (YouTube, Vimeo) — ícone na barra do Chrome ou Alt+Shift+S.</span></li>
    <li>${ic('grid',14)}<span><b>Escolhe o quadro</b> — o principal ou um dos 10 abertos mais recentemente; tudo chega à coluna «Por Arrumar».</span></li>
    <li>${ic('shield',14)}<span><b>Privado</b> — os recortes vão cifrados com a chave da sua conta; nada fica no computador além da sessão.</span></li>
@@ -292,7 +292,7 @@ html body.est-sge #def-mods .mdg-l>label.chk,html body.est-sge #def-mods .mdg-ic
 `;document.head.appendChild(s)}
 /* o título pode ser reescrito depois (ex.: nome da turma): o logótipo volta */
 {const liga=()=>{const t=$('#ttl');if(!t||t.dataset.vlo)return;t.dataset.vlo='1';new MutationObserver(()=>{if(!t.querySelector('.vlogo'))vLogo()}).observe(t,{childList:true})};try{liga();addEventListener('load',liga)}catch(_){}}
-/* logótipo de cor também no cabeçalho do quadro (SpruceNote / JornalNote) */
+/* logótipo de cor também no cabeçalho do quadro (Spruce Notes / JornalNote) */
 function mqLogo(){try{const bc=$('#mq-bc');if(!bc||bc.previousElementSibling&&bc.previousElementSibling.classList.contains('mq-logo'))return;const a=HUB_APPS.find(x=>x.v===VIEW);if(!a)return;
   bc.insertAdjacentHTML('beforebegin',`<span class="mq-logo" aria-hidden="true">${hubIcone(a,26)}</span>`)}catch(_){}}
 if(typeof mqVista==='function'){const _mqVL=mqVista;mqVista=function(){const r=_mqVL.apply(this,arguments);mqLogo();return r}}
@@ -314,7 +314,7 @@ const mod4On=k=>{try{const m=S.cfg&&S.cfg.modulos;return !(m&&m[k]===false)}catc
 function mod4Aplica(){try{MOD4.forEach(m=>document.body.classList.toggle('modoff-'+m.k,!mod4On(m.k)));hubMenuMods();if(typeof menuAgendar==='function')menuAgendar()}catch(e){console.warn(e)}}
 if(typeof cartaoAvisosDef==='function'){const _ca4=cartaoAvisosDef,_ba4=bindAvisosDef;
   cartaoAvisosDef=function(){let h=_ca4.apply(this,arguments);const kz=h.indexOf('<div class="card ed" id="def-zero">');let z='';if(kz>=0){z=h.slice(kz);h=h.slice(0,kz)}
-    z=z.replace(/<p class="hint" style="margin-top:0">[\s\S]*?<\/p>/,'<p class="hint" style="margin-top:0">Apaga definitivamente <b>todos</b> os seus dados da EduSpruce na base de dados — incluindo os dos módulos opcionais (Spruce It, Pulso, Formulários, Provas, SpruceNote, Reuniões, Biblioteca, Documentos…), salas, resultados e preferências. Depois, ao entrar de novo com Google, começa com a app vazia. Não há forma de desfazer.</p>');
+    z=z.replace(/<p class="hint" style="margin-top:0">[\s\S]*?<\/p>/,'<p class="hint" style="margin-top:0">Apaga definitivamente <b>todos</b> os seus dados da EduSpruce na base de dados — incluindo os dos módulos opcionais (Spruce It!, Spruce Live, Spruce Forms, Spruce Exam, Spruce Notes, Reuniões, Biblioteca, Documentos…), salas, resultados e preferências. Depois, ao entrar de novo com Google, começa com a app vazia. Não há forma de desfazer.</p>');
     return h.replace(/(<div class="card ed" id="def-mods">[\s\S]*?)(<\/div>)$/,'$1'+MOD4.map(m=>`<label class="chk" style="margin-top:8px"><input type="checkbox" id="${m.inp}" ${mod4On(m.k)?'checked':''}> ${ic(m.g,15)} <span><b>${m.n}</b><br><span class="mut">${m.d}${m.k==='direcao'?' (só aparece a quem é DT)':''}</span></span></label>`).join('')+'$2')+z};
   bindAvisosDef=function(){const r=_ba4.apply(this,arguments);MOD4.forEach(m=>{const c=$('#'+m.inp);if(c)c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos[m.k];else S.cfg.modulos[m.k]=false;save();mod4Aplica();toast('Módulo '+m.n+(c.checked?' ativado':' desativado'),'ok')}});return r}}
 {const _g4=go;go=function(v){if(MOD4.some(m=>m.k===v)&&!mod4On(v))v='inicio';const r=_g4.apply(this,[v].concat([].slice.call(arguments,1)));try{mod4Aplica()}catch(_){}return r};if(_g4._f)go._f=_g4._f}
@@ -520,13 +520,13 @@ try{const g=MOD_GR.find(x=>x[0]==='Organização');if(g)g[2].push(['mod-nf','not
   const c=M.querySelector('#mod-nf');c.onchange=()=>{S.cfg.notasOn=c.checked;save();try{nfRender(true)}catch(_){}toast('Notas Flutuantes '+(c.checked?'ativadas':'desativadas'),'ok')}}}catch(e){console.warn(e)}
   return _mgNf.apply(this,arguments)}}
 if(typeof vDefinicoes==='function'){const _vdNf=vDefinicoes;vDefinicoes=function(){const r=_vdNf.apply(this,arguments);try{const c=$('#view #nf-cfg');if(c)c.remove()}catch(_){}return r}}
-/* 1.108 — SpruceNote Web Clipper passa a módulo opcional (desligado: o atalho do Início desaparece) */
+/* 1.108 — Spruce Notes Web Clipper passa a módulo opcional (desligado: o atalho do Início desaparece) */
 const snwModOn=()=>{try{return !(S.cfg&&S.cfg.modulos&&S.cfg.modulos.snweb===false)}catch(_){return true}};
 const snwModAplica=()=>{try{document.body.classList.toggle('modoff-snweb',!snwModOn())}catch(_){}};
 try{const g=MOD_GR.find(x=>x[0]==='Organização');if(g)g[2].push(['mod-snw','snweb','download']);Object.assign(HUB_SGE_DEF,{snweb:'sgeTerra'})}catch(_){}
 {const _mgSw=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-snw')){
-  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-snw" ${snwModOn()?'checked':''}> ${ic('download',15)} <span><b>SpruceNote Web Clipper</b><br><span class="mut">Extensão do Chrome para guardar imagens, texto, ligações e vídeos da web nos quadros do SpruceNote (atalho no Início)</span></span></label>`);
-  const c=M.querySelector('#mod-snw');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.snweb;else S.cfg.modulos.snweb=false;save();snwModAplica();toast('SpruceNote Web Clipper '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
+  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-snw" ${snwModOn()?'checked':''}> ${ic('download',15)} <span><b>Spruce Notes Web Clipper</b><br><span class="mut">Extensão do Chrome para guardar imagens, texto, ligações e vídeos da web nos quadros do Spruce Notes (atalho no Início)</span></span></label>`);
+  const c=M.querySelector('#mod-snw');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.snweb;else S.cfg.modulos.snweb=false;save();snwModAplica();toast('Spruce Notes Web Clipper '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
   return _mgSw.apply(this,arguments)}}
 setTimeout(snwModAplica,400);{const _gSw=go;go=function(){const r=_gSw.apply(this,arguments);snwModAplica();return r};if(_gSw._f)go._f=_gSw._f}
 {const s=document.createElement('style');s.textContent='html body.modoff-snweb .snw-chip{display:none!important}';document.head.appendChild(s)}
@@ -540,7 +540,7 @@ const jnnModOn=()=>{try{return !(S.cfg&&S.cfg.modulos&&S.cfg.modulos.jornalnote=
 try{const a=HUB_APPS.find(x=>x.id==='jornalnote');if(a){const o=a.on;a.on=()=>jnnModOn()&&(!o||o())}
   const g=MOD_GR.find(x=>x[0]==='Escola e Comunicação');if(g){const i=g[2].findIndex(x=>x[1]==='jornal');g[2].splice(i<0?g[2].length:i+1,0,['mod-jnn','jornalnote'])}}catch(e){console.warn(e)}
 {const _mgJn=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-jnn')){
-  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-jnn" ${jnnModOn()?'checked':''}> ${ic('pen',15)} <span><b>JornalNote</b><br><span class="mut">Quadros de ideias do Jornal Escolar (precisa do Jornal Escolar e do SpruceNote ligados)</span></span></label>`);
+  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-jnn" ${jnnModOn()?'checked':''}> ${ic('pen',15)} <span><b>JornalNote</b><br><span class="mut">Quadros de ideias do Jornal Escolar (precisa do Jornal Escolar e do Spruce Notes ligados)</span></span></label>`);
   const c=M.querySelector('#mod-jnn');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.jornalnote;else S.cfg.modulos.jornalnote=false;save();try{hubMenuMods();menuAgendar()}catch(_){}toast('JornalNote '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
   return _mgJn.apply(this,arguments)}}
 {const _gJn=go;go=function(v){if(v==='snjornal'&&!jnnModOn())v='inicio';const r=_gJn.apply(this,[v].concat([].slice.call(arguments,1)));try{hubMenuMods()}catch(_){}return r};if(_gJn._f)go._f=_gJn._f}
@@ -549,7 +549,7 @@ setTimeout(()=>{try{hubMenuMods()}catch(_){}},1800);
 {const s=document.createElement('style');s.textContent='html body .ajg{align-items:start!important}html body .ajg>figure.ajf{align-self:start!important;height:auto!important}html body figure.ajf>img,html body figure.ajf>canvas{display:block}';document.head.appendChild(s)}
 
 /* Recomeçar do Zero (versão com base de dados): apaga mesmo tudo — todas as tabelas da conta, incluindo os módulos opcionais */
-nvApagarTudo=async function(){const r=await avisoModal('Apagar tudo e recomeçar?',['Vão ser apagados definitivamente todos os seus dados da EduSpruce na base de dados: turmas, alunos, avaliações, sumários e também tudo dos módulos opcionais (Spruce It, Pulso, Formulários, Provas, SpruceNote, Reuniões, Biblioteca, Documentos…), salas, resultados e preferências.','Depois, ao entrar de novo com Google, começa com a app vazia. A autorização do seu e-mail não muda.','Sugestão: antes, descarregue uma cópia em Definições › Segurança.'],[{t:'Cancelar',v:null,c:'pri'},{t:'Continuar',c:'dng',v:'sim'}]);if(r!=='sim')return;
+nvApagarTudo=async function(){const r=await avisoModal('Apagar tudo e recomeçar?',['Vão ser apagados definitivamente todos os seus dados da EduSpruce na base de dados: turmas, alunos, avaliações, sumários e também tudo dos módulos opcionais (Spruce It!, Spruce Live, Spruce Forms, Spruce Exam, Spruce Notes, Reuniões, Biblioteca, Documentos…), salas, resultados e preferências.','Depois, ao entrar de novo com Google, começa com a app vazia. A autorização do seu e-mail não muda.','Sugestão: antes, descarregue uma cópia em Definições › Segurança.'],[{t:'Cancelar',v:null,c:'pri'},{t:'Continuar',c:'dng',v:'sim'}]);if(r!=='sim')return;
   const w=(prompt('Para confirmar, escreva APAGAR')||'').trim();if(w!=='APAGAR'){toast('Nada foi apagado.');return}
   ocupado('A apagar todos os dados…');try{await sbRpc('eduspruce_apagar_conta',{p_confirmar:'APAGAR'})}catch(e){livre();return toast('Não foi possível apagar: '+(e.message||e),'erro')}
   window.__esSair=true;window.__efApagar=true;try{save=function(){};saveNow=function(){}}catch(_){}

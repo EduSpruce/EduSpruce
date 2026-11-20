@@ -1,4 +1,4 @@
-// SpruceNote Web Clipper · serviço de fundo (Manifest V3)
+// Spruce Notes Web Clipper · serviço de fundo (Manifest V3)
 // Menu do botão direito, ícone da barra, entrada na conta e gravação dos recortes (as imagens são lidas e
 // reduzidas aqui, como na app: no máximo 1600 px).
 import * as conta from './lib/conta.js';
@@ -14,7 +14,7 @@ async function opcoes() {
 /* ---------------- menu do botão direito e ícone ---------------- */
 function criarMenu() {
   chrome.contextMenus.removeAll(() => {
-    chrome.contextMenus.create({id: 'sn-guardar', title: 'Guardar no SpruceNote', contexts: ['selection', 'image', 'link', 'video', 'page']});
+    chrome.contextMenus.create({id: 'sn-guardar', title: 'Guardar no Spruce Notes', contexts: ['selection', 'image', 'link', 'video', 'page']});
   });
 }
 chrome.runtime.onInstalled.addListener(d => {
@@ -103,7 +103,7 @@ async function reduzir(blob) {
   return {u: await paraDataURL(out), w, h};
 }
 
-/* ---------------- recorte → elemento do SpruceNote ---------------- */
+/* ---------------- recorte → elemento do Spruce Notes ---------------- */
 const txt = (s, n) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n);
 const http = u => /^https?:\/\/\S+$/i.test(String(u || ''));
 const dominio = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (_) { return ''; } };

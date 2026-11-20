@@ -1,7 +1,7 @@
 /* ===================== v1.026 · Dados de demonstração: tudo o que há na app, em 3 anos letivos =====================
    Além do ano atual (com todas as turmas, PROFIJ, escola profissional, jornal, reuniões…), cria os dois anos letivos anteriores com os
    mesmos alunos um ano mais novos (turmas do ano anterior), os três períodos completos com classificações e sumários, e ainda
-   exemplos na Biblioteca, Contactos e SpruceNote. Tudo inventado — nenhum dado real. */
+   exemplos na Biblioteca, Contactos e Spruce Notes. Tudo inventado — nenhum dado real. */
 function demoAnoAnterior(a0,k){const DIA=864e5,SH=364*k;
   const desl=iso=>{const d=new Date(iso+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-SH);return d.toISOString().slice(0,10)};
   let j=JSON.stringify(a0);

@@ -1,6 +1,6 @@
-/* SpruceNote Web Clipper · painel (à direita da página) e botões flutuantes
+/* Spruce Notes Web Clipper · painel (à direita da página) e botões flutuantes
    Usado na página (dentro de um Shadow DOM fechado, que não mexe no site) e na janela pequena (janela.html).
-   Os recortes juntam-se no painel; «Guardar em …» envia-os para o quadro escolhido do SpruceNote
+   Os recortes juntam-se no painel; «Guardar em …» envia-os para o quadro escolhido do Spruce Notes
    (a raiz ou um dos 10 quadros abertos mais recentemente). */
 (() => {
   if (globalThis.SNPainel) return;
@@ -22,7 +22,7 @@
     return r.v;
   }
 
-  /* HTML seguro para as notas do SpruceNote (a mesma lista de etiquetas que a app aceita) */
+  /* HTML seguro para as notas do Spruce Notes (a mesma lista de etiquetas que a app aceita) */
   const MANTER = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'S', 'STRIKE', 'BR', 'DIV', 'P', 'UL', 'OL', 'LI', 'H3', 'A', 'SPAN', 'BLOCKQUOTE', 'CODE']);
   const TIRAR = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'SVG', 'MATH', 'IFRAME', 'OBJECT', 'EMBED', 'CANVAS', 'VIDEO', 'AUDIO', 'IMG', 'PICTURE', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'FORM', 'LINK', 'META', 'HEAD', 'TITLE', 'HR']);
   const EM_H3 = new Set(['H1', 'H2', 'H4', 'H5', 'H6']);
@@ -216,7 +216,7 @@
     /* ---------- botões flutuantes ---------- */
     botaoImagem(x, y, aoClicar) {
       if (!this.bimg) {
-        this.bimg = h('<button type="button" class="bimg" title="Guardar esta imagem no SpruceNote"><img alt="" src="' + LOGO + '"><span>Guardar</span></button>');
+        this.bimg = h('<button type="button" class="bimg" title="Guardar esta imagem no Spruce Notes"><img alt="" src="' + LOGO + '"><span>Guardar</span></button>');
         this.bimg.addEventListener('mousedown', e => { e.preventDefault(); e.stopPropagation(); });
         this.bimg.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); this.bimg._cb && this.bimg._cb(); });
         this.r.appendChild(this.bimg);
@@ -229,7 +229,7 @@
     esconderBotaoImagem() { if (this.bimg) this.bimg.hidden = true; }
     pino(x, y, aoClicar) {
       if (!this.bpino) {
-        this.bpino = h('<button type="button" class="pino" title="Guardar a seleção no SpruceNote" aria-label="Guardar a seleção no SpruceNote"><img alt="" src="' + LOGO + '"></button>');
+        this.bpino = h('<button type="button" class="pino" title="Guardar a seleção no Spruce Notes" aria-label="Guardar a seleção no Spruce Notes"><img alt="" src="' + LOGO + '"></button>');
         this.bpino.addEventListener('mousedown', e => { e.preventDefault(); e.stopPropagation(); });
         this.bpino.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); this.bpino._cb && this.bpino._cb(); });
         this.r.appendChild(this.bpino);
@@ -252,8 +252,8 @@
     aberto() { return !!(this.p && !this.p.hidden); }
     montar() {
       if (this.p) return;
-      this.p = h(`<section class="painel" role="dialog" aria-label="SpruceNote Web Clipper">
-        <header class="cab"><img alt="" src="${LOGO}"><div class="t"><b>SpruceNote</b><span>Web Clipper</span></div>
+      this.p = h(`<section class="painel" role="dialog" aria-label="Spruce Notes Web Clipper">
+        <header class="cab"><img alt="" src="${LOGO}"><div class="t"><b>Spruce Notes</b><span>Web Clipper</span></div>
           <button type="button" class="conta" data-conta title="Conta e opções" aria-label="Conta e opções">${ic('pessoa', 16)}</button>
           ${this.janela ? '' : `<button type="button" class="ib" data-fechar title="Fechar (Esc)" aria-label="Fechar">${ic('x', 17)}</button>`}</header>
         <div class="lista" data-lista></div>
@@ -418,14 +418,14 @@
           <button type="button" class="outra" data-outra>Outra forma de entrar</button>
           <form class="form" data-form hidden><input type="email" name="email" placeholder="E-mail da conta" autocomplete="username" required>
             <input type="password" name="senha" placeholder="Palavra-passe de reserva" autocomplete="current-password" required><button type="submit" class="btp">Entrar</button></form>`;
-        this.rod.querySelector('.msg').textContent = msg || st.erro || 'Entre com a sua conta da EduSpruce para guardar no SpruceNote.';
+        this.rod.querySelector('.msg').textContent = msg || st.erro || 'Entre com a sua conta da EduSpruce para guardar no Spruce Notes.';
         this.rod.querySelector('[data-google]').onclick = () => this._entrar({tipo: 'entrarGoogle'});
         const fm = this.rod.querySelector('[data-form]');
         this.rod.querySelector('[data-outra]').onclick = () => { fm.hidden = !fm.hidden; if (!fm.hidden) fm.email.focus(); };
         fm.onsubmit = e => { e.preventDefault(); this._entrar({tipo: 'entrarSenha', email: fm.email.value, senha: fm.senha.value}); };
         return;
       }
-      if (!this.destino) this.destino = {c: 'sn', id: 'raiz', nome: 'SpruceNote', cor: '#60a5fa'};
+      if (!this.destino) this.destino = {c: 'sn', id: 'raiz', nome: 'Spruce Notes', cor: '#60a5fa'};
       this.rod.innerHTML = `${msg ? '<p class="msg' + (erro ? ' erro' : '') + '"></p>' : ''}
         <div class="div"><button type="button" class="gu" data-gu><span>Guardar em <i></i></span></button>
         <button type="button" class="es" data-es aria-haspopup="menu" aria-expanded="false" title="Escolher outro quadro" aria-label="Escolher outro quadro">${ic('v', 18, 2.4)}</button></div>
@@ -484,7 +484,7 @@
       m.appendChild(h('<hr>'));
       m.appendChild(h('<div class="tt">Abertos recentemente</div>'));
       if (d.recentes.length) d.recentes.forEach(q => m.appendChild(op(q, false)));
-      else m.appendChild(h('<div class="dica">Os quadros que abrir no SpruceNote aparecem aqui. Abra o quadro na EduSpruce e atualize a lista.</div>'));
+      else m.appendChild(h('<div class="dica">Os quadros que abrir no Spruce Notes aparecem aqui. Abra o quadro na EduSpruce e atualize a lista.</div>'));
       const at = h('<button type="button" class="op mut">' + ic('rec', 15) + '<span>Atualizar a lista</span></button>');
       at.onclick = () => this.abrirMenu(true);
       m.appendChild(h('<hr>'));

@@ -1,15 +1,15 @@
 @parte I | Começar | O que é a EduSpruce, entrar pela primeira vez, conhecer o ecrã, as Apps e o Início
 
 # Bem-vindo à EduSpruce
-A **EduSpruce** reúne num só sítio todo o trabalho do professor: turmas e alunos, horários e calendário, aulas e sumários, critérios, instrumentos e pautas, direção de turma, reuniões e documentos, ensino profissional e PROFIJ — e um conjunto de apps para usar com os alunos (**SpruceApps**: Spruce It, Pulso, Formulários e Provas) e para se organizar (**SpruceNote**). Funciona no computador, no iPad e no telemóvel, sempre com os mesmos dados.
+A **EduSpruce** reúne num só sítio todo o trabalho do professor: turmas e alunos, horários e calendário, aulas e sumários, critérios, instrumentos e pautas, direção de turma, reuniões e documentos, ensino profissional e PROFIJ — e um conjunto de apps para usar com os alunos (**SpruceApps**: Spruce It!, Spruce Live, Spruce Forms e Spruce Exam) e para se organizar (**Spruce Notes**). Funciona no computador, no iPad e no telemóvel, sempre com os mesmos dados.
 Este manual foi escrito para **quem abre a app pela primeira vez** e a quer usar a 100%. Está organizado por **app e módulo**: cada capítulo diz para que serve, o que é cada botão, como se faz passo a passo e dá exemplos. Todas as imagens foram tiradas com o tema **Spruce** e com os **dados de demonstração** da própria app (escolas, alunos e professores fictícios).
 ## Como a app está organizada
 Tudo assenta em três níveis: **Escola → Ano letivo → Turmas**. Cada escola tem o seu calendário, a sua organização do ano (3 períodos ou 2 semestres) e os seus cargos — pode dar aulas em duas escolas ao mesmo tempo sem nunca misturar dados. Dentro de cada turma estão os alunos, o horário, os sumários, os critérios, os instrumentos e a avaliação.
 | Grupo | O que inclui |
 | Gestão | Turmas e alunos, avaliação, sumários, direção de turma, documentos, Coord. PROFIJ |
-| SpruceApps | Spruce It (jogos), Pulso (avaliação em tempo real), Formulários, Provas |
+| SpruceApps | Spruce It! (jogos), Spruce Live (avaliação em tempo real), Spruce Forms, Spruce Exam |
 | Escola e comunicação | Reuniões, Jornal Escolar, Contactos, As Minhas Tarefas |
-| Organização | SpruceNote, JornalNote, Biblioteca, Notas Flutuantes, Web Clipper |
+| Organização | Spruce Notes, JornalNote, Biblioteca, Notas Flutuantes, Web Clipper |
 ## Endereços
 - **eduspruce.pt** — a app (entra-se com a conta Google autorizada). **eduspruce.github.io** — espelho para redes que bloqueiam o endereço principal (mesmos dados).
 - **eduspruce.app** — página de apresentação e Changelog público.
@@ -72,7 +72,7 @@ Depois de importar turmas, alunos e horários, ligue o bloqueio: nada se apaga n
 # O menu lateral
 !> menu-nomes | O menu lateral do tema Spruce: Geral, as SpruceApps, as turmas e a Configuração.
 ## Parte geral
-**Início**, **Apps** (aparece a partir do 7.º módulo ativo), **Ano Letivo e Turmas**, **O Meu Horário**, **Calendário Escolar**, **Minhas Tarefas** (com contador), **Reuniões**, **Direção de Turma** (só para DT), **Biblioteca**, **Documentos**, **Contactos**, **Spruce It**, **Pulso**, **Formulários**, **Jornal Escolar** e **JornalNote**, **Coord. PROFIJ**, **SpruceNote**, **Provas** e **O Meu Calendário**.
+**Início**, **Apps** (aparece a partir do 7.º módulo ativo), **Ano Letivo e Turmas**, **O Meu Horário**, **Calendário Escolar**, **Minhas Tarefas** (com contador), **Reuniões**, **Direção de Turma** (só para DT), **Biblioteca**, **Documentos**, **Contactos**, **Spruce It!**, **Spruce Live**, **Spruce Forms**, **Jornal Escolar** e **JornalNote**, **Coord. PROFIJ**, **Spruce Notes**, **Spruce Exam** e **O Meu Calendário**.
 Cada item só aparece se o módulo estiver ligado em [[Definições › Os Meus Módulos]]. Os números a laranja são avisos por tratar.
 ## Turmas
 Por baixo ficam as turmas (com o número do ano no ícone; as PROFIJ sem número). Toque numa turma para abrir as secções: Painel da Turma, Alunos, Planta da Sala, Horário, Modo Aula, Sumários, Sorteio, Critérios, Marcação de Testes, Instrumentos, Produção Oral, Domínios, Análise de Resultados, Avaliação Intercalar, Avaliação Final e Relatórios. Turmas profissionais têm também **Módulos** e **Recuperação (MRA)**; turmas PROFIJ, **Planos de Recuperação**. Turmas com várias disciplinas mostram as disciplinas por baixo do nome.
@@ -86,12 +86,12 @@ Menu **Apps**. Um painel com um mosaico por app, agrupados em **Gestão**, **Spr
 !hub | Apps: Gestão (com a turma escolhida), SpruceApps, Escola e Comunicação.
 ## O que há no ecrã
 - **Turma** (no grupo Gestão) — escolhe a turma a que abrem Avaliação e Sumários.
-- Cada mosaico mostra o nome, a descrição e um resumo (ex.: «6 turmas · 98 alunos», «1 conjunto de perguntas») e etiquetas como **Nunca conta para a nota** (Spruce It), **Formativo · conta se escolher** (Pulso) e **Liga à Avaliação** (Formulários e Provas).
+- Cada mosaico mostra o nome, a descrição e um resumo (ex.: «6 turmas · 98 alunos», «1 conjunto de perguntas») e etiquetas como **Nunca conta para a nota** (Spruce It!), **Formativo · conta se escolher** (Spruce Live) e **Liga à Avaliação** (Spruce Forms e Spruce Exam).
 - **Abrir aqui ao entrar** — a app abre sempre nas Apps em vez do Início.
 - **Personalizar** — toque num ícone para lhe mudar o ícone e a cor; ‹ › muda a ordem das apps e ↑ ↓ a ordem dos grupos; **Concluído** termina.
-!!hub-baixo,hub-personalizar | Mais abaixo: Organização (SpruceNote, JornalNote, Biblioteca); à direita, o modo Personalizar.
+!!hub-baixo,hub-personalizar | Mais abaixo: Organização (Spruce Notes, JornalNote, Biblioteca); à direita, o modo Personalizar.
 ## As SpruceApps abrem à parte
-Spruce It, Pulso, Formulários e Provas abrem **sem o menu lateral**, com uma barra de cima numa só linha. Para voltar à EduSpruce toque no **ícone da casa** (canto superior esquerdo). Na primeira abertura cada uma mostra uma apresentação animada; o botão **Ver exemplo** (em baixo, à direita) volta a mostrá-la.
+Spruce It!, Spruce Live, Spruce Forms e Spruce Exam abrem **sem o menu lateral**, com uma barra de cima numa só linha. Para voltar à EduSpruce toque no **ícone da casa** (canto superior esquerdo). Na primeira abertura cada uma mostra uma apresentação animada; o botão **Ver exemplo** (em baixo, à direita) volta a mostrá-la.
 ? Um módulo desligado desaparece das Apps e do menu; se todos os módulos de um grupo estiverem desligados, o grupo desaparece.
 
 # Início
@@ -103,7 +103,7 @@ O Início é o painel do dia. Tem duas vistas, **Simples** (cartões grandes) e 
 - **Desempenho por Critério** — média da turma escolhida, positivas e domínios forte e a reforçar.
 - **O Meu Dia** — as aulas de hoje com **Sumário** e **Presenças**; ‹ Hoje › muda de dia.
 - **Próximas Tarefas**, **Reuniões**, **Próximos Testes**, **Matrizes a Enviar**, **Datas Importantes**, **As Minhas Turmas**, **Favoritos**, **Aniversários**, **Jornal Escolar** e a cópia de segurança.
-- O atalho **SpruceNote Web Clipper › Instalar** (só no computador) desaparece quando a extensão está instalada ou com **Não mostrar mais**.
+- O atalho **Spruce Notes Web Clipper › Instalar** (só no computador) desaparece quando a extensão está instalada ou com **Não mostrar mais**.
 !!inicio-simples-baixo,inicio-geral | O Meu Dia com a aula a decorrer; a vista Geral com botões rápidos e filtros.
 ## Personalizar e avisos
 !!inicio-personalizar,inicio-avisos | Personalizar (ligar/desligar e ordenar cartões) e Ver Avisos.
@@ -189,7 +189,7 @@ Menu **O Meu Horário**. O seu horário semanal com todas as turmas e os tempos 
 > Exemplo: tem «Apoio a alunos» à sexta das 11:45 às 12:30. **Acrescentar**, tipo «Apoio», dia «Sex», toque no tempo 11:45–12:30 e **Guardar**.
 
 # O Meu Calendário
-Menu **O Meu Calendário**. Agenda pessoal que junta aulas, reuniões, testes, tarefas, Provas agendadas e o calendário escolar com os seus eventos.
+Menu **O Meu Calendário**. Agenda pessoal que junta aulas, reuniões, testes, tarefas, provas agendadas (Spruce Exam) e o calendário escolar com os seus eventos.
 !meucal-Mês | Vista Mês: calendário pequeno, os seus calendários e as camadas da EduSpruce.
 ## Vistas
 **Dia**, **3 dias**, **Semana de trabalho**, **Semana**, **Mês**, **Agenda** e **Ano letivo**; **Hoje**, ‹ › e o calendário pequeno mudam de data.
@@ -201,5 +201,5 @@ Menu **O Meu Calendário**. Agenda pessoal que junta aulas, reuniões, testes, t
 3. Lembretes e **Guardar**.
 > Exemplo de adição rápida: escreva em «Adicionar rapidamente» o texto «Reunião de pais amanhã às 18h30» e carregue em +.
 ## Camadas e e-mails
-Em **Os Meus Calendários** e **Da EduSpruce** ligue ou desligue Aulas, Reuniões, Testes, Tarefas, Provas e Calendário escolar. **Arraste um e-mail** (Outlook ou outro) para o calendário para criar o evento ou a reunião — só funciona aqui e no Calendário Escolar. Use **.ics** para importar/exportar.
+Em **Os Meus Calendários** e **Da EduSpruce** ligue ou desligue Aulas, Reuniões, Testes, Tarefas, Spruce Exam e Calendário escolar. **Arraste um e-mail** (Outlook ou outro) para o calendário para criar o evento ou a reunião — só funciona aqui e no Calendário Escolar. Use **.ics** para importar/exportar.
 ? Os eventos **Privados** aparecem como «Ocupado» no modo de apresentação.

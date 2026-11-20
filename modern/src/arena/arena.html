@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5efe2">
 <meta name="robots" content="noindex">
-<title>Spruce It</title>
+<title>Spruce It!</title>
 <link rel="icon" href="favicon.png">
 <link rel="stylesheet" href="fontes/fontes.css">
 <style>
@@ -138,9 +138,9 @@ let CFG=null;const st={};
 function tema(k){k=AR.temaOk(k||'');if(st.tema===k)return;st.tema=k;document.documentElement.style.cssText=AR.temaCss(k);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=AR.TEMAS[k].v['--bg'];try{localStorage.setItem('arena.tema',k)}catch(_){}}
 {let k0='';try{k0=new URLSearchParams(location.search).get('tema')||localStorage.getItem('arena.tema')||''}catch(_){}tema(k0)}
 let tPoll=null,tRel=null,canal=null,ocupado=false,ecraAtual='';
-async function cfg(){if(CFG)return CFG;let c=window.__ES_SB;if(!c||typeof c!=='object'){try{c=await (await fetch('supabase-config.json',{cache:'no-store'})).json()}catch(_){c=null}}if(!c||!c.url)throw new Error('O Spruce It não está configurado.');CFG=c;return c}
+async function cfg(){if(CFG)return CFG;let c=window.__ES_SB;if(!c||typeof c!=='object'){try{c=await (await fetch('supabase-config.json',{cache:'no-store'})).json()}catch(_){c=null}}if(!c||!c.url)throw new Error('O Spruce It! não está configurado.');CFG=c;return c}
 async function rpc(fn,args){const c=await cfg();let r;try{r=await fetch(c.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:c.anonKey,Authorization:'Bearer '+c.anonKey},body:JSON.stringify(args)})}catch(e){const x=new Error('Sem ligação. A tentar de novo…');x.rede=true;throw x}
-  if(!r.ok){const t=await r.text();const x=new Error(r.status===404?'O Spruce It ainda não está disponível nesta escola.':'Erro do servidor ('+r.status+').');x.http=r.status;x.det=t;throw x}return r.json()}
+  if(!r.ok){const t=await r.text();const x=new Error(r.status===404?'O Spruce It! ainda não está disponível nesta escola.':'Erro do servidor ('+r.status+').');x.http=r.status;x.det=t;throw x}return r.json()}
 const MSG={espere:'Demasiadas tentativas falhadas a partir desta rede. Espera uns minutos e tenta de novo.',sala:'Não encontrei essa sala, ou o jogo já terminou. Confirma o código.',limite:'O prazo deste trabalho de casa já passou.',alcunha:'A alcunha precisa de 2 a 24 carateres.',impropria:'Essa alcunha não pode ser usada. Escolhe outra.',
   emuso:'Esse nome já está a ser usado por outro aparelho. Se és tu, espera uns segundos e tenta de novo.',tardia:'O jogo já começou e o professor não deixa entrar depois do início.',cheia:'A sala está cheia.',expulso:'O professor tirou-te deste jogo.',lista:'Escolhe o teu nome na lista.',pedido:'Pedido inválido.'};
 const guardar=()=>{try{localStorage.setItem('arena.'+st.id,JSON.stringify({j:st.j,tok:st.tok,alcunha:st.alcunha,ref:st.ref||null,code:st.code}))}catch(_){}};
