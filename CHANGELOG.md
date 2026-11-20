@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.171
+- Spruce Exam: a barra de atalhos acaba alinhada com o fundo do menu lateral
+
 ## 1.170
 - Spruce It!: «Modos de jogo» ocupa todo o espaço à esquerda, em duas colunas nos ecrãs largos
 
