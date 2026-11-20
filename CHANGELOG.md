@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.175
+- Apps: retirado o título repetido «Apps» (já está no topo)
+
 ## 1.174
 - Spruce It!: «Modos de jogo» e conteúdo centrados (margem esquerda igual à direita)
 

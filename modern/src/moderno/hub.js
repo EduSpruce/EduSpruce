@@ -155,7 +155,7 @@ function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
   const a0=A(),TL=a0?turmasFiltradas(a0):[],t0=T();
   const selT=`<label class="hub-tur${t0?'':' falta'}" data-semprop><span>Turma</span><select id="hb-tur" aria-label="Turma para Avaliação e Sumários">${t0?'':'<option value="">— Escolher a turma —</option>'}${TL.map(t=>`<option value="${esc(t.id)}"${t0&&t.id===t0.id?' selected':''}>${esc(t.nome+' · '+(t.disciplina||''))}</option>`).join('')}</select></label>`;
   $('#view').innerHTML=`<div class="hub${ed?' edit':''}">
-    <div class="hub-top"><div><h2>${ic('apps',22)}Apps</h2><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
+    <div class="hub-top"><div><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
       <div class="hub-bar"><label class="chk" style="margin:0"><input type="checkbox" id="hb-ini" ${hubIni()?'checked':''}> <span>Abrir aqui ao entrar</span></label>
         <button class="btn${ed?' pri':''}" id="hb-ed">${ic(ed?'check':'pencil',15)} ${ed?'Concluído':'Personalizar'}</button></div></div>
     ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id&&(!a.on||a.on()));return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(hubNomeGr(g))}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
