@@ -155,7 +155,7 @@ function vHub(){hubCss();const h=hubCfg();const ed=!!UI.hubEd;let i=0;
   const a0=A(),TL=a0?turmasFiltradas(a0):[],t0=T();
   const selT=`<label class="hub-tur${t0?'':' falta'}" data-semprop><span>Turma</span><select id="hb-tur" aria-label="Turma para Avaliação e Sumários">${t0?'':'<option value="">— Escolher a turma —</option>'}${TL.map(t=>`<option value="${esc(t.id)}"${t0&&t.id===t0.id?' selected':''}>${esc(t.nome+' · '+(t.disciplina||''))}</option>`).join('')}</select></label>`;
   $('#view').innerHTML=`<div class="hub${ed?' edit':''}">
-    <div class="hub-top"><div><div class="mut">${esc(hoje.charAt(0).toUpperCase()+hoje.slice(1))}${ed?' · toque num ícone para o personalizar':''}</div></div>
+    <div class="hub-top"><div><div class="hub-data"><b class="hub-dn">${new Date().getDate()}</b><span><b>${esc((d=>d.charAt(0).toUpperCase()+d.slice(1))(new Date().toLocaleDateString('pt-PT',{weekday:'long'})))}</b><small>${esc(new Date().toLocaleDateString('pt-PT',{month:'long',year:'numeric'}))}</small></span></div>${ed?'<div class="mut">Toque num ícone para o personalizar</div>':''}</div>
       <div class="hub-bar"><label class="chk" style="margin:0"><input type="checkbox" id="hb-ini" ${hubIni()?'checked':''}> <span>Abrir aqui ao entrar</span></label>
         <button class="btn${ed?' pri':''}" id="hb-ed">${ic(ed?'check':'pencil',15)} ${ed?'Concluído':'Personalizar'}</button></div></div>
     ${HUB_GRUPOS.map(g=>{const L=HUB_APPS.filter(a=>a.gr===g.id&&(!a.on||a.on()));return L.length?`<section class="hub-gr"><div class="hub-sec">${ic(g.g,18)}<span>${esc(hubNomeGr(g))}</span>${L.some(a=>a.turma)&&TL.length?selT:''}</div><div class="hub-grid">${L.map(tile).join('')}</div></section>`:''}).join('')}
@@ -261,3 +261,6 @@ html body .hub.hub,html body.est-sge .hub.hub{max-width:none;margin:0;padding:0 
 html body .hub-grid.hub-grid,html body.est-sge .hub-grid.hub-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
 html body .hub-grid.hub-grid>.hbt{min-width:0;max-width:none;flex:none}
 `;document.head.appendChild(s)}
+
+/* 1.176 — data grande no topo das Apps (como no cartão do Início) */
+{const st=document.createElement('style');st.textContent=`html body .hub .hub-data{display:flex;align-items:center;gap:14px;margin:2px 0 4px}html body .hub .hub-dn{font-size:clamp(44px,5vw,64px);line-height:.9;font-weight:800;color:var(--acc,#0f6c96);letter-spacing:-.02em}html body .hub .hub-data span{display:flex;flex-direction:column;gap:2px}html body .hub .hub-data span b{font-size:clamp(20px,2vw,26px);font-weight:800;color:var(--ink)}html body .hub .hub-data small{font-size:clamp(15px,1.4vw,18px);color:var(--mut)}`;document.head.appendChild(st)}

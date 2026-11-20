@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.176
+- Apps: data grande no topo, como no cartão do Início
+
 ## 1.175
 - Apps: retirado o título repetido «Apps» (já está no topo)
 
