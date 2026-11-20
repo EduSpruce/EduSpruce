@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.163
+- Dia 20 nas escolas de ensino regular: aviso de dia de ordenado no cartão de hoje e fogo de artifício na primeira entrada do dia («Conseguiste! É dia 20 outra vez!»)
+
 ## 1.162
 - Spruce It: com «Como funciona» fechado, a página ocupa também o espaço da direita
 
