@@ -1,4 +1,4 @@
-/* ===================== 1.138 · Spruce Notes e JornalNote: quadro de demonstração  =====================
+/* ===================== 1.138 · Spruce Notes e Jornal Notes: quadro de demonstração  =====================
    Aparece uma vez, na primeira entrada em cada contexto (S.cfg.mqDemo.sn / .snj), e volta a abrir no botão «Ver exemplo»
    no canto inferior direito do quadro. Só dados fictícios. «Criar quadro de exemplo» acrescenta um subquadro — nunca apaga nada. */
 const MQD={
@@ -11,7 +11,7 @@ const MQD={
     q1:['Brainstorm','12 cartões'],q2:['Visita de estudo','8 cartões, 2 ficheiros'],
     tab:['Visita de estudo','Custo',[['Autocarro','180,00 €'],['Entradas (24 alunos)','96,00 €'],['Lanche','60,00 €']],'336,00 €'],
     roda:['Criativo','Colaborativo','Organizado'],arte:'escola'},
-  snj:{nome:'JornalNote',tit:'Cada edição, num só quadro.',sub:'O JornalNote junta artigos, fotografias, entrevistas e prazos do jornal escolar.',
+  snj:{nome:'Jornal Notes',tit:'Cada edição, num só quadro.',sub:'O Jornal Notes junta artigos, fotografias, entrevistas e prazos do jornal escolar.',
     bc:['Início','Jornal Escolar','Edição de dezembro'],quadro:'Edição de dezembro',
     sobre:['Sobre','1 cartão, 1 ficheiro','<b>Edição de dezembro</b> do jornal da escola: tema <mark>«a escola que queremos»</mark>, com reportagens das turmas, uma entrevista e a página de desporto.','Pauta-de-dezembro.pdf','96 KB'],
     cor:['#F59E0B','Âmbar Jornal'],insp:['Capa','1 cartão, 1 ficheiro'],tipo:['Aa','Tipo de letra da manchete'],video:['entrevista.mp4','132,6 MB'],
@@ -34,11 +34,11 @@ function mqdQuadro(d){const ico=n=>ic(n,13);
     <div class="mqd-c mqd-sobre" style="--d:.15s"><h5>${d.sobre[0]}</h5><small>${d.sobre[1]}</small><p>${d.sobre[2]}</p><div class="mqd-pdf"><span>pdf</span><b>${d.sobre[3]}</b><small>${d.sobre[4]}</small></div></div>
     <div class="mqd-c mqd-img" style="--d:.45s">${mqdArte(d.arte)}</div>
     <div class="mqd-c mqd-cor" style="--d:.75s;--k:${d.cor[0]}"><div>${d.cor[0]}</div><span>${d.cor[1]}</span></div>
-    <div class="mqd-c mqd-logo" style="--d:1.05s"><b>${d.nome==='JornalNote'?'O ECO':'A MINHA ESCOLA'}</b></div>
+    <div class="mqd-c mqd-logo" style="--d:1.05s"><b>${d.nome==='Jornal Notes'?'O ECO':'A MINHA ESCOLA'}</b></div>
     <svg class="mqd-seta" viewBox="0 0 120 60" aria-hidden="true"><path d="M112 14 C80 2 30 4 10 42"/><path d="M4 30 L10 44 L24 38"/></svg>
     <div class="mqd-c mqd-insp" style="--d:1.35s"><h5>${d.insp[0]}</h5><small>${d.insp[1]}</small><div class="mqd-abc"><b>${d.tipo[0]}</b></div><span class="mqd-leg">${d.tipo[1]}</span>
       <div class="mqd-vid"><i>▶</i></div><div class="mqd-fich"><span>▷</span><b>${d.video[0]}</b><small><u>Descarregar</u> · ${d.video[1]}</small></div></div>
-    <div class="mqd-c mqd-textura" style="--d:1.65s"><div></div><span>${d.nome==='JornalNote'?'Papel reciclado':'Textura dos cartazes'}</span></div>
+    <div class="mqd-c mqd-textura" style="--d:1.65s"><div></div><span>${d.nome==='Jornal Notes'?'Papel reciclado':'Textura dos cartazes'}</span></div>
     <div class="mqd-c mqd-com" style="--d:2.4s"><div class="mqd-av">${d.com[0][0]}</div><div><b>${d.com[0]}</b> <small>${d.com[1]}</small><p>${d.com[2]}</p><a>Responder</a></div></div>
     <div class="mqd-c mqd-lista" style="--d:1.95s"><h5>${d.lista[0]}</h5>${d.lista[1].map((l,i)=>`<label class="${l[1]?'f':''}${i===1?' mqd-anim':''}"><span></span>${l[0]}</label>`).join('')}</div>
     <div class="mqd-c mqd-q mqd-q1" style="--d:2.1s"><div>${ico('grid')}</div><b>${d.q1[0]}</b><small>${d.q1[1]}</small></div>

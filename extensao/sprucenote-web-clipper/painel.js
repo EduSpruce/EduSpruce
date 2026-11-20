@@ -475,7 +475,7 @@
         b.querySelector('b').textContent = q.nome;
         const sm = b.querySelector('small');
         if (raiz) sm.textContent = q.c === 'snj' ? 'Quadros do Jornal Escolar' : 'O quadro principal';
-        else if (q.cam || q.c === 'snj') sm.textContent = (q.c === 'snj' ? 'JornalNote' + (q.cam ? ' › ' : '') : '') + (q.cam || ''); else sm.remove();
+        else if (q.cam || q.c === 'snj') sm.textContent = (q.c === 'snj' ? 'Jornal Notes' + (q.cam ? ' › ' : '') : '') + (q.cam || ''); else sm.remove();
         b.onclick = () => { this.destino = {c: q.c, id: q.id, nome: q.nome, cor: q.cor}; this.fecharMenu(); this._rodape(); this.rod.querySelector('[data-gu]').focus(); };
         return b;
       };

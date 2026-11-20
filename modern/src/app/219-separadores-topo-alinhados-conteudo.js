@@ -110,8 +110,8 @@ document.addEventListener('change',e=>{const el=e.target;if(!el||!el.dataset||!e
   save();toast('Guardado no curso '+nome,'ok')},true);
 {const _vcFP=vCalendario;vCalendario=function(){const r=_vcFP.apply(this,arguments);try{fpMarcar()}catch(e){console.warn(e)}return r}}
 {const _gFP=go;go=function(v){const r=_gFP.apply(this,arguments);try{$$('[data-v="intercalar"]').forEach(b=>{b.style.display=semIntercalar()?'none':''});fpMarcar()}catch(e){console.warn(e)}return r}}
-/* Spruce Notes e JornalNote: ao entrar, o quadro ajusta-se sozinho ao ecrã */
+/* Spruce Notes e Jornal Notes: ao entrar, o quadro ajusta-se sozinho ao ecrã */
 {const _gMQ=go;go=function(v){const ant=VIEW;const r=_gMQ.apply(this,arguments);try{if((v==='sprucenote'||v==='snjornal')&&ant!==v){let n=0;const f=()=>{const b=document.getElementById('mq-zf');if(b&&document.querySelector('[data-mq]')){b.click()}else if(b&&n>6){}else if(n++<12)setTimeout(f,120)};setTimeout(f,150)}}catch(_){}return r};if(_gMQ._f)go._f=_gMQ._f}
-/* JornalNote: o quadro principal antigo passa a chamar-se JornalNote */
-setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='JornalNote';save()}}catch(_){}},1200);
+/* Jornal Notes: o quadro principal antigo passa a chamar-se Jornal Notes */
+setTimeout(()=>{try{const q=S.snj&&S.snj.quadros;const r=q&&q.find(x=>x.id==='raiz');if(r&&r.nome==='SpruceNote do Jornal'){r.nome='Jornal Notes';save()}}catch(_){}},1200);
 

@@ -22,8 +22,8 @@ const HUB_APPS=[
    info:()=>{const t=T();return t?'Turma '+t.nome+' · '+t.disciplina:'Escolha a turma acima'},turma:1},
   {id:'arena',gr:'recreio',n:'Spruce It!',v:'arena',g:['mvArena','sparkle'],c:'roxo',d:'Joga e aprende',on:()=>typeof arOn!=='function'||arOn(),
    info:()=>hubN(((S.arena||{}).conj||[]).length,'conjunto de perguntas','conjuntos de perguntas'),tag:'Nunca conta para a nota'},
-  {id:'pulso',gr:'recreio',n:'Spruce Live',v:'pulso',g:['mvPulso','target'],c:'#f97316',d:'Pergunta e vê',on:()=>typeof puOn!=='function'||puOn(),
-   info:()=>hubN(((S.pulso||{}).quiz||[]).length,'questionário','questionários'),tag:'Formativo · conta se escolher'},
+  {id:'pulso',gr:'recreio',n:'Spruce Live',v:'pulso',g:['mvPulso','target'],c:'#dc2626',d:'Pergunta e vê',on:()=>typeof puOn!=='function'||puOn(),
+   info:()=>hubN(((S.pulso||{}).quiz||[]).length,'questionário','questionários'),tag:'Só conta se quiser'},
   {id:'forms',gr:'recreio',n:'Spruce Forms',v:'forms',g:['mvForms','clipboard'],c:'ciano',d:'Recolhe e organiza',on:()=>typeof fmOn!=='function'||fmOn(),
    info:()=>{const F=Array.isArray(S.forms)?S.forms:[];const r=F.reduce((s,o)=>s+((o.resp||[]).length),0);return hubN(F.length,'formulário','formulários')+(r?' · '+hubN(r,'resposta','respostas'):'')},tag:'Liga à Avaliação'},
   {id:'provas',gr:'recreio',n:'Spruce Exam',v:'provas',g:['award'],c:'ambar',d:'Testa e avalia',on:()=>typeof pvOn!=='function'||pvOn(),
@@ -38,7 +38,7 @@ const hubG=(a,o)=>{const c=(o||hubCfg().ic[a.id]||{}).g;if(c&&ICONS[c])return c;
 const HUB_SGE={sgeAzul:['#1b93c6','#1b93c6'],sgeEscuro:['#0e7095','#0e7095'],sgeLaranja:['#f39200','#f39200'],sgeCeu:['#5bb7de','#2a9fd0'],sgeCinza:['#7a8a96','#55656f'],sgeVerde:['#16a34a','#15803d'],sgeTeal:['#0f8b8d','#0b6b6d'],sgeVermelho:['#dc2626','#b91c1c'],sgeTerra:['#c2410c','#9a3412'],sgeAmbar:['#f59e0b','#b45309'],sgeRoxo:['#7c3aed','#5b21b6'],sgeProvas:['#22c55e','#15803d']};
 Object.assign(HUB_CORES,HUB_SGE);
 /* 1.076: cada app com a sua cor dentro da paleta SGE */
-const HUB_SGE_DEF={turmas:'sgeAzul',avaliacao:'sgeVerde',sumarios:'sgeCeu',arena:'sgeRoxo',pulso:'sgeTerra',forms:'sgeTeal',provas:'sgeProvas',sprucenote:'sgeAmbar'};
+const HUB_SGE_DEF={turmas:'sgeAzul',avaliacao:'sgeVerde',sumarios:'sgeCeu',arena:'sgeRoxo',pulso:'sgeVermelho',forms:'sgeTeal',provas:'sgeProvas',sprucenote:'sgeAmbar'};
 const hubSge=()=>{try{return document.body.classList.contains('est-sge')}catch(_){return false}};
 const hubCorDef=a=>hubSge()?(HUB_SGE_DEF[a.id]||'sgeAzul'):a.c;
 const hubCor=(a,o)=>{const c=((o||hubCfg().ic[a.id]||{}).c)||hubCorDef(a);if(HUB_CORES[c])return HUB_CORES[c];if(/^#[0-9a-f]{6}$/i.test(c))return[c,'color-mix(in srgb,'+c+' 62%,#000)'];return HUB_CORES[a.c]};

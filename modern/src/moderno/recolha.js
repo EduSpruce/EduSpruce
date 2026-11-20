@@ -4,14 +4,14 @@
    · arruma esses recortes no quadro escolhido, numa coluna «Por Arrumar», e apaga a linha.
      Antes de arrumar, reclama a linha (muda-lhe o nome para ef-f-snic-…): dois aparelhos abertos nunca arrumam o mesmo recorte.
      A linha só é apagada depois de os dados da app estarem gravados na base de dados.
-   · escreve em «ef-f-snidx.bin» (cifrada) a lista dos quadros do Spruce Notes/JornalNote e dos abertos mais recentemente,
+   · escreve em «ef-f-snidx.bin» (cifrada) a lista dos quadros do Spruce Notes/Jornal Notes e dos abertos mais recentemente,
      que a extensão mostra em «Guardar em ▾»
    · abre um quadro pela ligação #sn=sn:<id> ou #sn=snj:<id> («Abrir» na extensão) */
 const SNW_IN='ef-f-snin-',SNW_OC='ef-f-snic-',SNW_IDX='ef-f-snidx.bin',SNW_COL='Por Arrumar';
 let _snwRec=null,_snwPend=[],_snwSig='',_snwIdxT=0,_snwOn=false,_snwProx=false,_snwUlt=0;
 const snwPronto=()=>{try{const L=nvL();return !!(window.__esPronto&&L.prov==='supabase'&&(L.k||_nvK))}catch(_){return false}};
 const snwGravado=()=>{try{nvMarcar()}catch(_){}try{return !Object.keys(nvL().mod||{}).length&&!_nvBusy}catch(_){return false}};
-/* os quadros de cada contexto (sn = Spruce Notes, snj = JornalNote), sem depender do que está aberto no ecrã */
+/* os quadros de cada contexto (sn = Spruce Notes, snj = Jornal Notes), sem depender do que está aberto no ecrã */
 function snwQuadros(c){const k=UI.mqCtx;UI.mqCtx=c==='snj'?'jornal':'prof';try{return MQ()}finally{UI.mqCtx=k}}
 /* só os quadros ligados à raiz (os que estão na lixeira ficam de fora) */
 function snwAlc(Q){const por=new Map(Q.filter(q=>q&&q.id).map(q=>[q.id,q]));const raiz=por.get('raiz')||Q[0];if(!raiz)return new Set();const vis=new Set([raiz.id]),fila=[raiz];
@@ -68,7 +68,7 @@ async function snwRecolher(){if(_snwOn){_snwProx=true;return}if(!snwPronto())ret
       const ok=snwOk();novos.forEach(x=>ok.push(x.id));if(ok.length>300)ok.splice(0,ok.length-300);save();
       /* se o quadro está à vista: mostra os recortes; se a coluna é nova, ajusta o quadro ao ecrã para ela aparecer */
       try{if((VIEW==='sprucenote'||VIEW==='snjornal')&&!_mqEd&&$('#mq-its')){mqRender();const c=VIEW==='snjornal'?'snj':'sn',u=mqUI();if(onde.some(w=>w.nova&&w.c===c&&w.q===u.q)&&$('#mq-zf'))$('#mq-zf').click()}}catch(_){}
-      if(n)toast((n===1?'Chegou 1 recorte da Web':'Chegaram '+n+' recortes da Web')+' ao '+(onde.every(w=>w.c==='snj')?'JornalNote':'Spruce Notes')+' (coluna «'+SNW_COL+'»).','ok');
+      if(n)toast((n===1?'Chegou 1 recorte da Web':'Chegaram '+n+' recortes da Web')+' ao '+(onde.every(w=>w.c==='snj')?'Jornal Notes':'Spruce Notes')+' (coluna «'+SNW_COL+'»).','ok');
       if(await snwEsperarGravado())novos.forEach(x=>apagar.push(x.nome))}
     for(const n of apagar){try{await cli.from(T).delete().eq('nome',n)}catch(_){}}}
   catch(e){console.warn('[EduSpruce] recortes da extensão:',e&&e.message)}
@@ -216,7 +216,7 @@ html body.est-sge .diagcol-n{border-radius:0}
 html body .diagcol.fech>:not(h2){display:none!important}
 html body .diagcol.fech>h2{margin-bottom:0!important}
 `;document.head.appendChild(s)}
-/* 1.093 — todos os módulos nas Apps (Jornal Escolar, JornalNote, Contactos, Coord. PROFIJ), agrupados, cada um com a sua cor da paleta;
+/* 1.093 — todos os módulos nas Apps (Jornal Escolar, Jornal Notes, Contactos, Coord. PROFIJ), agrupados, cada um com a sua cor da paleta;
    o mesmo logótipo de cor aparece no título de cada módulo */
 {try{Object.assign(HUB_CORES,{sgeRoxo:['#7c3aed','#6d28d9'],sgeRosa:['#db2777','#be185d'],sgeIndigo:['#4f46e5','#4338ca'],sgeLima:['#65a30d','#4d7c0f'],sgeMagenta:['#c026d3','#a21caf'],sgeArdosia:['#475569','#334155']});
   Object.assign(HUB_SGE_DEF,{jornal:'sgeRosa',jornalnote:'sgeRoxo',contactos:'sgeCinza',cprofij:'sgeIndigo',roda:'sgeLima',autoav:'sgeMagenta',digit:'sgeArdosia'});
@@ -227,7 +227,7 @@ html body .diagcol.fech>h2{margin-bottom:0!important}
    {id:'cprofij',gr:'gestao',n:'Coord. PROFIJ',v:'cprofij',g:['award'],c:'indigo',d:'Coordenação do Programa PROFIJ',on:on('cpOn')},
    {id:'jornal',gr:'escola',n:'Jornal Escolar',v:'jornal',g:['file'],c:'vermelho',d:'Plano Anual de Atividades, peças e edições',on:on('jnOn')},
    {id:'contactos',gr:'escola',n:'Contactos',v:'contactos',g:['mail'],c:'ardosia',d:'E-mails dos colegas e dos diretores de turma',on:on('contOn')},
-   {id:'jornalnote',gr:'org',n:'JornalNote',v:'snjornal',g:['pen'],c:'indigo',d:'Quadros de ideias do Jornal Escolar',on:()=>on('jnOn')()&&on('snOn')()}];
+   {id:'jornalnote',gr:'org',n:'Jornal Notes',v:'snjornal',g:['pen'],c:'indigo',d:'Quadros de ideias do Jornal Escolar',on:()=>on('jnOn')()&&on('snOn')()}];
   novos.forEach(a=>{if(!HUB_APPS.some(x=>x.id===a.id)){const i=HUB_APPS.map(x=>x.gr).lastIndexOf(a.gr);HUB_APPS.splice(i<0?HUB_APPS.length:i+1,0,a)}})}catch(e){console.warn(e)}}
 function vLogo(){try{const t=$('#ttl');if(!t)return;const q=t.querySelector('.vlogo');
   const a=(typeof HUB_APPS!=='undefined'&&!document.body.classList.contains('eduapp'))?HUB_APPS.find(x=>x.v===VIEW&&(!x.on||x.on())):null;
@@ -292,7 +292,7 @@ html body.est-sge #def-mods .mdg-l>label.chk,html body.est-sge #def-mods .mdg-ic
 `;document.head.appendChild(s)}
 /* o título pode ser reescrito depois (ex.: nome da turma): o logótipo volta */
 {const liga=()=>{const t=$('#ttl');if(!t||t.dataset.vlo)return;t.dataset.vlo='1';new MutationObserver(()=>{if(!t.querySelector('.vlogo'))vLogo()}).observe(t,{childList:true})};try{liga();addEventListener('load',liga)}catch(_){}}
-/* logótipo de cor também no cabeçalho do quadro (Spruce Notes / JornalNote) */
+/* logótipo de cor também no cabeçalho do quadro (Spruce Notes / Jornal Notes) */
 function mqLogo(){try{const bc=$('#mq-bc');if(!bc||bc.previousElementSibling&&bc.previousElementSibling.classList.contains('mq-logo'))return;const a=HUB_APPS.find(x=>x.v===VIEW);if(!a)return;
   bc.insertAdjacentHTML('beforebegin',`<span class="mq-logo" aria-hidden="true">${hubIcone(a,26)}</span>`)}catch(_){}}
 if(typeof mqVista==='function'){const _mqVL=mqVista;mqVista=function(){const r=_mqVL.apply(this,arguments);mqLogo();return r}}
@@ -535,13 +535,13 @@ const nfModAplica=()=>{try{document.body.classList.toggle('modoff-nf',typeof nfO
 setTimeout(nfModAplica,400);setTimeout(nfModAplica,2500);{const _gNf=go;go=function(){const r=_gNf.apply(this,arguments);nfModAplica();return r};if(_gNf._f)go._f=_gNf._f}
 document.addEventListener('change',e=>{if(e.target&&(e.target.id==='mod-nf'||e.target.id==='nf-on'))setTimeout(nfModAplica,0)});
 {const s=document.createElement('style');s.textContent='html body.modoff-nf #nffab:not(#_a):not(#_b),html body.modoff-nf #nflayer,html body #nffab[hidden]:not(#_a):not(#_b),html body #nflayer[hidden]{display:none!important}';document.head.appendChild(s)}
-/* 1.110 — JornalNote passa a módulo opcional próprio: desligado, não aparece mesmo com o cargo do Jornal (o Jornal Escolar já tinha o seu) */
+/* 1.110 — Jornal Notes passa a módulo opcional próprio: desligado, não aparece mesmo com o cargo do Jornal (o Jornal Escolar já tinha o seu) */
 const jnnModOn=()=>{try{return !(S.cfg&&S.cfg.modulos&&S.cfg.modulos.jornalnote===false)}catch(_){return true}};
 try{const a=HUB_APPS.find(x=>x.id==='jornalnote');if(a){const o=a.on;a.on=()=>jnnModOn()&&(!o||o())}
   const g=MOD_GR.find(x=>x[0]==='Escola e Comunicação');if(g){const i=g[2].findIndex(x=>x[1]==='jornal');g[2].splice(i<0?g[2].length:i+1,0,['mod-jnn','jornalnote'])}}catch(e){console.warn(e)}
 {const _mgJn=modsAgrupar;modsAgrupar=function(){try{const M=$('#view #def-mods');if(M&&!M.dataset.grp&&!M.querySelector('#mod-jnn')){
-  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-jnn" ${jnnModOn()?'checked':''}> ${ic('pen',15)} <span><b>JornalNote</b><br><span class="mut">Quadros de ideias do Jornal Escolar (precisa do Jornal Escolar e do Spruce Notes ligados)</span></span></label>`);
-  const c=M.querySelector('#mod-jnn');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.jornalnote;else S.cfg.modulos.jornalnote=false;save();try{hubMenuMods();menuAgendar()}catch(_){}toast('JornalNote '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
+  M.insertAdjacentHTML('beforeend',`<label class="chk" style="margin-top:8px"><input type="checkbox" id="mod-jnn" ${jnnModOn()?'checked':''}> ${ic('pen',15)} <span><b>Jornal Notes</b><br><span class="mut">Quadros de ideias do Jornal Escolar (precisa do Jornal Escolar e do Spruce Notes ligados)</span></span></label>`);
+  const c=M.querySelector('#mod-jnn');c.onchange=()=>{S.cfg.modulos=S.cfg.modulos||{};if(c.checked)delete S.cfg.modulos.jornalnote;else S.cfg.modulos.jornalnote=false;save();try{hubMenuMods();menuAgendar()}catch(_){}toast('Jornal Notes '+(c.checked?'ativado':'desativado'),'ok')}}}catch(e){console.warn(e)}
   return _mgJn.apply(this,arguments)}}
 {const _gJn=go;go=function(v){if(v==='snjornal'&&!jnnModOn())v='inicio';const r=_gJn.apply(this,[v].concat([].slice.call(arguments,1)));try{hubMenuMods()}catch(_){}return r};if(_gJn._f)go._f=_gJn._f}
 setTimeout(()=>{try{hubMenuMods()}catch(_){}},1800);

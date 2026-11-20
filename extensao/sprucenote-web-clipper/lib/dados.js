@@ -45,11 +45,11 @@ function indiceDaParteGeral(G) {
   return o;
 }
 
-/* o que o painel mostra: as raízes (Spruce Notes, JornalNote) e até 10 quadros abertos recentemente */
+/* o que o painel mostra: as raízes (Spruce Notes, Jornal Notes) e até 10 quadros abertos recentemente */
 function resumo(idx) {
   idx = idx || {sn: {quadros: [{id: 'raiz', nome: 'Spruce Notes', pai: null, cor: '#60a5fa'}]}};
   const raizes = [], por = {};
-  for (const [c, nomeP] of [['sn', 'Spruce Notes'], ['snj', 'JornalNote']]) {
+  for (const [c, nomeP] of [['sn', 'Spruce Notes'], ['snj', 'Jornal Notes']]) {
     const L = idx[c] && Array.isArray(idx[c].quadros) ? idx[c].quadros : [];
     if (!L.length) continue;
     const m = new Map(L.map(q => [q.id, q]));

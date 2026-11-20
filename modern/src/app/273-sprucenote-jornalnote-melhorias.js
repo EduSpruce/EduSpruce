@@ -1,4 +1,4 @@
-/* ===================== 1.141 · Spruce Notes e JornalNote: melhorias =====================
+/* ===================== 1.141 · Spruce Notes e Jornal Notes: melhorias =====================
    · pesquisa em todos os quadros (botão ou Ctrl+F no quadro)
    · modelos de quadro (plano de aula, projeto, visita de estudo, reunião, brainstorm, pesquisa, semana, edição do jornal)
    · setas: etiqueta, tracejado, pontas (fim, ambas, nenhuma), cor, curva e inverter sentido
@@ -21,7 +21,7 @@ function mqmCentrar(q,id){const it=mqItem(q,id);if(!it)return;const base=it.pai?
   setTimeout(()=>{const el=$(`[data-mq="${it.id}"]`);if(el){el.classList.add('mqm-hit');setTimeout(()=>el.classList.remove('mqm-hit'),1600)}},60)}
 
 /* ---------- pesquisa em todos os quadros ---------- */
-function mqmPesquisa(){mqmLimpaSel();const nome=UI.mqCtx==='jornal'?'JornalNote':'Spruce Notes';
+function mqmPesquisa(){mqmLimpaSel();const nome=UI.mqCtx==='jornal'?'Jornal Notes':'Spruce Notes';
   openDrawer('Pesquisar no '+nome,`<input type="search" id="mqm-q" class="mqm-q" placeholder="Notas, tarefas, ligações, colunas, quadros…" autocomplete="off" aria-label="Pesquisar"><div id="mqm-r" class="mqm-r" role="list"></div>`);
   const inp=$('#mqm-q'),out=$('#mqm-r');let R=[];
   const corre=()=>{const v=inp.value.trim().toLowerCase();if(!v){out.innerHTML=`<p class="mut">Procura em todos os quadros do ${nome}.</p>`;return}R=[];

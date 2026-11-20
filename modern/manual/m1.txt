@@ -9,7 +9,7 @@ Tudo assenta em três níveis: **Escola → Ano letivo → Turmas**. Cada escola
 | Gestão | Turmas e alunos, avaliação, sumários, direção de turma, documentos, Coord. PROFIJ |
 | SpruceApps | Spruce It! (jogos), Spruce Live (avaliação em tempo real), Spruce Forms, Spruce Exam |
 | Escola e comunicação | Reuniões, Jornal Escolar, Contactos, As Minhas Tarefas |
-| Organização | Spruce Notes, JornalNote, Biblioteca, Notas Flutuantes, Web Clipper |
+| Organização | Spruce Notes, Jornal Notes, Biblioteca, Notas Flutuantes, Web Clipper |
 ## Endereços
 - **eduspruce.pt** — a app (entra-se com a conta Google autorizada). **eduspruce.github.io** — espelho para redes que bloqueiam o endereço principal (mesmos dados).
 - **eduspruce.app** — página de apresentação e Changelog público.
@@ -72,7 +72,7 @@ Depois de importar turmas, alunos e horários, ligue o bloqueio: nada se apaga n
 # O menu lateral
 !> menu-nomes | O menu lateral do tema Spruce: Geral, as SpruceApps, as turmas e a Configuração.
 ## Parte geral
-**Início**, **Apps** (aparece a partir do 7.º módulo ativo), **Ano Letivo e Turmas**, **O Meu Horário**, **Calendário Escolar**, **Minhas Tarefas** (com contador), **Reuniões**, **Direção de Turma** (só para DT), **Biblioteca**, **Documentos**, **Contactos**, **Spruce It!**, **Spruce Live**, **Spruce Forms**, **Jornal Escolar** e **JornalNote**, **Coord. PROFIJ**, **Spruce Notes**, **Spruce Exam** e **O Meu Calendário**.
+**Início**, **Apps** (aparece a partir do 7.º módulo ativo), **Ano Letivo e Turmas**, **O Meu Horário**, **Calendário Escolar**, **Minhas Tarefas** (com contador), **Reuniões**, **Direção de Turma** (só para DT), **Biblioteca**, **Documentos**, **Contactos**, **Spruce It!**, **Spruce Live**, **Spruce Forms**, **Jornal Escolar** e **Jornal Notes**, **Coord. PROFIJ**, **Spruce Notes**, **Spruce Exam** e **O Meu Calendário**.
 Cada item só aparece se o módulo estiver ligado em [[Definições › Os Meus Módulos]]. Os números a laranja são avisos por tratar.
 ## Turmas
 Por baixo ficam as turmas (com o número do ano no ícone; as PROFIJ sem número). Toque numa turma para abrir as secções: Painel da Turma, Alunos, Planta da Sala, Horário, Modo Aula, Sumários, Sorteio, Critérios, Marcação de Testes, Instrumentos, Produção Oral, Domínios, Análise de Resultados, Avaliação Intercalar, Avaliação Final e Relatórios. Turmas profissionais têm também **Módulos** e **Recuperação (MRA)**; turmas PROFIJ, **Planos de Recuperação**. Turmas com várias disciplinas mostram as disciplinas por baixo do nome.
@@ -86,10 +86,10 @@ Menu **Apps**. Um painel com um mosaico por app, agrupados em **Gestão**, **Spr
 !hub | Apps: Gestão (com a turma escolhida), SpruceApps, Escola e Comunicação.
 ## O que há no ecrã
 - **Turma** (no grupo Gestão) — escolhe a turma a que abrem Avaliação e Sumários.
-- Cada mosaico mostra o nome, a descrição e um resumo (ex.: «6 turmas · 98 alunos», «1 conjunto de perguntas») e etiquetas como **Nunca conta para a nota** (Spruce It!), **Formativo · conta se escolher** (Spruce Live) e **Liga à Avaliação** (Spruce Forms e Spruce Exam).
+- Cada mosaico mostra o nome, a descrição e um resumo (ex.: «6 turmas · 98 alunos», «1 conjunto de perguntas») e etiquetas como **Nunca conta para a nota** (Spruce It!), **Só conta se quiser** (Spruce Live) e **Liga à Avaliação** (Spruce Forms e Spruce Exam).
 - **Abrir aqui ao entrar** — a app abre sempre nas Apps em vez do Início.
 - **Personalizar** — toque num ícone para lhe mudar o ícone e a cor; ‹ › muda a ordem das apps e ↑ ↓ a ordem dos grupos; **Concluído** termina.
-!!hub-baixo,hub-personalizar | Mais abaixo: Organização (Spruce Notes, JornalNote, Biblioteca); à direita, o modo Personalizar.
+!!hub-baixo,hub-personalizar | Mais abaixo: Organização (Spruce Notes, Jornal Notes, Biblioteca); à direita, o modo Personalizar.
 ## As SpruceApps abrem à parte
 Spruce It!, Spruce Live, Spruce Forms e Spruce Exam abrem **sem o menu lateral**, com uma barra de cima numa só linha. Para voltar à EduSpruce toque no **ícone da casa** (canto superior esquerdo). Na primeira abertura cada uma mostra uma apresentação animada; o botão **Ver exemplo** (em baixo, à direita) volta a mostrá-la.
 ? Um módulo desligado desaparece das Apps e do menu; se todos os módulos de um grupo estiverem desligados, o grupo desaparece.

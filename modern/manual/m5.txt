@@ -92,7 +92,7 @@ Menu **Jornal Escolar** (só para o responsável pelo jornal; liga-se em Módulo
 !!jornal-Atividades_do_PAA,jornal-Calendário | Atividades do PAA e Calendário.
 !!jornal-Peças,jornal-Redação | Peças (quadro por estado) e Redação.
 
-@parte VIII | Organização | Spruce Notes, JornalNote, Spruce Notes Web Clipper e Notas Flutuantes
+@parte VIII | Organização | Spruce Notes, Jornal Notes, Spruce Notes Web Clipper e Notas Flutuantes
 
 # Spruce Notes
 Menu **Spruce Notes** (módulo opcional) — «Pensa e liga». Quadros visuais livres para planear aulas, projetos, visitas de estudo e ideias — notas, imagens, ligações, listas de tarefas, colunas e sub-quadros, arrastados para onde quiser.
@@ -111,9 +111,9 @@ Arraste um elemento da barra para o quadro: **Anotação** (texto), **Link**, **
 4. Crie um **Quadro** dentro do quadro para cada assunto (ex.: um por turma) — o caminho aparece em cima.
 > Exemplo: escolha **Modelos › Plano de projeto**, chame-lhe «PAP 12.º ano»; arraste para «A fazer» uma Pendência com as tarefas do mês e junte as imagens e ligações que for recolhendo com o Web Clipper.
 
-# JornalNote
-Menu **JornalNote** (por baixo do Jornal Escolar). Igual ao Spruce Notes, mas só com os quadros do **Jornal Escolar** — para planear edições, entrevistas e reportagens com a equipa do jornal.
-!snjornal | JornalNote: a apresentação de boas-vindas («Cada edição, num só quadro»).
+# Jornal Notes
+Menu **Jornal Notes** (por baixo do Jornal Escolar). Igual ao Spruce Notes, mas só com os quadros do **Jornal Escolar** — para planear edições, entrevistas e reportagens com a equipa do jornal.
+!snjornal | Jornal Notes: a apresentação de boas-vindas («Cada edição, num só quadro»).
 
 # Spruce Notes Web Clipper
 Extensão do Chrome que guarda **imagens, texto, ligações e vídeos** de qualquer site nos quadros do Spruce Notes. No Início, o atalho **Spruce Notes Web Clipper › Instalar** (só no computador) descarrega-a e mostra os passos.
@@ -145,10 +145,10 @@ A escolha é só da sua conta e fica logo disponível.
 | Grupo | Módulos |
 | Gestão e sala de aula | Coord. PROFIJ · Sorteio (Roda da Sorte) · Autoavaliação dos Alunos pelo Telemóvel · Digitalização de Testes · Direção de Turma · Documentos · Modo de Apresentação |
 | SpruceApps | Spruce It! · Moedas e coleção de Pinhas · Spruce Live · Spruce Forms · Spruce Exam |
-| Escola e comunicação | Reuniões · Jornal Escolar · JornalNote · Contactos |
+| Escola e comunicação | Reuniões · Jornal Escolar · Jornal Notes · Contactos |
 | Organização | Spruce Notes · Biblioteca · Notas Flutuantes · Spruce Notes Web Clipper |
 !def-Os_Meus_Módulos-2 | Os grupos SpruceApps, Escola e Comunicação e Organização, cada módulo com a sua cor.
-> Exemplo: não usa o Jornal nem a Coordenação do PROFIJ. Desligue **Jornal Escolar**, **JornalNote** e **Coord. PROFIJ**: desaparecem do menu, das Apps e do Início. Se um dia precisar, volte a ligar — tudo o que tinha continua lá.
+> Exemplo: não usa o Jornal nem a Coordenação do PROFIJ. Desligue **Jornal Escolar**, **Jornal Notes** e **Coord. PROFIJ**: desaparecem do menu, das Apps e do Início. Se um dia precisar, volte a ligar — tudo o que tinha continua lá.
 ## Professor
 !!def-Professor,def-Professor-2 | Professor: fotografia, dados pessoais e profissionais; cargos em cada escola e assinatura.
 Assinale os cargos (Diretor(a) de turma, Coordenador(a) de departamento, Coordenador(a) do PROFIJ…): os módulos correspondentes aparecem. A assinatura entra nos documentos e pautas (o fundo branco sai sozinho). O nome deve ser igual ao dos horários da escola.
@@ -258,7 +258,7 @@ Tabela de consulta rápida: cada entrada do menu, o que faz e o capítulo onde e
 | Spruce Live | Avaliação em tempo real (formativa) | Spruce Live |
 | Spruce Forms | Spruce Forms e questionários online | Spruce Forms |
 | Spruce Exam | Avaliações digitais completas | Spruce Exam |
-| Jornal Escolar / JornalNote | PAA, peças, edições, redação; quadros do jornal | Jornal Escolar, JornalNote |
+| Jornal Escolar / Jornal Notes | PAA, peças, edições, redação; quadros do jornal | Jornal Escolar, Jornal Notes |
 | Coord. PROFIJ | Coordenação do programa PROFIJ | Coordenação do PROFIJ |
 | Spruce Notes | Quadros visuais de ideias | Spruce Notes |
 | O Meu Calendário | Agenda pessoal | O Meu Calendário |
