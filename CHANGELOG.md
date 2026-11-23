@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.177
+- iPad e telemóvel: a barra de ações do fundo deixa de aparecer cortada — os botões que não cabem passam para «Mais»
+
 ## 1.176
 - Apps: data grande no topo, como no cartão do Início
 

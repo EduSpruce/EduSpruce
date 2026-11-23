@@ -281,5 +281,6 @@ dados/199-logotipos-novos.js
 280-novidades-modal.js
 282-logotipo-spruce.js
 284-dia20.js
+286-barra-acoes-ipad-mais.js
 245-fim-do-programa.js
 246-fecho.html
