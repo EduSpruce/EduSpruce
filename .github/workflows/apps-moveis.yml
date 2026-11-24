@@ -1,0 +1,85 @@
+# Spruce It! — compila as apps de Android e iOS (modern/nativo) sempre que mudam ou quando se pede em Actions › «Executar».
+# Android: APK de teste (instala-se diretamente) e, se houver chave nos segredos, APK e AAB assinados para a Google Play.
+# iOS: compilação para o simulador; a versão para iPhone assina-se no Mac com o Xcode (modern/nativo/build-ios.sh).
+name: Apps móveis (Spruce It!)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['modern/nativo/**', '.github/workflows/apps-moveis.yml']
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: modern/nativo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            modern/nativo
+            .github
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - run: npm install --no-audit --no-fund
+      - run: npx cap add android
+      - run: npx capacitor-assets generate --android --iconBackgroundColor '#6d28d9' --splashBackgroundColor '#6d28d9'
+      - run: python3 ci/ajustar.py
+      - run: npx cap sync android
+      - name: Compilar
+        working-directory: modern/nativo/android
+        run: ./gradlew assembleDebug assembleRelease bundleRelease --no-daemon
+      - name: Assinar para a Google Play (só se houver chave nos segredos)
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASS }}
+        if: ${{ env.KS != '' }}
+        working-directory: modern/nativo/android/app/build/outputs
+        run: |
+          echo "$KS" | base64 -d > /tmp/chave.jks
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          $BT/zipalign -f 4 apk/release/app-release-unsigned.apk /tmp/alinhado.apk
+          $BT/apksigner sign --ks /tmp/chave.jks --ks-pass env:KS_PASS --ks-key-alias "$KEY_ALIAS" --key-pass env:KEY_PASS --out apk/release/spruce-it.apk /tmp/alinhado.apk
+          jarsigner -keystore /tmp/chave.jks -storepass "$KS_PASS" -keypass "$KEY_PASS" bundle/release/app-release.aab "$KEY_ALIAS"
+          rm -f /tmp/chave.jks
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spruce-it-android
+          path: |
+            modern/nativo/android/app/build/outputs/apk/debug/app-debug.apk
+            modern/nativo/android/app/build/outputs/apk/release/spruce-it.apk
+            modern/nativo/android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: warn
+  ios:
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: modern/nativo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            modern/nativo
+            .github
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install --no-audit --no-fund
+      - run: npx cap add ios
+      - run: npx capacitor-assets generate --ios --iconBackgroundColor '#6d28d9' --splashBackgroundColor '#6d28d9'
+      - run: python3 ci/ajustar.py
+      - run: npx cap sync ios
+      - name: Compilar (simulador, sem assinatura)
+        run: |
+          if [ -d ios/App/App.xcworkspace ]; then W='-workspace ios/App/App.xcworkspace'; else W='-project ios/App/App.xcodeproj'; fi
+          xcodebuild $W -scheme App -configuration Release -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+          cd build/Build/Products/Release-iphonesimulator && zip -qr "$GITHUB_WORKSPACE/spruce-it-ios-simulador.zip" App.app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spruce-it-ios-simulador
+          path: spruce-it-ios-simulador.zip

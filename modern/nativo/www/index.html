@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="color-scheme" content="light">
+<title>Spruce It!</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<!-- Spruce It! (app): entrar num jogo ou num estudo com o código ou o QR; os professores abrem a EduSpruce.
+     Desenho e textos originais (roxo e amarelo do Spruce It!). Nada fica guardado além dos últimos códigos usados. -->
+<main id="ini" class="ini">
+  <header class="topo"><span class="logo">Spruce <em>It!</em></span><span class="sp"></span><button class="ib" id="b-def" aria-label="Definições">⚙︎</button></header>
+  <section class="hero">
+    <h1>Joga e aprende</h1>
+    <p>Escreve o código que aparece no quadro ou lê o QR.</p>
+    <form id="f-cod" autocomplete="off">
+      <input id="cod" inputmode="text" autocapitalize="characters" maxlength="8" placeholder="Código do jogo" aria-label="Código do jogo">
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+    <button class="btn sec" id="b-qr" type="button"><span aria-hidden="true">▣</span> Ler o código QR</button>
+    <p class="err" id="err" role="alert"></p>
+  </section>
+  <section class="cartoes">
+    <button class="cartao" id="b-rec" type="button" hidden><b>↺ Voltar ao último jogo</b><small id="rec-t"></small></button>
+    <div class="cartao info"><b>📚 Estudo</b><small>O professor também partilha códigos de estudo: cartões, aprender, pares e teste, ao teu ritmo.</small></div>
+    <button class="cartao prof" id="b-prof" type="button"><b>👩‍🏫 Sou professor</b><small>Criar conjuntos, lançar jogos ao vivo ou como trabalho de casa e ver os relatórios.</small></button>
+  </section>
+  <footer class="rod">EduSpruce · Spruce It! <span id="ver"></span></footer>
+</main>
+<main id="jogo" class="jogo" hidden>
+  <header class="barra"><button class="ib" id="b-sair" aria-label="Sair do jogo">←</button><span id="j-cod" class="jcod"></span><span class="sp"></span><button class="ib" id="b-rec2" aria-label="Recarregar">⟳</button></header>
+  <iframe id="fr" title="Jogo" allow="autoplay; fullscreen; vibrate" referrerpolicy="no-referrer"></iframe>
+</main>
+<dialog id="def"><form method="dialog"><h2>Definições</h2>
+  <label class="lin"><input type="checkbox" id="d-vib"> Vibrar ao responder</label>
+  <label class="lin">Servidor <select id="d-srv"><option value="auto">Automático</option><option value="https://eduspruce.pt/">eduspruce.pt</option><option value="https://eduspruce.github.io/">Espelho (redes de escola)</option></select></label>
+  <button class="btn" value="ok">Fechar</button><p class="peq"><a href="#" id="d-priv">Privacidade</a> · <a href="#" id="d-lic">Licenças</a></p></form></dialog>
+<script src="app.js"></script>
+</body>
+</html>

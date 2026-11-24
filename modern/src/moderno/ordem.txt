@@ -8,6 +8,7 @@ forms.js
 provas.js
 banco.js
 arena-inicio.js
+arena-plus.js
 avisos.js
 hub.js
 eduapps.js

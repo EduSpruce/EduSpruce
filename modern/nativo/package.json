@@ -1,0 +1,26 @@
+{
+  "name": "spruce-it-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Spruce It! — app para iOS e Android (entrar nos jogos e estudos com código ou QR; professores abrem a EduSpruce)",
+  "scripts": {
+    "icones": "capacitor-assets generate --iconBackgroundColor '#6d28d9' --splashBackgroundColor '#6d28d9'",
+    "android": "cap add android || true && npm run icones && cap sync android",
+    "ios": "cap add ios || true && npm run icones && cap sync ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/browser": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0",
+    "@capacitor-mlkit/barcode-scanning": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}
