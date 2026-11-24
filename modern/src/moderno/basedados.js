@@ -61,7 +61,7 @@ function sbEcraEntrar(){document.body.classList.add('login-on');let o=$('#login'
     <div class="lgalt" id="lg-alt" hidden><label for="lg-em">E-mail da conta</label><input type="email" id="lg-em" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="nome@exemplo.pt">
       <label for="lg-pw">Palavra-passe</label><input type="password" id="lg-pw" autocomplete="current-password"><button type="submit" class="btn pri" id="lg-pwok">Entrar</button></div>
     <button type="button" class="lgoutra" id="lg-outra" aria-expanded="false">Outra forma de entrar</button>
-    <p class="lgbdn">${ic('shield',14)}<span>Entra-se com a <b>conta Google autorizada</b> pelo administrador. Os seus dados aparecem logo, em qualquer aparelho — sem códigos e sem nada para configurar.</span></p></form>`;
+    <p class="lgbdn">${ic('shield',14)}<span>Entra-se com a <b>conta Google autorizada</b> pelo administrador (ou com e-mail e palavra-passe, em «Outra forma de entrar»). Os seus dados aparecem logo, em qualquer aparelho, sem nada para configurar.</span></p></form>`;
   document.body.appendChild(o);try{loginHero()}catch(_){}try{loginLegal()}catch(_){}return o}
 let _sbEntrouAgora=false;
 /* v0.942 · cortina: nada da app fica à vista enquanto a sessão se confirma ou antes de pedir o código de acesso */

@@ -2,7 +2,7 @@
 /* ID da aplicação (Microsoft Entra) embutido: preencha aqui quando alojar a app para não ter de o escrever em cada dispositivo.
    Também pode ser passado uma vez no endereço: https://…/index.html?ms=<ID> */
 const EF_MS_ID='';
-try{const q=new URLSearchParams(location.search).get('ms');if(q&&/^[0-9a-f-]{36}$/i.test(q)){nvSet({msId:q});history.replaceState(null,'',location.pathname+location.hash)}}catch(_){}
+try{const q=new URLSearchParams(location.search).get('ms');if(q&&/^[0-9a-f-]{36}$/i.test(q)){if(confirm('Este link quer mudar a ligação Microsoft desta app para outro registo ('+q+'). Só aceite se foi o administrador da EduSpruce que lho enviou. Aceitar?'))nvSet({msId:q});history.replaceState(null,'',location.pathname+location.hash)}}catch(_){}
 const msIdAtual=()=>{const L=nvL();const a=(S.cfg.auth&&S.cfg.auth.ms)||{};return L.msId||a.clientId||EF_MS_ID||''};
 /* a ligação usa o ID atual e o inquilino da escola (se indicado) */
 {const _ml=msLigar;msLigar=async function(){const id=msIdAtual();if(id&&!nvL().msId)nvSet({msId:id});return _ml.apply(this,arguments)}}

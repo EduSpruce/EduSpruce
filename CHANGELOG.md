@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.180
+- Segurança: a app passa sempre para HTTPS e não abre dentro de páginas de outros sítios
+- Entrada: ajuda «Não tem acesso?», texto corrigido (Google ou e-mail e palavra-passe) e sem o número de versão técnico
+- Links que mudam a configuração de ligação pedem confirmação
+- Página de erro em português, com atalhos para as páginas dos alunos; eduspruce.pt/formularios, /live e /exam passam a funcionar
+- Páginas da app fora dos motores de busca (robots.txt e noindex); security.txt e favicon.ico
+
 ## 1.179
 - Spruce Forms: títulos dos cartões de «Explorar modelos» de novo em branco e legíveis
 

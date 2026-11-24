@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+Allow: /privacidade.html
+Allow: /termos.html
+Allow: /licencas.html
