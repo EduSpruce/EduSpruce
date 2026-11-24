@@ -1,0 +1,15 @@
+{
+  "appId": "app.eduspruce.spruceit",
+  "appName": "Spruce It!",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": ["eduspruce.pt", "*.eduspruce.pt", "eduspruce.github.io", "eduspruce.app", "www.youtube-nocookie.com"]
+  },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 900, "backgroundColor": "#6d28d9", "showSpinner": false },
+    "StatusBar": { "backgroundColor": "#6d28d9", "style": "DARK" }
+  },
+  "android": { "allowMixedContent": false },
+  "ios": { "contentInset": "never", "scheme": "Spruce It" }
+}
