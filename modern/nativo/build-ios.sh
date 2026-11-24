@@ -4,7 +4,7 @@
 set -e
 cd "$(dirname "$0")"
 npm install
-[ -d ios ] || npx cap add ios
+[ -d ios ] || npx cap add ios || test -d ios/App
 npx capacitor-assets generate --ios --iconBackgroundColor '#6d28d9' --splashBackgroundColor '#6d28d9'
 python3 ci/ajustar.py
 npx cap sync ios

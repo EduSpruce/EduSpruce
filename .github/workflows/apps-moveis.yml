@@ -70,7 +70,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm install --no-audit --no-fund
-      - run: npx cap add ios
+      - name: Criar o projeto iOS (o pod install corre depois, no sync, já com o iOS 15.5)
+        run: npx cap add ios || test -d ios/App
       - run: npx capacitor-assets generate --ios --iconBackgroundColor '#6d28d9' --splashBackgroundColor '#6d28d9'
       - run: python3 ci/ajustar.py
       - run: npx cap sync ios
