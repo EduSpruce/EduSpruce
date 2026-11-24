@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.181
+- «Orgulhosamente feito nos Açores» no ecrã de entrada, no rodapé do menu lateral e nas páginas de Privacidade, Termos e Licenças
+
 ## 1.180
 - Segurança: a app passa sempre para HTTPS e não abre dentro de páginas de outros sítios
 - Entrada: ajuda «Não tem acesso?», texto corrigido (Google ou e-mail e palavra-passe) e sem o número de versão técnico
