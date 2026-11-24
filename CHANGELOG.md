@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.178
+- Spruce It!: 13 tipos de pergunta — escolha múltipla com imagens e até 6 opções, verdadeiro/falso, várias certas, resposta escrita, deslizante, ordenar, pino na imagem, sondagem, escala de opinião, nuvem de palavras, resposta aberta, ideias com votação e diapositivos; vídeo, pontos a dobrar e notas do orador
+- Spruce It!: modo aula, modo precisão, modo confiança, reações dos alunos, perguntas do público com votos e moderação, vista do orador, música no átrio, marca própria e até 2000 jogadores
+- Spruce It!: novo modo Estudo (cartões, aprender, pares e teste), importar diapositivos de PDF e PowerPoint, extrair perguntas de um texto, PDF ou Word
+- Spruce It!: relatórios com as respostas escritas, Excel, torneio entre jogos e certificados
+
 ## 1.177
 - iPad e telemóvel: a barra de ações do fundo deixa de aparecer cortada — os botões que não cabem passam para «Mais»
 
