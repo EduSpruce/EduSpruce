@@ -27,3 +27,8 @@ exportacoes/
 
 # alterações da versão com base de dados (sem dados de alunos)
 !modern/src/moderno/patches.json
+
+# apps móveis (configuração, sem dados)
+!modern/nativo/package.json
+!modern/nativo/package-lock.json
+!modern/nativo/capacitor.config.json
