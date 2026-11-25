@@ -181,3 +181,11 @@ Aqui ficam só as convenções e as notas de cada módulo: ler apenas a secção
 - Relatórios: `arGuardarRes` junta `r3` (conteúdo das respostas, P&R) e tira as perguntas sem resposta certa do acerto; Excel (`puXlsx`), torneio (`sp3Torneio`), certificados (`sp3Certificados`). Importar diapositivos (PDF/PPTX) e extrair perguntas de texto/PDF/Word, sem IA.
 - Testes: `tests/sql/spruceit3.teste.sql` (26) e `tests/spruceit-e2e.mjs PASTA` (PostgreSQL local + navegador: todos os tipos, P&R, reações, ideias, orador, relatório, estudo; capturas em `tests/saida/`).
 - Apps iOS/Android: `modern/nativo` (Capacitor 7, ver `LEIA-ME.md`), compiladas por `.github/workflows/apps-moveis.yml`.
+
+## Spruce Review (1.182, `moderno/review.js`, último da ordem; página do aluno `/review.html`; exemplos corretos em `/review/ref/*.webp`)
+- Avaliação de sites (por omissão o enunciado «Criação de Páginas Web — Módulo 003», 200 pts → 0–20). Dados em `S.rv = {enun:[{id,titulo,padrao,minPag,doms,temas:[{n,kw}],crit:[{id,dom,n,pts,desc,auto,ref}]}], av:[{id,titulo,enun,tid,al:[…]}], com:[banco]}`.
+- Aluno: `{aid,num,nome,url,pts,pts2 (2.º corretor),com,comG,audio{critId|_g:dataURL},shots[{src,cap,crit,anot[]}],an (resumo da análise, nunca o conteúdo),sug,vers,hist,portal,autoav}`.
+- Análise (`rvAnalisar`): pontos de acesso públicos do site (`/wp-json/`, páginas, artigos, rota inexistente para ver o idioma, navigation/themes quando públicos); deteção dos blocos em `rvAnalisarDados`; ligações, acessibilidade, conteúdo de modelo/inglês/repetido, tema por palavras-chave, desempenho (medição + pontuação de laboratório). Se o site não deixar ler, «Colar dados».
+- Capturas automáticas: serviço externo de capturas por URL (`rvShot`); anotações em coordenadas 0–1 (`rvSvgAnot`), nunca desenhadas dentro da imagem.
+- Página do aluno: sessões cifradas em `eduspruce_autoav` com chaves `es-rv-…` (sem SQL novo); autoavaliação volta por `eduspruce_autoav_enviar` e é importada de 2 em 2 min (`rvPortalVerTodos`). CSP própria `alunoImg` (imagens https).
+- Imagens de exemplo geradas fora do repositório (página fictícia «Quinta Verde»); para refazer, novas capturas 1200 px em webp com o mesmo nome.

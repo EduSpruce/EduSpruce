@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.182
+- Novo: Spruce Review — avaliação de sites dos alunos com análise automática pelo endereço, capturas de ecrã e exemplos corretos lado a lado
+- Spruce Review: rubricas por níveis, banco de comentários, comentários em áudio e anotações sobre capturas
+- Spruce Review: importação da turma ou de ficheiro, pautas (CSV e Excel), relatórios individuais e nota de 0 a 20
+- Spruce Review: página privada de cada aluno com feedback e autoavaliação, estatísticas, mapa de calor, dupla correção, versões e histórico
+- Spruce Review: verificação de acessibilidade, desempenho, ligações partidas, conteúdo de modelo e adequação ao tema; editor de enunciados
+
 ## 1.181
 - «Orgulhosamente feito nos Açores» no ecrã de entrada, no rodapé do menu lateral e nas páginas de Privacidade, Termos e Licenças
 

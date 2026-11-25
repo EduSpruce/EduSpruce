@@ -9,7 +9,7 @@
 //   · nada de onclick="…"/onsubmit="…" no HTML (usar addEventListener ou os atributos data-* de app/051-utilitarios.js);
 //   · nada de eval/new Function; nada de <script> dentro de janelas escritas com document.write (imprimir a partir da app);
 //   · um script externo novo (CDN) tem de entrar em EXTERNOS, com o endereço exato;
-//   · as páginas dos alunos (/aluno.html, /forms.html, /provas.html) recebem aqui a política: correr ./es testa ou ./es pub depois de as editar.
+//   · as páginas dos alunos (/aluno.html, /forms.html, /provas.html, /review.html) recebem aqui a política: correr ./es testa ou ./es pub depois de as editar.
 import {readFileSync,writeFileSync,existsSync,copyFileSync} from 'node:fs';import {join,dirname,resolve} from 'node:path';import {createHash} from 'node:crypto';import {gunzipSync} from 'node:zlib';import {fileURLToPath} from 'node:url';
 const raizMod=join(dirname(fileURLToPath(import.meta.url)),'..');const RAIZ=join(raizMod,'..');
 const h256=t=>"'sha256-"+createHash('sha256').update(t,'utf8').digest('base64')+"'";
@@ -46,6 +46,10 @@ export function politicas(cfg){const sb=new URL(cfg.url).origin,ws='wss://'+new 
     aluno:(h)=>junta({'default-src':"'none'",'script-src':["'self'",...h],'style-src':["'self'","'unsafe-inline'"],
       'img-src':["'self'",'data:','blob:'],'media-src':["'self'",'data:','blob:'],'font-src':["'self'",'data:'],
       'connect-src':["'self'",sb,ws],'manifest-src':"'self'",'object-src':"'none'",'base-uri':"'none'",'form-action':"'none'"}),
+    /* Spruce Review (página do aluno): como as dos alunos, mas mostra capturas de ecrã de outros endereços */
+    alunoImg:(h)=>junta({'default-src':"'none'",'script-src':["'self'",...h],'style-src':["'self'","'unsafe-inline'"],
+      'img-src':["'self'",'data:','blob:','https:'],'media-src':["'self'",'data:','blob:'],'font-src':["'self'",'data:'],
+      'connect-src':["'self'",sb,ws],'manifest-src':"'self'",'object-src':"'none'",'base-uri':"'none'",'form-action':"'none'"}),
     /* EduSchedule (abre dentro da app; o motor de horários corre num trabalhador criado a partir do próprio código) */
     eduschedule:(h)=>junta({'default-src':"'none'",'script-src':["'self'",...h,'blob:'],'style-src':["'self'","'unsafe-inline'"],
       'img-src':["'self'",'data:','blob:'],'font-src':["'self'",'data:'],'connect-src':["'self'",sb,ws,'data:','blob:'],
@@ -63,10 +67,10 @@ function hashesMRA(html,dir){const m=/<script type="application\/octet-stream" i
   let b64=m[2].trim();if(!b64&&m[1]){const f=join(dir,m[1]);if(!existsSync(f))throw new Error('csp: falta '+m[1]);b64=readFileSync(f,'utf8').trim()}
   if(!b64)return [];return hashesDe(gunzipSync(Buffer.from(b64,'base64')).toString('utf8'))}
 
-const PAGINAS={'index.html':'app','spruceit.html':'aluno','pulso.html':'aluno','aluno.html':'aluno','forms.html':'aluno','provas.html':'aluno',
+const PAGINAS={'index.html':'app','spruceit.html':'aluno','pulso.html':'aluno','aluno.html':'aluno','forms.html':'aluno','provas.html':'aluno','review.html':'alunoImg',
   'eduschedule.html':'eduschedule','horarios.html':'horarios','arena.html':'texto','privacidade.html':'texto','termos.html':'texto'};
 /* páginas editadas à mão na raiz do repositório: numa construção de teste copiam-se para a pasta de saída; na publicação recebem a política no próprio sítio */
-const DA_RAIZ=['aluno.html','forms.html','provas.html','privacidade.html','termos.html'];
+const DA_RAIZ=['aluno.html','forms.html','provas.html','review.html','privacidade.html','termos.html'];
 
 export function aplicar(dir){const cfg=JSON.parse(readFileSync(join(raizMod,'supabase-config.json'),'utf8'));const P=politicas(cfg);const feito=[];
   const naRaiz=resolve(dir)===resolve(RAIZ);

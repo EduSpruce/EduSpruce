@@ -16,3 +16,4 @@ recolha.js
 modulos.js
 vitrines.js
 visorpdf.js
+review.js
