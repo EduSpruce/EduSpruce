@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.184
+- Spruce Review: a apreciação geral é escrita sozinha em texto corrido, diferente para cada aluno e ajustada à nota e ao trabalho
+- Spruce Review: botão «Escrever outra» na apreciação geral; as frases já usadas com colegas da mesma avaliação são evitadas
+- Spruce Review: a apreciação automática acompanha as mudanças de pontos feitas à mão
+
 ## 1.183
 - Spruce Review: «Corrigir tudo automaticamente» analisa todos os sites, dá os pontos e escreve os comentários e a apreciação geral
 - Spruce Review: escrever o endereço do site já faz a correção automática

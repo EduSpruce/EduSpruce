@@ -166,20 +166,63 @@ function rvEstimar(k,an){const plac=an.plac.length,mau=an.a11y.some(x=>x.e==='fa
   return null}
 const rvConfTxt={alta:'confiança alta',media:'confiança média',baixa:'estimativa'};
 function rvComTxt(d){const n=String(d.nota||'').replace(/^Estimativa: /,'');return d.e==='ok'?'✓ '+n:d.e==='parcial'?'A melhorar: '+n:'Em falta: '+n}
-function rvComGeral(E,al,an){const det=c=>c.auto&&an.det[c.auto];const ok=E.crit.filter(c=>{const d=det(c);return d&&d.e==='ok'&&al.conf[c.id]==='alta'}).map(c=>c.n.toLowerCase());
-  const mal=E.crit.filter(c=>{const d=det(c);return d&&(d.e==='falta'||d.e==='parcial')&&al.conf[c.id]!=='baixa'}).map(c=>c.n.toLowerCase());const L=[];
-  if(ok.length)L.push('Pontos fortes: '+ok.slice(0,6).join(', ')+(ok.length>6?' e mais '+(ok.length-6):'')+'.');
-  if(mal.length)L.push('A melhorar: '+mal.slice(0,6).join(', ')+(mal.length>6?' e mais '+(mal.length-6):'')+'.');
-  const vz=an.pags.filter(p=>p.vazia);if(vz.length)L.push('Há '+vz.length+' página(s) sem conteúdo ('+vz.map(p=>p.t).slice(0,4).join(', ')+').');
-  const pl=[...new Set(an.plac.map(x=>x.t))];if(pl.length)L.push('Rever texto de modelo ou em inglês em: '+pl.slice(0,4).join(', ')+'.');
-  const alt=an.a11y.find(x=>/Texto alternativo/.test(x.t)&&x.e!=='ok');if(alt)L.push('Descrever as imagens (texto alternativo).');
-  if(an.links.mal.length)L.push(an.links.mal.length+' ligação(ões) não abre(m).');
-  if(an.tema&&an.tema.best&&an.det.tema&&an.det.tema.e!=='ok')L.push('O conteúdo deve corresponder a um dos temas propostos.');
-  return L.join(' ')}
+/* apreciação geral (1.184): texto corrido escrito a partir do trabalho e da nota de cada aluno, com muitas variantes de frase;
+   a semente (al.comGSeed) muda com «Escrever outra» e as frases já usadas por colegas da mesma avaliação são evitadas */
+const RV_FORTE={url:'o endereço do site no formato pedido',online:'o site sempre acessível',idioma:'o painel configurado em português',titulo:'o título do site',descricao:'a descrição do site',paginas:'a quantidade de páginas com conteúdo',
+  tema:'a ligação do conteúdo ao tema',titulos:'a organização dos títulos',responsivo:'o aspeto em vários ecrãs',menu:'o menu com submenus',temawp:'a escolha do tema',plugins:'as extensões instaladas',cover:'a capa com imagem de fundo',
+  paragrafo:'o parágrafo de introdução',imagem:'as imagens com legenda',citacao:'a citação em destaque',colunas:'a organização em colunas',galeria:'a galeria de imagens',lista:'os títulos com listas',video:'o vídeo incorporado',
+  grupo:'a caixa de destaque',tabela:'a tabela informativa',separador:'a separação entre secções',botao:'o botão de ação',fontes:'a indicação das fontes'};
+const RV_MELHORAR={url:'usar o endereço no formato pedido',online:'garantir que o site abre sem erros',idioma:'pôr o painel em português',titulo:'dar ao site um título ligado ao tema',descricao:'escrever uma descrição curta e pertinente',
+  paginas:'completar as páginas até chegar às quinze com conteúdo',tema:'centrar o conteúdo num dos temas propostos',titulos:'usar o bloco Título por ordem (H2, H3) em vez de texto a negrito',responsivo:'ver como o site fica no telemóvel',
+  menu:'organizar o menu com submenus',temawp:'personalizar o tema (cores, logótipo, tipo de letra)',plugins:'instalar e configurar pelo menos três extensões',cover:'abrir a página com um bloco Capa com imagem e título',
+  paragrafo:'escrever um parágrafo de introdução mais desenvolvido e formatado',imagem:'pôr legenda nas imagens',citacao:'usar o bloco Citação para uma curiosidade',colunas:'organizar conteúdo em duas colunas',galeria:'juntar uma galeria com pelo menos três imagens',
+  lista:'introduzir as listas com um título',video:'incorporar o vídeo com o bloco Incorporar em vez de deixar só a ligação',grupo:'destacar informação importante num grupo com fundo ou contorno',tabela:'organizar dados numa tabela',
+  separador:'separar as secções com um separador ou espaçador',botao:'pôr no botão uma ligação que funcione',fontes:'terminar as páginas com as fontes e os créditos'};
+const RV_FR={
+  abre:{ex:['{N}, o teu site está excelente!','Que trabalho tão completo, {N}!','Parabéns, {N}: o site cumpre praticamente tudo o que foi pedido.','{N}, este é um site de que te podes orgulhar.','Trabalho de grande qualidade, {N}.','Muito bem, {N}! Nota-se o cuidado em cada página.'],
+    mb:['{N}, fizeste um trabalho muito bom.','Bom trabalho, {N}: o site está bem construído.','{N}, o resultado é muito positivo.','Gostei bastante do teu site, {N}.','{N}, mostras que dominas bem o editor de blocos.','O teu site está bem conseguido, {N}.'],
+    b:['{N}, o site está no bom caminho.','Trabalho positivo, {N}, com alguns pontos a afinar.','{N}, já tens uma boa base.','O essencial está feito, {N}.','{N}, o teu site tem várias partes bem conseguidas.','Bom esforço, {N}: falta pouco para um site muito bom.'],
+    s:['{N}, o site cumpre o mínimo, mas pode ir mais longe.','{N}, há trabalho feito, mas ainda faltam algumas partes importantes.','O site está aceitável, {N}, e tem margem para crescer.','{N}, conseguiste o essencial; agora é completar.','Já há uma base, {N}, mas é preciso mais cuidado.'],
+    ins:['{N}, o site ainda está longe do que foi pedido.','{N}, este trabalho precisa de bastante mais desenvolvimento.','Ainda faltam muitas partes, {N}.','{N}, é preciso retomar o site com mais tempo e atenção.','O site está incompleto, {N}, mas dá para recuperar.']},
+  forte:['Destaco {L}.','Ficaram muito bem {L}.','Gostei especialmente {de:L}.','Está muito bem feito o trabalho {em:L}.','Os pontos fortes são {L}.','Mostras domínio {em:L}.','Merecem destaque {L}.'],
+  mel:['Para melhorar, falta {L}.','Da próxima vez, tenta {L}.','Ainda é preciso {L}.','Convém {L}.','O próximo passo é {L}.','Para subir a nota, tens de {L}.','Sugiro {L}.'],
+  vazias:['{Há uma página|Há {n} páginas} sem conteúdo ({L}), que não {conta|contam}.','{A página|As páginas} {L} {está vazia|estão vazias}: {preenche-a|preenche-as}.','Não te esqueças de preencher {L}.'],
+  modelo:['Revê o texto de modelo ou em inglês em {L}.','Em {L} ficou texto copiado de um modelo ou em inglês: escreve-o por palavras tuas.','Atenção a {L}: tem texto que não é teu ou está em inglês.'],
+  alt:['Descreve as imagens no texto alternativo, para quem não as consegue ver.','Falta o texto alternativo nas imagens.','Acrescenta a descrição (texto alternativo) às imagens.'],
+  links:['{Há uma ligação que não abre: confirma-a.|Há {n} ligações que não abrem: confirma-as.}','Verifica as ligações: {uma não funciona|{n} não funcionam}.','Corrige {a ligação partida|as {n} ligações partidas}.'],
+  tema:['O conteúdo tem de corresponder a um dos temas propostos.','Lembra-te de que o site devia tratar um dos temas do enunciado.','O tema do site afasta-se do que foi pedido.'],
+  fecha:{ex:['Continua assim!','Um exemplo para a turma.','Excelente trabalho!','Mantém este nível nos próximos módulos.','Muitos parabéns!'],
+    mb:['Continua com este empenho!','Com pequenos acertos fica excelente.','Bom trabalho!','Estás no caminho certo.','Força nos acertos finais!'],
+    b:['Com estes acertos, a nota sobe.','Confio que consegues melhorar.','Vale a pena rever estes pontos.','Continua a trabalhar!','Estás quase lá.'],
+    s:['Com mais dedicação, consegues muito mais.','Usa os exemplos corretos como guia.','Revê os pontos indicados com calma.','Conto contigo para melhorar.','Ainda vais a tempo de melhorar.'],
+    ins:['Fala comigo se precisares de ajuda.','Usa os exemplos corretos e retoma o trabalho.','Com empenho, ainda consegues recuperar.','Estou disponível para te ajudar.','Não desistas: vamos melhorar isto juntos.']}};
+function rvRng(seed){let a=0;const s=String(seed);for(let i=0;i<s.length;i++)a=Math.imul(a^s.charCodeAt(i),2654435761)>>>0;return ()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rvJunta=L=>L.length<2?L.join(''):L.slice(0,-1).join(', ')+' e '+L[L.length-1];
+function rvComGeral(E,al,an,av){const rnd=rvRng(al.id+'|'+(al.comGSeed||0));const pick=(L,usados)=>{const liv=usados?L.filter(x=>!usados.has(x)):L;const X=liv.length?liv:L;const f=X[Math.floor(rnd()*X.length)];esc_.push(f);return f};
+  const baral=L=>{const X=L.slice();for(let i=X.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[X[i],X[j]]=[X[j],X[i]]}return X};
+  const usados=new Set();(av?av.al:[]).forEach(o=>{if(o!==al&&o.comGAuto&&Array.isArray(o.comGF))o.comGF.forEach(f=>usados.add(f))});const esc_=[];
+  const T=rvTot(al,E);const r=T.t/(rvMax(E)||1);const b=r>=.9?'ex':r>=.75?'mb':r>=.6?'b':r>=.475?'s':'ins';
+  const nome=String(al.nome||'').trim().split(/\s+/)[0]||'Olá';const sub=(f,o)=>{const n=o&&o.n;let t=f.replace(/\{([^{}|]*(?:\{n\}[^{}|]*)*)\|([^{}|]*(?:\{n\}[^{}|]*)*)\}/g,(m,a,b)=>n==1?a:b).replace('{N}',nome).replace(/\{(de|em):L\}/,(m,p)=>rvJunta(((o&&o.I)||[]).map(x=>p+' '+x))).replace('{L}',o&&o.L||'').replace(/\{n\}/g,n||'');
+    return t.replace(/\b(de|em) (o|a|os|as)\b/g,(m,p,q)=>(p==='de'?'d':'n')+q).replace(/\b(De|Em) (o|a|os|as)\b/g,(m,p,q)=>(p==='De'?'D':'N')+q)};
+  const det=c=>c.auto&&an.det[c.auto];
+  const fortes=baral(E.crit.filter(c=>{const d=det(c);return d&&d.e==='ok'&&al.conf[c.id]==='alta'&&RV_FORTE[c.auto]&&!['url','online','idioma','descricao'].includes(c.auto)})).slice(0,2+Math.floor(rnd()*2)).map(c=>RV_FORTE[c.auto]);
+  const perdas=E.crit.map(c=>({c,p:(+c.pts||0)-(+al.pts[c.id]||0)})).filter(x=>x.p>0&&x.c.auto&&RV_MELHORAR[x.c.auto]&&!['paginas','tema'].includes(x.c.auto)).sort((a,b)=>b.p-a.p||rnd()-.5);
+  const mel=perdas.slice(0,b==='ex'?1:3).map(x=>RV_MELHORAR[x.c.auto]);
+  const F=[sub(pick(RV_FR.abre[b],usados))];const meio=[];
+  if(fortes.length)meio.push(sub(pick(RV_FR.forte,usados),{L:rvJunta(fortes),I:fortes}));
+  const extra=[];const vz=an.pags.filter(p=>p.vazia);if(vz.length)extra.push(sub(pick(RV_FR.vazias,usados),{n:vz.length,L:rvJunta(vz.slice(0,3).map(p=>'«'+p.t+'»'))}));
+  const pl=[...new Set(an.plac.map(x=>x.t))];if(pl.length)extra.push(sub(pick(RV_FR.modelo,usados),{L:rvJunta(pl.slice(0,3).map(t=>'«'+t+'»'))}));
+  if(an.det.tema&&an.det.tema.e==='falta')extra.push(sub(pick(RV_FR.tema,usados)));
+  if(mel.length)meio.push(sub(pick(RV_FR.mel,usados),{L:rvJunta(mel)}));
+  if(an.a11y.some(x=>/Texto alternativo/.test(x.t)&&x.e==='falta'))extra.push(sub(pick(RV_FR.alt,usados)));
+  if(an.links.mal.length)extra.push(sub(pick(RV_FR.links,usados),{n:an.links.mal.length}));
+  if(rnd()<.5&&meio.length>1&&b!=='ex'&&b!=='mb')meio.reverse();
+  F.push(...meio,...baral(extra).slice(0,b==='ins'||b==='s'?3:2),sub(pick(RV_FR.fecha[b],usados)));
+  al.comGF=esc_;return F.join(' ').replace(/\s+/g,' ').trim()}
 function rvAplicarAuto(av,al,forcar){const E=rvEn(av.enun);const cfg=rvCfg();const an=al.an;if(!an)return 0;al.pts=al.pts||{};al.com=al.com||{};al.auto=al.auto||{};al.comAuto=al.comAuto||{};let n=0;
   if(cfg.aplicar||forcar)E.crit.forEach(c=>{const s=al.sug[c.id];if(s==null)return;if(al.pts[c.id]==null||al.pts[c.id]===''||al.auto[c.id]){if(al.pts[c.id]!==s)n++;al.pts[c.id]=s;al.auto[c.id]=true}});
   if(cfg.comentar||forcar){E.crit.forEach(c=>{const d=c.auto&&an.det[c.auto];if(!d||al.conf[c.id]==='baixa'||d.e==='manual')return;if(!al.com[c.id]||al.comAuto[c.id]){al.com[c.id]=rvComTxt(d);al.comAuto[c.id]=true}});
-    if(!al.comG||al.comGAuto){al.comG=rvComGeral(E,al,an);al.comGAuto=true}}
+    if(!al.comG||al.comGAuto){al.comG=rvComGeral(E,al,an,av);al.comGAuto=true}}
   if(n)rvLog(al,'Correção automática: '+n+' critério(s)');return n}
 const rvPorRever=(al,E)=>E.crit.filter(c=>!(al.visto||{})[c.id]&&(al.pts[c.id]==null||al.pts[c.id]===''||((al.auto||{})[c.id]&&(al.conf||{})[c.id]!=='alta'))).length;
 function rvGuardarAnalise(av,al,an){const E=rvEn(av.enun);const cfg=rvCfg();const ant=al.an;al.an=an;al.sug={};al.conf={};
@@ -385,8 +428,8 @@ function rvAlCorrecao(m,av,E,al){const an=al.an;al.com=al.com||{};al.audio=al.au
          <div class="rvniv">${RV_NIV.map(([n,l,f])=>`<button type="button" data-rvn="${c.id}|${f}" class="${nv===n?'on':''}" title="${l} = ${nf((+c.pts||0)*f)} pts">${l}</button>`).join('')}<input type="number" class="rvpts" data-rvp="${c.id}" min="0" max="${c.pts}" step="0.5" value="${v==null?'':v}" aria-label="Pontos em ${esc(c.n)}"></div>
          <div class="rvcom"><textarea data-rvcm="${c.id}" rows="1" placeholder="Comentário para o aluno…">${esc(al.com[c.id]||'')}</textarea><button class="btn" data-rvbk="${c.id}" title="Banco de comentários">${ic('chat',14)}</button><button class="btn" data-rvsv="${c.id}" title="Guardar este comentário no banco">${ic('plus',14)}</button>
          <button class="btn${al.audio[c.id]?' on':''}" data-rvau="${c.id}" title="Comentário em áudio">${ic('mic',14)}</button></div>${al.audio[c.id]?`<div class="rvaud"><audio controls src="${esc(al.audio[c.id])}"></audio><button class="btn" data-rvaud="${c.id}">${ic('trash',13)}</button></div>`:''}</div>`}).join('')}</section>`}).join('')}
-   <section class="rvpanel"><h3>Apreciação geral</h3><textarea id="rv-g" rows="3" placeholder="Comentário geral para o aluno…">${esc(al.comG||'')}</textarea><div class="rvbar"><button class="btn${al.audio._g?' on':''}" data-rvau="_g">${ic('mic',14)} Áudio geral</button>${al.audio._g?`<audio controls src="${esc(al.audio._g)}"></audio><button class="btn" data-rvaud="_g">${ic('trash',13)}</button>`:''}</div></section>`;
-  const set=(cid,v)=>{const c=E.crit.find(x=>x.id===cid);const old=al.pts[cid];v=v===''||v==null?null:Math.max(0,Math.min(+c.pts||0,Math.round((+v||0)*2)/2));if(v==null)delete al.pts[cid];else al.pts[cid]=v;if(al.auto)delete al.auto[cid];(al.visto=al.visto||{})[cid]=true;if(old!==v)rvLog(al,c.n+': '+(old==null?'—':old)+' → '+(v==null?'—':v));save()};
+   <section class="rvpanel"><h3>Apreciação geral <span class="rvsp"></span>${al.comGAuto&&al.comG?'<span class="rvb ma">automática</span>':''}${an?`<button class="btn" id="rv-gn">${ic('refresh',14)} Escrever outra</button>`:''}</h3><textarea id="rv-g" rows="4" placeholder="Comentário geral para o aluno…">${esc(al.comG||'')}</textarea><div class="rvbar"><button class="btn${al.audio._g?' on':''}" data-rvau="_g">${ic('mic',14)} Áudio geral</button>${al.audio._g?`<audio controls src="${esc(al.audio._g)}"></audio><button class="btn" data-rvaud="_g">${ic('trash',13)}</button>`:''}</div></section>`;
+  const set=(cid,v)=>{const c=E.crit.find(x=>x.id===cid);const old=al.pts[cid];v=v===''||v==null?null:Math.max(0,Math.min(+c.pts||0,Math.round((+v||0)*2)/2));if(v==null)delete al.pts[cid];else al.pts[cid]=v;if(al.auto)delete al.auto[cid];(al.visto=al.visto||{})[cid]=true;if(al.comGAuto&&al.an)al.comG=rvComGeral(E,al,al.an,av);if(old!==v)rvLog(al,c.n+': '+(old==null?'—':old)+' → '+(v==null?'—':v));save()};
   m.querySelectorAll('[data-rvn]').forEach(b=>b.onclick=()=>{const [cid,f]=b.dataset.rvn.split('|');const c=E.crit.find(x=>x.id===cid);set(cid,(+c.pts||0)*f);rvAluno(av,al);requestAnimationFrame(()=>{const el=$('#rvc-'+cid);if(el)el.scrollIntoView({block:'nearest'})})});
   m.querySelectorAll('[data-rvp]').forEach(i=>i.onchange=()=>{set(i.dataset.rvp,i.value);setTimeout(()=>rvAluno(av,al))});
   m.querySelectorAll('[data-rvvis]').forEach(b=>b.onclick=()=>{(al.visto=al.visto||{})[b.dataset.rvvis]=true;rvLog(al,'Revisto: '+(E.crit.find(c=>c.id===b.dataset.rvvis)||{}).n);save();rvAluno(av,al)});
@@ -399,6 +442,7 @@ function rvAlCorrecao(m,av,E,al){const an=al.an;al.com=al.com||{};al.audio=al.au
   m.querySelectorAll('[data-rvau]').forEach(b=>b.onclick=()=>rvGravar(b,d=>{al.audio[b.dataset.rvau]=d;rvLog(al,'Comentário em áudio gravado');save();rvAluno(av,al)}));
   m.querySelectorAll('[data-rvaud]').forEach(b=>b.onclick=()=>{delete al.audio[b.dataset.rvaud];save();rvAluno(av,al)});
   $('#rv-g').onchange=e=>{al.comG=e.target.value.trim().slice(0,4000);al.comGAuto=false;save()};
+  const gn=$('#rv-gn');if(gn)gn.onclick=()=>{if(al.comG&&!al.comGAuto&&!confirm('Substituir a apreciação que escreveu por uma automática?'))return;al.comGSeed=(al.comGSeed||0)+1;al.comG=rvComGeral(E,al,al.an,av);al.comGAuto=true;rvLog(al,'Apreciação geral reescrita');save();rvAluno(av,al)};
   const a1=$('#rv-an1');if(a1)a1.onclick=async()=>{a1.disabled=true;a1.textContent='A analisar…';try{await rvAnalisar(av,al);toast('Análise feita','ok')}catch(e){toast(e.message,'erro')}rvAluno(av,al)};
   const s1=$('#rv-sug1');if(s1)s1.onclick=()=>{const n=rvAplicarAuto(av,al,true);save();toast(n?n+' critério(s) atualizados (o que mudou à mão fica igual)':'Nada a mudar','ok');rvAluno(av,al)}}
 function rvBancoDlg(cid,usar){const L=RV().com;let q='';
