@@ -96,7 +96,7 @@ function rvAnalisarDados(E,base,root,pags,posts,extra){const an={t:Date.now(),ba
    D.fontes=fim.length?r('ok','Fontes/créditos no fim da página.',fim):alg.length?r('parcial','Há referências a fontes, mas não num rodapé no fim da página.',alg):r('falta','Não há indicação de fontes ou créditos.')}
   /* site */
   {const re=new RegExp('^'+(E.padrao||'.*')+'$','i');D.url=re.test(host)?r('ok','Endereço no formato pedido: '+host):r('falta','Endereço fora do formato pedido: '+(host||'—'))}
-  D.online=root?r('ok','O site respondeu ('+Math.round((extra&&extra.ms)||0)+' ms).'):r('falta','O site não respondeu.');
+  D.online=root?r('ok','O site abre sem erros.'):r('falta','O site não respondeu.');
   {const m=String((extra&&extra.msg)||'');D.idioma=!m?r('manual','Confirmar nas capturas do painel.'):/rota|pedido|encontrad|método/i.test(m)?r('ok','Mensagens do site em português.'):r('falta','Mensagens do site noutra língua: «'+m.slice(0,80)+'».')}
   {const def=/^(o meu (site|blog)|my (wordpress )?(website|blog|site)|wordpress|site)$/i;D.titulo=!an.nome?r('falta','Sem título.'):def.test(an.nome.trim())?r('parcial','Título por omissão: «'+an.nome+'».'):r('ok','Título: «'+an.nome+'».')}
   {const def=/just another|só mais um|apenas mais um/i;D.descricao=!an.desc?r('falta','Sem descrição.'):def.test(an.desc)?r('parcial','Descrição por omissão.'):r('ok','Descrição: «'+an.desc+'».')}
@@ -154,10 +154,44 @@ async function rvVerLigacoes(an,base,docs){const conhecidos=new Set(docs.map(d=>
   await Promise.all([corre(),corre(),corre(),corre()]);an.links.ver=ver;an.links.bt=L.filter(l=>l.bt).length;an.links.mal=an.links.mal.slice(0,40)}
 async function rvPsi(base){try{const r=await rvGet('https://www.googleapis.com/pagespeedonline/v5/runPagespeed?category=performance&strategy=mobile&url='+encodeURIComponent(base+'/'),70000);
   const s=r.j&&r.j.lighthouseResult&&r.j.lighthouseResult.categories&&r.j.lighthouseResult.categories.performance;return s?Math.round(s.score*100):null}catch(_){return null}}
-function rvGuardarAnalise(av,al,an){const E=rvEn(av.enun);const ant=al.an;al.an=an;al.sug={};
-  E.crit.forEach(c=>{const d=c.auto&&an.det[c.auto];if(!d||d.e==='manual')return;const f=d.q!=null&&d.e!=='ok'?d.q*.75:d.e==='ok'?1:d.e==='parcial'?.5:0;al.sug[c.id]=Math.round((+c.pts||0)*f*2)/2});
+/* correção automática (1.183): sugestão + confiança por critério, estimativa nos critérios que não se veem de fora,
+   pontos e comentários preenchidos sozinhos (só onde o professor ainda não mexeu), lista do que falta rever */
+const rvCfg=()=>{const d=RV();if(!d.cfg||typeof d.cfg!=='object')d.cfg={};const c=d.cfg;['aplicar','estimar','comentar','analisar','capturas'].forEach(k=>{if(c[k]==null)c[k]=true});return c};
+function rvEstimar(k,an){const plac=an.plac.length,mau=an.a11y.some(x=>x.e==='falta');
+  if(k==='responsivo')return [!an.ok?0:Math.max(.5,1-(plac?.25:0)-(mau?.25:0)),'Estimativa: os temas atuais adaptam-se ao telemóvel'+(plac||mau?', mas há problemas de qualidade (conteúdo de modelo ou contraste)':'')+'. Confirmar nas capturas.'];
+  if(k==='menu'){const f=an.pags.filter(p=>p.pai).length;return [f?.75:.5,f?'Estimativa: há páginas filhas, provavelmente em submenus. Confirmar nas capturas.':'Estimativa: confirmar nas capturas se o menu tem submenus.']}
+  if(k==='temawp')return [an.ok?.75:0,'Estimativa: confirmar o tema e a personalização nas capturas.'];
+  if(k==='plugins')return [.5,'Estimativa: nenhuma extensão visível de fora; confirmar no painel.'];
+  if(k==='idioma')return [an.ok?.75:0,'Estimativa: confirmar o idioma do painel.'];
+  return null}
+const rvConfTxt={alta:'confiança alta',media:'confiança média',baixa:'estimativa'};
+function rvComTxt(d){const n=String(d.nota||'').replace(/^Estimativa: /,'');return d.e==='ok'?'✓ '+n:d.e==='parcial'?'A melhorar: '+n:'Em falta: '+n}
+function rvComGeral(E,al,an){const det=c=>c.auto&&an.det[c.auto];const ok=E.crit.filter(c=>{const d=det(c);return d&&d.e==='ok'&&al.conf[c.id]==='alta'}).map(c=>c.n.toLowerCase());
+  const mal=E.crit.filter(c=>{const d=det(c);return d&&(d.e==='falta'||d.e==='parcial')&&al.conf[c.id]!=='baixa'}).map(c=>c.n.toLowerCase());const L=[];
+  if(ok.length)L.push('Pontos fortes: '+ok.slice(0,6).join(', ')+(ok.length>6?' e mais '+(ok.length-6):'')+'.');
+  if(mal.length)L.push('A melhorar: '+mal.slice(0,6).join(', ')+(mal.length>6?' e mais '+(mal.length-6):'')+'.');
+  const vz=an.pags.filter(p=>p.vazia);if(vz.length)L.push('Há '+vz.length+' página(s) sem conteúdo ('+vz.map(p=>p.t).slice(0,4).join(', ')+').');
+  const pl=[...new Set(an.plac.map(x=>x.t))];if(pl.length)L.push('Rever texto de modelo ou em inglês em: '+pl.slice(0,4).join(', ')+'.');
+  const alt=an.a11y.find(x=>/Texto alternativo/.test(x.t)&&x.e!=='ok');if(alt)L.push('Descrever as imagens (texto alternativo).');
+  if(an.links.mal.length)L.push(an.links.mal.length+' ligação(ões) não abre(m).');
+  if(an.tema&&an.tema.best&&an.det.tema&&an.det.tema.e!=='ok')L.push('O conteúdo deve corresponder a um dos temas propostos.');
+  return L.join(' ')}
+function rvAplicarAuto(av,al,forcar){const E=rvEn(av.enun);const cfg=rvCfg();const an=al.an;if(!an)return 0;al.pts=al.pts||{};al.com=al.com||{};al.auto=al.auto||{};al.comAuto=al.comAuto||{};let n=0;
+  if(cfg.aplicar||forcar)E.crit.forEach(c=>{const s=al.sug[c.id];if(s==null)return;if(al.pts[c.id]==null||al.pts[c.id]===''||al.auto[c.id]){if(al.pts[c.id]!==s)n++;al.pts[c.id]=s;al.auto[c.id]=true}});
+  if(cfg.comentar||forcar){E.crit.forEach(c=>{const d=c.auto&&an.det[c.auto];if(!d||al.conf[c.id]==='baixa'||d.e==='manual')return;if(!al.com[c.id]||al.comAuto[c.id]){al.com[c.id]=rvComTxt(d);al.comAuto[c.id]=true}});
+    if(!al.comG||al.comGAuto){al.comG=rvComGeral(E,al,an);al.comGAuto=true}}
+  if(n)rvLog(al,'Correção automática: '+n+' critério(s)');return n}
+const rvPorRever=(al,E)=>E.crit.filter(c=>!(al.visto||{})[c.id]&&(al.pts[c.id]==null||al.pts[c.id]===''||((al.auto||{})[c.id]&&(al.conf||{})[c.id]!=='alta'))).length;
+function rvGuardarAnalise(av,al,an){const E=rvEn(av.enun);const cfg=rvCfg();const ant=al.an;al.an=an;al.sug={};al.conf={};
+  E.crit.forEach(c=>{const d=c.auto&&an.det[c.auto];if(!d)return;let f,conf;
+    if(d.e==='manual'||(c.auto==='menu'&&d.e==='parcial')){if(!cfg.estimar)return;const e=rvEstimar(c.auto,an);if(!e)return;f=e[0];conf='baixa';an.det[c.auto]={...d,nota:e[1]}}
+    else{f=d.e==='ok'?1:d.q!=null?d.q*.75:d.e==='parcial'?.5:0;conf=d.e==='parcial'?'media':'alta';if(c.auto==='titulos'&&an.plac.length)f=Math.min(f,.75)}
+    al.sug[c.id]=Math.round((+c.pts||0)*f*2)/2;al.conf[c.id]=conf});
   if(ant){const mud=[];E.crit.forEach(c=>{const a=ant.det&&ant.det[c.auto],b=an.det[c.auto];if(a&&b&&a.e!==b.e)mud.push(c.n+': '+a.e+' → '+b.e)});al.difAn=mud}
-  rvLog(al,'Análise automática'+(ant?' (nova)':''));save()}
+  rvLog(al,'Análise automática'+(ant?' (nova)':''));rvAplicarAuto(av,al);save()}
+async function rvCorrigirTodos(av,btn){const L=av.al.filter(x=>x.url);let ok=0,err=0,i=0;const fila=L.slice();
+  const vez=async()=>{while(fila.length){const al=fila.shift();i++;if(btn)btn.textContent=`A corrigir ${i} de ${L.length}…`;try{await rvAnalisar(av,al);rvAplicarAuto(av,al,true);ok++}catch(_){err++}}};
+  await Promise.all([vez(),vez(),vez()]);save();return {ok,err,sem:av.al.length-L.length}}
 /* colar dados à mão (quando o site não deixa ler diretamente) */
 function rvColarDlg(av,al){openDrawer('Colar os dados do site',`<div class="ed"><p class="hint" style="margin-top:0">Abra no browser os dois endereços abaixo, selecione tudo (Ctrl+A), copie e cole aqui.</p>
   <p><b>1.</b> <code>${esc(rvBase(al.url)||'https://…')}/wp-json/</code></p><textarea id="rvc-r" rows="4" placeholder="Cole aqui o primeiro"></textarea>
@@ -233,18 +267,26 @@ function rvAv(av){const E=rvEn(av.enun);const tab=UI.rvAvTab||'al';
   rvBindNav();$('#rv-vt').onclick=()=>{UI.rvEd=null;vReview()};$$('#view [data-rvat]').forEach(b=>b.onclick=()=>{UI.rvAvTab=b.dataset.rvat;rvAv(av)});
   ({al:rvAvAlunos,tu:rvAvTurma,dup:rvAvDupla,ex:rvAvExportar}[tab]||rvAvAlunos)($('#rv-avm'),av,E)}
 function rvAvAlunos(m,av,E){const mx=rvMax(E);
-  m.innerHTML=`<div class="rvbar"><button class="btn" id="rv-add">${ic('plus',14)} Aluno</button><button class="btn" id="rv-imp">${ic('upload',14)} Importar (turma / ficheiro)</button><button class="btn" id="rv-pad">${ic('globo',14)} Gerar endereços</button><button class="btn pri" id="rv-ana">${ic('search',14)} Analisar todos</button><button class="btn" id="rv-sug">${ic('sparkle',14)} Aplicar sugestões a todos</button><button class="btn" id="rv-del">${ic('trash',14)} Apagar avaliação</button></div>
-   ${av.al.length?`<div class="rvtw"><table class="rvt"><thead><tr><th>N.º</th><th>Aluno</th><th>Endereço</th><th>Análise</th><th>Pontos</th><th>Nota</th><th>Autoav.</th><th></th></tr></thead><tbody>${av.al.map(al=>{const T=rvTot(al,E);const sa=al.autoav?rvTot({pts:al.autoav.pts},E):null;
+  m.innerHTML=`<div class="rvbar"><button class="btn" id="rv-add">${ic('plus',14)} Aluno</button><button class="btn" id="rv-imp">${ic('upload',14)} Importar (turma / ficheiro)</button><button class="btn" id="rv-pad">${ic('globo',14)} Gerar endereços</button><button class="btn pri" id="rv-auto">${ic('sparkle',14)} Corrigir tudo automaticamente</button><button class="btn" id="rv-ana">${ic('search',14)} Analisar de novo</button><button class="btn" id="rv-sug">${ic('check',14)} Aplicar sugestões a todos</button><button class="btn" id="rv-cfg">${ic('gear',14)} Correção automática</button><button class="btn" id="rv-del">${ic('trash',14)} Apagar avaliação</button></div>
+   ${av.al.length?`<div class="rvtw"><table class="rvt"><thead><tr><th>N.º</th><th>Aluno</th><th>Endereço</th><th>Análise</th><th>Estado</th><th>Pontos</th><th>Nota</th><th>Autoav.</th><th></th></tr></thead><tbody>${av.al.map(al=>{const T=rvTot(al,E);const sa=al.autoav?rvTot({pts:al.autoav.pts},E):null;
      return `<tr><td>${esc(al.num)}</td><td><b>${esc(al.nome||'—')}</b></td><td><input class="rvurl" data-rvu="${al.id}" value="${esc(al.url||'')}" placeholder="testea01nome.wasmer.app" aria-label="Endereço do site de ${esc(al.nome)}"></td>
-     <td>${al.an?`${Object.values(al.an.det).filter(d=>d.e==='ok').length} ✓ · ${new Date(al.an.t).toLocaleDateString('pt-PT')}`:'<span class="mut">—</span>'}</td><td>${T.n?nf(T.t)+' / '+mx:'—'}${T.n&&!T.c?' <span class="mut">(incompleto)</span>':''}</td>
+     <td>${al.an?`${Object.values(al.an.det).filter(d=>d.e==='ok').length} ✓ · ${new Date(al.an.t).toLocaleDateString('pt-PT')}`:'<span class="mut">—</span>'}</td><td>${(()=>{if(!T.n)return '<span class="mut">por corrigir</span>';const r=rvPorRever(al,E);return r?`<span class="rvb pa">${r} por rever</span>`:'<span class="rvb ok">✓ revista</span>'})()}</td><td>${T.n?nf(T.t)+' / '+mx:'—'}${T.n&&!T.c?' <span class="mut">(incompleto)</span>':''}</td>
      <td>${T.n?`<b class="rvnota">${nf(rvVal(T.t,E))}</b>`:'—'}</td><td>${sa&&sa.n?nf(rvVal(sa.t,E)):'—'}</td><td><button class="btn pri" data-rvop="${al.id}">${ic('pencil',14)} Corrigir</button></td></tr>`}).join('')}</tbody></table></div>`:`<div class="rvvazio"><p>Ainda sem alunos. Importe a turma ou um ficheiro com «nome;endereço».</p></div>`}`;
-  m.querySelectorAll('[data-rvu]').forEach(i=>i.onchange=()=>{const al=av.al.find(x=>x.id===i.dataset.rvu);al.url=i.value.trim();rvLog(al,'Endereço: '+al.url);save()});
+  m.querySelectorAll('[data-rvu]').forEach(i=>i.onchange=()=>{const al=av.al.find(x=>x.id===i.dataset.rvu);al.url=i.value.trim();rvLog(al,'Endereço: '+al.url);save();
+    if(al.url&&rvCfg().analisar){i.classList.add('rvbusy');rvAnalisar(av,al).then(()=>toast('Site de '+aaCurto(al.nome)+' corrigido automaticamente','ok')).catch(e=>toast(e.message,'erro')).finally(()=>{if(VIEW==='review'&&UI.rvEd&&UI.rvEd.k==='av')rvAv(av)})}});
   m.querySelectorAll('[data-rvop]').forEach(b=>b.onclick=()=>{UI.rvEd={k:'al',av:av.id,id:b.dataset.rvop};UI.rvAlTab='cor';vReview()});
   $('#rv-add').onclick=()=>{const n=prompt('Nome do aluno:');if(!n||!n.trim())return;av.al.push({id:uid(),num:String(av.al.length+1),nome:n.trim().slice(0,120),url:'',pts:{},com:{},shots:[],hist:[]});save();rvAv(av)};
   $('#rv-imp').onclick=()=>rvImportarDlg(av);$('#rv-pad').onclick=()=>rvPadraoDlg(av,E);
+  $('#rv-auto').onclick=async e=>{const b=e.currentTarget;if(!av.al.some(x=>x.url))return toast('Indique primeiro os endereços dos sites (ou use «Gerar endereços»).','erro');b.disabled=true;
+    const r=await rvCorrigirTodos(av,b);const rev=av.al.reduce((s,al)=>s+(al.an?rvPorRever(al,E):0),0);
+    toast(`${r.ok} sites corrigidos`+(r.err?` · ${r.err} sem resposta (use «Colar dados»)`:'')+(r.sem?` · ${r.sem} sem endereço`:'')+(rev?` · ${rev} critérios para rever`:''),r.err?'aviso':'ok');rvAv(av)};
+  $('#rv-cfg').onclick=()=>rvCfgDlg(()=>rvAv(av));
   $('#rv-ana').onclick=async e=>{const b=e.currentTarget;b.disabled=true;let ok=0,err=0;for(const al of av.al.filter(x=>x.url)){b.textContent='A analisar '+(ok+err+1)+'…';try{await rvAnalisar(av,al);ok++}catch(_){err++}}toast(`${ok} sites analisados`+(err?`, ${err} sem resposta`:''),err?'aviso':'ok');rvAv(av)};
   $('#rv-sug').onclick=()=>{let n=0;av.al.forEach(al=>{if(!al.sug)return;E.crit.forEach(c=>{if(al.sug[c.id]!=null&&(al.pts[c.id]==null||al.pts[c.id]==='')){al.pts[c.id]=al.sug[c.id];n++}});rvLog(al,'Sugestões aplicadas')});save();toast(n+' pontos preenchidos (só onde estava vazio)','ok');rvAv(av)};
   $('#rv-del').onclick=()=>{if(!confirm('Apagar a avaliação «'+av.titulo+'» e todas as correções?'))return;const L=RV().av;L.splice(L.indexOf(av),1);save();UI.rvEd=null;vReview()}}
+function rvCfgDlg(fim){const c=rvCfg();const o=[['analisar','Corrigir logo que o endereço do site é escrito'],['aplicar','Dar os pontos sugeridos pela análise (só onde ainda não mexeu)'],['estimar','Estimar também os critérios que não se veem de fora (menu, tema, adaptação ao telemóvel), marcados para rever'],['comentar','Escrever os comentários para o aluno e a apreciação geral (só onde ainda não escreveu)'],['capturas','Mostrar ao aluno as capturas das páginas onde cada bloco foi encontrado']];
+  openDrawer('Correção automática',`<div class="ed"><p class="hint" style="margin-top:0">O que muda à mão nunca é substituído. O que fica com confiança média ou em estimativa aparece em «por rever».</p>${o.map(([k,l])=>`<label class="chk"><input type="checkbox" data-rvcf="${k}" ${c[k]?'checked':''}> <span>${l}</span></label>`).join('')}<button class="btn pri" id="rvcf-ok" style="margin-top:12px">${ic('check',14)} Guardar</button></div>`);
+  $('#rvcf-ok').onclick=()=>{$$('#dw-b [data-rvcf]').forEach(i=>c[i.dataset.rvcf]=i.checked);save();closeDrawer();toast('Guardado','ok');fim&&fim()}}
 function rvImportarDlg(av){const a=A();const TT=a?turmasFiltradas(a):[];
   openDrawer('Importar alunos',`<div class="ed"><label>Da turma (lista que veio do programa da escola)</label><select id="rvi-t"><option value="">—</option>${TT.map(t=>`<option value="${t.id}">${esc(t.nome)} · ${esc(t.disciplina||'')}</option>`).join('')}</select><button class="btn" id="rvi-tok" style="margin:8px 0 16px">${ic('users',14)} Juntar a turma</button>
    <label>Ficheiro CSV ou texto colado</label><p class="hint" style="margin-top:0">Uma linha por aluno: <code>número;nome;endereço</code> ou <code>nome;endereço</code> (separador ; , ou tabulação).</p>
@@ -275,7 +317,7 @@ function rvAvDupla(m,av,E){av.lim2=av.lim2==null?25:av.lim2;
    <p class="hint">Em cada aluno, o separador «Dupla correção» recebe os pontos do segundo corretor. Aqui ficam as divergências.</p>
    ${av.al.map(al=>{if(!al.pts2)return '';const D=E.crit.filter(c=>{const a=al.pts[c.id],b=al.pts2[c.id];return a!=null&&b!=null&&a!==''&&b!==''&&Math.abs(a-b)/(+c.pts||1)*100>=av.lim2});const t1=rvTot(al,E).t,t2=rvTot(al,E,'pts2').t;
      return `<section class="rvpanel"><h3>${esc(al.nome)} — ${nf(rvVal(t1,E))} / ${nf(rvVal(t2,E))} valores ${Math.abs(t1-t2)/rvMax(E)*20>=1?'<span class="rvb no">diferença ≥ 1 valor</span>':'<span class="rvb ok">notas próximas</span>'}</h3>${D.length?`<table class="rvt"><tr><th>Critério</th><th>Corretor 1</th><th>Corretor 2</th><th></th></tr>${D.map(c=>`<tr><td>${esc(c.n)}</td><td>${nf(al.pts[c.id])}</td><td>${nf(al.pts2[c.id])}</td><td><button class="btn" data-rvmed="${al.id}|${c.id}">Usar a média</button></td></tr>`).join('')}</table>`:'<p class="mut">Sem divergências.</p>'}</section>`}).join('')||'<div class="rvvazio"><p>Ainda nenhum aluno tem segunda correção.</p></div>'}`;
-  $('#rv2-n').onchange=e=>{av.cor2=e.target.value.trim();save()};$('#rv2-l').onchange=e=>{av.lim2=Math.max(5,Math.min(100,+e.target.value||25));save();rvAv(av)};
+  $('#rv2-n').onchange=e=>{av.cor2=e.target.value.trim();save()};$('#rv2-l').onchange=e=>{av.lim2=Math.max(5,Math.min(100,+e.target.value||25));save();setTimeout(()=>rvAv(av))};
   m.querySelectorAll('[data-rvmed]').forEach(b=>b.onclick=()=>{const [aid,cid]=b.dataset.rvmed.split('|');const al=av.al.find(x=>x.id===aid);const v=Math.round(((+al.pts[cid]||0)+(+al.pts2[cid]||0))/2*2)/2;rvLog(al,'Média dos corretores em «'+(E.crit.find(c=>c.id===cid)||{}).n+'»: '+al.pts[cid]+' → '+v);al.pts[cid]=v;save();rvAv(av)})}
 /* exportar e partilhar */
 function rvLinhas(av,E){const cab=['N.º','Aluno','Endereço',...E.crit.map(c=>c.n+' ('+c.pts+')'),'Total ('+rvMax(E)+')','Nota (0-20)'];
@@ -301,6 +343,7 @@ async function rvChaves(code){const te=new TextEncoder();const id=aaHex(await cr
   const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:te.encode('es-rv-k:'+id),iterations:150000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);return {id,k}}
 const rvUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'review.html#'+c;
 function rvDadosAluno(av,E,al,modo){const fb=modo!=='auto';const T=rvTot(al,E);let tam=0;const shots=fb?(al.shots||[]).filter(s=>{tam+=(s.src||'').length;return tam<2600000}).map(s=>({src:s.src,cap:s.cap||'',crit:s.crit||'',anot:s.anot||[]})):[];
+  if(fb&&rvCfg().capturas&&al.an)E.crit.forEach(c=>{const d=c.auto&&al.an.det[c.auto];if(!d||!d.onde||!d.onde[0]||d.e==='falta'||shots.some(x=>x.crit===c.id))return;shots.push({src:rvShot(d.onde[0].u,1280,900),cap:'A tua página «'+d.onde[0].t+'»',crit:c.id,anot:[]})});
   const aud={};if(fb)Object.keys(al.audio||{}).forEach(k=>{if(tam+al.audio[k].length<3500000){aud[k]=al.audio[k];tam+=al.audio[k].length}});
   return {v:1,t:av.titulo,en:E.titulo,nm:aaCurto(al.nome),url:al.url||'',prof:S.cfg.professor||'',modo,mx:rvMax(E),doms:E.doms,
     crit:E.crit.map(c=>({id:c.id,dom:c.dom,n:c.n,pts:+c.pts||0,desc:c.desc||'',ref:c.ref||''})),
@@ -333,27 +376,31 @@ function rvAluno(av,al){const E=rvEn(av.enun);const tab=UI.rvAlTab||'cor';const 
   $$('#view [data-rvalt]').forEach(b=>b.onclick=()=>{UI.rvAlTab=b.dataset.rvalt;rvAluno(av,al)});
   ({cor:rvAlCorrecao,cap:rvAlCapturas,ana:rvAlAnalise,aa:rvAlAuto,dup:rvAlDupla,ver:rvAlVersoes,his:rvAlHist,par:rvAlPartilhar}[tab]||rvAlCorrecao)($('#rv-alm'),av,E,al)}
 function rvAlCorrecao(m,av,E,al){const an=al.an;al.com=al.com||{};al.audio=al.audio||{};
-  m.innerHTML=`${!an?`<div class="alert">${ic('info',15)} Ainda sem análise automática. ${al.url?`<button class="btn pri" id="rv-an1">${ic('search',14)} Analisar o site</button>`:'Indique o endereço do site na lista de alunos.'}</div>`:al.sug&&Object.keys(al.sug).length?`<div class="rvbar"><button class="btn" id="rv-sug1">${ic('sparkle',14)} Aplicar as sugestões da análise (só onde está vazio)</button></div>`:''}
+  m.innerHTML=`${!an?`<div class="alert">${ic('info',15)} Ainda sem análise automática. ${al.url?`<button class="btn pri" id="rv-an1">${ic('search',14)} Analisar o site</button>`:'Indique o endereço do site na lista de alunos.'}</div>`:(()=>{const r=rvPorRever(al,E);al.visto=al.visto||{};return `<div class="rvbar rvauto">${r?`<span class="rvb pa">${r} critério(s) por rever</span>`:'<span class="rvb ok">✓ Tudo revisto</span>'}<label class="chk"><input type="checkbox" id="rv-so" ${UI.rvSoRever?'checked':''}> Mostrar só o que falta rever</label><span class="rvsp"></span>${r?`<button class="btn pri" id="rv-tv">${ic('checks',14)} Dar tudo como revisto</button>`:''}<button class="btn" id="rv-sug1">${ic('sparkle',14)} Refazer a correção automática</button></div>`})()}
    ${E.doms.map((d,di)=>{const C=E.crit.filter(c=>c.dom===di);if(!C.length)return '';const s=C.reduce((x,c)=>x+(+al.pts[c.id]||0),0),sm=C.reduce((x,c)=>x+(+c.pts||0),0);
-     return `<section class="rvpanel"><h3>${esc(d)} <span class="rvsp"></span><span class="mut">${nf(s)} / ${sm}</span></h3>${C.map(c=>{const v=al.pts[c.id];const nv=rvNivel(v,c.pts);const det=an&&c.auto&&an.det[c.auto];const sg=al.sug&&al.sug[c.id];
-       return `<div class="rvcrit" id="rvc-${c.id}"><div class="rvci">${c.ref?`<button type="button" class="rvthumb" data-rvlado="${c.id}" title="Ver o exemplo correto lado a lado"><img src="${RV_REF}${c.ref}.webp" alt="Exemplo correto: ${esc(c.n)}" loading="lazy"></button>`:''}
-         <div class="rvct"><b>${esc(c.n)}</b> <span class="mut">(${nf(c.pts)} pts)</span><div class="mut rvdesc">${esc(c.desc||'')}</div>${det?`<div class="rvdet">${rvEst(det.e)} ${esc(det.nota||'')}${det.onde&&det.onde.length?' · '+det.onde.map(o=>`<a href="${esc(o.u)}" target="_blank" rel="noopener">${esc(o.t)}</a>`).join(', '):''}${sg!=null?` · <span class="mut">sugestão: ${nf(sg)}</span>`:''}</div>`:''}</div></div>
+     return `<section class="rvpanel"><h3>${esc(d)} <span class="rvsp"></span><span class="mut">${nf(s)} / ${sm}</span></h3>${C.map(c=>{const v=al.pts[c.id];const nv=rvNivel(v,c.pts);const det=an&&c.auto&&an.det[c.auto];const sg=al.sug&&al.sug[c.id];const cf=(al.conf||{})[c.id];const au=(al.auto||{})[c.id];
+       const rever=!(al.visto||{})[c.id]&&(v==null||v===''||(au&&cf!=='alta'));if(UI.rvSoRever&&!rever)return '';
+       return `<div class="rvcrit${rever?' rvrever':''}" id="rvc-${c.id}"><div class="rvci">${c.ref?`<button type="button" class="rvthumb" data-rvlado="${c.id}" title="Ver o exemplo correto lado a lado"><img src="${RV_REF}${c.ref}.webp" alt="Exemplo correto: ${esc(c.n)}" loading="lazy"></button>`:''}
+         <div class="rvct"><b>${esc(c.n)}</b> <span class="mut">(${nf(c.pts)} pts)</span><div class="mut rvdesc">${esc(c.desc||'')}</div>${det?`<div class="rvdet">${rvEst(det.e)} ${esc(det.nota||'')}${det.onde&&det.onde.length?' · '+det.onde.map(o=>`<a href="${esc(o.u)}" target="_blank" rel="noopener">${esc(o.t)}</a>`).join(', '):''}${sg!=null?` · <span class="mut">sugestão: ${nf(sg)}</span>`:''}</div>`:''}${au?`<div class="rvdet"><span class="rvb ${cf==='alta'?'ok':cf==='media'?'pa':'ma'}">automático · ${rvConfTxt[cf]||''}</span>${rever?` <button type="button" class="btn rvvis" data-rvvis="${c.id}">${ic('check',13)} Revisto</button>`:''}</div>`:rever&&v!=null&&v!==''?`<div class="rvdet"><button type="button" class="btn rvvis" data-rvvis="${c.id}">${ic('check',13)} Revisto</button></div>`:''}</div></div>
          <div class="rvniv">${RV_NIV.map(([n,l,f])=>`<button type="button" data-rvn="${c.id}|${f}" class="${nv===n?'on':''}" title="${l} = ${nf((+c.pts||0)*f)} pts">${l}</button>`).join('')}<input type="number" class="rvpts" data-rvp="${c.id}" min="0" max="${c.pts}" step="0.5" value="${v==null?'':v}" aria-label="Pontos em ${esc(c.n)}"></div>
          <div class="rvcom"><textarea data-rvcm="${c.id}" rows="1" placeholder="Comentário para o aluno…">${esc(al.com[c.id]||'')}</textarea><button class="btn" data-rvbk="${c.id}" title="Banco de comentários">${ic('chat',14)}</button><button class="btn" data-rvsv="${c.id}" title="Guardar este comentário no banco">${ic('plus',14)}</button>
          <button class="btn${al.audio[c.id]?' on':''}" data-rvau="${c.id}" title="Comentário em áudio">${ic('mic',14)}</button></div>${al.audio[c.id]?`<div class="rvaud"><audio controls src="${esc(al.audio[c.id])}"></audio><button class="btn" data-rvaud="${c.id}">${ic('trash',13)}</button></div>`:''}</div>`}).join('')}</section>`}).join('')}
    <section class="rvpanel"><h3>Apreciação geral</h3><textarea id="rv-g" rows="3" placeholder="Comentário geral para o aluno…">${esc(al.comG||'')}</textarea><div class="rvbar"><button class="btn${al.audio._g?' on':''}" data-rvau="_g">${ic('mic',14)} Áudio geral</button>${al.audio._g?`<audio controls src="${esc(al.audio._g)}"></audio><button class="btn" data-rvaud="_g">${ic('trash',13)}</button>`:''}</div></section>`;
-  const set=(cid,v)=>{const c=E.crit.find(x=>x.id===cid);const old=al.pts[cid];v=v===''||v==null?null:Math.max(0,Math.min(+c.pts||0,Math.round((+v||0)*2)/2));if(v==null)delete al.pts[cid];else al.pts[cid]=v;if(old!==v)rvLog(al,c.n+': '+(old==null?'—':old)+' → '+(v==null?'—':v));save()};
+  const set=(cid,v)=>{const c=E.crit.find(x=>x.id===cid);const old=al.pts[cid];v=v===''||v==null?null:Math.max(0,Math.min(+c.pts||0,Math.round((+v||0)*2)/2));if(v==null)delete al.pts[cid];else al.pts[cid]=v;if(al.auto)delete al.auto[cid];(al.visto=al.visto||{})[cid]=true;if(old!==v)rvLog(al,c.n+': '+(old==null?'—':old)+' → '+(v==null?'—':v));save()};
   m.querySelectorAll('[data-rvn]').forEach(b=>b.onclick=()=>{const [cid,f]=b.dataset.rvn.split('|');const c=E.crit.find(x=>x.id===cid);set(cid,(+c.pts||0)*f);rvAluno(av,al);requestAnimationFrame(()=>{const el=$('#rvc-'+cid);if(el)el.scrollIntoView({block:'nearest'})})});
-  m.querySelectorAll('[data-rvp]').forEach(i=>i.onchange=()=>{set(i.dataset.rvp,i.value);rvAluno(av,al)});
-  m.querySelectorAll('[data-rvcm]').forEach(t=>t.onchange=()=>{al.com[t.dataset.rvcm]=t.value.trim().slice(0,2000);if(!al.com[t.dataset.rvcm])delete al.com[t.dataset.rvcm];save()});
+  m.querySelectorAll('[data-rvp]').forEach(i=>i.onchange=()=>{set(i.dataset.rvp,i.value);setTimeout(()=>rvAluno(av,al))});
+  m.querySelectorAll('[data-rvvis]').forEach(b=>b.onclick=()=>{(al.visto=al.visto||{})[b.dataset.rvvis]=true;rvLog(al,'Revisto: '+(E.crit.find(c=>c.id===b.dataset.rvvis)||{}).n);save();rvAluno(av,al)});
+  const so=$('#rv-so');if(so)so.onchange=()=>{UI.rvSoRever=so.checked;rvAluno(av,al)};
+  const tv=$('#rv-tv');if(tv)tv.onclick=()=>{al.visto=al.visto||{};E.crit.forEach(c=>{if(al.pts[c.id]!=null&&al.pts[c.id]!=='')al.visto[c.id]=true});rvLog(al,'Correção dada como revista');save();rvAluno(av,al)};
+  m.querySelectorAll('[data-rvcm]').forEach(t=>t.onchange=()=>{if(al.comAuto)delete al.comAuto[t.dataset.rvcm];al.com[t.dataset.rvcm]=t.value.trim().slice(0,2000);if(!al.com[t.dataset.rvcm])delete al.com[t.dataset.rvcm];save()});
   m.querySelectorAll('[data-rvlado]').forEach(b=>b.onclick=()=>rvLadoALado(E.crit.find(c=>c.id===b.dataset.rvlado),al));
   m.querySelectorAll('[data-rvbk]').forEach(b=>b.onclick=()=>rvBancoDlg(b.dataset.rvbk,txt=>{const t=m.querySelector(`[data-rvcm="${b.dataset.rvbk}"]`);t.value=(t.value?t.value+' ':'')+txt;t.onchange()}));
   m.querySelectorAll('[data-rvsv]').forEach(b=>b.onclick=()=>{const t=m.querySelector(`[data-rvcm="${b.dataset.rvsv}"]`).value.trim();if(!t)return toast('Escreva primeiro o comentário','erro');if(!RV().com.some(x=>x.txt===t))RV().com.push({id:uid(),crit:b.dataset.rvsv,txt:t,n:0});save();toast('Guardado no banco de comentários','ok')});
   m.querySelectorAll('[data-rvau]').forEach(b=>b.onclick=()=>rvGravar(b,d=>{al.audio[b.dataset.rvau]=d;rvLog(al,'Comentário em áudio gravado');save();rvAluno(av,al)}));
   m.querySelectorAll('[data-rvaud]').forEach(b=>b.onclick=()=>{delete al.audio[b.dataset.rvaud];save();rvAluno(av,al)});
-  $('#rv-g').onchange=e=>{al.comG=e.target.value.trim().slice(0,4000);save()};
+  $('#rv-g').onchange=e=>{al.comG=e.target.value.trim().slice(0,4000);al.comGAuto=false;save()};
   const a1=$('#rv-an1');if(a1)a1.onclick=async()=>{a1.disabled=true;a1.textContent='A analisar…';try{await rvAnalisar(av,al);toast('Análise feita','ok')}catch(e){toast(e.message,'erro')}rvAluno(av,al)};
-  const s1=$('#rv-sug1');if(s1)s1.onclick=()=>{let n=0;E.crit.forEach(c=>{if(al.sug[c.id]!=null&&(al.pts[c.id]==null||al.pts[c.id]==='')){al.pts[c.id]=al.sug[c.id];n++}});rvLog(al,'Sugestões aplicadas ('+n+')');save();toast(n+' critérios preenchidos','ok');rvAluno(av,al)}}
+  const s1=$('#rv-sug1');if(s1)s1.onclick=()=>{const n=rvAplicarAuto(av,al,true);save();toast(n?n+' critério(s) atualizados (o que mudou à mão fica igual)':'Nada a mudar','ok');rvAluno(av,al)}}
 function rvBancoDlg(cid,usar){const L=RV().com;let q='';
   openDrawer('Banco de comentários',`<div class="ed"><input type="search" id="rvb-q" placeholder="Pesquisar comentários…"><label class="chk"><input type="checkbox" id="rvb-so" checked> Só deste critério e gerais</label><div id="rvb-l"></div></div>`);
   const pinta=()=>{const so=$('#rvb-so').checked;const X=L.filter(x=>(!so||!x.crit||x.crit===cid)&&(!q||normT(x.txt).includes(normT(q)))).sort((a,b)=>(b.n||0)-(a.n||0));
@@ -403,7 +450,7 @@ function rvAlDupla(m,av,E,al){al.pts2=al.pts2||{};
   m.innerHTML=`<p class="hint">Pontos do segundo corretor${av.cor2?' ('+esc(av.cor2)+')':''}. As diferenças a partir de ${av.lim2||25}% do critério ficam assinaladas.</p><table class="rvt"><tr><th>Critério</th><th>Corretor 1</th><th>Corretor 2</th><th></th></tr>${E.crit.map(c=>{const a=al.pts[c.id],b=al.pts2[c.id];const dv=a!=null&&b!=null&&Math.abs(a-b)/(+c.pts||1)*100>=(av.lim2||25);
     return `<tr class="${dv?'rvdiv':''}"><td>${esc(c.n)} <span class="mut">(${nf(c.pts)})</span></td><td>${a==null?'—':nf(a)}</td><td><input type="number" class="rvpts" data-rv2="${c.id}" min="0" max="${c.pts}" step="0.5" value="${b==null?'':b}"></td><td>${dv?'<span class="rvb no">divergência</span>':''}</td></tr>`}).join('')}
     <tr><th>Nota</th><th>${nf(rvVal(rvTot(al,E).t,E))}</th><th>${nf(rvVal(rvTot(al,E,'pts2').t,E))}</th><th></th></tr></table>`;
-  m.querySelectorAll('[data-rv2]').forEach(i=>i.onchange=()=>{const c=E.crit.find(x=>x.id===i.dataset.rv2);if(i.value==='')delete al.pts2[c.id];else al.pts2[c.id]=Math.max(0,Math.min(+c.pts||0,+i.value||0));rvLog(al,'Segundo corretor · '+c.n+': '+(i.value||'—'));save();rvAluno(av,al)})}
+  m.querySelectorAll('[data-rv2]').forEach(i=>i.onchange=()=>{const c=E.crit.find(x=>x.id===i.dataset.rv2);if(i.value==='')delete al.pts2[c.id];else al.pts2[c.id]=Math.max(0,Math.min(+c.pts||0,+i.value||0));rvLog(al,'Segundo corretor · '+c.n+': '+(i.value||'—'));save();setTimeout(()=>rvAluno(av,al))})}
 function rvAlVersoes(m,av,E,al){al.vers=al.vers||[];
   m.innerHTML=`<div class="rvbar"><button class="btn pri" id="rv-vs">${ic('layers',14)} Guardar versão atual</button><span class="mut">Use antes de o aluno corrigir o site (reavaliação/recurso). Depois analise de novo e compare.</span></div>
    ${al.vers.length?al.vers.map((v,k)=>{const dif=E.crit.filter(c=>(v.pts[c.id]??null)!==(al.pts[c.id]??null));return `<section class="rvpanel"><h3>${esc(v.n)} · ${new Date(v.t).toLocaleString('pt-PT')} <span class="rvsp"></span><b>${nf(rvVal(v.tot,E))} → ${nf(rvVal(rvTot(al,E).t,E))} valores</b></h3>
@@ -444,7 +491,7 @@ function rvEnunEd(E){const opt=(L,v)=>L.map(([k,l])=>`<option value="${k}" ${k==
    <section class="rvpanel"><h3>Critérios <span class="rvsp"></span><button class="btn" id="rve-ca">${ic('plus',14)} Critério</button></h3><div class="rvtw"><table class="rvt rvedt"><tr><th></th><th>Domínio</th><th>Critério</th><th>Pontos</th><th>Descrição</th><th>Análise automática</th><th>Exemplo correto</th><th></th></tr>
     ${E.crit.map((c,i)=>`<tr><td><button class="btn" data-rvcu="${i}" ${i?'':'disabled'} aria-label="Subir">↑</button></td><td><select data-rvf="${i}|dom">${E.doms.map((d,k)=>`<option value="${k}" ${c.dom===k?'selected':''}>${esc(d)}</option>`).join('')}</select></td><td><input data-rvf="${i}|n" value="${esc(c.n)}"></td><td><input type="number" data-rvf="${i}|pts" value="${+c.pts||0}" min="0" step="0.5" style="width:70px"></td>
      <td><input data-rvf="${i}|desc" value="${esc(c.desc||'')}"></td><td><select data-rvf="${i}|auto">${opt(RV_AUTO,c.auto||'')}</select></td><td><select data-rvf="${i}|ref">${opt(RV_REFS,c.ref||'')}</select></td><td><button class="btn" data-rvcx="${i}">${ic('trash',13)}</button></td></tr>`).join('')}</table></div></section>`);
-  rvBindNav();const re=()=>{save();rvEnunEd(E)};$('#rve-v').onclick=()=>{UI.rvEd=null;UI.rvTab='enun';vReview()};
+  rvBindNav();const re=()=>{save();setTimeout(()=>rvEnunEd(E))};$('#rve-v').onclick=()=>{UI.rvEd=null;UI.rvTab='enun';vReview()};
   $('#rve-t').onchange=e=>{E.titulo=e.target.value.trim()||'Enunciado';save()};$('#rve-d').onchange=e=>{E.desc=e.target.value;save()};
   $('#rve-p').onchange=e=>{try{new RegExp(e.target.value);E.padrao=e.target.value.trim();save()}catch(_){toast('Expressão inválida','erro')}};$('#rve-mp').onchange=e=>{E.minPag=Math.max(0,+e.target.value||0);save()};
   $('#rve-da').onclick=()=>{E.doms.push('Novo domínio');re()};$$('#view [data-rvdm]').forEach(i=>i.onchange=()=>{E.doms[+i.dataset.rvdm]=i.value.trim();save()});
@@ -522,5 +569,7 @@ html body .rvlink{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:
 html body .rvbk{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;padding:9px 10px;border-radius:8px;margin:6px 0;cursor:pointer}html body .rvbk:hover{border-color:#c2410c}
 html body .rvrow{display:flex;gap:8px;align-items:center;margin:6px 0}html body .rvrow input{flex:1}html body .rvedt input,html body .rvedt select{width:100%;min-width:90px}
 html body .rvinl{display:flex;gap:6px;align-items:center}
+html body .rvcrit.rvrever{background:color-mix(in srgb,#f59e0b 8%,transparent);border-left:4px solid #f59e0b;padding-left:10px}html body .rvvis{padding:3px 10px;font-size:12px;margin-left:6px}html body .rvauto{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px}html body .rvauto .chk{margin:0}html body .rvurl.rvbusy{background:repeating-linear-gradient(90deg,transparent 0 10px,color-mix(in srgb,#c2410c 12%,transparent) 10px 20px)}
+html body.est-sge .rvauto{border-radius:0}
 html body.est-sge .rvnav,html body.est-sge .rvcard,html body.est-sge .rvpanel,html body.est-sge .rvkpis div,html body.est-sge .rvtotal,html body.est-sge .rvniv button,html body.est-sge .rvthumb,html body.est-sge .rvzoom,html body.est-sge .rvvazio,html body.est-sge .rvnav button,html body.est-sge .rvbk,html body.est-sge .rvlupa-c{border-radius:0}
 `;document.head.appendChild(st)})();

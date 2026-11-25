@@ -2,6 +2,13 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.183
+- Spruce Review: «Corrigir tudo automaticamente» analisa todos os sites, dá os pontos e escreve os comentários e a apreciação geral
+- Spruce Review: escrever o endereço do site já faz a correção automática
+- Spruce Review: cada pontuação automática mostra a confiança; menu, tema e adaptação ao telemóvel passam a ter estimativa
+- Spruce Review: «por rever» na lista e na ficha, com «Mostrar só o que falta rever» e «Dar tudo como revisto»
+- Spruce Review: a página do aluno mostra as capturas das páginas onde cada bloco foi encontrado
+
 ## 1.182
 - Novo: Spruce Review — avaliação de sites dos alunos com análise automática pelo endereço, capturas de ecrã e exemplos corretos lado a lado
 - Spruce Review: rubricas por níveis, banco de comentários, comentários em áudio e anotações sobre capturas
