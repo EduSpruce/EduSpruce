@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.187
+- Spruce Review passa a ser a ferramenta do Módulo 03 de TIC: só aparece com turmas de TIC do ensino profissional
+- Spruce Review: enunciados por curso (Mecatrónica, Agropecuária, Turismo Ambiental e Rural, Ação Educativa), disponíveis só depois de incluir o texto e os critérios
+- Spruce Review: exemplos corretos com conteúdos de cada curso e verificação do tema pelos temas do curso da turma
+- Spruce Review: na nova avaliação, o curso é reconhecido pela turma
+
 ## 1.186
 - Minhas Tarefas: botão «Aumentar» abre as tarefas em grande, no mesmo modo do Jornal Notes (Fechar ou Esc para voltar)
 
