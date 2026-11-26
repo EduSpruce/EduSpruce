@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.186
+- Minhas Tarefas: botão «Aumentar» abre as tarefas em grande, no mesmo modo do Jornal Notes (Fechar ou Esc para voltar)
+
 ## 1.185
 - Seletor de escola no cabeçalho com menu próprio: mais espaço, logótipo de cada escola e navegação por teclado
 - Minhas Tarefas: caixa «Adicionar uma tarefa» sem moldura interior e com mais espaço à volta da data, da estrela e do botão Adicionar
