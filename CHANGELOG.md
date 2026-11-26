@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.185
+- Seletor de escola no cabeçalho com menu próprio: mais espaço, logótipo de cada escola e navegação por teclado
+- Minhas Tarefas: caixa «Adicionar uma tarefa» sem moldura interior e com mais espaço à volta da data, da estrela e do botão Adicionar
+
 ## 1.184
 - Spruce Review: a apreciação geral é escrita sozinha em texto corrido, diferente para cada aluno e ajustada à nota e ao trabalho
 - Spruce Review: botão «Escrever outra» na apreciação geral; as frases já usadas com colegas da mesma avaliação são evitadas

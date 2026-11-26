@@ -57,6 +57,7 @@ dados/004-manifesto.html
 281-novidades-modal.css
 283-spruceit-lados.css
 285-dia20.css
+288-menu-escola.css
 040-corpo.html
 dados/041-hash-wasm.html
 042-corpo-2.html
@@ -282,5 +283,6 @@ dados/199-logotipos-novos.js
 282-logotipo-spruce.js
 284-dia20.js
 286-barra-acoes-ipad-mais.js
+287-menu-escola.js
 245-fim-do-programa.js
 246-fecho.html
