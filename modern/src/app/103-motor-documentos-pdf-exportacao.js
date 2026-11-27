@@ -27,7 +27,7 @@ async function pdfDocumento(spec,nome,opts){opts=opts||{};ocupado&&ocupado('A cr
     const logo=pdf.addImg(await jpegDe(e.logo,260));const logoD=e.logoDir?pdf.addImg(await jpegDe(e.logoDir,260)):null;const logoB=e.logoBaixo?pdf.addImg(await jpegDe(e.logoBaixo,300)):null;if(logoB)FOOT=64;const assin=S.cfg.assinaturaImg?pdf.addImg(await jpegDe(S.cfg.assinaturaImg,400)):null;let y=M;
     const cab=()=>{y=M-6;let xo=M;if(logo){const im=pdf.imgs[+logo.slice(2)-1];const h=40,w=Math.min(120,h*im.w/im.h);pdf.img(logo,M,y,w,h);xo=M+w+10}
       pdf.txt(xo,y+11,e.escola||'',10,{b:true});pdf.txt(xo,y+24,[e.agrupamento,'Ano letivo '+((A()||{}).nome||'')].filter(Boolean).join(' · '),8,{cor:'#5b6472'});
-      let xr=pdf.W-M;if(logoD){const im=pdf.imgs[+logoD.slice(2)-1];const h=22,w=Math.min(70,h*im.w/im.h);pdf.img(logoD,xr-w,y,w,h);xr-=w+10}const r=pdf.pages.length>1?(spec.titulo||''):'';if(r)pdf.txt(xr-pdfW(r,8.5,true),y+11,r,8.5,{b:true,cor:'#5b6472'});if(spec.numero){const n='N.º '+spec.numero;pdf.txt(xr-pdfW(n,8),y+24,n,8,{cor:'#5b6472'})}
+      let xr=pdf.W-M;if(logoD){const im=pdf.imgs[+logoD.slice(2)-1];const h=17,w=Math.min(56,h*im.w/im.h);pdf.img(logoD,xr-w,y,w,h);xr-=w+10}const r=pdf.pages.length>1?(spec.titulo||''):'';if(r)pdf.txt(xr-pdfW(r,8.5,true),y+11,r,8.5,{b:true,cor:'#5b6472'});if(spec.numero){const n='N.º '+spec.numero;pdf.txt(xr-pdfW(n,8),y+24,n,8,{cor:'#5b6472'})}
       y+=46;pdf.linha(M,y,pdf.W-M,y,acc,1.1);y+=14};
     const nova=()=>{pdf.nova();cab()};const espaco=h=>{if(y+h>pdf.H-M-FOOT)nova()};
     cab();pdf.txt(M,y+14,spec.titulo||'',16,{b:true});y+=20;if(spec.subtitulo){pdfWrap(spec.subtitulo,LW,10).forEach(l=>{pdf.txt(M,y+11,l,10,{cor:'#4b5563'});y+=13})}y+=10;

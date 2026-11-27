@@ -72,17 +72,19 @@ function regAutoav(t,a,perAte){const c={...S.cfg,...escolaDe(t)};const P=periodo
       <div class="rgc"><b>Comentário / Reflexão:</b> ${refl||''}</div></div>`};
   const ns=P.map(p=>p<=perAte?parseFloat(String(nAv(p)).replace(',','.')):NaN);const ok=ns.filter(x=>!isNaN(x));const fin=ok.length===P.length&&P.every(p=>p<=perAte)?Math.round(ok.reduce((s,x)=>s+x,0)/ok.length*10)/10:null;
   return `<section class="sheet rgsheet">
-    <div class="hdr"><span class="hl">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>${esc(S.cfg.departamento||(S.cfg.grupo?'Grupo '+S.cfg.grupo:''))}</span></span><span style="text-align:right">${c.logoDir?`<img src="${esc(c.logoDir)}" alt="" style="max-height:26px;max-width:92px;display:block;margin-left:auto;object-fit:contain">`:''}Ano letivo ${esc((A()||{}).nome||'')}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
+    <div class="hdr"><span class="hl">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>${esc(S.cfg.departamento||(S.cfg.grupo?'Grupo '+S.cfg.grupo:''))}</span></span><span style="text-align:right">${c.logoDir?`<img src="${esc(c.logoDir)}" alt="" style="max-height:26px;max-width:92px;display:block;margin-left:auto;object-fit:contain">`:''}Ano letivo ${esc((A()||{}).nome||'')}<br>${esc(relNivelT(t))}</span></div>
     <h1>Registo de Autoavaliação – ${esc(t.disciplina||'')}</h1><div class="sub">Critérios: ${crit}</div>
     <div class="rgal"><span><small>Aluno</small><b>${esc(a.nome)}</b></span><span><small>N.º</small><b>${esc(numAl(a))}</b></span><span><small>Turma</small><b>${esc(a.origem||t.nome)}</b></span></div>
     ${P.map(bloco).join('')}
     <div class="rgfin">${P.map((p,k)=>`${perNome(p).replace(/ .*/,'').replace('.º','.ºP')} <b>${!isNaN(ns[k])?String(ns[k]).replace('.',','):'___'}</b>`).join(' + ')} &nbsp;/ ${P.length} = <span>NOTA FINAL <b>${fin!=null?String(fin).replace('.',','):'_____'}</b></span></div></section>`}
+/* nível/oferta no cabeçalho dos relatórios: PROFIJ e profissional dizem-no (antes saía «Ensino Secundário» ou «3.º Ciclo» pelo ciclo da turma) */
+function relNivelT(t){try{const o=ofertaDe(t);if(o==='profij'){const n=t.nivelEns==='sec'?'Ensino Secundário · ':t.nivelEns==='bas'?'Ensino Básico · ':'';return n+'PROFIJ'+(t.anoCurso?' · '+t.anoCurso+'.º ano':'')}if(o==='profissional')return 'Curso Profissional'+(t.curso?' de '+t.curso:'');return CICLOS[t.ciclo]||''}catch(_){return CICLOS[t.ciclo]||''}}
 function relatorio(t,a,per){
   const P=relPers(t,per),c={...S.cfg,...escolaDe(t)};
   const meds=Object.entries(MEDIDAS).filter(([k])=>k!=='rec').map(([k,g])=>(a.medidas&&a.medidas[k]||[]).map(i=>g.l[i])).flat();
   const sint=(a.sintese&&a.sintese[per])||sintese(t,a,per);const nfin=ponderada(t,pctsFinal(t,a.id,per));
   return `<section class="sheet">
-    <div class="hdr"><span class="hl">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>Ano letivo ${esc((A()||{}).nome||'')}</span></span><span style="text-align:right">${esc(t.disciplina)} · Turma ${esc(a.origem||t.nome)}${a.origem?' <span style="color:#666">(aulas em '+esc(t.nome)+')</span>':''}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
+    <div class="hdr"><span class="hl">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>Ano letivo ${esc((A()||{}).nome||'')}</span></span><span style="text-align:right">${esc(t.disciplina)} · Turma ${esc(a.origem||t.nome)}${a.origem?' <span style="color:#666">(aulas em '+esc(t.nome)+')</span>':''}<br>${esc(relNivelT(t))}</span></div>
     <h1>Relatório Individual ${a.genero==='F'?'da Aluna':'do Aluno'}</h1><div class="sub">${tUnid(t)?esc(relPerNome(t,per)):perNome(per)}</div>
     <div class="sec">Dados ${a.genero==='F'?'da aluna':'do aluno'}</div>
     <div style="display:flex;gap:14px;align-items:flex-start">${fotoSrc(a)?`<img class="foto-al" src="${esc(fotoSrc(a))}" alt="" style="width:39mm;height:48.75mm;object-fit:cover;border:1px solid #999;border-radius:3px">`:''}<div style="flex:1;min-width:0"><div class="kv"><b>Nome</b><span>${esc(a.nome)}</span><b>N.º</b><span>${esc(numAl(a))}${a.processo?' · <span class="sens">proc. '+esc(a.processo)+'</span>':''}</span>

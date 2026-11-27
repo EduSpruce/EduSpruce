@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.217
+- Modelos de critérios: nova coluna «Natureza» para escolher se cada critério ou subdomínio é Específico (testes e trabalhos) ou Geral (ficha da Avaliação Final); ao aplicar o modelo, a natureza passa para a turma
+- Editar Turma (PROFIJ): novo campo «Nível de ensino» (Ensino Básico ou Ensino Secundário), que é o que aparece no cabeçalho dos relatórios (antes saía «Ensino Secundário» ou «3.º Ciclo» pelo ciclo da turma)
+- Relatório individual: nova secção «Elementos de avaliação» com a classificação de cada teste e trabalho (pontos obtidos) e a classificação de cada critério geral da ficha — também no PDF
+- Relatórios e documentos: logótipo do canto superior direito ainda mais pequeno
+
 ## 1.216
 - Língua Estrangeira (PROFIJ): a mesma relação das UFCD — Produção Oral, Compreensão Oral, Produção Escrita e Compreensão Escrita são critérios específicos (testes orais e escritos) e os subdomínios de Atitudes e Valores são critérios gerais, classificados na ficha da Avaliação Final; as turmas que já tinham o modelo passam a tê-los como gerais
 - «Domínios por período» com critérios gerais: passa a «Critérios específicos por período», sem separadores para os gerais e com ligação à ficha

@@ -203,3 +203,27 @@ function cgGeraisLE(t){try{if(!CG_LE(t)||t._gerLE)return;const N=PROF_ATIT.map(g
   const b=$('#ex-ficha');if(b)b.onclick=()=>cgFicha(t,p,aid)}}
 /* PROFIJ: as disciplinas (ex.: Língua Estrangeira - Inglês) não são UFCD — o separador «UFCD» só aparece na pauta das UFCD/UC */
 {const _nM=navModular;navModular=function(){const r=_nM.apply(this,arguments);try{const t=T();if(t&&ofertaDe(t)==='profij'&&!ehUnidC(t)){document.querySelectorAll('#side [data-v="modulos"],#tnavHold [data-v="modulos"]').forEach(b=>{b.hidden=true;b.style.display='none'});if(VIEW==='modulos')setTimeout(()=>go('painel'),0)}}catch(e){console.warn(e)}return r}}
+/* ---- Editar Turma (PROFIJ): «Nível de ensino» — Ensino Básico ou Secundário; é o que aparece no cabeçalho dos relatórios ---- */
+{const _eNv=editarTurmaDlg;editarTurmaDlg=function(t){const r=_eNv.apply(this,arguments);try{const sync=()=>{const w=$('#et-acurw');if(!w)return;let n=$('#et-nivw');
+      if(!n){w.insertAdjacentHTML('afterend',`<div id="et-nivw"><label for="et-niv">Nível de ensino</label><select id="et-niv"><option value="bas" ${t.nivelEns!=='sec'?'selected':''}>Ensino Básico</option><option value="sec" ${t.nivelEns==='sec'?'selected':''}>Ensino Secundário</option></select></div>`);n=$('#et-nivw')}
+      n.style.display=w.style.display};sync();const wr=$('#et-ofw');if(wr)wr.addEventListener('click',()=>setTimeout(sync,10));
+    const ok=$('#et-ok');if(ok)ok.addEventListener('click',()=>{const s=$('#et-niv'),n=$('#et-nivw');if(!s||!n||n.style.display==='none')return;const a=A();const L=[t,...((($('#et-irm')||{}).checked)?a.turmas.filter(x=>x!==t&&normTurma(x.nome)===normTurma(t.nome)&&escId(escolaDe(x))===escId(escolaDe(t))):[])];L.forEach(x=>x.nivelEns=s.value)},true)}catch(e){console.warn(e)}return r}}
+/* ---- Relatório individual: secção «Elementos de avaliação» — a nota de cada teste/trabalho e a ficha dos critérios gerais ---- */
+function relElementos(t,a,per){try{const un=tUnid(t);const P=un?null:relPers(t,per);const E=domEsp(t);
+  const I=(t.instrumentos||[]).filter(i=>instMax(i)&&(un||P.includes(+i.periodo))&&(i.itens||[]).some(it=>E.some(d=>d.id===it.dom)||!domGer(t).length)).sort((x,y)=>(+x.periodo-+y.periodo)||String(x.data||'').localeCompare(String(y.data||'')));
+  const linha=i=>{const tot=instTotal(i,a.id);const mx=instMax(i);const f=tot==null||!mx?null:tot/mx;const k=instAlunoEstado(t,i,a.id);const nr=(i.nr||{})[a.id];
+    const cr=E.filter(d=>(i.itens||[]).some(it=>it.dom===d.id)).map(d=>d.nome).join(', ');
+    const nota=f!=null?fmtNota(t,f)+(isSec(t)||un?'':'')+' <span style="color:#666">('+nf(tot,2)+'/'+nf(mx,2)+')</span>':nr==='j'?'não realizou (não conta)':nr==='z'?'não realizou (conta 0)':'—';
+    return `<tr><td>${esc(i.nome)}</td><td>${esc(i.tipo||'')}</td><td class="c">${esc(fmtIso(i.data||''))}${!un&&P.length>1?' · '+i.periodo+'.º':''}</td><td>${esc(cr)}</td><td class="c"><b>${nota}</b></td></tr>`};
+  const G=domGer(t);const gk=un?1:per;
+  const ger=G.length?`<table style="margin-top:8px"><thead><tr><th>Critério geral (ficha)</th><th class="c">Ponderação</th><th class="c">Classificação</th></tr></thead><tbody>${G.map(d=>{const v=critGVal(t,a.id,d.id,gk);return `<tr><td>${esc(d.nome)}</td><td class="c">${String(d.peso).replace('.',',')}%</td><td class="c">${v==null?'—':cgF1(v*20)}</td></tr>`}).join('')}</tbody></table>`:'';
+  if(!I.length&&!ger)return '';
+  return `<div class="sec">Elementos de avaliação</div>${I.length?`<table><thead><tr><th>Elemento</th><th>Tipo</th><th class="c">Data</th><th>Critérios</th><th class="c">Classificação</th></tr></thead><tbody>${I.map(linha).join('')}</tbody></table>`:'<p style="color:#666;margin:4px 0">Ainda sem testes ou trabalhos classificados.</p>'}${ger}`}catch(e){console.warn(e);return ''}}
+{const _rel=relatorio;relatorio=function(t,a,per){const h=_rel.apply(this,arguments);try{const x=relElementos(t,a,per);if(!x||typeof h!=='string')return h;const k=h.indexOf('<div class="sec">Síntese descritiva</div>');return k>=0?h.slice(0,k)+x+h.slice(k):h}catch(_){return h}}}
+/* PDF dos relatórios (motor de documentos): a mesma secção */
+{const _rB2=relBlocos;relBlocos=function(t,x,per){const B=_rB2.apply(this,arguments);try{const un=tUnid(t);const P=un?null:relPers(t,per);const E=domEsp(t);
+  const I=(t.instrumentos||[]).filter(i=>instMax(i)&&(un||P.includes(+i.periodo))&&(i.itens||[]).some(it=>E.some(d=>d.id===it.dom)||!domGer(t).length));
+  const G=domGer(t);if(!I.length&&!G.length)return B;const k=B.findIndex(b=>b&&b.h==='Síntese Descritiva');
+  const add=[{h:'Elementos de Avaliação'}];if(I.length)add.push({tabela:{cab:['Elemento','Tipo','Data','Classificação'],linhas:I.map(i=>{const tot=instTotal(i,x.id),mx=instMax(i);const f=tot==null||!mx?null:tot/mx;const nr=(i.nr||{})[x.id];return [i.nome,i.tipo||'',fmtIso(i.data||''),f!=null?fmtNota(t,f)+' ('+nf(tot,2)+'/'+nf(mx,2)+')':nr==='j'?'não realizou (não conta)':nr==='z'?'não realizou (conta 0)':'—']})}});
+  if(G.length)add.push({tabela:{cab:['Critério geral (ficha)','Ponderação','Classificação'],linhas:G.map(d=>{const v=critGVal(t,x.id,d.id,un?1:per);return [d.nome,String(d.peso).replace('.',',')+'%',v==null?'—':cgF1(v*20)]})}});
+  if(k>=0)B.splice(k,0,...add);else B.push(...add);return B}catch(e){console.warn(e);return B}}}
