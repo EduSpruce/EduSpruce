@@ -6,7 +6,7 @@ table{border-collapse:collapse;width:100%;margin:0 0 8px}th,td{border:1px solid 
 @page{size:A4;margin:12mm}@page land{size:A4 landscape}.land{page:land}`;
 /* logótipos da escola (canto superior direito e centrado em baixo) em todas as páginas dos documentos impressos */
 function docLogosHTML(corpo,sel){const e=(typeof EC==='function'&&EC())||{};if(!e.logoDir&&!e.logoBaixo)return corpo;const D=e.logoDir?`<img class="lgD" src="${esc(e.logoDir)}" alt="">`:'',B=e.logoBaixo?`<img class="lgB" src="${esc(e.logoBaixo)}" alt="">`:'';
-  const css=`<style>.lgpg{position:relative;display:flex;flex-direction:column;box-sizing:border-box}.lgpg>*{flex:none}.lgpg>h1,.lgpg>.hdr{padding-right:46mm}.lgD{position:absolute;top:0;right:0;max-height:14mm;max-width:42mm;object-fit:contain}.lgB{margin-top:auto;align-self:center;max-height:12mm;max-width:60mm;object-fit:contain;padding-top:4mm}@media print{.lgpg{min-height:265mm}.lgpg.land{min-height:180mm}}</style>`;
+  const css=`<style>.lgpg{position:relative;display:flex;flex-direction:column;box-sizing:border-box}.lgpg>*{flex:none}.lgpg>h1,.lgpg>.hdr{padding-right:36mm}.lgD{position:absolute;top:0;right:0;max-height:10mm;max-width:32mm;object-fit:contain}.lgB{margin-top:auto;align-self:center;max-height:12mm;max-width:60mm;object-fit:contain;padding-top:4mm}@media print{.lgpg{min-height:265mm}.lgpg.land{min-height:180mm}}</style>`;
   let n=0;const out=corpo.replace(new RegExp('<section class="('+(sel||'pg')+')([^"]*)"','g'),(m,a,b)=>{n++;return `<section class="${a}${b} lgpg"`}).replace(/<section class="([^"]*\blgpg\b[^"]*)"([^>]*)>/g,(m)=>m+D);
   if(!n)return css+D+corpo+`<div style="text-align:center">${B}</div>`;
   /* rodapé: antes do fecho de cada página */

@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.211
+- Relatórios e documentos: o logótipo da escola (à esquerda) fica maior e o do canto superior direito (ex.: Governo dos Açores) mais pequeno, no ecrã, na impressão e no PDF
+
 ## 1.210
 - Modelos de critérios: em «Disciplinas a que se aplica» aparecem também as disciplinas PROFIJ, agrupadas por componente (sociocultural, científica, tecnológica — incluindo Componente Tecnológica (UFCD) — e prática)
 

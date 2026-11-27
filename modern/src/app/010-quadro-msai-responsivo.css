@@ -52,7 +52,7 @@
 .esc-hero .btn.ico{width:42px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 .lnk{float:right;font-weight:500;color:var(--acc);text-decoration:none;font-size:12.5px}
 .sheet .hdr .hl{display:flex;align-items:center;gap:8px}
-.sheet .hdr .hl img{height:34px;max-width:90px;object-fit:contain}
+.sheet .hdr .hl img{height:52px;max-width:130px;object-fit:contain}
 @media (max-width:700px){.esc-hero{gap:12px;padding:14px}.esc-n{font-size:19px}.logo-esc.lg{width:58px;height:58px}.logo-zona{flex-direction:column;align-items:flex-start}}
 
 /* ---------- barra superior: controlos com o mesmo tamanho ---------- */
