@@ -9,6 +9,7 @@ Português de Portugal, respostas curtas. Publicar sem perguntar («publica e ac
 - Tema SGE: cantos retos em todos os módulos. Não mexer no eduspruce.app (landing) nem no manual PDF sem pedido.
 
 ## Gastar poucos tokens
+- Depois de uma pausa (semanas ou meses) não reler o projeto para se reorientar: basta este ficheiro, `./es estado` e a secção do `MAPA.md` do módulo pedido. Não ler `CHANGELOG.md`, `docs/` nem o `MAPA.md` inteiro; o pedido do utilizador diz onde mexer.
 - Nunca ler ficheiros inteiros nem juntar a app para editar: procurar → ler só as linhas precisas → editar.
 - `./es onde PADRÃO` procura (linhas curtas, sem `dados/`) · `./es fn NOME` mostra a definição e todas as redefinições · `./es ver FICHEIRO LINHA N` · `./es mapa` dá vista → função → peças.
 - Editar com a ferramenta Edit (antes, Read só das linhas com offset/limit) ou `./es troca FICHEIRO` com blocos `<<<<` antigo `====` novo `>>>>`.
