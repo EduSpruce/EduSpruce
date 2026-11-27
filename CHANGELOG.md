@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.199
+- Minhas Tarefas: botão «Aumentar» na barra de cima, ao lado de «Nova Lista», abre as tarefas em ecrã amplo
+- UFCD e módulos: o separador «Avaliação Final» abre a pauta da própria unidade (antes ia para a lista de Módulos), sem períodos e com a nota da unidade
+
 ## 1.198
 - Direção de Turma › Sínteses Descritivas: o DT dá a cada aluno uma nota de 0 a 10 em 10 parâmetros (aproveitamento, assiduidade, pontualidade, comportamento, participação, empenho, trabalho autónomo, organização, relacionamento, responsabilidade) e a síntese de final de período/semestre é escrita automaticamente, sem repetir frases entre alunos; pode ser alterada à mão, copiada ou exportada em CSV
 

@@ -48,3 +48,10 @@ function relPerNome(t,p){return tUnid(t)?(unidNomeComp(t)||'UFCD'):perNome(p)}
 function relGrpPeso(t,g){return Math.round((t.dominios||[]).filter(x=>x.grupo===g).reduce((a,x)=>a+(+x.peso||0),0)*100)/100}
 function relGrpTr(t,d,k,n){if(!d.grupo)return '';const ant=(t.dominios||[])[k-1];if(ant&&ant.grupo===d.grupo)return '';return `<tr class="relgr"><td><b>${esc(d.grupo)}</b></td><td class="c"><b>${String(relGrpPeso(t,d.grupo)).replace('.',',')}%</b></td><td colspan="${Math.max(1,n-2)}"></td></tr>`}
 function relGrpLin(t,d,k,n){if(!d.grupo)return [d];const ant=(t.dominios||[])[k-1];if(ant&&ant.grupo===d.grupo)return [d];return [{__g:[d.grupo,String(relGrpPeso(t,d.grupo)).replace('.',',')+'%',...Array(n).fill('')]},d]}
+/* «Avaliação Final» da UFCD/módulo: abre a pauta da própria unidade (antes ia para a lista de Módulos), sem períodos */
+try{delete UNID_REDIR.avaliacao}catch(_){}
+{const _vAU=vAvaliacao;vAvaliacao=function(){const t=T();if(!tUnid(t))return _vAU.apply(this,arguments);UI.per=1;const r=_vAU.apply(this,arguments);
+  try{const v=$('#view');if(!v)return r;const nm=unidNomeComp(t)||'Unidade';
+    v.querySelectorAll('.tabs').forEach(g=>{if(g.querySelector('button[data-p]')){const row=g.closest('.row');(row&&row.children.length===1?row:g).style.display='none'}});
+    const b=$('#av-bloq');if(b){const row=b.closest('.row');(row||b).style.display='none'}
+    v.querySelectorAll('th,span.mut,h2').forEach(e=>{if(e.children.length&&e.tagName!=='H2')return;for(const n of e.childNodes)if(n.nodeType===3){n.nodeValue=n.nodeValue.replace(/Nota = só o 1\.º (período|semestre)/i,'Nota da unidade').replace(/^1\.º (Período|Semestre)$/,nm).replace(/ · 1\.º (Período|Semestre)$/,' · '+nm)}})}catch(e){console.warn(e)}return r};if(go._f)go._f.avaliacao=vAvaliacao}
