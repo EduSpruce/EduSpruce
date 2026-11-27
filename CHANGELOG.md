@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.220
+- Síntese descritiva das UFCD: fala dos conteúdos programáticos da UFCD (ex.: «demonstrou dificuldades no que toca aos conteúdos programáticos da UFCD», «revelou um bom domínio dos conteúdos programáticos da UFCD»), pela positiva e pela negativa, e já não refere períodos
+- Relatório individual: o gráfico mostra o nome completo de cada critério por baixo da barra
+
 ## 1.219
 - Relatório individual: no gráfico, cada critério tem a sua cor (a mesma da app) e, nas turmas de 0 a 20, os valores e o eixo aparecem em valores (ex.: 9,2 em vez de 46)
 
