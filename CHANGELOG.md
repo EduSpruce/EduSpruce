@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.210
+- Modelos de critérios: em «Disciplinas a que se aplica» aparecem também as disciplinas PROFIJ, agrupadas por componente (sociocultural, científica, tecnológica — incluindo Componente Tecnológica (UFCD) — e prática)
+
 ## 1.209
 - Vista Ampla dos instrumentos: os botões «F» (não realizou) e de evidências (câmara) voltam a funcionar — o menu e o painel abrem por cima da vista ampla
 - Avaliação Final: a Autoavaliação aparece sozinha com a nota que o aluno propôs (pelo telemóvel ou na ficha do aluno); se só respondeu por critério, mostra a média calculada
