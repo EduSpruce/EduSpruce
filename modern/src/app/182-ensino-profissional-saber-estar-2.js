@@ -31,7 +31,7 @@ const profMed=(t,aid,mid)=>((t.medComp||{})[aid]||{})[mid]||'';
 function profMra(t,m,a){try{const F=((mraM(t)[m.id])||{})[a.id]||null;const f=F?+F.faltas||0:(mraFaltas(t,a,m)||0);const k=mraCalc(F?F.horas:m.horas,f);return {F,f,ex:k.ex||0,lim:k.lim}}catch(_){return {F:null,f:0,ex:0}}}
 /* medida efetiva: a escolha do formador; sem escolha, a ficha MRA decide (exame assinalado na ficha → Exame; excesso sem ficha concluída → Pendente) */
 function profMedEf(t,m,a){const v=profMed(t,a.id,m.id);if(v==='nao')return {v:'',src:'manual'};if(v)return {v,src:'manual'};const r=profMra(t,m,a);if(r.F&&/^sim/i.test(r.F.exame||''))return {v:'exame',src:'mra'};if(r.ex>0&&!(r.F&&r.F.guardada))return {v:'pendente',src:'mra'};return {v:'',src:''}}
-function profSit(t,m,aid){const f=notaMod(t,aid,m.id);const al=t.alunos.find(x=>x.id===aid)||{id:aid};const md=profMedEf(t,m,al).v;if(md==='pendente')return {k:'pend',t:'Pendente'};if(md==='exame')return {k:'exame',t:'Exame'};if(f==null)return {k:'',t:'—'};return f>=10?{k:'ok',t:'Aprovado'}:{k:'exame',t:'Exame'}}
+function profSit(t,m,aid){const f=notaMod(t,aid,m.id);const al=t.alunos.find(x=>x.id===aid)||{id:aid};const md=profMedEf(t,m,al).v;if(md==='pendente')return {k:'pend',t:'Pendente'};if(md==='exame')return {k:'exame',t:'Exame'};if(f==null)return {k:'',t:'—'};return f>=9.5?{k:'ok',t:'Aprovado'}:{k:'exame',t:'Exame'}}
 /* ---- Pauta do módulo ---- */
 function profPautaDlg(t,mid){const m=profMod(t,mid);if(!m)return;if(!profTem(m)){profModeloDlg(t,mid,true);return}const al=alunosAval(t);const D=m.av.dominios;const SE=D.filter(d=>d.grupo==='Saber Estar'),SF=D.filter(d=>d.grupo==='Saber Fazer');
   const U=unidMod(t);const f1=v=>v==null?'—':String(Math.round(v*10)/10).replace('.',',');

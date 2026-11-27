@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.189
+- Ensino profissional: um módulo conta como concluído a partir de 9,5 em toda a app (Módulos, Início, fichas e documento de transferência), como já acontecia no Painel da Turma
+- Horas do MRA: «25,5» passa a 25 em vez de 255
+- Contas autorizadas: com dois administradores, um já não retira as contas que o outro autorizou
+
 ## 1.188
 - Revisão geral de erros: 49 correções confirmadas em toda a app
 - Avaliação: anular «não fez · conta 0» já não apaga notas, a Produção Oral já não apaga notas escritas à mão, ponderações com décimas somam 100% e «Como foi calculado» explica o período aberto

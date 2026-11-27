@@ -92,7 +92,7 @@ function vMra(){const t=T();if(!t)return go('turmas');const U=unidMod(t);const v
   v.querySelectorAll('[data-mrasel]').forEach(b=>b.onclick=()=>{modEscolher(t,b.dataset.mrasel);vMra()});
   v.querySelectorAll('[data-mrafl]').forEach(b=>b.onclick=()=>{UI.mraF=b.dataset.mrafl;re()});
   v.querySelectorAll('[data-goview]').forEach(b=>b.onclick=()=>go(b.dataset.goview));
-  [['mr-h','horas',x=>+String(x).replace(/\D/g,'')||''],['mr-i','ini',x=>x],['mr-f','fim',x=>x]].forEach(([id,k,f])=>{const e=$('#'+id);if(e)e.onchange=()=>{m[k]=f(e.value);save();re()}});
+  [['mr-h','horas',x=>parseInt(String(x).replace(/[^\d.,]/g,''),10)||''],['mr-i','ini',x=>x],['mr-f','fim',x=>x]].forEach(([id,k,f])=>{const e=$('#'+id);if(e)e.onchange=()=>{m[k]=f(e.value);save();re()}});
   const setF=(a,val)=>{const MMm=mraM(t)[m.id]=mraM(t)[m.id]||{};val=Math.max(0,val);if(MMm[a.id]){MMm[a.id].faltas=val;const k=mraCalc(MMm[a.id].horas,val);const R=MMm[a.id].rows||[];const r0=R[0]||{};while(R.length<Math.min(k.ex||1,51))R.push({dt:'',disc:r0.disc||'',mod:r0.mod||'',ativ:'',parecer:''})}else{MMm[a.id]=Object.assign(mraFichaNova(t,a,m),{faltas:val});const k=mraCalc(MMm[a.id].horas,val);const r0=MMm[a.id].rows[0];MMm[a.id].rows=Array.from({length:Math.max(1,Math.min(k.ex||1,51))},()=>({...r0}))}save();re()};
   v.querySelectorAll('[data-mraf]').forEach(i=>i.onchange=()=>setF(al.find(x=>x.id===i.dataset.mraf),+String(i.value).replace(',','.')||0));
   v.querySelectorAll('[data-mrad]').forEach(b=>b.onclick=()=>{const a=al.find(x=>x.id===b.dataset.mrad);const cur=L.find(x=>x.a===a).f;setF(a,cur+(+b.dataset.dlt))});
