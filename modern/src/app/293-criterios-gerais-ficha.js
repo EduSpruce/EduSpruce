@@ -134,7 +134,7 @@ function cgValK(t,aid,d,k){const I=cgInd(d);if(I.length){const R=(((((t.critGI||
    se a unidade tem um só critério específico, os itens passam para ele; se o nome/abreviatura antigo coincidir com um critério específico, vão para esse ---- */
 function cgOrfaos(t){try{if(!t||!t.porModulo||!tUnid(t))return 0;let n=0;
   (t.modulos||[]).forEach(m=>{const av=m.av;if(!av)return;const D=av.dominios||[];const ids=new Set(D.map(d=>d.id));const E=D.filter(d=>!d.ger);if(!E.length)return;
-    (av.instrumentos||[]).forEach(i=>(i.itens||[]).forEach(it=>{if(!it.dom||ids.has(it.dom))return;const velho=((t.__mod&&t.__mod.dominios)||[]).find(d=>d.id===it.dom);
+    const gerIds=new Set(D.filter(d=>d.ger).map(d=>d.id));(av.instrumentos||[]).forEach(i=>(i.itens||[]).forEach(it=>{/* itens de um teste ligados a um critério geral: os gerais não usam instrumentos → passam para o único critério específico */if(it.dom&&gerIds.has(it.dom)&&!i.profAtt){if(E.length===1){it.dom=E[0].id;n++}return}if(!it.dom||ids.has(it.dom))return;const velho=((t.__mod&&t.__mod.dominios)||[]).find(d=>d.id===it.dom);
       const alvo=(velho&&E.find(d=>normT(d.ab)===normT(velho.ab)||normT(d.nome)===normT(velho.nome)))||(E.length===1?E[0]:null);if(alvo){it.dom=alvo.id;n++}}))});
   if(n)save();return n}catch(e){console.warn(e);return 0}}
 {const _gO=go;go=function(){try{cgOrfaos(T())}catch(_){}return _gO.apply(this,arguments)}}

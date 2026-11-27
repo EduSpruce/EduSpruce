@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.207
+- Instrumentos das UFCD: a correção de um teste mostra só os itens, a cotação de cada um e depois as classificações (total e nota do teste), sem linhas nem colunas de critérios; a nota conta para o critério específico
+- Instrumentos das UFCD: itens de um teste que estavam ligados a critérios gerais passam para o critério específico da UFCD (os gerais classificam-se só na ficha da Avaliação Final)
+
 ## 1.206
 - Síntese automática dos critérios gerais: deixou de usar a frase «… revelou nesta UFCD atitudes e valores suficientes»; as sínteses automáticas que a tinham são reescritas ao abrir a ficha
 

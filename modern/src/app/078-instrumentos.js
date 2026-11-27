@@ -71,12 +71,14 @@ function instNotas(t,i){
   const al=alunosAval(t);
   if(!i.itens.length){$('#i-body').innerHTML='<div class="empty">Defina primeiro os itens e cotações.</div>';return}
   if(!al.length){$('#i-body').innerHTML='<div class="empty">Nenhum aluno assinalado como frequentando a disciplina.</div>';return}
-  const doms=t.dominios.filter(d=>i.itens.some(x=>x.dom===d.id));const max=instMax(i);
+  /* UFCD/módulo com um só critério específico no instrumento: a correção é só do teste — itens, cotações e nota, sem linhas nem colunas de critérios */
+  const so1=typeof tUnid==='function'&&tUnid(t)&&t.dominios.filter(d=>!d.ger&&i.itens.some(x=>x.dom===d.id)).length<=1;const rs=so1?2:3;
+  const doms=so1?[]:t.dominios.filter(d=>i.itens.some(x=>x.dom===d.id));const max=instMax(i);
   const groups=[];i.itens.forEach(it=>{const g=groups[groups.length-1];if(g&&g.dom===it.dom)g.n++;else groups.push({dom:it.dom,n:1})});
   $('#i-body').innerHTML=`<p class="hint noprint">Escreva as cotações obtidas. <b>Enter</b> desce, setas navegam. Linha toda em branco = “Não avaliado”. Não é possível passar da cotação de cada item.</p>
   <div class="gwrap"><table class="grid" id="grid"><thead>
-    <tr><th class="stk0" rowspan="3">N.º</th><th class="stk" rowspan="3">Nome</th>${groups.map(g=>{const d=domById(t,g.dom)||{};return `<th colspan="${g.n}" class="cgnome" title="${esc(d.ab||'')}">${esc(d.nome||d.ab||'?')}${d.ger?' <small class="mut">(geral — classifica-se na Avaliação Final)</small>':''}</th>`}).join('')}<th rowspan="3">Total<div class="dh">/${nf(max)}</div></th><th rowspan="3">Nota</th><th rowspan="3">Menção</th>${doms.map(d=>`<th rowspan="3" class="cgnome" title="${esc(d.ab)}">${esc(d.nome||d.ab)}<div class="dh">${isSec(t)?'0–20':'%'}</div></th>`).join('')}</tr>
-    <tr>${i.itens.map(it=>`<th class="dh" title="${esc(it.rot)}"><span class="ith">${esc(it.rot)}</span></th>`).join('')}</tr>
+    <tr><th class="stk0" rowspan="${rs}">N.º</th><th class="stk" rowspan="${rs}">Nome</th>${so1?i.itens.map(it=>`<th class="dh" title="${esc(it.rot)}"><span class="ith">${esc(it.rot)}</span></th>`).join(''):groups.map(g=>{const d=domById(t,g.dom)||{};return `<th colspan="${g.n}" class="cgnome" title="${esc(d.ab||'')}">${esc(d.nome||d.ab||'?')}${d.ger?' <small class="mut">(geral — classifica-se na Avaliação Final)</small>':''}</th>`}).join('')}<th rowspan="${rs}">Total<div class="dh">/${nf(max)}</div></th><th rowspan="${rs}">Nota${so1?`<div class="dh">${isSec(t)?'0–20':'%'}</div>`:''}</th><th rowspan="${rs}">Menção</th>${doms.map(d=>`<th rowspan="3" class="cgnome" title="${esc(d.ab)}">${esc(d.nome||d.ab)}<div class="dh">${isSec(t)?'0–20':'%'}</div></th>`).join('')}</tr>
+    ${so1?'':`<tr>${i.itens.map(it=>`<th class="dh" title="${esc(it.rot)}"><span class="ith">${esc(it.rot)}</span></th>`).join('')}</tr>`}
     <tr>${i.itens.map(it=>`<th>${nf(it.cot,2)}</th>`).join('')}</tr></thead><tbody>
   ${al.map((a,r)=>`<tr data-a="${a.id}"><td class="n stk0">${esc(numAl(a))}</td><td class="stk" title="${esc(a.nome)}">${esc(a.nome)}${tagOrig(t,a)}</td>
     ${i.itens.map((it,c)=>{const v=(i.notas[a.id]||{})[it.id];return `<td><input data-r="${r}" data-c="${c}" data-i="${it.id}" value="${v==null?'':esc(String(v).replace('.',','))}" inputmode="decimal"></td>`}).join('')}
