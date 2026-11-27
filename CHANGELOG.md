@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.200
+- UFCD e módulos: novos subcritérios predefinidos do Saber Ser — Empenho e Responsabilidade 10 %, Autonomia 7 %, Atitudes e Comportamento 8 % e Relações Interpessoais 5 %, com os indicadores revistos
+
 ## 1.199
 - Minhas Tarefas: botão «Aumentar» na barra de cima, ao lado de «Nova Lista», abre as tarefas em ecrã amplo
 - UFCD e módulos: o separador «Avaliação Final» abre a pauta da própria unidade (antes ia para a lista de Módulos), sem períodos e com a nota da unidade
