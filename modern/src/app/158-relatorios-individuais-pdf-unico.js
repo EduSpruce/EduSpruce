@@ -8,8 +8,8 @@ function relBlocos(t,x,per){const P=relPers(t,per);const nfin=ponderada(t,pctsFi
     {tabela:{cab:['Domínio','Ponderação',...P.map(p=>relPerNome(t,p)),...(men?['Menção']:[])],linhas:[...t.dominios.flatMap((d,k)=>relGrpLin(t,d,k,P.length+(men?1:0))).map(d=>d.__g?d.__g:[d.grupo?'   '+d.nome:d.nome,d.peso+'%',...P.map(p=>pctD(t,domPer(t,x.id,d.id,p))||'—'),...(men?[(mencao(t,pctsFinal(t,x.id,per)[d.id])||{}).nome||'—']:[])]),
       ['Classificação','',...P.map(p=>fmtNota(t,ponderada(t,pctsPer(t,x.id,p)))||'—'),...(men?[nfin!=null?'Nível '+nivel(t,nfin):'']:[])]]}},
     ...relAutoBlocos(t,x,per),{h:'Síntese Descritiva'},{p:(x.sintese&&x.sintese[per])||sintese(t,x,per),just:1,ind:1},...((x.obsPer||{})[per]?[{h:'Observações'},{p:x.obsPer[per],just:1}]:[])]}
-function relSpec(t,L,per){const spec={titulo:'Relatórios Individuais',subtitulo:t.nome+' · '+t.disciplina+' · '+perNome(per),escola:escolaDe(t),turma:t,blocos:[],assinaturas:[profAssin(),'O(A) Encarregado(a) de Educação']};
-  L.forEach((x,i)=>{if(i)spec.blocos.push({pb:true});spec.blocos.push(...relBlocos(t,x,per))});if(L.length===1){spec.titulo='Relatório Individual';spec.subtitulo=L[0].nome+' · '+t.nome+' · '+t.disciplina+' · '+perNome(per)}return spec}
+function relSpec(t,L,per){const spec={titulo:'Relatórios Individuais',subtitulo:t.nome+' · '+t.disciplina+' · '+(tUnid(t)?relPerNome(t,per):perNome(per)),escola:escolaDe(t),turma:t,blocos:[],assinaturas:[profAssin(),'O(A) Encarregado(a) de Educação']};
+  L.forEach((x,i)=>{if(i)spec.blocos.push({pb:true});spec.blocos.push(...relBlocos(t,x,per))});if(L.length===1){spec.titulo='Relatório Individual';spec.subtitulo=L[0].nome+' · '+t.nome+' · '+t.disciplina+' · '+(tUnid(t)?relPerNome(t,per):perNome(per))}return spec}
 const nomeFich=x=>String(x).replace(/[\\/:*?"<>|]/g,'-').replace(/\s+/g,' ').trim();
 /* ZIP mínimo (sem compressão) */
 const CRCT=(()=>{const T_=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;T_[n]=c>>>0}return T_})();

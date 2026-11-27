@@ -60,6 +60,7 @@ dados/004-manifesto.html
 288-menu-escola.css
 290-ufcd-estanque-sem-periodos.css
 292-dt-sinteses-descritivas.css
+294-criterios-gerais-ficha.css
 040-corpo.html
 dados/041-hash-wasm.html
 042-corpo-2.html
@@ -288,5 +289,6 @@ dados/199-logotipos-novos.js
 287-menu-escola.js
 289-ufcd-estanque-sem-periodos.js
 291-dt-sinteses-descritivas.js
+293-criterios-gerais-ficha.js
 245-fim-do-programa.js
 246-fecho.html

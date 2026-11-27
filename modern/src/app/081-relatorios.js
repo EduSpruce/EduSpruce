@@ -36,7 +36,7 @@ function grafico(t,a,P){
   D.forEach((d,i)=>{const cx=pl+gw*i+gw/2,tot=nb*bw+(nb-1)*gap;let x=cx-tot/2;
     P.forEach((p,k)=>{const v=domPer(t,a.id,d.id,p);if(v!=null){const vv=Math.max(0,Math.min(1,v));g+=`<rect x="${x.toFixed(1)}" y="${y(vv).toFixed(1)}" width="${bw.toFixed(1)}" height="${(vv*ch).toFixed(1)}" fill="${cols[k%3]}" rx="2"/><text x="${(x+bw/2).toFixed(1)}" y="${(y(vv)-4).toFixed(1)}" font-size="10" font-weight="700" text-anchor="middle" fill="#333">${Math.round(v*100)}</text>`}x+=bw+gap});
     g+=`<text x="${cx.toFixed(1)}" y="${H-bot+16}" font-size="11" font-weight="700" text-anchor="middle" fill="#333">${esc(d.ab)}</text>`});
-  let lx=W-pr;const leg=P.slice().reverse().map((p,kk)=>{const k=P.length-1-kk;const tx=`${p}.º ${perW().slice(0,3).toLowerCase()}.`;lx-=tx.length*5.6+20;return `<rect x="${lx.toFixed(1)}" y="5" width="10" height="10" rx="2" fill="${cols[k%3]}"/><text x="${(lx+14).toFixed(1)}" y="14" font-size="10" fill="#333">${tx}</text>`}).join('');
+  let lx=W-pr;const leg=P.slice().reverse().map((p,kk)=>{const k=P.length-1-kk;const tx=tUnid(t)?esc(String(relPerNome(t,p)).slice(0,48)):`${p}.º ${perW().slice(0,3).toLowerCase()}.`;lx-=tx.length*5.6+20;return `<rect x="${lx.toFixed(1)}" y="5" width="10" height="10" rx="2" fill="${cols[k%3]}"/><text x="${(lx+14).toFixed(1)}" y="14" font-size="10" fill="#333">${tx}</text>`}).join('');
   const grid=[0,50,100].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${y(v/100)}" y2="${y(v/100)}" stroke="${v?'#e3e3e3':'#888'}" ${v?'stroke-dasharray="3 3"':''}/>${v?`<text x="${pl-5}" y="${y(v/100)+3}" font-size="9" text-anchor="end" fill="#555">${v}%</text>`:''}`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:190px">${grid}${g}${leg}</svg>`;
 }
@@ -83,7 +83,7 @@ function relatorio(t,a,per){
   const sint=(a.sintese&&a.sintese[per])||sintese(t,a,per);const nfin=ponderada(t,pctsFinal(t,a.id,per));
   return `<section class="sheet">
     <div class="hdr"><span class="hl">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.escola||'')}</b><br>Ano letivo ${esc((A()||{}).nome||'')}</span></span><span style="text-align:right">${esc(t.disciplina)} · Turma ${esc(a.origem||t.nome)}${a.origem?' <span style="color:#666">(aulas em '+esc(t.nome)+')</span>':''}<br>${esc(CICLOS[t.ciclo]||'')}</span></div>
-    <h1>Relatório Individual ${a.genero==='F'?'da Aluna':'do Aluno'}</h1><div class="sub">${perNome(per)}</div>
+    <h1>Relatório Individual ${a.genero==='F'?'da Aluna':'do Aluno'}</h1><div class="sub">${tUnid(t)?esc(relPerNome(t,per)):perNome(per)}</div>
     <div class="sec">Dados ${a.genero==='F'?'da aluna':'do aluno'}</div>
     <div style="display:flex;gap:14px;align-items:flex-start">${fotoSrc(a)?`<img class="foto-al" src="${esc(fotoSrc(a))}" alt="" style="width:39mm;height:48.75mm;object-fit:cover;border:1px solid #999;border-radius:3px">`:''}<div style="flex:1;min-width:0"><div class="kv"><b>Nome</b><span>${esc(a.nome)}</span><b>N.º</b><span>${esc(numAl(a))}${a.processo?' · <span class="sens">proc. '+esc(a.processo)+'</span>':''}</span>
       <b>Data de nascimento</b><span class="sens">${fmtD(a.nasc)||'—'} ${a.nasc?'('+idade(a.nasc)+' anos)':''}</span><b>ASE</b><span class="sens">${esc(a.ase)||'Não se aplica'}</span>
@@ -92,11 +92,11 @@ function relatorio(t,a,per){
     <div class="sec">Avaliação por domínios</div>
     <table><thead><tr><th>Domínio</th><th class="c">Ponderação</th>${P.map(p=>`<th class="c">${esc(relPerNome(t,p))}</th>`).join('')}<th class="c">Menção</th></tr></thead><tbody>
     ${t.dominios.map((d,k)=>`${relGrpTr(t,d,k,P.length+3)}<tr class="${d.grupo?'relsub':''}"><td>${esc(d.nome)}</td><td class="c">${d.peso}%</td>${P.map(p=>`<td class="c">${pctD(t,domPer(t,a.id,d.id,p))||'—'}</td>`).join('')}<td class="c">${esc((mencao(t,pctsFinal(t,a.id,per)[d.id])||{}).nome||'—')}</td></tr>`).join('')}
-    <tr><th>Nota do ${perW().toLowerCase()}</th><th></th>${P.map(p=>`<th class="c">${fmtNota(t,ponderada(t,pctsPer(t,a.id,p)))||'—'}</th>`).join('')}<th></th></tr>
+    ${tUnid(t)?'':`<tr><th>Nota do ${perW().toLowerCase()}</th><th></th>${P.map(p=>`<th class="c">${fmtNota(t,ponderada(t,pctsPer(t,a.id,p)))||'—'}</th>`).join('')}<th></th></tr>`}
     <tr><th>Classificação Final</th><th></th><th class="c" colspan="${P.length}" style="font-size:14px">${fmtNota(t,nfin)||'—'} ${nfin!=null?(isSec(t)?'valores':'· Nível '+nivel(t,nfin)):''}</th><th class="c">${esc((mencao(t,nfin)||{}).nome||'')}</th></tr></tbody></table>
     ${grafico(t,a,P)}
     <div class="sec">Síntese descritiva</div><div class="txt" contenteditable="true" data-sint="${a.id}">${esc(sint)}</div>
-    ${(a.obsPer||{})[per]?`<div class="sec">Observações</div><div class="txt sens">${esc(a.obsPer[per])}</div>`:''}
+    ${(o=>o?`<div class="sec">Observações</div><div class="txt sens">${esc(o)}</div>`:'')((a.obsPer||{})[tUnid(t)&&modAtivo(t)?'u:'+modAtivo(t).id:per])}
     <div class="sign"><div style="position:relative">${S.cfg.assinaturaImg?`<img src="${esc(S.cfg.assinaturaImg)}" alt="Assinatura" class="assinrel" style="position:absolute;left:50%;bottom:100%;transform:translate(-50%,32%);height:13mm;max-width:78%;object-fit:contain;pointer-events:none">`:''}${esc(profRotulo()+(c.professor?' — '+profNome(c.professor):''))}</div><div>O(A) Encarregado(a) de Educação</div></div></section>`;
 }
 

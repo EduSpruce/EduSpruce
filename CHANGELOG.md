@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.203
+- Critérios gerais com ficha do aluno: um critério «Geral» (ex.: Empenho e Responsabilidade) tem indicadores, que aparecem indentados por baixo dele nos Critérios; na Avaliação Final abre-se a ficha de cada aluno (botão «Ficha por aluno» ou tocando na nota do critério), cada indicador de 0 a 20, o critério vale a média e há total global e síntese descritiva
+- Instrumentos: a grelha mostra os nomes completos dos critérios (em cima e nas colunas da direita) e assinala os critérios gerais, que não contam nos instrumentos
+- Relatórios das UFCD e módulos: sem períodos — título com a UFCD, sem «Nota do período», legenda do gráfico e síntese descritiva a falar da UFCD
+- Em teste: botão «Terminar teste», que para o tempo e tira «Em teste» do menu; nas UFCD já não aparece o período
+
 ## 1.202
 - Critérios de Avaliação das UFCD e módulos: a barra de escolha da unidade já não aparece duplicada
 

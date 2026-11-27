@@ -7,7 +7,7 @@ const emtEhTeste=i=>{try{const ab=TIPO_AB(i.tipo||'');return ab==='T'||/^Q/.test
 function emtBlocos(a,t,d){d=d||new Date();try{const H=a.horProf;if(!H||!Array.isArray(H.aulas))return [];const L=H.aulas.filter(x=>x.dia===d.getDay()&&(H.mapa||{})[chaveAula(x)]===t.id).map(x=>({ini:+x.ini,fim:+x.fim,sala:x.sala||''})).sort((p,q)=>p.ini-q.ini);
     const B=[];L.forEach(x=>{const u=B[B.length-1];if(u&&x.ini-u.fim<=15){u.fim=Math.max(u.fim,x.fim)}else B.push({...x})});return B}catch(_){return []}}
 function emtHoje(){const a=A();if(!a)return [];const hj=isoData(new Date());const now=new Date();const mn=now.getHours()*60+now.getMinutes();const R=[];
-  (a.turmas||[]).forEach(t=>(t.instrumentos||[]).forEach(i=>{if(i.data!==hj||!emtEhTeste(i))return;const B=emtBlocos(a,t,now);const st=EMT()[i.id];
+  (a.turmas||[]).forEach(t=>(t.instrumentos||[]).forEach(i=>{if(i.data!==hj||!emtEhTeste(i))return;const B=emtBlocos(a,t,now);const st=EMT()[i.id];if(st&&st.terminado)return;
     if(B.length&&!(st&&st.ini&&!st.fechado)){const ok=B.some(b=>mn>=b.ini-60&&mn<=b.fim+30);if(!ok)return}R.push({t,i,B})}));return R}
 function emtNav(){document.querySelectorAll('#side .emtnav').forEach(e=>e.remove());const L=emtHoje();emtNav._k=L.map(o=>o.i.id).join();if(!L.length)return;
   const tree=$('#tTree');L.forEach(o=>{const st=EMT()[o.i.id];const corre=st&&st.ini&&!st.pz;
@@ -36,13 +36,13 @@ function emtAbrir(iid,tid){const a=A();const t=a&&(a.turmas||[]).find(x=>x.id===
   const o=document.createElement('div');o.id='emteste';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Modo em teste: '+i.nome);
   o.innerHTML=`<div class="emt-top"><span class="emt-tag"><i></i> Em teste</span><span class="emt-tur">${esc(t.nome)} · ${esc(t.disciplina)}${sala?' · Sala '+esc(sala):''}</span><span class="sp1"></span>
       <button type="button" class="emt-b" id="emt-fs" title="Ecrã inteiro">${ic('arrowUp',18)}<span>Ecrã inteiro</span></button><button type="button" class="emt-b" id="emt-x" title="Sair (Esc)">${ic('x',18)}<span>Sair</span></button></div>
-    <h1 class="emt-nome">${esc(i.nome)}</h1><p class="emt-sub">${esc(i.tipo||'Teste')}${i.periodo?' · '+i.periodo+'.º período':''}</p>
+    <h1 class="emt-nome">${esc(i.nome)}</h1><p class="emt-sub">${esc(i.tipo||'Teste')}${i.periodo&&!(typeof ehUnid==='function'&&ehUnid(t))?' · '+i.periodo+'.º período':''}</p>
     <div class="emt-grid"><div class="emt-cx emt-rel"><small>Hora</small><div class="emt-num"><b id="emt-h">--:--</b><span id="emt-s">:--</span></div><small id="emt-dt"></small></div>
       <div class="emt-cx emt-tmp"><small id="emt-lbl">Tempo do teste</small><div class="emt-num"><b id="emt-r">--:--</b></div><div class="emt-bar" aria-hidden="true"><i id="emt-bar"></i></div><small id="emt-fim"></small><small id="emt-ex"></small></div></div>
     <div class="emt-regras" id="emt-rg"></div>
     <div class="emt-ctl"><button type="button" class="emt-b pri" id="emt-go"></button><button type="button" class="emt-b" id="emt-m5" title="Menos 5 minutos">−5 min</button><button type="button" class="emt-b" id="emt-p5" title="Mais 5 minutos">+5 min</button>
       <label class="emt-dur">Duração <input type="number" id="emt-d" min="5" max="300" step="5" value="${s.dur}"> min</label>${nExtra?`<label class="emt-dur">Tempo adicional <select id="emt-xs">${[0,10,15,20,25,30,50].map(p=>`<option value="${p}" ${+s.extra===p?'selected':''}>${p?'+'+p+' %':'sem'}</option>`).join('')}</select></label>`:''}
-      <button type="button" class="emt-b" id="emt-rs" title="Recomeçar">${ic('refresh',16)} Recomeçar</button><button type="button" class="emt-b" id="emt-re" title="Editar as regras">${ic('pencil',16)} Regras</button></div>`;
+      <button type="button" class="emt-b" id="emt-rs" title="Recomeçar">${ic('refresh',16)} Recomeçar</button><button type="button" class="emt-b" id="emt-re" title="Editar as regras">${ic('pencil',16)} Regras</button><span class="sp1"></span><button type="button" class="emt-b emt-end" id="emt-end" title="Terminar o teste: para o tempo e tira «Em teste» do menu">${ic('check',16)} Terminar teste</button></div>`;
   document.body.appendChild(o);document.body.classList.add('emt-on');
   const rg=()=>{const L=String(s.regras||'').split('\n').map(x=>x.trim()).filter(Boolean);$('#emt-rg').innerHTML=L.length?`<ul>${L.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''};rg();
   let bipou=false,bip5=false;
@@ -64,7 +64,7 @@ function emtAbrir(iid,tid){const a=A();const t=a&&(a.turmas||[]).find(x=>x.id===
   const xs=$('#emt-xs');if(xs)xs.onchange=()=>{s.extra=+xs.value;guarda()};
   $('#emt-rs').onclick=()=>{if(s.ini&&!confirm('Recomeçar o temporizador deste teste?'))return;s.ini=null;s.acum=0;s.pz=null;bipou=bip5=false;guarda()};
   $('#emt-re').onclick=()=>{const v=prompt('Regras a mostrar durante o teste (uma por linha; use \\n para mudar de linha):',String(s.regras||'').replace(/\n/g,'\\n'));if(v==null)return;s.regras=v.replace(/\\n/g,'\n');rg();save()};
-  $('#emt-x').onclick=emtFechar;$('#emt-fs').onclick=()=>{try{if(document.fullscreenElement)document.exitFullscreen();else o.requestFullscreen&&o.requestFullscreen()}catch(_){}};
+  $('#emt-end').onclick=()=>{if(!confirm('Terminar o teste «'+i.nome+'»? O tempo para e «Em teste» sai do menu.'))return;if(s.ini&&!s.pz)s.pz=Date.now();s.terminado=Date.now();try{audit('Em teste','Fim do teste',i.nome+' · '+t.nome)}catch(_){}save();emtFechar();toast('Teste terminado','ok')};$('#emt-x').onclick=emtFechar;$('#emt-fs').onclick=()=>{try{if(document.fullscreenElement)document.exitFullscreen();else o.requestFullscreen&&o.requestFullscreen()}catch(_){}};
   o.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.fullscreenElement){e.preventDefault();emtFechar()}if(e.key===' '&&e.target===o){e.preventDefault();$('#emt-go').click()}});o.tabIndex=-1;o.focus();
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>EMT_WL=w).catch(()=>{})}catch(_){}
   tick();EMT_IV=setInterval(()=>{if(!document.getElementById('emteste')){clearInterval(EMT_IV);return}tick()},1000)}

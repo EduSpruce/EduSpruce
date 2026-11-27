@@ -31,3 +31,4 @@ html:not(.a11y-rm) body #emteste.emt-0 .emt-tmp{animation:emtfim 1.2s ease-in-ou
 html body #emteste.emt-pz #emt-r{opacity:.55}
 html body.emt-on{overflow:hidden}
 @media print{html body #emteste{display:none!important}}
+#emteste .emt-b.emt-end{background:#b42318;border-color:#b42318;color:#fff}#emteste .emt-b.emt-end:hover{filter:brightness(1.1)}
