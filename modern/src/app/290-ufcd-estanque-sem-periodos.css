@@ -1,0 +1,5 @@
+/* UFCD / módulos: sem períodos nem avaliação intercalar */
+html body.t-unid .seg:has(>[data-pnper]),html body.t-unid #perfilap .estps{display:none!important}
+html body.t-unid [data-v="intercalar"],html body.t-unid [data-goint]{display:none!important}
+/* Critérios: subdomínios indentados por baixo do domínio a que pertencem */
+html body tr.domsubr>td:first-child{padding-left:34px!important;position:relative}html body tr.domsubr>td:first-child::before{content:'';position:absolute;left:14px;top:0;bottom:0;border-left:3px solid var(--line,#d6e0e6)}html body tr.domsubr .hint{font-weight:600}

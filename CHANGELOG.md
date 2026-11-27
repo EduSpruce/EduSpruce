@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.196
+- UFCD e módulos são estanques: sem separadores de período no Painel e no Perfil de Aprendizagem, sem avaliação intercalar, critérios calculados com todos os instrumentos da unidade
+- Critérios: os subdomínios (ex.: Saber Ser) aparecem indentados por baixo do domínio
+
 ## 1.195
 - Autoavaliação nas UFCD: as respostas e sugestões dadas antes da mudança para «por UFCD» voltam a aparecer (nada foi apagado)
 
