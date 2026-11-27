@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.206
+- Síntese automática dos critérios gerais: deixou de usar a frase «… revelou nesta UFCD atitudes e valores suficientes»; as sínteses automáticas que a tinham são reescritas ao abrir a ficha
+
 ## 1.205
 - Classificações por UFCD: vão buscar automaticamente a nota da Avaliação Final de cada UFCD (instrumentos + critérios gerais; a «Atribuída» prevalece); escrever por cima continua a substituir; aprovação a partir de 9,5
 - Instrumentos das UFCD: itens ligados a um critério que já não existia na UFCD (aparecia «?» em Domínios e o instrumento não contava na Avaliação Final) passam automaticamente para o critério específico da UFCD

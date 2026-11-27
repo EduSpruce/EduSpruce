@@ -20,7 +20,7 @@ function cgFicha(t,per,aid){const G=domGer(t);if(!G.length)return toast('Não h�
   const unid=tUnid(t);per=+per||perAtual(t);const al=alunosAval(t);if(!al.length)return toast('Não há alunos.','aviso');let i=Math.max(0,al.findIndex(a=>a.id===aid));
   const sec=isSec(t)||unid;
   const total=a=>{let s=0,w=0;G.forEach(d=>{const v=critGVal(t,a.id,d.id,per);if(v!=null&&+d.peso>0){s+=v*20*d.peso;w+=+d.peso}});return w?s/w:null};
-  const draw=()=>{const a=al[i];const R=cgReg(t,per,a.id);
+  const draw=()=>{const a=al[i];const R=cgReg(t,per,a.id);if(R._obsAuto&&/ revelou (nesta|neste) [^.]* atitudes e valores suficientes\./.test(R._obs||''))cgSintAuto(t,per,a,R,false);
     const sub=unid?(unidNomeComp(t)||'Unidade'):perNome(per);
     openDrawer('Critérios Gerais — Ficha do Aluno',`<div class="ed cgf">
       <div class="cgfh"><button type="button" class="btn sm ico" id="cgf-ant" aria-label="Aluno anterior" ${i?'':'disabled'}>‹</button>
@@ -85,7 +85,7 @@ function cgIndDlg(t,k){const d=(t.dominios||[])[k];if(!d)return;
 const CG_NIV=v=>v==null?null:v>=17.5?'E':v>=13.5?'B':v>=9.5?'S':'I';
 const CG_ABRE={E:['{N} revelou {q} atitudes e valores exemplares.','{Q}, {N} manteve uma conduta muito positiva e responsável.','{N} destacou-se {q} pela forma exemplar como esteve nas aulas.','{Q}, {N} teve uma postura irrepreensível.'],
   B:['{N} revelou {q} boas atitudes e valores.','{Q}, {N} manteve uma postura positiva.','{N} teve {q} uma atitude globalmente boa.','{Q}, {N} mostrou uma conduta correta e empenhada.'],
-  S:['{N} revelou {q} atitudes e valores suficientes.','{Q}, a atitude de {N} foi satisfatória, com aspetos a melhorar.','{N} cumpriu {q} o essencial no que respeita a atitudes e valores.','{Q}, {N} teve uma postura aceitável, mas irregular.'],
+  S:['{Q}, a atitude de {N} foi satisfatória, com aspetos a melhorar.','{N} cumpriu {q} o essencial no que respeita a atitudes e valores.','{Q}, {N} teve uma postura aceitável, mas irregular.'],
   I:['{N} revelou {q} atitudes e valores abaixo do esperado.','{Q}, a postura de {N} precisa de melhorar.','{N} não alcançou {q} o que se pede em atitudes e valores.','{Q}, {N} teve uma atitude que fica aquém do que se espera.']};
 const CG_LEAD=['No critério {C}','Em {C}','No que respeita a {C}','Quanto a {C}'];
 const CG_COMP={E:['o desempenho foi excelente','revelou-se exemplar','atingiu um nível muito elevado','esteve sempre ao melhor nível'],
