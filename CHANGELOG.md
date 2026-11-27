@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.212
+- Critérios das UFCD e módulos: deixa de aparecer «Classificação final por período» (as unidades não têm períodos)
+
 ## 1.211
 - Relatórios e documentos: o logótipo da escola (à esquerda) fica maior e o do canto superior direito (ex.: Governo dos Açores) mais pequeno, no ecrã, na impressão e no PDF
 

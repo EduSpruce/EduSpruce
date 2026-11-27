@@ -74,6 +74,8 @@ function cgIndDlg(t,k){const d=(t.dominios||[])[k];if(!d)return;
     const ant=cgInd(d);if(ant.length&&L.join('\n')!==ant.join('\n')&&JSON.stringify(t.critGI||{}).indexOf('"'+d.id+'"')>=0&&!confirm('Já há classificações nesta ficha. As classificações ficam ligadas à posição de cada indicador (1.º, 2.º…). Continuar?'))return;
     d.ind=L;save();closeDrawer();vCriterios()}}
 {const _vCG=vCriterios;vCriterios=function(){const r=_vCG.apply(this,arguments);try{const t=T();if(!t)return r;const D=t.dominios||[];
+    /* UFCD/módulo: sem períodos — não mostra «Classificação final por período» */
+    if(tUnid(t))$$('#view .card').forEach(c=>{const h=c.querySelector(':scope>h2');if(h&&/^Classificação final por /i.test(h.textContent.trim()))c.style.display='none'});
     $$('#view tr[data-k]').forEach(tr=>{const k=+tr.dataset.k;const d=D[k];if(!d||!d.ger)return;const I=cgInd(d);const n=tr.cells.length;
       const h=I.map(x=>`<tr class="cgir"><td></td><td colspan="${Math.max(1,n-1)}"><span class="cgii">${esc(x)}</span></td></tr>`).join('')+
         `<tr class="cgir cgirb"><td></td><td colspan="${Math.max(1,n-1)}"><span class="mut">${I.length?I.length+' indicadores · classificados de 0 a 20 na ficha do aluno (Avaliação Final)':'Sem indicadores — classificado diretamente na Avaliação Final'}</span> <button type="button" class="btn sm" data-cgind="${k}">${ic('pencil',13)} ${I.length?'Editar indicadores':'Adicionar indicadores'}</button></td></tr>`;
