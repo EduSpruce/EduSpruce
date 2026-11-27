@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.194
+- Autoavaliação: o professor pode reagir a cada sugestão dos alunos com um emoji (👍 ❤️ 💡 ✅ 🤔 🙏), em grande no painel em ecrã inteiro, para dar feedback na hora
+
 ## 1.193
 - Autoavaliação pelo telemóvel nas UFCD e módulos: é feita por unidade (não por período) e o aluno avalia-se em cada critério e subcritério da unidade, agrupados e com o peso de cada um
 
