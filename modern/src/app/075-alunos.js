@@ -33,7 +33,7 @@ function vAlunos(){
     else a[k]=k==='repetente'?!!el.value:k==='frequenta'?el.checked:el.value;
     save();if(['num','nasc','nome','frequenta','genero'].includes(k))vAlunos();
   }));
-  $$('#view tr[data-a]').forEach(tr=>longoToque(tr,(x,y)=>{const al=t.alunos.find(q=>q.id===tr.dataset.a);if(!al)return;const outras=A().turmas.filter(q=>q!==t);
+  $$('#view tr[data-a]').forEach(tr=>longoToque(tr,(x,y)=>{const al=t.alunos.find(q=>q.id===tr.dataset.a);if(!al)return;const outras=A().turmas.filter(q=>q!==t&&escId(escolaDe(q))===escId(escolaDe(t)));
     const mv=(dest,copiar)=>()=>{if(dest.alunos.some(q=>normT(q.nome)===normT(al.nome)))return toast(al.nome+' já está em '+dest.nome,'aviso');const c=JSON.parse(JSON.stringify(al));c.id=copiar?uid():al.id;dest.alunos.push(c);if(!copiar)t.alunos=t.alunos.filter(q=>q!==al);save();vAlunos();toast(al.nome+(copiar?' copiado para ':' movido para ')+dest.nome+' · '+dest.disciplina,'ok')};
     menuContexto(x,y,[{t:'Ficha do aluno',ic:'idcard',f:()=>fichaAluno(al.id)},'-',...outras.slice(0,6).map(d=>({t:'Mover para '+d.nome+' · '+d.disciplina,ic:'merge',f:mv(d,false)})),...outras.slice(0,6).map(d=>({t:'Copiar para '+d.nome+' · '+d.disciplina,ic:'copy',f:mv(d,true)})),'-',{t:'Remover da turma',ic:'trash',dng:true,f:()=>{const b=tr.querySelector('[data-rm]');if(b)b.click()}}])}));
   $$('[data-rm]').forEach(b=>b.onclick=()=>{const a=t.alunos.find(x=>x.id===b.dataset.rm);if(confirm('Remover '+a.nome+' da turma? As classificações deste aluno também são apagadas.\n\n(Se o aluno apenas não frequenta a disciplina, desmarque “Frequenta”.)')){t.alunos=t.alunos.filter(x=>x!==a);t.instrumentos.forEach(i=>delete i.notas[a.id]);save();vAlunos()}});

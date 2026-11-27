@@ -8,7 +8,7 @@ function vAvaliacao(){
   const L=al.map(a=>{const pp=pctsPer(t,a.id,p),pf=pctsFinal(t,a.id,p);return {a,pp,pf,np:ponderada(t,pp),nf:ponderada(t,pf)}});
   barBtns([{id:'b-csv',t:'Exportar pauta (CSV)',f:()=>download('Pauta '+p+'.º - '+(UI.orig||t.nome)+' - '+t.disciplina+'.csv',csv([[UI.orig||t.nome,t.disciplina,perNome(p),(A()||{}).nome],[...(t.origens?['Turma']:[]),'N.º','Nome',...t.dominios.map(d=>d.ab+' ('+p+'.º)'),'Nota do '+perW().toLowerCase(),...(acum?t.dominios.map(d=>d.ab+' (acum.)'):[]),'Nota final','Nível','Menção','Autoavaliação','Observações'],...L.map(l=>[...(t.origens?[l.a.origem||'']:[]),l.a.num,l.a.nome,...t.dominios.map(d=>pctD(t,l.pp[d.id])),fmtNota(t,l.np),...(acum?t.dominios.map(d=>pctD(t,l.pf[d.id])):[]),fmtNota(t,l.nf),nivel(t,l.nf),(mencao(t,l.nf)||{}).nome||'',(l.a.autoav||{})[p]||'',(l.a.obsPer||{})[p]||''])]),'text/csv')},
     {id:'b-pr',t:'Imprimir',f:()=>{document.body.classList.add('print-landscape');window.print()}}]);
-  const ws=t.dominios.reduce((s,d)=>s+(+d.peso||0),0);
+  const ws=Math.round(t.dominios.reduce((s,d)=>s+(+d.peso||0),0)*1e6)/1e6;
   $('#view').innerHTML=`<div class="card wide">
     <div class="row"><div class="tabs" style="margin:0">${P.map(x=>`<button data-p="${x}" class="${x===p?'on':''}">${perNome(x)}</button>`).join('')}</div>${selOrigem(t)}<span class="sp1"></span>
     <span class="mut">${p===1?'Nota = só o 1.º '+perW().toLowerCase():acum?'Nota final = média por domínio de 1.º a '+p+'.º':'Nota final = só o '+p+'.º'} · ${t.dominios.map(d=>esc(d.ab)+' '+d.peso+'%').join(', ')}</span></div>

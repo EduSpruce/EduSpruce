@@ -63,7 +63,7 @@ const PROV={
     async apagar(n){const m=await this._mapa();const f=m[n];if(!f)return;await gsFetch('https://www.googleapis.com/drive/v3/files/'+f.id,{method:'DELETE'}).catch(()=>{});delete m[n]}}};
 const nvProv=()=>PROV[nvL().prov]||null;
 /* --- estado --- */
-let _nvBusy=false,_nvT=null;
+let _nvBusy=false,_nvT=null,_nvRefaz=0;
 const nvEstadoTxt=t=>{const e=$('#nv-est');if(e)e.textContent=t;const b=$('#nv-badge');if(b)b.title='Nuvem: '+t};
 const nvConflitos=()=>{try{return JSON.parse(localStorage.getItem(NV_CONF)||'[]')}catch(_){return []}};
 const nvGuardaConflito=(parte,dados,de)=>{const L=nvConflitos();L.unshift({parte,q:Date.now(),de,dados});try{localStorage.setItem(NV_CONF,JSON.stringify(L.slice(0,12)))}catch(_){try{localStorage.setItem(NV_CONF,JSON.stringify(L.slice(0,3)))}catch(_){}}};
@@ -121,7 +121,7 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     if(man&&man.chk){try{if(await nvDecifrar(man.chk,k)!=='eduflow')throw 0}catch(_){throw new Error('A palavra-passe de encriptação não corresponde à dos dados na nuvem.')}}
     if(!man)man={v:1,salt:L.salt,chk:await nvCifrar('eduflow',k),partes:{},fotos:{},rev:0};man.partes=man.partes||{};man.fotos=man.fotos||{};
     /* a assinatura é tirada no instante em que os dados são copiados: o que o utilizador gravar a meio desta sincronização muda-a, e a verificação seguinte volta a ser completa */
-    let _sigIni=nvSigLocal();const P=nvPartes();const loc={},locT={};Object.keys(P).forEach(n=>loc[n]=nvHash(locT[n]=JSON.stringify(P[n])));const mod=L.mod||{};
+    let _sigIni=nvSigLocal();const _ts0=S._ts;const P=nvPartes();const loc={},locT={};Object.keys(P).forEach(n=>loc[n]=nvHash(locT[n]=JSON.stringify(P[n])));const mod=L.mod||{};
     /* versões comuns depois desta sincronização (só passam a valer no fim, se tudo correr bem) */
     const btN=primeira?{}:{..._nvBT};const btPor=(n,h,t)=>{if(h===undefined||t===undefined)delete btN[n];else btN[n]={h,t}};
     const todos=new Set([...Object.keys(loc),...Object.keys(man.partes),...Object.keys(base)]);let mudouLocal=false;let _pi=0;const _pt=Math.max(1,todos.size);const agora=Date.now(),disp=nvDisp();
@@ -145,6 +145,9 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
     {const Lx=Array.isArray(S.fotosLixo)?S.fotosLixo:[];for(const id of Lx){if(FOTOS[id])continue;if(man.fotos[id]){delete man.fotos[id];res.fotosApag=(res.fotosApag||0)+1;try{prov.apagar&&await prov.apagar(nvNomeF(id))}catch(_){}}}}
     if(!window.__nvSemFotos)await nvPool(Object.keys(FOTOS),10,async id=>{if(!man.fotos[id]){try{await prov.escrever(nvNomeF(id),await nvCifrar(FOTOS[id],k));man.fotos[id]=1;res.fotosEnv++}catch(e){(res.fotosFalha=res.fotosFalha||[]).push(id);console.warn('[EduSpruce] ficheiro não enviado',id,e)}}});
     {const _F=Object.keys(man.fotos);let _fi=0;var _fprog=()=>{try{window.__nvProg&&window.__nvProg(0.8+0.2*(++_fi)/Math.max(1,_F.length))}catch(_){}}}if(!window.__nvSemFotos)await nvPool(Object.keys(man.fotos),10,async id=>{_fprog();if(!FOTOS[id]){let txt=null;try{txt=await prov.ler(nvNomeF(id))}catch(e){console.warn('[EduSpruce] ficheiro não recebido',id,e);return}if(txt!=null){const v=await nvDecifrar(txt,k);FOTOS[id]=v;idbPor(id,v);res.fotosRec++}}});
+    /* o utilizador alterou dados neste aparelho enquanto a sincronização decorria: o que se ia aplicar foi copiado antes dessa alteração e apagava-a.
+       Nada se aplica nem se regista: guarda-se a alteração e recomeça-se com os dados de agora (no máximo 3 vezes seguidas). */
+    if(mudouLocal&&(_savePend||S._ts!==_ts0)&&_nvRefaz<3){_nvRefaz++;_nvBusy=false;if(_savePend)saveNow();return await nvSincronizar(interativo)}_nvRefaz=0;
     if(mudouLocal){const st=nvMontar(P);const ok=validarCopia(st);if(ok.length)throw new Error('Dados recebidos incompletos: '+ok[0]);S=migrate(st);_semHist=true;saveNow();_semHist=false;_sigIni=nvSigLocal();const P2=nvPartes(true);Object.keys(P2).forEach(n=>{const t2=JSON.stringify(P2[n]);const h2=nvHash(t2);if(man.partes[n]&&base[n]===man.partes[n].h&&h2!==base[n]){man.partes[n].h=h2;base[n]=h2;btPor(n,h2,t2);res._fix=1}})}
     if(res.env||res.conf||res.fotosEnv||res.fotosApag||res._fix||!manTxt){/* evita escrever por cima de outro dispositivo que sincronizou entretanto */const atual=await prov.ler(NV_PREF+'manifest.json');if(atual&&manTxt&&atual!==manTxt){_nvBusy=false;const b0=L.base||{};(res._up||[]).forEach(n=>{if(b0[n]===undefined)delete base[n];else base[n]=b0[n]});nvSet({base,mod:L.mod||{}});return await nvSincronizar(interativo)}
       man.rev=(man.rev||0)+1;man.q=agora;man.dev=disp;_manFim=JSON.stringify(man);await prov.escrever(NV_PREF+'manifest.json',_manFim)}

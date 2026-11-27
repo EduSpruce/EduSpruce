@@ -2,6 +2,17 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.188
+- Revisão geral de erros: 49 correções confirmadas em toda a app
+- Avaliação: anular «não fez · conta 0» já não apaga notas, a Produção Oral já não apaga notas escritas à mão, ponderações com décimas somam 100% e «Como foi calculado» explica o período aberto
+- Sincronização: uma alteração feita enquanto chegam dados de outro aparelho já não se perde, nem a última alteração antes de Terminar Sessão
+- Escolas: turmas com o mesmo nome em escolas diferentes deixam de se misturar (Direção de Turma, reuniões, horário, alunos, juntar turmas)
+- Reuniões e tarefas repetidas mantêm o dia certo na mudança de hora e nos meses mais curtos; o sorteio «Não repetir» já sorteia o último aluno
+- Spruce Exam e Spruce Forms: «Ver os resultados» funciona com respostas curtas, o aluno é avisado se a sessão já fechou e «Parar» sem rede já não perde respostas
+- Spruce Live: perguntas de 0 pontos contam bem, cronómetro da Corrida certo e o aluno já não fica preso em «Responder»
+- Spruce It!: a Floresta acaba no número de árvores escolhido e «Extrair perguntas» já não troca opções por Verdadeiro/Falso
+- Spruce Notes e Jornal Notes: desfazer não mistura os dois módulos, arrastar cartões para fora de colunas funciona e a pesquisa encontra Documentos e Tabelas
+
 ## 1.187
 - Spruce Review passa a ser a ferramenta do Módulo 03 de TIC: só aparece com turmas de TIC do ensino profissional
 - Spruce Review: enunciados por curso (Mecatrónica, Agropecuária, Turismo Ambiental e Rural, Ação Educativa), disponíveis só depois de incluir o texto e os critérios

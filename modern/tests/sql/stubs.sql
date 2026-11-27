@@ -9,7 +9,7 @@ grant anon, authenticated, service_role to authenticator; grant anon, authentica
 create schema auth; create schema extensions; create schema storage; create schema cron; create schema net;
 grant usage on schema auth, extensions to anon, authenticated, service_role;
 create extension if not exists pgcrypto with schema extensions;
-create table auth.users (id uuid primary key default gen_random_uuid(), email text, email_confirmed_at timestamptz, last_sign_in_at timestamptz, raw_user_meta_data jsonb);
+create table auth.users (id uuid primary key default gen_random_uuid(), email text, email_confirmed_at timestamptz, last_sign_in_at timestamptz, raw_user_meta_data jsonb, is_anonymous boolean default false, banned_until timestamptz, deleted_at timestamptz);
 create table auth.identities (id uuid primary key default gen_random_uuid(), user_id uuid references auth.users(id) on delete cascade, provider text, identity_data jsonb);
 create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('test.uid', true), '')::uuid $$;
 create function auth.jwt() returns jsonb language sql stable as $$ select coalesce(nullif(current_setting('request.jwt.claims', true), ''), '{}')::jsonb $$;

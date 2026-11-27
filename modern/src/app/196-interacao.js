@@ -48,7 +48,8 @@ function mqItensBind(){const u=mqUI(),q=mqQ(u.q),cv=$('#mq-cv');
       const grupo=rz?[it]:u.sel.map(x=>mqItem(q,x)).filter(i=>i&&!(i.pai&&i.id!==it.id));const ori=grupo.map(i=>({i,x:i.x,y:i.y,w:i.w}));
       try{el.setPointerCapture(e.pointerId)}catch(_){}
       const mv=ev=>{const dx=(ev.clientX-x0)/v.z,dy=(ev.clientY-y0)/v.z;if(!mov&&Math.hypot(dx,dy)<4/v.z)return;
-        if(!mov){mov=true;mqAntes();if(!rz&&it.pai){/* tirar da coluna */const R=mqRectW(el);it.pai=null;it.x=R.x;it.y=R.y;ori[0].x=R.x;ori[0].y=R.y;mqRender();ghost=$(`[data-mq="${id}"]`)}else ghost=el;ghost.classList.add('arr')}
+        if(!mov){mov=true;mqAntes();if(!rz&&it.pai){/* tirar da coluna */const R=mqRectW(el);it.pai=null;it.x=R.x;it.y=R.y;{const o0=ori.find(o=>o.i===it)||ori[0];o0.x=R.x;o0.y=R.y}mqRender();ghost=$(`[data-mq="${id}"]`)||el;
+          /* o mqRender trocou o elemento: o novo passa a receber o resto do arrasto (senão o cartão saía da coluna e ficava parado) */if(ghost!==el){try{ghost.setPointerCapture(ev.pointerId)}catch(_){}ghost.addEventListener('pointermove',mv);ghost.addEventListener('pointerup',up);ghost.addEventListener('pointercancel',up)}}else ghost=el;ghost.classList.add('arr')}
         if(rz){it.w=Math.max(120,Math.round(ori[0].w+dx));ghost.style.width=it.w+'px';requestAnimationFrame(mqSetas);return}
         ori.forEach(o=>{if(o.i.pai)return;o.i.x=Math.round(o.x+dx);o.i.y=Math.round(o.y+dy);const g=o.i.id===id?ghost:$(`[data-mq="${o.i.id}"]`);if(g){g.style.left=o.i.x+'px';g.style.top=o.i.y+'px'}});
         /* coluna por baixo? */

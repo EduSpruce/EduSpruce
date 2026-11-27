@@ -1,6 +1,6 @@
 /* ---------- editar turma: oferta formativa, nome, ano de escolaridade ---------- */
 function editarTurmaDlg(t){
-  const a=A();const irmas=a.turmas.filter(x=>x!==t&&normTurma(x.nome)===normTurma(t.nome));
+  const a=A();const irmas=a.turmas.filter(x=>x!==t&&normTurma(x.nome)===normTurma(t.nome)&&escId(escolaDe(x))===escId(escolaDe(t)));
   let oferta=ofertaDe(t);
   openDrawer('Editar Turma',`<div class="ed">
     ${escolaSelect('et-esc',escId(escolaDe(t)))}
@@ -62,7 +62,7 @@ function novaTurmaDlg(r){
     const nome=$('#nt-nome').value.trim();if(!nome)return alert('Indique o nome da turma.');
     let d=sd&&sd.value!=='__outra'?discNome(sd.value):$('#nt-outra').value.trim();if(!d)return alert('Indique a disciplina.');
     {const k=sd&&sd.value!=='__outra'?sd.value:discKey(d,oferta==='profij'?'profij':cicloDoAno($('#nt-ano').value));if(!discAno().includes(k)&&!discExtraAno().includes(d)){if(DISCIPLINAS.some(x=>x.n===d))discAno().push(k);else discExtraAno().push(d)}}
-    if(a.turmas.some(t=>t.nome===nome&&t.disciplina===d))return alert('Já existe '+nome+' · '+d+' neste ano letivo.');
+    if(a.turmas.some(t=>t.nome===nome&&t.disciplina===d&&escId(escolaDe(t))===(($('#nt-esc')||{}).value||escAtiva())))return alert('Já existe '+nome+' · '+d+' neste ano letivo.');
     const anoEsc=$('#nt-ano').value,ciclo=cicloDoAno(anoEsc);
     const info=discInfo(d);
     const t={id:uid(),nome,anoEsc,ciclo,oferta,disciplina:d,dominios:mkDominiosDisc(d,oferta==='profij'?'profij':ciclo,oferta),mencoes:MENCOES_DEF.map(m=>({...m})),regra:{2:'media',3:'media'},alunos:[],instrumentos:[]};

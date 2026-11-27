@@ -3,7 +3,7 @@ function oralTrocar(t,instId){const o=oralM(t);o.regsI=o.regsI||{};const cur=ora
 function instsOrais(t){const d=domOral(t);if(!d)return [];return t.instrumentos.filter(i=>!i.oral&&i.itens.some(it=>it.dom===d.id))}
 {const _os=oralSync;oralSync=function(t){const o=oralM(t);const dom=domOral(t);if(!dom)return null;const i=o.inst&&t.instrumentos.find(x=>x.id===o.inst);
   if(!i||i.oral)return _os.apply(this,arguments);
-  let its=i.itens.filter(it=>it.dom===dom.id&&it.oralLig);if(!its.length){its=i.itens.filter(it=>it.dom===dom.id);its.forEach(it=>it.oralLig=true)}if(!its.length)return i;
+  let its=i.itens.filter(it=>it.dom===dom.id&&it.oralLig);if(!its.length){its=i.itens.filter(it=>it.dom===dom.id);if(its.some(it=>it.oralLig!=null))return i;/* ligação desligada à mão: as notas escritas no instrumento ficam como estão */its.forEach(it=>it.oralLig=true)}if(!its.length)return i;
   const c=o.cfg;alunosAval(t).forEach(a=>{const tt=oralTotal(t,a.id);const n=i.notas[a.id];if(!tt||!c.total){if(n)its.forEach(it=>delete n[it.id]);return}const fr=Math.max(0,Math.min(1,tt.pts/c.total));const m=i.notas[a.id]=i.notas[a.id]||{};its.forEach(it=>{m[it.id]=Math.round(fr*(+it.cot||0)*100)/100})});return i}}
 {const _vo2=vOral;vOral=function(){const r=_vo2.apply(this,arguments);try{const t=T();if(!t||!domOral(t))return r;const o=oralM(t);const L=instsOrais(t);const s=$('#view .orsync');if(!s)return r;
     const cur=o.inst&&t.instrumentos.find(x=>x.id===o.inst);

@@ -107,6 +107,7 @@ function mqLixoDlg(){const L=mqLixo();const nomeQ=id=>(MQ().find(z=>z.id===id)||
     <div class="row" style="margin-top:14px"><span class="sp1"></span><button class="btn dng" id="lx-all">${ic('trash',14)} Esvaziar Lixeira</button></div>`:`<div class="empty">${ic('trash',30)}<br>A lixeira está vazia.</div>`}</div>`);
   $$('[data-lxr]').forEach(b=>b.onclick=()=>{const e=L.find(x=>x.id===b.dataset.lxr);if(!e)return;const q=MQ().find(z=>z.id===e.qid)||mqQ(mqUI().q);const S_=mqStore();
     e.quadros.forEach(z=>{if(!S_.quadros.some(y=>y.id===z.id))S_.quadros.push(z)});const ids=new Set(q.itens.map(i=>i.id));e.itens.forEach(i=>{if(!ids.has(i.id))q.itens.push(i)});
+    /* cartão que estava numa coluna que já não existe neste quadro: volta solto (senão ficava recuperado mas invisível) */e.itens.forEach(i=>{if(i.pai&&!q.itens.some(z=>z.id===i.pai&&z.t==='coluna'))i.pai=null});
     const all=new Set(q.itens.map(i=>i.id));e.setas.forEach(s=>{if(all.has(s.de)&&all.has(s.para)&&!q.setas.some(z=>z.id===s.id))q.setas.push(s)});
     S_.lixo=S_.lixo.filter(x=>x!==e);save();mqUI().q=q.id;mqUI().sel=e.itens.filter(i=>!i.pai).map(i=>i.id);closeDrawer();mqRender();toast('Recuperado','ok')});
   $$('[data-lxd]').forEach(b=>b.onclick=()=>{const S_=mqStore();S_.lixo=S_.lixo.filter(x=>x.id!==b.dataset.lxd);save();mqLixoDlg();mqLixoN()});

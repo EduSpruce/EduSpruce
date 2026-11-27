@@ -89,7 +89,7 @@ async function dgPagina(src){const q=dgCantos(src);const p={src,q:q||DG_TUDO(),a
 let _dgStream=null,_dgTick=0;
 function dgCamParar(){clearInterval(_dgTick);_dgTick=0;if(_dgStream){try{_dgStream.getTracks().forEach(t=>t.stop())}catch(_){}_dgStream=null}}
 async function dgCamara(d,P,a,voltar,alternativa){if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return alternativa();let st;try{st=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:2560},height:{ideal:1920}}})}catch(e){toast('Sem acesso à câmara nesta janela — a abrir a câmara do aparelho','aviso');return alternativa()}
-  dgCamParar();_dgStream=st;d.dataset.modo='cam';d._sairCap=()=>{dgCamParar();d.dataset.modo='cap';voltar()};
+  dgCamParar();_dgStream=st;d.dataset.modo='cam';const sairAnt=d._sairCap;d._sairCap=()=>{dgCamParar();d._sairCap=sairAnt;d.dataset.modo='cap';voltar()};
   d.innerHTML=`<div class="dgcam"><video id="dc-v" playsinline autoplay muted></video><canvas id="dc-o"></canvas><div class="dcflash" id="dc-f"></div>
     <header class="dctop"><button type="button" class="dcb" id="dc-x" aria-label="Terminar">${ic('x',20)}</button><span class="dcinfo" id="dc-i">A procurar a folha…</span><button type="button" class="dcb" id="dc-l" aria-label="Lanterna" hidden>${ic('sun',20)}</button></header>
     <footer class="dcbot"><div class="dcthumbs" id="dc-t"></div><div class="dcrow"><span class="dccount" id="dc-n">${P.length} pág.</span><button type="button" class="dcshot" id="dc-s" aria-label="Fotografar a página"><i></i></button><button type="button" class="dcdone" id="dc-ok">${ic('check',18)} Concluir</button></div></footer></div>`;

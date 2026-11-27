@@ -80,7 +80,7 @@ async function fmAbrir(f,t,min,pes){const code=aaCodigo(8);const {id,k}=await fm
   f.sess.push(s);save();try{audit('Spruce Forms','Recolha de respostas aberta',f.titulo+(t?' · '+t.nome:''))}catch(_){}return s}
 async function fmAtualizarSessao(f,s){const t=s.tid&&A()?A().turmas.find(x=>x.id===s.tid):null;const {id,k}=await fmCh(s.code);const sb=await aaSb();
   const r=await sb.from('eduspruce_autoav').update({dados:await fmBlob(f,t,s,k)}).eq('id',id);if(r.error)throw new Error(aaErro(r.error))}
-async function fmFechar(f,s){try{await fmImportar(f,s)}catch(_){}const {id}=await fmCh(s.code);const sb=await aaSb();await sb.from('eduspruce_autoav').delete().eq('id',id);f.sess=f.sess.filter(x=>x!==s);save()}
+async function fmFechar(f,s){try{await fmImportar(f,s)}catch(_){}const {id}=await fmCh(s.code);const sb=await aaSb();const r=await sb.from('eduspruce_autoav').delete().eq('id',id);if(r&&r.error)throw new Error(aaErro(r.error));f.sess=f.sess.filter(x=>x!==s);save()}
 async function fmImportar(f,s){const {id,k}=await fmCh(s.code);const sb=await aaSb();const r=await sb.from('eduspruce_autoav_resp').select('id,conteudo').eq('sessao',id).order('id');if(r.error)throw new Error(aaErro(r.error));
   s.vistos=s.vistos||[];let n=0;const t=s.tid&&A()?A().turmas.find(x=>x.id===s.tid):null;
   for(const L of r.data||[]){if(s.vistos.includes(L.id))continue;s.vistos.push(L.id);let o;try{o=await aaDecifrar(L.conteudo,k)}catch(_){continue}if(!o||Array.isArray(o)||o.fm!==1)continue;o.aid=esIdOk(o.aid);
@@ -143,7 +143,8 @@ function fmPerguntas(f,el){const sel=UI.fmSel;let nq=0;
   const q=f.itens.find(x=>x.id===sel);if(!q)return;const c=el.querySelector('.fmq.on');
   c.querySelectorAll('[data-fk]').forEach(i=>{const ev=i.tagName==='SELECT'||i.type==='checkbox'?'change':'input';i.addEventListener(ev,()=>{const k=i.dataset.fk;let val=i.type==='checkbox'?i.checked:i.value;
     if(['pts','n'].includes(k))val=Math.max(0,+String(val).replace(',','.')||0);if(k==='l0'||k==='l1'){q.lbl=q.lbl||['',''];q.lbl[+k[1]]=val}else if(k==='num'){q.num=val?{}:null}else q[k]=val;
-    fmMudou(f);if(i.type==='checkbox'||i.tagName==='SELECT'||k==='n'||k==='pts')fmPerguntas(f,el)})});
+    fmMudou(f);if(i.type==='checkbox'||i.tagName==='SELECT'||k==='n')fmPerguntas(f,el);
+    else if(k==='pts'){/* sem redesenhar: o campo não perde o foco a meio da escrita */const b=c.querySelector('.fmqh .fmpts');if(b)b.textContent=nf(+q.pts||0)+' pt'+(+q.pts===1?'':'s');const tt=el.querySelector('.fmcab>.mut');if(tt)tt.innerHTML=`${ic('award',14)} Teste · ${nf(fmPts(f))} ponto${fmPts(f)===1?'':'s'} no total`}})});
   c.querySelectorAll('[data-fo]').forEach(i=>i.oninput=()=>{const [k,id]=i.dataset.fo.split('|');const o=(q.ops||q.linhas).find(x=>x.id===id)||{};if(k==='t')o.t=i.value;if(k==='fb')o.fb=i.value;if(k==='lk')q.ops[+id]=i.value;if(k==='ln'){const L=q.linhas.find(x=>x.id===id);if(L)L.t=i.value}fmMudou(f)});
   c.querySelectorAll('[data-fsalto]').forEach(s=>s.onchange=()=>{const o=q.ops.find(x=>x.id===s.dataset.fsalto);o.salto=s.value;fmMudou(f)});
   c.querySelectorAll('[data-fcerta]').forEach(b=>b.onclick=()=>{const o=q.ops.find(x=>x.id===b.dataset.fcerta);if(!q.multi)q.ops.forEach(x=>{if(x!==o)x.certa=false});o.certa=!o.certa;fmMudou(f);fmPerguntas(f,el)});

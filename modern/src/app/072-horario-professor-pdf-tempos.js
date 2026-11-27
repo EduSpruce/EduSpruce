@@ -65,9 +65,9 @@ async function lerHorarioProfPdf(file){
   r.paginas=RES.length;r.aulas.sort((a,b)=>a.dia-b.dia||a.ini-b.ini);r.naoLetivos.sort((a,b)=>a.dia-b.dia||a.ini-b.ini);r.linhas.sort((a,b)=>a.ini-b.ini);return r;
 }
 const escolaTitulo=s=>s&&s===s.toUpperCase()?s.toLowerCase().replace(/(^|\s)(\S)/g,(m,a,b)=>a+b.toUpperCase()).replace(/\b(De|Da|Do|Das|Dos|E)\b/g,w=>w.toLowerCase()):s;
-function mapaAuto(a,aulas){const m={};aulas.forEach(x=>{const k=chaveAula(x);if(k in m)return;
-  const t=a.turmas.find(t=>turmasDaClasse(t).concat([t.nome]).some(c=>normTurma(c)===normTurma(x.turma))&&siglaCasa(x.sig,t.disciplina))||a.turmas.find(t=>normTurma(t.nome)===normTurma(x.turma)&&a.turmas.filter(u=>normTurma(u.nome)===normTurma(x.turma)).length===1);
-  const t2=!t&&/^ufcd|^mod/i.test(x.sig)?a.turmas.find(q=>ofertaDe(q)==='profij'&&(normTurma(q.nome)===normTurma(x.turma)||normT(q.nome).replace(/\D/g,'')===normT(x.turma).replace(/\D/g,''))):null;
+function mapaAuto(a,aulas){const m={};const TT=a.turmas.filter(t=>escId(escolaDe(t))===escAtiva());aulas.forEach(x=>{const k=chaveAula(x);if(k in m)return;
+  const t=TT.find(t=>turmasDaClasse(t).concat([t.nome]).some(c=>normTurma(c)===normTurma(x.turma))&&siglaCasa(x.sig,t.disciplina))||TT.find(t=>normTurma(t.nome)===normTurma(x.turma)&&TT.filter(u=>normTurma(u.nome)===normTurma(x.turma)).length===1);
+  const t2=!t&&/^ufcd|^mod/i.test(x.sig)?TT.find(q=>ofertaDe(q)==='profij'&&(normTurma(q.nome)===normTurma(x.turma)||normT(q.nome).replace(/\D/g,'')===normT(x.turma).replace(/\D/g,''))):null;
   m[k]=t?t.id:t2?t2.id:''});return m}
 const pickHorProf=()=>{const f=$('#hpIn');f.value='';f.onchange=async()=>{const file=f.files[0];if(!file)return;ocupado('A ler '+file.name+'…');
   try{const r=await lerHorarioProfPdf(file);livre();importarHorProfDlg(r)}catch(e){livre();alert('Não foi possível ler o horário.\n\n'+e.message+'\n\nSugestão: '+sugestaoErro(e.message))}};f.click()};
@@ -86,7 +86,7 @@ function importarHorProfDlg(r){
     <h3>Aulas e Turmas</h3><p class="hint" style="margin-top:0">Associe cada linha do horário a uma turma da app. As aulas associadas passam a ser as da turma (próxima aula, horário, aulas previstas), com prioridade sobre o horário da turma, porque indicam exatamente quando tem aula com ela.</p>
     ${dist.some(d=>!mapa[d.k])?`<div class="row" style="margin-bottom:8px"><button class="btn sm" id="hp-cria">${ic('plus',14)} Criar as turmas em falta (${dist.filter(d=>!mapa[d.k]).length})</button><span class="hint" style="margin:0">Cria turmas vazias com o nome e a disciplina do horário; os alunos importam-se depois.</span></div>`:''}
     <table class="lst"><thead><tr><th>No Horário</th><th class="num">Tempos</th><th>Turma na App</th></tr></thead><tbody>
-    ${dist.map(d=>`<tr><td><b>${esc(d.turma)}</b> · ${esc(d.sig)}</td><td class="num">${d.n}</td><td><select data-hm="${esc(d.k)}"><option value="">— não associar —</option>${a.turmas.map(t=>`<option value="${t.id}" ${mapa[d.k]===t.id?'selected':''}>${esc(t.nome)} · ${esc(t.disciplina)}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table>
+    ${dist.map(d=>`<tr><td><b>${esc(d.turma)}</b> · ${esc(d.sig)}</td><td class="num">${d.n}</td><td><select data-hm="${esc(d.k)}"><option value="">— não associar —</option>${a.turmas.filter(t=>escId(escolaDe(t))===escAtiva()||mapa[d.k]===t.id).map(t=>`<option value="${t.id}" ${mapa[d.k]===t.id?'selected':''}>${esc(t.nome)} · ${esc(t.disciplina)}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table>
     ${r.obs.length?`<h3>Observações do Horário</h3><div class="hint">${r.obs.map(esc).join('<br>')}</div>`:''}
     ${r.preview?`<details class="pdfprev"><summary>${ic('file',14)} Ver o PDF lido${r.paginas>1?' ('+r.paginas+' páginas)':''}</summary><img src="${esc(r.preview)}" alt="Pré-visualização do PDF do horário"></details>`:''}
     <div class="row" style="margin-top:16px"><button class="btn pri" id="hp-ok">${ic('check',15)} Guardar o Meu Horário</button></div></div>`);

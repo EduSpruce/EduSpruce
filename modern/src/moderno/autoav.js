@@ -55,7 +55,7 @@ async function aaImportar(t,s){const {id,k}=await aaCh(s.code);const sb=await aa
     const pl=o.plano||{};AV.plano=AV.plano||{};['meta','estr','apoio'].forEach(c=>{if(pl[c])AV.plano[c]=String(pl[c]).slice(0,600)});
     if(AV.nota){a.autoav=a.autoav||{};a.autoav[s.p]=AV.nota}AV.data=isoHoje();AV.origem='aluno';AV.alunoQ=o.q;vis.add(aid);novos++}
   s.vistos=[...vis];s.n=s.vistos.length;if(novos)save();return novos}
-async function aaFechar(t,s){try{await aaImportar(t,s)}catch(_){}const {id}=await aaCh(s.code);const sb=await aaSb();await sb.from('eduspruce_autoav').delete().eq('id',id);
+async function aaFechar(t,s){try{await aaImportar(t,s)}catch(_){}const {id}=await aaCh(s.code);const sb=await aaSb();const rd=await sb.from('eduspruce_autoav').delete().eq('id',id);if(rd&&rd.error)throw new Error(aaErro(rd.error));
   const L=aaSess(t);const i=L.indexOf(s);if(i>=0)L.splice(i,1);save()}
 async function aaMais(t,s,min){const {id}=await aaCh(s.code);const sb=await aaSb();const ex=new Date(Math.max(Date.now(),s.expira)+min*60000);const r=await sb.from('eduspruce_autoav').update({expira:ex.toISOString()}).eq('id',id);if(r.error)throw new Error(aaErro(r.error));s.expira=+ex;save()}
 /* ao abrir a app: traz respostas que chegaram entretanto e arruma as sessões que já expiraram */

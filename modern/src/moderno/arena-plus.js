@@ -124,7 +124,7 @@ arCriar=async function(c,P,L){const code=AR.codigo();const id=await AR.salaId(co
     for(const a of al){const r=(await AR.sha('es-arena-ref:'+S.cfg.arenaSal+':'+(a.cid||a.id))).slice(0,32);refs[r]=a.id;const pn=String(a.nome||'').trim().split(/\s+/);lista.push({r,n:(numAl(a)?numAl(a)+'. ':'')+pn[0]+(pn.length>1?' '+pn[pn.length-1]:'')})}}
   const PB=src.map(sp3Publica);const perguntas=PB.map(x=>x.pub),certas=PB.map(x=>x.ci),extra=PB.map(x=>x.k);
   const porObj=M.dur&&M.obj&&L.fim==='obj';
-  const cfg={titulo:c.nome,nomes:L.nomes,tardias:L.tipo==='vivo'?!!L.tardias:true,aleatoria:L.ordem!=='seq',dominar:!!M.v2&&L.ordem==='dom',moedas:arMoedasOn()&&!!L.moedas,duracao:M.dur?(porObj?1200:L.dur):0,objetivo:porObj?(L.obj||0):0,
+  const cfg={titulo:c.nome,nomes:L.nomes,tardias:L.tipo==='vivo'?!!L.tardias:true,aleatoria:L.ordem!=='seq',dominar:!!M.v2&&L.ordem==='dom',moedas:arMoedasOn()&&!!L.moedas,duracao:M.dur?(porObj?1200:L.dur):0,objetivo:porObj?(L.obj||0)*(L.modo==='floresta'?4:1):0,
     tema:AR.temaOk(L.tema),mostrar:L.mostrar!==false,silencio:!!L.silencio};if(M.eq)cfg.equipas=L.equipas;if(L.alcAleat&&L.nomes==='livre')cfg.alcunhas='aleat';if(estudo)cfg.estudo=true;
   const op=S.cfg.sp3Opc||{};if(L.tipo==='vivo'){['reacoes','qa','aula'].forEach(k=>{if(op[k]!=null)cfg[k]=op[k]});if(op.maxjog)cfg.maxjog=op.maxjog}if(S.cfg.sp3Marca&&S.cfg.sp3Marca.on!==false)cfg.marca=sp3MarcaPub(S.cfg.sp3Marca);
   if(lista)cfg.lista_c=await AR.cifrar(lista,code);
@@ -348,7 +348,7 @@ function sp3Extrair(txt){const L=String(txt||'').replace(/\r/g,'').split('\n').m
   const fecha=()=>{if(!q)return;if(q.o.length>=2){const p={id:uid(),t:q.t,s:20,tp:'mc',o:q.o.map(x=>x.t).slice(0,6),c:Math.max(0,q.o.findIndex(x=>x.ok))};const okN=q.o.filter(x=>x.ok).length;
       if(q.r){const k=/^[a-f]$/i.test(q.r)?q.r.toLowerCase().charCodeAt(0)-97:q.o.findIndex(x=>sp3Norm(x.t)===sp3Norm(q.r));if(k>=0)p.c=k}
       if(okN>1){p.tp='multi';p.cs=q.o.map((x,k)=>x.ok?k:-1).filter(k=>k>=0)}
-      if(p.o.length===2&&/^(v|verdadeir)/i.test(p.o[0])&&/^(f|fals)/i.test(p.o[1])){p.tp='vf';p.o=['Verdadeiro','Falso']}
+      if(p.o.length===2&&/^(v|verdadeir[oa])$/i.test(p.o[0].trim())&&/^(f|fals[oa])$/i.test(p.o[1].trim())){p.tp='vf';p.o=['Verdadeiro','Falso']}
       while(p.o.length<4&&p.tp==='mc')p.o.push('');Q.push(p)}
     else if(q.r){Q.push({id:uid(),t:q.t,s:30,tp:'rc',a:q.r.split(/\s*[;|]\s*/).filter(Boolean).slice(0,6),o:['','','',''],c:0})}
     else if(/(verdadeiro|falso)\s*\??$/i.test(q.t)||/^v\/f/i.test(q.t)){Q.push({id:uid(),t:q.t.replace(/^v\/f[:.\s]*/i,''),s:20,tp:'vf',o:['Verdadeiro','Falso'],c:0})}

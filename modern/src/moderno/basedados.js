@@ -43,12 +43,13 @@ function sbEsquecer(){try{Object.keys(localStorage).forEach(k=>{if(k===SB_SES||k
   try{const L=nvL();const o={sb:0,conta:'',base:null,mod:{},erro:'',rekey:null};if(L.kConta){o.k=null;o.salt=null;o.kDe='';o.kConta=0;try{_nvK=null}catch(_){}}nvSet(o)}catch(_){}
   try{localStorage.removeItem('eskeep')}catch(_){}}
 async function sbTerminar(msgEntrada){try{esCortina(false)}catch(_){}if(sbTerminar._on)return;sbTerminar._on=true;
-  try{try{nvMarcar()}catch(_){}if(window.__esPronto&&navigator.onLine&&Object.keys(nvL().mod||{}).length)await Promise.race([nvSincronizar(false),new Promise(r=>setTimeout(r,6000))])}catch(_){}
+  /* a última alteração pode ainda estar à espera de ser gravada (150 ms depois de mexer) ou haver um envio a meio: grava-se já e espera-se por esse envio, senão perdia-se ao sair */
+  try{try{if(window.__esPronto&&_savePend)saveNow()}catch(_){}try{nvMarcar()}catch(_){}if(window.__esPronto&&navigator.onLine&&Object.keys(nvL().mod||{}).length)await Promise.race([nvSyncSaida()||nvSincronizar(false),new Promise(r=>setTimeout(r,6000))])}catch(_){}
   try{const p=await Promise.race([sbObter(),new Promise((_,ko)=>setTimeout(()=>ko(new Error('t')),3000))]);await Promise.race([p.sair(),new Promise(r=>setTimeout(r,3000))])}catch(_){}
   sbEsquecer();try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY);sessionStorage.removeItem('es.loc')}catch(_){}
   try{if(msgEntrada)sessionStorage.setItem('es.lgmsg',msgEntrada)}catch(_){}
   window.__esSair=true;location.replace(location.origin+location.pathname)}
-terminarSessao=function(){try{try{nvMarcar()}catch(_){}if(window.__esPronto&&Object.keys(nvL().mod||{}).length&&!navigator.onLine&&!confirm('Há alterações que ainda não ficaram guardadas (sem internet). Se terminar a sessão agora, perdem-se.\n\nTerminar mesmo assim?'))return}catch(_){}sbTerminar()};
+terminarSessao=function(){try{try{if(window.__esPronto&&_savePend)saveNow()}catch(_){}try{nvMarcar()}catch(_){}if(window.__esPronto&&Object.keys(nvL().mod||{}).length&&!navigator.onLine&&!confirm('Há alterações que ainda não ficaram guardadas (sem internet). Se terminar a sessão agora, perdem-se.\n\nTerminar mesmo assim?'))return}catch(_){}sbTerminar()};
 /* quem deixa de estar autorizado sai também da base de dados (senão voltava a entrar sozinho) */
 {const _av=acVerificar;acVerificar=async function(){try{return await _av.apply(this,arguments)}catch(e){if(e&&e.semAcesso){sbEsquecer();try{sessionStorage.setItem('es.lgmsg',e.message)}catch(_){}}throw e}}}
 

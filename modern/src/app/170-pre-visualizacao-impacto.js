@@ -18,6 +18,6 @@ function impactoDlg(t,tit,desc,R,extra,ok){const d=document.createElement('dialo
 {const _vCP=vCriterios;vCriterios=function(){const r=_vCP.apply(this,arguments);try{const t=T();if(!t)return r;
   $$('#view [data-d="peso"]').forEach(el=>{el.addEventListener('change',e=>{const d=t.dominios[+el.closest('tr').dataset.k];if(!d)return;const novo=num(el.value)||0,velho=d.peso;if(+novo===+velho)return;
     const temNotas=alunosAval(t).some(x=>ponderada(t,pctsFinal(t,x.id,perAtual(t)))!=null);if(!temNotas)return;e.stopImmediatePropagation();if($('dialog.impdlg[open]'))return;
-    const R=impactoCalc(t,()=>{d.peso=novo},()=>{d.peso=velho});const tot=t.dominios.reduce((s_,z)=>s_+(z===d?+novo:(+z.peso||0)),0);
+    const R=impactoCalc(t,()=>{d.peso=novo},()=>{d.peso=velho});const tot=Math.round(t.dominios.reduce((s_,z)=>s_+(z===d?+novo:(+z.peso||0)),0)*1e6)/1e6;
     impactoDlg(t,'Alterar a ponderação de '+d.ab+'?',`${esc(d.nome)}: ${velho}% → <b>${novo}%</b>${tot!==100?` · <span class="stlo">total ${tot}%</span>`:''}.`,R,'',ok=>{if(ok){d.peso=novo;save();audit('Critérios','Ponderação alterada',t.nome+' · '+d.ab+' '+velho+'% → '+novo+'%')}else el.value=velho;vCriterios()})},true)})}catch(e){console.warn(e)}return r};if(go._f)go._f.criterios=vCriterios}
 

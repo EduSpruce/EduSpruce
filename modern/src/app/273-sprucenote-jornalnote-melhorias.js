@@ -11,9 +11,9 @@ const MQM_SVG='http://www.w3.org/2000/svg';
 /* antes de abrir um painel lateral: tira a seleção (senão o menu do elemento fica por cima do painel) */
 function mqmLimpaSel(){try{const u=mqUI();u.sel=[];u.selSeta=null;const b=$('#mq-ctx');if(b)b.hidden=true;$$('#mq-its .mq-it.sel').forEach(x=>x.classList.remove('sel'));mqSetas()}catch(_){}}
 function mqmTexto(it){if(!it)return '';const tx=h=>{const d=document.createElement('div');d.innerHTML=mqLimpa(h||'');d.querySelectorAll('br,div,p,li,h3').forEach(e=>e.append(' '));return d.textContent.replace(/\s+/g,' ').trim()};
-  switch(it.t){case 'nota':case 'titulo':case 'documento':return tx(it.txt);case 'tarefa':return [it.tit,...(it.l||[]).map(x=>x.t)].filter(Boolean).join(' · ');case 'link':return [it.tit,it.url,it.desc].filter(Boolean).join(' · ');
+  switch(it.t){case 'nota':case 'titulo':return tx(it.txt);case 'documento':return [it.tit,tx(it.html)].filter(Boolean).join(' · ');case 'tarefa':return [it.tit,...(it.l||[]).map(x=>x.t)].filter(Boolean).join(' · ');case 'link':return [it.tit,it.url,it.desc].filter(Boolean).join(' · ');
     case 'quadro':{const s=MQ().find(q=>q.id===it.ref);return s?s.nome||'':''}case 'coluna':return it.tit||'';case 'imagem':return it.leg||'';case 'cor':return it.hex||'';case 'ficheiro':return it.nome||'';
-    case 'comentario':return [tx(it.txt),...(it.resp||[]).map(r=>tx(r.txt||r.t||''))].filter(Boolean).join(' · ');case 'tabela':return (it.rows||it.l||[]).flat?(it.rows||it.l||[]).flat().filter(x=>typeof x==='string').join(' '):'';
+    case 'comentario':return [tx(it.txt),...(it.resp||[]).map(r=>tx(r.txt||r.t||''))].filter(Boolean).join(' · ');case 'tabela':return (it.lin||it.rows||it.l||[]).flat?(it.lin||it.rows||it.l||[]).flat().filter(x=>typeof x==='string').join(' '):'';
     default:return [it.tit,it.txt?tx(it.txt):'',it.nome,it.leg,it.desc].filter(Boolean).join(' · ')}}
 function mqmCaminho(qid){const L=[];let q=MQ().find(x=>x.id===qid),n=0;while(q&&n++<30){L.unshift(q.nome||'Sem nome');q=q.pai?MQ().find(x=>x.id===q.pai):null}return L.join(' › ')}
 function mqmCentrar(q,id){const it=mqItem(q,id);if(!it)return;const base=it.pai?mqItem(q,it.pai)||it:it;const cv=$('#mq-cv');if(!cv)return;const r=cv.getBoundingClientRect(),v=mqVis(q.id);v.z=Math.max(v.z||1,.8);
@@ -40,7 +40,7 @@ function mqmMd(q,nivel){nivel=nivel||0;if(nivel>4)return '';const top=q.itens.fi
     case 'comentario':return '> '+mqmTexto(it);default:{const t=mqmTexto(it);return t}}};
   return top.map(um).filter(Boolean).join('\n\n')}
 function mqmExportar(){const q=mqQ(mqUI().q);const md='# '+(q.nome||'Quadro')+'\n\n'+mqmMd(q);
-  const mostra=()=>{mqmLimpaSel();openDrawer('Quadro em texto',`<p class="mut">Selecione tudo e copie.</p><textarea class="mqm-md" id="mqm-md" readonly>${esc(md)}</textarea>`);setTimeout(()=>{const t=$('#mqm-md');t&&(t.focus(),t.select())},40)};
+  const mostra=()=>{mqmLimpaSel();openDrawer('Quadro em texto',`<p class="mut">Selecione tudo e copie.</p><textarea class="mqm-md" id="mqm-md" readonly>${esc(md)}</textarea>`);setTimeout(()=>{const t=$('textarea.mqm-md');t&&(t.focus(),t.select())},40)};
   try{navigator.clipboard.writeText(md).then(()=>toast('Quadro copiado como texto (Markdown)','ok'),mostra)}catch(_){mostra()}}
 
 /* ---------- modelos de quadro ---------- */

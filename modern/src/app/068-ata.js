@@ -13,7 +13,7 @@ function ataTexto(r){const a=A();return ['ATA — '+reunTitulo(r,a),fmtIsoL(r.da
 /* ---------- editor ---------- */
 function reuniaoDlg(id,pre){const a=A();if(!a)return;const L=reunioes(a);const ed=id?L.find(x=>x.id===id):null;
   const r=ed?JSON.parse(JSON.stringify(ed)):Object.assign({id:uid(),tipo:'ct',titulo:'',data:isoData(new Date(Date.now()+864e5)),ini:17*60,fim:18*60+30,local:'',link:'',turma:null,convocante:'',participantes:'',lembretes:[1440,60],ordem:[],prep:[],notas:'',decisoes:[],estado:'agendada'},pre||{});
-  const TS=a.turmas.slice().sort((x,y)=>x.nome.localeCompare(y.nome,'pt'));
+  const TS=a.turmas.filter(t=>escId(escolaDe(t))===escAtiva()||reunTurmas(r,a).includes(t)).sort((x,y)=>x.nome.localeCompare(y.nome,'pt'));
   openDrawer(ed?'Editar Reunião':'Nova Reunião',`<div class="ed reued">
     <label>Tipo</label><div class="rtipos">${Object.entries(REUN_T).filter(([k])=>k!=='avl'||r.tipo==='avl').map(([k,v])=>`<button type="button" class="chip ${r.tipo===k?'on':''}" data-rt="${k}" style="--rc:${v.cor}"><i></i>${v.n}</button>`).join('')}<button type="button" class="chip ${r.tipo==='avl'?'on':''}" data-rt="avl" style="--rc:${REUN_T.avl.cor}"><i></i>${REUN_T.avl.n}</button></div>
     <div class="g2" style="margin-top:12px"><div style="grid-column:1/-1"><label>Título <span class="mut">(opcional — por omissão: tipo · turma)</span></label><input id="r-tit" value="${esc(r.titulo)}" placeholder="${esc(reunTitulo({...r,titulo:''},a))}"></div>
@@ -45,7 +45,7 @@ function reuniaoDlg(id,pre){const a=A();if(!a)return;const L=reunioes(a);const e
   $('#r-ok').onclick=()=>{ler();if(!r.data)return alert('Indique a data da reunião.');let n=1;
     if(ed){if(ed.data!==r.data||ed.ini!==r.ini)r.avisados={};Object.assign(ed,r)}
     else{const rep=($('#r-rep')||{}).value,ate=($('#r-ate')||{}).value;L.push(r);
-      if(rep&&ate){r.serie=r.id;let d=dataDeIso(r.data);for(let k=0;k<60;k++){if(rep==='m')d=new Date(d.getFullYear(),d.getMonth()+1,d.getDate());else d=new Date(d.getTime()+(+rep)*864e5);const iso=isoData(d);if(iso>ate)break;
+      if(rep&&ate){r.serie=r.id;let d=dataDeIso(r.data);for(let k=0;k<60;k++){if(rep==='m'){const d0=dataDeIso(r.data),m1=new Date(d0.getFullYear(),d0.getMonth()+k+1,1);d=new Date(m1.getFullYear(),m1.getMonth(),Math.min(d0.getDate(),new Date(m1.getFullYear(),m1.getMonth()+1,0).getDate()))}else d=new Date(d.getFullYear(),d.getMonth(),d.getDate()+(+rep));const iso=isoData(d);if(iso>ate)break;
         L.push({...JSON.parse(JSON.stringify(r)),id:uid()+k,data:iso,serie:r.id,avisados:{}});n++}}
       if(n>1)toast(n+' reuniões agendadas','ok')}
     saveNow();closeDrawer();if(ed||!(n>1))toast(ed?'Reunião guardada':'Reunião agendada para '+fmtIsoL(r.data)+' às '+fmtHM(r.ini),'ok');verificarLembretes(true);go(VIEW==='reunioes'?'reunioes':VIEW)};

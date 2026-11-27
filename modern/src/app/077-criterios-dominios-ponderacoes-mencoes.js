@@ -2,7 +2,7 @@
    CRITÉRIOS (domínios, ponderações, menções, regra)
    ===================================================================== */
 function vCriterios(){
-  const t=T();const ws=t.dominios.reduce((s,d)=>s+(+d.peso||0),0);const disc=minhasDisc();
+  const t=T();const ws=Math.round(t.dominios.reduce((s,d)=>s+(+d.peso||0),0)*1e6)/1e6;/* sem os restos das contas com décimas (11,1×8+11,2 dava 99,99999999999999) */const disc=minhasDisc();
   $('#view').innerHTML=`
   <div class="card ed"><h2>Turma</h2>
     <div style="margin-bottom:10px"><label>Oferta formativa</label>${segOferta('cr-of',ofertaDe(t))}</div>

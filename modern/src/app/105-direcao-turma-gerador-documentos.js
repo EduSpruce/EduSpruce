@@ -3,7 +3,7 @@
    ===================================================================== */
 /* ---------- dados da direção de turma ---------- */
 function dtDados(a,n){a.dirTurma=a.dirTurma||{};const k=normTurma(n);const o=a.dirTurma[k]=a.dirTurma[k]||{};['atend','ocorr','planos','comun','arquivo','diligencias'].forEach(x=>o[x]=o[x]||[]);o.intercalar=o.intercalar||{};o.prepCT=o.prepCT||{};return o}
-function alunosDaClasse(a,n){const out=[];a.turmas.filter(t=>turmasDaClasse(t).some(c=>normTurma(c)===normTurma(n))).forEach(t=>t.alunos.forEach(x=>{if(t.origens&&normTurma(x.origem||'')!==normTurma(n))return;const o=out.find(z=>mesmoAluno(z.x,x));if(o)o.reg.push({t,x});else out.push({x,reg:[{t,x}]})}));return out.sort((p,q)=>(+p.x.num||0)-(+q.x.num||0)||p.x.nome.localeCompare(q.x.nome,'pt'))}
+function alunosDaClasse(a,n){const out=[];a.turmas.filter(t=>escId(escolaDe(t))===escAtiva()&&turmasDaClasse(t).some(c=>normTurma(c)===normTurma(n))).forEach(t=>t.alunos.forEach(x=>{if(t.origens&&normTurma(x.origem||'')!==normTurma(n))return;const o=out.find(z=>mesmoAluno(z.x,x));if(o)o.reg.push({t,x});else out.push({x,reg:[{t,x}]})}));return out.sort((p,q)=>(+p.x.num||0)-(+q.x.num||0)||p.x.nome.localeCompare(q.x.nome,'pt'))}
 const chaveAl=x=>x.processo?'p:'+x.processo:'n:'+normT(x.nome);
 function faltasAluno(reg){const F=[];reg.forEach(({x})=>(x.faltasAl||[]).forEach(f=>F.push(f)));return F}
 function resumoAluno(a,{x,reg}){const F=faltasAluno(reg);const inj=F.filter(f=>f.tipo==='injust').reduce((s,f)=>s+(+f.tempos||1),0),just=F.filter(f=>f.tipo==='just').reduce((s,f)=>s+(+f.tempos||1),0),disc=F.filter(f=>f.tipo==='disc').length;
@@ -72,7 +72,7 @@ function bindDirecao(a,n,D,AL,R){const re=()=>{save();vDirecao()};
   $$('[data-dtcom]').forEach(b=>b.onclick=()=>{const o=AL.find(z=>chaveAl(z.x)===b.dataset.dtcom);UI.docCtx={dt:n,modelo:'assid',aluno:chaveAl(o.x)};go('documentos')});
   if($('#dt-conv'))$('#dt-conv').onclick=()=>{UI.docCtx={dt:n,modelo:'conv'};go('documentos')};
   $$('[data-dtck]').forEach(c=>c.onchange=()=>{D.prepCT[c.dataset.dtck]=c.checked;save()});
-  if($('#dt-ctn'))$('#dt-ctn').onclick=()=>{const t=a.turmas.find(z=>turmasDaClasse(z).some(c=>normTurma(c)===normTurma(n)));reuniaoDlg(null,{tipo:'ct',turmas:t?[t.id]:[]})};
+  if($('#dt-ctn'))$('#dt-ctn').onclick=()=>{const t=a.turmas.find(z=>escId(escolaDe(z))===escAtiva()&&turmasDaClasse(z).some(c=>normTurma(c)===normTurma(n)));reuniaoDlg(null,{tipo:'ct',turmas:t?[t.id]:[]})};
   if($('#dt-ctpdf'))$('#dt-ctpdf').onclick=()=>{const lim=+S.cfg.limFaltas||10;pdfDocumento({titulo:'Preparação do Conselho de Turma',subtitulo:'Turma '+n+' · '+perNome(periodoDe()||1),paisagem:true,blocos:[{tabela:{cab:['N.º','Aluno','Faltas inj.','Negativas','Medidas','Instrumentos por realizar','Observações'],larg:[.05,.25,.08,.2,.08,.2,.14],
      linhas:R.map(o=>[o.x.num,o.x.nome,o.r.inj,o.r.notas.filter(z=>z.neg).map(z=>z.t.disciplina+' ('+nivel(z.t,z.f)+')').join(', ')||'—',o.r.med?'Sim':'—',o.r.porFazer.map(p=>p.i.nome).join(', ')||'—','']),destaque:r=>+r[2]>=lim}},{h:'Pontos para a reunião'},{p:'1. Análise do aproveitamento e comportamento da turma.\n2. Situação individual dos alunos sinalizados.\n3. Medidas de suporte à aprendizagem e à inclusão.\n4. Outros assuntos.'}],assinaturas:[tituloDT(S.cfg.professor)+' — '+profNome(S.cfg.professor)]},'Preparação CT '+n)};
   $$('[data-dtip]').forEach(b=>b.onclick=()=>{UI.dtIP=b.dataset.dtip;vDirecao()});

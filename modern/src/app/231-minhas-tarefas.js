@@ -8,7 +8,7 @@ const tdHoje=()=>isoData(new Date());
 const tdImp=x=>x.prio==='alta';
 const tdNoDia=x=>x.dia===tdHoje();
 const tdAtr=x=>!x.feito&&x.prazo&&x.prazo<tdHoje();
-function tdProx(iso,r){const d=dataDeIso(iso||tdHoje());if(r==='d')d.setDate(d.getDate()+1);else if(r==='u'){do{d.setDate(d.getDate()+1)}while(d.getDay()===0||d.getDay()===6)}else if(r==='s')d.setDate(d.getDate()+7);else if(r==='m')d.setMonth(d.getMonth()+1);else if(r==='a')d.setFullYear(d.getFullYear()+1);return isoData(d)}
+function tdProx(iso,r){const d=dataDeIso(iso||tdHoje());if(r==='d')d.setDate(d.getDate()+1);else if(r==='u'){do{d.setDate(d.getDate()+1)}while(d.getDay()===0||d.getDay()===6)}else if(r==='s')d.setDate(d.getDate()+7);else if(r==='m'){const dd=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);d.setDate(Math.min(dd,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()))}else if(r==='a')d.setFullYear(d.getFullYear()+1);return isoData(d)}
 function tdConcluir(x,on){x.feito=on;x.feitaEm=on?Date.now():null;if(on&&x.rep&&!x._repFeito){x._repFeito=1;const n=JSON.parse(JSON.stringify(x));Object.assign(n,{id:uid(),feito:false,feitaEm:null,criada:Date.now(),_repFeito:0,prazo:tdProx(x.prazo,x.rep),dia:'',lemb:x.lemb?tdProx(x.lemb.slice(0,10),x.rep)+x.lemb.slice(10):'',lembFeito:false,passos:(x.passos||[]).map(p=>({...p,f:false}))});tarefas().push(n);toast('Tarefa repetida: próxima a '+fmtIsoL(n.prazo),'ok')}
   if(on){try{audit('Tarefas','Tarefa concluída',x.t)}catch(_){}}}
 function tdFiltro(k){const L=tarefas();if(k==='dia')return L.filter(tdNoDia);if(k==='imp')return L.filter(tdImp);if(k==='plan')return L.filter(x=>x.prazo);if(k==='todas')return L.filter(x=>!x.lista);const l=tdListas().find(z=>z.id===k);return l?L.filter(x=>x.lista===k):L}

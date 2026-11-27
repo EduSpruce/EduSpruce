@@ -36,7 +36,7 @@ function fmcImportar(){openDrawer('Importação rápida',`<div class="ed"><p cla
   $('#fmci-ok').onclick=()=>{const L=$('#fmci-t').value.split(/\r?\n/);const P=[];let c=null;
     for(const l0 of L){const l=l0.trim();if(!l){c=null;continue}const m=l.match(/^(?:[-•]|[a-hA-H][).])\s*(.+)$/);
       if(m&&c){const t=m[1].replace(/\s*\*\s*$/,'');c.ops.push({t,certa:/\*\s*$/.test(m[1])})}else{c={t:l.replace(/^\d+[).]\s*/,''),ops:[]};P.push(c)}}
-    if(!P.length)return toast('Não encontrei perguntas','err');const quiz=P.some(p=>p.ops.some(o=>o.certa));const f=fmNovo(quiz);f.titulo=$('#fmci-n').value.trim()||'Importado';
+    if(!P.length)return toast('Não encontrei perguntas','erro');const quiz=P.some(p=>p.ops.some(o=>o.certa));const f=fmNovo(quiz);f.titulo=$('#fmci-n').value.trim()||'Importado';
     f.itens=P.map(p=>{if(!p.ops.length)return Object.assign(fmQ('texto'),{titulo:p.t,longo:true});const q=Object.assign(fmQ('escolha'),{titulo:p.t,ops:p.ops.map((o,i)=>({id:uid()+i,t:o.t,...(o.certa?{certa:true}:{})}))});q.multi=p.ops.filter(o=>o.certa).length>1;if(quiz)q.pts=1;return q});
     save();closeDrawer();toast(P.length+' pergunta'+(P.length===1?'':'s')+' importada'+(P.length===1?'':'s'),'ok');UI.fmId=f.id;UI.fmTab='perg';vForms()}}
 function fmCasa(){const v=$('#view');if(!v)return;const F=UI.fmF=UI.fmF||{tipo:'',turma:'',q:''};const T=UI.fmcTab=UI.fmcTab||'rec';const vis=S.cfg.fmVis||'grelha';

@@ -84,9 +84,12 @@ function fichaTransfBanner(id){const t=T();const al=t&&t.alunos.find(x=>x.id===i
 /* v0.59 · «não realizou»: não imputável ao aluno (não conta — a média faz-se com os restantes elementos) ou imputável (conta 0) */
 {const _iA2=instAvaliado;instAvaliado=function(i,aid){if(i&&i.nr&&i.nr[aid]&&i.nr[aid]!=='z')return false;return _iA2.apply(this,arguments)}}
 function nrRot(v){return v==='z'?'não fez · conta 0':v?'não fez · não conta':'F'}
-function nrMarcar(t,i,aid,v){i.nr=i.nr||{};if(!v){delete i.nr[aid];if(i._nrZ&&i._nrZ[aid]){delete i.notas[aid];delete i._nrZ[aid]}}
-  else if(v==='z'){i.nr[aid]='z';const n=i.notas[aid]=i.notas[aid]||{};let pus=false;i.itens.forEach(it=>{if(num(n[it.id])==null){n[it.id]=0;pus=true}});if(pus){i._nrZ=i._nrZ||{};i._nrZ[aid]=1}}
-  else{if(i.nr[aid]==='z'&&i._nrZ&&i._nrZ[aid]){delete i.notas[aid];delete i._nrZ[aid]}i.nr[aid]='j'}
+function nrMarcar(t,i,aid,v){i.nr=i.nr||{};
+  /* os zeros postos pelo «conta 0» só se retiram se a linha ainda for toda de zeros: classificações que o aluno já tinha (ou escritas depois) nunca se apagam */
+  const tiraZ=()=>{const n=i.notas[aid];if(!n||i.itens.every(it=>n[it.id]==null||n[it.id]===''||num(n[it.id])===0))delete i.notas[aid];delete i._nrZ[aid]};
+  if(!v){delete i.nr[aid];if(i._nrZ&&i._nrZ[aid])tiraZ()}
+  else if(v==='z'){i.nr[aid]='z';const n=i.notas[aid]=i.notas[aid]||{};const tinha=i.itens.some(it=>num(n[it.id])!=null);let pus=false;i.itens.forEach(it=>{if(num(n[it.id])==null){n[it.id]=0;pus=true}});if(pus&&!tinha){i._nrZ=i._nrZ||{};i._nrZ[aid]=1}}
+  else{if(i.nr[aid]==='z'&&i._nrZ&&i._nrZ[aid])tiraZ();i.nr[aid]='j'}
   save();audit('Avaliação','Não realizou: '+(v==='z'?'conta 0':v?'não conta':'anulado'),i.nome)}
 {const _vIn=vInstrumento;vInstrumento=function(id){const r=_vIn.apply(this,arguments);try{nrBotoes(id)}catch(e){console.warn(e)}return r}}
 function nrBotoes(id){const t=T();const i=t&&t.instrumentos.find(x=>x.id===id);if(!i)return;i.nr=i.nr||{};

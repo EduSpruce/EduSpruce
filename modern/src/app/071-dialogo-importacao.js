@@ -8,7 +8,7 @@ function importarHorariosDlg(res){
     ${res.filter(h=>h.erro).map(h=>`<div class="alert w">${ic('alert',15)} ${esc(h.ficheiro)}: não encontrei um horário de turma${h.msg?' ('+esc(h.msg)+')':''}.</div>`).join('')}
     ${ok.length?`<p class="hint" style="margin-top:0">Os horários ficam associados às turmas com o mesmo nome. As aulas da sua disciplina são reconhecidas pela legenda (nome da disciplina e professor).</p>
     <table class="lst"><thead><tr><th>Turma</th><th>Tempos da Turma</th><th>Turmas na App</th><th>As suas disciplinas</th><th>Diretor(a) de Turma</th></tr></thead><tbody>
-    ${ok.map(h=>{const lig=a.turmas.filter(t=>turmasDaClasse(t).some(c=>normTurma(c)===normTurma(h.turma)));const meus=siglasDoProfessor(h);
+    ${ok.map(h=>{const lig=a.turmas.filter(t=>escId(escolaDe(t))===escAtiva()&&turmasDaClasse(t).some(c=>normTurma(c)===normTurma(h.turma)));const meus=siglasDoProfessor(h);
       return `<tr><td><b>${esc(h.turma||'?')}</b><div class="hint">${esc(h.ficheiro)}</div></td><td>${h.aulas.length}</td>
       <td>${lig.length?lig.map(t=>`<span class="tag">${esc(t.nome)} · ${esc(t.disciplina)}</span> <span class="mut" style="font-size:12px">${esc(siglasDaDisciplina(h,t.disciplina).join(', ')||'—')}</span>`).join('<br>'):'<span class="mut">ainda sem turma com este nome</span>'}</td>
       <td>${meus.length?meus.map(l=>`<span class="tag">${esc(l.ab)}</span> ${esc(l.nome)}`).join('<br>'):'<span class="mut">—</span>'}</td><td>${esc(h.diretor||'—')}</td></tr>`}).join('')}

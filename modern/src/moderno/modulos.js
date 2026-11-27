@@ -13,7 +13,8 @@ function modInc(id){return modAdmin()||!MOD_PERM||MOD_PERM.includes(id)}
 function modIdDe(inp){for(const g of MOD_GR)for(const [i,id] of g[2])if(i===inp)return id;
   return ({'mod-jnn':'jornalnote','mod-nf':'notasf','mod-snw':'snweb','mod-apres':'apres'})[inp]||inp.replace(/^mod-|-on$/g,'')}
 /* licença: as apps não incluídas ficam desligadas no menu e nas Apps */
-HUB_APPS.forEach(a=>{if(!a.on||a._mp)return;const o=a.on;a.on=()=>modInc(a.id)&&o();a._mp=1});
+function modLicApps(){HUB_APPS.forEach(a=>{if(!a.on||a._mp)return;const o=a.on;a.on=()=>modInc(a.id)&&o();a._mp=1})}
+modLicApps();setTimeout(modLicApps,0); /* também as apps acrescentadas por peças carregadas depois desta (ex.: Spruce Review): sem isto ficavam fora da licença */
 const hubNApps=()=>{try{return HUB_APPS.filter(a=>!a.on||a.on()).length}catch(_){return HUB_MIN}};
 const hubPoucas=()=>hubNApps()<HUB_MIN;
 {const _hm=hubMenuMods;hubMenuMods=function(){const r=_hm.apply(this,arguments);try{const p=hubPoucas();document.body.classList.toggle('hub-poucas',p);
@@ -69,7 +70,7 @@ function modContaEditar(r,nome,cat,depois){const tem=r.modulos?new Set(r.modulos
 
 /* a licença da conta lê-se depois de abrir (sem atrasar a abertura); sem o script 0020 ficam todos incluídos */
 setTimeout(function modLer(){if(!window.__esPronto)return setTimeout(modLer,1500);(async()=>{try{if(modAdmin()||nvL().prov!=='supabase')return;
-  const v=await sbRpc('eduspruce_meus_modulos');MOD_PERM=Array.isArray(v)?v:null;hubMenuMods();if(typeof menuAgendar==='function')menuAgendar();
+  const v=await sbRpc('eduspruce_meus_modulos');MOD_PERM=Array.isArray(v)?v:null;modLicApps();hubMenuMods();if(typeof menuAgendar==='function')menuAgendar();
   const a=HUB_APPS.find(x=>x.v===VIEW&&x.on);if(a&&!modInc(a.id))go('inicio');if(VIEW==='definicoes'&&UI.defTab==='mods')modsMeus()}catch(_){MOD_PERM=null}})()},1500);
 setTimeout(()=>{try{hubMenuMods()}catch(_){}},400);
 

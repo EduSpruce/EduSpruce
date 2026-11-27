@@ -27,8 +27,8 @@ function criarTurmasEmFalta(r,mapa){const a=A();let n=0;const dist={};r.aulas.fo
   Object.entries(dist).forEach(([k,x])=>{if(mapa[k])return;const prof=/profij/i.test(x.turma)||/^ufcd/i.test(x.sig);
     const nome=x.turma.replace(/^(\d{1,2})\s*º\s*/,'$1.º ').replace(/\s+/g,' ').trim();const ano=((nome.match(/^(\d{1,2})\./)||[])[1]||'10')+'.º';
     let disc=discDeSigla(x.sig)||(prof?(a.turmas.find(t=>ofertaDe(t)==='profij')||{}).disciplina||'Comunicar em Inglês':x.sig);
-    let t=a.turmas.find(t=>normTurma(t.nome)===normTurma(nome)&&t.disciplina===disc);
-    if(!t){t={id:uid(),nome,anoEsc:ano,ciclo:prof?'profij':cicloDoAno(ano),oferta:prof?'profij':'regular',disciplina:disc,dominios:mkDominiosDisc(disc,prof?'profij':cicloDoAno(ano),prof?'profij':'regular'),mencoes:MENCOES_DEF.map(m=>({...m})),regra:{2:'media',3:'media'},alunos:[],instrumentos:[]};a.turmas.push(t);n++}
+    let t=a.turmas.find(t=>normTurma(t.nome)===normTurma(nome)&&t.disciplina===disc&&escId(escolaDe(t))===escAtiva());
+    if(!t){t={id:uid(),nome,anoEsc:ano,ciclo:prof?'profij':cicloDoAno(ano),oferta:prof?'profij':'regular',disciplina:disc,dominios:mkDominiosDisc(disc,prof?'profij':cicloDoAno(ano),prof?'profij':'regular'),mencoes:MENCOES_DEF.map(m=>({...m})),regra:{2:'media',3:'media'},alunos:[],instrumentos:[]};if(escAtiva()!=='principal')t.escola=escAtiva();a.turmas.push(t);n++}
     mapa[k]=t.id});saveNow();return n}
 /* ---------- critérios: exportar / importar ---------- */
 function exportarCriterios(t){download('Critérios '+t.disciplina+' '+t.anoEsc+'.json',JSON.stringify({app:'EduGest',criterios:{disciplina:t.disciplina,anoEsc:t.anoEsc,dominios:t.dominios.map(({ab,nome,peso})=>({ab,nome,peso})),mencoes:t.mencoes,regra:t.regra}},null,1),'application/json')}

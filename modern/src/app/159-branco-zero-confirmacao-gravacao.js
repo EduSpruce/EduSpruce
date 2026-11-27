@@ -27,7 +27,7 @@ function vIntercalar(){const t=T();if(!t)return go('turmas');const a=A();const M
   const k=M.findIndex(m=>m.id===UI.intM);const m=M[k];const R=intRegs(t,m.id);const al=alunosFiltro(t).filter(x=>x.frequenta!==false);const ate=m.fim||m.data||hj;UI.intEd=UI.intEd||{};
   const feitos=al.filter(x=>R[x.id]&&(R[x.id].sem||R[x.id].m)).length;
   barBtns([{id:'b-intcsv',t:ic('download',15)+' Exportar CSV',f:()=>download('Intercalar '+m.p+'.º '+t.nome+' '+t.disciplina+'.csv',csv([['N.º','Nome','Previstas','Dadas','Assistidas','FI','FJ','FD','Avaliação','Observação'],...al.map(x=>{const r=R[x.id]||{};const s=intAssid(t,a,x.id,ate);return [x.num,x.nome,s.P,s.D,s.A,s.FI,s.FJ,s.FD,r.sem?'Sem avaliação':r.m||'',r.obs||'']})]),'text/csv')},{id:'b-intpr',t:ic('printer',15)+' Imprimir',f:()=>window.print()}]);
-  const cell=x=>{const r=R[x.id]||{};const ed=UI.intEd[x.id];const sug=intSugestao(t,x.id,m.p);
+  const cell=x=>{const ed=UI.intEd[x.id];const r=ed&&typeof ed==='object'?ed:R[x.id]||{};const sug=intSugestao(t,x.id,m.p);
     if(ed)return `<div class="ited" data-ited="${x.id}"><label class="itck"><input type="checkbox" data-isem ${r.sem?'checked':''}> Sem avaliação</label>
       <div class="itmen" ${r.sem?'hidden':''}><label>Menção</label><div class="itmw"><select data-imen><option value="">(selecione)</option>${INT_M.map(o=>`<option ${r.m===o?'selected':''}>${o}</option>`).join('')}</select>${sug?`<button type="button" class="btn sm" data-isug="${esc(sug)}" title="Com base nas classificações do ${m.p}.º ${perW().toLowerCase()} até agora">${ic('sparkle',12)} Sugerir: ${esc(sug)}</button>`:''}</div></div>
       <label class="itck"><input type="checkbox" data-iobsck ${r.obs?'checked':''}> Observação</label><textarea data-iobs ${r.obs?'':'hidden'} rows="3" placeholder="Observação para o encarregado de educação e o conselho de turma…">${esc(r.obs||'')}</textarea>
@@ -42,7 +42,8 @@ function vIntercalar(){const t=T();if(!t)return go('turmas');const a=A();const M
       <div class="intv">${cell(x)}</div></div>`}).join('')}</div>
     <div class="intbar"><span class="sp1"></span><button type="button" class="btn sm" data-iall>${ic('pencil',13)} Editar Todos</button>${Object.keys(UI.intEd).length?`<button type="button" class="btn sm pri" data-isuball>${ic('check',13)} Submeter Todos</button>`:''}</div>
     <p class="hint">P: aulas previstas · D: dadas · A: assistidas (contadas só nas aulas com chamada confirmada) · FI/FJ/FD: faltas injustificadas, justificadas e disciplinares · PC: aulas com chamada por confirmar. A sugestão de menção usa as classificações do ${m.p}.º ${perW().toLowerCase()} até agora.</p></div>`;
-  const re=()=>manterPosicao(vIntercalar);
+  /* o que está escrito nas fichas abertas não se perde quando a lista é redesenhada */
+  const re=()=>{$$('[data-ited]').forEach(box=>{const v=ler(box);if(UI.intEd[v.aid])UI.intEd[v.aid]=v});manterPosicao(vIntercalar)};
   $$('[data-imov]').forEach(b=>b.onclick=()=>{UI.intM=M[k+(+b.dataset.imov)].id;UI.intEd={};re()});
   $$('[data-iedit]').forEach(b=>b.onclick=()=>{UI.intEd[b.dataset.iedit]=1;re();setTimeout(()=>{const s_=$(`[data-ited="${b.dataset.iedit}"] select`);if(s_)s_.focus()},50)});
   $$('[data-iall]').forEach(b=>b.onclick=()=>{al.forEach(x=>UI.intEd[x.id]=1);re()});
