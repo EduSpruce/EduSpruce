@@ -159,7 +159,7 @@ function imprimirBytes(bytes,nome){const url=URL.createObjectURL(new Blob([bytes
   let f=$('#a11y-printf');if(f)f.remove();f=document.createElement('iframe');f.id='a11y-printf';f.title='Documento para imprimir';f.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0';f.src=url;document.body.appendChild(f);
   f.onload=()=>setTimeout(()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){window.open(url,'_blank')}},250)}
 const _printNativo=window.print.bind(window);
-function imprimirVista(){if(_imprimirPdf)return;_imprimirPdf=true;toast('A preparar o documento para imprimir…');try{const r=exportarVistaPdf();Promise.resolve(r).finally(()=>setTimeout(()=>{if(_imprimirPdf){_imprimirPdf=false}},4000))}catch(e){_imprimirPdf=false;console.warn(e);_printNativo()}}
+function imprimirVista(){if(document.body.classList.contains('aa-folha'))return _printNativo();if(_imprimirPdf)return;_imprimirPdf=true;toast('A preparar o documento para imprimir…');try{const r=exportarVistaPdf();Promise.resolve(r).finally(()=>setTimeout(()=>{if(_imprimirPdf){_imprimirPdf=false}},4000))}catch(e){_imprimirPdf=false;console.warn(e);_printNativo()}}
 window.print=imprimirVista;
 addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&!e.shiftKey&&!e.altKey&&(e.key==='p'||e.key==='P')){e.preventDefault();imprimirVista()}},true);
 

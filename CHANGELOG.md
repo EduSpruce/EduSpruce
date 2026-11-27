@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.191
+- Autoavaliação: «Imprimir» nos papéis dos alunos volta a imprimir os papéis com os códigos (imprimia a página que estava por trás)
+
 ## 1.190
 - Painel da Turma: o nome completo da disciplina ou da UFCD (código - nome) aparece acima de «A Minha Disciplina»
 - Modelos de Domínios: subdomínios com peso próprio dentro de um domínio (ex.: Assiduidade e Participação em Atitudes e Valores)
