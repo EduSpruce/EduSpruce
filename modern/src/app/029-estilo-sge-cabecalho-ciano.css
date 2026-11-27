@@ -116,6 +116,7 @@ html body.est-sge.est-sge.est-sge #main #view table.pntb tbody td :is(span,b,sma
 body.numorig .stk0,body.numorig table.grid :is(td,th).stk0{width:66px!important;min-width:66px!important;max-width:66px!important;white-space:nowrap}
 body.numorig .stk,body.numorig table.grid :is(td,th).stk{left:66px!important}
 .pnvis{margin:0 0 12px}
+.pnnome{margin:0 0 10px;font-size:19px;font-weight:700;line-height:1.25}
 .pnds{margin-left:4px;opacity:.6}.pnds:hover{opacity:1}
 .tcsum{display:flex;flex-wrap:wrap;gap:6px 18px;padding:8px 12px;border-radius:12px;background:var(--bg);margin-bottom:10px;font-size:13px;color:var(--mut)}.tcsum b{color:var(--ink)}
 .tctb td,.tctb th{white-space:nowrap}.tctb .tnm{display:flex;align-items:center;gap:8px}.tctb .tnm .foto-al{width:24px!important;height:30px!important}

@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.190
+- Painel da Turma: o nome completo da disciplina ou da UFCD (código - nome) aparece acima de «A Minha Disciplina»
+- Modelos de Domínios: subdomínios com peso próprio dentro de um domínio (ex.: Assiduidade e Participação em Atitudes e Valores)
+- Modelos de Domínios: as UFCD aparecem como «Unidades de Formação de Curta Duração (UFCD)» nas disciplinas
+
 ## 1.189
 - Ensino profissional: um módulo conta como concluído a partir de 9,5 em toda a app (Módulos, Início, fichas e documento de transferência), como já acontecia no Painel da Turma
 - Horas do MRA: «25,5» passa a 25 em vez de 255
