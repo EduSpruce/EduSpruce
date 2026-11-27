@@ -34,10 +34,10 @@ function grafico(t,a,P){
   const D=t.dominios||[];const W=640,H=190,pl=34,pr=8,top=28,bot=26,ch=H-top-bot,gw=(W-pl-pr)/Math.max(1,D.length);const nb=Math.max(1,P.length);
   const bw=Math.min(54,gw*.72/nb),gap=Math.min(6,bw*.15);const cols=['#9fbbe0','#2f7fd0','#0a3d75'];const y=v=>top+ch-v*ch;let g='';
   D.forEach((d,i)=>{const cx=pl+gw*i+gw/2,tot=nb*bw+(nb-1)*gap;let x=cx-tot/2;
-    P.forEach((p,k)=>{const v=domPer(t,a.id,d.id,p);if(v!=null){const vv=Math.max(0,Math.min(1,v));g+=`<rect x="${x.toFixed(1)}" y="${y(vv).toFixed(1)}" width="${bw.toFixed(1)}" height="${(vv*ch).toFixed(1)}" fill="${cols[k%3]}" rx="2"/><text x="${(x+bw/2).toFixed(1)}" y="${(y(vv)-4).toFixed(1)}" font-size="10" font-weight="700" text-anchor="middle" fill="#333">${Math.round(v*100)}</text>`}x+=bw+gap});
-    g+=`<text x="${cx.toFixed(1)}" y="${H-bot+16}" font-size="11" font-weight="700" text-anchor="middle" fill="#333">${esc(d.ab)}</text>`});
+    P.forEach((p,k)=>{const v=domPer(t,a.id,d.id,p);if(v!=null){const vv=Math.max(0,Math.min(1,v));g+=`<rect x="${x.toFixed(1)}" y="${y(vv).toFixed(1)}" width="${bw.toFixed(1)}" height="${(vv*ch).toFixed(1)}" fill="${P.length===1?domCor(t,d):cols[k%3]}" rx="2"/><text x="${(x+bw/2).toFixed(1)}" y="${(y(vv)-4).toFixed(1)}" font-size="10" font-weight="700" text-anchor="middle" fill="#333">${isSec(t)?String(Math.round(v*200)/10).replace('.',','):Math.round(v*100)}</text>`}x+=bw+gap});
+    g+=`<text x="${cx.toFixed(1)}" y="${H-bot+16}" font-size="11" font-weight="700" text-anchor="middle" fill="${P.length===1?domCor(t,d):'#333'}">${esc(d.ab)}</text>`});
   let lx=W-pr;const leg=P.slice().reverse().map((p,kk)=>{const k=P.length-1-kk;const tx=tUnid(t)?esc(String(relPerNome(t,p)).slice(0,48)):`${p}.º ${perW().slice(0,3).toLowerCase()}.`;lx-=tx.length*5.6+20;return `<rect x="${lx.toFixed(1)}" y="5" width="10" height="10" rx="2" fill="${cols[k%3]}"/><text x="${(lx+14).toFixed(1)}" y="14" font-size="10" fill="#333">${tx}</text>`}).join('');
-  const grid=[0,50,100].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${y(v/100)}" y2="${y(v/100)}" stroke="${v?'#e3e3e3':'#888'}" ${v?'stroke-dasharray="3 3"':''}/>${v?`<text x="${pl-5}" y="${y(v/100)+3}" font-size="9" text-anchor="end" fill="#555">${v}%</text>`:''}`).join('');
+  const grid=[0,50,100].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${y(v/100)}" y2="${y(v/100)}" stroke="${v?'#e3e3e3':'#888'}" ${v?'stroke-dasharray="3 3"':''}/>${v?`<text x="${pl-5}" y="${y(v/100)+3}" font-size="9" text-anchor="end" fill="#555">${isSec(t)?v/5:v+'%'}</text>`:''}`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:190px">${grid}${g}${leg}</svg>`;
 }
 /* autoavaliação do aluno no relatório individual (o que o aluno respondeu, por domínio) */

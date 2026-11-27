@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.219
+- Relatório individual: no gráfico, cada critério tem a sua cor (a mesma da app) e, nas turmas de 0 a 20, os valores e o eixo aparecem em valores (ex.: 9,2 em vez de 46)
+
 ## 1.218
 - Em toda a app: as abreviaturas mostram uma dica ao passar o rato — critérios das turmas (ex.: ER → Empenho e Responsabilidade · 5 % · critério geral; CC, PO, CO…), períodos (1.º P, 1.º Per.) e siglas (ASE, UFCD, UC, PROFIJ, DT, EE, FCT, PAP, PAF, CNQ, DL 54/2018, n/a…)
 
