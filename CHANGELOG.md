@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.192
+- Autoavaliação: papéis dos códigos redesenhados — 10 por folha A4 (2 × 5), QR code maior, número do aluno em destaque, turma e código pessoal em caixas, fundo branco na impressão
+
 ## 1.191
 - Autoavaliação: «Imprimir» nos papéis dos alunos volta a imprimir os papéis com os códigos (imprimia a página que estava por trás)
 
