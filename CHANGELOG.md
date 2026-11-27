@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.218
+- Em toda a app: as abreviaturas mostram uma dica ao passar o rato — critérios das turmas (ex.: ER → Empenho e Responsabilidade · 5 % · critério geral; CC, PO, CO…), períodos (1.º P, 1.º Per.) e siglas (ASE, UFCD, UC, PROFIJ, DT, EE, FCT, PAP, PAF, CNQ, DL 54/2018, n/a…)
+
 ## 1.217
 - Modelos de critérios: nova coluna «Natureza» para escolher se cada critério ou subdomínio é Específico (testes e trabalhos) ou Geral (ficha da Avaliação Final); ao aplicar o modelo, a natureza passa para a turma
 - Editar Turma (PROFIJ): novo campo «Nível de ensino» (Ensino Básico ou Ensino Secundário), que é o que aparece no cabeçalho dos relatórios (antes saía «Ensino Secundário» ou «3.º Ciclo» pelo ciclo da turma)
