@@ -44,3 +44,5 @@ html body.est-sge #view :is(.pnembc,.pnembf svg){border-radius:0}
 .sheet .rdal .rdg small{font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;font-weight:700}
 .sheet .rdal .rdg span{font-size:12.5px;overflow-wrap:anywhere}
 .sheet .rdal .rdg .rdw{grid-column:1/-1}
+/* Alunos: «Repet.» e «ASE» com largura para o texto todo (antes ficava «N…») */
+html body table.alst select[data-k="repetente"],html body table.alst select[data-k="ase"]{min-width:92px!important;width:auto!important;padding-right:26px!important;text-overflow:clip}

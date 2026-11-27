@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.223
+- Alunos: as colunas «Repet.» e «ASE» já mostram o texto todo (antes aparecia «N…»)
+
 ## 1.222
 - Perfis de Aprendizagem nas UFCD: sem períodos — no topo, a classificação de cada UFCD (tocar abre essa UFCD); «Evolução por Período» passa a «Classificação por UFCD» (barras por UFCD com a média da turma); subtítulo com a UFCD; «Compromisso para a próxima UFCD»
 
