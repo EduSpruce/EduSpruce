@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.215
+- Modelos de critérios: «UFCDs PROFIJ II» (Saber-saber e Saber-fazer 80 % + Atitudes e Valores 20 %) e «Línguas Estrangeira I - Inglês (PROFIJ II - Tipo 2)» passam a ser modelos base; a versão própria que já existia fica como a versão alterada do modelo base (nada se perde)
+- Modelo das línguas PROFIJ II: Atitudes e Valores passa para o fim (Produção Oral, Compreensão Oral, Produção Escrita, Compreensão Escrita e depois Atitudes e Valores)
+- Ao aplicar estes modelos, os subdomínios de Atitudes e Valores (Empenho e Responsabilidade, Autonomia, Atitudes e Comportamento, Relações Interpessoais) já ficam como critérios gerais, com a ficha de indicadores
+
 ## 1.214
 - Modelos de critérios: a lista PROFIJ inclui agora todas as disciplinas das matrizes dos cursos (Nível II Tipo 2 e 3, Nível IV Tipo 4 — ex.: Língua Estrangeira I - Inglês, Desenvolvimento Pessoal e Social, Mundo Atual, Matemática e Realidade) e as disciplinas das suas turmas PROFIJ
 

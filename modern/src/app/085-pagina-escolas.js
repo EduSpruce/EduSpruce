@@ -64,16 +64,25 @@ const MOD_BASE=[
  {id:'em',nome:'Estudo do Meio',disc:['Estudo do Meio'],d:[['SOC','Sociedade',30],['NAT','Natureza',30],['TEC','Tecnologia',20],['SNT','Sociedade / Natureza / Tecnologia',20]]},
  {id:'cla',nome:'Línguas Clássicas',disc:['Latim A','Grego'],d:[['LIN','Língua',40],['TL','Tradução e Leitura',40],['CUL','Cultura',20]]},
  {id:'ae',nome:'Apoio ao Estudo / Oferta Complementar',disc:['Apoio ao Estudo','Oferta Complementar','Oferta de Escola'],d:[['MT','Métodos de Trabalho',40],['AUT','Autonomia',30],['PAR','Participação',30]]},
+ {id:'ufcd-pfj2',nome:'UFCDs PROFIJ II',disc:['Componente Tecnológica (UFCD)'],cic:['profij'],d:[['CC','Saber-saber e Saber-fazer',80],['AT','Atitudes e Valores',20,[['ER','Empenho e Responsabilidade',5,'g'],['A','Autonomia',5,'g'],['AC','Atitudes e Comportamento',5,'g'],['RI','Relações Interpessoais',5,'g']]]]},
+ {id:'le-pfj2',nome:'Línguas Estrangeira I - Inglês (PROFIJ II - Tipo 2)',disc:['Língua Estrangeira I - Inglês','Língua Estrangeira - Inglês'],cic:['profij'],d:[['PO','Produção Oral',20],['CO','Compreensão Oral',20],['PE','Produção Escrita',20],['CE','Compreensão Escrita',20],['AT','Atitudes e Valores',20,[['ER','Empenho e Responsabilidade',5,'g'],['A','Autonomia',5,'g'],['AC','Atitudes e Comportamento',5,'g'],['RI','Relações Interpessoais',5,'g']]]]},
  {id:'mod',nome:'Módulo / UFCD (cursos profissionais e PROFIJ)',disc:[],of:['profissional','profij'],d:[['CON','Conhecimentos',50],['PRA','Prática e Aplicação',30],['AT','Atitudes e Comportamentos',20]]},
  {id:'gen',nome:'Genérico',disc:[],d:[['CC','Conhecimentos e Capacidades',80],['AT','Atitudes e Valores',20]]}];
-function modelosTodos(){const U=S.cfg.modelos||[];const base=MOD_BASE.map(b=>{const o=U.find(u=>u.id===b.id);return o?{...b,...o,base:true,alterado:true}:{...b,base:true}});return base.concat(U.filter(u=>!MOD_BASE.some(b=>b.id===u.id)))}
+/* 1.215: os modelos próprios «UFCDs PROFIJ II» e «Línguas Estrangeira I - Inglês (PROFIJ II - Tipo 2)» passam a ser modelos base:
+   a cópia própria (se existir) fica como a versão alterada do modelo base — nada se perde; nas línguas, Atitudes e Valores passa para o fim; os subdomínios do Saber Ser ficam «gerais» */
+function modMigrarPfj(){try{const U=S.cfg&&S.cfg.modelos;if(!Array.isArray(U)||!U.length)return;let mud=0;const M={'ufcd-pfj2':'UFCDs PROFIJ II','le-pfj2':'Línguas Estrangeira I - Inglês (PROFIJ II - Tipo 2)'};
+  Object.entries(M).forEach(([id,nm])=>{if(U.some(u=>u.id===id))return;const o=U.find(u=>normT(u.nome)===normT(nm));if(!o)return;o.id=id;
+    (o.d||[]).forEach(x=>{if(Array.isArray(x[3])&&/atitudes e valores/i.test(normT(x[1])))x[3].forEach(z=>{if(z.length<4)z[3]='g'})});
+    if(id==='le-pfj2'&&Array.isArray(o.d)){const at=o.d.filter(x=>Array.isArray(x[3])&&x[3].length),ou=o.d.filter(x=>!(Array.isArray(x[3])&&x[3].length));o.d=ou.concat(at)}mud=1});
+  if(mud)save()}catch(e){console.warn(e)}}
+function modelosTodos(){modMigrarPfj();const U=S.cfg.modelos||[];const base=MOD_BASE.map(b=>{const o=U.find(u=>u.id===b.id);return o?{...b,...o,base:true,alterado:true}:{...b,base:true}});return base.concat(U.filter(u=>!MOD_BASE.some(b=>b.id===u.id)))}
 function modeloPara(disc,ciclo,oferta){const M=modelosTodos();const nd=normT(disc);
   return M.filter(m=>!m.base||true).find(m=>!m.base&&(m.disc||[]).some(x=>normT(x)===nd)&&(!m.cic||!m.cic.length||m.cic.includes(ciclo)))
     ||M.find(m=>m.base&&(m.disc||[]).some(x=>normT(x)===nd)&&(!m.cic||!m.cic.length||m.cic.includes(ciclo)))
     ||(oferta&&oferta!=='regular'&&M.find(m=>(m.of||[]).includes(oferta)))
     ||(()=>{const i=discInfo(disc);const k=i&&i.t;return M.find(m=>m.id===({le:'le',port:ciclo==='sec'?'port-s':'port-b',ef:'ef'}[k]||'gen'))})()}
 const mdRot=d=>d==='Componente Tecnológica (UFCD)'?'Unidades de Formação de Curta Duração (UFCD)':d;
-const dominiosDoModelo=m=>(m?m.d:MODELOS.gen).flatMap(([ab,nome,peso,sub],k)=>Array.isArray(sub)&&sub.length?sub.map((x,j)=>({id:uid()+k+'s'+j,ab:x[0],nome:x[1],peso:+x[2]||0,grupo:nome})):[{id:uid()+k,ab,nome,peso:+peso}]);
+const dominiosDoModelo=m=>(m?m.d:MODELOS.gen).flatMap(([ab,nome,peso,sub],k)=>Array.isArray(sub)&&sub.length?sub.map((x,j)=>({id:uid()+k+'s'+j,ab:x[0],nome:x[1],peso:+x[2]||0,grupo:nome,...(x[3]==='g'?{ger:true}:{})})):[{id:uid()+k,ab,nome,peso:+peso}]);
 const mkDominiosDisc=(disc,ciclo,oferta)=>dominiosDoModelo(modeloPara(disc,ciclo,oferta));
 function guardarModelo(m){S.cfg.modelos=S.cfg.modelos||[];const i=S.cfg.modelos.findIndex(x=>x.id===m.id);const o={id:m.id,nome:m.nome,disc:m.disc||[],cic:m.cic||[],of:m.of||[],d:m.d};if(i>=0)S.cfg.modelos[i]=o;else S.cfg.modelos.push(o);saveNow()}
 function defModelos(){const M=modelosTodos();const q=normT(UI.modQ||'');const L=M.filter(m=>!q||normT(m.nome+' '+(m.disc||[]).join(' ')).includes(q));const minhas=new Set(minhasDisc());
