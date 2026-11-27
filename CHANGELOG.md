@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.214
+- Modelos de critérios: a lista PROFIJ inclui agora todas as disciplinas das matrizes dos cursos (Nível II Tipo 2 e 3, Nível IV Tipo 4 — ex.: Língua Estrangeira I - Inglês, Desenvolvimento Pessoal e Social, Mundo Atual, Matemática e Realidade) e as disciplinas das suas turmas PROFIJ
+
 ## 1.213
 - Painel da Turma: no canto de cima aparece a bandeira da língua (Inglês → Reino Unido; também Francês, Espanhol, Alemão e Português) e, nas UFCD e módulos, só o código da unidade em tamanho grande
 
