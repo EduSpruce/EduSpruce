@@ -662,6 +662,7 @@ html:not(.a11y-rm) body #emteste.emt-0 .emt-tmp{animation:emtfim 1.2s ease-in-ou
 html body #emteste.emt-pz #emt-r{opacity:.55}
 html body.emt-on{overflow:hidden}
 @media print{html body #emteste{display:none!important}}
+#emteste .emt-b.emt-end{background:#b42318;border-color:#b42318;color:#fff}#emteste .emt-b.emt-end:hover{filter:brightness(1.1)}
 /* ===== v1.026 · modo leve (computadores mais antigos) ===== */
 html.leve *,html.leve *::before,html.leve *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}
 html.leve body .card,html.leve body .tcard,html.leve body #drawer,html.leve body .kpi,html.leve body .btn{box-shadow:none!important}
@@ -1713,3 +1714,23 @@ html body .sdtn input{width:100%;text-align:center;font-weight:700;padding:5px}
 html body .sdtn input.sdtvE{background:#dcfce7}html body .sdtn input.sdtvB{background:#ecfccb}html body .sdtn input.sdtvS{background:#fef9c3}html body .sdtn input.sdtvF{background:#ffedd5}html body .sdtn input.sdtvM{background:#fee2e2}
 html body .sdtal textarea{width:100%;min-height:84px;line-height:1.45}
 html body.est-sge .sdtal{border-radius:0}
+/* ===================== critérios gerais: ficha do aluno e indicadores nos Critérios ===================== */
+html body .cgf .cgfh{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+html body .cgf .cgfn{flex:1;display:flex;flex-direction:column;min-width:0}
+html body .cgf .cgfs{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;background:var(--panel)}
+html body .cgf .cgfsh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+html body .cgf .cgft b{font-size:16px}
+html body .cgf .cgfr{display:flex;align-items:center;gap:10px;margin:0;padding:4px 0 4px 14px;border-top:1px solid var(--line);font-weight:400;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink)}
+html body .cgf .cgfr span{flex:1}
+html body .cgf .cgfi{width:76px;text-align:center;flex:none}
+html body .cgf .cgfg{display:flex;align-items:baseline;gap:10px;padding:10px 12px;border-radius:12px;background:var(--soft,rgba(0,0,0,.04));margin-top:6px}
+html body .cgf .cgfg b{font-size:20px}
+html body .cgro{cursor:pointer;background:var(--soft,rgba(0,0,0,.04))}
+html body #view td.cgcel{cursor:pointer;text-decoration:underline dotted}
+html body #view tr.cgir td{padding-top:3px;padding-bottom:3px;border-top:0}
+html body #view tr.cgir .cgii{display:block;padding-left:34px;font-size:13.5px;color:var(--mut,#667)}
+html body #view tr.cgir .cgii::before{content:'↳ ';opacity:.6}
+html body #view tr.cgirb td{padding-left:34px;padding-bottom:8px}
+html body.est-sge :is(.cgf .cgfs,.cgf .cgfg){border-radius:0}
+html body #grid thead th.cgnome{white-space:normal;min-width:120px;line-height:1.2}
+html body .cgf .cgfsr{align-items:center;gap:8px;margin-top:6px}

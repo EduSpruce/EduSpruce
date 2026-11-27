@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.204
+- Ficha dos critérios gerais: síntese descritiva escrita automaticamente a partir das notas, com frases diferentes das dos colegas da turma (nunca saem duas iguais); botão «Escrever de novo» e pode ser alterada à mão
+- Avaliação Final e Instrumentos: ao passar o rato, as abreviaturas dos critérios mostram o nome completo (com o peso) e os nomes dos alunos cortados aparecem completos
+
 ## 1.203
 - Critérios gerais com ficha do aluno: um critério «Geral» (ex.: Empenho e Responsabilidade) tem indicadores, que aparecem indentados por baixo dele nos Critérios; na Avaliação Final abre-se a ficha de cada aluno (botão «Ficha por aluno» ou tocando na nota do critério), cada indicador de 0 a 20, o critério vale a média e há total global e síntese descritiva
 - Instrumentos: a grelha mostra os nomes completos dos critérios (em cima e nas colunas da direita) e assinala os critérios gerais, que não contam nos instrumentos

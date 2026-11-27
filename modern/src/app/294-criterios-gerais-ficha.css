@@ -17,3 +17,4 @@ html body #view tr.cgir .cgii::before{content:'↳ ';opacity:.6}
 html body #view tr.cgirb td{padding-left:34px;padding-bottom:8px}
 html body.est-sge :is(.cgf .cgfs,.cgf .cgfg){border-radius:0}
 html body #grid thead th.cgnome{white-space:normal;min-width:120px;line-height:1.2}
+html body .cgf .cgfsr{align-items:center;gap:8px;margin-top:6px}
