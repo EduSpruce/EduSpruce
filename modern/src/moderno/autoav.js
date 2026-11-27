@@ -24,19 +24,28 @@ const aaUrl=c=>location.origin+location.pathname.replace(/[^/]*$/,'')+'aluno.htm
 const aaCurto=n=>{const p=String(n||'').trim().split(/\s+/);return p.length>1?p[0]+' '+p[p.length-1][0]+'.':p[0]||''};
 const aaErro=e=>{const m=(e&&e.message)||String(e);if(/does not exist|schema cache|PGRST20[25]|42P01/i.test(m+(e&&e.code||'')))return 'A base de dados ainda não está preparada para a autoavaliação pelo telemóvel. O administrador tem de correr uma vez o script «0004_autoavaliacao_alunos.sql» no Supabase.';return m};
 const aaSb=async()=>(await sbObter()).cliente;
+/* UFCD / módulos: a autoavaliação é por unidade (não por período) e segue os critérios e subcritérios da unidade */
+const aaUnid=t=>{try{return typeof ehUnid==='function'&&ehUnid(t)&&!!modAtivo(t)}catch(_){return false}};
+const aaUK=t=>'u:'+modAtivo(t).id;
+const aaUMod=(t,p)=>typeof p==='string'&&p.indexOf('u:')===0?(t.modulos||[]).find(m=>'u:'+m.id===p)||null:null;
+const aaPN=(t,p)=>{const m=aaUMod(t,p);if(m){const r=typeof rotUnid==='function'?rotUnid(m,t):(m.cod||'');return r&&m.nome&&String(m.nome).indexOf(m.cod||'@')!==0?r+' - '+m.nome:(m.nome||r)}return typeof p==='string'?'':perNome(p)};
+const aaPW=t=>aaUnid(t)?(typeof ehUnidC==='function'&&ehUnidC(t)?'UFCD':'Módulo'):perW();
+const aaNeste=t=>aaUnid(t)?(aaPW(t)==='UFCD'?'nesta UFCD':'neste módulo'):'neste '+perW().toLowerCase();
+const aaProx=t=>aaUnid(t)?(aaPW(t)==='UFCD'?'a próxima UFCD':'o próximo módulo'):'o próximo '+perW().toLowerCase();
+const aaDomDe=(t,p)=>{const m=aaUMod(t,p);return (m&&m.av&&m.av.dominios)||t.dominios||[]};
 const aaSess=t=>{t.autoavTlm=Array.isArray(t.autoavTlm)?t.autoavTlm:[];return t.autoavTlm};
 async function aaQrLib(){if(window.qrcode)return;await new Promise((ok,ko)=>{const s=document.createElement('script');s.src='esm/qrcode-1.4.4.min.js';s.onload=ok;s.onerror=()=>ko(new Error('Não foi possível carregar o gerador de QR code.'));document.head.appendChild(s)})}
 function aaQR(txt){const q=window.qrcode(0,'M');q.addData(txt);q.make();const n=q.getModuleCount(),m=2;let d='';for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(q.isDark(y,x))d+=`M${x+m} ${y+m}h1v1h-1z`;
   return `<svg viewBox="0 0 ${n+2*m} ${n+2*m}" role="img" aria-label="QR code da autoavaliação" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#000"/></svg>`}
 /* abrir uma sessão */
-async function aaAbrir(t,p,q,min,pes){pes=pes===undefined?(t.autoavModo!=='geral'):!!pes;for(const s0 of [...aaSess(t)]){try{await aaFechar(t,s0)}catch(_){}}const code=aaTurmaCod(t);aaAtivos(t).forEach(a=>aaChave(t,a.id));const {id,k}=await aaCh(code);const sec=isSec(t);
-  const D={v:2,pes:pes?1:0,t:t.nome,d:t.disciplina,p,pn:perNome(p),W:perW(),esc:sec?'20':'5',prof:S.cfg.professor||'',q,dom:(t.dominios||[]).map(d=>({id:d.id,n:d.nome})),
+async function aaAbrir(t,p,q,min,pes){pes=pes===undefined?(t.autoavModo!=='geral'):!!pes;for(const s0 of [...aaSess(t)]){try{await aaFechar(t,s0)}catch(_){}}const code=aaTurmaCod(t);aaAtivos(t).forEach(a=>aaChave(t,a.id));const {id,k}=await aaCh(code);const sec=isSec(t);if(aaUnid(t))p=aaUK(t);
+  const D={v:2,pes:pes?1:0,t:t.nome,d:t.disciplina,p,pn:aaPN(t,p),W:aaPW(t),ne:aaNeste(t),pr:aaProx(t),esc:sec?'20':'5',prof:S.cfg.professor||'',q,dom:aaDomDe(t,p).map(d=>({id:d.id,n:d.nome,w:+d.peso||0,g:d.grupo||''})),
     al:t.alunos.filter(a=>a.frequenta!==false).sort((a,b)=>(+a.num||0)-(+b.num||0)).map(a=>({id:a.id,n:a.num||'',nm:aaCurto(a.nome)}))};
   const expira=new Date(Date.now()+min*60000).toISOString();const sb=await aaSb();
   const linha={id,dados:await aaCifrar(D,k),expira};let r=await sb.from('eduspruce_autoav').insert(linha);
   if(r.error&&(r.error.code==='23505'||/duplicate key/i.test(r.error.message||''))){await sb.from('eduspruce_autoav').delete().eq('id',id);r=await sb.from('eduspruce_autoav').insert(linha)}
   if(r.error)throw new Error(aaErro(r.error));
-  const s={code,p,pes:pes?1:0,q,criado:Date.now(),expira:Date.parse(expira),n:0,vistos:[],esc:{}};aaSess(t).push(s);save();try{audit('Avaliação','Autoavaliação pelo telemóvel aberta',t.nome+' · '+perNome(p))}catch(_){}return s}
+  const s={code,p,pes:pes?1:0,q,criado:Date.now(),expira:Date.parse(expira),n:0,vistos:[],esc:{}};aaSess(t).push(s);save();try{audit('Avaliação','Autoavaliação pelo telemóvel aberta',t.nome+' · '+aaPN(t,p))}catch(_){}return s}
 /* trazer as respostas para o Perfil de Aprendizagem */
 async function aaImportar(t,s){const {id,k}=await aaCh(s.code);const sb=await aaSb();const r=await sb.from('eduspruce_autoav_resp').select('id,conteudo').eq('sessao',id).order('id');
   if(r.error)throw new Error(aaErro(r.error));const ult={},V={},rej=[];s.esc=s.esc||{};
@@ -50,7 +59,7 @@ async function aaImportar(t,s){const {id,k}=await aaCh(s.code);const sb=await aa
       if(!txt){if(i>=0){t.autoavSug.splice(i,1);mud=true}continue}if(i>=0){if(t.autoavSug[i].txt!==txt){t.autoavSug[i]={...t.autoavSug[i],txt,q:o.q};mud=true}}else{t.autoavSug.push({h,p:s.p,q:o.q,txt});mud=true}}if(mud)save()}
   let novos=0;const vis=new Set(s.vistos||[]);
   for(const aid in ult){const a=t.alunos.find(z=>z.id===aid);if(!a)continue;const o=ult[aid];const AV=autoD(a,s.p);if(AV.alunoQ===o.q){vis.add(aid);continue}
-    const dom={};(t.dominios||[]).forEach(d=>{const v=+((o.dom||{})[d.id]);if(v>=1&&v<=4)dom[d.id]=v});
+    const dom={};aaDomDe(t,s.p).forEach(d=>{const v=+((o.dom||{})[d.id]);if(v>=1&&v<=4)dom[d.id]=v});
     Object.assign(AV.dom,dom);if(o.nota)AV.nota=String(o.nota).slice(0,5);if(o.forte)AV.forte=String(o.forte).slice(0,600);if(o.melhorar)AV.melhorar=String(o.melhorar).slice(0,600);
     const pl=o.plano||{};AV.plano=AV.plano||{};['meta','estr','apoio'].forEach(c=>{if(pl[c])AV.plano[c]=String(pl[c]).slice(0,600)});
     if(AV.nota){a.autoav=a.autoav||{};a.autoav[s.p]=AV.nota}AV.data=isoHoje();AV.origem='aluno';AV.alunoQ=o.q;vis.add(aid);novos++}
@@ -63,9 +72,9 @@ async function aaVerificarTodas(){if(!window.__esPronto)return;const a=A();if(!a
 setTimeout(function aaCiclo(){aaVerificarTodas().finally(()=>setTimeout(aaCiclo,120000))},8000);
 
 /* janela do professor */
-function aaSugHtml(t,p){const L=(Array.isArray(t.autoavSug)?t.autoavSug:[]).filter(x=>!p||x.p===p).sort((a,b)=>b.q-a.q);
-  if(!L.length)return `<p class="mut aasugv">Ainda não há sugestões${p?' neste '+esc(perW().toLowerCase()):''}.</p>`;
-  return `<ul class="aasugl">${L.map(x=>`<li><span>${esc(x.txt)}</span><small class="mut">${esc(perNome(x.p))} · ${new Date(x.q).toLocaleDateString('pt-PT',{day:'numeric',month:'short'})}</small></li>`).join('')}</ul>`}
+function aaSugHtml(t,p){if(p&&typeof p!=='string'&&aaUnid(t))p=aaUK(t);const L=(Array.isArray(t.autoavSug)?t.autoavSug:[]).filter(x=>!p||x.p===p).sort((a,b)=>b.q-a.q);
+  if(!L.length)return `<p class="mut aasugv">Ainda não há sugestões${p?' '+esc(aaNeste(t)):''}.</p>`;
+  return `<ul class="aasugl">${L.map(x=>`<li><span>${esc(x.txt)}</span><small class="mut">${esc(aaPN(t,x.p))} · ${new Date(x.q).toLocaleDateString('pt-PT',{day:'numeric',month:'short'})}</small></li>`).join('')}</ul>`}
 /* folha com um papel por aluno (QR code pessoal + código), para recortar; serve o ano todo */
 async function aaFolha(t,soNovos){await aaQrLib();const cod=aaTurmaCod(t);let L=aaAtivos(t);const imp=new Set(t.autoavImp||[]);if(soNovos)L=L.filter(a=>!imp.has(a.id));
   if(!L.length)return toast('Não há alunos novos para imprimir.','aviso');
@@ -91,13 +100,13 @@ async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma t
         <p class="mut" style="margin:0 0 8px">${t.autoavCod?`Código da turma <b>${esc(aaFmt(t.autoavCod))}</b> · criado a ${esc(new Date(t.autoavCodQ||Date.now()).toLocaleDateString('pt-PT'))}${novos?` · <b>${novos}</b> aluno${novos>1?'s':''} ainda sem papel impresso`:' · todos os alunos têm papel'}`:'Ainda não foram criados os papéis desta turma.'}</p>
         <div class="row aaa"><button type="button" class="btn" id="aa-fol">${ic('printer',15)} ${t.autoavCod?'Imprimir os Papéis':'Criar e Imprimir os Papéis'}</button>${t.autoavCod&&novos&&novos<ativos.length?`<button type="button" class="btn" id="aa-foln">Imprimir Só os Novos (${novos})</button>`:''}${t.autoavCod?`<button type="button" class="btn" id="aa-reg" title="Os papéis antigos deixam de funcionar">${ic('refresh',15)} Códigos Novos</button>`:''}</div></section>
       <section class="aabox"><h3>${ic('sparkle',15)} 2. Abrir a autoavaliação</h3>
-      <div class="aag"><div><label for="aa-p">${esc(perW())}</label><select id="aa-p">${Array.from({length:np},(_,i)=>`<option value="${i+1}" ${i+1===pa?'selected':''}>${esc(perNome(i+1))}</option>`).join('')}</select></div>
+      <div class="aag">${aaUnid(t)?`<div><label>${esc(aaPW(t))}</label><input type="hidden" id="aa-p" value="${esc(aaUK(t))}"><div class="aaun"><b>${esc(aaPN(t,aaUK(t)))}</b><small class="mut">${esc(aaDomDe(t,aaUK(t)).map(d=>(d.grupo?d.grupo+' › ':'')+d.nome+' '+(+d.peso||0)+'%').join(' · '))}</small></div></div>`:`<div><label for="aa-p">${esc(perW())}</label><select id="aa-p">${Array.from({length:np},(_,i)=>`<option value="${i+1}" ${i+1===pa?'selected':''}>${esc(perNome(i+1))}</option>`).join('')}</select></div>`}
       <div><label for="aa-m">Fica aberta durante</label><select id="aa-m"><option value="20">20 minutos</option><option value="45" selected>45 minutos</option><option value="90">90 minutos</option><option value="1440">24 horas</option><option value="4320">3 dias</option><option value="10080">7 dias</option></select></div></div>
       <fieldset class="aaq"><legend>O que os alunos respondem</legend>
-        <label class="chk"><input type="checkbox" id="aa-qd" checked> Nível em cada domínio (1 a 4)</label>
+        <label class="chk"><input type="checkbox" id="aa-qd" checked> Nível em cada ${aaUnid(t)?'critério e subcritério':'domínio'} (1 a 4)</label>
         <label class="chk"><input type="checkbox" id="aa-qn" checked> Classificação que propõem</label>
         <label class="chk"><input type="checkbox" id="aa-qr" checked> O que fizeram bem e o que podem melhorar</label>
-        <label class="chk"><input type="checkbox" id="aa-qp" checked> Compromisso para o próximo ${esc(perW().toLowerCase())}</label>
+        <label class="chk"><input type="checkbox" id="aa-qp" checked> Compromisso para ${esc(aaProx(t))}</label>
         <label class="chk"><input type="checkbox" id="aa-qs" checked> Sugestões para as aulas <span class="mut">(aparecem aqui sem o nome do aluno)</span></label></fieldset>
       <fieldset class="aaq"><legend>Como os alunos se identificam</legend>
         <label class="chk"><input type="radio" name="aa-modo" value="pes" ${t.autoavModo!=='geral'?'checked':''}> <span><b>Com o código pessoal</b> do papel <span class="mut">— só o próprio aluno pode responder por si</span></span></label>
@@ -114,9 +123,9 @@ async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma t
     d.querySelector('#aa-ok').onclick=async()=>{const b=d.querySelector('#aa-ok');b.disabled=true;b.innerHTML=ic('refresh',15)+' A abrir…';
       const q={dom:d.querySelector('#aa-qd').checked,nota:d.querySelector('#aa-qn').checked,forte:d.querySelector('#aa-qr').checked,melhorar:d.querySelector('#aa-qr').checked,plano:d.querySelector('#aa-qp').checked,sug:d.querySelector('#aa-qs').checked};
       const md=(d.querySelector('input[name=aa-modo]:checked')||{}).value||'pes';t.autoavModo=md==='geral'?'geral':'pes';save();
-      try{await aaQrLib();const s=await aaAbrir(t,+d.querySelector('#aa-p').value,q,+d.querySelector('#aa-m').value,md!=='geral');aberta(s)}catch(e){formulario(aaErro(e))}}};
+      try{await aaQrLib();const s=await aaAbrir(t,aaUnid(t)?d.querySelector('#aa-p').value:+d.querySelector('#aa-p').value,q,+d.querySelector('#aa-m').value,md!=='geral');aberta(s)}catch(e){formulario(aaErro(e))}}};
   const aberta=s=>{const url=aaUrl(s.code);
-    d.innerHTML=`<div class="aaw aaon"><header class="aah"><h2 id="aa-t">${ic('users',18)} ${esc(t.nome)} · ${esc(perNome(s.p))} · <span class="aaab">aberta</span></h2><button type="button" class="btn ico" id="aa-x" aria-label="Fechar a janela (a autoavaliação continua aberta)">${ic('x',16)}</button></header>
+    d.innerHTML=`<div class="aaw aaon"><header class="aah"><h2 id="aa-t">${ic('users',18)} ${esc(t.nome)} · ${esc(aaPN(t,s.p))} · <span class="aaab">aberta</span></h2><button type="button" class="btn ico" id="aa-x" aria-label="Fechar a janela (a autoavaliação continua aberta)">${ic('x',16)}</button></header>
       <div class="aaqr"><div class="aaqi">${aaQR(url)}</div><div class="aaqt">${s.pes?`<p class="aadica"><b>Os alunos apontam a câmara ao seu papel.</b></p><p class="mut">Quem não tiver o papel aponta a este código (ou abre <b>${esc(url.replace(/#.*$/,'').replace(/^https?:\/\//,''))}</b> e escreve o código da turma), escolhe o número e escreve o seu código pessoal.</p>`:`<p class="aadica"><b>Os alunos apontam a câmara a este código.</b></p><p class="mut">Ou abrem <b>${esc(url.replace(/#.*$/,'').replace(/^https?:\/\//,''))}</b> e escrevem o código da turma. Depois escolhem o seu número — <b>sem código pessoal</b>. Quem tiver o papel também pode usá-lo.</p>`}<p class="aamodo"><span class="tag ${s.pes?'':'ok'}">${s.pes?'Com código pessoal':'Só com o código da turma'}</span> <button type="button" class="btn sm" id="aa-modo">${s.pes?'Deixar responder sem código pessoal':'Voltar a exigir o código pessoal'}</button></p><p class="aacod" aria-label="Código da turma ${esc(s.code.split('').join(' '))}">${esc(aaFmt(s.code))}</p>
         <p class="aaest"><b id="aa-n">0</b> de ${ativos.length} responderam · <span id="aa-exp"></span></p></div></div>
       <div class="aavis" id="aa-vis"></div><div id="aa-av"></div>
@@ -167,6 +176,7 @@ dialog.aadlg{border:0;border-radius:22px;padding:0;width:min(760px,96vw);max-hei
 .aaab{font-size:12px;font-weight:800;background:#16a34a;color:#fff;border-radius:999px;padding:3px 9px;text-transform:uppercase;letter-spacing:.04em}.aadica{font-size:17px}
 .aarej{display:flex;gap:8px;align-items:flex-start}.aadup{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,#d97706 10%,var(--panel));border:1px solid color-mix(in srgb,#d97706 35%,var(--line))}
 #aafolha{position:fixed;inset:0;z-index:100001;background:#eef2f5;overflow:auto;color:#111}.aaf-bar{position:sticky;top:0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;background:#fff;border-bottom:1px solid #d6e0e6;z-index:2}.aaf-bar .mut{color:#5b6b77;font-size:13px}
+.aaun{display:flex;flex-direction:column;gap:2px;padding:7px 10px;border:1px solid var(--line,#d6e0e6);background:var(--panel2,transparent)}.aaun small{font-size:12px;line-height:1.35}
 .aaf-g{display:grid;grid-template-columns:repeat(2,1fr);gap:0;width:194mm;max-width:100%;margin:16px auto;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.08)}
 .aaf-p{display:grid;grid-template-columns:36mm minmax(0,1fr);grid-template-rows:auto 1fr auto;column-gap:4mm;height:55mm;padding:3.5mm 4mm 3mm;overflow:hidden;border:1px dashed #9aa7b1;margin:-.5px;break-inside:avoid;page-break-inside:avoid;box-sizing:border-box;font:11px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;color:#111;background:#fff}
 .aaf-h{grid-column:1/-1;display:flex;justify-content:space-between;gap:6px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0b5c7a;border-bottom:1.5px solid #0b5c7a;padding-bottom:1.2mm;margin-bottom:2mm;white-space:nowrap;overflow:hidden}.aaf-h span:last-child{color:#555;overflow:hidden;text-overflow:ellipsis}
