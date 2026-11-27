@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.195
+- Autoavaliação nas UFCD: as respostas e sugestões dadas antes da mudança para «por UFCD» voltam a aparecer (nada foi apagado)
+
 ## 1.194
 - Autoavaliação: o professor pode reagir a cada sugestão dos alunos com um emoji (👍 ❤️ 💡 ✅ 🤔 🙏), em grande no painel em ecrã inteiro, para dar feedback na hora
 

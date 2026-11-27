@@ -72,7 +72,7 @@ async function aaVerificarTodas(){if(!window.__esPronto)return;const a=A();if(!a
 setTimeout(function aaCiclo(){aaVerificarTodas().finally(()=>setTimeout(aaCiclo,120000))},8000);
 
 /* janela do professor */
-function aaSugHtml(t,p){if(p&&typeof p!=='string'&&aaUnid(t))p=aaUK(t);const L=(Array.isArray(t.autoavSug)?t.autoavSug:[]).filter(x=>!p||x.p===p).sort((a,b)=>b.q-a.q);
+function aaSugHtml(t,p){if(p&&typeof p!=='string'&&aaUnid(t))p=aaUK(t);const L=(Array.isArray(t.autoavSug)?t.autoavSug:[]).filter(x=>!p||x.p===p||(typeof p==='string'&&typeof x.p==='number')).sort((a,b)=>b.q-a.q);
   if(!L.length)return `<p class="mut aasugv">Ainda não há sugestões${p?' '+esc(aaNeste(t)):''}.</p>`;
   return `<ul class="aasugl">${L.map(aaSugLi).join('')}</ul>`}
 /* reação do professor a cada sugestão (emoji), para dar feedback na hora com o painel projetado */
