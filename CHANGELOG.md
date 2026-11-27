@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.213
+- Painel da Turma: no canto de cima aparece a bandeira da língua (Inglês → Reino Unido; também Francês, Espanhol, Alemão e Português) e, nas UFCD e módulos, só o código da unidade em tamanho grande
+
 ## 1.212
 - Critérios das UFCD e módulos: deixa de aparecer «Classificação final por período» (as unidades não têm períodos)
 
