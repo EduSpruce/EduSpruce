@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.202
+- Critérios de Avaliação das UFCD e módulos: a barra de escolha da unidade já não aparece duplicada
+
 ## 1.201
 - Autoavaliação nas UFCD e módulos: as respostas dadas por período antes da mudança para «por unidade» passam mesmo para a UFCD (também quando a ficha da UFCD já existia vazia); o original fica guardado
 - Avaliação Final da UFCD: «Atribuída», «Autoavaliação» e «Observações» passam a ser de cada UFCD, e a autoavaliação mostra a nota que o aluno propôs

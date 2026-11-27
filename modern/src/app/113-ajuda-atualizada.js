@@ -48,7 +48,7 @@ function layoutLado(){const v=document.getElementById('view');if(!v)return;const
   const tit=c=>(((c.querySelector(':scope>h2,:scope>.row>h2,:scope>summary>h2,:scope .ajhd>h2,:scope>div>h2')||{}).textContent)||'').trim();
   const lado=kids.filter(c=>(c.matches('.kpis')&&R.includes('kpis'))||(c.matches('.card')&&R.some(re=>re instanceof RegExp&&re.test(tit(c)))));if(!lado.length)return;
   const lay=document.createElement('div');lay.className='vlay';const m=document.createElement('div');m.className='vmain';const s=document.createElement('div');s.className='vside';
-  const topo=[];for(const c of kids){if(c.matches('.tabs,.deftabs')&&!m.children.length)topo.push(c);else break}
+  const topo=[];for(const c of kids){if(c.matches('.tabs,.deftabs,.modwrap')&&!m.children.length)topo.push(c);else break}
   const ae=document.activeElement;let ss=null,se=null;try{ss=ae&&ae.selectionStart;se=ae&&ae.selectionEnd}catch(_){}const y=v.scrollTop;
   kids.forEach(c=>{if(topo.includes(c)||c.matches('input[type=file]'))return;(lado.includes(c)?s:m).appendChild(c)});lay.appendChild(m);lay.appendChild(s);v.appendChild(lay);v.scrollTop=y;
   if(ae&&ae!==document.body&&v.contains(ae)&&document.activeElement!==ae){try{ae.focus({preventScroll:true});if(ss!=null)ae.setSelectionRange(ss,se)}catch(_){}}}

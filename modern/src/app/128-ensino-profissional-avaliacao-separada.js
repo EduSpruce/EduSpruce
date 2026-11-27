@@ -41,13 +41,13 @@ function barraModulos(t){const M=t.modulos||[];const m=modAtivo(t);const U=unidM
   return `<div class="modbar" role="group" aria-label="${U.s} em avaliação"><span class="modl">${ic('layers',15)} ${U.s}</span><div class="modch">${M.map((x,i)=>{const n=(x.av&&x.av.instrumentos||[]).length;return `<button type="button" class="modc ${x===m?'on':''}" data-modsel="${x.id}" aria-pressed="${x===m}" title="${esc((x.cod?x.cod+' · ':'')+x.nome)}"><b>${esc(x.cod||String(i+1))}</b><span>${esc(x.nome)}</span><small>${x.horas?x.horas+' h':''}${n?' · '+n+' instr.':''}</small></button>`}).join('')}</div>
     <span class="sp1"></span><span class="mut modtot">${M.length} ${M.length===1?U.um:U.p.toLowerCase()}${hs?' · '+hs+' h':''}</span><button class="btn sm" type="button" data-modger>${ic('pencil',13)} Gerir</button></div>
     ${m?`<p class="modinfo">${ic('info',13)||''} A ver <b>${esc((m.cod?m.cod+' — ':'')+m.nome)}</b>: critérios, instrumentos e classificação são só deste ${U.um}. Alunos, horário e planta da sala são os da turma.</p>`:''}`}
-function modPorBarra(){const v=$('#view');if(!v)return;const t=T();const ex=v.querySelector(':scope>.modwrap');
+function modPorBarra(){const v=$('#view');if(!v)return;const t=T();const ex=v.querySelector(':scope>.modwrap')||v.querySelector('.modwrap');/* pode estar dentro da grelha com painel lateral (ex.: Critérios) */
   if(!t||!t.porModulo||!MOD_VISTAS.has(VIEW)){if(ex)ex.remove();return}
-  const html=barraModulos(t);if(ex&&ex.dataset.h===html)return;if(ex)ex.remove();
-  const w=document.createElement('div');w.className='modwrap';w.dataset.h=html;w.innerHTML=html;const h=v.querySelector(':scope>h1');if(h)h.after(w);else v.prepend(w);
+  const html=barraModulos(t);if(ex&&ex.dataset.h===html)return;
+  const w=document.createElement('div');w.className='modwrap';w.dataset.h=html;w.innerHTML=html;if(ex)ex.replaceWith(w);else{const h=v.querySelector(':scope>h1');if(h)h.after(w);else v.prepend(w)}
   w.querySelectorAll('[data-modsel]').forEach(b=>b.onclick=()=>{modEscolher(t,b.dataset.modsel);go(VIEW)});
   const g=w.querySelector('[data-modger]');if(g)g.onclick=()=>go('modulos');const n=w.querySelector('[data-modnovo]');if(n)n.onclick=()=>{go('modulos');setTimeout(()=>{try{moduloDlg(t)}catch(_){}},100)}}
-{let _mo=null;const liga=()=>{const v=$('#view');if(!v||_mo)return;_mo=new MutationObserver(()=>{if(!v.querySelector(':scope>.modwrap')||VIEW)requestAnimationFrame(()=>{try{modPorBarra()}catch(_){}})});_mo.observe(v,{childList:true})};
+{let _mo=null;const liga=()=>{const v=$('#view');if(!v||_mo)return;_mo=new MutationObserver(()=>{if(!v.querySelector('.modwrap')||VIEW)requestAnimationFrame(()=>{try{modPorBarra()}catch(_){}})});_mo.observe(v,{childList:true})};
   setTimeout(liga,0);{const _gMb=go;go=function(){const r=_gMb.apply(this,arguments);liga();try{modPorBarra()}catch(_){}return r}}}
 /* Módulos: interruptor da avaliação separada e classificação automática visível */
 {const _vm=vModulos;vModulos=function(){const r=_vm.apply(this,arguments);try{const t=T();if(!t||!ehModular(t))return r;const U=unidMod(t);const v=$('#view');const h=v.querySelector(':scope>h1');
