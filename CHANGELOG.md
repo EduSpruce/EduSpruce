@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.225
+- Perfis de Aprendizagem nas UFCD: tocar na caixa de uma UFCD abre essa UFCD e mantém o perfil por UFCD (antes voltava aos períodos)
+- Horário: dois tempos à mesma hora (ex.: uma UFCD e a Biblioteca) aparecem lado a lado e assinalados a laranja — antes um ficava por cima do outro
+
 ## 1.224
 - Perfis de Aprendizagem: «Evolução nos Instrumentos» passa a uma barra por instrumento (nome, tipo, data, classificação e risca com a média da turma) e uma frase sobre a tendência — já não aparece o gráfico enorme; nas UFCD sem períodos
 - Dicas das abreviaturas também nos gráficos (ex.: radar do perfil: CC, ER, A…) e nos Perfis de Aprendizagem
