@@ -54,4 +54,15 @@ try{delete UNID_REDIR.avaliacao}catch(_){}
   try{const v=$('#view');if(!v)return r;const nm=unidNomeComp(t)||'Unidade';
     v.querySelectorAll('.tabs').forEach(g=>{if(g.querySelector('button[data-p]')){const row=g.closest('.row');(row&&row.children.length===1?row:g).style.display='none'}});
     const b=$('#av-bloq');if(b){const row=b.closest('.row');(row||b).style.display='none'}
+    unidLinhasAval(t,v);
     v.querySelectorAll('th,span.mut,h2').forEach(e=>{if(e.children.length&&e.tagName!=='H2')return;for(const n of e.childNodes)if(n.nodeType===3){n.nodeValue=n.nodeValue.replace(/Nota = só o 1\.º (período|semestre)/i,'Nota da unidade').replace(/^1\.º (Período|Semestre)$/,nm).replace(/ · 1\.º (Período|Semestre)$/,' · '+nm)}})}catch(e){console.warn(e)}return r};if(go._f)go._f.avaliacao=vAvaliacao}
+/* na pauta da unidade, «Atribuída», «Autoavaliação» e «Observações» são de cada UFCD/módulo (chave 'u:'+id), não do 1.º período da turma;
+   a autoavaliação vem da ficha do aluno (incluindo as respostas antigas por período, recuperadas pelo autoD) */
+function unidLinhasAval(t,v){const m=modAtivo(t);if(!m)return;const u='u:'+m.id;
+  v.querySelectorAll('tr[data-a]').forEach(tr=>{const a=t.alunos.find(x=>x.id===tr.dataset.a);if(!a)return;
+    const at=tr.querySelector('[data-atr]'),av=tr.querySelector('[data-av]'),ob=tr.querySelector('[data-ob]');
+    if(at){const val=((t.atrib||{})[u]||{})[a.id];at.value=val==null?'':val;at.classList.toggle('dif',at.value!==''&&at.value!==at.placeholder);
+      at.onchange=()=>{t.atrib=t.atrib||{};const R=t.atrib[u]=t.atrib[u]||{};const x=at.value.trim();if(x)R[a.id]=x;else delete R[a.id];save();at.classList.toggle('dif',!!x&&x!==at.placeholder)}}
+    if(av){let n='';try{n=(autoD(a,1)||{}).nota||''}catch(_){}av.value=n||(a.autoav||{})[u]||'';
+      av.oninput=()=>{try{autoD(a,1).nota=av.value}catch(_){}a.autoav=a.autoav||{};a.autoav[u]=av.value;save()}}
+    if(ob){ob.value=(a.obsPer||{})[u]||'';ob.oninput=()=>{a.obsPer=a.obsPer||{};a.obsPer[u]=ob.value;save()}}})}
