@@ -78,7 +78,7 @@ function regAutoav(t,a,perAte){const c={...S.cfg,...escolaDe(t)};const P=periodo
     ${P.map(bloco).join('')}
     <div class="rgfin">${P.map((p,k)=>`${perNome(p).replace(/ .*/,'').replace('.º','.ºP')} <b>${!isNaN(ns[k])?String(ns[k]).replace('.',','):'___'}</b>`).join(' + ')} &nbsp;/ ${P.length} = <span>NOTA FINAL <b>${fin!=null?String(fin).replace('.',','):'_____'}</b></span></div></section>`}
 function relatorio(t,a,per){
-  const P=periodos().filter(p=>p<=per),c={...S.cfg,...escolaDe(t)};
+  const P=relPers(t,per),c={...S.cfg,...escolaDe(t)};
   const meds=Object.entries(MEDIDAS).filter(([k])=>k!=='rec').map(([k,g])=>(a.medidas&&a.medidas[k]||[]).map(i=>g.l[i])).flat();
   const sint=(a.sintese&&a.sintese[per])||sintese(t,a,per);const nfin=ponderada(t,pctsFinal(t,a.id,per));
   return `<section class="sheet">
@@ -90,8 +90,8 @@ function relatorio(t,a,per){
       <b>Encarregado de educação</b><span class="sens">${esc(a.eeNome)||'—'}</span><b>Contacto</b><span class="sens">${esc(a.eeContacto)||'—'}</span>
       <b>DL 54/2018</b><span class="sens" style="grid-column:span 3">${meds.length?esc(meds.join('; ')):'Não se aplica'}</span></div>${relAuto(t,a,per)}</div></div>
     <div class="sec">Avaliação por domínios</div>
-    <table><thead><tr><th>Domínio</th><th class="c">Ponderação</th>${P.map(p=>`<th class="c">${perNome(p)}</th>`).join('')}<th class="c">Menção</th></tr></thead><tbody>
-    ${t.dominios.map(d=>`<tr><td>${esc(d.nome)}</td><td class="c">${d.peso}%</td>${P.map(p=>`<td class="c">${pctD(t,domPer(t,a.id,d.id,p))||'—'}</td>`).join('')}<td class="c">${esc((mencao(t,pctsFinal(t,a.id,per)[d.id])||{}).nome||'—')}</td></tr>`).join('')}
+    <table><thead><tr><th>Domínio</th><th class="c">Ponderação</th>${P.map(p=>`<th class="c">${esc(relPerNome(t,p))}</th>`).join('')}<th class="c">Menção</th></tr></thead><tbody>
+    ${t.dominios.map((d,k)=>`${relGrpTr(t,d,k,P.length+3)}<tr class="${d.grupo?'relsub':''}"><td>${esc(d.nome)}</td><td class="c">${d.peso}%</td>${P.map(p=>`<td class="c">${pctD(t,domPer(t,a.id,d.id,p))||'—'}</td>`).join('')}<td class="c">${esc((mencao(t,pctsFinal(t,a.id,per)[d.id])||{}).nome||'—')}</td></tr>`).join('')}
     <tr><th>Nota do ${perW().toLowerCase()}</th><th></th>${P.map(p=>`<th class="c">${fmtNota(t,ponderada(t,pctsPer(t,a.id,p)))||'—'}</th>`).join('')}<th></th></tr>
     <tr><th>Classificação Final</th><th></th><th class="c" colspan="${P.length}" style="font-size:14px">${fmtNota(t,nfin)||'—'} ${nfin!=null?(isSec(t)?'valores':'· Nível '+nivel(t,nfin)):''}</th><th class="c">${esc((mencao(t,nfin)||{}).nome||'')}</th></tr></tbody></table>
     ${grafico(t,a,P)}

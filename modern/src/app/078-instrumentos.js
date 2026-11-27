@@ -53,7 +53,7 @@ function instItens(t,i){
   $('#i-body').innerHTML=`<p class="hint">Cada item (pergunta, critério, alínea) pertence a um domínio e tem uma cotação. A % de cada domínio no instrumento = pontos obtidos ÷ cotação desse domínio.</p>
     <table class="lst"><thead><tr><th style="width:40px">#</th><th>Item / critério</th><th style="width:240px">Domínio</th><th style="width:110px">Cotação</th><th style="width:90px"></th></tr></thead><tbody>
     ${i.itens.map((it,k)=>`<tr data-k="${k}"><td class="mut">${k+1}</td><td><input data-f="rot" value="${esc(it.rot)}"></td>
-      <td><select data-f="dom">${domById(t,it.dom)?'':'<option value="">— sem domínio —</option>'}${t.dominios.map(d=>`<option value="${d.id}" ${d.id===it.dom?'selected':''}>${esc(d.ab)} — ${esc(d.nome)}</option>`).join('')}</select></td>
+      <td><select data-f="dom">${domById(t,it.dom)?'':'<option value="">— sem domínio —</option>'}${domEsp(t).map(d=>`<option value="${d.id}" ${d.id===it.dom?'selected':''}>${esc(d.ab)} — ${esc(d.nome)}</option>`).join('')}</select></td>
       <td><input data-f="cot" value="${esc(String(it.cot).replace('.',','))}" inputmode="decimal"></td>
       <td class="act"><button class="btn sm" data-up="${k}">↑</button> <button class="btn sm dng" data-del="${k}">×</button></td></tr>`).join('')}</tbody></table>
     <div class="row" style="margin-top:10px"><button class="btn" id="it-add">+ Item</button><button class="btn" id="it-addn">+ Vários itens…</button><span class="sp1"></span>

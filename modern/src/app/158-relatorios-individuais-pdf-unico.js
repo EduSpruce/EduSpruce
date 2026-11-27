@@ -3,9 +3,9 @@ function relAutoBlocos(t,x,per){const AV=((x.autoavD||{})[per])||{};const dom=AV
   if(!L.length&&!nota&&!AV.forte&&!AV.melhorar)return [];const lab=k=>{const z=AUTO_N.find(q=>String(q[0])===String(k));return z?z[1]:String(k)};
   const R=[{h:'Autoavaliação'}];if(L.length)R.push({tabela:{cab:['Domínio','Autoavaliação'],linhas:L.map(d=>[d.nome,lab(dom[d.id])])}});
   const tx=[nota?'Classificação que propõe: '+nota+'.':'',AV.forte?'O que fiz bem: '+AV.forte:'',AV.melhorar?'O que posso melhorar: '+AV.melhorar:''].filter(Boolean);tx.forEach(z=>R.push({p:z}));return R}
-function relBlocos(t,x,per){const P=periodos().filter(p=>p<=per);const nfin=ponderada(t,pctsFinal(t,x.id,per));const men=temMencoes(t);
+function relBlocos(t,x,per){const P=relPers(t,per);const nfin=ponderada(t,pctsFinal(t,x.id,per));const men=temMencoes(t);
   return [{h:'Relatório Individual — '+x.nome},{kv:[['Nome',x.nome],['N.º',x.num],['Turma',x.origem||t.nome],['Disciplina',t.disciplina]],foto:fotoSrc(x)},
-    {tabela:{cab:['Domínio','Ponderação',...P.map(perNome),...(men?['Menção']:[])],linhas:[...t.dominios.map(d=>[d.nome,d.peso+'%',...P.map(p=>pctD(t,domPer(t,x.id,d.id,p))||'—'),...(men?[(mencao(t,pctsFinal(t,x.id,per)[d.id])||{}).nome||'—']:[])]),
+    {tabela:{cab:['Domínio','Ponderação',...P.map(p=>relPerNome(t,p)),...(men?['Menção']:[])],linhas:[...t.dominios.flatMap((d,k)=>relGrpLin(t,d,k,P.length+(men?1:0))).map(d=>d.__g?d.__g:[d.grupo?'   '+d.nome:d.nome,d.peso+'%',...P.map(p=>pctD(t,domPer(t,x.id,d.id,p))||'—'),...(men?[(mencao(t,pctsFinal(t,x.id,per)[d.id])||{}).nome||'—']:[])]),
       ['Classificação','',...P.map(p=>fmtNota(t,ponderada(t,pctsPer(t,x.id,p)))||'—'),...(men?[nfin!=null?'Nível '+nivel(t,nfin):'']:[])]]}},
     ...relAutoBlocos(t,x,per),{h:'Síntese Descritiva'},{p:(x.sintese&&x.sintese[per])||sintese(t,x,per),just:1,ind:1},...((x.obsPer||{})[per]?[{h:'Observações'},{p:x.obsPer[per],just:1}]:[])]}
 function relSpec(t,L,per){const spec={titulo:'Relatórios Individuais',subtitulo:t.nome+' · '+t.disciplina+' · '+perNome(per),escola:escolaDe(t),turma:t,blocos:[],assinaturas:[profAssin(),'O(A) Encarregado(a) de Educação']};

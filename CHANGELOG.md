@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.197
+- Critérios: cada critério é «Específico» (avaliado pelos elementos de avaliação) ou «Geral» (sem elementos de avaliação, classificado só na avaliação final do período ou no fim da UFCD, em «Critérios gerais › Classificar»)
+- Critérios e relatórios: os subdomínios aparecem por baixo do nível superior (ex.: Saber Ser 20%) com o peso total
+- UFCD: separador «Avaliação Final» da unidade; relatório individual sem períodos, com o nome da UFCD
+
 ## 1.196
 - UFCD e módulos são estanques: sem separadores de período no Painel e no Perfil de Aprendizagem, sem avaliação intercalar, critérios calculados com todos os instrumentos da unidade
 - Critérios: os subdomínios (ex.: Saber Ser) aparecem indentados por baixo do domínio
