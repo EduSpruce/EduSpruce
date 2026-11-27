@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.198
+- Direção de Turma › Sínteses Descritivas: o DT dá a cada aluno uma nota de 0 a 10 em 10 parâmetros (aproveitamento, assiduidade, pontualidade, comportamento, participação, empenho, trabalho autónomo, organização, relacionamento, responsabilidade) e a síntese de final de período/semestre é escrita automaticamente, sem repetir frases entre alunos; pode ser alterada à mão, copiada ou exportada em CSV
+
 ## 1.197
 - Critérios: cada critério é «Específico» (avaliado pelos elementos de avaliação) ou «Geral» (sem elementos de avaliação, classificado só na avaliação final do período ou no fim da UFCD, em «Critérios gerais › Classificar»)
 - Critérios e relatórios: os subdomínios aparecem por baixo do nível superior (ex.: Saber Ser 20%) com o peso total

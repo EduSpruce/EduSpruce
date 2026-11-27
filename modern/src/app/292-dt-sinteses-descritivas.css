@@ -1,0 +1,10 @@
+/* DT › Sínteses Descritivas */
+html body .sdtl{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+html body .sdtal{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--panel)}
+html body .sdth{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+html body .sdtn{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:6px;margin-bottom:8px}
+html body .sdtn label{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--mut)}
+html body .sdtn input{width:100%;text-align:center;font-weight:700;padding:5px}
+html body .sdtn input.sdtvE{background:#dcfce7}html body .sdtn input.sdtvB{background:#ecfccb}html body .sdtn input.sdtvS{background:#fef9c3}html body .sdtn input.sdtvF{background:#ffedd5}html body .sdtn input.sdtvM{background:#fee2e2}
+html body .sdtal textarea{width:100%;min-height:84px;line-height:1.45}
+html body.est-sge .sdtal{border-radius:0}
