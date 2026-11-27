@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.208
+- Instrumentos: o separador «Itens e Cotações» passa a vir antes de «Classificações» (a seguir: Análise e Vista Ampla)
+
 ## 1.207
 - Instrumentos das UFCD: a correção de um teste mostra só os itens, a cotação de cada um e depois as classificações (total e nota do teste), sem linhas nem colunas de critérios; a nota conta para o critério específico
 - Instrumentos das UFCD: itens de um teste que estavam ligados a critérios gerais passam para o critério específico da UFCD (os gerais classificam-se só na ficha da Avaliação Final)
