@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.216
+- Língua Estrangeira (PROFIJ): a mesma relação das UFCD — Produção Oral, Compreensão Oral, Produção Escrita e Compreensão Escrita são critérios específicos (testes orais e escritos) e os subdomínios de Atitudes e Valores são critérios gerais, classificados na ficha da Avaliação Final; as turmas que já tinham o modelo passam a tê-los como gerais
+- «Domínios por período» com critérios gerais: passa a «Critérios específicos por período», sem separadores para os gerais e com ligação à ficha
+- «Como foi calculado» nas disciplinas com critérios gerais: testes por critério específico, critérios gerais pela ficha e ponderação até à nota de 0 a 20
+- PROFIJ: o separador «UFCD» deixa de aparecer nas disciplinas (só existe na pauta das UFCD)
+
 ## 1.215
 - Modelos de critérios: «UFCDs PROFIJ II» (Saber-saber e Saber-fazer 80 % + Atitudes e Valores 20 %) e «Línguas Estrangeira I - Inglês (PROFIJ II - Tipo 2)» passam a ser modelos base; a versão própria que já existia fica como a versão alterada do modelo base (nada se perde)
 - Modelo das línguas PROFIJ II: Atitudes e Valores passa para o fim (Produção Oral, Compreensão Oral, Produção Escrita, Compreensão Escrita e depois Atitudes e Valores)
