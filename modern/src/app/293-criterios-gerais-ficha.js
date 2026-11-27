@@ -121,3 +121,20 @@ function cgDicas(t){try{const v=$('#view');if(!v||!t)return;const D=t.dominios||
   v.querySelectorAll('tr[data-a] td.stk, tr[data-a] td:nth-child(2)').forEach(td=>{if(td.title)return;const a=t.alunos.find(x=>x.id===td.closest('tr').dataset.a);if(a)td.title=a.nome})}catch(e){console.warn(e)}}
 {const _vAD=vAvaliacao;vAvaliacao=function(){const r=_vAD.apply(this,arguments);cgDicas(T());return r};if(go._f)go._f.avaliacao=vAvaliacao}
 {const _vID=vInstrumentos;vInstrumentos=function(){const r=_vID.apply(this,arguments);setTimeout(()=>cgDicas(T()),0);return r};if(go._f)go._f.instrumentos=vInstrumentos}
+/* ---- Classificações por UFCD/módulo: vão buscar automaticamente a nota da Avaliação Final de cada unidade
+   (critérios específicos pelos instrumentos + critérios gerais pela ficha ou classificação direta); a «Atribuída» da pauta da unidade prevalece ---- */
+function cgValK(t,aid,d,k){const I=cgInd(d);if(I.length){const R=(((((t.critGI||{})[k])||{})[aid])||{})[d.id]||{};const v=I.map((_,i)=>R[i]).filter(x=>x!=null&&x!=='').map(Number).filter(x=>isFinite(x));if(v.length)return v.reduce((a,b)=>a+b,0)/v.length/20}
+  const v=((((t.critG||{})[k])||{})[aid]||{})[d.id];return v==null||v===''?null:+v}
+{const _nMA=notaModAuto;notaModAuto=function(t,aid,mid){if(!t||!t.porModulo||!tUnid(t))return _nMA.apply(this,arguments);const m=(t.modulos||[]).find(x=>x.id===mid);if(!m||!m.av)return null;const k='u:'+m.id;
+  const at=(((t.atrib||{})[k])||{})[aid];if(at!=null&&at!==''&&isFinite(+String(at).replace(',','.')))return +String(at).replace(',','.');
+  const D=m.av.dominios||[],I=m.av.instrumentos||[];if(!D.length)return null;const p={};
+  D.forEach(d=>{if(d.ger){p[d.id]=cgValK(t,aid,d,k);return}const v=I.map(i=>instDom(i,aid,d.id)).filter(Boolean).map(x=>x.pct);p[d.id]=v.length?v.reduce((a,b)=>a+b,0)/v.length:null});
+  if(!D.some(d=>p[d.id]!=null))return null;const f=ponderada({dominios:D},p);return f==null?null:Math.round(f*20)}}
+/* ---- itens de instrumentos ligados a um critério que já não existe na unidade (aparecia «?» em Domínios e o instrumento não contava):
+   se a unidade tem um só critério específico, os itens passam para ele; se o nome/abreviatura antigo coincidir com um critério específico, vão para esse ---- */
+function cgOrfaos(t){try{if(!t||!t.porModulo||!tUnid(t))return 0;let n=0;
+  (t.modulos||[]).forEach(m=>{const av=m.av;if(!av)return;const D=av.dominios||[];const ids=new Set(D.map(d=>d.id));const E=D.filter(d=>!d.ger);if(!E.length)return;
+    (av.instrumentos||[]).forEach(i=>(i.itens||[]).forEach(it=>{if(!it.dom||ids.has(it.dom))return;const velho=((t.__mod&&t.__mod.dominios)||[]).find(d=>d.id===it.dom);
+      const alvo=(velho&&E.find(d=>normT(d.ab)===normT(velho.ab)||normT(d.nome)===normT(velho.nome)))||(E.length===1?E[0]:null);if(alvo){it.dom=alvo.id;n++}}))});
+  if(n)save();return n}catch(e){console.warn(e);return 0}}
+{const _gO=go;go=function(){try{cgOrfaos(T())}catch(_){}return _gO.apply(this,arguments)}}

@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.205
+- Classificações por UFCD: vão buscar automaticamente a nota da Avaliação Final de cada UFCD (instrumentos + critérios gerais; a «Atribuída» prevalece); escrever por cima continua a substituir; aprovação a partir de 9,5
+- Instrumentos das UFCD: itens ligados a um critério que já não existia na UFCD (aparecia «?» em Domínios e o instrumento não contava na Avaliação Final) passam automaticamente para o critério específico da UFCD
+
 ## 1.204
 - Ficha dos critérios gerais: síntese descritiva escrita automaticamente a partir das notas, com frases diferentes das dos colegas da turma (nunca saem duas iguais); botão «Escrever de novo» e pode ser alterada à mão
 - Avaliação Final e Instrumentos: ao passar o rato, as abreviaturas dos critérios mostram o nome completo (com o peso) e os nomes dos alunos cortados aparecem completos
