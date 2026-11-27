@@ -233,7 +233,9 @@ function abrMapa(){const M=Object.assign({},ABR_FIXAS);try{const a=A();const ts=
     ts.forEach(t=>{const D=[...(t.dominios||[]),...((t.modulos||[]).flatMap(m=>(m.av&&m.av.dominios)||[]))];D.forEach(d=>{const ab=String(d.ab||'').trim();if(!ab||vistos.has(ab))return;vistos.add(ab);M[ab]=d.nome+(d.peso!=null?' · '+String(d.peso).replace('.',',')+'%':'')+(d.ger?' · critério geral':'')})});
     const W=perW();[1,2,3].forEach(n=>{M[n+'.º P']=n+'.º '+W;M[n+'.º Per.']=n+'.º '+W;M[n+'.º per.']=n+'.º '+W})}catch(_){}return M}
 function abrDicas(){try{const M=abrMapa();const ks=Object.keys(M);if(!ks.length)return;
-  document.querySelectorAll('#view *, #dw-b *, #ampv *, #side .tdsb, #barx *').forEach(e=>{if(e.title||e.children.length>1||e.closest('svg'))return;if(e.children.length===1&&!/^(SMALL|BR|DIV)$/.test(e.children[0].tagName))return;
+  /* SVG (gráficos, radar): a dica é um <title> dentro do texto */
+  document.querySelectorAll('#view svg text, #dw-b svg text, #ampv svg text, #perfilap svg text, .sheet svg text').forEach(e=>{if(e.querySelector('title'))return;const tx=e.textContent.trim();if(M[tx]&&!/^\d+$/.test(tx)){const ti=document.createElementNS('http://www.w3.org/2000/svg','title');ti.textContent=M[tx];e.appendChild(ti)}});
+  document.querySelectorAll('#view *, #dw-b *, #ampv *, #perfilap *, #side .tdsb, #barx *').forEach(e=>{if(e.title||e.children.length>1||e.closest('svg'))return;if(e.children.length===1&&!/^(SMALL|BR|DIV)$/.test(e.children[0].tagName))return;
     const n=e.firstChild;const tx=(n&&n.nodeType===3?n.nodeValue:e.textContent||'').trim();if(!tx||tx.length>12)return;
     const k=M[tx]?tx:(M[tx.replace(/[.:]$/,'')]?tx.replace(/[.:]$/,''):null);if(k&&!/^\d+$/.test(k))e.title=M[k]})}catch(e){console.warn(e)}}
 {let _abT=null;const corre=()=>{clearTimeout(_abT);_abT=setTimeout(abrDicas,350)};const liga=()=>{try{new MutationObserver(corre).observe(document.body,{childList:true,subtree:true})}catch(_){}corre()};
@@ -266,3 +268,20 @@ function paUnid(){try{const o=document.getElementById('perfilap');const t=T();if
     if(/^Compromisso para o próximo/i.test(tx)){h.innerHTML=ic('flag',16)+' Compromisso para '+(U.art==='a'?'a próxima ':'o próximo ')+esc(U.um)}})}catch(e){console.warn(e)}}
 {const _pAU=perfilAluno;perfilAluno=function(){const r=_pAU.apply(this,arguments);setTimeout(paUnid,0);return r}}
 {let _paT=null;try{new MutationObserver(()=>{clearTimeout(_paT);_paT=setTimeout(()=>{const o=document.getElementById('perfilap');if(o&&o.dataset.paU!=='1')paUnid()},80)}).observe(document.body,{childList:true,subtree:true})}catch(_){}}
+/* ---- Perfis de Aprendizagem: «Evolução nos Instrumentos» compacta — uma barra por instrumento (nome, data, classificação),
+   em vez do gráfico enorme quando há poucos instrumentos; nas UFCD sem períodos ---- */
+function paInstr(){try{const o=document.getElementById('perfilap');const t=T();if(!o||!t||o.dataset.paI==='1')return;const h=[...o.querySelectorAll('section h2')].find(x=>/^Evolução nos instrumentos/i.test(x.textContent.trim()));if(!h)return;
+  const NM=new Set(t.alunos.map(x=>x.nome));const nm=([...o.querySelectorAll('h1,h2,h3,b,strong,div,span')].find(e=>e.children.length===0&&NM.has(e.textContent.trim()))||{textContent:''}).textContent.trim();const a=t.alunos.find(x=>x.nome===nm);if(!a)return;
+  o.dataset.paI='1';const un=tUnid(t);const sec=isSec(t)||un;
+  const I=(t.instrumentos||[]).filter(i=>instMax(i)&&instTotal(i,a.id)!=null).sort((x,y)=>(+x.periodo-+y.periodo)||String(x.data||'').localeCompare(String(y.data||'')));
+  const s=h.closest('section');[...s.children].forEach(c=>{if(c!==h)c.remove()});
+  if(!I.length){s.insertAdjacentHTML('beforeend','<p class="mut">Ainda sem instrumentos classificados.</p>');return}
+  const rows=I.map(i=>{const f=instTotal(i,a.id)/instMax(i);const neg=negativa(t,f);const al=alunosAval(t);const tu=(L=>L.length?L.reduce((x,y)=>x+y,0)/L.length:null)(al.map(x=>{const v=instTotal(i,x.id);return v==null?null:v/instMax(i)}).filter(v=>v!=null));
+    return `<div class="pir"><div class="pirn"><b>${esc(i.nome)}</b><small class="mut">${esc(i.tipo||'')}${i.data?' · '+esc(fmtIso(i.data)):''}${!un&&i.periodo?' · '+i.periodo+'.º '+esc(perW().toLowerCase()):''}</small></div>
+      <div class="pirb"><i style="width:${Math.round(f*100)}%;background:${neg?'#c0392b':'#1f7a4d'}"></i>${tu!=null?`<u style="left:${Math.round(tu*100)}%" title="Média da turma: ${fmtNota(t,tu)}"></u>`:''}</div><b class="pirv ${neg?'neg':''}">${fmtNota(t,f)}</b></div>`}).join('');
+  const fs=I.map(i=>instTotal(i,a.id)/instMax(i));const tend=fs.length>=2?fs[fs.length-1]-fs[0]:null;
+  s.insertAdjacentHTML('beforeend',`<div class="pil">${rows}</div><p class="mut" style="margin:8px 0 0;font-size:12.5px">${tend==null?'Só um instrumento classificado até agora.':tend>0.025?'A subir: do primeiro para o último instrumento melhorou '+(sec?String(Math.round(tend*200)/10).replace('.',',')+' valores':Math.round(tend*100)+' pontos percentuais')+'.':tend<-0.025?'A descer: do primeiro para o último instrumento baixou '+(sec?String(Math.round(-tend*200)/10).replace('.',',')+' valores':Math.round(-tend*100)+' pontos percentuais')+'.':'Estável entre o primeiro e o último instrumento.'} A risca é a média da turma.</p>`)}catch(e){console.warn(e)}}
+{const _pAI=perfilAluno;perfilAluno=function(){const r=_pAI.apply(this,arguments);setTimeout(paInstr,0);return r}}
+{let _piT=null;try{new MutationObserver(()=>{clearTimeout(_piT);_piT=setTimeout(()=>{const o=document.getElementById('perfilap');if(o&&o.dataset.paI!=='1')paInstr()},90)}).observe(document.body,{childList:true,subtree:true})}catch(_){}}
+/* Relatórios das UFCD/módulos: sem o seletor «Até ao … período» (a UFCD não tem períodos) */
+{const _vRl=vRelatorios;vRelatorios=function(){const r=_vRl.apply(this,arguments);try{const t=T();if(t&&tUnid(t)){const s=$('#r-per');if(s){s.style.display='none';const l=s.previousElementSibling;if(l&&/Até ao/.test(l.textContent))l.style.display='none'}}}catch(e){console.warn(e)}return r};if(go._f)go._f.relatorios=vRelatorios}

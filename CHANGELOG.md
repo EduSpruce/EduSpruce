@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.224
+- Perfis de Aprendizagem: «Evolução nos Instrumentos» passa a uma barra por instrumento (nome, tipo, data, classificação e risca com a média da turma) e uma frase sobre a tendência — já não aparece o gráfico enorme; nas UFCD sem períodos
+- Dicas das abreviaturas também nos gráficos (ex.: radar do perfil: CC, ER, A…) e nos Perfis de Aprendizagem
+- Relatórios das UFCD: deixa de aparecer «Até ao … período»
+- Barra das UFCD: «são só desta UFCD» e «3 UFCD» (antes «deste UFCD», «3 ufcd»)
+
 ## 1.223
 - Alunos: as colunas «Repet.» e «ASE» já mostram o texto todo (antes aparecia «N…»)
 
