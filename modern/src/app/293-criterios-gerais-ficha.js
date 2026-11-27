@@ -138,3 +138,34 @@ function cgOrfaos(t){try{if(!t||!t.porModulo||!tUnid(t))return 0;let n=0;
       const alvo=(velho&&E.find(d=>normT(d.ab)===normT(velho.ab)||normT(d.nome)===normT(velho.nome)))||(E.length===1?E[0]:null);if(alvo){it.dom=alvo.id;n++}}))});
   if(n)save();return n}catch(e){console.warn(e);return 0}}
 {const _gO=go;go=function(){try{cgOrfaos(T())}catch(_){}return _gO.apply(this,arguments)}}
+/* ---- Classificações por UFCD/módulo: só leitura — a nota de cada unidade vem da sua Avaliação Final (lá se muda, em «Atribuída») ---- */
+{const _vMR=vModulos;vModulos=function(){const r=_vMR.apply(this,arguments);try{const t=T();if(!t||!tUnid(t))return r;
+    $$('#view input[data-mn]').forEach(i=>{const [aid,mid]=i.dataset.mn.split('|');const v=notaMod(t,aid,mid);const s=document.createElement('b');s.className='mnro';s.textContent=v==null?'':String(v).replace('.',',');
+      s.title='Vem da Avaliação Final desta unidade — para mudar, abra a Avaliação Final da unidade e use «Atribuída»';s.onclick=()=>{modEscolher(t,mid);go('avaliacao')};i.replaceWith(s)});
+    $$('#view .card .row .mut').forEach(e=>{if(/automático: nota da Avaliação Final/.test(e.textContent))e.textContent=e.textContent.replace(/\s*\(escrever por cima substitui\)/,' — toque na nota para abrir a Avaliação Final')})}catch(e){console.warn(e)}return r};if(go._f)go._f.modulos=vModulos}
+
+/* ---- Autoavaliação na Avaliação Final: preenchida sozinha com a classificação que o aluno propôs (telemóvel ou ficha do aluno);
+   se o aluno só respondeu por critério (1 a 4), propõe-se a média ponderada (1 → 5, 2 → 10, 3 → 15, 4 → 20) ---- */
+function cgAutoNota(t,a,p){try{const AV=autoD(a,p)||{};if(AV.nota!==''&&AV.nota!=null)return {v:String(AV.nota),src:AV.origem==='aluno'?'telemóvel':'ficha do aluno'};
+    const dom=AV.dom||{};let s=0,w=0;(t.dominios||[]).forEach(d=>{const l=+dom[d.id];if(l>=1&&l<=4&&+d.peso>0){s+=l*5*d.peso;w+=+d.peso}});
+    if(!w)return null;const n=s/w;return {v:isSec(t)||tUnid(t)?String(Math.round(n*10)/10).replace('.',','):String(Math.round(n*5)),src:'calculada das respostas por critério',calc:true}}catch(_){return null}}
+{const _vAA=vAvaliacao;vAvaliacao=function(){const r=_vAA.apply(this,arguments);try{const t=T();if(!t)return r;const p=tUnid(t)?1:UI.per;
+    $$('#view tr[data-a] [data-av]').forEach(inp=>{if(inp.value.trim())return;const a=t.alunos.find(x=>x.id===inp.closest('tr').dataset.a);if(!a)return;const o=cgAutoNota(t,a,p);if(!o)return;
+      inp.value=o.v;inp.title='Autoavaliação ('+o.src+')';if(o.calc)inp.classList.add('aucalc')})}catch(e){console.warn(e)}return r};if(go._f)go._f.avaliacao=vAvaliacao}
+/* ---- «Como foi calculado» nas UFCD/módulos: sem períodos; instrumentos só com os critérios específicos; critérios gerais pela ficha ---- */
+{const _eN=explicarNota;explicarNota=function(t,aid,per,pAte){if(!tUnid(t))return _eN.apply(this,arguments);const x=t.alunos.find(z=>z.id===aid);if(!x)return;
+  const U=v=>v==null?'—':pctD(t,v);const pc=pctsFinal(t,aid,1);const f=ponderada(t,pc);const E=domEsp(t),G=domGer(t);const nm=unidNomeComp(t)||'Unidade';
+  const I=(t.instrumentos||[]).filter(i=>instMax(i)&&(i.itens||[]).some(it=>E.some(d=>d.id===it.dom)));
+  const tab=E.length?`<div class="tblw"><table class="lst expt"><thead><tr><th>Instrumento</th>${E.map(d=>`<th style="--dc:${domCor(t,d)}"><b>${esc(d.nome)}</b><small>${+d.peso||0}%</small></th>`).join('')}</tr></thead><tbody>
+    ${I.map(i=>{const k=instAlunoEstado(t,i,aid);return `<tr class="${['completo','incompleta'].includes(k)||(k==='faltou'&&(i.nr||{})[aid]==='z')?'':'expx'}"><td><b>${esc(i.nome)}</b><small class="mut">${esc(fmtIso(i.data||''))} · ${esc((EST_INST[k]||['Não realizou'])[0].toLowerCase())}</small></td>${E.map(d=>{const r=instDom(i,aid,d.id);return `<td>${r?`<b>${U(r.pct)}</b><small class="mut">${nf(r.pts,2)}/${nf(r.max,2)} pontos</small>`:'<span class="mut">·</span>'}</td>`}).join('')}</tr>`}).join('')||`<tr><td colspan="${E.length+1}" class="mut">Sem instrumentos classificados.</td></tr>`}
+    <tr class="exps"><td><b>Média ${unidMod(t).art==='a'?'da':'do'} ${esc(unidMod(t).um)}</b><small class="mut">média simples dos instrumentos</small></td>${E.map(d=>`<td><b>${U(domPer(t,aid,d.id,1))}</b></td>`).join('')}</tr></tbody></table></div>`:'<p class="mut">Não há critérios específicos.</p>';
+  const ger=G.length?`<div class="exger">${G.map(d=>{const v=critGVal(t,aid,d.id,1);const n=cgInd(d).length;return `<div class="exgr"><span style="color:${domCor(t,d)}"><b>${esc(d.nome)}</b> · ${String(d.peso).replace('.',',')}%</span><span class="mut">${n?'média de '+n+' indicadores':'classificação direta'}</span><b>${v==null?'—':cgF1(v*20)}</b></div>`}).join('')}<button type="button" class="btn sm" id="ex-ficha">${ic('user',13)} Abrir a ficha de ${esc(x.nome.split(' ')[0])}</button></div>`:'';
+  const usados=t.dominios.filter(d=>pc[d.id]!=null&&+d.peso>0);const wT=Math.round(usados.reduce((s_,d)=>s_+ +d.peso,0)*1e6)/1e6;const wAll=Math.round(t.dominios.reduce((s_,d)=>s_+(+d.peso||0),0)*1e6)/1e6;
+  const formula=usados.map(d=>`<span style="color:${domCor(t,d)}">${esc(d.nome)}</span> ${U(pc[d.id])} × ${String(d.peso).replace('.',',')}%`).join(' + ');const falta=t.dominios.filter(d=>pc[d.id]==null&&+d.peso>0);
+  const ok=f!=null&&f*20>=9.5;
+  openDrawer('Como foi calculado — '+x.nome.split(' ')[0],`<div class="ed expl"><p class="hint" style="margin-top:0">${esc(x.nome)} · ${esc(t.nome)} · ${esc(nm)}</p>
+    <ol class="exsteps"><li><b>Critérios específicos — instrumentos</b> — em cada instrumento, pontos obtidos ÷ cotação total; o critério vale a média dos instrumentos.${tab}</li>
+    ${G.length?`<li><b>Critérios gerais — ficha do aluno</b> — sem instrumentos: cada critério vale a média dos seus indicadores (0 a 20).${ger}</li>`:''}
+    <li><b>Ponderação</b> — (${formula||'sem dados'}) ÷ ${String(wT).replace('.',',')}%${wT!==wAll?` <span class="tag w">pesos reajustados: ${falta.map(d=>esc(d.nome)).join(', ')} ainda sem classificação</span>`:''} = <b>${f==null?'—':nf(f*20,3)+' valores'}</b></li>
+    <li><b>Arredondamento</b> (${['unidades','décimas','centésimas'][notaDec()]}) → <b>${f==null?'—':fmtNota(t,f)}</b>${f!=null?' → classificação '+nivel(t,f)+` <span class="tag ${ok?'ok':'bad'}">${ok?'aprovado(a) — a partir de 9,5':'não aprovado(a) — abaixo de 9,5'}</span>`:''}</li></ol></div>`);
+  const b=$('#ex-ficha');if(b)b.onclick=()=>cgFicha(t,1,aid)}}

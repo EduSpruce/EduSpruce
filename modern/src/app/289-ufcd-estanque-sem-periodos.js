@@ -67,7 +67,7 @@ function unidLinhasAval(t,v){const m=modAtivo(t);if(!m)return;const u='u:'+m.id;
       av.oninput=()=>{try{autoD(a,1).nota=av.value}catch(_){}a.autoav=a.autoav||{};a.autoav[u]=av.value;save()}}
     if(ob){ob.value=(a.obsPer||{})[u]||'';ob.oninput=()=>{a.obsPer=a.obsPer||{};a.obsPer[u]=ob.value;save()}}})}
 /* Relatórios das UFCD/módulos: sem períodos — a síntese fala da unidade e a autoavaliação é a da unidade */
-function unidSemPer(t,s){if(!tUnid(t)||typeof s!=='string')return s;const U=unidMod(t);const f=U.art==='a';return s.replace(/([nNdD])o \d\.º (período|semestre)/g,(m,c)=>c+(f?'a ':'o ')+U.um).replace(/([Nn])este (período|semestre)/g,(m,c)=>c+(f?'esta ':'este ')+U.um)}
+function unidSemPer(t,s){if(!tUnid(t)||typeof s!=='string')return s;const U=unidMod(t);const f=U.art==='a';const m_=modAtivo(t);const nmU=m_&&m_.nome?String(m_.nome).trim():'';if(nmU&&t.disciplina)s=s.split(t.disciplina).join(nmU);return s.replace(/([nNdD])o \d\.º (período|semestre)/g,(m,c)=>c+(f?'esta ':'este ')+U.um).replace(/([Nn])este (período|semestre)/g,(m,c)=>c+(f?'esta ':'este ')+U.um)}
 {const _sI=sintese;sintese=function(t){return unidSemPer(t,_sI.apply(this,arguments))}}
 {const _rA=relAuto;relAuto=function(t,a,per){if(tUnid(t)){const m=modAtivo(t);if(m){try{autoD(a,1)}catch(_){}return _rA.call(this,t,a,'u:'+m.id)}}return _rA.apply(this,arguments)}}
 {const _rB=relAutoBlocos;relAutoBlocos=function(t,x,per){if(tUnid(t)){const m=modAtivo(t);if(m){try{autoD(x,1)}catch(_){}return _rB.call(this,t,x,'u:'+m.id)}}return _rB.apply(this,arguments)}}

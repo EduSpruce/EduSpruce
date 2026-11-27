@@ -91,7 +91,7 @@ function relatorio(t,a,per){
       <b>DL 54/2018</b><span class="sens" style="grid-column:span 3">${meds.length?esc(meds.join('; ')):'Não se aplica'}</span></div>${relAuto(t,a,per)}</div></div>
     <div class="sec">Avaliação por domínios</div>
     <table><thead><tr><th>Domínio</th><th class="c">Ponderação</th>${P.map(p=>`<th class="c">${esc(relPerNome(t,p))}</th>`).join('')}<th class="c">Menção</th></tr></thead><tbody>
-    ${t.dominios.map((d,k)=>`${relGrpTr(t,d,k,P.length+3)}<tr class="${d.grupo?'relsub':''}"><td>${esc(d.nome)}</td><td class="c">${d.peso}%</td>${P.map(p=>`<td class="c">${pctD(t,domPer(t,a.id,d.id,p))||'—'}</td>`).join('')}<td class="c">${esc((mencao(t,pctsFinal(t,a.id,per)[d.id])||{}).nome||'—')}</td></tr>`).join('')}
+    ${t.dominios.map((d,k)=>`${relGrpTr(t,d,k,P.length+3)}<tr class="${d.grupo?'relsub':''}">${(b=>`<td>${b?'<b>':''}${esc(d.nome)}${b?'</b>':''}</td><td class="c">${b?'<b>':''}${d.peso}%${b?'</b>':''}</td>`)(!d.grupo&&t.dominios.some(x=>x.grupo))}${P.map(p=>`<td class="c">${pctD(t,domPer(t,a.id,d.id,p))||'—'}</td>`).join('')}<td class="c">${esc((mencao(t,pctsFinal(t,a.id,per)[d.id])||{}).nome||'—')}</td></tr>`).join('')}
     ${tUnid(t)?'':`<tr><th>Nota do ${perW().toLowerCase()}</th><th></th>${P.map(p=>`<th class="c">${fmtNota(t,ponderada(t,pctsPer(t,a.id,p)))||'—'}</th>`).join('')}<th></th></tr>`}
     <tr><th>Classificação Final</th><th></th><th class="c" colspan="${P.length}" style="font-size:14px">${fmtNota(t,nfin)||'—'} ${nfin!=null?(isSec(t)?'valores':'· Nível '+nivel(t,nfin)):''}</th><th class="c">${esc((mencao(t,nfin)||{}).nome||'')}</th></tr></tbody></table>
     ${grafico(t,a,P)}

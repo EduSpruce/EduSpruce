@@ -2,6 +2,15 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.209
+- Vista Ampla dos instrumentos: os botões «F» (não realizou) e de evidências (câmara) voltam a funcionar — o menu e o painel abrem por cima da vista ampla
+- Avaliação Final: a Autoavaliação aparece sozinha com a nota que o aluno propôs (pelo telemóvel ou na ficha do aluno); se só respondeu por critério, mostra a média calculada
+- Classificações por UFCD: só leitura (a nota vem da Avaliação Final de cada UFCD; tocar na nota abre-a); médias com vírgula
+- Estatística da turma nas UFCD: Aprovados (≥ 9,5) / Não aprovados, fichas dos critérios gerais preenchidas, média por critério com nomes completos, melhores resultados só com aprovados e nomes completos
+- «Como foi calculado» nas UFCD: sem períodos, instrumentos só com os critérios específicos, critérios gerais pela ficha (com botão para a abrir), pesos reajustados com nomes completos e aprovado/não aprovado a partir de 9,5
+- Relatórios: os critérios do nível de cima (ex.: Saber-saber e Saber-fazer) aparecem a negrito; a síntese das UFCD fala da UFCD pelo nome (ex.: «Nesta UFCD, … dificuldades em Armazém - processos e atividades»)
+- Menu lateral: cada UFCD tem a sua cor
+
 ## 1.208
 - Instrumentos: o separador «Itens e Cotações» passa a vir antes de «Classificações» (a seguir: Análise e Vista Ampla)
 
