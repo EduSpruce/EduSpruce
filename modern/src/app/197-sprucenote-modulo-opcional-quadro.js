@@ -53,7 +53,7 @@ function zmAplicar(){const w=document.querySelector('#view .sheetwrap');if(!w)re
   const sw=sh.offsetWidth||794,shh=sh.offsetHeight||1123;const disp=w.parentElement.clientWidth-24,alt=innerHeight-(w.getBoundingClientRect().top>0?Math.min(w.getBoundingClientRect().top,200):160)-40;
   let f=z.f;if(z.modo==='largura')f=disp/sw;else if(z.modo==='pagina')f=Math.min(disp/sw,alt/shh);else if(z.modo==='todas'){w.classList.add('zgrid');f=Math.max(.2,Math.min(.6,(disp/Math.min(L.length,4)-24)/sw))}
   if(z.modo==='pagina'||z.modo==='umapag'){w.classList.add('zpag');L[z.p].classList.add('zon')}
-  f=Math.max(.2,Math.min(3,f));w.style.zoom=f;
+  f=Math.max(.2,Math.min(3,f));w.style.zoom=f;/* «Todas»: a grelha ocupa a largura toda (com zoom, a largura do contentor tem de ser a disponível ÷ zoom, senão fica uma página por linha) */if(z.modo==='todas'){w.style.width=Math.floor(disp/f)+'px';w.style.maxWidth='none'}else{w.style.width='';w.style.maxWidth=''}
   const B=(m,l,i_)=>`<button type="button" data-zm="${m}" class="${z.modo===m?'on':''}" title="${l}">${ic(i_,14)} ${l}</button>`;
   bar.innerHTML=`<div class="seg">${B('todas','Todas','grid')}${B('umapag','Página a Página','file')}${B('pagina','Página Inteira','image')}${B('largura','Largura','arrowR')}${B('normal','100 %','search')}</div>
     <button type="button" class="btn sm ico" data-zf="-" aria-label="Diminuir">−</button><span class="zmv">${Math.round(f*100)} %</span><button type="button" class="btn sm ico" data-zf="+" aria-label="Aumentar">+</button>

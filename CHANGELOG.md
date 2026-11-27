@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.221
+- Relatório individual: dados do aluno mais arrumados (nome em destaque e campos em duas colunas, com turma e disciplina/UFCD); nas escolas dos Açores deixa de aparecer o DL 54/2018 (só aparecem as medidas de suporte, se houver)
+- Relatórios: a vista «Todas» mostra várias páginas lado a lado, ocupando a largura do ecrã
+- Síntese descritiva: as frases mudam de período para período, de UFCD para UFCD e de disciplina para disciplina — a mesma avaliação nunca dá o mesmo texto
+
 ## 1.220
 - Síntese descritiva das UFCD: fala dos conteúdos programáticos da UFCD (ex.: «demonstrou dificuldades no que toca aos conteúdos programáticos da UFCD», «revelou um bom domínio dos conteúdos programáticos da UFCD»), pela positiva e pela negativa, e já não refere períodos
 - Relatório individual: o gráfico mostra o nome completo de cada critério por baixo da barra

@@ -37,3 +37,10 @@ html body #view .pnemb{float:right;margin:0 0 6px 16px;line-height:1}
 html body #view .pnembf svg{display:block;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.18)}
 html body #view .pnembc{font-size:30px;font-weight:800;letter-spacing:.02em;color:var(--acc,#0b5e8a);padding:8px 14px;border:2px solid currentColor;border-radius:12px}
 html body.est-sge #view :is(.pnembc,.pnembf svg){border-radius:0}
+/* Relatório individual: dados do aluno mais limpos */
+.sheet .rdal .rdnm{font-size:17px;font-weight:700;margin:0 0 8px;line-height:1.25}
+.sheet .rdal .rdg{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
+.sheet .rdal .rdg>div{display:flex;flex-direction:column;border-bottom:1px solid #e3e6ea;padding-bottom:4px;min-width:0}
+.sheet .rdal .rdg small{font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;font-weight:700}
+.sheet .rdal .rdg span{font-size:12.5px;overflow-wrap:anywhere}
+.sheet .rdal .rdg .rdw{grid-column:1/-1}

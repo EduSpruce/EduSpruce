@@ -410,7 +410,7 @@ html body.est-sge.est-sge.est-sge #bar #ctxEsc img{background:#fff!important;bor
 .zmbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px 8px;margin:0 auto 12px;width:max-content;max-width:100%;box-shadow:0 4px 14px -8px rgba(0,0,0,.25)}
 .zmbar .seg button{padding:5px 10px;font-size:12.5px}.zmbar .zmv{min-width:52px;text-align:center;font-variant-numeric:tabular-nums;font-size:13px}
 .zmbar .zmpg{display:flex;align-items:center;gap:4px;font-size:13px}
-.sheetwrap.zgrid{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;align-items:flex-start}
+.sheetwrap.zgrid{display:flex;flex-direction:row;flex-wrap:wrap;gap:24px;justify-content:center;align-items:flex-start}
 .sheetwrap.zgrid>.sheet{margin:0!important}
 .sheetwrap.zpag>.sheet:not(.zon){display:none!important}
 @media print{.zmbar{display:none!important}.sheetwrap{zoom:1!important}.sheetwrap>.sheet{display:block!important}}
