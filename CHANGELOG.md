@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.222
+- Perfis de Aprendizagem nas UFCD: sem períodos — no topo, a classificação de cada UFCD (tocar abre essa UFCD); «Evolução por Período» passa a «Classificação por UFCD» (barras por UFCD com a média da turma); subtítulo com a UFCD; «Compromisso para a próxima UFCD»
+
 ## 1.221
 - Relatório individual: dados do aluno mais arrumados (nome em destaque e campos em duas colunas, com turma e disciplina/UFCD); nas escolas dos Açores deixa de aparecer o DL 54/2018 (só aparecem as medidas de suporte, se houver)
 - Relatórios: a vista «Todas» mostra várias páginas lado a lado, ocupando a largura do ecrã

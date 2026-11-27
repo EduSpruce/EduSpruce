@@ -238,3 +238,31 @@ function abrDicas(){try{const M=abrMapa();const ks=Object.keys(M);if(!ks.length)
     const k=M[tx]?tx:(M[tx.replace(/[.:]$/,'')]?tx.replace(/[.:]$/,''):null);if(k&&!/^\d+$/.test(k))e.title=M[k]})}catch(e){console.warn(e)}}
 {let _abT=null;const corre=()=>{clearTimeout(_abT);_abT=setTimeout(abrDicas,350)};const liga=()=>{try{new MutationObserver(corre).observe(document.body,{childList:true,subtree:true})}catch(_){}corre()};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',liga);else liga()}
+/* ---- Perfis de Aprendizagem nas UFCD/módulos: sem períodos — classificação de cada UFCD (em vez de 1.º/2.º/3.º Per.),
+   gráfico «Classificação por UFCD» (em vez de «Evolução por Período») e compromisso para a próxima UFCD ---- */
+function paUnid(){try{const o=document.getElementById('perfilap');const t=T();if(!o||!t||!tUnid(t)||o.dataset.paU==='1')return;const U=unidMod(t);const M=t.modulos||[];if(!M.length)return;
+  const NM=new Set(t.alunos.map(x=>x.nome));const nm=([...o.querySelectorAll('h1,h2,h3,b,strong,.pan,div,span')].find(e=>e.children.length===0&&NM.has(e.textContent.trim()))||{textContent:''}).textContent.trim();const a=nm&&t.alunos.find(x=>x.nome===nm);if(!a)return;
+  o.dataset.paU='1';const ma=modAtivo(t);const F=v=>v==null||v===''?'—':String(v).replace('.',',');const da=(U.art==='a'?'da ':'do ');
+  /* caixas dos períodos → uma caixa por UFCD */
+  const bx=o.querySelector('.estps');if(bx){const P=[...bx.querySelectorAll('button')].filter(b=>/º Per\./.test(b.textContent));if(P.length){const html=M.map(m=>{const n=notaMod(t,a.id,m.id);const c=String(m.cod||'').replace(/^(UFCD|UC|M[óo]d(ulo)?\.?)\s*/i,'')||m.nome.slice(0,8);
+      return `<button type="button" class="${m===ma?'on':''}" data-pamod="${m.id}" title="${esc((m.cod||'')+' — '+(m.nome||''))}"><small>${esc(c)}</small><b class="${n!=null&&+n<9.5?'neg':''}">${F(n)}</b></button>`}).join('');
+      P[0].insertAdjacentHTML('beforebegin',html);P.forEach(b=>b.remove());bx.querySelectorAll('[data-pamod]').forEach(b=>b.onclick=()=>{modEscolher(t,b.dataset.pamod);perfilAluno(a.id)})}}
+  const pn=o.querySelector('.pnotas');if(pn){const P=[...pn.querySelectorAll('.pn')].filter(d=>/º Per\./.test(d.textContent));if(P.length){P[0].insertAdjacentHTML('beforebegin',M.map(m=>{const n=notaMod(t,a.id,m.id);const c=String(m.cod||'').replace(/^(UFCD|UC|M[óo]d(ulo)?\.?)\s*/i,'')||m.nome.slice(0,8);
+      return `<div class="pn ${m===ma?'on':''}" data-pamod="${m.id}" title="${esc((m.cod||'')+' — '+(m.nome||''))}" style="cursor:pointer"><span>${esc(c)}</span><b style="color:${n==null||n===''?'var(--mut)':+n<9.5?'#c0392b':'#1f7a4d'}">${F(n)}</b><small>${m===ma?'a ver':''}</small></div>`}).join(''));P.forEach(d=>d.remove());pn.querySelectorAll('[data-pamod]').forEach(b=>b.onclick=()=>{modEscolher(t,b.dataset.pamod);perfilAluno(a.id)})}}
+  o.querySelectorAll('svg text.pper').forEach(x=>{if(/º Per/.test(x.textContent))x.textContent=String((ma&&ma.cod)||U.um)});
+  /* subtítulo: a UFCD em vez do período */
+  o.querySelectorAll('p.mut, .pah .mut').forEach(p=>{for(const n of p.childNodes)if(n.nodeType===3&&/\d\.º (período|semestre)/.test(n.nodeValue))n.nodeValue=n.nodeValue.replace(/\d\.º (período|semestre)/,unidNomeComp(t)||U.um)});
+  o.querySelectorAll('section h2').forEach(h=>{const tx=h.textContent.trim();
+    if(/^Evolução por (período|semestre)/i.test(tx)){const s=h.closest('section');
+      const al=alunosAval(t);const V=M.map(m=>({m,n:notaMod(t,a.id,m.id),tu:(L=>L.length?L.reduce((x,y)=>x+y,0)/L.length:null)(al.map(x=>notaMod(t,x.id,m.id)).filter(v=>v!=null&&v!==''))}));
+      const W=420,H=280,L=40,R=12,Tp=24,B=46;const gw=(W-L-R)/Math.max(1,V.length);const sy=v=>Tp+(1-Math.max(0,Math.min(20,+v))/20)*(H-Tp-B);
+      const grid=[0,5,10,15,20].map(g=>`<line x1="${L}" x2="${W-R}" y1="${sy(g)}" y2="${sy(g)}" class="${g===10?'pe50':'peg'}"/><text x="${L-6}" y="${sy(g)}" text-anchor="end" dominant-baseline="middle" class="pey">${g}</text>`).join('');
+      const bars=V.map((x,i)=>{const cx=L+gw*i+gw/2,bw=Math.min(46,gw*.55);const c=String(x.m.cod||'').replace(/^(UFCD|UC|M[óo]d(ulo)?\.?)\s*/i,'')||x.m.nome.slice(0,8);
+        return (x.n!=null&&x.n!==''?`<rect x="${(cx-bw/2).toFixed(1)}" y="${sy(x.n).toFixed(1)}" width="${bw.toFixed(1)}" height="${(sy(0)-sy(x.n)).toFixed(1)}" rx="3" style="fill:${+x.n<9.5?'#c0392b':'#1f7a4d'}"><title>${esc(x.m.nome)}: ${F(x.n)}</title></rect><text x="${cx}" y="${sy(x.n)-6}" text-anchor="middle" class="pev">${F(x.n)}</text>`:`<text x="${cx}" y="${sy(0)-8}" text-anchor="middle" class="pey">por avaliar</text>`)
+          +(x.tu!=null?`<line x1="${cx-bw/2-4}" x2="${cx+bw/2+4}" y1="${sy(x.tu)}" y2="${sy(x.tu)}" style="stroke:#555;stroke-width:2;stroke-dasharray:4 3"><title>Média da turma: ${F(Math.round(x.tu*10)/10)}</title></line>`:'')
+          +`<text x="${cx}" y="${H-B+18}" text-anchor="middle" class="pex">${esc(c)}</text><text x="${cx}" y="${H-B+32}" text-anchor="middle" class="pey" style="font-size:9px">${esc((x.m.nome||'').slice(0,22))}</text>`}).join('');
+      h.innerHTML=ic('chart',16)+' Classificação por '+esc(U.um);
+      [...s.children].forEach(c=>{if(c!==h)c.remove()});s.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 ${W} ${H}" class="pevo" role="img" aria-label="Classificação por ${esc(U.um)}">${grid}${bars}</svg><div class="pleg"><span><i style="background:#1f7a4d"></i>Aprovada (≥ 9,5)</span><span><i style="background:#c0392b"></i>Não aprovada</span><span><i class="rt"></i>Média da turma</span></div>`)}
+    if(/^Compromisso para o próximo/i.test(tx)){h.innerHTML=ic('flag',16)+' Compromisso para '+(U.art==='a'?'a próxima ':'o próximo ')+esc(U.um)}})}catch(e){console.warn(e)}}
+{const _pAU=perfilAluno;perfilAluno=function(){const r=_pAU.apply(this,arguments);setTimeout(paUnid,0);return r}}
+{let _paT=null;try{new MutationObserver(()=>{clearTimeout(_paT);_paT=setTimeout(()=>{const o=document.getElementById('perfilap');if(o&&o.dataset.paU!=='1')paUnid()},80)}).observe(document.body,{childList:true,subtree:true})}catch(_){}}
