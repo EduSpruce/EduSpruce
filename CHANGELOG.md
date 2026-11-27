@@ -2,6 +2,9 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.226
+- MSAI (medidas de suporte e acomodações) por disciplina e por UFCD: cada disciplina do aluno tem as suas medidas (já não são copiadas para as outras disciplinas) e, na pauta das UFCD, cada UFCD tem as suas — a primeira vez, cada UFCD começa com as que o aluno já tinha; os documentos continuam comuns
+
 ## 1.225
 - Perfis de Aprendizagem nas UFCD: tocar na caixa de uma UFCD abre essa UFCD e mantém o perfil por UFCD (antes voltava aos períodos)
 - Horário: dois tempos à mesma hora (ex.: uma UFCD e a Biblioteca) aparecem lado a lado e assinalados a laranja — antes um ficava por cima do outro

@@ -285,3 +285,16 @@ function paInstr(){try{const o=document.getElementById('perfilap');const t=T();i
 {let _piT=null;try{new MutationObserver(()=>{clearTimeout(_piT);_piT=setTimeout(()=>{const o=document.getElementById('perfilap');if(o)paInstr()},90)}).observe(document.body,{childList:true,subtree:true})}catch(_){}}
 /* Relatórios das UFCD/módulos: sem o seletor «Até ao … período» (a UFCD não tem períodos) */
 {const _vRl=vRelatorios;vRelatorios=function(){const r=_vRl.apply(this,arguments);try{const t=T();if(t&&tUnid(t)){const s=$('#r-per');if(s){s.style.display='none';const l=s.previousElementSibling;if(l&&/Até ao/.test(l.textContent))l.style.display='none'}}}catch(e){console.warn(e)}return r};if(go._f)go._f.relatorios=vRelatorios}
+/* ===== MSAI (medidas de suporte e acomodações) por disciplina e por UFCD =====
+   Antes eram iguais em todas as disciplinas do aluno (copiadas entre pautas). Agora cada disciplina tem as suas e, na pauta
+   das UFCD/módulos, cada unidade tem as suas: ao mudar de unidade guardam-se as da unidade anterior em a.medU[id] e carregam-se
+   as da nova (a primeira vez, a unidade começa com as que o aluno já tinha). Os documentos continuam comuns. */
+try{['medidas','acomod'].forEach(f=>{const i=CAMPOS_COMUNS.indexOf(f);if(i>=0)CAMPOS_COMUNS.splice(i,1)})}catch(_){}
+propagarFicha=function(t,a){try{mesmosAlunos(t,a).forEach(({x})=>{x.docs=JSON.parse(JSON.stringify(a.docs||{}))})}catch(e){console.warn(e)}};
+const MSAI_F=['medidas','medObs','acomod'];
+function msaiSync(t){try{if(!t||!tUnid(t)||!(t.modulos||[]).length)return;const m=modAtivo(t);if(!m)return;let mud=false;
+  (t.alunos||[]).forEach(a=>{if(a.medMod===m.id)return;a.medU=a.medU||{};const cur={};MSAI_F.forEach(f=>{if(a[f]!=null)cur[f]=JSON.parse(JSON.stringify(a[f]))});
+    if(a.medMod)a.medU[a.medMod]=cur;const nv=a.medU[m.id];if(nv){MSAI_F.forEach(f=>{a[f]=nv[f]!=null?JSON.parse(JSON.stringify(nv[f])):(f==='acomod'?[]:f==='medidas'?{univ:[],selet:[],adic:[]}:{})})}
+    a.medMod=m.id;mud=true});if(mud)save()}catch(e){console.warn(e)}}
+{const _mE=modEscolher;modEscolher=function(t,id){try{msaiSync(t)}catch(_){}const r=_mE.apply(this,arguments);try{msaiSync(t)}catch(_){}return r}}
+{const _gMs=go;go=function(){try{msaiSync(T())}catch(_){}return _gMs.apply(this,arguments)}}
