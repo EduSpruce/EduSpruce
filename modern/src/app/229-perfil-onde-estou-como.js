@@ -44,7 +44,7 @@ function ondeHTML(t,X,V){const ok=X.dom.filter(x=>x.v!=null);if(!ok.length)retur
 {const _pA=perfilAluno;perfilAluno=function(aid,opt){const r=_pA.apply(this,arguments);try{ondeAplicar(aid)}catch(e){console.warn(e)}return r}}
 function ondeAplicar(aid){const t=T();if(!t)return;const a=t.alunos.find(x=>x.id===aid);if(!a)return;const run=()=>{const o=document.querySelector('.pab');if(!o)return;
   const sec=[...o.querySelectorAll('section.pc')].find(s=>/Onde Estou e Como Avançar/.test((s.querySelector('h2')||{}).textContent||''));if(!sec||sec.dataset.onde)return;
-  const pb=document.querySelector('[data-pap].on');const p=pb?+pb.dataset.pap:perAtual(t);const X=perfilDados(t,a,p);const sc=isSec(t);const V=f=>f==null?'—':sc?(f*20).toFixed(1).replace('.',','):Math.round(f*100)+'%';
+  const pb=document.querySelector('[data-pap].on');const p=pb?+pb.dataset.pap:perAtual(t);const X=perfilDados(t,a,p);const sc=isSec(t);const V=f=>f==null?'—':fmtNota(t,f);
   sec.dataset.onde=1;sec.classList.add('pwide','ondsec');sec.innerHTML=`<h2>${ic('sparkle',16)} Onde Estou e Como Avançar</h2>${ondeHTML(t,X,V)}`};
   run();if(window._ondeMO)window._ondeMO.disconnect();const mo=window._ondeMO=new MutationObserver(()=>{if(!document.querySelector('.pab')){mo.disconnect();return}run()});mo.observe(document.body,{childList:true,subtree:true});setTimeout(()=>mo.disconnect(),10*60*1000)}
 

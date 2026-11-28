@@ -3,7 +3,7 @@ const CONV5_DEF=[19,49,69,89];
 function escalaAuto(t){return t&&(t.ciclo==='sec'||t.oferta==='profij'||t.oferta==='profissional')?'20':'100'}
 function escalaDe(t){if(!t)return '100';return t.escala==='20'||t.escala==='100'?t.escala:escalaAuto(t)}
 function conv5(t){const v=(t&&Array.isArray(t.conv5)&&t.conv5.length===4)?t.conv5:(Array.isArray(S.cfg.conv5)&&S.cfg.conv5.length===4?S.cfg.conv5:CONV5_DEF);return v.map(Number)}
-function arredModo(){return S.cfg.arredModo||'normal'}
+function arredModo(){return 'normal'} /* regra única: 9,4 dá 9 e 9,5 dá 10 (S.cfg.arredModo antigo fica gravado, sem uso) */
 /* arredondamento com modo (normal = meio para cima; cima; baixo) */
 _rdx=function(x,d){const m=Math.pow(10,d);const y=+(x*m).toFixed(6);const md=arredModo();return (md==='cima'?Math.ceil(y):md==='baixo'?Math.floor(y):Math.round(y))/m};
 function _rint(x){const y=+(+x).toFixed(6);const md=arredModo();return md==='cima'?Math.ceil(y):md==='baixo'?Math.floor(y):Math.round(y)}
@@ -22,13 +22,13 @@ function cartaoEscala(t){const e=escalaDe(t),au=escalaAuto(t);const c=conv5(t);c
 function _arrV(v,d,md){const k=Math.pow(10,d);const y=+(v*k).toFixed(6);return (md==='cima'?Math.ceil(y):md==='baixo'?Math.floor(y):Math.round(y))/k}
 function arrSimular(t,pc){const sec=isSec(t);const md=arredModo(),d=notaDec();const f=pc/100;const passos=[];if(sec){const v=f*20;const n=_arrV(v,d,md);const fin=_arrV(v,0,md);passos.push(['Resultado',nf(pc,2)+'%'],['Em valores',nf(v,3)],['Nota mostrada ('+['unidades','décimas','centésimas'][d]+')',n.toFixed(d).replace('.',',')],['Classificação final',String(fin)]);return {passos,pos:fin>=10,txt:fin>=10?'Positiva':'Negativa'}}
   const q=_arrV(pc,0,md);const c=conv5(t);let nv=5;for(let k=0;k<4;k++)if(q<=c[k]){nv=k+1;break}passos.push(['Resultado',nf(pc,2)+'%'],['Percentagem mostrada',q+'%'],['Nível',String(nv)]);return {passos,pos:nv>=3,txt:nv>=3?'Positivo':'Negativo'}}
-function blocoArred(t){const sec=isSec(t);const d=notaDec(),md=arredModo();const ex=14.275,exr=14.25;
+function blocoArred(t){const sec=isSec(t);const d=notaDec(),md=arredModo();const ex=14.275;
   const opD=[[0,'Unidades','Sem casas decimais'],[1,'Décimas','Uma casa decimal'],[2,'Centésimas','Duas casas decimais']];
-  const opM=[['normal','Normal','5 ou mais sobe, abaixo de 5 desce'],['cima','Sempre para cima','Qualquer fração sobe'],['baixo','Sempre para baixo','Qualquer fração é cortada']];
+
   const sim=arrSimular(t,+(UI.arrSim??47.25));
   return `<div class="convt arrb"><div class="convh"><b>${ic('sliders',15)} Arredondamento</b><span class="tag">todas as turmas</span><span class="sp1"></span><span class="mut" style="font-size:12.5px">${sec?'A classificação final arredonda a nota exata uma só vez: 9,45 mostra-se 9,5 mas fica em 9.':'A nota que se vê é a que decide positiva/negativa, o nível e a menção.'}</span></div>
     <div class="arrg"><section><h3>Casas decimais das notas <small>(turmas 0–20)</small></h3><div class="arro" role="radiogroup" aria-label="Casas decimais">${opD.map(([v,l,dsc])=>`<button type="button" role="radio" aria-checked="${d===v}" data-arrd="${v}" class="${d===v?'on':''}"><b>${l}</b><small>${dsc}</small><span class="arrx">${nf(ex,3)} → <i>${_arrV(ex,v,md).toFixed(v).replace('.',',')}</i></span></button>`).join('')}</div></section>
-      <section><h3>Regra de arredondamento</h3><div class="arro" role="radiogroup" aria-label="Regra">${opM.map(([v,l,dsc])=>`<button type="button" role="radio" aria-checked="${md===v}" data-arrm="${v}" class="${md===v?'on':''}"><b>${l}</b><small>${dsc}</small><span class="arrx">${nf(exr,2)} → <i>${_arrV(exr,1,v).toFixed(1).replace('.',',')}</i> · ${nf(exr,2).replace(/,\d+/,',75')} → <i>${_arrV(14.75,0,v)}</i></span></button>`).join('')}</div></section></div>
+      </div>
     <div class="arrsim"><label for="arr-sim">${ic('target',14)} Experimentar</label><span class="arrin"><input id="arr-sim" type="number" min="0" max="100" step="0.01" value="${UI.arrSim??47.25}" inputmode="decimal"><span>%</span></span><div class="arrp" id="arr-p">${arrPassos(sim)}</div></div></div>`}
 function arrPassos(sim){return sim.passos.map(([l,v],k)=>`${k?'<span class="arrse">→</span>':''}<span class="arrps"><small>${esc(l)}</small><b>${esc(v)}</b></span>`).join('')+`<span class="tag ${sim.pos?'ok':'bad'}" style="margin-left:6px">${sim.txt}</span>`}
 function bindEscala(t){const c=$('#esc-card');if(!c)return;const re=()=>manterPosicao(vCriterios);

@@ -37,7 +37,7 @@ function mencao(t,f){if(f==null)return null;const p=Math.round(f*1000)/10;for(le
 const mcls=(t,m)=>m?'mc'+Math.min(4,Math.max(1,Math.round((m.i/Math.max(1,t.mencoes.length-1))*3)+1)):'';
 const tcls=(t,m)=>m?'t'+mcls(t,m).slice(1):'';
 const pillM=(t,m)=>m&&!m.banda&&m.nome?`<span class="pill ${mcls(t,m)}">${esc(m.nome)}</span>`:'';
-const pct=f=>f==null?'':Math.round(f*100)+'%';
+const pct=f=>f==null?'':Math.round(+(f*100).toFixed(6))+'%';
 const pctD=(t,f)=>f==null||!isFinite(f)?'':(t&&isSec(t)?fmtNota(t,f):pct(f));
 const negativa=(t,f)=>{const p=pctCanon(t,f);return p!=null&&(isSec(t)?p<50:nivel(t,f)<3)};
 function avg(a){const v=a.filter(x=>x!=null&&x!==false);return v.length?v.reduce((x,y)=>x+y,0)/v.length:null}

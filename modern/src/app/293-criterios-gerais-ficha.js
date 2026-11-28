@@ -128,7 +128,7 @@ function cgDicas(t){try{const v=$('#view');if(!v||!t)return;const D=t.dominios||
 function cgValK(t,aid,d,k){const I=cgInd(d);if(I.length){const R=(((((t.critGI||{})[k])||{})[aid])||{})[d.id]||{};const v=I.map((_,i)=>R[i]).filter(x=>x!=null&&x!=='').map(Number).filter(x=>isFinite(x));if(v.length)return v.reduce((a,b)=>a+b,0)/v.length/20}
   const v=((((t.critG||{})[k])||{})[aid]||{})[d.id];return v==null||v===''?null:+v}
 {const _nMA=notaModAuto;notaModAuto=function(t,aid,mid){if(!t||!t.porModulo||!tUnid(t))return _nMA.apply(this,arguments);const m=(t.modulos||[]).find(x=>x.id===mid);if(!m||!m.av)return null;const k='u:'+m.id;
-  const at=(((t.atrib||{})[k])||{})[aid];if(at!=null&&at!==''&&isFinite(+String(at).replace(',','.')))return +String(at).replace(',','.');
+  const at=(((t.atrib||{})[k])||{})[aid];if(at!=null&&at!==''&&isFinite(+String(at).replace(',','.')))return notaInt(String(at).replace(',','.'));
   const D=m.av.dominios||[],I=m.av.instrumentos||[];if(!D.length)return null;const p={};
   D.forEach(d=>{if(d.ger){p[d.id]=cgValK(t,aid,d,k);return}const v=I.map(i=>instDom(i,aid,d.id)).filter(Boolean).map(x=>x.pct);p[d.id]=v.length?v.reduce((a,b)=>a+b,0)/v.length:null});
   if(!D.some(d=>p[d.id]!=null))return null;const f=ponderada({dominios:D},p);return f==null?null:Math.round(+(f*20).toFixed(6))}}

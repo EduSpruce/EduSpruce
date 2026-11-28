@@ -30,7 +30,7 @@ function domFichaAluno(t,d,X,o,tipo){if(!o)return '';const c=domCor(t,d);const v
         <div class="row" style="gap:8px;margin-top:12px">${oral?`<button class="btn pri" id="dm-oral">${ic('mic',15)} Abrir a Produção Oral</button>`:''}<button class="btn" id="dm-inst">${ic('clipboard',15)} Instrumentos</button></div></section></div>`;
     let ex=card.querySelector('.dmx');if(ex)ex.remove();const tb=card.querySelector('.dtabs,.tabs');(tb||card.firstElementChild).insertAdjacentHTML(tb?'afterend':'beforebegin',vz);
     const bo=$('#dm-oral');if(bo)bo.onclick=()=>{UI.oralAberta=false;go('oral')};$('#dm-inst').onclick=()=>{UI.inst=null;go('instrumentos')};return r}
-  const bins=sec?[[0,.245,'0–4'],[.245,.495,'5–9'],[.495,.695,'10–13'],[.695,.895,'14–17'],[.895,1.01,'18–20']]:[[0,.195,'1'],[.195,.495,'2'],[.495,.695,'3'],[.695,.895,'4'],[.895,1.01,'5']];const H=bins.map(([lo,hi,n])=>({n,c:X.ok.filter(o=>o.m>=lo&&o.m<hi).length,neg:hi<=.495}));const hm=Math.max(1,...H.map(h=>h.c));
+  const bins=sec?[[0,.245,'0–4'],[.245,.495,'5–9'],[.495,.695,'10–13'],[.695,.895,'14–17'],[.895,1.01,'18–20']]:[[0,.195,'1'],[.195,.495,'2'],[.495,.695,'3'],[.695,.895,'4'],[.895,1.01,'5']];const H=bins.map(([lo,hi,n])=>({n,c:X.ok.filter(o=>{const g=pctCanon(t,o.m)/100;return g>=lo&&g<hi}).length,neg:hi<=.495}));const hm=Math.max(1,...H.map(h=>h.c));
   const outros=t.dominios.map(x=>({x,m:avg(X.al.map(a=>avg(X.P.map(p=>domPer(t,a.id,x.id,p)).filter(v=>v!=null))))}));
   const perM=X.P.map(p=>({p,m:avg(X.al.map(a=>domPer(t,a.id,d.id,p)))}));
   const kp=(l,v,s)=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="mut">${s}</div></div>`;

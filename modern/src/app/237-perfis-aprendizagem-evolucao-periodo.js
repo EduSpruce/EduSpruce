@@ -4,7 +4,7 @@ function perfilEvol(X,show){const t=T();if(!t||!X||!X.P||!X.P.length)return '';c
   const tur=P.map(q=>_avg(al.map(x=>ponderada(t,pctsPer(t,x.id,q))).filter(v=>v!=null)));
   const D=X.dom.filter(o=>o.porP.some(v=>v!=null));if(!D.length&&!X.fin.some(v=>v!=null))return '';
   const W=420,H=300,L=44,R=24,Tp=22,B=40;const sx=i=>P.length<2?(L+W-R)/2:L+i*((W-L-R)/(P.length-1)),sy=v=>Tp+(1-Math.max(0,Math.min(1,v)))*(H-Tp-B);
-  const V=v=>sec?(v*20).toFixed(1).replace('.',','):Math.round(v*100)+'%';const Wp=perW();
+  const V=v=>fmtNota(t,v);const Wp=perW();
   const linha=(vals,cls,sty)=>{let d='',ab=false;vals.forEach((v,i)=>{if(v==null){ab=false;return}d+=(ab?'L':'M')+sx(i).toFixed(1)+' '+sy(v).toFixed(1)+' ';ab=true});return d?`<path d="${d}" class="${cls}" style="${sty||''}"/>`:''};
   const grid=[0,.25,.5,.75,1].map(g=>`<line x1="${L}" x2="${W-R}" y1="${sy(g)}" y2="${sy(g)}" class="${g===.5?'pe50':'peg'}"/><text x="${L-8}" y="${sy(g)}" text-anchor="end" dominant-baseline="middle" class="pey">${sec?Math.round(g*20):Math.round(g*100)+'%'}</text>`).join('');
   const xl=P.map((q,i)=>`<text x="${sx(i)}" y="${H-B+20}" text-anchor="middle" class="pex">${q}.º ${esc(Wp.slice(0,3))}.</text>`).join('');

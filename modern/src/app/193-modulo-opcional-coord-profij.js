@@ -20,7 +20,7 @@ function cpClasses(a){const M={};cpTurmas(a).forEach(t=>{const n=t.nome;(M[n]=M[
   return Object.values(M).map(c=>({...c,curso:(c.disc.find(t=>t.curso)||{}).curso||'',anoEsc:(c.disc[0]||{}).anoEsc||'',formandos:Object.values(c.al).sort((p,q)=>(+p.num||0)-(+q.num||0)||p.nome.localeCompare(q.nome,'pt'))})).sort((p,q)=>p.nome.localeCompare(q.nome,'pt',{numeric:true}))}
 /* classificação 0–20 de um formando numa disciplina registada na app */
 function cpNotaDisc(t,a,al){const x=alunosAval(t).find(z=>cpAlKey(z)===al.k);if(!x)return null;
-  if(Array.isArray(t.modulos)&&t.modulos.length){const v=t.modulos.map(m=>{try{return notaMod(t,x.id,m.id)}catch(_){return null}}).filter(v=>v!=null);if(v.length)return avg(v)}
+  if(Array.isArray(t.modulos)&&t.modulos.length){const v=t.modulos.map(m=>{try{/* pauta PROFIJ: usa a nota do módulo tal como está gravada (fórmula oficial às décimas) */return notaModGravada(t,x.id,m.id)??notaModAuto(t,x.id,m.id)}catch(_){return null}}).filter(v=>v!=null);if(v.length)return avg(v)}
   try{const f=ponderada(t,pctsFinal(t,x.id));if(f!=null)return f*20}catch(_){}try{const P=periodos();for(let i=P.length-1;i>=0;i--){const f=ponderada(t,pctsPer(t,x.id,P[i]));if(f!=null)return f*20}}catch(_){}return null}
 function cpLinha(cl,al,a){const {y}=CP();const man=y.man[cl.nome+'|'+al.k]||{};const r={comp:{},fp:null,paf:null};
   CP_COMP.forEach(([k])=>{if(man[k]!=null&&man[k]!==''){r.comp[k]={v:+man[k],man:true};return}const v=cl.disc.filter(t=>cpCompKey(t)===k).map(t=>cpNotaDisc(t,a,al)).filter(v=>v!=null);r.comp[k]=v.length?{v:avg(v),n:v.length}:null});

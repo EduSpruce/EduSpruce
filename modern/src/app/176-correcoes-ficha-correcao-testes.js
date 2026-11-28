@@ -60,7 +60,7 @@ function fichaCorrecao(t,i){const al=alunosAval(t);const max=instMax(i);const se
   const heat=p=>{if(p==null)return 'transparent';p=Math.max(0,Math.min(1,p));const esc_=document.body.classList.contains('escurox');if(p>=.7)return esc_?`hsl(150 30% ${18+(p-.7)*20}%)`:`hsl(150 45% ${96-(p-.7)*18}%)`;if(p>=.5)return esc_?'hsl(45 35% 22%)':'hsl(45 90% 93%)';return esc_?`hsl(8 40% ${26-p*8}%)`:`hsl(8 85% ${88+p*10}%)`};
   const heatInv=p=>p==null||p<=0?'transparent':heat(1-p);
   const bands=sec?[[0,.495,'Negativa (<10)','#dc2626'],[.495,.695,'10 a 13','#d97706'],[.695,.895,'14 a 17','#2563eb'],[.895,1.01,'18 a 20','#16a34a']]:[[0,.495,'Insuficiente','#dc2626'],[.495,.695,'Suficiente','#d97706'],[.695,.895,'Bom','#2563eb'],[.895,1.01,'Muito Bom','#16a34a']];
-  const distG=bands.map(([lo,hi,n,c])=>({n,c,k:res.filter(x=>x.tot/max>=lo&&x.tot/max<hi).length}));
+  const distG=bands.map(([lo,hi,n,c])=>({n,c,k:res.filter(x=>{const g=pctCanon(t,x.tot/max)/100;return g>=lo&&g<hi}).length}));
   const doms=t.dominios.filter(d=>its.some(x=>x.dom===d.id)).map(d=>{const v=res.map(x=>(instDom(i,x.a.id,d.id)||{}).pct).filter(x=>x!=null);return {d,v,med:v.length?avg(v):null,min:v.length?Math.min(...v):null,max:v.length?Math.max(...v):null,dist:bands.map(([lo,hi,n,c])=>({n,c,k:v.filter(x=>x>=lo&&x<hi).length}))}});
   const oralIts=its.filter(it=>it.oralLig);const oralSt=st.filter(x=>x.it.oralLig);
   const pc=x=>x==null?'—':Math.round(x*100)+'%';

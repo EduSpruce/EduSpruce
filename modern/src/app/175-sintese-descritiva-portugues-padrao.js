@@ -22,12 +22,12 @@ const SINT_PLANO=[[/compreensao oral|ouvir|audi/,['ouvir, duas a três vezes por
  [/atitude|valor|comport|responsab|social/,['trazer sempre o material e cumprir os prazos','registar os trabalhos de casa na agenda e verificá-los diariamente','colaborar nas tarefas de grupo, respeitando as regras combinadas']],
  [/conhecimento|capacidade|conteudo/,['organizar um horário de estudo semanal, com revisão regular das matérias','fazer resumos e esquemas de cada unidade','testar-se com perguntas sobre a matéria antes dos testes']]];
 const NIV_TXT=['dificuldades','um desempenho satisfatório','um bom desempenho','um desempenho muito bom'];
-const nivTxt=v=>v>=.895?3:v>=.695?2:v>=.495?1:0;
+const nivTxt=(v,t)=>t?(v==null?1:bandaNota(t,v)):v>=.895?3:v>=.695?2:v>=.495?1:0;
 const juntaE=L=>L.length<2?(L[0]||''):L.slice(0,-1).join(', ')+' e '+L[L.length-1];
 function sintesePers(t,a,per,cfg){cfg=cfg||SINT_CFG();const D=sintDados(t,a,per);const w=perW().toLowerCase();const nm=a.nome.split(' ')[0];const F=a.genero==='F';const Su=(F?'a ':'o ')+nm;const SU=(F?'A ':'O ')+nm;const ext=cfg.ext||'completa';const P=[];const dsc=t.disciplina;
   const nP=periodos().length;const ult=+per===nP;const sec=isSec(t);const V=(k,L)=>_vs(a,per,k,L);
   if(D.f==null)return `${SU} ainda não dispõe de elementos de avaliação suficientes no ${per}.º ${w} que permitam uma apreciação do seu desempenho.`;
-  const v=D.f;const lv=v>=.895?4:v>=.695?3:v>=.495?2:1;
+  const v=D.f;const lv=v==null?2:bandaNota(t,v)+1;
   /* 1. apreciação global (abertura diferente em cada período) */
   const glob=[null,V('g',[`dificuldades em ${dsc}, não tendo ainda consolidado as aprendizagens essenciais`,`um desempenho ainda insuficiente em ${dsc}, com aprendizagens essenciais por adquirir`,`dificuldades significativas em ${dsc}, que importa superar`]),
     V('g',[`um desempenho satisfatório em ${dsc}, tendo adquirido as aprendizagens essenciais, embora com algumas fragilidades`,`um desempenho suficiente em ${dsc}, com as aprendizagens essenciais adquiridas mas ainda por consolidar`,`um desempenho globalmente satisfatório em ${dsc}, com aspetos que pode ainda melhorar`]),
@@ -37,8 +37,8 @@ function sintesePers(t,a,per,cfg){cfg=cfg||SINT_CFG();const D=sintDados(t,a,per)
   const cls=cfg.num?` (${sec?fmtNota(t,v)+' valores':'nível '+nivel(t,v)})`:'';
   P.push((ab+glob+cls+'.').replace(/^(.)/,c=>c.toUpperCase()));
   /* 2. retrato por domínio */
-  const doms=D.doms;if(doms.length>1){const G=[[],[],[],[]];doms.forEach(x=>G[nivTxt(x.v)].push(emDom(x.d.nome)));const partes=[];[3,2,1,0].forEach(k=>{if(G[k].length)partes.push(NIV_TXT[k]+' '+juntaE(G[k]))});
-    const uni=G.filter(g=>g.length).length===1;const ng=nivTxt(doms[0].v);
+  const doms=D.doms;if(doms.length>1){const G=[[],[],[],[]];doms.forEach(x=>G[nivTxt(x.v,t)].push(emDom(x.d.nome)));const partes=[];[3,2,1,0].forEach(k=>{if(G[k].length)partes.push(NIV_TXT[k]+' '+juntaE(G[k]))});
+    const uni=G.filter(g=>g.length).length===1;const ng=nivTxt(doms[0].v,t);
     if(uni)P.push(ng===0?V('dm',['As dificuldades manifestaram-se em todos os domínios.','As dificuldades foram transversais a todos os domínios.','Nenhum dos domínios atingiu ainda o nível desejável.']):V('dm',[`Revelou ${NIV_TXT[ng]} em todos os domínios.`,`O desempenho foi homogéneo, com ${NIV_TXT[ng]} nos diferentes domínios.`,`Manteve ${NIV_TXT[ng]} de forma equilibrada nos vários domínios.`]));
     else P.push(V('dm',['Nos diferentes domínios, revelou ','Analisando os domínios, evidenciou ','Por domínios, demonstrou '])+juntaE(partes)+'.');
     const top=doms[0],low=doms[doms.length-1];if(!uni&&top.v-low.v>=.12&&ext!=='curta')P.push(V('fr',[`O seu ponto mais forte foi ${oDom(top.d.nome)}, enquanto ${oDom(low.d.nome)} exige maior investimento.`,`Destacou-se ${emDom(top.d.nome)}, sendo ${oDom(low.d.nome)} o domínio que mais precisa de atenção.`,`Os melhores resultados surgiram ${emDom(top.d.nome)}; já ${oDom(low.d.nome)} requer um trabalho mais sistemático.`]))}
@@ -54,7 +54,7 @@ function sintesePers(t,a,per,cfg){cfg=cfg||SINT_CFG();const D=sintDados(t,a,per)
     if(ext==='completa'&&D.inter&&D.inter.obs&&+per!==nP)P.push(D.inter.obs.trim().replace(/([^.!?])$/,'$1.'))}
   /* 5. balanço do ano (último período) */
   if(ult&&nP>1&&ext!=='curta'){const traj=[];for(let p=1;p<=nP;p++){const g=ponderada(t,pctsPer(t,a.id,p));if(g!=null)traj.push({p,g})}
-    if(traj.length>=2){const i0=traj[0],i1=traj[traj.length-1];const d0=NIV_TXT[nivTxt(i0.g)],d1=NIV_TXT[nivTxt(i1.g)];const sub=i1.g-i0.g;
+    if(traj.length>=2){const i0=traj[0],i1=traj[traj.length-1];const d0=NIV_TXT[nivTxt(i0.g,t)],d1=NIV_TXT[nivTxt(i1.g,t)];const sub=i1.g-i0.g;
       const fx=d0===d1?(sub>=.05?`manteve ${d0}, mas com progressos visíveis ao longo do ano, o que demonstra esforço`:sub<=-.05?`manteve ${d0}, embora com uma descida dos resultados ao longo do ano, pelo que deverá retomar os hábitos de trabalho do início do ano`:`manteve ${d0} ao longo de todo o ano`):sub>=.05?`passou de ${d0} no ${i0.p}.º ${w} para ${d1} no ${i1.p}.º ${w}, o que demonstra esforço e capacidade de superação`:`passou de ${d0} no ${i0.p}.º ${w} para ${d1} no ${i1.p}.º ${w}, pelo que deverá retomar os hábitos de trabalho do início do ano`;
       P.push(`Em balanço do ano letivo, ${Su} ${fx}.`)}}
   /* 6. recomendações (curta) ou plano de estudo e trabalho */

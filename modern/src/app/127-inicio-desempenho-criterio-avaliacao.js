@@ -3,16 +3,16 @@ function estCriterios(t,per){const AL=alunosAval(t);const D=t.dominios||[];const
   AL.forEach(al=>{const P=pctsFinal(t,al.id,per);lin.forEach(l=>{const x=P[l.d.id];if(x!=null)l.v.push({x,al})});const f=ponderada(t,P);if(f!=null)fin.push({f,al});
     if(per>1){const Q=pctsPer(t,al.id,per-1);lin.forEach(l=>{const x=Q[l.d.id];if(x!=null)l.ant.push(x)})}});
   const med=a=>a.length?a.reduce((s,b)=>s+b,0)/a.length:null;
-  lin.forEach(l=>{const xs=l.v.map(o=>o.x);l.m=med(xs);l.min=xs.length?Math.min(...xs):null;l.max=xs.length?Math.max(...xs):null;l.neg=xs.filter(x=>x<.495).length;l.top=xs.filter(x=>x>=.895).length;l.n=xs.length;l.ma=med(l.ant);
-    l.dp=xs.length>1?Math.sqrt(xs.reduce((s,x)=>s+(x-l.m)**2,0)/xs.length):0;l.fracos=l.v.filter(o=>o.x<.495).sort((a,b)=>a.x-b.x).map(o=>o.al)});
-  return {lin,fin,AL,mf:med(fin.map(o=>o.f)),pos:fin.filter(o=>o.f>=.495).length}}
+  lin.forEach(l=>{const xs=l.v.map(o=>o.x);l.m=med(xs);l.min=xs.length?Math.min(...xs):null;l.max=xs.length?Math.max(...xs):null;l.neg=xs.filter(x=>negativa(t,x)).length;l.top=xs.filter(x=>x>=.895).length;l.n=xs.length;l.ma=med(l.ant);
+    l.dp=xs.length>1?Math.sqrt(xs.reduce((s,x)=>s+(x-l.m)**2,0)/xs.length):0;l.fracos=l.v.filter(o=>negativa(t,o.x)).sort((a,b)=>a.x-b.x).map(o=>o.al)});
+  return {lin,fin,AL,mf:med(fin.map(o=>o.f)),pos:fin.filter(o=>!negativa(t,o.f)).length}}
 function widgetCriterios(){const a=A();if(!a)return '';const TF=turmasFiltradas(a).filter(t=>(t.dominios||[]).length&&t.instrumentos.some(i=>alunosAval(t).some(al=>instAvaliado(i,al.id))));if(!TF.length)return '';
   UI.estC=UI.estC||{};let t=TF.find(x=>x.id===UI.estC.t)||TF.find(x=>x.id===S.turmaAtiva)||TF[0];const pmax=Math.max(1,...t.instrumentos.map(i=>+i.periodo||1));let per=Math.min(UI.estC.p||perAtual(t),pmax);
-  const sec=isSec(t);const V=f=>f==null?'—':sec?(f*20).toFixed(1).replace('.',','):Math.round(f*100)+'%';const cor=f=>f==null?'var(--mut)':f<.495?'#dc2626':f<.695?'#d97706':f<.895?'#2563eb':'#16a34a';
+  const sec=isSec(t);const V=f=>f==null?'—':fmtNota(t,f);const cor=f=>f==null?'var(--mut)':['#dc2626','#d97706','#2563eb','#16a34a'][bandaNota(t,f)];
   const E=estCriterios(t,per);const ok=E.lin.filter(l=>l.m!=null);if(!ok.length)return '';
   const forte=ok.slice().sort((x,y)=>y.m-x.m)[0],fraco=ok.slice().sort((x,y)=>x.m-y.m)[0];const W=CAL()&&periodos().length===2?'S':'P';
   const bins=sec?[[0,.245,'0–4'],[.245,.495,'5–9'],[.495,.695,'10–13'],[.695,.895,'14–17'],[.895,1.01,'18–20']]:[[0,.495,'<50'],[.495,.695,'50–69'],[.695,.895,'70–89'],[.895,1.01,'90+']];
-  const H=bins.map(([lo,hi,n])=>({n,c:E.fin.filter(o=>o.f>=lo&&o.f<hi).length,lo}));const hm=Math.max(1,...H.map(h=>h.c));
+  const H=bins.map(([lo,hi,n])=>({n,c:E.fin.filter(o=>{const g=pctCanon(t,o.f)/100;return g>=lo&&g<hi}).length,lo}));const hm=Math.max(1,...H.map(h=>h.c));
   const pctP=E.fin.length?Math.round(E.pos/E.fin.length*100):0;
   return `<div class="card estc" id="estc"><div class="row" style="gap:8px;margin-bottom:10px"><h2 style="margin:0;font-size:15px">${ic('chart',17)} Desempenho por Critério</h2><span class="sp1"></span>
     <div class="estps" role="group" aria-label="Período">${Array.from({length:pmax},(_,i)=>`<button type="button" class="${i+1===per?'on':''}" data-estp="${i+1}" aria-pressed="${i+1===per}">${i+1}.º ${W}</button>`).join('')}</div></div>

@@ -2,6 +2,12 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.230
+- Uma só regra de arredondamento em toda a app: 9,4 dá 9 e 9,5 dá 10; a nota final é sempre inteira (a opção «sempre para cima / sempre para baixo» saiu das Definições)
+- Aviso bem visível junto de uma nota em dúvida (por exemplo, 9,45 mostra-se 9,5 mas fica 9); para dar outra nota, escreve-se em «Atribuída»
+- Nota do módulo sempre inteira: as notas antigas com décimas ficam como estão, contam arredondadas e aparecem com aviso
+- Painéis, cores e sínteses usam a mesma regra (nas turmas 0–20, um 9,5 já não aparece como negativa)
+
 ## 1.229
 - Nota automática do módulo e da UFCD: uma conta que dá exatamente 9,5 passa sempre a 10 (em casos raros ficava em 9)
 - Escala 0–20: a classificação final arredonda a nota exata uma só vez (9,45 fica em 9; antes passava a 9,5 e depois a 10)
