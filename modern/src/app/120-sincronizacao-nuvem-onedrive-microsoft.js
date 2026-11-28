@@ -160,7 +160,11 @@ async function nvSincronizar(interativo){const prov=nvProv();if(!prov||_nvBusy)r
 {const _sv3=saveNow;saveNow=function(){const r=_sv3.apply(this,arguments);try{const L=nvL0();if(L.prov&&L.base){
   /* marcar o que mudou (resumir as partes) já não se faz em cada gravação: fica para o envio, 250 ms depois da última — várias gravações seguidas
      (escrever notas) contam como uma, e a gravação em si fica mais rápida. Quem precisa da marcação já (sair, fechar, mudar de conta) chama nvMarcar(). */
-  if(_saveMudou)_nvMarcaPend=true;if(L.auto!==false&&_nvK){clearTimeout(_nvT);_nvT=setTimeout(()=>{nvMarcar();nvSincronizar(false)},250)}else nvMarcar()}}catch(_){}return r}}
+  if(_saveMudou)_nvMarcaPend=true;if(L.auto!==false&&_nvK)nvAgendar();else nvMarcar()}}catch(_){}return r}}
+/* 1.228 · envio para a base de dados: 1,5 s depois da última gravação, mas nunca mais de 6 s depois da primeira por enviar
+   (antes eram 250 ms: escrever uma pauta fazia 3–4 pedidos por célula). Ao esconder/fechar a página envia logo (abaixo e em _nvSaida). */
+let _nvPrim=0;function nvAgendar(){const n=Date.now();if(!_nvPrim)_nvPrim=n;clearTimeout(_nvT);const esp=Math.max(0,Math.min(1500,_nvPrim+6000-n));
+  _nvT=setTimeout(()=>{_nvPrim=0;try{nvMarcar()}catch(_){}nvSincronizar(false)},esp)}
 /* marca as partes que mudaram desde a última sincronização (só se resumem as que ainda não estão marcadas) */
 function nvMarcar(){if(!_nvMarcaPend)return;_nvMarcaPend=false;try{const L=nvL0();if(!(L.prov&&L.base))return;const mod=L.mod||{};let m=false;const P=nvPartes(true);
   Object.keys(P).forEach(n=>{if(mod[n])return;const h=nvHash(JSON.stringify(P[n]));if(h!==L.base[n]){mod[n]=Date.now();m=true}});if(m)nvSet({mod})}catch(_){}}

@@ -40,7 +40,7 @@ function modsMeus(){const M=$('#view #def-mods');if(!M)return;
   if(!M.dataset.mmb){M.dataset.mmb=1;M.addEventListener('change',e=>{if(!e.target.matches('input[type=checkbox]'))return;setTimeout(()=>{try{hubMenuMods();if(typeof menuAgendar==='function')menuAgendar()}catch(_){}},30)})}
   M.querySelectorAll('label.chk input[type=checkbox]').forEach(i=>{if(!i.id)return;const id=modIdDe(i.id);const lb=i.closest('label.chk');if(!lb)return;
     const inc=modInc(id);lb.classList.toggle('mm-bloq',!inc);if(!inc){if(i.checked){i.checked=false;i.dispatchEvent(new Event('change',{bubbles:true}))}i.disabled=true;
-      if(!lb.querySelector('.mm-tag'))lb.insertAdjacentHTML('beforeend',`<span class="tag mm-tag">${ic('lock',12)} Não incluído</span>`)}
+      if(!lb.querySelector('.mm-tag'))lb.insertAdjacentHTML('beforeend',`<span class="tag mm-tag">${ic('cadeado',12)} Não incluído</span>`)}
     else if(lb.querySelector('.mm-tag')){i.disabled=false;lb.querySelector('.mm-tag').remove()}});
   if(modAdmin())modContasCartao(M)}
 function modCatalogo(){const L=[],vis=new Set();MOD_GR.forEach(g=>g[2].forEach(([inp,id])=>{if(vis.has(id))return;vis.add(id);const a=HUB_APPS.find(x=>x.id===id);

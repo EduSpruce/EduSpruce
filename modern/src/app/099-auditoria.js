@@ -1,8 +1,11 @@
 /* ---------- auditoria ---------- */
 function audit(area,acao,det){try{S.audit=S.audit||[];const s=SESSAO||{};S.audit.unshift({q:Date.now(),u:s.u||'—',area,acao,det:det?String(det).slice(0,300):'',v:typeof VIEW!=='undefined'?VIEW:''});if(S.audit.length>5000)S.audit.length=5000}catch(_){}}
 let _audUlt={k:'',q:0};
-function auditEdicao(){const k=VIEW+'|'+(S.turmaAtiva||'');const n=Date.now();if(_audUlt.k===k&&n-_audUlt.q<90000){if(S.audit&&S.audit[0]&&S.audit[0].acao==='Edição'){S.audit[0].q=n;S.audit[0].n=(S.audit[0].n||1)+1}return}
-  _audUlt={k,q:n};const t=T();audit(TITLES[VIEW]||VIEW,'Edição',t?t.nome+' · '+t.disciplina:'')}
+function auditEdicao(){const k=VIEW+'|'+(S.turmaAtiva||'');const n=Date.now();if(_audUlt.k===k&&n-_audUlt.q<90000){
+    /* 1.228 · a mesma edição seguida: conta em memória e só mexe no registo de minuto a minuto (antes cada gravação alterava a auditoria e obrigava a reenviá-la inteira para a base de dados) */
+    _audUlt.p=(_audUlt.p||0)+1;if(n-(_audUlt.w||0)>=60000&&S.audit&&S.audit[0]&&S.audit[0].acao==='Edição'){S.audit[0].q=n;S.audit[0].n=(S.audit[0].n||1)+_audUlt.p;_audUlt.p=0;_audUlt.w=n}return}
+  if(_audUlt.p&&S.audit&&S.audit[0]&&S.audit[0].acao==='Edição'){S.audit[0].n=(S.audit[0].n||1)+_audUlt.p}
+  _audUlt={k,q:n,w:n,p:0};const t=T();audit(TITLES[VIEW]||VIEW,'Edição',t?t.nome+' · '+t.disciplina:'')}
 function defAuditoria(){const L=S.audit||[];const f=UI.audF||{};const users=[...new Set(L.map(x=>x.u))];const areas=[...new Set(L.map(x=>x.area))].sort();
   const F=L.filter(x=>(!f.u||x.u===f.u)&&(!f.a||x.area===f.a)&&(!f.q||normT(x.acao+' '+x.det+' '+x.area).includes(normT(f.q)))&&(!f.d||isoData(new Date(x.q))>=f.d));
   return `<div class="card"><div class="row"><h2 style="margin:0">${ic('shield',18)} Auditoria e Registos</h2><span class="sp1"></span><button class="btn" id="au-csv">${ic('download',15)} Exportar CSV</button><button class="btn" id="au-pdf">${ic('file',15)} Exportar PDF</button>${(SESSAO||{}).papel==='admin'?`<button class="btn dng" id="au-lim">${ic('trash',15)} Limpar &gt; 1 ano</button>`:''}</div>

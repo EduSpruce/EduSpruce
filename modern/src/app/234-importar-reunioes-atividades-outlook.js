@@ -65,7 +65,7 @@ function esCorTopo(){try{if(S.cfg&&S.cfg.estilo==='ios27')return;const b=$('#bar
   if(document.body.classList.contains('lock')||$('#login:not([hidden])'))return;
   document.querySelectorAll('meta[name=theme-color]').forEach((m,i)=>{if(i){m.remove();return}m.removeAttribute('media');if(m.getAttribute('content')!==c)m.setAttribute('content',c)});
   const sa=matchMedia('(display-mode:standalone)').matches||navigator.standalone;if(sa&&document.documentElement.style.backgroundColor!==c)document.documentElement.style.backgroundColor=c}catch(_){}}
-setInterval(esCorTopo,2000);setTimeout(esCorTopo,300);
+setInterval(()=>{if(!document.hidden)esCorTopo()},2000);setTimeout(esCorTopo,300);
 /* v0.939 · ao mexer numa opção (caixa, botão, separador…) o ecrã volta a desenhar-se SEM saltar para cima: em todas as vistas */
 /* repõe o scroll logo a seguir a desenhar; depois só volta a corrigir se mais ninguém mexeu entretanto (não estraga «ir para o topo» ou «mostrar item» de propósito) */
 function mpFixo(fn){const ae=document.activeElement;const ch=ae&&ae.dataset?Object.entries(ae.dataset).find(([k])=>!/^(cg|a11y|dec|ik|wg)/.test(k)):null;

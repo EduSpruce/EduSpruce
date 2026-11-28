@@ -21,7 +21,7 @@ from decimal import Decimal
 R=os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)),'..','..'))
 SRC=os.path.join(R,'modern','src');APP=os.path.join(SRC,'app');T='/tmp/es';os.makedirs(T,exist_ok=True)
 PARTIR=os.path.join(R,'modern','scripts','partir.py');DB=os.path.join(R,'modern','scripts','db.mjs')
-GERADOS=['index.html','arquivo.html','eduschedule.html','horarios.html','spruceit.html','arena.html','pulso.html','versao.json','app','esm','supabase-config.json']
+GERADOS=['index.html','arquivo.html','spruceit.html','arena.html','pulso.html','versao.json','app','esm','supabase-config.json']
 
 def sh(*a,cwd=R,ok=True):
     r=subprocess.run(a,cwd=cwd,capture_output=True,text=True)
@@ -112,19 +112,28 @@ def fim_bloco(s,i,maxc):
         k+=1
     return N
 def fn(a):
-    m=int(opt(a,'-m',3000))
-    if not a:sys.exit('uso: ./es fn NOME')
+    """lista todas as definições (uma linha cada, pela ordem do programa) e mostra o corpo só das últimas -u (omissão 2; -t todas).
+    Atenção: muitas redefinições EMBRULHAM a anterior (const _x=f; f=function(){_x()…}), por isso várias camadas podem correr."""
+    m=int(opt(a,'-m',3000));u=int(opt(a,'-u',2));todas=opt(a,'-t',flag=True)
+    if not a:sys.exit('uso: ./es fn NOME [-u 2] [-t] [-m 3000]')
     n=re.escape(a[0])
     rx=re.compile(rf'(?:(?<![\w$.])function\s*\*?\s*{n}\s*\(|(?<![\w$.])(?:const|let|var)\s+{n}\s*=|(?<![\w$.]){n}\s*=\s*(?:async\s*)?(?:function\b|\([^()]*\)\s*=>|[\w$]+\s*=>)|(?:window|EduGest|go\._f)\.{n}\s*=)')
-    achou=0
+    D=[]
     for f in fontes():
         s=open(f,encoding='utf-8',errors='replace').read()
         for mt in rx.finditer(s):
-            if achou>=6:print('(mais definições: ./es onde '+a[0]+')');return
-            achou+=1;i=mt.start();e=fim_bloco(s,i,m);txt=s[i:e]
-            print(f'── {rel(f)}:{s.count(chr(10),0,i)+1}  ({len(txt)} car.)')
-            print(txt if len(txt)<=m else txt[:m]+f'\n…[+{len(txt)-m} car.; ./es ver para o resto]')
-    if not achou:print('não encontrei a definição de '+a[0]+' (tente ./es onde '+a[0]+')')
+            i=mt.start();e=fim_bloco(s,i,m);D.append((f,s.count(chr(10),0,i)+1,s[i:e]))
+    if not D:print('não encontrei a definição de '+a[0]+' (tente ./es onde '+a[0]+')');return
+    mostra=set(range(len(D))) if todas else set(range(max(0,len(D)-u),len(D)))
+    emb=re.compile(r'(?<![\w$.])_[\w$]+(?:\.apply|\.call)?\s*\(|\.apply\(this|\.call\(this|\b(?:velha|anterior|orig)[\w$]*\s*\(')
+    print(f'{len(D)} definição(ões) de {a[0]} (última vale; «⤷» = embrulha a anterior, ou seja ambas correm):')
+    for k,(f,ln,txt) in enumerate(D):
+        if k in mostra:continue
+        print(f'  {k+1:3d}. {rel(f)}:{ln}  ({len(txt)} car.){"  ⤷" if emb.search(txt) else ""}')
+    for k,(f,ln,txt) in enumerate(D):
+        if k not in mostra:continue
+        print(f'── {k+1}. {rel(f)}:{ln}  ({len(txt)} car.){"  ⤷" if emb.search(txt) else ""}')
+        print(txt if len(txt)<=m else txt[:m]+f'\n…[+{len(txt)-m} car.; ./es ver para o resto]')
 
 # ---------------------------------------------------------------- alterar
 def troca(a):
@@ -167,8 +176,6 @@ def construir(saida):
     p=junta();sintaxe(principal(p))
     r=subprocess.run(['node',DB,p,saida],capture_output=True,text=True)
     if r.returncode:sys.exit('ERRO a construir a versão com base de dados:\n'+(r.stderr or r.stdout).strip()[-900:])
-    r=subprocess.run(['node',os.path.join(SRC,'eduschedule','build.js'),os.path.dirname(saida)],capture_output=True,text=True)
-    if r.returncode:sys.exit('ERRO a construir o EduSchedule:\n'+(r.stderr or r.stdout).strip()[-900:])
     r=subprocess.run(['node',os.path.join(R,'modern','scripts','csp.mjs'),os.path.dirname(saida)],capture_output=True,text=True)
     if r.returncode:sys.exit('ERRO na política de conteúdo (CSP):\n'+(r.stderr or r.stdout).strip()[-900:])
     return p

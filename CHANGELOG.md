@@ -2,6 +2,16 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.228
+- Sumários: fechar a aula com Esc, X ou Cancelar depois de escrever pergunta se quer guardar — o sumário já não se perde
+- Avisos com o aspeto da app: os avisos do navegador passam a janelas da app, e os de validação («Indique a data.») aparecem como aviso curto e levam ao campo em falta
+- Datas escolhidas no calendário (exportar semanas, adiar reunião, data-limite do Spruce It!) e palavra-passe da cópia escondida enquanto se escreve
+- Mensagens de erro técnicas aparecem ao professor em linguagem simples (o administrador continua a ver o detalhe)
+- Mais rápida: a página de entrada passa de 78 KB para 22 KB, uma versão nova já não volta a descarregar estilos e bibliotecas que não mudaram, e escrever notas faz muito menos pedidos à base de dados
+- Menos trabalho com a app parada ou noutro separador (menos bateria)
+- Textos acertados: «Os Meus Módulos» em toda a ajuda, «Guardar» no Spruce Exam, descrições dos estilos sem nomes de outras plataformas, ícone do cadeado em «Não incluído»
+- Limpeza: retirados os últimos ficheiros do EduSchedule
+
 ## 1.227
 - Ecrã de entrada: o botão «Entrar» (e-mail e palavra-passe) faz um só pedido, mesmo com Enter e clique ao mesmo tempo
 - Ecrã de entrada: junto à palavra-passe passa a explicar-se como a recuperar, e «Não tem acesso?» refere as duas formas de entrar

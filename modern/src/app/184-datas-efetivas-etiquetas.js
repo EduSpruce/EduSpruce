@@ -43,7 +43,7 @@ function jnNav(){const b=$('#side [data-v="jornal"]');if(!b)return;const sp=b.qu
 function jnAbrirAviso(x){if(x.a)jnAtivDlg(x.a);else if(x.p)jnPecaDlg(x.p);else if(x.e)jnEdDlg(x.e)}
 
 /* ---------- vista principal ---------- */
-function vJornal(){if(!jnOn()){$('#view').innerHTML=`<div class="card empty">${ic('news',30)}<br><b>O módulo Jornal Escolar está desativado</b><br><span class="mut">Pode ativá-lo em Definições › Módulos Opcionais. Os dados guardados mantêm-se.</span><br><br><button class="btn pri" id="jn-on">Ativar o Módulo</button></div>`;$('#jn-on').onclick=()=>{jnAtivar(true);go('jornal')};return}
+function vJornal(){if(!jnOn()){$('#view').innerHTML=`<div class="card empty">${ic('news',30)}<br><b>O módulo Jornal Escolar está desativado</b><br><span class="mut">Pode ativá-lo em Definições › Os Meus Módulos. Os dados guardados mantêm-se.</span><br><br><button class="btn pri" id="jn-on">Ativar o Módulo</button></div>`;$('#jn-on').onclick=()=>{jnAtivar(true);go('jornal')};return}
   const {y,cfg}=JN();const tab=UI.jnTab||'painel';const hj=jnHoje();
   $('#ttl').textContent=cfg.nome||'Jornal Escolar';
   barBtns([{id:'b-jnimp',t:ic('upload',15)+' Importar PAA…',f:jnPickPAA},{id:'b-jnics',t:ic('calendar',15)+' Exportar .ics',f:jnICS},{id:'b-jncfg',t:ic('gear',15)+' Opções',f:jnCfgDlg}]);

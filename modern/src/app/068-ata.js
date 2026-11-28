@@ -84,7 +84,7 @@ function reuniaoVer(id){const a=A();if(!a)return;if(String(id).startsWith('av:')
   $('#rv-ed').onclick=()=>{closeDrawer();setTimeout(()=>reuniaoDlg(id),60)};
   const est=v=>{r.estado=v;salvar();toast('Reunião '+REUN_EST[v].n.toLowerCase(),'ok');reuniaoVer(id)};
   if($('#rv-real'))$('#rv-real').onclick=()=>est('realizada');if($('#rv-can'))$('#rv-can').onclick=()=>{if(confirm('Marcar a reunião como cancelada?'))est('cancelada')};if($('#rv-reab'))$('#rv-reab').onclick=()=>est('agendada');
-  if($('#rv-adi'))$('#rv-adi').onclick=()=>{const v=prompt('Nova data (dd/mm/aaaa) — deixe em branco para “adiada, sem data”:',r.data.split('-').reverse().join('/'));if(v===null)return;
+  if($('#rv-adi'))$('#rv-adi').onclick=async()=>{const D_=await pedirDatas('Adiar a reunião',[{l:'Nova data',v:r.data,vazio:'Deixe em branco para «adiada, sem data».'}]);if(D_===null)return;const v=D_[0]?D_[0].split('-').reverse().join('/'):'';
     const m=v.match(/(\d{1,2})\D(\d{1,2})\D(\d{4})/);if(m){r.data=m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');r.estado='agendada';r.avisados={};toast('Reunião adiada para '+fmtIsoL(r.data),'ok')}else{r.estado='adiada';toast('Reunião adiada (sem nova data)')}salvar();reuniaoVer(id)};
   $('#rv-ics').onclick=()=>exportarICS([r],reunTitulo(r,a));
   $('#rv-ata').onclick=()=>download('Ata '+reunTitulo(r,a).replace(/[\\/:*?"<>|]/g,'-')+' '+r.data+'.doc',ataHTML(r),'application/msword');

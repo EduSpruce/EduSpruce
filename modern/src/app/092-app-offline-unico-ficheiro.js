@@ -47,7 +47,7 @@ async function exportarCopia(opc){saveNow();let txt=dadosCopia(opc.soAno);const 
   if(opc.pw){txt=await encriptar(txt,opc.pw)}download(nome+(opc.pw?'.egcrypt.json':'.json'),txt,'application/json');S.cfg.ultimaCopia=Date.now();save();toast('Cópia exportada','ok')}
 function validarCopia(st){const err=[];if(!st||!Array.isArray(st.anos))err.push('falta a lista de anos letivos');else st.anos.forEach((a,i)=>{if(!a.nome)err.push('ano '+(i+1)+' sem nome');if(!Array.isArray(a.turmas))err.push('ano '+(a.nome||i+1)+' sem turmas');else a.turmas.forEach(t=>{if(!Array.isArray(t.alunos)||!Array.isArray(t.instrumentos))err.push('turma '+(t.nome||'?')+' incompleta')})});return err}
 async function importarCopia(f){try{let o=JSON.parse(await f.text());
-    if(o.encriptado){const pw=prompt('Esta cópia está protegida. Palavra-passe:');if(!pw)return;try{o=JSON.parse(await desencriptar(o,pw))}catch(_){return alert('Palavra-passe errada ou ficheiro danificado.')}}
+    if(o.encriptado){const pw=await pedirPalavraPasse('Esta cópia está protegida','Palavra-passe da cópia');if(!pw)return;try{o=JSON.parse(await desencriptar(o,pw))}catch(_){return alert('Palavra-passe errada ou ficheiro danificado.')}}
     if(o.definicoes&&!o.estado){if(!confirm('Importar só as definições (escola, disciplinas, tipos, aparência)?'))return;Object.assign(S.cfg,o.definicoes);saveNow();aplicarPrefs();toast('Definições importadas','ok');go('definicoes');return}
     const st=o.estado||o;const err=validarCopia(st);if(err.length)return alert('A cópia tem problemas e não foi importada:\n• '+err.slice(0,8).join('\n• '));
     const nT=st.anos.reduce((s,a)=>s+a.turmas.length,0),nA=st.anos.reduce((s,a)=>s+a.turmas.reduce((q,t)=>q+t.alunos.length,0),0);
@@ -104,7 +104,7 @@ function defDados(){const c=S.cfg;const dias=c.ultimaCopia?Math.floor((Date.now(
     <ul><li>Use um dispositivo pessoal protegido por código; ative o código de acesso da app.</li><li>Exporte cópias <b>encriptadas</b> quando as guardar na nuvem ou numa pen.</li><li>Não partilhe exportações (CSV, pautas, relatórios) fora dos canais da escola.</li><li>No fim do ano, arquive ou apague os dados que já não são necessários.</li></ul><p style="margin-top:10px">${legalLinks()}</p></div></div>`}
 function bindDados(){
   $('#bk-exp').onclick=()=>exportarCopia({});$('#bk-ano').onclick=()=>A()?exportarCopia({soAno:true}):toast('Sem ano letivo','erro');
-  $('#bk-cr').onclick=()=>{const p1=prompt('Palavra-passe para a cópia (mínimo 6 caracteres):');if(!p1)return;if(p1.length<6)return alert('Use pelo menos 6 caracteres.');if(prompt('Repita a palavra-passe:')!==p1)return alert('As palavras-passe não coincidem.');exportarCopia({pw:p1})};
+  $('#bk-cr').onclick=async()=>{const p1=await pedirPalavraPasse('Palavra-passe para a cópia','mínimo 6 caracteres',true);if(!p1)return;exportarCopia({pw:p1})};
   {const bo=$('#bk-off');if(bo)bo.onclick=exportarOfflineDlg}
   $('#bk-imp').onclick=()=>$('#bk-f').click();$('#bk-f').onchange=e=>{const f=e.target.files[0];if(f)importarCopia(f)};
   $('#bk-def').onclick=()=>{const d={...S.cfg};delete d.logo;delete d.pinHash;download('EduSpruce-definicoes.json',JSON.stringify({app:'EduGest',definicoes:{...d,logo:S.cfg.logo}}),'application/json')};
@@ -131,3 +131,17 @@ function bindFerramentas(){
   $('#ft-calc').onclick=calcMostrar;
   $('#ft-demo').onclick=criarDemo;$('#ft-tour').onclick=()=>{go('inicio');setTimeout(visitaGuiada,200)};$('#ft-nov').onclick=novidades;
   $('#ft-rep').onclick=()=>{const info=`EduSpruce ${VERSAO} · ${navigator.userAgent} · ${innerWidth}×${innerHeight} · anos ${S.anos.length}`;try{navigator.clipboard.writeText(info)}catch(_){}location.href='mailto:'+encodeURIComponent(S.cfg.emailSuporte||'')+'?subject='+encodeURIComponent('EduSpruce — sugestão/problema')+'&body='+encodeURIComponent('Descreva a sugestão ou o problema:\n\n\n---\n'+info)}}
+/* 1.228 · palavra-passe num diálogo da app (campo escondido), em vez do prompt() do navegador, que a mostrava às claras */
+function pedirPalavraPasse(titulo,dica,repetir){return new Promise(res=>{const d=document.createElement('dialog');d.className='amodal';d.setAttribute('aria-labelledby','pp-t');
+  d.innerHTML=`<form method="dialog"><div class="amh">${ic('cadeado',22)}<h2 id="pp-t">${esc(titulo)}</h2></div><label for="pp-1">${esc(dica||'Palavra-passe')}</label><input id="pp-1" type="password" autocomplete="new-password" style="width:100%">${repetir?'<label for="pp-2" style="margin-top:8px">Repita a palavra-passe</label><input id="pp-2" type="password" autocomplete="new-password" style="width:100%">':''}<p class="hint neg" id="pp-e" style="min-height:1.2em;margin:8px 0 0"></p><div class="row amb"><button type="button" class="btn" data-pp0>Cancelar</button><button type="submit" class="btn pri" data-pp1>OK</button></div></form>`;
+  document.body.appendChild(d);const fim=v=>{try{d.close()}catch(_){}d.remove();res(v)};d.addEventListener('cancel',e=>{e.preventDefault();fim(null)});d.querySelector('[data-pp0]').onclick=()=>fim(null);
+  d.querySelector('form').onsubmit=e=>{e.preventDefault();const a=d.querySelector('#pp-1').value,b=repetir?d.querySelector('#pp-2').value:a,er=d.querySelector('#pp-e');
+    if(!a){er.textContent='Escreva a palavra-passe.';return d.querySelector('#pp-1').focus()}if(repetir&&a.length<6){er.textContent='Use pelo menos 6 caracteres.';return d.querySelector('#pp-1').focus()}
+    if(b!==a){er.textContent='As palavras-passe não coincidem.';return d.querySelector('#pp-2').focus()}fim(a)};
+  try{d.showModal()}catch(_){d.setAttribute('open','')}d.querySelector('#pp-1').focus()})}
+/* 1.228 · datas num diálogo da app com o calendário do aparelho (input date/datetime-local), em vez de escrever «AAAA-MM-DD» num prompt() */
+function pedirDatas(titulo,campos){return new Promise(res=>{const d=document.createElement('dialog');d.className='amodal';d.setAttribute('aria-labelledby','pd-t');
+  d.innerHTML=`<form method="dialog"><div class="amh">${ic('calendar',22)}<h2 id="pd-t">${esc(titulo)}</h2></div>${campos.map((c,i)=>`<label for="pd-${i}" style="${i?'margin-top:8px;':''}display:block">${esc(c.l)}</label><input id="pd-${i}" type="${c.tipo||'date'}" value="${esc(c.v||'')}" style="width:100%">${c.vazio?`<p class="hint" style="margin:4px 0 0">${esc(c.vazio)}</p>`:''}`).join('')}<div class="row amb" style="margin-top:14px"><button type="button" class="btn" data-pd0>Cancelar</button><button type="submit" class="btn pri">OK</button></div></form>`;
+  document.body.appendChild(d);const fim=v=>{try{d.close()}catch(_){}d.remove();res(v)};d.addEventListener('cancel',e=>{e.preventDefault();fim(null)});d.querySelector('[data-pd0]').onclick=()=>fim(null);
+  d.querySelector('form').onsubmit=e=>{e.preventDefault();const V=campos.map((c,i)=>d.querySelector('#pd-'+i).value);const f=V.findIndex((v,i)=>!v&&!campos[i].vazio);if(f>=0){const x=d.querySelector('#pd-'+f);x.classList.add('es-falta');return x.focus()}fim(V)};
+  try{d.showModal()}catch(_){d.setAttribute('open','')}d.querySelector('#pd-0').focus()})}

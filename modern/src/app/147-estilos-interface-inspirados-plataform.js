@@ -1,10 +1,10 @@
-/* ===================== v0.39: estilos de interface inspirados em plataformas conhecidas ===================== */
-const ESTILOS_X=[['coral','Coral','heart','Inspirado no Airbnb: branco, coral e cantos muito arredondados'],['social','Social','users','Inspirado no Facebook: cinzento claro e azul'],['gradiente','Gradiente','camera','Inspirado no Instagram: minimalista com gradiente'],['institucional','Institucional','building','Inspirado no SGE: denso, formal, azul-marinho'],['academico','Académico','grad','Inspirado no Schoology: limpo, azul e verde']];
+/* ===================== v0.39: estilos de interface adicionais ===================== */
+const ESTILOS_X=[['coral','Coral','heart','Branco, coral e cantos muito arredondados'],['social','Social','users','Cinzento claro e azul'],['gradiente','Gradiente','camera','Minimalista com gradiente'],['institucional','Institucional','building','Denso, formal, azul-marinho'],['academico','Académico','grad','Limpo, azul e verde']];
 {const _ap=aplicarPrefs;aplicarPrefs=function(){const r=_ap.apply(this,arguments);try{const b=document.body;const e=S.cfg.estilo;ESTILOS_X.forEach(([k])=>b.classList.toggle('est-'+k,e===k));if(ESTILOS_X.some(([k])=>k===e))b.classList.add('estilo-azul');
   const t=S.cfg.tema||'auto';const esc_=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);b.classList.toggle('escurox',esc_)}catch(_){}return r}}
 {const _vdE=vDefinicoes;vDefinicoes=function(){const r=_vdE.apply(this,arguments);try{const sg=$('#ap-est');if(sg&&!sg.dataset.x){sg.dataset.x=1;sg.classList.add('estg');sg.insertAdjacentHTML('beforeend',ESTILOS_X.map(([k,l,i,d])=>`<button type="button" data-v="${k}" class="${S.cfg.estilo===k?'on':''}" title="${esc(d)}">${ic(i,15)} ${l}</button>`).join(''));
   sg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{S.cfg.estilo=b.dataset.v;save();sg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));aplicarPrefs()}));
-  sg.insertAdjacentHTML('afterend','<p class="hint" style="margin:6px 0 0">Coral, Social, Gradiente, Institucional e Académico lembram as cores e as formas de plataformas conhecidas (Airbnb, Facebook, Instagram, SGE e Schoology), sem usar as suas marcas.</p>')}}catch(e){console.warn(e)}return r};if(go._f)go._f.definicoes=vDefinicoes}
+  sg.insertAdjacentHTML('afterend','<p class="hint" style="margin:6px 0 0">Coral, Social, Gradiente, Institucional e Académico: estilos alternativos de cores e formas.</p>')}}catch(e){console.warn(e)}return r};if(go._f)go._f.definicoes=vDefinicoes}
 try{aplicarPrefs()}catch(_){}
 
 /* logótipo EduSpruce (livro + fluxo) */

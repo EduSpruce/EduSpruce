@@ -39,7 +39,7 @@ function sincFaltasAula(t,x,aid,p){const al=t.alunos.find(z=>z.id===aid);if(!al)
   if(p.fm)al.faltasAl.push({id:base+'FM',data:x.data,tempos:1,tipo:'material',obs});if(p.at)al.faltasAl.push({id:base+'AT',data:x.data,tempos:1,tipo:'atraso',obs})}
 function resumoPres(s){const P=Object.values(s.pres||{});const c=k=>P.filter(p=>p.f===k).length;const fm=P.filter(p=>p.fm).length,at=P.filter(p=>p.at).length,oc=P.filter(p=>p.oc&&p.oc.n).length;
   return [c('F')?c('F')+' F':'',c('FD')?c('FD')+' FD':'',fm?fm+' FM':'',at?at+' At':'',oc?oc+' ocorr.':''].filter(Boolean).join(' · ')}
-function aulaDlg(t,k,tabIni){const a=A();const L=listaAulas(t,a);const x=L.find(z=>z.k===k);if(!x)return;const SM=sumariosT(a,t);const s=JSON.parse(JSON.stringify(SM[k]||{}));s.pres=s.pres||{};
+function aulaDlg(t,k,tabIni){const a=A();const L=listaAulas(t,a);const x=L.find(z=>z.k===k);if(!x)return;const SM=sumariosT(a,t);const s=JSON.parse(JSON.stringify(SM[k]||{}));s.pres=s.pres||{};const s0=JSON.stringify(s);
   const al=alunosAval(t);let tab=tabIni||'sum';let viuP=tab==='pres';const aberto=new Set();
   const d=document.createElement('dialog');d.className='auladlg';d.setAttribute('aria-labelledby','au-t');document.body.appendChild(d);
   const dataL=x.data.split('-').reverse().join('-');
@@ -59,7 +59,7 @@ function aulaDlg(t,k,tabIni){const a=A();const L=listaAulas(t,a);const x=L.find(
       <footer class="auft"><span class="mut" id="au-res">${esc(resumoPres(s))}</span><span class="sp1"></span><button type="button" class="btn" data-aux0>Cancelar</button><button type="button" class="btn pri" data-auok>${ic('check',15)} Submeter</button></footer></form>`;
     const lerTxt=()=>{const tx=d.querySelector('#au-txt');if(tx){s.texto=tx.value;s.obs=d.querySelector('#au-obs').value;s.ocor=d.querySelector('#au-oco').value}d.querySelectorAll('[data-auot]').forEach(ta=>{const p=s.pres[ta.dataset.auot]=s.pres[ta.dataset.auot]||{};p.oc=p.oc||{};p.oc.t=ta.value})};
     d.querySelectorAll('[data-aut]').forEach(b=>b.onclick=()=>{lerTxt();tab=b.dataset.aut;if(tab==='pres')viuP=true;desenha();const f=d.querySelector(`[data-aut="${tab}"]`);if(f)f.focus()});
-    d.querySelectorAll('[data-aux0]').forEach(b=>b.onclick=()=>fecha(false));d.querySelector('[data-auok]').onclick=()=>{lerTxt();fecha(true)};
+    d.querySelectorAll('[data-aux0]').forEach(b=>b.onclick=()=>sair());d.querySelector('[data-auok]').onclick=()=>{lerTxt();fecha(true)};
     const foca=sel=>{const n=d.querySelector(sel);if(n)n.focus({preventScroll:true})};
     d.querySelectorAll('[data-aup]').forEach(b=>b.onclick=()=>{lerTxt();const [id,k2]=b.dataset.aup.split('|');const p=s.pres[id]=s.pres[id]||{};p.f=k2==='P'?'':k2;const sc=d.querySelector('.aub').scrollTop;desenha();d.querySelector('.aub').scrollTop=sc;foca(`[data-aup="${b.dataset.aup}"]`)});
     d.querySelectorAll('[data-aux]').forEach(b=>b.onclick=()=>{lerTxt();const [id,k2]=b.dataset.aux.split('|');const p=s.pres[id]=s.pres[id]||{};p[k2]=!p[k2];const sc=d.querySelector('.aub').scrollTop;desenha();d.querySelector('.aub').scrollTop=sc;foca(`[data-aux="${b.dataset.aux}"]`)});
@@ -68,7 +68,12 @@ function aulaDlg(t,k,tabIni){const a=A();const L=listaAulas(t,a);const x=L.find(
     const all=d.querySelector('[data-auall]');if(all)all.onclick=()=>{lerTxt();al.forEach(a2=>{const p=s.pres[a2.id]=s.pres[a2.id]||{};p.f=''});desenha()}};
   const fecha=ok=>{if(ok){const prev=SM[k]||{};SM[k]={...prev,...s};if(viuP||Object.values(s.pres||{}).some(p=>p&&p.f))SM[k].cham=SM[k].cham||Date.now();al.forEach(a2=>sincFaltasAula(t,x,a2.id,s.pres[a2.id]||{}));saveNow();audit('Sumários','Aula registada',t.nome+' · '+x.data+' · '+fmtHM(x.ini));toast('Aula registada'+(resumoPres(s)?' · '+resumoPres(s):''),'ok')}
     try{d.close()}catch(_){}d.remove();if(ok&&VIEW==='sumarios')manterPosicao(vSumarios)};
-  d.addEventListener('cancel',e=>{e.preventDefault();fecha(false)});desenha();try{d.showModal()}catch(_){d.setAttribute('open','')}
+  /* 1.228 · Esc, X ou Cancelar com alterações por gravar: pergunta antes de deitar fora o sumário */
+  let aPerg=false;const sair=async()=>{if(aPerg)return;try{const tx=d.querySelector('#au-txt');if(tx){s.texto=tx.value;s.obs=d.querySelector('#au-obs').value;s.ocor=d.querySelector('#au-oco').value}d.querySelectorAll('[data-auot]').forEach(ta=>{const p=s.pres[ta.dataset.auot]=s.pres[ta.dataset.auot]||{};p.oc=p.oc||{};p.oc.t=ta.value})}catch(_){}
+    const limpo=o=>JSON.stringify(o,(k,v)=>v===''||(v&&typeof v==='object'&&!Array.isArray(v)&&!Object.keys(v).length)?undefined:v);if(limpo(s)===limpo(JSON.parse(s0)))return fecha(false);aPerg=true;
+    const v=await avisoModal('Guardar as alterações desta aula?',['Escreveu ou alterou o sumário, as presenças ou as observações.'],[{t:'Continuar a Editar',v:'v'},{t:'Descartar',v:'n',c:'dng'},{t:'Guardar',v:'s',c:'pri'}]);aPerg=false;
+    if(v==='s')fecha(true);else if(v==='n')fecha(false)};
+  d.addEventListener('cancel',e=>{e.preventDefault();sair()});desenha();try{d.showModal()}catch(_){d.setAttribute('open','')}
   setTimeout(()=>{const f=d.querySelector(tab==='sum'?'#au-txt':'[data-aup]');if(f)f.focus()},50)}
 {const _vs=vSumarios;vSumarios=function(){const r=_vs.apply(this,arguments);try{const t=T(),a=A();if(!t||!a)return r;const SM=sumariosT(a,t);
   $$('.sumi').forEach(el=>{const ta=el.querySelector('[data-sum]');if(!ta)return;const k=ta.dataset.sum;const h=el.querySelector('.sumh');if(!h||h.querySelector('[data-aula-ab]'))return;const s=SM[k]||{};const res=resumoPres(s);

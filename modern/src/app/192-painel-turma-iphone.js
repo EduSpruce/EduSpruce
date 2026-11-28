@@ -92,7 +92,7 @@ function nvPinPrep(){NV_PIN_IDS.forEach(id=>{const el=document.getElementById(id
         const bt=grp.querySelector('#nvas-ok,#nv2-pwok,#nv-pwok,[data-np="1"],button[type=submit].pri,.btn.pri');if(bt)bt.click();return}
       else{if(alvo.value.length>=32)return;alvo.value+=k}
       alvo.dispatchEvent(new Event('input',{bubbles:true}));if(!nvToque())alvo.focus();if(navigator.vibrate)try{navigator.vibrate(8)}catch(_){}})})}
-setInterval(nvPinPrep,350);document.addEventListener('focusin',()=>setTimeout(nvPinPrep,0));
+setInterval(()=>{if(!document.hidden)nvPinPrep()},350);document.addEventListener('focusin',()=>setTimeout(nvPinPrep,0));
 
 /* v0.94 · o ID da Google nunca falta (configuração lenta ou bloqueada) */
 const ES_G_ID='275856895734-48n60vhatvltml3t601o24cbak7ndjq2.apps.googleusercontent.com';
@@ -146,7 +146,7 @@ function railPrep(){const sd=$('#side');if(!sd||$('#railTgl'))return;const br=sd
   if(br)br.insertAdjacentElement('afterend',b);else sd.prepend(b);b.onclick=e=>{e.stopPropagation();railAbrir(!document.body.classList.contains('rail-aberta'))};
   if(br){br.style.cursor='pointer';br.addEventListener('click',()=>{if(railModo())railAbrir(!document.body.classList.contains('rail-aberta'))})}
   sd.addEventListener('click',e=>{if(!document.body.classList.contains('rail-aberta'))return;const n=e.target.closest('[data-v],[data-go],.tsec');if(n&&!e.target.closest('.chev'))setTimeout(()=>railAbrir(false),60)})}
-railPrep();setInterval(railPrep,1500);
+railPrep();setInterval(()=>{if(!document.hidden)railPrep()},1500);
 /* menu só com ícones: o botão do tema mostra o tema atual e muda para o seguinte a cada toque (Auto → Claro → Escuro) */
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#temaSel>button.on');if(!b||!railModo()||document.body.classList.contains('rail-aberta'))return;
   const L=[...b.parentElement.querySelectorAll('button[data-tema]')];const n=L[(L.indexOf(b)+1)%L.length];if(!n||n===b)return;e.preventDefault();e.stopImmediatePropagation();n.click();
@@ -181,7 +181,7 @@ function menuAplicar(){try{menuCss()}catch(e){console.warn(e)}const b=document.b
   const sd=$('#side');if(!sd)return;let t=$('#menuTgl');if(!t){t=document.createElement('button');t.type='button';t.id='menuTgl';t.className='menutgl';sd.appendChild(t);
     t.onclick=e=>{e.stopPropagation();const ico=b.classList.contains('menu-ico');S.cfg.menuModo=ico?'completo':'icones';try{save()}catch(_){}railAbrir(false);menuAplicar();toast(ico?'Menu completo fixado — pode voltar a recolhê-lo aqui':'Menu só com ícones — o botão no topo do menu mostra os nomes','ok')}}
   {const tm=$('#temaSel');if(tm){let rw=$('#tmRow');if(!rw||tm.parentElement!==rw){rw=rw||document.createElement('div');rw.id='tmRow';rw.className='tmrow';tm.before(rw);rw.appendChild(tm)}if(t.parentElement!==rw||t.previousElementSibling!==tm)rw.appendChild(t)}else if(t.nextElementSibling)sd.appendChild(t)}const ico=b.classList.contains('menu-ico');const h=ico?RAIL_IC_ABRIR+'<span class="lbl">Manter o menu aberto</span>':RAIL_IC_FECHAR+'<span class="lbl">Recolher (só ícones)</span>';if(t.dataset.k!==String(ico)){t.dataset.k=String(ico);t.innerHTML=h;t.title=ico?'Mostrar sempre o menu com os nomes neste computador':'Mostrar só os ícones no menu, para ganhar espaço';t.setAttribute('aria-label',t.title)}}
-menuAplicar();setInterval(menuAplicar,1500);addEventListener('resize',menuAplicar);
+menuAplicar();setInterval(()=>{if(!document.hidden)menuAplicar()},1500);addEventListener('resize',menuAplicar);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('rail-aberta'))railAbrir(false)});
 addEventListener('resize',()=>{if(!railModo()&&document.body.classList.contains('rail-aberta'))railAbrir(false)});
 {let x0=null,y0r=null,dentro=false;document.addEventListener('touchstart',e=>{if(!railModo()||e.touches.length!==1)return;const t=e.touches[0];const ab=document.body.classList.contains('rail-aberta');dentro=ab&&!!e.target.closest('#side');if(t.clientX<28||dentro||(!ab&&e.target.closest('#side'))){x0=t.clientX;y0r=t.clientY}else x0=null},{passive:true});

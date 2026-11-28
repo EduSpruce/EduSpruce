@@ -17,3 +17,4 @@ modulos.js
 vitrines.js
 visorpdf.js
 review.js
+dialogos.js

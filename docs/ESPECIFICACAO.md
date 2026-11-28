@@ -505,7 +505,7 @@ Em cada vista recolhem-se erros JS, textos NaN/undefined e transbordos. Foram ai
   - Podem criar-se perfis novos, e cada conta escolhe o seu perfil.
   - Botões sem permissão ficam desativados e mostram um aviso.
   - Limitação: no modo local, as permissões protegem a interface neste dispositivo; só um servidor as torna invioláveis.
-- **Estilos de interface**: Coral, Social, Gradiente, Institucional e Académico, inspirados no Airbnb, Facebook, Instagram, SGE e Schoology, sem usar as marcas.
+- **Estilos de interface**: Coral, Social, Gradiente, Institucional e Académico: estilos alternativos de cores e formas.
 - **Apagar Tudo (100%)**: limpa localStorage, sessionStorage, todas as IndexedDB (dados, cópias, evidências), caches e cookies, e reinicia. A escola, as contas e as definições também são apagadas. A nuvem não é apagada, apenas desligada.
 - **Barra superior**: ano letivo e turma só aparecem quando existem.
 - **Matrizes**: os instrumentos orais (oral, «Prova Oral», «Apresentação Oral») não têm matriz.

@@ -35,6 +35,15 @@ export function separar(html,destDir){const dir=join(destDir,'app');mkdirSync(di
   /* ícones dos logótipos (separador e ecrã principal do iPhone): eram ~600 KB de imagens em texto dentro do programa, descarregados
      por toda a gente a cada versão; passam a ficheiros .png, e o navegador só vai buscar os do logótipo em uso */
   {let n=0;s=s.replace(/"(fav|ios)": "data:image\/png;base64,([A-Za-z0-9+\/=]+)"/g,(m,k,b64)=>{n++;return `"${k}": "${guarda('logo-'+k,'png',Buffer.from(b64,'base64'))}"`});if(n<10)throw new Error('separar: logótipos não encontrados ('+n+')')}
+  /* 1.228 · biblioteca da palavra-passe (29 KB) → ficheiro com impressão digital (guardado pelo service worker; a página, que vem sempre da rede, fica mais leve).
+     Continua síncrona e no mesmo sítio, por isso corre pela mesma ordem. */
+  {const a='<script id="argon2-lib">';const i=s.indexOf(a);if(i<0||s.indexOf(a,i+1)>=0)throw new Error('separar: argon2-lib');const j=s.indexOf('</script>',i);
+    s=s.slice(0,i)+`<script id="argon2-lib" src="${guarda('argon2','js',s.slice(i+a.length,j))}"></script>`+s.slice(j+9)}
+  /* ícones do separador e do iPhone embutidos no <head> (27 KB em cada abertura) → os ficheiros de icons/ */
+  {const fh=s.indexOf('</head>');let h=s.slice(0,fh);
+    h=h.replace(/<link rel="apple-touch-icon"([^>]*?) href="data:image\/png;base64,[^"]+">/,'<link rel="apple-touch-icon"$1 href="icons/apple-touch-icon.png">')
+       .replace(/<link rel="icon" type="image\/png" sizes="192x192" href="data:image\/png;base64,[^"]+">/,'<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">');
+    s=h+s.slice(fh)}
   /* estilos grandes (fora dos scripts) → ficheiros .css, pela mesma ordem */
   const fimHead=s.indexOf('</head>');let k=0;
   s=s.slice(0,fimHead).replace(/<style([^>]*)>([\s\S]*?)<\/style>/g,(m,at,css)=>css.length<20000?m:`<link rel="stylesheet" href="${guarda('estilos'+(++k),'css',css)}"${/id="([^"]+)"/.test(at)?' data-id="'+at.match(/id="([^"]+)"/)[1]+'"':''}>`)+s.slice(fimHead);

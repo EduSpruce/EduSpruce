@@ -575,10 +575,10 @@ function pvExEditor(w,ctx){const v=$('#view');barBtns([]);let n=0;const sec=(t,b
       :`<div class="pvdrop" id="pv-drop">${ic('image',22)}<br><u>Clique para carregar</u> ou arraste e largue</div>`);corpo+=corr(leg?'Cada legenda respondida corretamente vale uma parte proporcional da cotação.':'Cada zona marcada corretamente vale uma parte proporcional da cotação.')}
   corpo+=sec('Texto extra',`<p class="pvhint">Texto de apoio que o aluno pode abrir (ex.: um excerto, dados, formulário).</p><textarea id="pv-ext" rows="3" placeholder="Insira aqui o texto extra">${esc(w.extra||'')}</textarea>`,tg('pv-exa',w.extraA,'Começar totalmente expandido'));
   corpo+=sec('Proposta de Resolução (resposta modelo)',`<p class="pvhint">Não é mostrada aos alunos durante a avaliação; aparece quando publicar as classificações.</p><textarea id="pv-res" rows="3" placeholder="Insira aqui a proposta de resolução">${esc(w.resol||'')}</textarea>`);
-  v.innerHTML=pvShell(ctx.av?'av':'ex',`<div class="pvhd"><h2>${ic('pencil',20)} Exercício${ctx.av?' · <span class="mut" style="font-weight:400">'+esc(ctx.av.titulo)+'</span>':''}</h2><span class="pvsp"></span><button class="btn ghost" data-pvc>Cancelar</button><button class="btn pri" data-pvg>${ic('check',15)} Gravar</button></div>
+  v.innerHTML=pvShell(ctx.av?'av':'ex',`<div class="pvhd"><h2>${ic('pencil',20)} Exercício${ctx.av?' · <span class="mut" style="font-weight:400">'+esc(ctx.av.titulo)+'</span>':''}</h2><span class="pvsp"></span><button class="btn ghost" data-pvc>Cancelar</button><button class="btn pri" data-pvg>${ic('check',15)} Guardar</button></div>
     <div class="pvtop"><span class="mut">Criar exercício de</span><select id="pv-tipo">${PV_TIPOS.map(([k,,l])=>`<option value="${k}" ${w.tipo===k?'selected':''}>${l}</option>`).join('')}</select><span class="mut">Cotação</span><input id="pv-pts" type="number" min="0" step="0.5" value="${+w.pts||0}" style="width:90px"><span class="pvsp"></span><button class="btn ghost" id="pv-pre">${ic('eye',15)} Pré-visualizar exercício</button></div>
     <div class="pvetq">${(w.etq||[]).map(e=>`<span class="pvchip">${esc(e)}</span>`).join('')}<button type="button" class="pvchip" id="pv-etq">+ Adicionar etiqueta</button></div>${corpo}
-    <div class="pvfoot"><button class="btn ghost" data-pvc>Cancelar</button><button class="btn pri" data-pvg>${ic('check',15)} Gravar</button></div>`);
+    <div class="pvfoot"><button class="btn ghost" data-pvc>Cancelar</button><button class="btn pri" data-pvg>${ic('check',15)} Guardar</button></div>`);
   pvShellBind();pvRteBind(v);
   const ler=()=>{w.html=pvRteVal(v,'en');w.pts=Math.max(0,+$('#pv-pts').value||0);const g=id=>{const e=$('#'+id);return e?e:null};
     if(g('pv-bar'))w.baralhar=g('pv-bar').checked;if(g('pv-just'))w.just=g('pv-just').checked;
@@ -685,7 +685,7 @@ function pvBancoDlg(a){const L=PV().ex;let sel=[];const pinta=(q)=>{q=normT(q||'
   pinta('');$('#pb-q').oninput=e=>pinta(e.target.value);
   $('#pb-ok').onclick=()=>{sel.forEach(id=>{const e=L.find(x=>x.id===id);if(e)a.itens.push(pvParaItem(e))});pvMudou(a);closeDrawer();pvAvEditor(a)}}
 function pvBlocoDlg(a,i,tipo){const q=i!=null?a.itens[i]:{id:uid(),tipo,html:'',titulo:'',sub:''};
-  openDrawer(q.tipo==='info'?'Bloco de informação':'Pausa / secção',`<div class="ed">${q.tipo==='info'?`<p class="hint" style="margin-top:0">Texto, imagem ou tabela que os alunos leem (não tem cotação).</p>${pvRte('bi',q.html,'Escreva aqui a informação',140)}`:`<p class="hint" style="margin-top:0">Divide a avaliação em páginas (o aluno passa para a página seguinte).</p><label>Título</label><input id="bs-t" value="${esc(q.titulo||'')}"><label>Texto (opcional)</label><textarea id="bs-s" rows="3">${esc(q.sub||'')}</textarea>`}<button class="btn pri" id="bi-ok" style="margin-top:12px">Gravar</button></div>`);
+  openDrawer(q.tipo==='info'?'Bloco de informação':'Pausa / secção',`<div class="ed">${q.tipo==='info'?`<p class="hint" style="margin-top:0">Texto, imagem ou tabela que os alunos leem (não tem cotação).</p>${pvRte('bi',q.html,'Escreva aqui a informação',140)}`:`<p class="hint" style="margin-top:0">Divide a avaliação em páginas (o aluno passa para a página seguinte).</p><label>Título</label><input id="bs-t" value="${esc(q.titulo||'')}"><label>Texto (opcional)</label><textarea id="bs-s" rows="3">${esc(q.sub||'')}</textarea>`}<button class="btn pri" id="bi-ok" style="margin-top:12px">Guardar</button></div>`);
   pvRteBind($('#dw-b'));
   $('#bi-ok').onclick=()=>{if(q.tipo==='info'){q.html=pvRteVal($('#dw-b'),'bi');q.titulo=pvTxt(q.html).slice(0,80)}else{q.titulo=$('#bs-t').value.trim()||'Secção';q.sub=$('#bs-s').value}if(i==null)a.itens.push(q);pvMudou(a);closeDrawer();pvAvEditor(a)}}
 function pvDefsDlg(a){const d=a.defs;openDrawer('Definições · '+a.titulo,`<div class="ed">
@@ -762,7 +762,7 @@ function pvListaRub(m){const L=PV().rub;m.innerHTML=pvHd('grid','Rubricas',`<but
     $('#rm-d').onclick=()=>{const c=pvClone(r);c.id=uid();c.nome+=' (cópia)';L.unshift(c);save();closeDrawer();pvListaRub(m)};$('#rm-s').onclick=()=>pvPartilharDlg('rub',r);
     $('#rm-x').onclick=()=>{if(!confirm('Apagar esta rubrica?'))return;S.pv.rub=L.filter(x=>x!==r);save();closeDrawer();pvListaRub(m)}})}
 function pvRubEditor(w){const v=$('#view');barBtns([]);
-  v.innerHTML=pvShell('rub',`<div class="pvhd"><h2>${ic('grid',20)} Rubricas</h2><span class="pvsp"></span><button class="btn ghost" data-prc>Cancelar</button><button class="btn pri" data-prg>${ic('check',15)} Gravar</button></div>
+  v.innerHTML=pvShell('rub',`<div class="pvhd"><h2>${ic('grid',20)} Rubricas</h2><span class="pvsp"></span><button class="btn ghost" data-prc>Cancelar</button><button class="btn pri" data-prg>${ic('check',15)} Guardar</button></div>
     <section class="pvcard"><h3>1. Nome da rubrica</h3><input id="rb-n" value="${esc(w.nome)}" placeholder="Nome da rubrica"></section>
     <section class="pvcard"><h3>2. Descrição da rubrica (opcional)</h3><input id="rb-d" value="${esc(w.desc)}" placeholder="Descrição da rubrica"></section>
     <section class="pvcard"><h3>3. Critérios</h3><p class="pvhint">Adicione todos os critérios que considerar relevantes. Os níveis dos critérios vão de 1 a 5.</p>
@@ -770,7 +770,7 @@ function pvRubEditor(w){const v=$('#view');barBtns([]);
         <div class="pvniv">${[5,4,3,2,1].map((n,i)=>`<div><span class="pvnv">${n}</span><textarea data-rbn="${k}|${i}" rows="4" placeholder="Descrição do critério">${esc(c.niv[i]||'')}</textarea></div>`).join('')}</div></details>`).join('')}
       <button type="button" class="pvadd" id="rb-a">${ic('plus',15)} Adicionar critério</button></section>
     <section class="pvcard"><h3>4. Pré-visualizar</h3><div id="rb-p">${pvRubGrelha(w)}</div></section>
-    <div class="pvfoot"><button class="btn ghost" data-prc>Cancelar</button><button class="btn pri" data-prg>${ic('check',15)} Gravar</button></div>`);
+    <div class="pvfoot"><button class="btn ghost" data-prc>Cancelar</button><button class="btn pri" data-prg>${ic('check',15)} Guardar</button></div>`);
   pvShellBind();const ler=()=>{w.nome=$('#rb-n').value.trim();w.desc=$('#rb-d').value.trim();v.querySelectorAll('[data-rbc]').forEach(i=>w.crit[+i.dataset.rbc].nome=i.value);v.querySelectorAll('[data-rbn]').forEach(t=>{const [k,i]=t.dataset.rbn.split('|').map(Number);w.crit[k].niv[i]=t.value})};
   v.querySelectorAll('input,textarea').forEach(i=>i.addEventListener('input',()=>{ler();$('#rb-p').innerHTML=pvRubGrelha(w)}));
   $('#rb-a').onclick=()=>{ler();w.crit.push({id:uid(),nome:'',niv:['','','','','']});pvRubEditor(w)};

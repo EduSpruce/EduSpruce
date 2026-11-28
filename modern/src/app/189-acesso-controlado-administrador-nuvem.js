@@ -23,7 +23,7 @@ async function acVerificar(email){email=String(email||'').toLowerCase();const C=
   return {papel:'professor',fonte:'aberto'}}
 function acErro(email,qual){const e=new Error('A conta '+email+' não está autorizada a usar a EduSpruce'+(qual?' ('+qual+')':'')+'. Peça ao administrador para a acrescentar à lista de contas autorizadas.');e.semAcesso=true;return e}
 /* sessões já guardadas: volta a confirmar ao abrir (o administrador pode ter retirado a conta) */
-setTimeout(()=>{acCentral().then(async()=>{try{const s=sessaoAtual();if(!s||s.tipo!=='google')return;let r;try{r=await acVerificar(s.u)}catch(e){if(!e.semAcesso)return;try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY)}catch(_){}alert(e.message);location.reload();return}
+setTimeout(()=>{acCentral().then(async()=>{try{const s=sessaoAtual();if(!s||s.tipo!=='google')return;let r;try{r=await acVerificar(s.u)}catch(e){if(!e.semAcesso)return;try{sessionStorage.removeItem(SESS_KEY);localStorage.removeItem(SESS_KEY)}catch(_){}(window._alertNativo||alert)(e.message);location.reload();return}
   if(r&&r.papel&&r.papel!==s.papel){s.papel=r.papel;guardarSessao(s,!!localStorage.getItem(SESS_KEY));if(SESSAO)SESSAO.papel=r.papel;try{sessBox()}catch(_){}}}catch(e){console.warn(e)}})},300);
 
 /* ---------- 2. nuvem obrigatória: só dados sincronizados com a conta Google ---------- */

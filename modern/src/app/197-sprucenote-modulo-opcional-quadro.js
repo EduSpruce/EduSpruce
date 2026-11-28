@@ -3,7 +3,7 @@
    ===================================================================== */
 TITLES.sprucenote='Spruce Notes';
 const snOn=()=>!(S.cfg&&S.cfg.modSN===false);
-function vSpruceNote(){if(!snOn()){$('#view').innerHTML=`<div class="card empty">${ic('grid',30)}<br><b>O Spruce Notes está desativado</b><br><span class="mut">Ative-o em Definições › Módulos Opcionais. Os quadros guardados mantêm-se.</span><br><br><button class="btn pri" id="sn-on">Ativar o Spruce Notes</button></div>`;$('#sn-on').onclick=()=>{S.cfg.modSN=true;save();snNav();go('sprucenote')};return}
+function vSpruceNote(){if(!snOn()){$('#view').innerHTML=`<div class="card empty">${ic('grid',30)}<br><b>O Spruce Notes está desativado</b><br><span class="mut">Ative-o em Definições › Os Meus Módulos. Os quadros guardados mantêm-se.</span><br><br><button class="btn pri" id="sn-on">Ativar o Spruce Notes</button></div>`;$('#sn-on').onclick=()=>{S.cfg.modSN=true;save();snNav();go('sprucenote')};return}
   UI.mqCtx='prof';barBtns([]);$('#view').innerHTML='<div id="sn-c"></div>';mqVista()}
 function vSnJornal(){UI.mqCtx='jornal';barBtns([{id:'b-jn',t:ic('news',15)+' Jornal Escolar',f:()=>go('jornal')}]);$('#view').innerHTML='<div id="sn-c"></div>';mqVista()}
 TITLES.snjornal='Jornal Notes';

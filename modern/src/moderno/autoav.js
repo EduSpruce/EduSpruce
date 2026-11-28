@@ -93,7 +93,7 @@ async function aaFolha(t,soNovos){await aaQrLib();const cod=aaTurmaCod(t);let L=
   const sai=()=>{f.remove();document.body.classList.remove('aa-folha');dl.forEach(x=>{if(x.isConnected)try{x.showModal()}catch(_){}})};f.querySelector('#aaf-x').onclick=sai;
   f.querySelector('#aaf-imp').onclick=()=>{t.autoavImp=[...new Set([...(t.autoavImp||[]),...L.map(a=>a.id)])];save();setTimeout(()=>window.print(),60)};
   try{audit('Avaliação','Papéis da autoavaliação gerados',t.nome+' · '+L.length+' aluno(s)')}catch(_){}}
-async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma turma.','erro');if(!aaLigado())return toast('A autoavaliação pelo telemóvel está desligada (Definições › Módulos Opcionais).','erro');
+async function aaPainel(){const t=T();if(!t)return toast('Escolha primeiro uma turma.','erro');if(!aaLigado())return toast('A autoavaliação pelo telemóvel está desligada (Definições › Os Meus Módulos).','erro');
   if(!window.__esPronto)return toast('Os dados ainda estão a abrir. Tente dentro de momentos.','erro');
   $$('dialog.aadlg').forEach(d=>d.remove());const d=document.createElement('dialog');d.className='aadlg';d.setAttribute('aria-labelledby','aa-t');document.body.appendChild(d);
   let tm=null;const fim=()=>{clearInterval(tm);try{d.close()}catch(_){}d.remove();if(VIEW)try{go(VIEW)}catch(_){}};

@@ -32,3 +32,7 @@ exportacoes/
 !modern/nativo/package.json
 !modern/nativo/package-lock.json
 !modern/nativo/capacitor.config.json
+
+# Python (gerado)
+__pycache__/
+*.pyc

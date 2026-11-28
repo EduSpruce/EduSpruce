@@ -3,7 +3,7 @@
    Os módulos da versão com base de dados (Spruce It!, Spruce Live, Spruce Exam, Digitalização, Autoavaliação) acrescentam-se sozinhos ao #def-mods. */
 {const _vdMo=vDefinicoes;vDefinicoes=function(){const quer=UI.defTab==='mods';if(quer)UI.defTab='geral';let r;try{r=_vdMo.apply(this,arguments)}finally{if(quer)UI.defTab='mods'}
   try{const v=$('#view');const tb=v&&v.querySelector('.deftabs');
-    if(tb&&!tb.querySelector('[data-dt2="mods"]')){const ref=tb.querySelector('[data-dt2="geral"]');const b=document.createElement('button');b.dataset.dt2='mods';b.innerHTML=ic('layers',15)+' Módulos Opcionais';ref?ref.after(b):tb.appendChild(b)}
+    if(tb&&!tb.querySelector('[data-dt2="mods"]')){const ref=tb.querySelector('[data-dt2="geral"]');const b=document.createElement('button');b.dataset.dt2='mods';b.innerHTML=ic('layers',15)+' Os Meus Módulos';ref?ref.after(b):tb.appendChild(b)}
     if(tb){tb.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',UI.defTab==='notif'?!!b.dataset.dtn:b.dataset.dt2===UI.defTab);if(b.dataset.dt2)b.onclick=()=>{UI.defTab=b.dataset.dt2;vDefinicoes()};else if(b.dataset.dtn)b.onclick=()=>{UI.defTab='notif';vDefinicoes()}})}
     const m=v&&v.querySelector('#def-mods');
     if(quer){if(v){v.innerHTML='';if(tb)v.appendChild(tb);if(m){m.querySelector('h2')&&m.querySelector('h2').remove();m.classList.add('defmods-tab');v.appendChild(m)}else v.insertAdjacentHTML('beforeend',`<div class="card empty">${ic('layers',30)}<br><b>Sem módulos opcionais</b></div>`);try{alinharTabsTopo()}catch(_){}}}
