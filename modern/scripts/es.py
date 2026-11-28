@@ -192,6 +192,10 @@ def testa(a):
     r=subprocess.run(['node',os.path.join(R,'modern','tests','notas.mjs'),p],capture_output=True,text=True)
     print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
     if r.returncode:sys.exit(1)
+    # as contas feitas à mão (tests/casos-notas.mjs): cada caso traz a conta escrita e o resultado certo
+    r=subprocess.run(['node',os.path.join(R,'modern','tests','casos-notas.mjs'),p],capture_output=True,text=True)
+    print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])
+    if r.returncode:sys.exit(1)
     # a versão com base de dados, servida por HTTP com a política de conteúdo ativa e uma base de dados falsa (tests/bd.mjs)
     r=subprocess.run(['node',os.path.join(R,'modern','tests','bd.mjs'),d],capture_output=True,text=True)
     print((r.stdout or '').strip()[-2500:] or (r.stderr or '').strip()[-1500:])

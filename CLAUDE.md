@@ -19,6 +19,11 @@ Português de Portugal, respostas curtas. Publicar sem perguntar («publica e ac
 - `./es estado` antes de começar: versão, o que está por publicar e o que outras sessões publicaram.
 - `MAPA.md` tem as convenções do código e as notas de cada módulo: ler só a secção precisa.
 
+## Equipa de agentes (`.claude/agents/`) — só no risco alto
+- Risco baixo (texto, cor, ícone, espaçamento): fazer e publicar, sem agentes.
+- Risco alto (contas das notas, dados gravados, entrada/contas, base de dados, páginas dos alunos): `triagem` → `executor` → `verificador-contas` (se tocar em notas) → `revisor` → `./es pub`. Quem publica é a sessão principal, nunca um agente.
+- Se um agente falhar, volta ao `executor` com o caso concreto; à segunda falha, parar e perguntar ao utilizador.
+
 ## Onde está cada coisa (caminhos do `./es` relativos a `modern/src/`)
 - `app/NNN-assunto.{js,css,html}` — a app: um só programa em peças, pela ordem de `app/ordem.txt`. Peças mais à frente redefinem funções das anteriores; quase sempre a nova EMBRULHA a anterior (correm todas as camadas, a última por fora) — ver `./es fn`.
 - Código novo: `./es novo NOME` (peça JS no fim do programa) e `./es novo NOME --css` (peça no fim dos estilos; seletores fortes `html body …` por causa do tema SGE). Pequenos acertos: na peça do assunto.
