@@ -2,6 +2,11 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.227
+- Ecrã de entrada: o botão «Entrar» (e-mail e palavra-passe) faz um só pedido, mesmo com Enter e clique ao mesmo tempo
+- Ecrã de entrada: junto à palavra-passe passa a explicar-se como a recuperar, e «Não tem acesso?» refere as duas formas de entrar
+- Com o JavaScript desligado, a página explica o que fazer e mostra o contacto de apoio
+
 ## 1.226
 - MSAI (medidas de suporte e acomodações) por disciplina e por UFCD: cada disciplina do aluno tem as suas medidas (já não são copiadas para as outras disciplinas) e, na pauta das UFCD, cada UFCD tem as suas — a primeira vez, cada UFCD começa com as que o aluno já tinha; os documentos continuam comuns
 
