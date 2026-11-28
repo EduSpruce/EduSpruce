@@ -25,7 +25,7 @@ function modAtivar(t){if(!t||t.porModulo)return;const M=t.modulos=t.modulos||[];
 function modDesativar(t){if(!t||!t.porModulo)return;const b=t.__mod||t;modDetach(t);t.instrumentos=t.instrumentos||[];(t.modulos||[]).forEach(m=>{if(m.av){(m.av.instrumentos||[]).forEach(i=>{i.modulo=m.id;t.instrumentos.push(i)})}});t.porModulo=false}
 /* classificação do módulo: critérios do módulo, todos os instrumentos do módulo (0–20) */
 function notaModAuto(t,aid,mid){if(!t||!t.porModulo)return null;const m=(t.modulos||[]).find(x=>x.id===mid);if(!m||!m.av)return null;const D=m.av.dominios||[],I=m.av.instrumentos||[];if(!D.length||!I.length)return null;
-  const p={};D.forEach(d=>{const v=I.map(i=>instDom(i,aid,d.id)).filter(Boolean).map(x=>x.pct);p[d.id]=v.length?v.reduce((a,b)=>a+b,0)/v.length:null});const f=ponderada({dominios:D},p);return f==null?null:Math.round(f*20)}
+  const p={};D.forEach(d=>{const v=I.map(i=>instDom(i,aid,d.id)).filter(Boolean).map(x=>x.pct);p[d.id]=v.length?v.reduce((a,b)=>a+b,0)/v.length:null});const f=ponderada({dominios:D},p);return f==null?null:Math.round(+(f*20).toFixed(6))}
 /* ligações: migrar, guardar e navegar voltam a ligar os módulos (o estado pode ter sido recarregado) */
 {const _mg=migrate;migrate=function(st){const r=_mg.apply(this,arguments);modAttachAll(r);return r}}
 {const _svM=saveNow;saveNow=function(){modAttachAll();return _svM.apply(this,arguments)}}

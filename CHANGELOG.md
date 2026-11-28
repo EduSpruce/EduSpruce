@@ -2,6 +2,10 @@
 
 O histórico detalhado de cada versão está em [`docs/ESPECIFICACAO.md`](docs/ESPECIFICACAO.md). Resumo das versões mais recentes:
 
+## 1.229
+- Nota automática do módulo e da UFCD: uma conta que dá exatamente 9,5 passa sempre a 10 (em casos raros ficava em 9)
+- Escala 0–20: a classificação final arredonda a nota exata uma só vez (9,45 fica em 9; antes passava a 9,5 e depois a 10)
+
 ## 1.228
 - Sumários: fechar a aula com Esc, X ou Cancelar depois de escrever pergunta se quer guardar — o sumário já não se perde
 - Avisos com o aspeto da app: os avisos do navegador passam a janelas da app, e os de validação («Indique a data.») aparecem como aviso curto e levam ao campo em falta

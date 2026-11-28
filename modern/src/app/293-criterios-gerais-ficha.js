@@ -131,7 +131,7 @@ function cgValK(t,aid,d,k){const I=cgInd(d);if(I.length){const R=(((((t.critGI||
   const at=(((t.atrib||{})[k])||{})[aid];if(at!=null&&at!==''&&isFinite(+String(at).replace(',','.')))return +String(at).replace(',','.');
   const D=m.av.dominios||[],I=m.av.instrumentos||[];if(!D.length)return null;const p={};
   D.forEach(d=>{if(d.ger){p[d.id]=cgValK(t,aid,d,k);return}const v=I.map(i=>instDom(i,aid,d.id)).filter(Boolean).map(x=>x.pct);p[d.id]=v.length?v.reduce((a,b)=>a+b,0)/v.length:null});
-  if(!D.some(d=>p[d.id]!=null))return null;const f=ponderada({dominios:D},p);return f==null?null:Math.round(f*20)}}
+  if(!D.some(d=>p[d.id]!=null))return null;const f=ponderada({dominios:D},p);return f==null?null:Math.round(+(f*20).toFixed(6))}}
 /* ---- itens de instrumentos ligados a um critério que já não existe na unidade (aparecia «?» em Domínios e o instrumento não contava):
    se a unidade tem um só critério específico, os itens passam para ele; se o nome/abreviatura antigo coincidir com um critério específico, vão para esse ---- */
 function cgOrfaos(t){try{if(!t||!t.porModulo||!tUnid(t))return 0;let n=0;
